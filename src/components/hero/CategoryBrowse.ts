@@ -64,10 +64,10 @@ function renderPopupSidebarSkeleton(): string {
 function renderCategoryPopup(): string {
   return `
     <!-- Category Popup Overlay -->
-    <div id="cat-popup-overlay" class="fixed inset-0 z-(--z-backdrop) bg-black/50 opacity-0 pointer-events-none transition-opacity duration-200"></div>
+    <div id="cat-popup-overlay" data-home-overlay data-home-overlay-state="closed" aria-hidden="true" class="fixed inset-0 z-(--z-backdrop) bg-black/50 opacity-0 pointer-events-none transition-opacity duration-200"></div>
 
     <!-- Category Popup Panel -->
-    <div id="cat-popup-panel" class="fixed inset-0 z-(--z-modal) flex items-end lg:items-start justify-center lg:pt-20 opacity-0 pointer-events-none transition-opacity duration-200">
+    <div id="cat-popup-panel" data-home-overlay data-home-overlay-state="closed" role="dialog" aria-modal="true" aria-labelledby="cat-popup-title" aria-hidden="true" inert class="fixed inset-0 z-(--z-modal) flex items-end lg:items-start justify-center lg:pt-20 opacity-0 pointer-events-none transition-opacity duration-200">
       <div id="cat-popup-sheet" class="rounded-t-md lg:rounded-md shadow-2xl border w-full lg:max-w-7xl max-h-[85vh] lg:max-h-[80vh] flex flex-col overflow-hidden transition-transform duration-200 will-change-transform" style="background-color:var(--catpopup-bg);border-color:var(--catpopup-border)">
 
         <!-- Drag handle (mobile) -->
@@ -80,7 +80,7 @@ function renderCategoryPopup(): string {
           <h2 id="cat-popup-title" class="text-lg font-bold" style="color:var(--catpopup-heading)"><span data-i18n="categoryBrowse.title">${t("categoryBrowse.title")}</span></h2>
           <div class="flex items-center gap-4">
             <a href="/featured" class="text-sm hidden lg:inline transition-colors duration-150 hover:text-(--catpopup-link-hover)" style="color:var(--catpopup-link)"><span data-i18n="categoryBrowse.browseDesc">${t("categoryBrowse.browseDesc")}</span></a>
-            <button id="cat-popup-close" class="p-1.5 transition-colors" style="color:var(--catpopup-close-color)" aria-label="Close">
+            <button id="cat-popup-close" type="button" class="p-1.5 transition-colors" style="color:var(--catpopup-close-color)" aria-label="Close">
               <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18 18 6M6 6l12 12"/>
               </svg>
@@ -119,6 +119,8 @@ export function CategoryBrowse(): string {
           <button
             type="button"
             id="category-browse-view-all"
+            aria-controls="cat-popup-panel"
+            aria-expanded="false"
             class="th-no-press absolute bottom-3 left-1/2 -translate-x-1/2 flex items-center gap-1 px-3 py-1 text-xs font-medium rounded-full border bg-white cursor-pointer opacity-0 group-hover/panel:opacity-100 transition-opacity whitespace-nowrap" style="color:#222222;border-color:#E5E5E5;font-family:var(--font-sans);line-height:1.2"
           >
             <span data-i18n="categoryBrowse.viewAll">${t("categoryBrowse.viewAll")}</span>
@@ -135,38 +137,113 @@ export function CategoryBrowse(): string {
 
 /* ──── Init: click handlers, sidebar navigation, close ──── */
 
-export function initCategoryBrowse(): void {
+export function initCategoryBrowse(): Promise<void> {
   const overlay = document.getElementById("cat-popup-overlay");
   const panel = document.getElementById("cat-popup-panel");
   const closeBtn = document.getElementById("cat-popup-close");
   const title = document.getElementById("cat-popup-title");
   const viewAllBtn = document.getElementById("category-browse-view-all");
 
-  if (!overlay || !panel || !closeBtn || !title) return;
+  if (!overlay || !panel || !closeBtn || !title) return Promise.resolve();
 
   const ACT = ["th-catpopup-sidebar-item--active"];
   const INACT: string[] = [];
+  let _cats: ApiCategory[] = [];
+  let isPopupOpen = false;
+  let activeCategoryId = "for-you";
+  let popupTrigger: HTMLElement | null = null;
+  const mountedCategoryIds = new Set<string>();
 
-  function openPopup(categoryId: string): void {
+  function setPopupTrigger(trigger: HTMLElement | null): void {
+    document
+      .querySelectorAll<HTMLElement>(
+        "#category-browse-view-all, #category-browse-list .category-browse-item"
+      )
+      .forEach((item) => item.setAttribute("aria-expanded", "false"));
+    popupTrigger = trigger;
+    popupTrigger?.setAttribute("aria-expanded", "true");
+  }
+
+  function openPopup(categoryId: string, trigger: HTMLElement | null): void {
+    setPopupTrigger(trigger);
+    isPopupOpen = true;
     overlay!.style.opacity = "1";
     overlay!.style.pointerEvents = "auto";
+    overlay!.setAttribute("aria-hidden", "false");
+    overlay!.setAttribute("data-home-overlay-state", "open");
     panel!.style.opacity = "1";
     panel!.style.pointerEvents = "auto";
+    panel!.removeAttribute("inert");
+    panel!.setAttribute("aria-hidden", "false");
+    panel!.setAttribute("data-home-overlay-state", "open");
     document.body.style.overflow = "hidden";
     showCategory(categoryId);
+    window.requestAnimationFrame(() => closeBtn!.focus());
   }
 
-  function closePopup(): void {
+  function closePopup(restoreFocus = true): void {
+    if (!isPopupOpen) return;
+    const triggerToRestore = popupTrigger;
+    isPopupOpen = false;
     overlay!.style.opacity = "0";
     overlay!.style.pointerEvents = "none";
+    overlay!.setAttribute("aria-hidden", "true");
+    overlay!.setAttribute("data-home-overlay-state", "closed");
     panel!.style.opacity = "0";
     panel!.style.pointerEvents = "none";
+    panel!.setAttribute("inert", "");
+    panel!.setAttribute("aria-hidden", "true");
+    panel!.setAttribute("data-home-overlay-state", "closed");
     document.body.style.overflow = "";
+    setPopupTrigger(null);
+    if (restoreFocus) triggerToRestore?.focus();
   }
 
-  let _cats: ApiCategory[] = [];
+  function renderForYouSection(): string {
+    return `
+      <div id="cat-popup-section-for-you" class="cat-popup-section" data-popup-section="for-you">
+        <div class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-7 gap-y-5 gap-x-4 lg:gap-y-8 lg:gap-x-6"></div>
+      </div>
+    `;
+  }
+
+  function renderCategorySection(cat: ApiCategory): string {
+    return `
+      <div class="cat-popup-section hidden" data-popup-section="${escapeHtml(cat.id)}">
+        <div class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-7 gap-y-5 gap-x-4 lg:gap-y-8 lg:gap-x-6">
+          ${cat.children.map((ch) => renderSubcategoryItem(ch.name, ch.slug, ch.image)).join("")}
+          <a href="${escapeHtml(sanitizeUrl(`/pages/products.html?cat=${encodeURIComponent(cat.slug)}`))}" class="flex flex-col items-center gap-2 group/product">
+            <div class="w-20 h-20 lg:w-24 lg:h-24 xl:w-28 xl:h-28 rounded-full border-2 border-dashed flex items-center justify-center transition-colors duration-150 ease-out" style="background-color:var(--catpopup-sidebar-bg);border-color:var(--catpopup-border)">
+              <svg class="w-7 h-7 lg:w-9 lg:h-9" style="color:var(--catpopup-icon)" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3.75 6A2.25 2.25 0 0 1 6 3.75h2.25A2.25 2.25 0 0 1 10.5 6v2.25a2.25 2.25 0 0 1-2.25 2.25H6a2.25 2.25 0 0 1-2.25-2.25V6ZM3.75 15.75A2.25 2.25 0 0 1 6 13.5h2.25a2.25 2.25 0 0 1 2.25 2.25V18a2.25 2.25 0 0 1-2.25 2.25H6A2.25 2.25 0 0 1 3.75 18v-2.25ZM13.5 6a2.25 2.25 0 0 1 2.25-2.25H18A2.25 2.25 0 0 1 20.25 6v2.25A2.25 2.25 0 0 1 18 10.5h-2.25a2.25 2.25 0 0 1-2.25-2.25V6ZM13.5 15.75a2.25 2.25 0 0 1 2.25-2.25H18A2.25 2.25 0 0 1 20.25 15.75V18A2.25 2.25 0 0 1 18 20.25h-2.25A2.25 2.25 0 0 1 13.5 18v-2.25Z"/>
+              </svg>
+            </div>
+            <span class="text-xs lg:text-sm text-center leading-tight transition-colors duration-150" style="color:var(--catpopup-text)" data-i18n="categoryBrowse.viewAll">${t("categoryBrowse.viewAll")}</span>
+          </a>
+        </div>
+      </div>
+    `;
+  }
+
+  function ensureCategorySection(categoryId: string): void {
+    if (mountedCategoryIds.has(categoryId)) return;
+    const content = document.getElementById("cat-popup-content");
+    if (!content) return;
+    if (categoryId === "for-you") {
+      content.insertAdjacentHTML("beforeend", renderForYouSection());
+      mountedCategoryIds.add(categoryId);
+      refreshForYouSection();
+      return;
+    }
+    const cat = _cats.find((item) => item.id === categoryId);
+    if (!cat) return;
+    content.insertAdjacentHTML("beforeend", renderCategorySection(cat));
+    mountedCategoryIds.add(categoryId);
+  }
 
   function showCategory(categoryId: string): void {
+    activeCategoryId = categoryId;
+    ensureCategorySection(categoryId);
     const titleSpan = title!.querySelector("span");
     if (categoryId === "for-you") {
       if (titleSpan) titleSpan.textContent = t("categoryBrowse.headerForYou");
@@ -232,19 +309,44 @@ export function initCategoryBrowse(): void {
   }
 
   if (viewAllBtn) {
-    viewAllBtn.addEventListener("click", () => {
-      if (_cats.length > 0) openPopup("for-you");
+    viewAllBtn.addEventListener("click", (event) => {
+      if (_cats.length > 0) openPopup("for-you", event.currentTarget as HTMLElement);
     });
   }
 
   // Close handlers
-  closeBtn.addEventListener("click", closePopup);
-  overlay.addEventListener("click", closePopup);
+  closeBtn.addEventListener("click", () => closePopup());
+  overlay.addEventListener("click", () => closePopup());
   panel.addEventListener("click", (e) => {
     if (!(e.target as HTMLElement).closest("#cat-popup-sheet")) closePopup();
   });
   document.addEventListener("keydown", (e) => {
-    if (e.key === "Escape") closePopup();
+    if (!isPopupOpen) return;
+    if (e.key === "Escape") {
+      e.preventDefault();
+      closePopup();
+      return;
+    }
+    if (e.key !== "Tab") return;
+    const focusable = Array.from(
+      panel!.querySelectorAll<HTMLElement>(
+        'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])'
+      )
+    ).filter((element) => element.offsetParent !== null);
+    if (focusable.length === 0) {
+      e.preventDefault();
+      closeBtn!.focus();
+      return;
+    }
+    const first = focusable[0];
+    const last = focusable[focusable.length - 1];
+    if (e.shiftKey && document.activeElement === first) {
+      e.preventDefault();
+      last.focus();
+    } else if (!e.shiftKey && document.activeElement === last) {
+      e.preventDefault();
+      first.focus();
+    }
   });
 
   // ── Drag-down to close (mouse + touch) ──
@@ -357,7 +459,7 @@ export function initCategoryBrowse(): void {
   }
 
   // ──── Populate from API ────
-  onCategoriesLoaded((cats) => {
+  return onCategoriesLoaded((cats) => {
     if (!cats.length) return;
     _cats = cats;
 
@@ -372,6 +474,8 @@ export function initCategoryBrowse(): void {
             class="category-browse-item level1-cate-unit th-no-press flex items-center w-full text-start transition-colors duration-150 group bg-transparent hover:bg-white dark:text-gray-300 dark:hover:bg-gray-700/60 dark:hover:text-white"
             style="min-height:44px;padding:6px 16px;gap:12px"
             data-category-id="for-you"
+            aria-controls="cat-popup-panel"
+            aria-expanded="false"
           >
             <span class="flex-shrink-0 inline-flex items-center justify-center [&>svg]:w-5 [&>svg]:h-5" style="color:#222222">${forYouStarSvg}</span>
             <span class="title flex-1 truncate" style="color:#222222;font-size:15px;font-weight:600;font-family:var(--font-sans);line-height:1.3">${t("categoryBrowse.headerForYou")}</span>
@@ -392,6 +496,8 @@ export function initCategoryBrowse(): void {
             class="category-browse-item level1-cate-unit th-no-press flex items-center w-full text-start transition-colors duration-150 group bg-transparent hover:bg-white dark:text-gray-300 dark:hover:bg-gray-700/60 dark:hover:text-white"
             style="min-height:44px;padding:6px 16px;gap:12px"
             data-category-id="${escapeHtml(cat.id)}"
+            aria-controls="cat-popup-panel"
+            aria-expanded="false"
           >
             <span class="flex-shrink-0 inline-flex items-center justify-center [&>svg]:w-5 [&>svg]:h-5" style="color:#222222">
               ${cat.icon_class ? getCategoryIcon(cat.icon_class) : getIconByName(cat.name)}
@@ -408,9 +514,9 @@ export function initCategoryBrowse(): void {
 
       // Bind browse item clicks
       browseList.querySelectorAll<HTMLButtonElement>(".category-browse-item").forEach((item) => {
-        item.addEventListener("click", () => {
+        item.addEventListener("click", (event) => {
           const id = item.getAttribute("data-category-id");
-          if (id) openPopup(id);
+          if (id) openPopup(id, event.currentTarget as HTMLElement);
         });
       });
     }
@@ -466,39 +572,27 @@ export function initCategoryBrowse(): void {
       });
     }
 
-    // Populate popup content (subcategory grids)
+    // Keep only the active category and one neighbour mounted up front.
+    // Remaining category grids are generated when their sidebar/list trigger is selected.
     const content = document.getElementById("cat-popup-content");
     if (content) {
-      const forYouChildren = cats.flatMap((c) => c.children).slice(0, 24);
-      const forYouSection = `
-        <div id="cat-popup-section-for-you" class="cat-popup-section" data-popup-section="for-you">
-          <div class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-7 gap-y-5 gap-x-4 lg:gap-y-8 lg:gap-x-6">
-            ${forYouChildren.map((ch) => renderSubcategoryItem(ch.name, ch.slug, ch.image)).join("")}
-          </div>
-        </div>
-      `;
-      content.innerHTML =
-        forYouSection +
-        cats
-          .map(
-            (cat) => `
-        <div class="cat-popup-section hidden" data-popup-section="${escapeHtml(cat.id)}">
-          <div class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-7 gap-y-5 gap-x-4 lg:gap-y-8 lg:gap-x-6">
-            ${cat.children.map((ch) => renderSubcategoryItem(ch.name, ch.slug, ch.image)).join("")}
-            <!-- View all item -->
-            <a href="${escapeHtml(sanitizeUrl(`/pages/products.html?cat=${encodeURIComponent(cat.slug)}`))}" class="flex flex-col items-center gap-2 group/product">
-              <div class="w-20 h-20 lg:w-24 lg:h-24 xl:w-28 xl:h-28 rounded-full border-2 border-dashed flex items-center justify-center transition-colors duration-150 ease-out" style="background-color:var(--catpopup-sidebar-bg);border-color:var(--catpopup-border)">
-                <svg class="w-7 h-7 lg:w-9 lg:h-9" style="color:var(--catpopup-icon)" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3.75 6A2.25 2.25 0 0 1 6 3.75h2.25A2.25 2.25 0 0 1 10.5 6v2.25a2.25 2.25 0 0 1-2.25 2.25H6a2.25 2.25 0 0 1-2.25-2.25V6ZM3.75 15.75A2.25 2.25 0 0 1 6 13.5h2.25a2.25 2.25 0 0 1 2.25 2.25V18a2.25 2.25 0 0 1-2.25 2.25H6A2.25 2.25 0 0 1 3.75 18v-2.25ZM13.5 6a2.25 2.25 0 0 1 2.25-2.25H18A2.25 2.25 0 0 1 20.25 6v2.25A2.25 2.25 0 0 1 18 10.5h-2.25a2.25 2.25 0 0 1-2.25-2.25V6ZM13.5 15.75a2.25 2.25 0 0 1 2.25-2.25H18a2.25 2.25 0 0 1 2.25 2.25V18A2.25 2.25 0 0 1 18 20.25h-2.25A2.25 2.25 0 0 1 13.5 18v-2.25Z"/>
-                </svg>
-              </div>
-              <span class="text-xs lg:text-sm text-center leading-tight transition-colors duration-150" style="color:var(--catpopup-text)" data-i18n="categoryBrowse.viewAll">${t("categoryBrowse.viewAll")}</span>
-            </a>
-          </div>
-        </div>
-      `
-          )
-          .join("");
+      content.innerHTML = "";
+      mountedCategoryIds.clear();
+
+      const desiredActive =
+        activeCategoryId === "for-you" || cats.some((cat) => cat.id === activeCategoryId)
+          ? activeCategoryId
+          : "for-you";
+      ensureCategorySection(desiredActive);
+
+      if (desiredActive === "for-you") {
+        if (cats[0]) ensureCategorySection(cats[0].id);
+      } else {
+        const activeIndex = cats.findIndex((cat) => cat.id === desiredActive);
+        const adjacent = cats[activeIndex + 1] ?? cats[activeIndex - 1];
+        if (adjacent) ensureCategorySection(adjacent.id);
+      }
+      showCategory(desiredActive);
     }
   });
 }

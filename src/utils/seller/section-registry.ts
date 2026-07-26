@@ -427,13 +427,13 @@ const SECTION_RENDERERS: Record<string, SectionRenderer> = {
                     </template>
                   </div>
 
-                  <!-- Pagination — tüm ürünler tek atış çekilir, burada client-side sayfalanır -->
+                  <!-- Pagination — backend yalnız görünür sayfayı döndürür. -->
                   <div x-show="totalPages > 1" class="flex items-center justify-center gap-1.5 mt-8 flex-wrap">
                     <button @click="goToPage(currentPage - 1)" :disabled="currentPage === 1" aria-label="Önceki"
                             class="w-9 h-9 flex items-center justify-center rounded-md border border-gray-200 text-gray-500 hover:bg-gray-50 disabled:opacity-30 disabled:cursor-not-allowed transition-colors">
                       <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
                     </button>
-                    <template x-for="pg in totalPages" :key="pg">
+                    <template x-for="pg in visiblePages" :key="pg">
                       <button @click="goToPage(pg)"
                               :class="currentPage === pg ? 'text-white border-transparent' : 'bg-white text-gray-700 border-gray-200 hover:bg-gray-50'"
                               :style="currentPage === pg ? 'background: var(--store-accent, #cc9900)' : ''"

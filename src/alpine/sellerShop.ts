@@ -245,26 +245,34 @@ function sectionLabels(): Record<string, string> {
   };
 }
 
-// Satıcının TÜM ürünlerini backend total'ine göre sayfa sayfa çeker (tek atış
-// page_size=50 ile 50+ ürünlü mağazalarda ürünler eksik kalıyordu). Client-side
-// filtre/sort/pagination tam liste üzerinde çalışsın diye hepsi belleğe alınır.
-async function fetchAllSellerProducts(sellerCode: string): Promise<SellerShopProduct[]> {
-  const FETCH_SIZE = 100;
-  const url = (pg: number) =>
-    `${API_BASE}/method/tradehub_core.api.seller.get_seller_products?seller_code=${sellerCode}&page=${pg}&page_size=${FETCH_SIZE}`;
-  const first = await fetch(url(1), { credentials: "omit" }).then((r) => r.json());
-  let all: SellerShopProduct[] = first?.message?.products || [];
-  const total = Number(first?.message?.total) || all.length;
-  if (total > all.length) {
-    const lastPage = Math.ceil(total / FETCH_SIZE);
-    const reqs: Promise<{ message?: { products?: SellerShopProduct[] } }>[] = [];
-    for (let pg = 2; pg <= lastPage; pg++) {
-      reqs.push(fetch(url(pg), { credentials: "omit" }).then((r) => r.json()));
-    }
-    const rest = await Promise.all(reqs);
-    for (const r of rest) all = all.concat(r?.message?.products || []);
+interface SellerProductsPage {
+  products: SellerShopProduct[];
+  total: number;
+}
+
+async function fetchSellerProducts(
+  sellerCode: string,
+  options: { page: number; pageSize: number; category?: string; categoryType?: string; sort?: string }
+): Promise<SellerProductsPage> {
+  const query = new URLSearchParams({
+    seller_code: sellerCode,
+    page: String(options.page),
+    page_size: String(options.pageSize),
+    sort: options.sort || "default",
+  });
+  if (options.category) {
+    query.set("category", options.category);
+    query.set("category_type", options.categoryType || "seller");
   }
-  return all;
+  const response = await fetch(
+    `${API_BASE}/method/tradehub_core.api.seller.get_seller_products?${query.toString()}`,
+    { credentials: "omit" }
+  ).then((r) => r.json());
+  const message = response?.message || {};
+  return {
+    products: message.products || [],
+    total: Number(message.total) || 0,
+  };
 }
 
 Alpine.data("sellerShop", () => ({
@@ -280,6 +288,7 @@ Alpine.data("sellerShop", () => ({
   categories: [] as SellerShopCategory[],
   products: [] as SellerShopProduct[],
   filteredProducts: [] as SellerShopProduct[],
+  totalProducts: 0,
   activeCategory: "",
   activeCategoryType: "" as string, // "" | "seller" | "platform"
   activeCategoryName: "",
@@ -288,14 +297,21 @@ Alpine.data("sellerShop", () => ({
   currentPage: 1,
   pageSize: 12,
   get totalPages(): number {
-    return Math.ceil(this.filteredProducts.length / this.pageSize) || 1;
+    return Math.ceil(this.totalProducts / this.pageSize) || 1;
   },
   get paginatedProducts(): SellerShopProduct[] {
-    const start = (this.currentPage - 1) * this.pageSize;
-    return this.filteredProducts.slice(start, start + this.pageSize);
+    return this.filteredProducts;
   },
-  goToPage(pg: number) {
-    this.currentPage = Math.min(Math.max(1, pg), this.totalPages);
+  get visiblePages(): number[] {
+    const start = Math.max(1, Math.min(this.currentPage - 3, this.totalPages - 6));
+    const end = Math.min(this.totalPages, start + 6);
+    return Array.from({ length: end - start + 1 }, (_, index) => start + index);
+  },
+  async goToPage(pg: number) {
+    const nextPage = Math.min(Math.max(1, pg), this.totalPages);
+    if (nextPage === this.currentPage) return;
+    this.currentPage = nextPage;
+    await this.loadProducts();
     const el = document.getElementById("shop-products-top");
     if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
   },
@@ -344,12 +360,16 @@ Alpine.data("sellerShop", () => ({
           )
             .then((r) => r.json())
             .catch(() => ({ message: [] })),
-          fetchAllSellerProducts(this.sellerCode).catch(() => [] as SellerShopProduct[]),
+          fetchSellerProducts(this.sellerCode, { page: 1, pageSize: this.pageSize }).catch(() => ({
+            products: [] as SellerShopProduct[],
+            total: 0,
+          })),
         ]);
 
         this.seller = sellerRes?.message || null;
         this.categories = catRes?.message?.categories || catRes?.message || [];
-        this.products = prodRes || [];
+        this.products = prodRes.products;
+        this.totalProducts = prodRes.total;
 
         if (layoutRes?.message) {
           this.layout = {
@@ -371,6 +391,7 @@ Alpine.data("sellerShop", () => ({
     }
 
     this.filteredProducts = [...this.products];
+    this.totalProducts ||= this.products.length;
     this.applyTheme();
 
     // Search dropdown "son gezdiklerin" — sadece URL'den gerçek seller geldiyse kaydet,
@@ -405,6 +426,7 @@ Alpine.data("sellerShop", () => ({
     this.sellerCode = MOCK_SELLER.seller_code;
     this.categories = [...MOCK_CATEGORIES];
     this.products = [...MOCK_PRODUCTS];
+    this.totalProducts = this.products.length;
     this.layout = {
       sections: DEFAULT_SECTIONS,
       theme: {
@@ -439,13 +461,39 @@ Alpine.data("sellerShop", () => ({
     return section?.settings?.title || sectionLabels()[type] || "";
   },
 
+  async loadProducts() {
+    if (!this.sellerCode) return;
+    try {
+      const result = await fetchSellerProducts(this.sellerCode, {
+        page: this.currentPage,
+        pageSize: this.pageSize,
+        category: this.activeCategory || undefined,
+        categoryType: this.activeCategoryType || undefined,
+        sort: this.sortBy,
+      });
+      this.products = result.products;
+      this.filteredProducts = result.products;
+      this.totalProducts = result.total;
+    } catch (error) {
+      console.error("Seller shop products API error:", error);
+      this.products = [];
+      this.filteredProducts = [];
+      this.totalProducts = 0;
+    }
+  },
+
   filterByCategory(categoryName: string, categoryType: string = "seller") {
     this.currentPage = 1;
     if (this.activeCategory === categoryName && this.activeCategoryType === categoryType) {
       this.activeCategory = "";
       this.activeCategoryType = "";
       this.activeCategoryName = "";
-      this.filteredProducts = [...this.products];
+      if (this.sellerCode) {
+        void this.loadProducts();
+      } else {
+        this.filteredProducts = [...this.products];
+        this.totalProducts = this.products.length;
+      }
     } else {
       this.activeCategory = categoryName;
       this.activeCategoryType = categoryType;
@@ -453,16 +501,26 @@ Alpine.data("sellerShop", () => ({
         (c) => c.name === categoryName && (c.type || "seller") === categoryType
       );
       this.activeCategoryName = cat?.category_name || categoryName;
-      this.filteredProducts = this.products.filter((p) => {
-        if (categoryType === "platform") {
-          return p.product_category === categoryName || p.product_category_name === categoryName;
-        }
-        return p.category === categoryName || p.category_name === categoryName;
-      });
+      if (this.sellerCode) {
+        void this.loadProducts();
+      } else {
+        this.filteredProducts = this.products.filter((p) => {
+          if (categoryType === "platform") {
+            return p.product_category === categoryName || p.product_category_name === categoryName;
+          }
+          return p.category === categoryName || p.category_name === categoryName;
+        });
+        this.totalProducts = this.filteredProducts.length;
+      }
     }
   },
 
   sortProducts() {
+    this.currentPage = 1;
+    if (this.sellerCode) {
+      void this.loadProducts();
+      return;
+    }
     // price_min/price_max API'den hem string hem number gelebiliyor — String()'le güvene al.
     const toNum = (v: string | number | undefined): number => parseFloat(String(v ?? "0"));
     const sorted = [...this.filteredProducts];
@@ -481,7 +539,7 @@ Alpine.data("sellerShop", () => ({
         break;
     }
     this.filteredProducts = sorted;
-    this.currentPage = 1;
+    this.totalProducts = this.filteredProducts.length;
   },
 
   formatPrice(p: SellerShopProduct): string {

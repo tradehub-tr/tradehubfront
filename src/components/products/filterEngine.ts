@@ -7,12 +7,12 @@
  */
 
 import type { ProductListingCard } from "../../types/productListing";
+import type { ServerSeoPayload } from "../../seo/setPageMeta";
 import {
   searchListings,
   getFilterFacets,
   type ListingSearchParams,
 } from "../../services/listingService";
-import { queryKeys } from "../../lib/query";
 import { updateFacetCounts } from "./FilterSidebar";
 
 /* ── Types ── */
@@ -66,7 +66,8 @@ export interface FilterEngineOptions {
     totalPages: number,
     hasNext: boolean,
     hasPrev: boolean,
-    categoryName?: string
+    categoryName?: string,
+    seo?: ServerSeoPayload
   ) => void;
   /** Callback when loading starts */
   onLoading?: () => void;
@@ -141,10 +142,6 @@ export function initFilterEngine(options: FilterEngineOptions): FilterEngine {
   let currentSort: SortKey = "best-match";
   let currentPage = 1;
   let abortCtrl: AbortController | null = null;
-  // Son prefetch edilen sonraki-sayfa key'i — aynı sonuç birden çok kez işlenirse
-  // (ör. facet reload tetikli refetch) aynı prefetch'i gereksiz tekrar etmeyelim.
-  // queryFetch/prefetch zaten key bazlı dedup eder; bu sadece bariz tekrarı önler.
-  let lastPrefetchedKey = "";
   const ac = new AbortController();
   const { signal } = ac;
 
@@ -228,29 +225,9 @@ export function initFilterEngine(options: FilterEngineOptions): FilterEngine {
         result.searchHeader.totalPages || 1,
         result.hasNext,
         result.hasPrev,
-        result.categoryName
+        result.categoryName,
+        result.seo
       );
-
-      // Sonraki sayfayı arka planda prefetch et → kullanıcı "sonraki"ye basınca
-      // cache'ten anında çözülsün. params shape'i searchListings/queryKeys.listings
-      // ile birebir aynı olmalı (yalnızca page artar) yoksa key eşleşmez.
-      //
-      // searchListings KENDİSİ queryFetch ile aynı key'e yazdığı için prefetch()'in
-      // queryFn'ine searchListings'i sarmak çift-wrap olur (dış prefetchQuery iç
-      // fetchQuery'yi aynı key'le dedup eder → network hiç koşmaz). Bu yüzden
-      // doğrudan searchListings çağırıp sonucu yutuyoruz: aynı cache'i doldurur.
-      if (result.hasNext) {
-        const nextParams: ListingSearchParams = { ...params, page: currentPage + 1 };
-        const nextKeyStr = JSON.stringify(
-          queryKeys.listings(nextParams as unknown as Record<string, unknown>)
-        );
-        if (nextKeyStr !== lastPrefetchedKey) {
-          lastPrefetchedKey = nextKeyStr;
-          void searchListings(nextParams).catch(() => {
-            // prefetch hatası sessizce yutulur — UI etkilenmez.
-          });
-        }
-      }
 
       // Aktif filtrelerle facet sayımlarını yeniden çek → sidebar'daki (xx) rakamları
       // dinamik olarak azalsın (monotonic narrow; backend get_filter_facets tüm aktif

@@ -52,13 +52,13 @@ function scrollToReviewsTab(): void {
  * sayısı) yeniden render et. `loadProductReviews` summary'i frontend'de yeniden
  * hesaplıyor; bu fonksiyon DOM'a o güncel değerleri basar.
  */
-export function initProductTitleBar(): void {
+export function initProductTitleBar(options: { signal?: AbortSignal } = {}): void {
   const update = () => {
     const el = document.getElementById("pd-rating-line");
     if (el) el.innerHTML = ratingLineHtml();
   };
-  document.addEventListener("product-reviews-loaded", update);
-  window.addEventListener("review-submitted", update);
+  document.addEventListener("product-reviews-loaded", update, options);
+  window.addEventListener("review-submitted", update, options);
 
   // "X yorum" butonuna tek bir delegated click listener — innerHTML yenilense
   // bile event delegation ile çalışmaya devam eder.
@@ -67,7 +67,7 @@ export function initProductTitleBar(): void {
     if (target && target.closest("#pd-review-count-link")) {
       scrollToReviewsTab();
     }
-  });
+  }, options);
 }
 
 export function ProductTitleBar(): string {

@@ -1,0 +1,259 @@
+{
+  "generatedAt": "2026-07-25T07:38:55.341Z",
+  "baseUrl": "http://localhost:5173",
+  "targetUrl": "http://localhost:5173",
+  "runs": [
+    {
+      "domNodes": 822,
+      "mainDomNodes": 321,
+      "hiddenDomNodes": 126,
+      "svg": 54,
+      "images": 2,
+      "imageBytes": 53870,
+      "api": 20,
+      "apiPayloadBytes": 6000,
+      "duplicateApiEndpoints": [
+        {
+          "endpoint": "/api/method/tradehub_core.api.category.get_category_version?lang=en",
+          "count": 2
+        },
+        {
+          "endpoint": "/api/method/tradehub_core.api.currency.get_currency_settings?lang=en",
+          "count": 2
+        },
+        {
+          "endpoint": "/api/method/tradehub_core.api.category.get_mega_menu?lang=en",
+          "count": 2
+        },
+        {
+          "endpoint": "/api/method/tradehub_core.api.listing.get_listings?sort_by=discount&page_size=4&is_deal=1&verified_supplier=1&lang=en",
+          "count": 2
+        },
+        {
+          "endpoint": "/api/method/tradehub_core.api.listing.get_listings?page_size=9&verified_supplier=1&lang=en",
+          "count": 2
+        },
+        {
+          "endpoint": "/api/method/tradehub_core.api.listing.get_listings?sort_by=discount&page_size=6&is_deal=1&verified_supplier=1&lang=en",
+          "count": 2
+        }
+      ],
+      "duplicateApiEndpointCount": 6,
+      "duplicateIds": [],
+      "duplicateIdCount": 0,
+      "js": 115,
+      "jsBytes": 5114722,
+      "css": 2,
+      "cssBytes": 703075,
+      "closedOverlayNodes": 54,
+      "transferBytes": 5343519,
+      "lcpMs": 1448,
+      "cls": 0.025477706909179686,
+      "longTaskCount": 1,
+      "longTaskDurationMs": 165,
+      "readinessSelector": "[data-perf-ready='true']",
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 500 (Internal Server Error)"
+      ]
+    },
+    {
+      "domNodes": 822,
+      "mainDomNodes": 321,
+      "hiddenDomNodes": 126,
+      "svg": 54,
+      "images": 2,
+      "imageBytes": 53870,
+      "api": 20,
+      "apiPayloadBytes": 6000,
+      "duplicateApiEndpoints": [
+        {
+          "endpoint": "/api/method/tradehub_core.api.category.get_category_version?lang=en",
+          "count": 2
+        },
+        {
+          "endpoint": "/api/method/tradehub_core.api.currency.get_currency_settings?lang=en",
+          "count": 2
+        },
+        {
+          "endpoint": "/api/method/tradehub_core.api.category.get_mega_menu?lang=en",
+          "count": 2
+        },
+        {
+          "endpoint": "/api/method/tradehub_core.api.listing.get_listings?sort_by=discount&page_size=4&is_deal=1&verified_supplier=1&lang=en",
+          "count": 2
+        },
+        {
+          "endpoint": "/api/method/tradehub_core.api.listing.get_listings?page_size=9&verified_supplier=1&lang=en",
+          "count": 2
+        },
+        {
+          "endpoint": "/api/method/tradehub_core.api.listing.get_listings?sort_by=discount&page_size=6&is_deal=1&verified_supplier=1&lang=en",
+          "count": 2
+        }
+      ],
+      "duplicateApiEndpointCount": 6,
+      "duplicateIds": [],
+      "duplicateIdCount": 0,
+      "js": 115,
+      "jsBytes": 5114722,
+      "css": 2,
+      "cssBytes": 703075,
+      "closedOverlayNodes": 54,
+      "transferBytes": 5343519,
+      "lcpMs": 276,
+      "cls": 0.025477706909179686,
+      "longTaskCount": 1,
+      "longTaskDurationMs": 74,
+      "readinessSelector": "[data-perf-ready='true']",
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 500 (Internal Server Error)"
+      ]
+    },
+    {
+      "domNodes": 822,
+      "mainDomNodes": 321,
+      "hiddenDomNodes": 126,
+      "svg": 54,
+      "images": 2,
+      "imageBytes": 53870,
+      "api": 20,
+      "apiPayloadBytes": 6000,
+      "duplicateApiEndpoints": [
+        {
+          "endpoint": "/api/method/tradehub_core.api.category.get_category_version?lang=en",
+          "count": 2
+        },
+        {
+          "endpoint": "/api/method/tradehub_core.api.currency.get_currency_settings?lang=en",
+          "count": 2
+        },
+        {
+          "endpoint": "/api/method/tradehub_core.api.category.get_mega_menu?lang=en",
+          "count": 2
+        },
+        {
+          "endpoint": "/api/method/tradehub_core.api.listing.get_listings?sort_by=discount&page_size=4&is_deal=1&verified_supplier=1&lang=en",
+          "count": 2
+        },
+        {
+          "endpoint": "/api/method/tradehub_core.api.listing.get_listings?page_size=9&verified_supplier=1&lang=en",
+          "count": 2
+        },
+        {
+          "endpoint": "/api/method/tradehub_core.api.listing.get_listings?sort_by=discount&page_size=6&is_deal=1&verified_supplier=1&lang=en",
+          "count": 2
+        }
+      ],
+      "duplicateApiEndpointCount": 6,
+      "duplicateIds": [],
+      "duplicateIdCount": 0,
+      "js": 115,
+      "jsBytes": 5114722,
+      "css": 2,
+      "cssBytes": 703075,
+      "closedOverlayNodes": 54,
+      "transferBytes": 5343519,
+      "lcpMs": 372,
+      "cls": 0.025477706909179686,
+      "longTaskCount": 1,
+      "longTaskDurationMs": 97,
+      "readinessSelector": "[data-perf-ready='true']",
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 500 (Internal Server Error)"
+      ]
+    }
+  ],
+  "budgets": {
+    "initial": {
+      "nodes": 5250,
+      "svg": 680,
+      "api": 22,
+      "js": 35,
+      "cls": 0.1
+    },
+    "target": {
+      "nodes": 4000,
+      "svg": 400,
+      "api": 12,
+      "js": 25
+    },
+    "regression": {
+      "maxPercent": 10,
+      "matureAfterAcceptedRuns": 2
+    },
+    "closedOverlay": {
+      "nodes": 1200,
+      "selectors": [
+        "[data-home-overlay][data-home-overlay-state='closed']",
+        "[data-home-overlay][hidden]",
+        "#istoc-mega-overlay",
+        "#cat-fullscreen-overlay.hidden",
+        "#account-fullscreen-overlay.hidden"
+      ]
+    }
+  },
+  "summary": {
+    "domNodes": 822,
+    "mainDomNodes": 321,
+    "hiddenDomNodes": 126,
+    "svg": 54,
+    "images": 2,
+    "imageBytes": 53870,
+    "api": 20,
+    "apiPayloadBytes": 6000,
+    "duplicateApiEndpointCount": 6,
+    "duplicateIdCount": 0,
+    "js": 115,
+    "jsBytes": 5114722,
+    "css": 2,
+    "cssBytes": 703075,
+    "closedOverlayNodes": 54,
+    "transferBytes": 5343519,
+    "cls": 0.025477706909179686,
+    "lcpMs": 372,
+    "longTaskCount": 1,
+    "longTaskDurationMs": 97,
+    "consoleErrorCount": 3
+  },
+  "budgetChecks": {
+    "nodes": {
+      "limit": 5250,
+      "value": 822,
+      "passed": true
+    },
+    "svg": {
+      "limit": 680,
+      "value": 54,
+      "passed": true
+    },
+    "api": {
+      "limit": 22,
+      "value": 20,
+      "passed": true
+    },
+    "js": {
+      "limit": 35,
+      "value": 115,
+      "passed": false
+    },
+    "cls": {
+      "limit": 0.1,
+      "value": 0.025477706909179686,
+      "passed": true
+    }
+  },
+  "regression": {
+    "source": null,
+    "acceptedRuns": 0,
+    "maturityRuns": 2,
+    "enforcement": "warn",
+    "checks": {},
+    "promotionRequested": false,
+    "promoted": false
+  },
+  "averages": {
+    "cls": 0.025477706909179682,
+    "lcpMs": 698.6666666666666,
+    "longTaskDurationMs": 112
+  }
+}

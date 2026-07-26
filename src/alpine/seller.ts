@@ -233,6 +233,11 @@ Alpine.data("sellPricing", () => ({
 
 Alpine.data("sellerStorefront", () => ({
   activeTab: "overview" as string,
+  // Tab panelleri pahalı bağımsız Alpine ağaçlarıdır. Sadece aktif panel ilk
+  // boyada kurulur; ziyaret edilen paneller DOM'da tutularak kendi verisi ve
+  // kullanıcı state'i (filtre, sayfa, form) tekrar açılışta korunur.
+  mountedTabs: {} as Record<string, boolean>,
+  profileTabs: ["overview", "reviews", "products", "videos", "contact"],
   mobileMenuOpen: false,
   seller: null as SellerStorefrontData | null,
   navCategories: [] as SellerNavCategory[],
@@ -266,9 +271,12 @@ Alpine.data("sellerStorefront", () => ({
     const code =
       (pathMatch && pathMatch[1]) || new URLSearchParams(window.location.search).get("seller");
     this.sellerCode = code || "";
-    if (new URLSearchParams(window.location.search).get("tab") === "contact") {
-      this.activeTab = "contact";
+    const requestedTab = new URLSearchParams(window.location.search).get("tab");
+    if (requestedTab && (this.profileTabs.includes(requestedTab) || requestedTab === "contact")) {
+      this.activeTab = requestedTab;
     }
+    this.mountedTabs[this.activeTab] = true;
+    this.hydrateMountedTab(this.activeTab);
     if (!code) {
       this.loading = false;
       return;
@@ -341,7 +349,10 @@ Alpine.data("sellerStorefront", () => ({
   },
 
   setTab(tab: string) {
+    if (!this.profileTabs.includes(tab) && tab !== "contact") return;
+    this.mountedTabs[tab] = true;
     this.activeTab = tab;
+    this.hydrateMountedTab(tab);
     // Scroll to tab content area (below sticky tab bar)
     const tabNav = document.getElementById("store-tab-nav");
     if (tabNav) {
@@ -350,6 +361,43 @@ Alpine.data("sellerStorefront", () => ({
     } else {
       window.scrollTo({ top: 0, behavior: "smooth" });
     }
+  },
+
+  isTabMounted(tab: string) {
+    return !!this.mountedTabs[tab];
+  },
+
+  hydrateMountedTab(tab: string) {
+    // x-if ile sonradan eklenen paneldeki bağımsız x-data ağacı ilk frame'de
+    // hydrate edilir. `_x_dataStack` kontrolü, daha önce ziyaret edilen bir
+    // panelin init/fetch işini tekrar çalıştırmayı engeller.
+    requestAnimationFrame(() => {
+      const panel = document.getElementById(`tab-${tab}`);
+      if (panel && !("_x_dataStack" in panel)) window.Alpine.initTree(panel);
+    });
+  },
+
+  onTabKeydown(event: KeyboardEvent, tab: string) {
+    const currentIndex = this.profileTabs.indexOf(tab);
+    if (currentIndex < 0) return;
+
+    let nextIndex = currentIndex;
+    if (event.key === "ArrowRight" || event.key === "ArrowDown") {
+      nextIndex = (currentIndex + 1) % this.profileTabs.length;
+    } else if (event.key === "ArrowLeft" || event.key === "ArrowUp") {
+      nextIndex = (currentIndex - 1 + this.profileTabs.length) % this.profileTabs.length;
+    } else if (event.key === "Home") {
+      nextIndex = 0;
+    } else if (event.key === "End") {
+      nextIndex = this.profileTabs.length - 1;
+    } else {
+      return;
+    }
+
+    event.preventDefault();
+    const nextTab = this.profileTabs[nextIndex];
+    this.setTab(nextTab);
+    requestAnimationFrame(() => document.getElementById(`store-tab-${nextTab}`)?.focus());
   },
 
   toggleMobileMenu() {

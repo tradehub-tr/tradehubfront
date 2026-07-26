@@ -104,17 +104,17 @@ function renderPaymentManagement(): string {
     <div class="mb-8" x-data="paymentManagement">
       <h2 class="text-base font-semibold text-text-primary mb-4">${t("payment.transactionsTitle")}</h2>
       <div class="flex border-b border-border-default overflow-x-auto overflow-y-hidden">
-        <button @click="activeTab = 'payments'" :class="activeTab === 'payments' ? '!text-text-primary !font-semibold !border-b-[#222]' : ''" class="th-no-press py-3 px-5 max-sm:py-2.5 max-sm:px-3 text-[13px] max-sm:text-xs font-medium text-text-secondary bg-transparent border-none border-b-2 border-transparent cursor-pointer transition-[color,border-color] duration-150 -mb-px whitespace-nowrap hover:text-text-primary">${t("payment.paymentsTab")}</button>
-        <button @click="activeTab = 'refunds'" :class="activeTab === 'refunds' ? '!text-text-primary !font-semibold !border-b-[#222]' : ''" class="th-no-press py-3 px-5 max-sm:py-2.5 max-sm:px-3 text-[13px] max-sm:text-xs font-medium text-text-secondary bg-transparent border-none border-b-2 border-transparent cursor-pointer transition-[color,border-color] duration-150 -mb-px whitespace-nowrap hover:text-text-primary">${t("payment.refundsTab")}</button>
+        <button @click="selectTab('payments')" data-payment-management-tab="payments" :class="activeTab === 'payments' ? '!text-text-primary !font-semibold !border-b-[#222]' : ''" class="th-no-press py-3 px-5 max-sm:py-2.5 max-sm:px-3 text-[13px] max-sm:text-xs font-medium text-text-secondary bg-transparent border-none border-b-2 border-transparent cursor-pointer transition-[color,border-color] duration-150 -mb-px whitespace-nowrap hover:text-text-primary">${t("payment.paymentsTab")}</button>
+        <button @click="selectTab('refunds')" data-payment-management-tab="refunds" :class="activeTab === 'refunds' ? '!text-text-primary !font-semibold !border-b-[#222]' : ''" class="th-no-press py-3 px-5 max-sm:py-2.5 max-sm:px-3 text-[13px] max-sm:text-xs font-medium text-text-secondary bg-transparent border-none border-b-2 border-transparent cursor-pointer transition-[color,border-color] duration-150 -mb-px whitespace-nowrap hover:text-text-primary">${t("payment.refundsTab")}</button>
       </div>
 
       <!-- Loading -->
-      <div x-show="loading" class="flex items-center justify-center py-12">
+      <div x-show="(activeTab === 'payments' && paymentsLoading) || (activeTab === 'refunds' && refundsLoading)" class="flex items-center justify-center py-12">
         <svg class="animate-spin h-8 w-8 text-text-tertiary" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/></svg>
       </div>
 
       <!-- Ödemeler Tab -->
-      <div x-show="!loading && activeTab === 'payments'" x-cloak>
+      <div x-show="activeTab === 'payments' && !paymentsLoading" x-cloak>
         <template x-if="payments.length === 0">
           <div class="flex flex-col items-center justify-center py-12 px-6 text-center">
             <div class="opacity-50 mb-4">${RECEIPT_ICON}</div>
@@ -148,7 +148,8 @@ function renderPaymentManagement(): string {
       </div>
 
       <!-- İadeler Tab -->
-      <div x-show="!loading && activeTab === 'refunds'" x-cloak>
+      <template x-if="activeTab === 'refunds'">
+      <div data-payment-management-refunds-panel x-show="!refundsLoading" x-cloak>
         <template x-if="refunds.length === 0">
           <div class="flex flex-col items-center justify-center py-12 px-6 text-center">
             <div class="opacity-50 mb-4">${RECEIPT_ICON}</div>
@@ -178,6 +179,7 @@ function renderPaymentManagement(): string {
           </div>
         </template>
       </div>
+      </template>
     </div>
 
     <!-- Modal: Yeni bir kart ekle (Interactive Card) -->

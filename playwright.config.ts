@@ -1,5 +1,7 @@
 import { defineConfig, devices } from "@playwright/test";
 
+const startViteServer = process.env.PERF_FIXTURE_TEST !== "1";
+
 /**
  * Playwright config for tradehubfront filter E2E suite.
  * Lokal backend yok — testler `page.route()` ile API mock'lar.
@@ -23,10 +25,12 @@ export default defineConfig({
       use: { ...devices["Desktop Chrome"], viewport: { width: 1280, height: 800 } },
     },
   ],
-  webServer: {
-    command: "npm run dev",
-    url: "http://localhost:5173",
-    reuseExistingServer: true,
-    timeout: 60_000,
-  },
+  webServer: startViteServer
+    ? {
+        command: "npm run dev",
+        url: "http://localhost:5173",
+        reuseExistingServer: true,
+        timeout: 60_000,
+      }
+    : undefined,
 });

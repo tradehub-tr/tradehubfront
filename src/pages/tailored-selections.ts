@@ -252,7 +252,8 @@ let activeSubCategory: string | undefined = subCategorySlug;
 let searchQuery = '';
 let currentPage = 1;
 let totalPages = 1;
-const PAGE_SIZE = 40;
+// İlk kişiselleştirilmiş vitrin batch'i; sayfalama eski kartları replace eder.
+const PAGE_SIZE = 24;
 
 function toggleEmptyState(hide: boolean): void {
   const emptyState = document.getElementById('ts-product-grid-empty');

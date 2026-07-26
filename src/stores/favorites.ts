@@ -33,9 +33,20 @@ export interface FavoriteItem {
   addedAt: number;
 }
 
+export interface FavoriteListingSummary {
+  category: string;
+  supplier: { name: string; verified: boolean; country: string };
+  stock_qty: number;
+  in_stock: boolean;
+  current_price: number;
+  currency: string;
+}
+
 export interface FavoritesState {
   lists: FavoriteList[];
   items: FavoriteItem[];
+  /** Current backend metadata, keyed by listing id; null = no longer accessible. */
+  listingSummary?: Record<string, FavoriteListingSummary | null>;
 }
 
 const STORAGE_KEY = "tradehub-favorites-v2";
@@ -95,6 +106,10 @@ function getState(): FavoritesState {
     return {
       lists: Array.isArray(parsed.lists) ? parsed.lists : [],
       items: Array.isArray(parsed.items) ? parsed.items : [],
+      listingSummary:
+        parsed.listingSummary && typeof parsed.listingSummary === "object"
+          ? parsed.listingSummary
+          : undefined,
     };
   } catch {
     return { lists: [], items: [] };
@@ -104,6 +119,21 @@ function getState(): FavoritesState {
 function saveState(state: FavoritesState): void {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
   window.dispatchEvent(new CustomEvent("favorites-changed", { detail: state }));
+}
+
+export function normalizeFavoritesRemoteState(remote: unknown): FavoritesState | null {
+  if (!remote || typeof remote !== "object") return null;
+  const value = remote as Partial<FavoritesState> & {
+    listing_summary?: Record<string, FavoriteListingSummary | null>;
+  };
+  return {
+    lists: Array.isArray(value.lists) ? value.lists : [],
+    items: Array.isArray(value.items) ? value.items : [],
+    listingSummary:
+      value.listing_summary && typeof value.listing_summary === "object"
+        ? value.listing_summary
+        : undefined,
+  };
 }
 
 // ── Backend sync helpers (fire-and-forget; UI bloklamaz) ──
@@ -129,6 +159,10 @@ export function getLists(): FavoriteList[] {
 
 export function getItems(): FavoriteItem[] {
   return getState().items;
+}
+
+export function getListingSummary(listingId: string): FavoriteListingSummary | null | undefined {
+  return getState().listingSummary?.[listingId];
 }
 
 export function isItemFavorited(productId: string): boolean {
@@ -324,12 +358,7 @@ async function fetchFromBackend(): Promise<FavoritesState | null> {
     // callMethod bazen direkt FavoritesState bazen {message: ...} wrap döndürebiliyor;
     // her iki şekli de defansif olarak destekliyoruz.
     const maybeWrapped = res as unknown as { message?: unknown };
-    const remote = (maybeWrapped?.message ?? res) as Partial<FavoritesState> | null;
-    if (!remote || typeof remote !== "object") return null;
-    return {
-      lists: Array.isArray(remote.lists) ? remote.lists : [],
-      items: Array.isArray(remote.items) ? remote.items : [],
-    };
+    return normalizeFavoritesRemoteState(maybeWrapped?.message ?? res);
   } catch {
     return null;
   }
@@ -352,12 +381,7 @@ async function mergeLocalIntoBackend(): Promise<FavoritesState | null> {
       true
     );
     const maybeWrapped = res as unknown as { message?: unknown };
-    const merged = (maybeWrapped?.message ?? res) as Partial<FavoritesState> | null;
-    if (!merged || typeof merged !== "object") return null;
-    return {
-      lists: Array.isArray(merged.lists) ? merged.lists : [],
-      items: Array.isArray(merged.items) ? merged.items : [],
-    };
+    return normalizeFavoritesRemoteState(maybeWrapped?.message ?? res);
   } catch {
     return null;
   }

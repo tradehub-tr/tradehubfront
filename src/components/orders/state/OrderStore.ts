@@ -122,14 +122,39 @@ export class OrderStore {
   private listeners = new Set<() => void>();
   private loading = false;
   private loaded = false;
+  private total = 0;
+  private page = 1;
+  private pageSize = 24;
+  private statusCounts: Record<string, number> = {};
+  private cache = new Map<string, { orders: Order[]; total: number; statusCounts: Record<string, number> }>();
+  private requestId = 0;
+  private error = "";
 
-  async load(): Promise<void> {
-    await this.fetchFromApi();
+  async load(query: { status?: string; search?: string; dateFrom?: string; dateTo?: string; page?: number } = {}): Promise<void> {
+    await this.fetchFromApi(query);
   }
 
-  async fetchFromApi(): Promise<void> {
-    if (this.loading) return;
+  async fetchFromApi(query: { status?: string; search?: string; dateFrom?: string; dateTo?: string; page?: number } = {}): Promise<void> {
+    const requestId = ++this.requestId;
+    const page = Math.max(1, query.page || 1);
+    const status = query.status && query.status !== "all" ? query.status : "";
+    const search = query.search?.trim() || "";
+    const dateFrom = query.dateFrom || "";
+    const dateTo = query.dateTo || "";
+    const cacheKey = [status, search, dateFrom, dateTo, page].join("|");
+    const cached = this.cache.get(cacheKey);
+    if (cached) {
+      this.orders = cached.orders;
+      this.total = cached.total;
+      this.statusCounts = cached.statusCounts;
+      this.page = page;
+      this.loaded = true;
+      this.error = "";
+      this.notify();
+      return;
+    }
     this.loading = true;
+    this.error = "";
     this.notify();
 
     try {
@@ -137,25 +162,51 @@ export class OrderStore {
         success: boolean;
         orders: ApiOrder[];
         total: number;
-      }>("tradehub_core.api.order.get_my_orders", { page_size: 100 });
+        status_counts?: Record<string, number>;
+      }>("tradehub_core.api.order.get_my_orders", {
+        page,
+        page_size: this.pageSize,
+        ...(status ? { status } : {}),
+        ...(search ? { search } : {}),
+        ...(dateFrom ? { date_from: dateFrom } : {}),
+        ...(dateTo ? { date_to: dateTo } : {}),
+      });
 
+      if (requestId !== this.requestId) return;
       if (result?.success && Array.isArray(result.orders)) {
         this.orders = result.orders.map(apiOrderToOrder);
+        this.total = Number(result.total || 0);
+        this.statusCounts = result.status_counts || {};
+        this.page = page;
+        this.cache.set(cacheKey, { orders: this.orders, total: this.total, statusCounts: this.statusCounts });
         this.loaded = true;
       }
     } catch (err) {
+      if (requestId !== this.requestId) return;
       console.warn("[OrderStore] API fetch failed:", err);
       // API başarısız → boş liste (mock data yok artık)
       this.orders = [];
+      this.total = 0;
+      this.statusCounts = {};
+      this.error = "Siparişler yüklenemedi. Lütfen tekrar deneyin.";
     } finally {
-      this.loading = false;
-      this.notify();
+      if (requestId === this.requestId) {
+        this.loading = false;
+        this.notify();
+      }
     }
   }
 
   getOrders(): Order[] {
     return this.orders;
   }
+
+  getTotal(): number { return this.total; }
+  getPage(): number { return this.page; }
+  getPageSize(): number { return this.pageSize; }
+  getStatusCounts(): Record<string, number> { return this.statusCounts; }
+  getError(): string { return this.error; }
+  clearCache(): void { this.cache.clear(); }
 
   getOrderByNumber(orderNumber: string): Order | undefined {
     return this.orders.find((o) => o.orderNumber === orderNumber);
@@ -194,9 +245,15 @@ export class OrderStore {
   ): void {
     const order = this.getOrderByNumber(orderNumber);
     if (!order) return;
+    const previousStatus = order.status;
     order.status = status;
     order.statusColor = statusColor;
     order.statusDescription = statusDescription;
+    this.cache.clear();
+    if (previousStatus !== status) {
+      this.statusCounts[previousStatus] = Math.max(0, (this.statusCounts[previousStatus] || 0) - 1);
+      this.statusCounts[status] = (this.statusCounts[status] || 0) + 1;
+    }
     this.notify();
   }
 

@@ -103,11 +103,11 @@ export function MobileCategoryBar(): string {
 
 /* ──── Init ──── */
 
-export function initMobileCategoryBar(): void {
+export function initMobileCategoryBar(): Promise<void> {
   const tabsContainer = document.getElementById("mcb-tabs");
   const productsContainer = document.getElementById("mcb-products");
 
-  if (!productsContainer || !tabsContainer) return;
+  if (!productsContainer || !tabsContainer) return Promise.resolve();
 
   const TAB_ACT = [
     "font-bold",
@@ -149,7 +149,7 @@ export function initMobileCategoryBar(): void {
   }
 
   // ──── Populate from API ────
-  onCategoriesLoaded((cats) => {
+  return onCategoriesLoaded((cats) => {
     if (!cats.length) return;
     _cats = cats;
 

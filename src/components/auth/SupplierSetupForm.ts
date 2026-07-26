@@ -11,7 +11,6 @@
  */
 
 import { t } from "../../i18n";
-import { callMethod } from "../../utils/api";
 import { validatePhone, validateIBAN, validateTCKN } from "../../utils/tr-validation";
 import { resolveCountry, getFlagEmoji } from "../../data/countries";
 import { getSubdivisionsForCountry } from "../../data/country-subdivisions";
@@ -42,6 +41,35 @@ export interface SupplierSetupFormData {
   return_policy_accepted: boolean;
 }
 
+export type SupplierSetupFieldState = SupplierSetupFormData;
+
+export function collectSupplierSetupData(fields: SupplierSetupFieldState): SupplierSetupFormData {
+  return { ...fields };
+}
+
+export function validateSupplierSetupStep(step: number, fields: SupplierSetupFieldState): boolean {
+  if (step === 1) {
+    const phone = fields.contact_phone.replace(/[\s\-()]/g, "");
+    return !!fields.seller_type && !!fields.business_name.trim() && !!phone && validatePhone(phone);
+  }
+  if (step === 2) {
+    const taxId = fields.tax_id.trim();
+    const isTR = fields.country === "Turkey";
+    return !!fields.tax_id_type && (isTR ? /^\d{10,11}$/.test(taxId.replace(/\D/g, "")) : !!taxId) &&
+      !!fields.tax_office.trim() && !!fields.address_line_1.trim() && !!fields.city.trim() && !!fields.country.trim();
+  }
+  if (step === 3) {
+    const iban = fields.iban.replace(/\s/g, "");
+    const result = iban.length >= 26 ? validateIBAN(iban) : { valid: false };
+    return !!result.valid && !!fields.bank_name.trim() && !!fields.account_holder_name.trim();
+  }
+  if (step === 4) {
+    return !!fields.identity_document_number.trim() && validateTCKN(fields.identity_document_number.replace(/\s/g, "")) &&
+      fields.terms_accepted && fields.privacy_accepted && fields.kvkk_accepted && fields.commission_accepted && fields.return_policy_accepted;
+  }
+  return false;
+}
+
 export interface SupplierSetupFormOptions {
   onSubmit?: (data: SupplierSetupFormData) => void;
   /** Sprint 2.6: Prefill ile başlangıçta hangi step açılsın (kullanıcının
@@ -64,7 +92,7 @@ export function SupplierSetupForm(defaultCountry: string = "TR"): string {
   const cityOptions = getSubdivisionsForCountry(country.code);
   const hasCityDropdown = !!(cityOptions && cityOptions.length > 0);
   return `
-    <div id="supplier-setup-form" class="w-full">
+    <div id="supplier-setup-form" class="w-full" data-supplier-country="${country.nameEN}" data-supplier-country-iso="${country.code}">
       <!-- Step indicator -->
       <div id="supplier-step-indicator" class="flex items-center justify-center gap-2 mb-6">
         ${[1, 2, 3, 4]
@@ -100,6 +128,9 @@ export function SupplierSetupForm(defaultCountry: string = "TR"): string {
         </div>
       </div>
 
+      <!-- Steps 2/3 start inert and are mounted only while active. -->
+      <div data-supplier-step-host="2"></div>
+      <template id="supplier-step-template-2">
       <!-- Step 2: Tax & Address -->
       <div class="supplier-step hidden" data-supplier-step="2">
         <div class="mb-6 text-center lg:text-start">
@@ -201,7 +232,10 @@ export function SupplierSetupForm(defaultCountry: string = "TR"): string {
           </div>
         </div>
       </div>
+      </template>
 
+      <div data-supplier-step-host="3"></div>
+      <template id="supplier-step-template-3">
       <!-- Step 3: Bank Information -->
       <div class="supplier-step hidden" data-supplier-step="3">
         <div class="mb-6 text-center lg:text-start">
@@ -236,9 +270,12 @@ export function SupplierSetupForm(defaultCountry: string = "TR"): string {
           </div>
         </div>
       </div>
+      </template>
 
-      <!-- Step 4: Identity & Agreements -->
-      <div class="supplier-step hidden" data-supplier-step="4">
+      <!-- Step 4 stays inert until the user reaches the agreement stage. -->
+      <div data-supplier-step-host="4"></div>
+      <template id="supplier-step-template-4">
+      <div class="supplier-step" data-supplier-step="4">
         <div class="mb-6 text-center lg:text-start">
           <h2 class="text-xl font-bold text-gray-900 dark:text-white mb-1">${t("auth.supplierSetup.step4Title")}</h2>
           <p class="text-sm text-gray-500 dark:text-gray-400">${t("auth.supplierSetup.step4Desc")}</p>
@@ -299,6 +336,7 @@ export function SupplierSetupForm(defaultCountry: string = "TR"): string {
           </div>
         </div>
       </div>
+      </template>
 
       <!-- Navigation Buttons -->
       <div class="flex items-center gap-3 mt-8">
@@ -358,12 +396,16 @@ const PREFILL_FIELD_MAP: Array<[keyof SupplierSetupPrefill, string]> = [
   ["identity_document_expiry", "ss-id-expiry"],
 ];
 
+const pendingSupplierPrefill = new WeakMap<HTMLElement, SupplierSetupPrefill>();
+
 /**
  * Form'a Draft Application değerlerini doldur. Form render edildikten SONRA
  * çağrılmalı (initSupplierSetupForm sonrası).
  * Dönüş: kullanıcının kaldığı tahmini step (dolu alanlara göre).
  */
 export function applySupplierSetupPrefill(data: SupplierSetupPrefill): number {
+  const form = document.getElementById("supplier-setup-form");
+  if (form) pendingSupplierPrefill.set(form, data);
   for (const [key, inputId] of PREFILL_FIELD_MAP) {
     const value = data[key];
     if (!value) continue;
@@ -396,63 +438,156 @@ export function applySupplierSetupPrefill(data: SupplierSetupPrefill): number {
 export function initSupplierSetupForm(options: SupplierSetupFormOptions = {}): void {
   const container = document.getElementById("supplier-setup-form");
   if (!container) return;
-
+  const form = container;
   let currentStep = Math.min(Math.max(options.initialStep ?? 1, 1), 4);
-  let uploadedFileUrl = "";
   let lastAutoFilledBank = "";
   let lastAutoFilledHolder = "";
+  let cityListeners: AbortController | null = null;
+  const prefill = pendingSupplierPrefill.get(form) ?? {};
+  const fields: SupplierSetupFieldState = {
+    seller_type: "Business", business_name: "", contact_phone: "", tax_id_type: "TCKN",
+    tax_id: "", tax_office: "", address_line_1: "", city: "",
+    country: form.dataset.supplierCountry ?? "Turkey", bank_name: "", iban: "", account_holder_name: "",
+    identity_document_type: "", identity_document_number: "", identity_document_expiry: "", identity_document: "",
+    terms_accepted: false, privacy_accepted: false, kvkk_accepted: false,
+    commission_accepted: false, return_policy_accepted: false,
+    ...prefill,
+  };
 
-  // DOM refs
-  const steps = container.querySelectorAll<HTMLElement>(".supplier-step");
-  const dots = container.querySelectorAll<HTMLElement>(".supplier-step-dot");
-  const backBtn = document.getElementById("ss-back-btn") as HTMLButtonElement;
-  const nextBtn = document.getElementById("ss-next-btn") as HTMLButtonElement;
-  const errorEl = document.getElementById("ss-error");
-
-  // Step 1 fields
-  const sellerType = document.getElementById("ss-seller-type") as HTMLSelectElement;
-  const businessName = document.getElementById("ss-business-name") as HTMLInputElement;
-  const contactPhone = document.getElementById("ss-contact-phone") as HTMLInputElement;
-
-  // Step 2 fields
-  const taxIdType = document.getElementById("ss-tax-id-type") as HTMLInputElement;
-  const taxId = document.getElementById("ss-tax-id") as HTMLInputElement;
-  const taxOffice = document.getElementById("ss-tax-office") as HTMLInputElement;
-  const address = document.getElementById("ss-address") as HTMLInputElement;
-  const city = document.getElementById("ss-city") as HTMLInputElement;
-  const countryCode = document.getElementById("ss-country-code") as HTMLInputElement;
-  const isTR = countryCode.dataset.iso === "TR";
-
-  // Validation error elements
-  const phoneError = document.getElementById("ss-phone-error");
-  const taxIdError = document.getElementById("ss-taxid-error");
-  const ibanError = document.getElementById("ss-iban-error");
-  const tcknError = document.getElementById("ss-tckn-error");
-
-  // Step 3 fields
-  const bankName = document.getElementById("ss-bank-name") as HTMLInputElement;
-  const iban = document.getElementById("ss-iban") as HTMLInputElement;
-  const accountHolder = document.getElementById("ss-account-holder") as HTMLInputElement;
-
-  // Step 4 fields — TEMP-DISABLED: idType ve fileInput HTML yorumda olduğu
-  // için null gelir. Geri açıldığında non-nullable cast'e dönülür.
-  const idType = document.getElementById("ss-id-type") as HTMLSelectElement | null;
-  const idNumber = document.getElementById("ss-id-number") as HTMLInputElement;
-  const idExpiry = document.getElementById("ss-id-expiry") as HTMLInputElement;
-  const fileInput = document.getElementById("ss-id-file") as HTMLInputElement | null;
-  const fileNameEl = document.getElementById("ss-file-name");
-  const termsCheck = document.getElementById("ss-terms") as HTMLInputElement;
-  const privacyCheck = document.getElementById("ss-privacy") as HTMLInputElement;
-  const kvkkCheck = document.getElementById("ss-kvkk") as HTMLInputElement;
-  const commissionCheck = document.getElementById("ss-commission") as HTMLInputElement;
-  const returnCheck = document.getElementById("ss-return") as HTMLInputElement;
+  const dots = form.querySelectorAll<HTMLElement>(".supplier-step-dot");
+  const backBtn = form.querySelector<HTMLButtonElement>("#ss-back-btn")!;
+  const nextBtn = form.querySelector<HTMLButtonElement>("#ss-next-btn")!;
+  const errorEl = form.querySelector<HTMLElement>("#ss-error");
+  const sellerType = form.querySelector<HTMLInputElement>("#ss-seller-type")!;
+  const businessName = form.querySelector<HTMLInputElement>("#ss-business-name")!;
+  const contactPhone = form.querySelector<HTMLInputElement>("#ss-contact-phone")!;
+  const phoneError = form.querySelector<HTMLElement>("#ss-phone-error");
+  let taxId: HTMLInputElement | null = null;
+  let taxIdError: HTMLElement | null = null;
+  let iban: HTMLInputElement | null = null;
+  let bankName: HTMLInputElement | null = null;
+  let accountHolder: HTMLInputElement | null = null;
+  let ibanError: HTMLElement | null = null;
+  let idNumber: HTMLInputElement | null = null;
+  let tcknError: HTMLElement | null = null;
+  let termsCheck: HTMLInputElement | null = null;
+  let privacyCheck: HTMLInputElement | null = null;
+  let kvkkCheck: HTMLInputElement | null = null;
+  let commissionCheck: HTMLInputElement | null = null;
+  let returnCheck: HTMLInputElement | null = null;
 
   // ── Helpers ──
 
-  function showStep(step: number) {
-    steps.forEach((el, i) => {
-      el.classList.toggle("hidden", i + 1 !== step);
+  function hydrateInput(id: string, value: string | boolean): void {
+    const el = form.querySelector<HTMLInputElement>(`#${id}`);
+    if (!el) return;
+    if (el.type === "checkbox") el.checked = Boolean(value);
+    else el.value = String(value);
+  }
+
+  function syncMountedStep(step: number): void {
+    if (step === 1) {
+      fields.seller_type = sellerType.value;
+      fields.business_name = businessName.value.trim();
+      fields.contact_phone = contactPhone.value.trim();
+    } else if (step === 2) {
+      fields.tax_id_type = form.querySelector<HTMLInputElement>("#ss-tax-id-type")?.value ?? fields.tax_id_type;
+      fields.tax_id = taxId?.value.trim() ?? fields.tax_id;
+      fields.tax_office = form.querySelector<HTMLInputElement>("#ss-tax-office")?.value.trim() ?? fields.tax_office;
+      fields.address_line_1 = form.querySelector<HTMLInputElement>("#ss-address")?.value.trim() ?? fields.address_line_1;
+      fields.city = form.querySelector<HTMLInputElement>("#ss-city")?.value.trim() ?? fields.city;
+    } else if (step === 3) {
+      fields.iban = iban?.value.trim() ?? fields.iban;
+      fields.bank_name = bankName?.value.trim() ?? fields.bank_name;
+      fields.account_holder_name = accountHolder?.value.trim() ?? fields.account_holder_name;
+    } else if (step === 4) {
+      fields.identity_document_number = idNumber?.value.trim() ?? fields.identity_document_number;
+      fields.terms_accepted = !!termsCheck?.checked;
+      fields.privacy_accepted = !!privacyCheck?.checked;
+      fields.kvkk_accepted = !!kvkkCheck?.checked;
+      fields.commission_accepted = !!commissionCheck?.checked;
+      fields.return_policy_accepted = !!returnCheck?.checked;
+    }
+  }
+
+  function bindCurrentStepInputs(step: number): void {
+    const root = form.querySelector<HTMLElement>(`[data-supplier-step="${step}"]`);
+    if (!root) return;
+    root.querySelectorAll<HTMLInputElement | HTMLSelectElement>("input, select").forEach((el) => {
+      el.addEventListener("input", () => { syncMountedStep(step); validateCurrentStep(); });
+      el.addEventListener("change", () => { syncMountedStep(step); validateCurrentStep(); });
     });
+  }
+
+  function mountStep(step: 2 | 3): void {
+    if (form.querySelector(`[data-supplier-step="${step}"]`)) return;
+    const host = form.querySelector<HTMLElement>(`[data-supplier-step-host="${step}"]`);
+    const template = form.querySelector<HTMLTemplateElement>(`#supplier-step-template-${step}`);
+    if (!host || !template) return;
+    host.append(template.content.cloneNode(true));
+    if (step === 2) {
+      taxId = form.querySelector<HTMLInputElement>("#ss-tax-id");
+      taxIdError = form.querySelector<HTMLElement>("#ss-taxid-error");
+      hydrateInput("ss-tax-id-type", fields.tax_id_type);
+      hydrateInput("ss-tax-id", fields.tax_id);
+      hydrateInput("ss-tax-office", fields.tax_office);
+      hydrateInput("ss-address", fields.address_line_1);
+      hydrateInput("ss-city", fields.city);
+      if (form.dataset.supplierCountryIso === "TR") {
+        taxId?.addEventListener("input", () => {
+          const cleaned = taxId!.value.replace(/\D/g, "").slice(0, 11);
+          if (cleaned !== taxId!.value) taxId!.value = cleaned;
+          syncMountedStep(2);
+          validateCurrentStep();
+        });
+      }
+      const display = form.querySelector<HTMLElement>("#ss-city-display");
+      if (display && fields.city) display.textContent = fields.city;
+      bindCurrentStepInputs(2);
+      if (form.dataset.supplierCountryIso && getSubdivisionsForCountry(form.dataset.supplierCountryIso)) initCityDropdown(getSubdivisionsForCountry(form.dataset.supplierCountryIso)!);
+    } else {
+      iban = form.querySelector<HTMLInputElement>("#ss-iban");
+      bankName = form.querySelector<HTMLInputElement>("#ss-bank-name");
+      accountHolder = form.querySelector<HTMLInputElement>("#ss-account-holder");
+      ibanError = form.querySelector<HTMLElement>("#ss-iban-error");
+      hydrateInput("ss-iban", fields.iban);
+      hydrateInput("ss-bank-name", fields.bank_name);
+      hydrateInput("ss-account-holder", fields.account_holder_name);
+      iban?.addEventListener("paste", (event) => {
+        event.preventDefault();
+        iban!.value = (event.clipboardData?.getData("text") || "").replace(/\s/g, "").toUpperCase();
+        syncMountedStep(3); validateCurrentStep();
+      });
+      bindCurrentStepInputs(3);
+    }
+  }
+
+  function mountStep4() {
+    if (idNumber) return;
+    const host = form.querySelector<HTMLElement>('[data-supplier-step-host="4"]');
+    const template = form.querySelector<HTMLTemplateElement>("#supplier-step-template-4");
+    if (!host || !template) return;
+    host.append(template.content.cloneNode(true));
+    idNumber = form.querySelector<HTMLInputElement>("#ss-id-number");
+    tcknError = form.querySelector<HTMLElement>("#ss-tckn-error");
+    termsCheck = form.querySelector<HTMLInputElement>("#ss-terms");
+    privacyCheck = form.querySelector<HTMLInputElement>("#ss-privacy");
+    kvkkCheck = form.querySelector<HTMLInputElement>("#ss-kvkk");
+    commissionCheck = form.querySelector<HTMLInputElement>("#ss-commission");
+    returnCheck = form.querySelector<HTMLInputElement>("#ss-return");
+    hydrateInput("ss-id-number", fields.identity_document_number);
+    hydrateInput("ss-terms", fields.terms_accepted); hydrateInput("ss-privacy", fields.privacy_accepted);
+    hydrateInput("ss-kvkk", fields.kvkk_accepted); hydrateInput("ss-commission", fields.commission_accepted);
+    hydrateInput("ss-return", fields.return_policy_accepted);
+    bindCurrentStepInputs(4);
+  }
+
+  function showStep(step: number) {
+    syncMountedStep(currentStep);
+    if (step === 2 || step === 3) mountStep(step);
+    if (step === 4) mountStep4();
+    const steps = form.querySelectorAll<HTMLElement>(".supplier-step");
+    steps.forEach((el) => el.classList.toggle("hidden", Number(el.dataset.supplierStep) !== step));
     dots.forEach((dot, i) => {
       const s = i + 1;
       dot.classList.toggle("bg-orange-500", s <= step);
@@ -469,11 +604,12 @@ export function initSupplierSetupForm(options: SupplierSetupFormOptions = {}): v
     // Step 3'e girişte: Hesap Sahibi'ni Step 1'deki İşletme Ünvanı'ndan
     // otomatik doldur. Kullanıcı manuel düzenlediyse (lastAutoFilledHolder
     // ile uyuşmuyorsa) override etme.
-    if (step === 3 && accountHolder && businessName) {
-      const current = accountHolder.value.trim();
-      const bn = businessName.value.trim();
+    if (step === 3 && accountHolder) {
+      const current = fields.account_holder_name.trim();
+      const bn = fields.business_name.trim();
       if (bn && (!current || current === lastAutoFilledHolder)) {
         accountHolder.value = bn;
+        fields.account_holder_name = bn;
         lastAutoFilledHolder = bn;
       }
     }
@@ -486,8 +622,9 @@ export function initSupplierSetupForm(options: SupplierSetupFormOptions = {}): v
     el.classList.toggle("hidden", !msg);
   }
 
+  function getCurrentFieldState(): SupplierSetupFieldState { return { ...fields }; }
+
   function validateCurrentStep(): boolean {
-    let valid = false;
     switch (currentStep) {
       case 1: {
         const phoneVal = contactPhone.value.replace(/[\s\-()]/g, "");
@@ -496,15 +633,14 @@ export function initSupplierSetupForm(options: SupplierSetupFormOptions = {}): v
           phoneError,
           phoneVal && !phoneOk ? t("auth.supplierSetup.invalidPhone") : ""
         );
-        valid = !!sellerType.value && !!businessName.value.trim() && !!phoneVal && phoneOk;
         break;
       }
       case 2: {
         // TR: Vergi Numarası 10-11 hane integer (regex). Non-TR: serbest metin,
         // sadece non-empty kontrolü. Vergi Dairesi her ülkede serbest metin.
-        const taxIdRaw = taxId.value.trim();
+        const taxIdRaw = fields.tax_id.trim();
         let taxIdOk: boolean;
-        if (isTR) {
+        if (form.dataset.supplierCountryIso === "TR") {
           const digits = taxIdRaw.replace(/\D/g, "");
           taxIdOk = /^\d{10,11}$/.test(digits);
           showFieldError(
@@ -515,17 +651,10 @@ export function initSupplierSetupForm(options: SupplierSetupFormOptions = {}): v
           taxIdOk = taxIdRaw.length > 0;
           showFieldError(taxIdError, "");
         }
-        valid =
-          !!taxIdType.value &&
-          taxIdOk &&
-          !!taxOffice.value.trim() &&
-          !!address.value.trim() &&
-          !!city.value.trim() &&
-          !!countryCode.value.trim();
         break;
       }
       case 3: {
-        const ibanVal = iban.value.replace(/\s/g, "");
+        const ibanVal = fields.iban.replace(/\s/g, "");
         const ibanResult = ibanVal.length >= 26 ? validateIBAN(ibanVal) : { valid: false };
         showFieldError(
           ibanError,
@@ -542,136 +671,43 @@ export function initSupplierSetupForm(options: SupplierSetupFormOptions = {}): v
           lastAutoFilledBank = ibanResult.bankName;
         }
         if (!ibanResult.valid || !ibanResult.bankName) {
-          if (bankName.value === lastAutoFilledBank) bankName.value = "";
+          if (bankName?.value === lastAutoFilledBank) bankName.value = "";
+          if (fields.bank_name === lastAutoFilledBank) fields.bank_name = "";
           lastAutoFilledBank = "";
         }
-        valid =
-          !!bankName.value.trim() && !!ibanVal && ibanResult.valid && !!accountHolder.value.trim();
+        if (ibanResult.valid && ibanResult.bankName) fields.bank_name = ibanResult.bankName;
         break;
       }
       case 4: {
+        if (!idNumber || !termsCheck || !privacyCheck || !kvkkCheck || !commissionCheck || !returnCheck) break;
         const tcknVal = idNumber.value.replace(/\s/g, "");
         const tcknOk = !tcknVal || validateTCKN(tcknVal);
         showFieldError(tcknError, tcknVal && !tcknOk ? t("auth.supplierSetup.invalidTCKN") : "");
         // TEMP-DISABLED: idType.value && uploadedFileUrl koşulları geri
         // eklenecek. Geri açma: HTML bloklarını + bu koşulları + collectData'yı.
-        valid =
-          !!tcknVal &&
-          tcknOk &&
-          termsCheck.checked &&
-          privacyCheck.checked &&
-          kvkkCheck.checked &&
-          commissionCheck.checked &&
-          returnCheck.checked;
         break;
       }
     }
+    const valid = validateSupplierSetupStep(currentStep, getCurrentFieldState());
     nextBtn.disabled = !valid;
     return valid;
   }
 
   function collectData(): SupplierSetupFormData {
-    return {
-      seller_type: sellerType.value,
-      business_name: businessName.value.trim(),
-      contact_phone: contactPhone.value.trim(),
-      tax_id_type: taxIdType.value,
-      tax_id: taxId.value.trim(),
-      tax_office: taxOffice.value.trim(),
-      address_line_1: address.value.trim(),
-      city: city.value.trim(),
-      country: countryCode.value.trim(),
-      bank_name: bankName.value.trim(),
-      iban: iban.value.trim(),
-      account_holder_name: accountHolder.value.trim(),
-      // TEMP-DISABLED: identity_document_type ve identity_document boş gönderiliyor
-      // (HTML yorum satırında). Geri açıldığında idType.value / uploadedFileUrl olur.
-      identity_document_type: idType?.value || "",
-      identity_document_number: idNumber.value.trim(),
-      identity_document_expiry: idExpiry.value,
-      identity_document: uploadedFileUrl,
-      terms_accepted: termsCheck.checked,
-      privacy_accepted: privacyCheck.checked,
-      kvkk_accepted: kvkkCheck.checked,
-      commission_accepted: commissionCheck.checked,
-      return_policy_accepted: returnCheck.checked,
-    };
-  }
-
-  // ── File upload (base64 JSON — same auth pattern as all other API calls) ──
-
-  if (fileInput) {
-    fileInput.addEventListener("change", async () => {
-      const file = fileInput.files?.[0];
-      if (!file) return;
-
-      if (fileNameEl) fileNameEl.textContent = `${t("common.loading")}...`;
-
-      try {
-        // Read file as base64
-        const base64 = await new Promise<string>((resolve, reject) => {
-          const reader = new FileReader();
-          reader.onload = () => resolve(reader.result as string);
-          reader.onerror = () => reject(reader.error);
-          reader.readAsDataURL(file);
-        });
-
-        // Retry once if first attempt fails (session cookie may not be set yet)
-        let result: { file_url: string } | null = null;
-        for (let attempt = 0; attempt < 2; attempt++) {
-          try {
-            result = await callMethod<{ file_url: string }>(
-              "tradehub_core.api.v1.identity.upload_private_file",
-              { filename: file.name, filedata: base64 },
-              true
-            );
-            break;
-          } catch {
-            if (attempt === 0) await new Promise((r) => setTimeout(r, 500));
-          }
-        }
-
-        if (result?.file_url) {
-          uploadedFileUrl = result.file_url;
-          if (fileNameEl) fileNameEl.textContent = file.name;
-        } else {
-          throw new Error("Upload failed");
-        }
-      } catch {
-        uploadedFileUrl = "";
-        if (fileNameEl)
-          fileNameEl.textContent =
-            t("auth.supplierSetup.uploadFailed") || "Yukleme basarisiz. Tekrar deneyin.";
-      }
-
-      validateCurrentStep();
-    });
-  }
-
-  // ── Tax ID input filter: TR'de sadece rakam + max 11 hane; non-TR'de filtre yok ──
-  if (isTR) {
-    taxId.addEventListener("input", () => {
-      const cleaned = taxId.value.replace(/\D/g, "").slice(0, 11);
-      if (cleaned !== taxId.value) {
-        taxId.value = cleaned;
-      }
-    });
-  }
-
-  // ── City: dropdown sadece subdivision listesi olan ülkelerde (TR/US/...) ──
-  const cityOptionsList = getSubdivisionsForCountry(countryCode.dataset.iso || "");
-  if (cityOptionsList && cityOptionsList.length > 0) {
-    initCityDropdown(cityOptionsList);
+    return collectSupplierSetupData(getCurrentFieldState());
   }
 
   function initCityDropdown(cityList: readonly string[]): void {
-    const cityBtn = document.getElementById("ss-city-btn") as HTMLButtonElement | null;
-    const cityDisplay = document.getElementById("ss-city-display");
-    const cityIcon = document.getElementById("ss-city-icon");
-    const cityDropdown = document.getElementById("ss-city-dropdown");
-    const cityListEl = document.getElementById("ss-city-list");
-    const citySearch = document.getElementById("ss-city-search") as HTMLInputElement | null;
-    const cityNoResults = document.getElementById("ss-city-no-results");
+    cityListeners?.abort();
+    cityListeners = new AbortController();
+    const { signal } = cityListeners;
+    const cityBtn = form.querySelector<HTMLButtonElement>("#ss-city-btn");
+    const cityDisplay = form.querySelector<HTMLElement>("#ss-city-display");
+    const cityIcon = form.querySelector<HTMLElement>("#ss-city-icon");
+    const cityDropdown = form.querySelector<HTMLElement>("#ss-city-dropdown");
+    const cityListEl = form.querySelector<HTMLElement>("#ss-city-list");
+    const citySearch = form.querySelector<HTMLInputElement>("#ss-city-search");
+    const cityNoResults = form.querySelector<HTMLElement>("#ss-city-no-results");
     if (!cityBtn || !cityDropdown || !cityListEl || !citySearch) return;
 
     let filtered: readonly string[] = cityList;
@@ -687,7 +723,7 @@ export function initSupplierSetupForm(options: SupplierSetupFormOptions = {}): v
       cityNoResults?.classList.add("hidden");
       cityListEl!.innerHTML = filtered
         .map((name, i) => {
-          const isSelected = name === city.value;
+          const isSelected = name === fields.city;
           const isFocused = i === activeIndex;
           const stateCls = [
             isFocused ? "bg-orange-50 dark:bg-orange-900/30" : "",
@@ -730,10 +766,11 @@ export function initSupplierSetupForm(options: SupplierSetupFormOptions = {}): v
       cityIcon?.classList.add("rotate-180");
       citySearch!.value = "";
       applyFilter("");
-      const idx = filtered.findIndex((c) => c === city.value);
+      const idx = filtered.findIndex((c) => c === fields.city);
       activeIndex = idx >= 0 ? idx : 0;
       renderList();
       window.setTimeout(() => {
+        if (signal.aborted) return;
         citySearch!.focus();
         scrollSelectedIntoView();
       }, 0);
@@ -747,7 +784,9 @@ export function initSupplierSetupForm(options: SupplierSetupFormOptions = {}): v
     }
 
     function select(name: string): void {
-      city.value = name;
+      const cityInput = form.querySelector<HTMLInputElement>("#ss-city");
+      if (cityInput) cityInput.value = name;
+      fields.city = name;
       if (cityDisplay) {
         cityDisplay.textContent = name;
         cityDisplay.classList.remove("text-gray-400", "dark:text-gray-500");
@@ -760,12 +799,12 @@ export function initSupplierSetupForm(options: SupplierSetupFormOptions = {}): v
     cityBtn.addEventListener("click", () => {
       if (cityDropdown.classList.contains("hidden")) open();
       else close();
-    });
+    }, { signal });
 
     cityListEl.addEventListener("click", (e) => {
       const item = (e.target as HTMLElement).closest<HTMLElement>("[data-city]");
       if (item) select(item.getAttribute("data-city") || "");
-    });
+    }, { signal });
 
     cityListEl.addEventListener("mousemove", (e) => {
       const item = (e.target as HTMLElement).closest<HTMLElement>("[data-index]");
@@ -776,9 +815,9 @@ export function initSupplierSetupForm(options: SupplierSetupFormOptions = {}): v
           renderList();
         }
       }
-    });
+    }, { signal });
 
-    citySearch.addEventListener("input", () => applyFilter(citySearch.value));
+    citySearch.addEventListener("input", () => applyFilter(citySearch.value), { signal });
 
     citySearch.addEventListener("keydown", (e) => {
       switch (e.key) {
@@ -829,33 +868,18 @@ export function initSupplierSetupForm(options: SupplierSetupFormOptions = {}): v
           close();
           break;
       }
-    });
+    }, { signal });
 
     document.addEventListener("click", (e) => {
       const target = e.target as HTMLElement;
       if (!cityBtn!.contains(target) && !cityDropdown!.contains(target)) {
         close();
       }
-    });
+    }, { signal });
   }
 
   // ── Event listeners ──
-
-  // Handle IBAN paste: strip spaces and non-alphanumeric chars, then validate
-  iban.addEventListener("paste", (e) => {
-    e.preventDefault();
-    const pasted = e.clipboardData?.getData("text") || "";
-    const cleaned = pasted.replace(/\s/g, "").toUpperCase();
-    iban.value = cleaned;
-    validateCurrentStep();
-  });
-
-  // Validation on input for all steps
-  const allInputs = container.querySelectorAll("input, select");
-  allInputs.forEach((el) => {
-    el.addEventListener("input", () => validateCurrentStep());
-    el.addEventListener("change", () => validateCurrentStep());
-  });
+  bindCurrentStepInputs(1);
 
   // Back button
   backBtn.addEventListener("click", () => {

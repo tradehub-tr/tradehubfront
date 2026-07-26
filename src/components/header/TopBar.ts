@@ -7,7 +7,7 @@
 
 import type { LocaleOption, CurrencyOption } from "../../types/navigation";
 import { cartStore } from "../cart/state/CartStore";
-import { isLoggedIn, getUser, getSessionUser, waitForAuth, logout } from "../../utils/auth";
+import { isLoggedIn, getUser, waitForAuth, logout } from "../../utils/auth";
 import { getListingUrl } from "../../utils/listingUrl";
 import { getBrandUrl } from "../../utils/brandUrl";
 import { getSellerUrl } from "../../utils/sellerUrl";
@@ -38,6 +38,7 @@ import {
   type UnifiedSuggestSeller,
 } from "../../services/searchService";
 import { getAllRecent, hasAnyRecent } from "../../services/recentHistoryService";
+import { createLazyMount, type LazyMountController } from "../../utils/lazyMount";
 
 interface CompactSearchGroupItem {
   label: string;
@@ -374,9 +375,74 @@ function renderCompactStickySearch(): string {
   `;
 }
 
+function renderMobileSearchOverlay(): string {
+  return `
+    <div
+      id="mobile-search-overlay"
+      role="dialog"
+      aria-modal="true"
+      aria-label="${t("common.search")}"
+      aria-hidden="true"
+      inert
+      tabindex="-1"
+      class="fixed inset-0 z-50 bg-white dark:bg-gray-900 hidden flex-col"
+    >
+      <div class="flex items-center gap-1.5 px-3 py-1.5 border-b border-gray-100 dark:border-gray-700">
+        <button id="mobile-search-back" type="button" aria-label="${t("common.cancel")}" class="th-no-press appearance-none focus:outline-none flex items-center justify-center w-7 h-7 shrink-0 text-gray-600 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white">
+          ${getLucideIcon("chevron-left", "w-5 h-5")}
+        </button>
+        <form action="/urunler" method="GET" role="search" class="flex-1 min-w-0">
+          <input type="hidden" name="searchType" value="products" />
+          <div class="flex items-center h-8 rounded-full bg-gray-100 overflow-hidden dark:bg-gray-700">
+            <input
+              id="mobile-search-input"
+              type="text"
+              name="q"
+              class="w-full h-full px-3 text-sm text-gray-900 bg-transparent border-none focus:ring-0 focus:outline-none placeholder-gray-400 dark:text-white"
+              placeholder="${t("header.searchPlaceholder")}"
+              autocomplete="off"
+            />
+            <button
+              id="mobile-search-clear"
+              type="button"
+              hidden
+              aria-label="${t("common.clear")}"
+              class="th-no-press appearance-none focus:outline-none items-center justify-center w-6 h-6 shrink-0 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200"
+            >
+              ${getLucideIcon("x", "w-3.5 h-3.5")}
+            </button>
+            <button type="submit" aria-label="${t("header.searchButton")}" class="th-btn th-no-press flex items-center justify-center h-7 w-7 p-0 mr-0.5 rounded-full cursor-pointer shrink-0">
+              ${getLucideIcon("search", "w-3.5 h-3.5")}
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <div class="flex-1 overflow-y-auto px-4 py-3" id="mobile-search-suggestions">
+        <div class="flex items-center justify-between mb-3">
+          <h3 class="text-base font-bold text-gray-900 dark:text-white" data-i18n="header.recommendedForYou">${t("header.recommendedForYou")}</h3>
+        </div>
+        <div id="mobile-search-results-groups"></div>
+      </div>
+    </div>
+  `;
+}
+
 /**
  * Generates the delivery country selector with popover panel
  */
+function renderCountryPopoverContent(): string {
+  return `
+    <div class="p-5">
+      <h3 class="text-base font-bold text-gray-900 dark:text-white mb-1"><span data-i18n="header.specifyLocation">${t("header.specifyLocation")}</span></h3>
+      <p class="text-sm text-gray-500 dark:text-gray-400 mb-4"><span data-i18n="header.shippingVary">${t("header.shippingVary")}</span></p>
+      <a href="/pages/dashboard/addresses.html" class="th-btn w-full px-4 py-2.5 text-sm font-medium transition-colors mb-4 inline-block text-center">
+        <span data-i18n="header.addAddress">${t("header.addAddress")}</span>
+      </a>
+    </div>
+  `;
+}
+
 function renderCountrySelector(): string {
   const defaultCountry = countryOptions[0];
   return `
@@ -401,44 +467,7 @@ function renderCountrySelector(): string {
     <div data-popover id="popover-deliver-to" role="tooltip"
       class="absolute z-50 invisible inline-block w-80 bg-white border border-gray-200 rounded-md shadow-lg opacity-0 transition-opacity duration-300 dark:bg-gray-800 dark:border-gray-700"
     >
-      <div class="p-5">
-        <h3 class="text-base font-bold text-gray-900 dark:text-white mb-1"><span data-i18n="header.specifyLocation">${t("header.specifyLocation")}</span></h3>
-        <p class="text-sm text-gray-500 dark:text-gray-400 mb-4"><span data-i18n="header.shippingVary">${t("header.shippingVary")}</span></p>
-
-        <!-- Add Address Button -->
-        <a href="/pages/dashboard/addresses.html" class="th-btn w-full px-4 py-2.5 text-sm font-medium transition-colors mb-4 inline-block text-center">
-          <span data-i18n="header.addAddress">${t("header.addAddress")}</span>
-        </a>
-
-        <!-- DISABLED: Ülke/posta kodu seçimi — ileride geliştirilecek
-        <div class="flex items-center gap-3 mb-4">
-          <div class="flex-1 border-t border-gray-200 dark:border-gray-600"></div>
-          <span class="text-sm text-gray-400" data-i18n="common.or">${t("common.or")}</span>
-          <div class="flex-1 border-t border-gray-200 dark:border-gray-600"></div>
-        </div>
-        <div class="mb-3">
-          <select class="th-input th-input-md cursor-pointer">
-            ${countryOptions
-              .map(
-                (country) => `
-              <option value="${country.code}">${country.name}</option>
-            `
-              )
-              .join("")}
-          </select>
-        </div>
-        <div class="mb-4">
-          <input
-            type="text"
-            placeholder="${t("header.enterZip")}" data-i18n-placeholder="header.enterZip"
-            class="th-input th-input-md"
-          />
-        </div>
-        <button type="button" class="th-btn w-full px-4 py-2.5 text-sm font-medium transition-colors">
-          <span data-i18n="common.save">${t("common.save")}</span>
-        </button>
-        -->
-      </div>
+      <div data-lazy-popover-content="country"></div>
     </div>
   `;
 }
@@ -446,6 +475,34 @@ function renderCountrySelector(): string {
 /**
  * Generates the language/currency selector with popover panel
  */
+function renderLanguageCurrencyPopoverContent(): string {
+  return `
+    <div class="p-5">
+      <h3 class="text-base font-bold text-gray-900 dark:text-white mb-1"><span data-i18n="header.langCurrency">${t("header.langCurrency")}</span></h3>
+      <p class="text-sm text-gray-500 dark:text-gray-400 mb-5"><span data-i18n="header.langCurrencyDesc">${t("header.langCurrencyDesc")}</span></p>
+      <div class="mb-4">
+        <label class="block text-sm font-medium text-gray-900 dark:text-white mb-2" data-i18n="header.language">${t("header.language")}</label>
+        <select id="lang-select" data-native-select class="th-input th-input-md cursor-pointer">
+          ${languageOptions
+            .map(
+              (lang) => `
+            <option value="${lang.code}">${lang.name}</option>
+          `
+            )
+            .join("")}
+        </select>
+      </div>
+      <div class="mb-5">
+        <label class="block text-sm font-medium text-gray-900 dark:text-white mb-2" data-i18n="header.currency">${t("header.currency")}</label>
+        <select id="currency-select" data-native-select class="th-input th-input-md cursor-pointer">${buildCurrencyOptionsHtml()}</select>
+      </div>
+      <button type="button" data-locale-save class="th-btn w-full px-4 py-2.5 text-sm font-medium transition-colors">
+        <span data-i18n="common.save">${t("common.save")}</span>
+      </button>
+    </div>
+  `;
+}
+
 function renderLanguageCurrencySelector(): string {
   return `
     <button
@@ -465,40 +522,7 @@ function renderLanguageCurrencySelector(): string {
     <div data-popover id="popover-language-currency" role="tooltip"
       class="absolute z-50 invisible inline-block w-96 bg-white border border-gray-200 rounded-md shadow-lg opacity-0 transition-opacity duration-300 dark:bg-gray-800 dark:border-gray-700"
     >
-      <div class="p-5">
-        <h3 class="text-base font-bold text-gray-900 dark:text-white mb-1"><span data-i18n="header.langCurrency">${t("header.langCurrency")}</span></h3>
-        <p class="text-sm text-gray-500 dark:text-gray-400 mb-5"><span data-i18n="header.langCurrencyDesc">${t("header.langCurrencyDesc")}</span></p>
-
-        <!-- Language Select -->
-        <div class="mb-4">
-          <label class="block text-sm font-medium text-gray-900 dark:text-white mb-2" data-i18n="header.language">${t("header.language")}</label>
-          <!-- data-native-select: SelectMenu genelleştirmesinden opt-out — bu popover
-               site genelinde her sayfada render edilir; initLanguageSelector() +
-               rebuildCurrencyPicker() sık sık programatik senkronizasyon yapıyor ve
-               Flowbite'ın kendi data-popover görünürlük sistemine iç içe geçiyor.
-               Bkz. SelectMenu.ts dosya başı yorumu. -->
-          <select id="lang-select" data-native-select class="th-input th-input-md cursor-pointer">
-            ${languageOptions
-              .map(
-                (lang) => `
-              <option value="${lang.code}">${lang.name}</option>
-            `
-              )
-              .join("")}
-          </select>
-        </div>
-
-        <!-- Currency Select -->
-        <div class="mb-5">
-          <label class="block text-sm font-medium text-gray-900 dark:text-white mb-2" data-i18n="header.currency">${t("header.currency")}</label>
-          <select id="currency-select" data-native-select class="th-input th-input-md cursor-pointer">${buildCurrencyOptionsHtml()}</select>
-        </div>
-
-        <!-- Save Button -->
-        <button type="button" class="th-btn w-full px-4 py-2.5 text-sm font-medium transition-colors">
-          <span data-i18n="common.save">${t("common.save")}</span>
-        </button>
-      </div>
+      <div data-lazy-popover-content="locale"></div>
     </div>
   `;
 }
@@ -858,70 +882,20 @@ export function TopBar(props?: TopBarProps): string {
           </div>
 
           <!-- Mobile Inline Search (between logo and icons) -->
-          <div class="flex-1 min-w-0 mx-0.5 min-[400px]:mx-1 sm:mx-2 xl:hidden" x-data="{ mobileSearchOpen: false, mobileSearchQuery: '' }">
-            <!-- Trigger bar (always visible) -->
-            <div
-              class="flex items-center justify-between h-7 min-[400px]:h-8 sm:h-9 rounded-full border border-gray-300 bg-white cursor-text dark:bg-gray-700 dark:border-gray-600"
-              @click="mobileSearchOpen = true; $nextTick(() => $refs.mobileSearchInput.focus())"
+          <div class="flex-1 min-w-0 mx-0.5 min-[400px]:mx-1 sm:mx-2 xl:hidden">
+            <button
+              id="mobile-search-trigger"
+              type="button"
+              aria-label="${t("header.searchPlaceholder")}"
+              aria-controls="mobile-search-overlay"
+              aria-expanded="false"
+              aria-haspopup="dialog"
+              class="th-no-press flex items-center justify-between w-full h-7 min-[400px]:h-8 sm:h-9 rounded-full border border-gray-300 bg-white cursor-text dark:bg-gray-700 dark:border-gray-600"
             >
               <span class="flex-1 px-2 min-[400px]:px-3 text-[11px] min-[400px]:text-xs sm:text-sm text-gray-400 truncate">${t("header.searchPlaceholder")}</span>
               <span class="th-btn th-no-press flex items-center justify-center h-5 min-[400px]:h-6 sm:h-7 px-2.5 min-[400px]:px-3 sm:px-4 me-0.5 rounded-full text-[10px] min-[400px]:text-xs font-semibold shrink-0">${t("header.searchButton")}</span>
-            </div>
-
-            <!-- Full-screen search overlay -->
-            <div
-              x-show="mobileSearchOpen"
-              x-transition:enter="transition ease-out duration-150"
-              x-transition:enter-start="opacity-0"
-              x-transition:enter-end="opacity-100"
-              x-transition:leave="transition ease-out duration-100"
-              x-transition:leave-start="opacity-100"
-              x-transition:leave-end="opacity-0"
-              class="fixed inset-0 z-50 bg-white dark:bg-gray-900 flex flex-col"
-              x-cloak
-            >
-              <!-- Top bar: back + search -->
-              <div class="flex items-center gap-1.5 px-3 py-1.5 border-b border-gray-100 dark:border-gray-700">
-                <button type="button" @click="mobileSearchOpen = false" aria-label="${t("common.cancel")}" class="th-no-press appearance-none focus:outline-none flex items-center justify-center w-7 h-7 shrink-0 text-gray-600 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white">
-                  ${getLucideIcon("chevron-left", "w-5 h-5")}
-                </button>
-                <form action="/urunler" method="GET" role="search" class="flex-1 min-w-0">
-                  <input type="hidden" name="searchType" value="products" />
-                  <div class="flex items-center h-8 rounded-full bg-gray-100 overflow-hidden dark:bg-gray-700">
-                    <input
-                      x-ref="mobileSearchInput"
-                      x-model="mobileSearchQuery"
-                      type="text"
-                      name="q"
-                      class="w-full h-full px-3 text-sm text-gray-900 bg-transparent border-none focus:ring-0 focus:outline-none placeholder-gray-400 dark:text-white"
-                      placeholder="${t("header.searchPlaceholder")}"
-                      autocomplete="off"
-                    />
-                    <button
-                      type="button"
-                      x-show="mobileSearchQuery"
-                      x-cloak
-                      @click="mobileSearchQuery = ''; $refs.mobileSearchInput.focus()"
-                      aria-label="${t("common.clear")}"
-                      class="th-no-press appearance-none focus:outline-none flex items-center justify-center w-6 h-6 shrink-0 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200"
-                    >
-                      ${getLucideIcon("x", "w-3.5 h-3.5")}
-                    </button>
-                    <button type="submit" aria-label="${t("header.searchButton")}" class="th-btn th-no-press flex items-center justify-center h-7 w-7 p-0 mr-0.5 rounded-full cursor-pointer shrink-0">
-                      ${getLucideIcon("search", "w-3.5 h-3.5")}
-                    </button>
-                  </div>
-                </form>
-              </div>
-
-              <!-- Suggestions -->
-              <div class="flex-1 overflow-y-auto px-4 py-3" id="mobile-search-suggestions">
-                <div class="flex items-center justify-between mb-3">
-                  <h3 class="text-base font-bold text-gray-900 dark:text-white" data-i18n="header.recommendedForYou">${t("header.recommendedForYou")}</h3>
-                </div>
-                <div id="mobile-search-results-groups"></div>
-              </div>
-            </div>
+            </button>
+            <div id="mobile-search-host"></div>
           </div>
 
           <!-- Desktop Compact Sticky Search -->
@@ -1267,7 +1241,9 @@ export function initHeaderCart(): void {
 
   // Sepeti yükle: oturum açıksa API'den (kullanıcıya özel), misafirse localStorage'dan
   (async () => {
-    const sessionUser = getUser() ?? (await getSessionUser());
+    // Modül yüklenirken başlayan tekil session isteğini paylaş. Ayrı
+    // getSessionUser() çağrısı ilk açılışta aynı endpoint'i çoğaltıyordu.
+    const sessionUser = getUser() ?? (await waitForAuth());
     if (sessionUser) {
       try {
         const apiCart = await fetchCart();
@@ -1436,8 +1412,6 @@ export function initLanguageSelector(): void {
   // Run initial translation update for all data-i18n elements
   updatePageTranslations();
 
-  const langSelect = document.getElementById("lang-select") as HTMLSelectElement | null;
-  const currencySelect = document.getElementById("currency-select") as HTMLSelectElement | null;
   const langMap: Record<string, SupportedLang> = {
     TR: "tr",
     EN: "en",
@@ -1445,14 +1419,6 @@ export function initLanguageSelector(): void {
     RU: "ru",
     DE: "en",
   };
-
-  if (langSelect) {
-    langSelect.value = getCurrentLang().toUpperCase();
-  }
-
-  if (currencySelect) {
-    currencySelect.value = getSelectedCurrency().code;
-  }
 
   // Rozeti seçili dil + para birimine göre güncelle (statik i18n metni değil).
   updateLangCurrencyLabel();
@@ -1475,28 +1441,63 @@ export function initLanguageSelector(): void {
     rebuildCurrencyPicker();
   }
 
-  // Desktop popover "Save" button — applies language + currency, then refreshes
-  const popover = document.getElementById("popover-language-currency");
-  const saveBtn = popover?.querySelector<HTMLButtonElement>(".th-btn");
-  if (saveBtn) {
-    saveBtn.addEventListener("click", () => {
-      const selectedLangCode = langSelect?.value || getCurrentLang().toUpperCase();
-      const lang = langMap[selectedLangCode] || "en";
-      localStorage.setItem("i18nextLng", lang);
+  const mountPopoverContent = (
+    targetId: string,
+    contentSelector: string,
+    render: () => string,
+    afterMount?: () => void
+  ): void => {
+    const trigger = document.querySelector<HTMLElement>(`[data-popover-target="${targetId}"]`);
+    const content = document.querySelector<HTMLElement>(contentSelector);
+    if (!trigger || !content || trigger.dataset.lazyContentBound === "true") return;
+    trigger.dataset.lazyContentBound = "true";
+    const mount = (): void => {
+      if (content.dataset.lazyMounted === "true") return;
+      content.dataset.lazyMounted = "true";
+      content.innerHTML = render();
+      updatePageTranslations();
+      afterMount?.();
+    };
+    trigger.addEventListener("pointerenter", mount);
+    trigger.addEventListener("pointerdown", mount);
+    trigger.addEventListener("focus", mount);
+    trigger.addEventListener("click", mount);
+  };
 
+  mountPopoverContent(
+    "popover-deliver-to",
+    "[data-lazy-popover-content='country']",
+    renderCountryPopoverContent
+  );
+  mountPopoverContent(
+    "popover-language-currency",
+    "[data-lazy-popover-content='locale']",
+    renderLanguageCurrencyPopoverContent,
+    () => {
+      const langSelect = document.getElementById("lang-select") as HTMLSelectElement | null;
+      const currencySelect = document.getElementById("currency-select") as HTMLSelectElement | null;
+      const saveBtn = document.querySelector<HTMLButtonElement>("[data-locale-save]");
+      if (langSelect) langSelect.value = getCurrentLang().toUpperCase();
       if (currencySelect) {
-        setSelectedCurrency(currencySelect.value);
+        rebuildCurrencyPicker();
+        currencySelect.value = getSelectedCurrency().code;
       }
+      saveBtn?.addEventListener(
+        "click",
+        () => {
+          const selectedLangCode = langSelect?.value || getCurrentLang().toUpperCase();
+          localStorage.setItem("i18nextLng", langMap[selectedLangCode] || "en");
+          if (currencySelect) setSelectedCurrency(currencySelect.value);
+          window.location.reload();
+        },
+        { once: true }
+      );
+    }
+  );
 
-      window.location.reload();
-    });
-  }
+  initResponsiveCompactSearch();
 
-  // Load dynamic search suggestions for compact header dropdown
-  initCompactSearchSuggestions();
-
-  // Load mobile search suggestions
-  initMobileSearchSuggestions();
+  initMobileSearchOverlay();
 }
 
 /**
@@ -1504,6 +1505,27 @@ export function initLanguageSelector(): void {
  * Boş input → her gruptan popüler/en yeni 5 kayıt.
  * q ≥ 2 karakter → LIKE %q% ile filtreli sonuçlar (300ms debounce).
  */
+const compactSuggestionInputs = new WeakSet<HTMLInputElement>();
+const responsiveCompactInputs = new WeakSet<HTMLInputElement>();
+
+function initResponsiveCompactSearch(): void {
+  const input = document.getElementById("topbar-compact-search-input") as HTMLInputElement | null;
+  if (!input || responsiveCompactInputs.has(input)) return;
+  responsiveCompactInputs.add(input);
+
+  const media = window.matchMedia("(min-width: 1280px)");
+  const ensureInitialized = (): void => initCompactSearchSuggestions();
+  const onMediaChange = (event: MediaQueryListEvent): void => {
+    if (!event.matches) return;
+    ensureInitialized();
+    media.removeEventListener("change", onMediaChange);
+  };
+
+  input.addEventListener("focus", ensureInitialized);
+  media.addEventListener("change", onMediaChange);
+  if (media.matches) ensureInitialized();
+}
+
 function initCompactSearchSuggestions(): void {
   const groupsEl = document.getElementById("topbar-compact-results-groups");
   if (!groupsEl) return;
@@ -1518,6 +1540,8 @@ function initCompactSearchSuggestions(): void {
   const compactInput = document.getElementById(
     "topbar-compact-search-input"
   ) as HTMLInputElement | null;
+  if (!compactInput || compactSuggestionInputs.has(compactInput)) return;
+  compactSuggestionInputs.add(compactInput);
 
   const renderGroups = (data: UnifiedSuggestResult): string => {
     return [
@@ -1613,9 +1637,9 @@ function initCompactSearchSuggestions(): void {
   }
 }
 
-function initMobileSearchSuggestions(): void {
-  const groupsEl = document.getElementById("mobile-search-results-groups");
-  if (!groupsEl) return;
+function initMobileSearchSuggestions(overlay: HTMLElement): () => void {
+  const groupsEl = overlay.querySelector<HTMLElement>("#mobile-search-results-groups");
+  if (!groupsEl) return () => {};
 
   const renderGroups = (data: UnifiedSuggestResult): string => {
     return [
@@ -1646,11 +1670,11 @@ function initMobileSearchSuggestions(): void {
 
   loadSuggestions();
 
-  const mobileInput = document.querySelector<HTMLInputElement>("[x-ref='mobileSearchInput']");
+  const mobileInput = overlay.querySelector<HTMLInputElement>("#mobile-search-input");
   if (mobileInput) {
     let debounceTimer: number | undefined;
     let requestSeq = 0;
-    mobileInput.addEventListener("input", (e) => {
+    const onInput = (e: Event): void => {
       const q = (e.target as HTMLInputElement).value.trim();
       if (debounceTimer) window.clearTimeout(debounceTimer);
       if (q.length < 2) {
@@ -1663,8 +1687,70 @@ function initMobileSearchSuggestions(): void {
         if (mySeq !== requestSeq) return;
         groupsEl.innerHTML = renderGroups(data);
       }, 300);
-    });
+    };
+    mobileInput.addEventListener("input", onInput);
+    return () => {
+      if (debounceTimer) window.clearTimeout(debounceTimer);
+      mobileInput.removeEventListener("input", onInput);
+    };
   }
+  return () => {};
+}
+
+const mobileSearchControllers = new WeakMap<HTMLElement, LazyMountController>();
+
+function mobileSearchElement(): HTMLElement {
+  const template = document.createElement("template");
+  template.innerHTML = renderMobileSearchOverlay().trim();
+  const element = template.content.firstElementChild;
+  if (!(element instanceof HTMLElement)) throw new Error("Mobile search overlay root is missing");
+  return element;
+}
+
+function initMobileSearchOverlay(): void {
+  const trigger = document.getElementById("mobile-search-trigger");
+  const host = document.getElementById("mobile-search-host");
+  if (!trigger || !host || mobileSearchControllers.has(trigger)) return;
+
+  const controller = createLazyMount({
+    trigger,
+    host,
+    closeOnMediaQuery: "(min-width: 1280px)",
+    mount: mobileSearchElement,
+    initialFocus: (overlay) =>
+      overlay.querySelector<HTMLInputElement>("#mobile-search-input"),
+    onMount: (overlay) => {
+      const back = overlay.querySelector<HTMLButtonElement>("#mobile-search-back");
+      const input = overlay.querySelector<HTMLInputElement>("#mobile-search-input");
+      const clear = overlay.querySelector<HTMLButtonElement>("#mobile-search-clear");
+      const close = (): void => controller.close();
+      const clearInput = (): void => {
+        if (!input || !clear) return;
+        input.value = "";
+        clear.hidden = true;
+        clear.classList.remove("flex");
+        input.focus();
+      };
+      const syncClearButton = (): void => {
+        if (!input || !clear) return;
+        clear.hidden = input.value.length === 0;
+        clear.classList.toggle("flex", input.value.length > 0);
+      };
+      const cleanupSuggestions = initMobileSearchSuggestions(overlay);
+      back?.addEventListener("click", close);
+      clear?.addEventListener("click", clearInput);
+      input?.addEventListener("input", syncClearButton);
+      return () => {
+        cleanupSuggestions();
+        back?.removeEventListener("click", close);
+        clear?.removeEventListener("click", clearInput);
+        input?.removeEventListener("input", syncClearButton);
+      };
+    },
+    onOpen: (overlay) => overlay.classList.add("flex"),
+    onClose: (overlay) => overlay.classList.remove("flex"),
+  });
+  mobileSearchControllers.set(trigger, controller);
 }
 
 // ── Auto-init: initHeaderCart() çağırmayan sayfalar için ─────────────────────

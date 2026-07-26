@@ -88,22 +88,47 @@ Alpine.data("interactiveCard", () => ({
 Alpine.data("paymentManagement", () => ({
   payments: [] as PaymentTransaction[],
   refunds: [] as PaymentTransaction[],
-  loading: true,
+  paymentsLoading: true,
+  refundsLoading: false,
+  paymentsLoaded: false,
+  refundsLoaded: false,
   activeTab: "payments" as "payments" | "refunds",
 
   async init() {
+    await this.loadPayments();
+  },
+
+  async loadPayments() {
+    if (this.paymentsLoading === false && this.paymentsLoaded) return;
     try {
-      const [payRes, refRes] = await Promise.all([
-        fetchRecentPayments(1, 10),
-        fetchRecentRefunds(1, 10),
-      ]);
+      this.paymentsLoading = true;
+      const payRes = await fetchRecentPayments(1, 10);
       this.payments = payRes.payments || [];
-      this.refunds = refRes.refunds || [];
+      this.paymentsLoaded = true;
     } catch (e) {
-      console.error("Payment management load error:", e);
+      console.error("Payment management payments load error:", e);
     } finally {
-      this.loading = false;
+      this.paymentsLoading = false;
     }
+  },
+
+  async loadRefunds() {
+    if (this.refundsLoaded || this.refundsLoading) return;
+    try {
+      this.refundsLoading = true;
+      const refRes = await fetchRecentRefunds(1, 10);
+      this.refunds = refRes.refunds || [];
+      this.refundsLoaded = true;
+    } catch (e) {
+      console.error("Payment management refunds load error:", e);
+    } finally {
+      this.refundsLoading = false;
+    }
+  },
+
+  selectTab(tab: "payments" | "refunds") {
+    this.activeTab = tab;
+    if (tab === "refunds") void this.loadRefunds();
   },
 
   formatDate(dateStr: string) {

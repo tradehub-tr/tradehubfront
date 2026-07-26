@@ -33,6 +33,36 @@ interface TailoredCollection {
 // Empty — populated from API in initTailoredSelections()
 const tailoredCollections: TailoredCollection[] = [];
 
+function renderTailoredSkeleton(): string {
+  return `
+    <div
+      data-home-section-skeleton
+      class="absolute inset-0 grid min-h-[280px] grid-cols-1 gap-2 sm:grid-cols-2 lg:grid-cols-3"
+      aria-hidden="true"
+    >
+      ${Array.from(
+        { length: 3 },
+        () => `
+          <div class="animate-pulse rounded-md bg-white p-4">
+            <div class="mb-3 h-4 w-2/3 rounded bg-gray-200"></div>
+            <div class="mb-4 h-3 w-1/3 rounded bg-gray-200"></div>
+            <div class="grid grid-cols-2 gap-2">
+              <div class="aspect-square rounded-md bg-gray-200"></div>
+              <div class="aspect-square rounded-md bg-gray-200"></div>
+            </div>
+          </div>
+        `
+      ).join("")}
+    </div>
+  `;
+}
+
+function showTailoredEmptyState(): void {
+  document.querySelector("[data-home-section='tailored-selections'] [data-home-section-skeleton]")?.remove();
+  const emptyState = document.getElementById("tailored-empty");
+  if (emptyState) emptyState.style.display = "";
+}
+
 function renderProductImage(product: CollectionProduct): string {
   return `
     <div class="relative h-full w-full overflow-hidden rounded-md bg-white" aria-hidden="true">
@@ -110,9 +140,9 @@ function renderCollectionSlide(collection: TailoredCollection): string {
   `;
 }
 
-export function initTailoredSelections(): void {
+export function initTailoredSelections(): Promise<void> {
   const el = document.querySelector<HTMLElement>(".tailored-swiper");
-  if (!el) return;
+  if (!el) return Promise.resolve();
 
   applySwiperDir(el);
   new Swiper(el, {
@@ -145,10 +175,13 @@ export function initTailoredSelections(): void {
   // Load tailored recommendations — 9 grup kartı, kategori başına 2 ürün.
   // Giriş yapmış kullanıcıda aktiviteye göre kişiselleştirilir, aksi halde
   // global top kategoriler (cold-start) döner.
-  initCurrency()
+  return initCurrency()
     .then(() => getTailoredSelections(9))
     .then((result) => {
-      if (!result.groups || result.groups.length === 0) return;
+      if (!result.groups || result.groups.length === 0) {
+        showTailoredEmptyState();
+        return;
+      }
 
       const collections: TailoredCollection[] = result.groups
         .filter((g) => g.products && g.products.length >= 1)
@@ -169,9 +202,13 @@ export function initTailoredSelections(): void {
           };
         });
 
-      if (collections.length === 0) return;
+      if (collections.length === 0) {
+        showTailoredEmptyState();
+        return;
+      }
 
       // Hide empty state
+      document.querySelector("[data-home-section='tailored-selections'] [data-home-section-skeleton]")?.remove();
       const emptyState = document.getElementById("tailored-empty");
       if (emptyState) emptyState.style.display = "none";
 
@@ -188,14 +225,24 @@ export function initTailoredSelections(): void {
         }
       }
     })
-    .catch((err) => console.warn("[TailoredSelections] API load failed:", err));
+    .catch((err) => {
+      console.warn("[TailoredSelections] API load failed:", err);
+      showTailoredEmptyState();
+    });
 }
 
 export function TailoredSelections(): string {
   return `
-    <section class="py-4 lg:py-6" aria-label="Tailored Selections" style="margin-top: 28px;">
+    <section
+      class="py-4 lg:py-6"
+      aria-label="Tailored Selections"
+      aria-busy="true"
+      data-home-section="tailored-selections"
+      data-home-section-state="pending"
+      style="margin-top: 28px;"
+    >
       <div class="container-boxed">
-        <div class="rounded-md grid grid-cols-1 lg:grid-cols-[260px_minmax(0,1fr)] gap-3" style="background-color: var(--tailored-bg, #F5F5F5); padding: var(--space-card-padding, 16px);">
+        <div class="min-h-[328px] rounded-md grid grid-cols-1 lg:grid-cols-[260px_minmax(0,1fr)] gap-3" style="background-color: var(--tailored-bg, #F5F5F5); padding: var(--space-card-padding, 16px);">
           <!-- Lead panel — Editorial Split: başlık + açıklama + CTA -->
           <a
             href="/size-ozel"
@@ -212,16 +259,19 @@ export function TailoredSelections(): string {
           </a>
 
           <!-- Swiper slider -->
-          <div class="group/tailored relative min-w-0">
+          <div class="group/tailored relative min-h-[280px] min-w-0">
             <div id="tailored-swiper" class="swiper tailored-swiper overflow-hidden h-full" aria-label="Tailored selection collections">
               <div class="swiper-wrapper">
                 ${tailoredCollections.length > 0 ? tailoredCollections.map((c) => renderCollectionSlide(c)).join("") : ""}
               </div>
             </div>
-            ${
-              tailoredCollections.length === 0
-                ? `
-            <div id="tailored-empty" class="flex items-center justify-center py-12">
+            ${tailoredCollections.length === 0 ? renderTailoredSkeleton() : ""}
+            <div
+              id="tailored-empty"
+              data-home-section-empty
+              class="absolute inset-0 flex min-h-[280px] items-center justify-center py-12"
+              style="display:none;"
+            >
               <div class="text-center">
                 <svg class="w-12 h-12 mx-auto mb-3 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/>
@@ -229,9 +279,6 @@ export function TailoredSelections(): string {
                 <p class="text-sm text-gray-400">Yak\u0131nda yeni \u00fcr\u00fcnler eklenecek</p>
               </div>
             </div>
-            `
-                : ""
-            }
 
             <!-- Navigation arrows -->
             <button

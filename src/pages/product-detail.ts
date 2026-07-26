@@ -22,7 +22,7 @@ import { recordListingView } from '../services/socialProofService'
 
 // Floating components
 import { FloatingPanel } from '../components/floating'
-import { ChatPopup, initChatTriggers } from '../components/chat-popup'
+import { mountChatPopup, initChatTriggers } from '../components/chat-popup'
 import { chatTriggerAttrs } from '../components/chat-popup/chatTriggerAttrs'
 
 // Alpine.js
@@ -92,6 +92,29 @@ const listingId = _resolveListingIdFromUrl();
 
 const appEl = document.querySelector<HTMLDivElement>('#app')!;
 appEl.classList.add('relative');
+
+function renderMobileProductBar(product: ReturnType<typeof getCurrentProduct>): string {
+  const sellerUrl = escapeHtml(sanitizeUrl(getSellerUrl({ id: product.supplier?.id })));
+  const cartButton =
+    product.sellerKybVerified === false
+      ? `<button type="button" id="pdm-bar-cart" disabled aria-disabled="true" class="pdm-bar-cart-btn th-btn-dark h-10 text-[12px] sm:text-sm opacity-50 !cursor-not-allowed pointer-events-none whitespace-nowrap overflow-hidden text-ellipsis min-w-0" title="${t('common.addToCartDisabledKyb')}">${t('product.addToCart')}</button>`
+      : `<button type="button" id="pdm-bar-cart" data-pdm-sheet="pdm-sheet-options" class="pdm-bar-cart-btn th-btn-dark h-10 text-[12px] sm:text-sm whitespace-nowrap overflow-hidden text-ellipsis min-w-0">${t('product.addToCart')}</button>`;
+
+  return `
+    <div id="pd-mobile-bar" x-data :class="$store.chatPopup.isOpen && 'hidden'" class="xl:hidden grid grid-cols-[44px_44px_minmax(0,1fr)_minmax(0,1fr)] items-center gap-1.5 px-3 py-2 pb-[calc(8px+env(safe-area-inset-bottom))] fixed bottom-0 left-0 right-0 z-100 bg-surface border-t border-border-default shadow-[0_-2px_10px_rgba(0,0,0,0.08)] overflow-hidden box-border">
+      <a href="${sellerUrl}" class="th-no-press appearance-none flex flex-col items-center justify-center gap-0.5 text-[10px] font-medium text-text-body no-underline focus:outline-none active:opacity-70 transition-opacity duration-150">
+        <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M15 21v-4a2 2 0 0 0-2-2h-2a2 2 0 0 0-2 2v4"/><path d="M17.774 10.31a1.12 1.12 0 0 1-1.549 0 2.5 2.5 0 0 0-3.451 0 1.12 1.12 0 0 1-1.548 0 2.5 2.5 0 0 0-3.452 0 1.12 1.12 0 0 1-1.549 0 2.5 2.5 0 0 0-3.77 3.248A2.5 2.5 0 0 0 4 14.5V20a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-5.5a2.5 2.5 0 0 0 1.549-4.442 2.5 2.5 0 0 0-3.775-3.248"/><path d="M4 10.6V3a1 1 0 0 1 1-1h14a1 1 0 0 1 1 1v7.6"/></svg>
+        ${t('product.storeLabel')}
+      </a>
+      <button type="button" id="pdm-bar-chat" ${chatTriggerAttrs(product)} class="th-no-press appearance-none flex flex-col items-center justify-center gap-0.5 text-[10px] font-medium text-text-body bg-transparent border-0 p-0 cursor-pointer focus:outline-none active:opacity-70 transition-opacity duration-150" aria-label="${t('prodUi.chat')}">
+        <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M2.992 16.342a2 2 0 0 1 .094 1.167l-1.065 3.29a1 1 0 0 0 1.236 1.168l3.413-.998a2 2 0 0 1 1.099.092 10 10 0 1 0-4.777-4.719"/><path d="M8 12h.01"/><path d="M12 12h.01"/><path d="M16 12h.01"/></svg>
+        ${t('prodUi.chat')}
+      </button>
+      <button type="button" id="pdm-bar-ask" class="th-btn-outline h-10 text-[12px] sm:text-sm font-semibold whitespace-nowrap overflow-hidden text-ellipsis min-w-0">${t('product.sendQuestion')}</button>
+      ${cartButton}
+    </div>
+  `;
+}
 
 // Show loading state immediately
 appEl.innerHTML = `
@@ -225,6 +248,71 @@ async function renderProductPage() {
     document.title = product.title ? `${product.title} | iStoc` : 'iStoc';
   }
 
+  const renderDesktopLayout = () => `
+    <div id="pd-desktop-layout">
+      <section style="background: var(--pd-bg, #ffffff);">
+        <div class="mx-auto w-full max-w-[1600px] px-4 2xl:px-8">
+          <div id="pd-hero-grid" class="flex flex-col gap-5 pt-3 xl:grid xl:grid-cols-[1fr_380px] xl:gap-10 xl:items-start 2xl:grid-cols-[1fr_460px] 2xl:gap-12">
+            <div id="pd-hero-left" class="w-full min-w-0">
+              ${Breadcrumb(pdCrumbs)}
+              ${ProductTitleBar()}
+              <div id="pd-hero-gallery" class="w-full text-center">${ProductImageGallery()}</div>
+              ${SellerTrustCard()}
+              ${ProductTabs()}
+              ${RelatedProducts()}
+            </div>
+            <div id="pd-hero-info" class="w-full xl:flex xl:flex-col xl:[&.pd-sticky]:sticky xl:[&.pd-sticky]:top-[165px] xl:[&.pd-sticky]:max-h-[calc(100vh-180px)] xl:[&.pd-sticky]:flex xl:[&.pd-sticky]:flex-col">${ProductInfo()}</div>
+          </div>
+        </div>
+      </section>
+    </div>
+  `;
+
+  const renderMobileLayout = () => `
+    <div id="pd-mobile-layout" class="pb-20">
+      ${MobileProductLayout()}
+    </div>
+    ${renderMobileProductBar(product)}
+  `;
+
+  // Bu projedeki `xl:` CSS kırılımı 1024px'tir; JS mount koşulu aynı
+  // eşiği kullanmalı ki görünür düzen ile etkileşimli düzen ayrışmasın.
+  const detailMediaQuery = window.matchMedia('(min-width: 1024px)');
+  let detailLayoutLifecycle: AbortController | null = null;
+  const mountDetailLayout = () => {
+    const host = document.getElementById('pd-detail-layout-host');
+    if (!host) return;
+    const desktop = detailMediaQuery.matches;
+    const nextMode = desktop ? 'desktop' : 'mobile';
+    if (host.dataset.pdLayout === nextMode) return;
+
+    detailLayoutLifecycle?.abort();
+    const lifecycle = new AbortController();
+    detailLayoutLifecycle = lifecycle;
+    host.innerHTML = desktop ? renderDesktopLayout() : renderMobileLayout();
+    host.dataset.pdLayout = nextMode;
+
+    if (desktop) {
+      initProductTitleBar({ signal: lifecycle.signal });
+      initProductInfo({ signal: lifecycle.signal });
+      initProductTabs({ signal: lifecycle.signal });
+      initAttributesTab();
+    } else {
+      initMobileLayout({ signal: lifecycle.signal });
+    }
+
+    // Reviews and related products belong to the currently mounted layout only.
+    initReviews({ signal: lifecycle.signal });
+    initRelatedProducts();
+    initFavorites(product);
+
+    // İlk mount'ta startAlpine() biraz aşağıda çağrılır. Viewport sonradan
+    // değişirse yeni layout ağacı için Alpine'in dinamik tree init'ini çağır.
+    const Alpine = (window as unknown as { Alpine?: { initTree?: (root: HTMLElement) => void } })
+      .Alpine;
+    Alpine?.initTree?.(host);
+  };
+
   // Render full product page
   appEl.innerHTML = `
     <!-- Sticky Header -->
@@ -235,43 +323,14 @@ async function renderProductPage() {
 
     ${MegaMenu()}
 
-    <!-- Main Content -->
-    <main>
-      <!-- DESKTOP LAYOUT -->
-      <div id="pd-desktop-layout" class="hidden xl:block">
-        <section style="background: var(--pd-bg, #ffffff);">
-          <div class="mx-auto w-full max-w-[1600px] px-4 2xl:px-8">
-            <div id="pd-hero-grid" class="flex flex-col gap-5 pt-3 xl:grid xl:grid-cols-[1fr_380px] xl:gap-10 xl:items-start 2xl:grid-cols-[1fr_460px] 2xl:gap-12">
-              <div id="pd-hero-left" class="w-full min-w-0">
-                ${Breadcrumb(pdCrumbs)}
-                ${ProductTitleBar()}
-                <div id="pd-hero-gallery" class="w-full text-center">
-                  ${ProductImageGallery()}
-                </div>
-                ${SellerTrustCard()}
-                ${ProductTabs()}
-                ${RelatedProducts()}
-              </div>
-              <div id="pd-hero-info" class="w-full xl:flex xl:flex-col xl:[&.pd-sticky]:sticky xl:[&.pd-sticky]:top-[165px] xl:[&.pd-sticky]:max-h-[calc(100vh-180px)] xl:[&.pd-sticky]:flex xl:[&.pd-sticky]:flex-col">
-                ${ProductInfo()}
-              </div>
-            </div>
-          </div>
-        </section>
-      </div>
-
-      <!-- MOBILE LAYOUT -->
-      <div id="pd-mobile-layout" class="xl:hidden pb-20">
-        ${MobileProductLayout()}
-      </div>
-    </main>
+    <!-- Main Content: yalnız etkin viewport bileşimi burada mount edilir. -->
+    <main><div id="pd-detail-layout-host" data-pd-layout="pending"></div></main>
 
     <!-- Footer -->
     <footer>${FooterLinks()}</footer>
 
     <!-- Floating Panel -->
     ${FloatingPanel()}
-    ${ChatPopup()}
 
     <!-- Modals / Drawers -->
     ${ReviewsModal()}
@@ -283,31 +342,6 @@ async function renderProductPage() {
     ${CartDrawer()}
     ${ShippingModal()}
 
-    <!-- Mobile Sticky Bottom Bar — Mağaza / Sohbet / Soru sor / Sepete Ekle -->
-    <div id="pd-mobile-bar" x-data :class="$store.chatPopup.isOpen && 'hidden'" class="xl:hidden grid grid-cols-[44px_44px_minmax(0,1fr)_minmax(0,1fr)] items-center gap-1.5 px-3 py-2 pb-[calc(8px+env(safe-area-inset-bottom))] fixed bottom-0 left-0 right-0 z-100 bg-surface border-t border-border-default shadow-[0_-2px_10px_rgba(0,0,0,0.08)] overflow-hidden box-border">
-      <a href="${escapeHtml(sanitizeUrl(getSellerUrl({ id: product.supplier?.id })))}"
-         class="th-no-press appearance-none flex flex-col items-center justify-center gap-0.5 text-[10px] font-medium text-text-body no-underline focus:outline-none active:opacity-70 transition-opacity duration-150">
-        <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M15 21v-4a2 2 0 0 0-2-2h-2a2 2 0 0 0-2 2v4"/><path d="M17.774 10.31a1.12 1.12 0 0 1-1.549 0 2.5 2.5 0 0 0-3.451 0 1.12 1.12 0 0 1-1.548 0 2.5 2.5 0 0 0-3.452 0 1.12 1.12 0 0 1-1.549 0 2.5 2.5 0 0 0-3.77 3.248A2.5 2.5 0 0 0 4 14.5V20a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-5.5a2.5 2.5 0 0 0 1.549-4.442 2.5 2.5 0 0 0-3.775-3.248"/><path d="M4 10.6V3a1 1 0 0 1 1-1h14a1 1 0 0 1 1 1v7.6"/></svg>
-        ${t('product.storeLabel')}
-      </a>
-      <button type="button" id="pdm-bar-chat"
-              ${chatTriggerAttrs(product)}
-              class="th-no-press appearance-none flex flex-col items-center justify-center gap-0.5 text-[10px] font-medium text-text-body bg-transparent border-0 p-0 cursor-pointer focus:outline-none active:opacity-70 transition-opacity duration-150" aria-label="${t('prodUi.chat')}">
-        <svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M2.992 16.342a2 2 0 0 1 .094 1.167l-1.065 3.29a1 1 0 0 0 1.236 1.168l3.413-.998a2 2 0 0 1 1.099.092 10 10 0 1 0-4.777-4.719"/><path d="M8 12h.01"/><path d="M12 12h.01"/><path d="M16 12h.01"/></svg>
-        ${t('prodUi.chat')}
-      </button>
-      <button type="button" id="pdm-bar-ask"
-              class="th-btn-outline h-10 text-[12px] sm:text-sm font-semibold whitespace-nowrap overflow-hidden text-ellipsis min-w-0">${t('product.sendQuestion')}</button>
-      ${
-        product.sellerKybVerified === false
-          ? `
-      <button type="button" id="pdm-bar-cart" disabled aria-disabled="true" class="pdm-bar-cart-btn th-btn-dark h-10 text-[12px] sm:text-sm opacity-50 !cursor-not-allowed pointer-events-none whitespace-nowrap overflow-hidden text-ellipsis min-w-0" title="${t('common.addToCartDisabledKyb')}">${t('product.addToCart')}</button>
-          `
-          : `
-      <button type="button" id="pdm-bar-cart" data-pdm-sheet="pdm-sheet-options" class="pdm-bar-cart-btn th-btn-dark h-10 text-[12px] sm:text-sm whitespace-nowrap overflow-hidden text-ellipsis min-w-0">${t('product.addToCart')}</button>
-          `
-      }
-    </div>
   `;
 
   // Re-initialize all behaviors after render
@@ -317,20 +351,12 @@ async function renderProductPage() {
   initLanguageSelector();
   initAnimatedPlaceholder('#topbar-compact-search-input');
 
-  // Product-specific inits
+  // Sayfa-geneli product init'leri; responsive layout kendi mount'unda init edilir.
   initVerificationHelpers(); // window.__verifiedByText / __downloadReportText (before startAlpine)
   initCartDrawer();
-  initProductTitleBar();
-  initProductInfo();
-  initProductTabs();
-  initAttributesTab();
-  initReviews();
   initShippingModal();
-  initRelatedProducts();
-  initMobileLayout();
-
-  // Favorites
-  initFavorites(product);
+  mountDetailLayout();
+  detailMediaQuery.addEventListener('change', mountDetailLayout);
 
   // ── Original images + title (for "back to default" fallback) ──
   const originalTitle = product.title || '';
@@ -378,6 +404,7 @@ async function renderProductPage() {
     });
   }
 
+  mountChatPopup();
   initChatTriggers();
 
   // Start Alpine LAST

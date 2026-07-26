@@ -11,7 +11,7 @@
  *    server-rendered. Dev'de Vite client storefront'u re-render edip <head>'i
  *    eziyor — bu helper backend'in döndürdüğü `seo` payload'ını alıp DOM
  *    head'ini canonical formata getirir (title, description, OG, canonical,
- *    hreflang, robots).
+ *    hreflang, robots, JSON-LD).
  *
  *      applyServerSeo(product.seo);
  */
@@ -36,6 +36,91 @@ export interface ServerSeoPayload {
   twitter_handle?: string;
   hreflang_links?: Array<{ hreflang: string; href: string }>;
   lang?: string;
+  json_ld?: Array<Record<string, unknown>>;
+}
+
+function schemaIdentity(schema: Record<string, unknown>): string | null {
+  const id = schema["@id"];
+  if (typeof id === "string" && id) return id;
+  const type = schema["@type"];
+  if (typeof type === "string" && type) return `type:${type}`;
+  return null;
+}
+
+function stableScriptId(identity: string): string {
+  let hash = 2166136261;
+  for (let i = 0; i < identity.length; i += 1) {
+    hash ^= identity.charCodeAt(i);
+    hash = Math.imul(hash, 16777619);
+  }
+  return `istoc-jsonld-${(hash >>> 0).toString(36)}`;
+}
+
+function parsedSchema(script: HTMLScriptElement): Record<string, unknown> | null {
+  try {
+    const value: unknown = JSON.parse(script.textContent || "");
+    return value !== null && typeof value === "object" && !Array.isArray(value)
+      ? (value as Record<string, unknown>)
+      : null;
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * Backend kaynaklı JSON-LD'yi kalıcı @id üzerinden günceller. Bot SSR scriptleri
+ * data attribute taşımadığında içeriği okunarak sahiplenilir; böylece hydration
+ * sonrası aynı şemanın ikinci bir kopyası oluşturulmaz.
+ */
+export function syncStructuredData(schemas: Array<Record<string, unknown>>): void {
+  for (const schema of schemas) {
+    const identity = schemaIdentity(schema);
+    if (!identity) continue;
+    const incomingType = schema["@type"];
+
+    let scripts = Array.from(
+      document.querySelectorAll<HTMLScriptElement>('script[type="application/ld+json"]')
+    );
+
+    // Filtre/pagination sonucu değiştiğinde önceki sayfanın ürünleri DOM'da
+    // kalmamalı. ItemList sayfa başına tekil ve değiştirilebilir bir şemadır.
+    if (incomingType === "ItemList") {
+      for (const script of scripts) {
+        const existingSchema = parsedSchema(script);
+        if (
+          existingSchema?.["@type"] === "ItemList" &&
+          schemaIdentity(existingSchema) !== identity
+        ) {
+          script.remove();
+        }
+      }
+      scripts = scripts.filter((script) => script.isConnected);
+    }
+
+    const matches = scripts.filter((script) => {
+      if (script.dataset.istocJsonld === identity) return true;
+      const existingSchema = parsedSchema(script);
+      if (!existingSchema) return false;
+      if (schemaIdentity(existingSchema) === identity) return true;
+
+      // CDN'de eski bot HTML'i kalmış olabilir: eski markup @id taşımıyorsa
+      // aynı sayfadaki aynı schema türünü sahiplenip güncelle.
+      return (
+        typeof schema["@id"] === "string" &&
+        typeof existingSchema["@id"] !== "string" &&
+        existingSchema["@type"] === incomingType
+      );
+    });
+
+    const script = matches.shift() || document.createElement("script");
+    for (const duplicate of matches) duplicate.remove();
+
+    script.type = "application/ld+json";
+    script.id = stableScriptId(identity);
+    script.dataset.istocJsonld = identity;
+    script.textContent = JSON.stringify(schema).replace(/</g, "\\u003c");
+    if (!script.isConnected) document.head.appendChild(script);
+  }
 }
 
 function upsertMetaTag(attr: "name" | "property", key: string, content: string): void {
@@ -126,6 +211,8 @@ export function applyServerSeo(seo: ServerSeoPayload | null | undefined): void {
 
   // HTML lang attribute
   if (seo.lang) document.documentElement.lang = seo.lang;
+
+  if (seo.json_ld?.length) syncStructuredData(seo.json_ld);
 }
 
 /**

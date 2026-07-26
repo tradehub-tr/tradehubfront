@@ -249,7 +249,20 @@ function renderOrderSupplierNote(order: CheckoutDeliveryOrderGroup): string {
   `;
 }
 
-function renderOrder(order: CheckoutDeliveryOrderGroup, defaultExpanded: boolean): string {
+function getSupplierPanelId(orderId: string, index: number): string {
+  // Order ids come from the backend, so encode every code point rather than trusting
+  // their characters to be valid/unique HTML id fragments.
+  const encodedOrderId = Array.from(orderId)
+    .map((character) => character.codePointAt(0)?.toString(16) ?? "0")
+    .join("-");
+  return `checkout-supplier-panel-${index}-${encodedOrderId}`;
+}
+
+function renderOrder(
+  order: CheckoutDeliveryOrderGroup,
+  defaultExpanded: boolean,
+  index: number
+): string {
   const shippingSummary = renderShippingSummary(order);
   const productCount = order.products.length;
   const productCards = order.products.map((p) => renderProductCard(p, productCount)).join("");
@@ -264,6 +277,7 @@ function renderOrder(order: CheckoutDeliveryOrderGroup, defaultExpanded: boolean
     (sum, product) => sum + product.skuLines.reduce((acc, sku) => acc + sku.quantity, 0),
     0
   );
+  const panelId = getSupplierPanelId(order.orderId, index);
 
   return `
     <div class="p-0 border-t border-[#e5e5e5] first:border-t-0 mt-0"
@@ -271,7 +285,9 @@ function renderOrder(order: CheckoutDeliveryOrderGroup, defaultExpanded: boolean
       <button type="button"
         class="th-no-press w-full flex items-center gap-2 sm:gap-3 m-0 px-4 sm:px-[22px] py-[10px] sm:py-[14px] rounded-none cursor-pointer hover:bg-[#fafafa] transition-colors select-none text-start"
         @click="expanded = !expanded"
-        :aria-expanded="expanded">
+        :aria-expanded="expanded"
+        aria-controls="${panelId}"
+        data-checkout-supplier-trigger="${index}">
         <svg class="w-4 h-4 text-text-tertiary shrink-0 hidden sm:block" fill="none" stroke="currentColor" stroke-width="1.75" viewBox="0 0 24 24">
           <path d="M4 7h16M4 7l2-3h12l2 3M4 7v12a2 2 0 002 2h12a2 2 0 002-2V7" stroke-linecap="round" stroke-linejoin="round" />
         </svg>
@@ -286,14 +302,24 @@ function renderOrder(order: CheckoutDeliveryOrderGroup, defaultExpanded: boolean
         </svg>
       </button>
 
-      <div class="pt-1 px-4 sm:px-[22px] pb-4 sm:pb-[18px]" x-show="expanded" x-collapse>
-        ${shippingSummary}
+      <!--
+        In a multi-supplier checkout, closed supplier bodies are not mounted at
+        all. This removes product-card DOM from the initial render. x-if is
+        deliberate here: x-collapse needs an element to remain mounted, which
+        would defeat the DOM saving. Nested product/SKU UI state is recreated
+        when this panel is reopened; checkout-level shipping and note state stay
+        on checkoutItemsDelivery and are therefore preserved.
+      -->
+      <template x-if="expanded">
+        <div id="${panelId}" data-checkout-supplier-body="${index}" class="pt-1 px-4 sm:px-[22px] pb-4 sm:pb-[18px]">
+          ${shippingSummary}
 
-        <div class="mt-4">
-          ${productCards}
-          ${noteBlock}
+          <div class="mt-4">
+            ${productCards}
+            ${noteBlock}
+          </div>
         </div>
-      </div>
+      </template>
     </div>
   `;
 }
@@ -446,7 +472,7 @@ export function ItemsDeliverySection({ orders = [] }: ItemsDeliverySectionProps 
   const defaultExpanded = orders.length <= 1;
   const ordersHtml =
     orders.length > 0
-      ? orders.map((order) => renderOrder(order, defaultExpanded)).join("")
+      ? orders.map((order, index) => renderOrder(order, defaultExpanded, index)).join("")
       : `<p class="text-[#6b7280] text-base p-6">${t("checkout.itemsDeliveryEmpty")}</p>`;
 
   const supplierCount = orders.length;

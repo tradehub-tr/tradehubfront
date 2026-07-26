@@ -53,7 +53,7 @@ export function ChatHeader(opts: ChatHeaderOptions = {}): string {
                 class="appearance-none border-0 bg-transparent p-1.5 rounded cursor-pointer hover:text-[var(--color-text-primary,#0a0a0a)] hover:bg-[var(--color-surface-raised,#f5f5f5)] focus:outline-none"
                 aria-label="${t("chat.aria.more")}">${moreIcon}</button>
         ${showExpand ? `<button type="button" @click="$store.chatPopup.toggleExpanded()" class="appearance-none border-0 bg-transparent p-1.5 rounded cursor-pointer hover:text-[var(--color-text-primary,#0a0a0a)] hover:bg-[var(--color-surface-raised,#f5f5f5)] focus:outline-none" aria-label="${t("chat.aria.expand")}">${expandIcon}</button>` : ""}
-        ${showClose ? `<button type="button" @click="$store.chatPopup.close()" class="appearance-none border-0 bg-transparent p-1.5 rounded cursor-pointer hover:text-[var(--color-text-primary,#0a0a0a)] hover:bg-[var(--color-surface-raised,#f5f5f5)] focus:outline-none" aria-label="${t("chat.aria.close")}">${closeIcon}</button>` : ""}
+        ${showClose ? `<button type="button" data-chat-popup-close @click="$store.chatPopup.close()" class="appearance-none border-0 bg-transparent p-1.5 rounded cursor-pointer hover:text-[var(--color-text-primary,#0a0a0a)] hover:bg-[var(--color-surface-raised,#f5f5f5)] focus:outline-none" aria-label="${t("chat.aria.close")}">${closeIcon}</button>` : ""}
       </div>
     </div>
   `;

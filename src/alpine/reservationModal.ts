@@ -93,6 +93,7 @@ Alpine.store("reservationModal", {
     this.successReservation = null;
     this.successActive = false;
     this.reserving = false;
+    window.dispatchEvent(new CustomEvent("reservation-modal:close"));
   },
 
   selectSlot(id) {

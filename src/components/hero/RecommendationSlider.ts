@@ -143,9 +143,9 @@ function initSwiper(): void {
   });
 }
 
-export function initRecommendationSlider(): void {
+export function initRecommendationSlider(): Promise<void> {
   // Load products from API
-  initCurrency()
+  return initCurrency()
     // verified_supplier: anasayfa KYB doğrulanmamış satıcı ürünü göstermez.
     .then(() => searchListings({ page_size: 9, verified_supplier: true }))
     .then((result) => {

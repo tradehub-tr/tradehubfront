@@ -2,6 +2,7 @@ import { getCurrencySymbol } from "../../utils/currency";
 import { t } from "../../i18n";
 import { escapeHtml, sanitizeUrl, safeHexColor } from "../../utils/sanitize";
 import { updatePriceFacet, initPriceSliders } from "./initPriceSlider";
+import type { FilterFacets } from "../../services/listingService";
 
 /**
  * FilterSidebar Component (iSTOC-style Filter Panel)
@@ -27,6 +28,26 @@ import type {
   SearchableCheckboxFilterSection,
   FilterOption,
 } from "../../types/productListing";
+
+let initialFacetKey = "";
+let initialFacetPromise: Promise<FilterFacets> | null = null;
+let latestFacetCounts: FilterFacets | null = null;
+
+function loadInitialFacets(query?: string, category?: string): Promise<FilterFacets> {
+  const key = JSON.stringify([query ?? "", category ?? ""]);
+  if (initialFacetPromise && initialFacetKey === key) return initialFacetPromise;
+
+  initialFacetKey = key;
+  const request = import("../../services/listingService").then(({ getFilterFacets }) =>
+    getFilterFacets(query, category)
+  );
+  const cachedRequest = request.catch((error: unknown) => {
+    if (initialFacetKey === key) initialFacetPromise = null;
+    throw error;
+  });
+  initialFacetPromise = cachedRequest;
+  return cachedRequest;
+}
 
 /**
  * SVG Icons for filter UI elements
@@ -585,11 +606,10 @@ export function FilterSidebar(sections?: FilterSection[], idPrefix = ""): string
 export function initFilterSidebar(query?: string, category?: string): void {
   // Fiyat slider drag delegation'ı (idempotent — tek sefer bağlanır).
   initPriceSliders();
-  // Load dynamic facets from API
-  import("../../services/listingService")
-    .then(({ getFilterFacets }) => {
-      getFilterFacets(query, category)
-        .then((facets) => {
+  // Desktop ve talep-üzerine mount edilen mobil sidebar aynı başlangıç facet
+  // isteğini ve sonucu paylaşır; mobil paneli açmak ikinci bir ağ isteği yapmaz.
+  void loadInitialFacets(query, category)
+    .then((facets) => {
           // Update category sections
           document
             .querySelectorAll<HTMLElement>('[data-filter-dynamic="categories"]')
@@ -817,25 +837,14 @@ export function initFilterSidebar(query?: string, category?: string): void {
 
           // Statik section'ların (verified-supplier) count'u dinamik render'dan geçmez;
           // ilk yüklemede de doğru sayıyı basmak için map'ten güncelle.
-          updateFacetCounts(facets);
+          updateFacetCounts(latestFacetCounts ?? facets);
 
           // Tüm dinamik facet input'ları DOM'a girdi → filter engine restore'u tetikleyebilir.
           // Eskiden setTimeout(1500ms) hack'i ile yapılıyordu; artık deterministik event.
           document.dispatchEvent(new CustomEvent("filter-facets-loaded"));
-        })
-        .catch((err) => {
-          console.warn("[FilterSidebar] getFilterFacets failed:", err);
-          // Replace skeleton with "no results" so user knows the load finished
-          document.querySelectorAll<HTMLElement>("[data-filter-dynamic]").forEach((container) => {
-            container.innerHTML = `<p class="text-xs" style="color:#9ca3af">${t("products.noResults")}</p>`;
-          });
-          ["supplier-country", "brands", "mgmt-certifications", "product-certifications"].forEach(
-            (id) => toggleSearchForSection(id, 0)
-          );
-        });
     })
     .catch((err) => {
-      console.warn("[FilterSidebar] listingService import failed:", err);
+      console.warn("[FilterSidebar] getFilterFacets failed:", err);
       document.querySelectorAll<HTMLElement>("[data-filter-dynamic]").forEach((container) => {
         container.innerHTML = `<p class="text-xs" style="color:#9ca3af">${t("products.noResults")}</p>`;
       });
@@ -886,6 +895,7 @@ function buildCountMap(
 export function updateFacetCounts(
   facets: import("../../services/listingService").FilterFacets
 ): void {
+  latestFacetCounts = facets;
   const counts = buildCountMap(facets);
   // Tüm sidebar checkbox'larını gez (desktop + mobile sidebar her ikisi de DOM'da)
   document

@@ -249,12 +249,12 @@ export function CategoryShowcase(data: ShowcaseData = getCachedShowcase()): stri
   `;
 }
 
-export async function initCategoryShowcase(): Promise<void> {
+export async function initCategoryShowcase(initialData?: ShowcaseData): Promise<void> {
   const existingRoot = document.querySelector<HTMLElement>("[data-category-showcase-root]");
   if (!existingRoot) return;
 
   try {
-    const fresh = await fetchActiveShowcase();
+    const fresh = initialData ?? (await fetchActiveShowcase());
     const currentHash = existingRoot.dataset.showcaseHash ?? "";
     const nextHash = signature(fresh);
     if (currentHash === nextHash) return;

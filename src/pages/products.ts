@@ -48,6 +48,7 @@ import { initListingFavoriteTriggers, syncListingFavoriteHearts } from '../compo
 import { ShippingModal, initShippingModal, LoginModal } from '../components/product'
 
 import { initCurrency } from '../services/currencyService'
+import { applyServerSeo } from '../seo/setPageMeta'
 
 // Category data for slug/ID → name mapping (dynamic, API-based)
 import { findCategoryBySlug, findCategoryById, findCategoryPath, onCategoriesLoaded } from '../services/categoryService'
@@ -57,6 +58,7 @@ import { initAnimatedPlaceholder } from '../utils/animatedPlaceholder'
 import { pushRecentCategory } from '../utils/recentCategories'
 import { saveRecentCategory } from '../services/recentHistoryService'
 import { escapeHtml } from "../utils/sanitize";
+import { createLazyMount, type LazyMountController } from '../utils/lazyMount'
 
 /* ── Helpers ── */
 
@@ -187,40 +189,8 @@ appEl.innerHTML = `
   <!-- Bottom Navigation (mobile/tablet) -->
   ${BottomNav()}
 
-  <!-- Mobile Filter Drawer (off-canvas for mobile) -->
-  <div
-    id="filter-sidebar-drawer"
-    class="fixed top-0 left-0 z-50 h-screen w-full overflow-y-auto transition-transform -translate-x-full bg-white dark:bg-gray-800 lg:hidden"
-    tabindex="-1"
-    aria-labelledby="filter-sidebar-drawer-label"
-  >
-    <div class="sticky top-0 z-10 flex items-center justify-between h-12 px-4 border-b border-gray-200 bg-white dark:bg-gray-800 dark:border-gray-700">
-      <h5
-        id="filter-sidebar-drawer-label"
-        class="text-base font-bold text-gray-900 dark:text-white"
-      >${t('products.filters')}</h5>
-      <button
-        type="button"
-        data-drawer-hide="filter-sidebar-drawer"
-        aria-controls="filter-sidebar-drawer"
-        class="absolute top-3 end-3 inline-flex items-center justify-center w-8 h-8 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-md text-sm dark:hover:bg-gray-600 dark:hover:text-white"
-      >
-        <svg class="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
-        </svg>
-        <span class="sr-only">${t('common.close')}</span>
-      </button>
-    </div>
-    <div>
-      ${FilterSidebar(undefined, 'mobile')}
-    </div>
-  </div>
-
-  <!-- Drawer backdrop -->
-  <div
-    data-drawer-backdrop="filter-sidebar-drawer"
-    class="hidden bg-gray-900/50 dark:bg-gray-900/80 fixed inset-0 z-40"
-  ></div>
+  <!-- Mobile filter content mounts only after the filter trigger is used. -->
+  <div id="mobile-filter-host"></div>
 
   <!-- Listing Cart Drawer -->
   ${ListingCartDrawer()}
@@ -252,15 +222,72 @@ document.addEventListener('view-mode-change', (e: Event) => {
   setGridViewMode((e as CustomEvent).detail.mode);
 });
 
-// Close mobile filter drawer when user presses the global "Ara" (Apply) button
+let mobileFilterController: LazyMountController | null = null;
+
+function mobileFilterDialogElement(): HTMLElement {
+  const template = document.createElement('template');
+  template.innerHTML = `
+    <section
+      id="mobile-filter-dialog"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="mobile-filter-dialog-label"
+      tabindex="-1"
+      class="fixed inset-0 z-50 flex flex-col bg-white dark:bg-gray-800 lg:hidden"
+    >
+      <div class="flex h-12 shrink-0 items-center justify-between border-b border-gray-200 bg-white px-4 dark:border-gray-700 dark:bg-gray-800">
+        <h2 id="mobile-filter-dialog-label" class="text-base font-bold text-gray-900 dark:text-white">${t('products.filters')}</h2>
+        <button
+          type="button"
+          data-mobile-filter-close
+          class="th-no-press inline-flex h-8 w-8 items-center justify-center rounded-md bg-transparent text-gray-400 hover:bg-gray-200 hover:text-gray-900 dark:hover:bg-gray-600 dark:hover:text-white"
+        >
+          <svg class="h-5 w-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" /></svg>
+          <span class="sr-only">${t('common.close')}</span>
+        </button>
+      </div>
+      <div class="min-h-0 flex-1 overflow-y-auto">
+        ${FilterSidebar(undefined, 'mobile')}
+      </div>
+    </section>
+  `.trim();
+  const element = template.content.firstElementChild;
+  if (!(element instanceof HTMLElement)) throw new Error('Mobile filter dialog root is missing');
+  return element;
+}
+
+function initMobileFilterDialog(): void {
+  const trigger = document.getElementById('mobile-filter-toggle');
+  const host = document.getElementById('mobile-filter-host');
+  if (!trigger || !host || mobileFilterController) return;
+
+  const controller = createLazyMount({
+    trigger,
+    host,
+    closeOnMediaQuery: '(min-width: 1024px)',
+    mount: mobileFilterDialogElement,
+    initialFocus: (dialog) => dialog.querySelector<HTMLButtonElement>('[data-mobile-filter-close]'),
+    onMount: (dialog) => {
+      window.Alpine.initTree(dialog);
+      initFilterSidebar(queryParam || undefined, categoryParam || undefined);
+      const close = (): void => controller.close();
+      dialog.querySelector<HTMLButtonElement>('[data-mobile-filter-close]')?.addEventListener('click', close);
+      return () => {
+        dialog.querySelector<HTMLButtonElement>('[data-mobile-filter-close]')?.removeEventListener('click', close);
+        window.Alpine.destroyTree(dialog);
+      };
+    },
+  });
+  mobileFilterController = controller;
+}
+
+// Mobile "Ara" only closes the dialog that originated the event; desktop filters stay open.
 document.addEventListener('filter-apply', (e: Event) => {
   const source = (e.target as HTMLElement | null)?.closest('[data-filter-prefix-root]');
-  if (!source || source.getAttribute('data-filter-prefix-root') !== 'mobile') return;
-  const hideBtn = document.querySelector<HTMLElement>(
-    '[data-drawer-hide="filter-sidebar-drawer"]'
-  );
-  hideBtn?.click();
+  if (source?.getAttribute('data-filter-prefix-root') === 'mobile') mobileFilterController?.close();
 });
+
+initMobileFilterDialog();
 
 // Initialize shipping modal
 initShippingModal();
@@ -341,8 +368,9 @@ initCurrency().then(() => {
   engine = initFilterEngine({
     baseParams,
     pageSize: 40,
-    onUpdate: (products, total, page, totalPages, hasNext, hasPrev, categoryName) => {
+    onUpdate: (products, total, page, totalPages, hasNext, hasPrev, categoryName, seo) => {
       rerenderProductGrid(products);
+      applyServerSeo(seo);
       if (categoryName) apiCategoryName = categoryName;
       const resolvedKeyword = resolveKeyword() || undefined;
       updateSubHeader({

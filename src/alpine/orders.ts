@@ -60,7 +60,7 @@ export const ORDER_STATUS_MAP: Record<string, string[]> = {
   "completed-review": ["Completed"],
   completed: ["Completed"],
   cancelled: ["Cancelled"],
-  closed: ["Cancelled"],
+  closed: ["Completed", "Cancelled"],
 };
 
 function parsePrice(v: unknown): number {
@@ -84,6 +84,11 @@ Alpine.data("ordersListComponent", () => ({
   orders: [] as Order[],
   loading: true,
   error: "",
+  totalOrders: 0,
+  currentPage: 1,
+  pageSize: 24,
+  statusCounts: {} as Record<string, number>,
+  searchTimer: null as ReturnType<typeof setTimeout> | null,
 
   // Order detail panel — Section 4 (Ürünler) state
   showAllProducts: false,
@@ -97,10 +102,15 @@ Alpine.data("ordersListComponent", () => ({
     orderStore.subscribe(() => {
       this.orders = orderStore.getOrders();
       this.loading = orderStore.isLoading();
+      this.totalOrders = orderStore.getTotal();
+      this.currentPage = orderStore.getPage();
+      this.pageSize = orderStore.getPageSize();
+      this.statusCounts = orderStore.getStatusCounts();
+      this.error = orderStore.getError();
     });
 
     // Backend'den siparişleri çek (OrderStore.load() → order.py::get_my_orders)
-    await orderStore.load();
+    await this.loadPage();
     this.orders = orderStore.getOrders();
     this.loading = false;
 
@@ -118,43 +128,53 @@ Alpine.data("ordersListComponent", () => ({
       const match = this.orders.find((o) => o.orderNumber === urlOrder);
       if (match) this.selectedOrder = match;
     }
+
+    this.$watch("activeTab", () => this.loadPage(1));
+    this.$watch("searchQuery", () => {
+      if (this.searchTimer) clearTimeout(this.searchTimer);
+      this.searchTimer = setTimeout(() => this.loadPage(1), 350);
+    });
   },
 
   get filteredOrders() {
-    return this.orders.filter((o) => {
-      // Status filter
-      const allowedStatuses = ORDER_STATUS_MAP[this.activeTab];
-      const matchStatus =
-        !allowedStatuses || allowedStatuses.length === 0 || allowedStatuses.includes(o.status);
+    return this.orders;
+  },
 
-      // Search filter
-      const q = this.searchQuery.toLowerCase();
-      const matchSearch =
-        !q ||
-        o.orderNumber.toLowerCase().includes(q) ||
-        o.seller.toLowerCase().includes(q) ||
-        o.products.some((p) => p.name.toLowerCase().includes(q));
+  get totalPages() { return Math.max(1, Math.ceil(this.totalOrders / this.pageSize)); },
+  get canPreviousPage() { return this.currentPage > 1; },
+  get canNextPage() { return this.currentPage < this.totalPages; },
 
-      // Date filter
-      let matchDate = true;
-      if (this.dateFilter !== "all" && o.createdAt) {
-        const orderTime = o.createdAt;
-        const now = Date.now();
-        if (this.dateFilter === "7d") {
-          matchDate = now - orderTime <= 7 * 24 * 60 * 60 * 1000;
-        } else if (this.dateFilter === "30d") {
-          matchDate = now - orderTime <= 30 * 24 * 60 * 60 * 1000;
-        } else if (this.dateFilter === "90d") {
-          matchDate = now - orderTime <= 90 * 24 * 60 * 60 * 1000;
-        } else if (this.dateFilter === "custom") {
-          if (this.dateFrom) matchDate = orderTime >= new Date(this.dateFrom).getTime();
-          if (this.dateTo && matchDate)
-            matchDate = orderTime <= new Date(this.dateTo).getTime() + 24 * 60 * 60 * 1000;
-        }
-      }
+  async loadPage(page?: number) {
+    const targetPage = page || this.currentPage;
+    const range = this.getDateRange();
+    const status = this.activeTab === "completed-review" ? "completed" : this.activeTab;
+    await orderStore.load({ status, search: this.searchQuery, dateFrom: range.from, dateTo: range.to, page: targetPage });
+    this.orders = orderStore.getOrders();
+    this.loading = orderStore.isLoading();
+  },
 
-      return matchStatus && matchSearch && matchDate;
-    });
+  async changePage(page: number) {
+    if (page < 1 || page > this.totalPages || page === this.currentPage) return;
+    await this.loadPage(page);
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  },
+
+  resetFilters() {
+    this.searchQuery = "";
+    this.dateFilter = "all";
+    this.dateFrom = "";
+    this.dateTo = "";
+    this.activeTab = "all";
+    this.loadPage(1);
+  },
+
+  getDateRange(): { from: string; to: string } {
+    if (this.dateFilter === "custom") return { from: this.dateFrom, to: this.dateTo };
+    const days = this.dateFilter === "7d" ? 7 : this.dateFilter === "30d" ? 30 : this.dateFilter === "90d" ? 90 : 0;
+    if (!days) return { from: "", to: "" };
+    const from = new Date();
+    from.setDate(from.getDate() - days);
+    return { from: from.toISOString().slice(0, 10), to: "" };
   },
 
   get filteredProducts(): OrderProduct[] {
@@ -212,8 +232,8 @@ Alpine.data("ordersListComponent", () => ({
 
   tabCount(tabId: string) {
     const allowedStatuses = ORDER_STATUS_MAP[tabId];
-    if (!allowedStatuses || allowedStatuses.length === 0) return this.orders.length;
-    return this.orders.filter((o) => allowedStatuses.includes(o.status)).length;
+    if (!allowedStatuses || allowedStatuses.length === 0) return Object.values(this.statusCounts).reduce((sum, count) => sum + count, 0);
+    return allowedStatuses.reduce((sum, status) => sum + (this.statusCounts[status] || 0), 0);
   },
 
   viewDetail(order: Order) {
@@ -254,6 +274,7 @@ Alpine.data("ordersListComponent", () => ({
       this.dateFrom = "";
       this.dateTo = "";
     }
+    this.loadPage(1);
   },
 
   clearTimeRange() {
@@ -261,12 +282,14 @@ Alpine.data("ordersListComponent", () => ({
     this.dateTo = "";
     this.dateFilter = "all";
     this.timeOpen = false;
+    this.loadPage(1);
   },
 
   applyTimeRange() {
     if (this.dateFrom || this.dateTo) {
       this.dateFilter = "custom";
       this.timeOpen = false;
+      this.loadPage(1);
     }
   },
 

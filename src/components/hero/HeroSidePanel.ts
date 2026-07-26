@@ -125,13 +125,13 @@ function startRotation(card: HTMLElement, slides: HTMLElement[], dots: HTMLEleme
   play();
 }
 
-export function initHeroSidePanel(): void {
+export function initHeroSidePanel(): Promise<void> {
   const card = document.getElementById("hero-deals");
   const stage = document.getElementById("hero-deals-stage");
   const dotsWrap = document.getElementById("hero-deals-dots");
-  if (!card || !stage || !dotsWrap) return;
+  if (!card || !stage || !dotsWrap) return Promise.resolve();
 
-  initCurrency()
+  return initCurrency()
     // verified_supplier: anasayfa KYB doğrulanmamış satıcı ürünü göstermez.
     .then(() =>
       searchListings({

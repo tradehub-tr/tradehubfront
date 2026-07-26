@@ -2,10 +2,9 @@
  * E2E — Products page filter behaviour.
  *
  * Backend lokalde ayakta değil — `page.route()` ile `/api/method/...` çağrıları mock'lanır.
- * Sayfa hem desktop (`.hidden lg:block`) hem mobile (`#filter-sidebar-drawer`) için
- * `FilterSidebar()`'ı iki kez render eder → DOM'da aynı `data-filter-value`'ya sahip
- * iki checkbox bulunur. Bu test paketi multi-select chip akışının bu duplikasyonu
- * doğru yönettiğini doğrular.
+ * Masaüstü filtre başlangıçta render edilir; mobil filtre ise yalnız kullanıcı
+ * tetiklediğinde mount edilir. Bu paket hem filtre state'ini hem de bu DOM bütçesini
+ * korur.
  */
 import { test, expect, type Route, type Page } from "@playwright/test";
 
@@ -54,6 +53,25 @@ const LISTINGS_EMPTY: Record<string, unknown> = {
   total_pages: 1,
 };
 
+const LISTINGS_WITH_NEXT_PAGE: Record<string, unknown> = {
+  data: [
+    {
+      id: "LST-FIXTURE-1",
+      slug: "fixture-urun",
+      name: "Fixture Ürün",
+      price: "₺100",
+      moq: "1 adet",
+      imageSrc: "/placeholder.png",
+      supplierName: "Fixture Tedarikçi",
+    },
+  ],
+  total: 80,
+  page: 1,
+  total_pages: 2,
+  has_next: true,
+  has_prev: false,
+};
+
 async function mockBackend(page: Page): Promise<void> {
   // Playwright route handler sırası: son eklenen ilk çalıştırılır.
   // Catch-all en BAŞTA, spesifik handler'lar SONRA ki en spesifik önce eşleşsin.
@@ -90,6 +108,50 @@ async function mockBackend(page: Page): Promise<void> {
 test.describe("Products page — multi-select filter chips", () => {
   test.beforeEach(async ({ page }) => {
     await mockBackend(page);
+  });
+
+  test("mobil filtre içeriği kullanıcı açana kadar DOM'da yoktur ve ilk açılışta mount edilir", async ({
+    page,
+  }) => {
+    await page.setViewportSize({ width: 390, height: 844 });
+    await page.goto("/pages/products.html");
+
+    await expect(page.locator('[data-filter-prefix-root="desktop"]')).toBeAttached();
+    await expect(page.locator('[data-filter-prefix-root="mobile"]')).toHaveCount(0);
+
+    await page.locator("#mobile-filter-toggle").click();
+
+    const mobileSidebar = page.locator('[data-filter-prefix-root="mobile"]');
+    await expect(mobileSidebar).toBeVisible();
+    await expect(mobileSidebar).toHaveCount(1);
+
+    await page.keyboard.press("Escape");
+    await expect(mobileSidebar).toBeHidden();
+  });
+
+  test("dolu ilk sonuç sayfası kullanıcı sayfalamaya basmadan ikinci sayfayı istemez", async ({
+    page,
+  }) => {
+    await page.unroute("**/api/method/tradehub_core.api.listing.get_listings*");
+    const requestedPages: string[] = [];
+    await page.route(
+      "**/api/method/tradehub_core.api.listing.get_listings*",
+      async (route: Route) => {
+        const pageNumber = new URL(route.request().url()).searchParams.get("page") ?? "1";
+        requestedPages.push(pageNumber);
+        await route.fulfill({
+          status: 200,
+          contentType: "application/json",
+          body: JSON.stringify({ message: LISTINGS_WITH_NEXT_PAGE }),
+        });
+      }
+    );
+
+    await page.goto("/pages/products.html");
+    await expect.poll(() => requestedPages.length).toBeGreaterThan(0);
+    await page.waitForTimeout(750);
+
+    expect(requestedPages).toEqual(["1"]);
   });
 
   test("Tek bir ülke seçilince chip yalnızca BİR kez render edilmeli (dupe yok)", async ({
@@ -262,11 +324,15 @@ test.describe("Products page — multi-select filter chips", () => {
     await chips.locator("button").first().click();
     await page.waitForTimeout(400);
 
-    // Hem desktop hem mobile sidebar checkbox'ları uncheck olmalı
+    // Desktop checkbox uncheck olmalı. Mobil filtre henüz mount edilmemiştir;
+    // mobil viewport'ta ilk açılışta aynı shared state'in unchecked geldiğini doğrula.
     await expect(desktopTr).not.toBeChecked();
+    await page.setViewportSize({ width: 390, height: 844 });
+    await page.locator("#mobile-filter-toggle").click();
     const mobileTr = page.locator(
       '[data-filter-prefix-root="mobile"] input[data-filter-section="supplier-country"][data-filter-value="TR"]'
     );
+    await expect(mobileTr).toBeAttached();
     await expect(mobileTr).not.toBeChecked();
 
     // Chip container empty
@@ -465,6 +531,52 @@ test.describe("Products page — multi-select filter chips", () => {
     });
 
     await expect(verifiedLabel.locator("span.ms-auto")).toHaveText("(8)", { timeout: 5_000 });
+  });
+
+  test("mobil filtre ilk açılışta masaüstündeki güncel facet sayacını korumalı", async ({
+    page,
+  }) => {
+    await page.unroute("**/api/method/tradehub_core.api.listing.get_filter_facets*");
+    await page.route(
+      "**/api/method/tradehub_core.api.listing.get_filter_facets*",
+      async (route: Route) => {
+        const isFiltered = route.request().url().includes("country=TR");
+        await route.fulfill({
+          status: 200,
+          contentType: "application/json",
+          body: JSON.stringify({
+            message: { data: { ...FACETS_BASE, verifiedSupplierCount: isFiltered ? 8 : 20 } },
+          }),
+        });
+      }
+    );
+
+    await page.goto("/pages/products.html");
+    const desktopTurkey = page.locator(
+      '[data-filter-prefix-root="desktop"] input[data-filter-section="supplier-country"][data-filter-value="TR"]'
+    );
+    await expect(desktopTurkey).toBeAttached({ timeout: 10_000 });
+    await page.evaluate(() => {
+      const input = document.querySelector<HTMLInputElement>(
+        '[data-filter-prefix-root="desktop"] input[data-filter-section="supplier-country"][data-filter-value="TR"]'
+      );
+      if (!input) throw new Error("desktop TR checkbox not found");
+      input.checked = true;
+      input.dispatchEvent(new Event("change", { bubbles: true }));
+    });
+
+    const desktopVerified = page.locator(
+      '[data-filter-prefix-root="desktop"] label:has(input[data-filter-section="verified-supplier"][data-filter-value="1"]) span.ms-auto'
+    );
+    await expect(desktopVerified).toHaveText("(8)", { timeout: 5_000 });
+
+    await page.setViewportSize({ width: 390, height: 844 });
+    await page.locator("#mobile-filter-toggle").click();
+
+    const mobileVerified = page.locator(
+      '[data-filter-prefix-root="mobile"] label:has(input[data-filter-section="verified-supplier"][data-filter-value="1"]) span.ms-auto'
+    );
+    await expect(mobileVerified).toHaveText("(8)");
   });
 
   test("Fiyat facet'i histogram bar'ları + slider göstermeli, slider hareketi input'u doldurmalı (İş 2)", async ({

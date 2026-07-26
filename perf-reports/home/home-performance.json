@@ -1,0 +1,178 @@
+{
+  "generatedAt": "2026-07-25T07:36:45.690Z",
+  "baseUrl": "http://traderup.localhost",
+  "targetUrl": "http://traderup.localhost",
+  "runs": [
+    {
+      "domNodes": 1477,
+      "mainDomNodes": 843,
+      "hiddenDomNodes": 176,
+      "svg": 149,
+      "images": 21,
+      "imageBytes": 2139961,
+      "api": 12,
+      "apiPayloadBytes": 21750,
+      "duplicateApiEndpoints": [],
+      "duplicateApiEndpointCount": 0,
+      "duplicateIds": [],
+      "duplicateIdCount": 0,
+      "js": 32,
+      "jsBytes": 346433,
+      "css": 2,
+      "cssBytes": 68074,
+      "closedOverlayNodes": 255,
+      "transferBytes": 2548256,
+      "lcpMs": 1472,
+      "cls": 0.17581054687499997,
+      "longTaskCount": 1,
+      "longTaskDurationMs": 234,
+      "readinessSelector": "[data-perf-ready='true']",
+      "consoleErrors": []
+    },
+    {
+      "domNodes": 1477,
+      "mainDomNodes": 843,
+      "hiddenDomNodes": 176,
+      "svg": 149,
+      "images": 21,
+      "imageBytes": 1962542,
+      "api": 12,
+      "apiPayloadBytes": 21750,
+      "duplicateApiEndpoints": [],
+      "duplicateApiEndpointCount": 0,
+      "duplicateIds": [],
+      "duplicateIdCount": 0,
+      "js": 32,
+      "jsBytes": 346433,
+      "css": 2,
+      "cssBytes": 68074,
+      "closedOverlayNodes": 255,
+      "transferBytes": 2540710,
+      "lcpMs": 608,
+      "cls": 0.17581054687499997,
+      "longTaskCount": 1,
+      "longTaskDurationMs": 91,
+      "readinessSelector": "[data-perf-ready='true']",
+      "consoleErrors": []
+    },
+    {
+      "domNodes": 1477,
+      "mainDomNodes": 843,
+      "hiddenDomNodes": 176,
+      "svg": 149,
+      "images": 21,
+      "imageBytes": 1962542,
+      "api": 12,
+      "apiPayloadBytes": 21750,
+      "duplicateApiEndpoints": [],
+      "duplicateApiEndpointCount": 0,
+      "duplicateIds": [],
+      "duplicateIdCount": 0,
+      "js": 32,
+      "jsBytes": 346433,
+      "css": 2,
+      "cssBytes": 68074,
+      "closedOverlayNodes": 255,
+      "transferBytes": 2548256,
+      "lcpMs": 960,
+      "cls": 0.17581054687499997,
+      "longTaskCount": 2,
+      "longTaskDurationMs": 196,
+      "readinessSelector": "[data-perf-ready='true']",
+      "consoleErrors": []
+    }
+  ],
+  "budgets": {
+    "initial": {
+      "nodes": 5250,
+      "svg": 680,
+      "api": 22,
+      "js": 35,
+      "cls": 0.1
+    },
+    "target": {
+      "nodes": 4000,
+      "svg": 400,
+      "api": 12,
+      "js": 25
+    },
+    "regression": {
+      "maxPercent": 10,
+      "matureAfterAcceptedRuns": 2
+    },
+    "closedOverlay": {
+      "nodes": 1200,
+      "selectors": [
+        "[data-home-overlay][data-home-overlay-state='closed']",
+        "[data-home-overlay][hidden]",
+        "#istoc-mega-overlay",
+        "#cat-fullscreen-overlay.hidden",
+        "#account-fullscreen-overlay.hidden"
+      ]
+    }
+  },
+  "summary": {
+    "domNodes": 1477,
+    "mainDomNodes": 843,
+    "hiddenDomNodes": 176,
+    "svg": 149,
+    "images": 21,
+    "imageBytes": 1962542,
+    "api": 12,
+    "apiPayloadBytes": 21750,
+    "duplicateApiEndpointCount": 0,
+    "duplicateIdCount": 0,
+    "js": 32,
+    "jsBytes": 346433,
+    "css": 2,
+    "cssBytes": 68074,
+    "closedOverlayNodes": 255,
+    "transferBytes": 2548256,
+    "cls": 0.17581054687499997,
+    "lcpMs": 960,
+    "longTaskCount": 1,
+    "longTaskDurationMs": 196,
+    "consoleErrorCount": 0
+  },
+  "budgetChecks": {
+    "nodes": {
+      "limit": 5250,
+      "value": 1477,
+      "passed": true
+    },
+    "svg": {
+      "limit": 680,
+      "value": 149,
+      "passed": true
+    },
+    "api": {
+      "limit": 22,
+      "value": 12,
+      "passed": true
+    },
+    "js": {
+      "limit": 35,
+      "value": 32,
+      "passed": true
+    },
+    "cls": {
+      "limit": 0.1,
+      "value": 0.17581054687499997,
+      "passed": false
+    }
+  },
+  "regression": {
+    "source": null,
+    "acceptedRuns": 0,
+    "maturityRuns": 2,
+    "enforcement": "warn",
+    "checks": {},
+    "promotionRequested": false,
+    "promoted": false
+  },
+  "averages": {
+    "cls": 0.17581054687499997,
+    "lcpMs": 1013.3333333333334,
+    "longTaskDurationMs": 173.66666666666666
+  }
+}

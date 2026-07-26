@@ -42,6 +42,11 @@ export interface ListingCardOptions {
    * Ana sayfa vitrini `true` geçer; liste/arama sayfaları etkilenmez.
    */
   containImage?: boolean;
+  /**
+   * Ana sayfaya özel tek-grid kartı. Liste/dense-mobile varyantlarını, kapalı
+   * aksiyonları ve boş sosyal kanıt slotlarını hiç üretmez.
+   */
+  homeCompact?: boolean;
 }
 
 /**
@@ -76,23 +81,42 @@ function renderImageSlider(
   // `;
   // ──────────────────────────────────────────────────────────────
 
-  // Build image list from available source
-  const realImageSrc = card.imageSrc || "";
-  const imageList: string[] = realImageSrc ? [realImageSrc] : [];
+  // API bazı koleksiyonlarda ek görselleri `images` içinde URL olarak döndürüyor;
+  // eski placeholder kind değerleri de aynı alanda kalabildiği için yalnız gerçek
+  // URL/path değerlerini medya olarak kabul et.
+  const isImageSource = (value: unknown): value is string =>
+    typeof value === "string" &&
+    (/^(?:https?:)?\/\//.test(value) || value.startsWith("/") || value.startsWith("data:image/"));
+  const primaryImage = isImageSource(card.imageSrc) ? card.imageSrc : "";
+  const additionalImages = (card.images ?? [])
+    .filter(isImageSource)
+    .filter((src) => src !== primaryImage);
+  const imageList = primaryImage
+    ? [primaryImage, ...additionalImages]
+    : additionalImages;
   const hasMultiple = imageList.length > 1;
 
   let slidesHtml: string;
+  let secondarySlidesTemplate = "";
 
   if (imageList.length > 0) {
-    slidesHtml = imageList
-      .map(
-        (src, i) => `
+    const renderSlide = (src: string, i: number): string => `
       <div class="w-full h-full flex-shrink-0">
         <img src="${escapeHtml(sanitizeUrl(src))}" alt="${escapeHtml(card.name)}${i > 0 ? ` - ${i + 1}` : ""}" class="w-full h-full ${imgFit}" width="400" height="400" decoding="async" ${i > 0 || opts.lazy ? 'loading="lazy"' : ""} />
       </div>
-    `
+    `;
+    slidesHtml = imageList
+      .slice(0, 1)
+      .map(
+        (src, i) => renderSlide(src, i)
       )
       .join("");
+    if (imageList.length > 1) {
+      secondarySlidesTemplate = `<template data-slider-secondary="${escapeHtml(card.id)}">${imageList
+        .slice(1)
+        .map((src, index) => renderSlide(src, index + 1))
+        .join("")}</template>`;
+    }
   } else {
     // No image — show placeholder
     slidesHtml = `
@@ -140,9 +164,11 @@ function renderImageSlider(
       <!-- Slides container -->
       <div class="product-slider flex w-full h-full transition-transform duration-300 ease-out"
            data-slider-id="${escapeHtml(card.id)}"
+           ${hasMultiple ? 'data-secondary-media="pending"' : ""}
            style="transform: translateX(0%)">
         ${slidesHtml}
       </div>
+      ${secondarySlidesTemplate}
 
       ${arrowsHtml}
       ${dotsHtml}
@@ -316,7 +342,50 @@ export function renderListingCard(
               max-sm:group-data-[list-mode=list]/grid:top-1 max-sm:group-data-[list-mode=list]/grid:end-1 max-sm:group-data-[list-mode=list]/grid:w-6 max-sm:group-data-[list-mode=list]/grid:h-6"
               aria-label="${t("product.addToFavorites")}">
         <svg class="w-[18px] h-[18px] pointer-events-none max-sm:group-data-[list-mode=list]/grid:w-3.5 max-sm:group-data-[list-mode=list]/grid:h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.51 4.04 3 5.5l7 7Z"/></svg>
+	      </button>`;
+  const homeFavBtnHtml = `<button type="button"
+              data-fav-btn="${escapeAttr(card.id)}"
+              data-product-title="${escapeAttr(card.name)}"
+              data-product-price="${escapeAttr(card.price)}"
+              data-product-thumb="${escapeAttr(card.imageSrc ?? "")}"
+              data-product-min-order="${escapeAttr(card.moq ?? "")}"
+              class="th-no-press absolute top-2 end-2 z-30 flex h-8 w-8 cursor-pointer items-center justify-center rounded-full border-0 bg-white/95 text-gray-500 shadow-sm hover:text-red-500"
+              aria-label="${t("product.addToFavorites")}">
+        <svg class="h-[18px] w-[18px] pointer-events-none" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.51 4.04 3 5.5l7 7Z"/></svg>
       </button>`;
+
+  if (opts.homeCompact) {
+    return `
+      <div
+        data-card-variant="home-compact"
+        class="fy26-product-card-wrapper relative isolate flex w-full flex-col overflow-hidden rounded-md border border-gray-200 bg-white pb-3 transition-shadow duration-200 ease-out hover:z-10 hover:shadow-[0_1px_4px_rgba(0,0,0,0.06),0_8px_24px_rgba(0,0,0,0.14)] hover:ring-1 hover:ring-gray-200"
+      >
+        <div class="searchx-img-area relative mb-3" data-sp-host="${escapeAttr(card.id)}">
+          <a href="${escapeHtml(sanitizeUrl(card.href))}" class="block">
+            ${rankBadgeHtml}${oosBadgeHtml}
+            ${kybBadgeHtml}${discountBadgeHtml}
+            ${oosOverlayHtml}
+            ${renderImageSlider(card, sliderOpts)}
+          </a>
+          ${homeFavBtnHtml}
+        </div>
+        <div class="flex min-h-[104px] flex-1 flex-col px-3">
+          <h2 class="searchx-product-e-title m-0 min-h-[40px] overflow-hidden text-ellipsis text-sm font-normal leading-5 text-[#333] line-clamp-2">
+            ${brandInlineHtml}<a href="${escapeHtml(sanitizeUrl(card.href))}" target="_blank" class="text-inherit no-underline hover:text-primary-500"><span>${escapeHtml(card.name)}</span></a>
+          </h2>
+          <div class="mt-2">
+            ${
+              kybBlocked
+                ? `<div class="fy26-price text-sm font-medium leading-5 text-amber-800" title="${t("common.kybGateBannerTitle")}">${t("common.kybGateBannerTitle")}</div>`
+                : `<div class="fy26-price whitespace-nowrap text-lg font-semibold leading-[26px] text-gray-900">${localizePriceString(card.price)}</div>`
+            }
+            ${oldPriceHtml}
+            ${isOOS ? `<div class="mt-1 text-xs font-medium text-red-600">${t("products.outOfStock")}</div>` : ""}
+          </div>
+        </div>
+      </div>
+    `.replace(/^[\t ]+$/gm, "").trimEnd();
+  }
   // data-seller-id olmazsa chat popup satıcıyı çözemez ve inbox'taki İLK
   // konuşmaya düşer (yanlış satıcı!) — supplierSlug = Admin Seller Profile
   // docname'i, backend start_or_get_thread/can_chat bunu resolve ediyor.
@@ -506,16 +575,31 @@ export function renderListingCard(
           : ""
       }
     </div>
-  `;
+  `.replace(/^[\t ]+$/gm, "").trimEnd();
 }
 
 /**
  * Navigate a product slider to the given index using translateX.
  * Updates the slider transform and dot indicators.
  */
+function materializeSecondarySlides(slider: HTMLElement): void {
+  if (slider.dataset.secondaryMedia !== "pending") return;
+  const template = slider.parentElement?.querySelector<HTMLTemplateElement>(
+    `template[data-slider-secondary="${CSS.escape(slider.dataset.sliderId ?? "")}"]`
+  );
+  if (!template) return;
+
+  slider.append(template.content.cloneNode(true));
+  template.remove();
+  slider.dataset.secondaryMedia = "mounted";
+}
+
 function navigateSlider(sliderId: string, direction: number): void {
-  const slider = document.querySelector<HTMLElement>(`[data-slider-id="${sliderId}"]`);
+  const slider = document.querySelector<HTMLElement>(
+    `[data-slider-id="${CSS.escape(sliderId)}"]`
+  );
   if (!slider) return;
+  materializeSecondarySlides(slider);
 
   const totalSlides = slider.children.length;
   if (totalSlides <= 1) return;
@@ -547,8 +631,11 @@ function navigateSlider(sliderId: string, direction: number): void {
  * Navigate a product slider to a specific index (for dot clicks).
  */
 function navigateSliderTo(sliderId: string, targetIndex: number): void {
-  const slider = document.querySelector<HTMLElement>(`[data-slider-id="${sliderId}"]`);
+  const slider = document.querySelector<HTMLElement>(
+    `[data-slider-id="${CSS.escape(sliderId)}"]`
+  );
   if (!slider) return;
+  materializeSecondarySlides(slider);
 
   const totalSlides = slider.children.length;
   if (totalSlides <= 1 || targetIndex < 0 || targetIndex >= totalSlides) return;
@@ -574,26 +661,55 @@ function navigateSliderTo(sliderId: string, targetIndex: number): void {
  * Prevents navigation events from following the product card link.
  */
 let _slidersInitialized = false;
+let _sliderMediaObserver: IntersectionObserver | null = null;
+
+function observeDeferredSliderMedia(): void {
+  if (!("IntersectionObserver" in window)) return;
+  _sliderMediaObserver ??= new IntersectionObserver(
+    (entries) => {
+      for (const entry of entries) {
+        if (!entry.isIntersecting) continue;
+        const slider = entry.target as HTMLElement;
+        materializeSecondarySlides(slider);
+        _sliderMediaObserver?.unobserve(slider);
+      }
+    },
+    { rootMargin: "200px" }
+  );
+
+  document
+    .querySelectorAll<HTMLElement>('[data-secondary-media="pending"]:not([data-media-observed])')
+    .forEach((slider) => {
+      slider.dataset.mediaObserved = "true";
+      _sliderMediaObserver?.observe(slider);
+    });
+}
+
 export function initProductSliders(): void {
-  if (_slidersInitialized) return;
-  _slidersInitialized = true;
+  if (!_slidersInitialized) {
+    _slidersInitialized = true;
 
-  // Arrow buttons use inline onclick (stopPropagation to prevent <a> navigate)
-  // and dispatch custom 'slider-nav' event that bubbles to document
-  document.addEventListener("slider-nav", ((e: CustomEvent) => {
-    const { id, dir } = e.detail || {};
-    if (id && typeof dir === "number") navigateSlider(id, dir);
-  }) as EventListener);
+    // Arrow buttons use inline onclick (stopPropagation to prevent <a> navigate)
+    // and dispatch custom 'slider-nav' event that bubbles to document
+    document.addEventListener("slider-nav", ((e: CustomEvent) => {
+      const { id, dir } = e.detail || {};
+      if (id && typeof dir === "number") navigateSlider(id, dir);
+    }) as EventListener);
 
-  // Dot clicks
-  document.addEventListener("click", (e: MouseEvent) => {
-    const dotEl = (e.target as HTMLElement).closest<HTMLElement>("[data-dot-index]");
-    if (dotEl) {
-      e.preventDefault();
-      e.stopPropagation();
-      const sliderId = dotEl.getAttribute("data-slider-dot");
-      const dotIndex = parseInt(dotEl.getAttribute("data-dot-index") ?? "0", 10);
-      if (sliderId) navigateSliderTo(sliderId, dotIndex);
-    }
-  });
+    // Dot clicks
+    document.addEventListener("click", (e: MouseEvent) => {
+      const dotEl = (e.target as HTMLElement).closest<HTMLElement>("[data-dot-index]");
+      if (dotEl) {
+        e.preventDefault();
+        e.stopPropagation();
+        const sliderId = dotEl.getAttribute("data-slider-dot");
+        const dotIndex = parseInt(dotEl.getAttribute("data-dot-index") ?? "0", 10);
+        if (sliderId) navigateSliderTo(sliderId, dotIndex);
+      }
+    });
+  }
+
+  // Her grid render'ında yalnız yeni slider'lar observer'a eklenir. Ana dinleyiciler
+  // idempotent kalır, 40 kartlık pagination tekrarında handler çoğalmaz.
+  observeDeferredSliderMedia();
 }

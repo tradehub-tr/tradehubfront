@@ -5,7 +5,12 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc && vite build",
+    "build": "npm run icons:generate && tsc && vite build",
+    "icons:generate": "node scripts/generate-lucide-sprite.mjs",
+    "icons:check": "node scripts/generate-lucide-sprite.mjs --check",
+    "perf:home": "node scripts/measure-home-perf.mjs",
+    "perf:home:promote": "PERF_PROMOTE_BASELINE=1 node scripts/measure-home-perf.mjs",
+    "test:perf:home": "PERF_FIXTURE_TEST=1 playwright test tests/e2e/home-performance.spec.ts --project=chromium-desktop",
     "preview": "vite preview",
     "lint": "eslint \"src/**/*.{ts,js}\"",
     "check:dup": "node scripts/check-duplicate-exports.mjs",
