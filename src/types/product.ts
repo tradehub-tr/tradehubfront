@@ -152,6 +152,12 @@ export interface SupplierInfo {
   responseTime: string;
   responseRate: string;
   onTimeDelivery: string;
+  /**
+   * @deprecated `mainMarkets`'in yanlış adlandırılmış takma adı — backend
+   * `main_markets` içeriğini geriye uyumluluk için bu anahtarla da gönderiyor
+   * (ürün listesi DEĞİL). Yeni kod `mainMarkets` okumalı; backend alanı
+   * bıraktığında bu alan kaldırılabilir.
+   */
   mainProducts: string[];
   employees: string;
   annualRevenue: string;

@@ -2142,11 +2142,14 @@ const tr = {
       responseTime: "Yanıt Süresi",
       responseRate: "Yanıt Oranı",
       onTimeDelivery: "Zamanında Teslimat",
+      // Satıcı paneli metrik etiketleri — dar grid hücresi, kısa tutulur
+      storeRating: "Mağaza puanı",
       companyInfo: "Şirket Bilgileri",
       employees: "Çalışan Sayısı",
       annualRevenue: "Yıllık Gelir",
       yearsInBusiness: "Faaliyet Süresi",
       mainProductsLabel: "Ana Ürünler",
+      mainMarkets: "Ana pazarlar",
       factoryCapability: "Fabrika Kapasitesi",
       productionLine: "Üretim Hattı",
       qualityControl: "Kalite Kontrol",
@@ -2307,7 +2310,8 @@ const tr = {
       supportedPayments: "Desteklenen ödeme yöntemleri",
       // Mobil ürün detay — Tedarikçi genel bilgileri + öneri carousel'leri
       companyOverview: "Şirket genel bilgileri",
-      reorderRate: "Yeniden sipariş oranı",
+      // Kompakt metrik etiketi (grid-cols-4 hücresi ~100px) — uzun hali sığmıyor
+      reorderRate: "Tekrar sipariş",
       similarFromSupplier: "Bu tedarikçiden benzer ürünler",
       storeBestSellers: "Bu mağazanın çok satanları",
       buyersAlsoBought: "Size benzer alıcıların aldığı ürünler",

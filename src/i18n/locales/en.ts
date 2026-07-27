@@ -2146,11 +2146,14 @@ const en = {
       responseTime: "Response Time",
       responseRate: "Response Rate",
       onTimeDelivery: "On-time Delivery",
+      // Seller panel metric labels — narrow grid cell, kept short
+      storeRating: "Store rating",
       companyInfo: "Company Information",
       employees: "Number of Employees",
       annualRevenue: "Annual Revenue",
       yearsInBusiness: "Years in Business",
       mainProductsLabel: "Main Products",
+      mainMarkets: "Main markets",
       factoryCapability: "Factory Capability",
       productionLine: "Production Line",
       qualityControl: "Quality Control",
@@ -2311,6 +2314,7 @@ const en = {
       supportedPayments: "Supported payment methods",
       // Mobile product detail — Supplier overview + recommendation carousels
       companyOverview: "Company overview",
+      // Compact metric label (grid-cols-4 cell ~100px) — must stay two words max
       reorderRate: "Reorder rate",
       similarFromSupplier: "Similar products from this supplier",
       storeBestSellers: "Best sellers from this store",

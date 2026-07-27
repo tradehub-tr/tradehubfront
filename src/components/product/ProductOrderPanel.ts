@@ -2,7 +2,9 @@
  * ProductOrderPanel — ürün detay SAĞ sütunu.
  * Kargo kartı, sosyal kanıt rozeti ve CTA'lar (Sepete Ekle / Sohbet et).
  * 1280px altında sağ panel ortanın altına akar; sticky yalnız 1280px ve
- * üstünde devreye girer (CSS tarafı `#pd-hero-info` üzerinde `min-[1280px]:`).
+ * üstünde devreye girer. Eşiğin tek hakemi CSS: hem dıştaki `#pd-hero-info`
+ * hem içerideki `[.pd-sticky_&]:` grupları `min-[1280px]:` ile kapılıdır.
+ * JS `.pd-sticky` class'ını her genişlikte toggle eder (bkz. init).
  */
 
 import { getCurrentProduct } from "../../alpine/product";
@@ -17,8 +19,8 @@ export function ProductOrderPanel(): string {
   const p = mockProduct;
 
   return `
-    <div id="pd-order-panel" class="bg-[var(--color-surface,#fff)] flex flex-col border border-[var(--color-border-default,#e5e5e5)] rounded-md overflow-hidden [.pd-sticky_&]:flex-1 [.pd-sticky_&]:min-h-0 [.pd-sticky_&]:max-h-full [.pd-sticky_&]:overflow-hidden">
-      <div id="pd-info-scrollable" class="p-5 flex flex-col scrollbar-hide [.pd-sticky_&]:flex-1 [.pd-sticky_&]:overflow-y-auto [.pd-sticky_&]:min-h-0">
+    <div id="pd-order-panel" class="bg-[var(--color-surface,#fff)] flex flex-col border border-[var(--color-border-default,#e5e5e5)] rounded-md overflow-hidden min-[1280px]:[.pd-sticky_&]:flex-1 min-[1280px]:[.pd-sticky_&]:min-h-0 min-[1280px]:[.pd-sticky_&]:max-h-full min-[1280px]:[.pd-sticky_&]:overflow-hidden">
+      <div id="pd-info-scrollable" class="p-5 flex flex-col scrollbar-hide min-[1280px]:[.pd-sticky_&]:flex-1 min-[1280px]:[.pd-sticky_&]:overflow-y-auto min-[1280px]:[.pd-sticky_&]:min-h-0">
         <!-- Shipping — yöntem belli değilse bölüm hiç render edilmez -->
         ${
           p.shipping[0]?.method
@@ -47,7 +49,7 @@ export function ProductOrderPanel(): string {
              gösterilir; CTA üstündeki duplicate banner kaldırıldı (2026-06-15). -->
 
         <!-- CTA Buttons (Sepete Ekle + Sohbet et — 50/50 grid) -->
-        <div id="pd-cta-buttons" class="grid grid-cols-2 gap-3 px-5 py-4 border-t border-b border-[var(--color-border-default,#e5e5e5)] bg-[var(--color-surface,#fff)] [.pd-sticky_&]:sticky [.pd-sticky_&]:-bottom-[22px] [.pd-sticky_&]:z-[2] [.pd-sticky_&]:bg-[var(--color-surface,#fff)] [.pd-sticky_&]:border-b-0 [.pd-sticky_&]:mx-[-20px] [.pd-sticky_&]:-mb-[20px] [.pd-sticky_&]:px-5 [.pd-sticky_&]:py-4 [.pd-sticky_&]:pb-5 [.pd-sticky_&]:shadow-[0_-4px_14px_-8px_rgba(17,24,39,0.12)]">
+        <div id="pd-cta-buttons" class="grid grid-cols-2 gap-3 px-5 py-4 border-t border-b border-[var(--color-border-default,#e5e5e5)] bg-[var(--color-surface,#fff)] min-[1280px]:[.pd-sticky_&]:sticky min-[1280px]:[.pd-sticky_&]:-bottom-[22px] min-[1280px]:[.pd-sticky_&]:z-[2] min-[1280px]:[.pd-sticky_&]:bg-[var(--color-surface,#fff)] min-[1280px]:[.pd-sticky_&]:border-b-0 min-[1280px]:[.pd-sticky_&]:mx-[-20px] min-[1280px]:[.pd-sticky_&]:-mb-[20px] min-[1280px]:[.pd-sticky_&]:px-5 min-[1280px]:[.pd-sticky_&]:py-4 min-[1280px]:[.pd-sticky_&]:pb-5 min-[1280px]:[.pd-sticky_&]:shadow-[0_-4px_14px_-8px_rgba(17,24,39,0.12)]">
           ${
             mockProduct.sellerKybVerified === false
               ? `
@@ -92,10 +94,13 @@ export function ProductOrderPanel(): string {
 
 export function initProductOrderPanel(options: { signal?: AbortSignal } = {}): void {
   // Sticky card: add .pd-sticky once user scrolls past the card's bottom.
-  // Eşik 1280px — altındaki iki sütunlu kırılımda sağ panel ortanın altına
-  // aktığı için sticky anlamsız (CSS tarafı da `min-[1280px]:` kullanıyor).
+  // Class HER genişlikte toggle edilir; 1280px eşiğinin TEK hakemi CSS'tir
+  // (hem `#pd-hero-info` hem buradaki `[.pd-sticky_&]:` grupları
+  // `min-[1280px]:` ile kapılı). Düzen yalnızca 1024px geçilince yeniden
+  // mount edildiği için matchMedia'yı mount anında ölçmek 1100↔1440 canlı
+  // resize'ında ya sticky'yi hiç bağlamıyor ya da tek sütunda çalıştırıyordu.
   const heroInfo = document.getElementById("pd-hero-info");
-  if (heroInfo && window.matchMedia("(min-width: 1280px)").matches) {
+  if (heroInfo) {
     const stickyTop = 130;
     const cardBottom = heroInfo.getBoundingClientRect().bottom + window.scrollY;
 

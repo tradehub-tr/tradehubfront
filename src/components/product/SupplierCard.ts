@@ -36,6 +36,11 @@ export function ProductSupplierCard(): string {
   const mockProduct = getCurrentProduct();
   const s = mockProduct.supplier;
 
+  // Backend bu listeyi `mainProducts` adıyla da gönderir ama içeriği
+  // `main_markets`'tır (ör. "Türkiye, Almanya"). Doğru etiket "Ana pazarlar";
+  // `mainProducts` yalnızca cache'i eski payload'lar için fallback.
+  const mainMarkets = (s.mainMarkets?.length ? s.mainMarkets : s.mainProducts) || [];
+
   return `
     <div class="th-card flex flex-col gap-4 min-w-0 overflow-hidden" style="background: var(--pd-supplier-card-bg, #ffffff);">
       <!-- Company Name -->
@@ -74,11 +79,11 @@ export function ProductSupplierCard(): string {
         )}
       </div>
 
-      <!-- Main Products -->
+      <!-- Main Markets (backend'in yanlış adlandırılmış mainProducts alanı) -->
       <div>
-        <p class="text-xs font-medium mb-1.5" style="color: var(--pd-rating-text-color, #6b7280);">${t("product.mainProductsLabel")}</p>
+        <p class="text-xs font-medium mb-1.5" style="color: var(--pd-rating-text-color, #6b7280);">${t("product.mainMarkets")}</p>
         <div class="flex flex-wrap gap-1.5">
-          ${s.mainProducts
+          ${mainMarkets
             .slice(0, 3)
             .map(
               (mp) => `

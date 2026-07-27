@@ -41,6 +41,9 @@ export function ProductSellerPanel(): string {
   const sellerInitial = escapeHtml((s.name || "?").trim().charAt(0).toUpperCase() || "?");
 
   const metrics: SellerMetric[] = [];
+  // Hem `rating > 0` hem `reorderRate` (backend falsy 0'ı None'a çeviriyor —
+  // api/listing.py) kasıtlı olarak "falsy olanı gizle" davranışındadır: %0 /
+  // 0.0 puan pratikte "veri yok" demek, güven metriğini sıfırla reklamlamayız.
   if (typeof s.rating === "number" && s.rating > 0) {
     const count = s.reviewCount ? ` (${s.reviewCount})` : "";
     metrics.push({

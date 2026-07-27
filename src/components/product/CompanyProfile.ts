@@ -83,11 +83,15 @@ export function CompanyProfile(): string {
       title: escapeHtml(s.annualRevenue),
       desc: t("product.annualRevenue"),
     });
-  if (s.mainProducts.length)
+  // Backend bu listeyi `mainProducts` adıyla da gönderir ama içeriği
+  // `main_markets`'tır (ör. "Türkiye, Almanya"). Doğru etiket "Ana pazarlar";
+  // `mainProducts` yalnızca cache'i eski payload'lar için fallback.
+  const mainMarkets = (s.mainMarkets?.length ? s.mainMarkets : s.mainProducts) || [];
+  if (mainMarkets.length)
     rows.push({
       icon: ICONS.box,
-      title: t("product.mainProductsLabel"),
-      desc: escapeHtml(s.mainProducts.join(", ")),
+      title: t("product.mainMarkets"),
+      desc: escapeHtml(mainMarkets.join(", ")),
     });
   rows.push({
     icon: ICONS.factory,
