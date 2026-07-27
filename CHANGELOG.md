@@ -1,3 +1,13 @@
+## [v2.2.3-alpha.2] - 2026-07-27 ALPHA
+
+Bu surum alpha.istoc.com'da gelistirme asamasindadir.
+
+### Duzeltildi
+- fix(seo): refresh static metadata on page load (@TurksabYonetim)
+- fix(seo): normalize static metadata language (@TurksabYonetim)
+- fix(seo): preserve storefront document language (@TurksabYonetim)
+
+---
 ## [v2.2.3] - 2026-07-23 PROD
 
 Bu surum istoc.com'da yayindadir.
