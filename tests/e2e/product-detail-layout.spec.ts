@@ -73,9 +73,14 @@ test.describe("Ürün detay — 3 sütunlu masaüstü düzeni", () => {
 
     // Satıcı kartı sol sütunda, galerinin altında.
     const panel = page.locator("#pd-seller-panel");
+    const gallery = page.locator("#pd-hero-gallery");
     await expect(panel).toBeVisible();
-    const pBox = await panel.boundingBox();
+    const [pBox, gBox] = await Promise.all([panel.boundingBox(), gallery.boundingBox()]);
+    // Sol sütunun kendi yatay aralığı İÇİNDE (orta sütunun solunda VE sol sütunun solundan geride değil).
+    expect(pBox!.x).toBeGreaterThanOrEqual(lBox!.x);
     expect(pBox!.x).toBeLessThan(cBox!.x);
+    // Panelin üst kenarı galerinin alt kenarından sonra gelir (galerinin ALTINDA, üstünde değil).
+    expect(pBox!.y).toBeGreaterThanOrEqual(gBox!.y + gBox!.height);
     // Eski yatay güven şeridi masaüstü düzende artık yok.
     await expect(page.locator("#pd-seller-strip")).toHaveCount(0);
   });
