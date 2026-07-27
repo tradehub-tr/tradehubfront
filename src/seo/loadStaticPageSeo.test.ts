@@ -8,6 +8,7 @@ describe("static page SEO HTTP refresh", () => {
     vi.unstubAllGlobals();
     vi.restoreAllMocks();
     document.head.innerHTML = "<title>Build başlığı</title>";
+    document.documentElement.lang = "tr";
   });
 
   it("normalizes the English URL prefix", () => {
@@ -50,9 +51,10 @@ describe("static page SEO HTTP refresh", () => {
   });
 
   it("sends Turkish metadata language for Arabic storefront state", async () => {
+    document.documentElement.lang = "ar";
     const fetchMock = vi.fn().mockResolvedValue({
       ok: true,
-      json: async () => ({ message: { title: "Güncel başlık" } }),
+      json: async () => ({ message: { title: "Güncel başlık", lang: "tr" } }),
     });
     vi.stubGlobal("fetch", fetchMock);
 
@@ -60,12 +62,14 @@ describe("static page SEO HTTP refresh", () => {
 
     const request = new URL(fetchMock.mock.calls[0][0], window.location.origin);
     expect(request.searchParams.get("lang")).toBe("tr");
+    expect(document.documentElement.lang).toBe("ar");
   });
 
   it("sends Turkish metadata language for Russian storefront state", async () => {
+    document.documentElement.lang = "ru";
     const fetchMock = vi.fn().mockResolvedValue({
       ok: true,
-      json: async () => ({ message: { title: "Güncel başlık" } }),
+      json: async () => ({ message: { title: "Güncel başlık", lang: "tr" } }),
     });
     vi.stubGlobal("fetch", fetchMock);
 
@@ -73,6 +77,19 @@ describe("static page SEO HTTP refresh", () => {
 
     const request = new URL(fetchMock.mock.calls[0][0], window.location.origin);
     expect(request.searchParams.get("lang")).toBe("tr");
+    expect(document.documentElement.lang).toBe("ru");
+  });
+
+  it("uses English for document metadata on an English-prefixed URL", async () => {
+    const fetchMock = vi.fn().mockResolvedValue({
+      ok: true,
+      json: async () => ({ message: { title: "Current English title", lang: "tr" } }),
+    });
+    vi.stubGlobal("fetch", fetchMock);
+
+    await loadStaticPageSeo("tr", "/en/urunler");
+
+    expect(document.documentElement.lang).toBe("en");
   });
 
   it("skips dynamic paths", async () => {

@@ -26,8 +26,9 @@ export async function loadStaticPageSeo(
   const normalized = normalizeStaticSeoPath(pathname);
   if (!getStaticPageHtmlPath(normalized.path)) return;
 
-  const lang = normalized.langFromPath || normalizeStaticSeoLanguage(activeLang);
-  const query = new URLSearchParams({ path: normalized.path, lang });
+  const effectiveUiLang = normalized.langFromPath || activeLang;
+  const apiLang = normalizeStaticSeoLanguage(effectiveUiLang);
+  const query = new URLSearchParams({ path: normalized.path, lang: apiLang });
   try {
     const response = await fetch(`${ENDPOINT}?${query}`, {
       cache: "no-store",
@@ -36,7 +37,7 @@ export async function loadStaticPageSeo(
     });
     if (!response.ok) return;
     const body = (await response.json()) as { message?: ServerSeoPayload | null };
-    applyServerSeo(body.message);
+    applyServerSeo(body.message ? { ...body.message, lang: effectiveUiLang } : body.message);
   } catch {
     // Build-time SEO remains the safe fallback when the API is unavailable.
   }
