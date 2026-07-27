@@ -159,28 +159,22 @@ function renderVariant(variant: ProductVariant, allVariants: ProductVariant[]): 
   `;
 }
 
-/** "X yorum" tıklamasında Yorumlar tab'ını aç + bölümü scroll'a getir. */
+/**
+ * "X yorum" tıklamasında Yorumlar bölümüne git.
+ * Sekme nav'ının kendi delegated handler'ına delege ediyoruz (ProductTabs.ts:128) —
+ * o zaten sticky header + nav ofsetini hesaba katan yumuşak kaydırmayı yapıyor ve
+ * aktif sekme vurgusunu güncelliyor. Sekmeler henüz mount edilmediyse bölüm
+ * başına kaydırmaya düşülür.
+ */
 function scrollToReviewsTab(): void {
-  // Alpine'ın `Alpine.$data(el)` API'si ile #product-tabs-section üzerindeki
-  // activeTab state'ini "reviews"'a çek. Alpine yüklü değilse sessizce geç.
-  const section = document.getElementById("product-tabs-section");
-  if (!section) return;
-  const AlpineGlobal = (
-    window as unknown as { Alpine?: { $data: (el: Element) => { activeTab?: string } } }
-  ).Alpine;
-  if (AlpineGlobal && typeof AlpineGlobal.$data === "function") {
-    // ProductTabs anchor-scroll'a geçtiğinden #product-tabs-section'da artık
-    // x-data yok: boş data stack'inde `$data(el).activeTab = ...` TypeError
-    // atıyor ve altındaki scrollIntoView'i engelliyordu. Alpine tabanlı bir
-    // tab bileşeni geri gelirse yine çalışsın diye blok korunuyor, hata yutulur.
-    try {
-      const data = AlpineGlobal.$data(section);
-      if (data) data.activeTab = "reviews";
-    } catch (_) {
-      /* noop */
-    }
+  const btn = document.getElementById("tab-btn-reviews");
+  if (btn) {
+    btn.click();
+    return;
   }
-  section.scrollIntoView({ behavior: "smooth", block: "start" });
+  document
+    .getElementById("product-tabs-section")
+    ?.scrollIntoView({ behavior: "smooth", block: "start" });
 }
 
 export function ProductBuyBox(): string {
