@@ -276,17 +276,24 @@ export function ProductOrderPanel(): string {
             : ""
         }
 
-        <!-- Social Proof Badge — kargo ile CTA arası -->
+        <!-- Social Proof Badge — kargo ile CTA arası. Sinyal yokken iç kutu
+             x-show ile gizlenir ama dış sarmalayıcı DOM'da kalır, yani bu
+             margin o durumda da uygulanır (16px). Rozet için ayrı bir ayraç
+             koymamamızın sebebi de bu: boşluk tek yerden gelsin. -->
         ${SocialProofBadge({
           listingId: p.id,
           supplierId: p.supplier?.id ?? "",
+          wrapperClass: "mt-4",
         })}
 
         <!-- KYB uyarısı orta sütunda (ProductBuyBox'ın fiyat alanında) tek sefer
              gösterilir; CTA üstündeki duplicate banner kaldırıldı (2026-06-15). -->
 
         <!-- CTA Buttons (Sepete Ekle + Sohbet et — 50/50 grid) -->
-        <div id="pd-cta-buttons" class="grid grid-cols-2 gap-3 px-5 py-4 border-t border-b border-[var(--color-border-default,#e5e5e5)] bg-[var(--color-surface,#fff)] min-[1280px]:[.pd-sticky_&]:sticky min-[1280px]:[.pd-sticky_&]:-bottom-[22px] min-[1280px]:[.pd-sticky_&]:z-[2] min-[1280px]:[.pd-sticky_&]:bg-[var(--color-surface,#fff)] min-[1280px]:[.pd-sticky_&]:border-b-0 min-[1280px]:[.pd-sticky_&]:mx-[-20px] min-[1280px]:[.pd-sticky_&]:-mb-[20px] min-[1280px]:[.pd-sticky_&]:px-5 min-[1280px]:[.pd-sticky_&]:py-4 min-[1280px]:[.pd-sticky_&]:pb-5 min-[1280px]:[.pd-sticky_&]:shadow-[0_-4px_14px_-8px_rgba(17,24,39,0.12)]">
+        <!-- px-5 YOK: panelin kendi p-5 dolgusu var, buraya da eklemek butonları
+             kargo/fiyat bloklarından 20px dar bırakıyordu. Sticky halinde
+             mx-[-20px] ile kenara yayılırken px-5 ayrıca uygulanıyor. -->
+        <div id="pd-cta-buttons" class="grid grid-cols-2 gap-3 mt-5 py-4 border-t border-b border-[var(--color-border-default,#e5e5e5)] bg-[var(--color-surface,#fff)] min-[1280px]:[.pd-sticky_&]:sticky min-[1280px]:[.pd-sticky_&]:-bottom-[22px] min-[1280px]:[.pd-sticky_&]:z-[2] min-[1280px]:[.pd-sticky_&]:bg-[var(--color-surface,#fff)] min-[1280px]:[.pd-sticky_&]:border-b-0 min-[1280px]:[.pd-sticky_&]:mx-[-20px] min-[1280px]:[.pd-sticky_&]:-mb-[20px] min-[1280px]:[.pd-sticky_&]:px-5 min-[1280px]:[.pd-sticky_&]:py-4 min-[1280px]:[.pd-sticky_&]:pb-5 min-[1280px]:[.pd-sticky_&]:shadow-[0_-4px_14px_-8px_rgba(17,24,39,0.12)]">
           ${
             mockProduct.sellerKybVerified === false
               ? `
