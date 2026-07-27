@@ -22,6 +22,12 @@ const PRODUCT: Record<string, unknown> = {
     kybVerified: true,
     country: "TR",
     yearsInBusiness: 8,
+    rating: 4.9,
+    reviewCount: 365,
+    responseTime: "≤3sa",
+    onTimeDelivery: 100,
+    mainMarkets: ["Türkiye", "Almanya", "İngiltere"],
+    reorderRate: 17,
   },
 };
 
@@ -98,5 +104,18 @@ test.describe("Ürün detay — 3 sütunlu masaüstü düzeni", () => {
     const [cBox, rBox] = await Promise.all([center.boundingBox(), right.boundingBox()]);
     // Sağ panel artık ortanın ALTINDA.
     expect(rBox!.y).toBeGreaterThan(cBox!.y);
+  });
+
+  test("satıcı kartı dört metriği ve ana pazarları gösterir", async ({ page }) => {
+    await page.setViewportSize({ width: 1440, height: 900 });
+    await mockApi(page);
+    await page.goto("/pages/product-detail.html?id=LST-TEST-0002");
+
+    const panel = page.locator("#pd-seller-panel");
+    await expect(panel).toBeVisible();
+    await expect(panel.locator("[data-seller-metric]")).toHaveCount(4);
+    await expect(panel).toContainText("4.9/5 (365)");
+    await expect(panel).toContainText("17%");
+    await expect(panel.locator("[data-seller-markets]")).toContainText("Türkiye, Almanya");
   });
 });
