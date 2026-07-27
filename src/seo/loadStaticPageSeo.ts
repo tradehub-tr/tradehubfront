@@ -15,6 +15,10 @@ export function normalizeStaticSeoPath(pathname: string): {
   return { path: pathname || "/" };
 }
 
+function normalizeStaticSeoLanguage(lang: SupportedLang): "tr" | "en" {
+  return lang === "en" ? "en" : "tr";
+}
+
 export async function loadStaticPageSeo(
   activeLang: SupportedLang,
   pathname = window.location.pathname
@@ -22,7 +26,7 @@ export async function loadStaticPageSeo(
   const normalized = normalizeStaticSeoPath(pathname);
   if (!getStaticPageHtmlPath(normalized.path)) return;
 
-  const lang = normalized.langFromPath || activeLang;
+  const lang = normalized.langFromPath || normalizeStaticSeoLanguage(activeLang);
   const query = new URLSearchParams({ path: normalized.path, lang });
   try {
     const response = await fetch(`${ENDPOINT}?${query}`, {
