@@ -2211,6 +2211,7 @@ const ru = {
       wholesaleSales: "Оптовые продажи",
       customization: "Кастомизация",
       readyToShip: "Готов к отправке",
+      noReviewsYet: "Пока нет отзывов",
       salesRank: "Рейтинг продаж",
       bestSeller: "Бестселлер",
       salesRankSubtitle: "Показатели продаж этого товара по категориям",

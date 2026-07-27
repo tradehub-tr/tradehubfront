@@ -14,43 +14,106 @@ import { applyVariantPrice, tierQtyLabel } from "./variantPrice";
 import { renderStars, formatScore } from "./ProductReviews";
 import { escapeHtml } from "../../utils/sanitize";
 
+/** Bölümler arası ince yatay ayraç — referans düzenin ritmini veren öğe. */
+const SECTION_DIVIDER = `<hr class="my-5 border-0 border-t border-[var(--color-border-default,#e5e5e5)]" />`;
+
+/**
+ * Başlık altındaki meta satırı: yorum durumu │ sipariş sayısı.
+ * Yorum yokken de #pd-review-count-link basılır — tıklanınca Yorumlar
+ * bölümüne götürür, böylece ilk yorumu yazmak isteyen kullanıcı oraya ulaşır.
+ */
 function ratingLineHtml(): string {
   const p = getCurrentProduct();
-  const score = formatScore(p.rating);
+  const hasReviews = p.reviewCount > 0;
+  const linkText = hasReviews
+    ? t("product.reviewsLabel", { count: String(p.reviewCount) })
+    : t("product.noReviewsYet");
+
+  const stars = hasReviews
+    ? `<span class="flex items-center gap-0.5">${renderStars(p.rating)}</span>
+       <span class="font-semibold text-[var(--pd-title-color,#111827)]">${formatScore(p.rating)}</span>`
+    : "";
+
+  // orderCount backend'den string gelir ("0" olabilir) — sıfırsa satırı kirletme.
+  const orderCountNum = Number.parseInt(p.orderCount, 10);
+  const orders =
+    Number.isFinite(orderCountNum) && orderCountNum > 0
+      ? `<span class="w-px h-3.5 bg-[var(--color-border-default,#e5e5e5)]" aria-hidden="true"></span>
+         <span>${t("product.ordersLabel", { count: String(p.orderCount) })}</span>`
+      : "";
+
   return `
-        <span class="flex items-center gap-0.5">${renderStars(p.rating)}</span>
-        <span class="font-semibold text-[var(--pd-title-color,#111827)]">${score}</span>
-        <span class="text-gray-300">·</span>
+        ${stars}
         <button
           type="button"
           id="pd-review-count-link"
-          class="cursor-pointer hover:underline bg-transparent border-0 p-0 text-[13px] text-[var(--pd-rating-text-color,#6b7280)]"
-        >${t("product.reviewsLabel", { count: String(p.reviewCount) })}</button>
-        <span class="text-gray-300">·</span>
-        <span class="text-[var(--pd-rating-text-color,#6b7280)]">${t("product.ordersLabel", { count: String(p.orderCount) })}</span>
+          class="th-no-press cursor-pointer hover:underline bg-transparent border-0 p-0 text-sm text-[var(--pd-rating-text-color,#6b7280)]"
+        >${linkText}</button>
+        ${orders}
   `;
 }
 
-function renderPriceTiers(tiers: PriceTier[]): string {
-  // When a campaign is active the backend sets each tier's originalPrice
-  // (pre-discount). We show it stacked above the deal price.
-  // The qty label is fully localised via product.moqSingle / product.moqRange
-  // so each locale controls its own unit (TR: "1 adet", EN: "1 piece").
+/**
+ * Teknik Özellikler ızgarası — referansta orta sütunun son bölümü.
+ * Gri kutu, 3 sütun, sütunlar arasında dikey ayraç; etiket üstte soluk,
+ * değer altta kalın. İlk 6 özellik; tamamı detay sekmelerinde duruyor.
+ */
+function keyAttributesHtml(): string {
+  const specs = (getCurrentProduct().specs ?? []).slice(0, 6);
+  if (specs.length === 0) return "";
+
+  const cells = specs
+    .map(
+      (spec) => `
+      <div class="min-w-0 px-4 [&:nth-child(3n+1)]:ps-0 [&:nth-child(3n)]:border-e-0 border-e border-[var(--color-border-default,#e5e5e5)]">
+        <div class="text-[13px] leading-snug text-[var(--color-text-tertiary,#737373)] break-words">${escapeHtml(spec.key)}</div>
+        <div class="mt-1 text-[15px] font-bold leading-snug text-[var(--pd-title-color,#111827)] break-words">${escapeHtml(spec.value)}</div>
+      </div>`
+    )
+    .join("");
+
   return `
-    <div id="pd-price-tiers" class="grid grid-cols-3 gap-x-4 gap-y-3 mb-4">
+    ${SECTION_DIVIDER}
+    <h2 class="text-base font-bold text-[var(--pd-title-color,#111827)]">${t("product.keyAttributes")}</h2>
+    <div id="pd-key-attributes" class="mt-3.5 grid grid-cols-3 gap-y-6 rounded-md bg-[var(--color-surface-raised,#f5f5f5)] p-4">
+      ${cells}
+    </div>
+  `;
+}
+
+/**
+ * Fiyat kademeleri — referans sırası: büyük fiyat üstte, altında üstü çizili
+ * kampanya öncesi fiyat, en altta adet aralığı etiketi.
+ *
+ * Kampanya varken backend her kademeye originalPrice (indirim öncesi) koyar;
+ * o durumda ilk kademe kırmızı vurgulanır, kampanya yokken tüm kademeler
+ * nötr siyahtır — referans düzenin davranışı bu.
+ *
+ * Adet etiketi product.moqSingle / product.moqRange ile tam yerelleştirilir,
+ * böylece her dil kendi birimini yönetir (TR: "1 adet", EN: "1 piece").
+ */
+function renderPriceTiers(tiers: PriceTier[]): string {
+  const campaignActive = tiers.some(
+    (tier) => typeof tier.originalPrice === "number" && tier.originalPrice > tier.price
+  );
+  const activePriceColor = campaignActive
+    ? "[.pd-price-tier.active_&]:text-[#cc0000]"
+    : "";
+
+  return `
+    <div id="pd-price-tiers" class="grid grid-cols-3 gap-x-6 gap-y-4">
       ${tiers
         .map((tier, i) => {
-          const qtyLabel = tierQtyLabel(tier);
           const hasDiscount =
             typeof tier.originalPrice === "number" && tier.originalPrice > tier.price;
           const strikethrough = hasDiscount
-            ? `<span class="pd-price-tier-original block line-through text-[13px] text-[var(--color-text-tertiary,#9ca3af)] leading-tight mb-0.5">${formatCurrency(tier.originalPrice!, getSelectedCurrency())}</span>`
+            ? `<span class="pd-price-tier-original block line-through text-[13px] leading-tight text-[var(--color-text-tertiary,#9ca3af)] mt-1">${formatCurrency(tier.originalPrice!, getSelectedCurrency())}</span>`
             : "";
           return `
           <div class="pd-price-tier flex flex-col p-0 cursor-default min-w-0 ${i === 0 ? "active" : ""}" data-tier-index="${i}">
-            <span class="pd-price-tier-qty text-[15px] text-[var(--color-text-muted,#666)] mb-1">${qtyLabel}</span>
+            <span class="pd-price-tier-price text-[26px] font-bold leading-[1.15] break-words text-[var(--color-text-heading,#111827)] ${activePriceColor}">${formatCurrency(tier.price, getSelectedCurrency())}</span>
             ${strikethrough}
-            <span class="pd-price-tier-price shrink-0 text-[22px] font-bold text-[var(--color-text-heading,#111827)] leading-[1.2] [.pd-price-tier.active_&]:text-[#cc0000]">${formatCurrency(tier.price, getSelectedCurrency())}</span>
+            <span class="pd-price-tier-qty mt-1.5 text-sm leading-snug text-[var(--color-text-muted,#666)] break-words">${tierQtyLabel(tier)}</span>
           </div>
         `;
         })
@@ -59,16 +122,49 @@ function renderPriceTiers(tiers: PriceTier[]): string {
   `;
 }
 
-function renderVariant(variant: ProductVariant, allVariants: ProductVariant[]): string {
+/**
+ * Varyant ekseni başlığı — referansta her eksen kendi başlığını taşır ve
+ * yalnız ilkinin sağında seçim butonu durur.
+ * Seçili değer `.variant-selected-label` içinde kalır: tıklamada güncellenen
+ * ve testlerin dayandığı düğüm budur.
+ */
+function variantHeaderHtml(
+  variant: ProductVariant,
+  selectedLabel: string,
+  withSelectButton: boolean
+): string {
+  const selectButton = withSelectButton
+    ? `<button type="button" data-open-selection class="pd-select-now shrink-0 cursor-pointer whitespace-nowrap px-4 py-1.5 text-[13px] font-medium border-[length:var(--btn-outline-border-width)] border-[var(--btn-outline-border-color)] rounded-[var(--radius-button)] bg-[var(--btn-outline-bg)] text-[var(--btn-outline-text)] transition-[background,color,border-color] duration-150 hover:bg-[var(--btn-outline-hover-bg,var(--btn-outline-bg))] hover:text-[var(--btn-outline-hover-text,var(--btn-outline-text))]">${t("product.makeSelection")}</button>`
+    : "";
+
+  return `
+        <div class="flex items-center justify-between gap-3">
+          <h3 class="pd-variant-label min-w-0 text-base font-bold text-[var(--pd-title-color,#111827)]">
+            ${variant.displayLabel || variant.label}<span class="ms-1.5 font-normal text-sm text-[var(--color-text-muted,#666)] variant-selected-label">${selectedLabel}</span>
+          </h3>
+          ${selectButton}
+        </div>`;
+}
+
+function renderVariant(
+  variant: ProductVariant,
+  allVariants: ProductVariant[],
+  index = 0
+): string {
   // Default: isDefault flag; fallback: first available option
   const defaultOpt = variant.options.find((o) => o.isDefault && o.available);
   const selectedOpt = defaultOpt || variant.options.find((o) => o.available) || variant.options[0];
+  const header = variantHeaderHtml(
+    variant,
+    selectedOpt.displayLabel || selectedOpt.label,
+    index === 0
+  );
 
   if (variant.type === "color") {
     return `
-      <div class="variant-group" data-variant-type="${variant.type}" data-variant-label="${variant.label}">
-        <h3 class="pd-variant-label text-sm text-[var(--pd-title-color,#111827)] my-4 mb-3"><strong>${variant.displayLabel || variant.label}:</strong> <span class="variant-selected-label">${selectedOpt.displayLabel || selectedOpt.label}</span></h3>
-        <div class="pd-color-thumbs flex flex-wrap gap-2 mt-2">
+      <div class="variant-group mt-5 first:mt-0" data-variant-type="${variant.type}" data-variant-label="${variant.label}">
+        ${header}
+        <div class="pd-color-thumbs flex flex-wrap gap-2 mt-3">
           ${variant.options
             .map((opt) => {
               const isDef = !!opt.isDefault;
@@ -76,7 +172,7 @@ function renderVariant(variant: ProductVariant, allVariants: ProductVariant[]): 
               return `
             <button
               type="button"
-              class="variant-option pd-color-thumb w-16 h-16 p-0 border-2 border-[var(--color-border-default,#e5e5e5)] rounded-full overflow-hidden cursor-pointer bg-transparent transition-[border-color] duration-150 [&_img]:w-full [&_img]:h-full [&_img]:object-cover [&_img]:block [&.active]:border-[var(--pd-title-color,#111827)] [&:hover:not(.active):not(.pd-color-thumb-disabled)]:border-[#999] [&.pd-color-thumb-disabled]:opacity-40 [&.pd-color-thumb-disabled]:cursor-not-allowed ${isActive ? "active" : ""} ${opt.available ? "" : "pd-color-thumb-disabled"}"
+              class="variant-option pd-color-thumb w-16 h-16 p-0.5 border border-[var(--color-border-default,#e5e5e5)] rounded-md overflow-hidden cursor-pointer bg-[var(--color-surface,#fff)] transition-[border-color,box-shadow] duration-150 [&_img]:w-full [&_img]:h-full [&_img]:object-cover [&_img]:block [&_img]:rounded-[3px] [&.active]:border-2 [&.active]:border-[var(--pd-title-color,#111827)] [&.active]:p-[3px] [&:hover:not(.active):not(.pd-color-thumb-disabled)]:border-[#999] [&.pd-color-thumb-disabled]:opacity-40 [&.pd-color-thumb-disabled]:cursor-not-allowed ${isActive ? "active" : ""} ${opt.available ? "" : "pd-color-thumb-disabled"}"
               data-variant-id="${opt.id}"
               data-variant-label="${opt.label}"
               data-variant-display="${opt.displayLabel || opt.label}"
@@ -115,9 +211,9 @@ function renderVariant(variant: ProductVariant, allVariants: ProductVariant[]): 
   const axisIndex = variantIndex >= 1 ? variantIndex : 1;
 
   return `
-    <div class="variant-group" data-variant-type="${variant.type}" data-variant-label="${variant.label}">
-      <h4 class="pd-variant-label text-sm text-[var(--pd-title-color,#111827)] my-4 mb-3"><strong>${variant.displayLabel || variant.label}:</strong> <span class="variant-selected-label">${selectedOpt.displayLabel || selectedOpt.label}</span></h4>
-      <div class="flex flex-wrap gap-2 mt-2">
+    <div class="variant-group mt-5 first:mt-0" data-variant-type="${variant.type}" data-variant-label="${variant.label}">
+      ${header}
+      <div class="flex flex-wrap gap-2 mt-3">
         ${variant.options
           .map((opt) => {
             const isDef = !!opt.isDefault;
@@ -137,7 +233,7 @@ function renderVariant(variant: ProductVariant, allVariants: ProductVariant[]): 
             return `
           <button
             type="button"
-            class="variant-option pd-variant-btn px-4 py-1.5 rounded-full text-[13px] font-medium border border-[var(--color-border-medium,#d1d5db)] bg-[var(--color-surface,#fff)] text-[var(--pd-title-color,#111827)] cursor-pointer transition-[border-color,color] duration-150 [&.active]:border-[var(--pd-title-color,#111827)] [&.active]:font-semibold [&:hover:not(.active):not(:disabled)]:border-[#999] ${isActive ? "active" : ""} ${isAvailable ? "" : "opacity-40 line-through cursor-not-allowed"}"
+            class="variant-option pd-variant-btn min-w-[52px] px-4 py-2.5 rounded-md text-sm font-medium border border-[var(--color-border-medium,#d1d5db)] bg-[var(--color-surface-raised,#f5f5f5)] text-[var(--pd-title-color,#111827)] cursor-pointer transition-[border-color,color] duration-150 [&.active]:border-2 [&.active]:border-[var(--pd-title-color,#111827)] [&.active]:px-[15px] [&.active]:py-[9px] [&.active]:font-semibold [&:hover:not(.active):not(:disabled)]:border-[#999] ${isActive ? "active" : ""} ${isAvailable ? "" : "opacity-40 line-through cursor-not-allowed"}"
             data-variant-id="${opt.id}"
             data-variant-label="${opt.label}"
             data-variant-display="${opt.displayLabel || opt.label}"
@@ -177,27 +273,44 @@ function scrollToReviewsTab(): void {
     ?.scrollIntoView({ behavior: "smooth", block: "start" });
 }
 
+/** Kampanya varsa ilk kademenin indirim yüzdesi — fiyatın üstündeki kırmızı rozet. */
+function discountBadgeHtml(tiers: PriceTier[]): string {
+  const first = tiers[0];
+  if (!first || typeof first.originalPrice !== "number" || first.originalPrice <= first.price) {
+    return "";
+  }
+  const percent = Math.round(((first.originalPrice - first.price) / first.originalPrice) * 100);
+  if (percent <= 0) return "";
+  // Rakamsal gösterim kasıtlı: "-10%" dört dilde de aynı okunur, çeviri gerektirmez.
+  return `<span class="pd-discount-badge inline-flex items-center self-start mb-2.5 px-2 py-[3px] rounded-[3px] text-[13px] font-medium leading-tight text-white bg-[#cc0000]">-${percent}%</span>`;
+}
+
 export function ProductBuyBox(): string {
   const p = getCurrentProduct();
 
   return `
-    <div id="pd-buy-box" class="flex flex-col">
-      <!-- Wholesale Tab — eskiden sağ karttaydı; negatif kenar boşlukları o
-           kartın p-5 dolgusunu iptal etmek içindi, bu sütunda dolgu yok. -->
-      <div id="pd-card-tabs" class="flex p-0 mb-4 bg-[var(--color-surface-raised,#f5f5f5)] border-b border-[var(--color-border-default,#e5e5e5)]">
-        <button type="button" class="pd-card-tab flex-1 px-4 py-3.5 text-[15px] font-semibold text-center bg-transparent border-0 border-t-[3px] border-t-transparent cursor-pointer text-[var(--color-text-muted,#666)] relative transition-[background,color] duration-150 [&:not(:first-child)]:border-s [&:not(:first-child)]:border-s-[var(--color-border-default,#e5e5e5)] [&.active]:text-[var(--color-text-primary)] [&.active]:font-bold [&.active]:bg-[var(--color-surface,#fff)] [&.active]:border-t-[var(--pd-tab-active-border,#cc9900)] active">${t("product.wholesaleSales")}</button>
+    <div id="pd-buy-box" class="flex flex-col overflow-hidden rounded-md border border-[var(--color-border-default,#e5e5e5)] bg-[var(--color-surface,#fff)]">
+      <!-- Sekme şeridi kartın tepesinde; aktif sekme beyaz zemin + üst vurgu
+           çizgisiyle içerikle birleşir. Genişliği yarımla sınırlı ki ikinci
+           sekme (Özelleştirme) geldiğinde düzen kaymasın. -->
+      <div id="pd-card-tabs" class="flex p-0 bg-[var(--color-surface-raised,#f5f5f5)] border-b border-[var(--color-border-default,#e5e5e5)]">
+        <button type="button" class="pd-card-tab th-no-press flex-1 max-w-[50%] px-4 py-3.5 text-[15px] font-semibold text-center bg-transparent border-0 border-t-[3px] border-t-transparent cursor-pointer text-[var(--color-text-muted,#666)] relative transition-[background,color] duration-150 [&:not(:first-child)]:border-s [&:not(:first-child)]:border-s-[var(--color-border-default,#e5e5e5)] [&.active]:text-[var(--color-text-primary)] [&.active]:font-bold [&.active]:bg-[var(--color-surface,#fff)] [&.active]:border-t-[var(--pd-tab-active-border,#cc9900)] active">${t("product.wholesaleSales")}</button>
       </div>
 
-      <h1 id="pd-product-title" class="text-2xl font-bold leading-snug tracking-[-0.015em] text-balance break-words text-[var(--pd-title-color,#111827)]">${escapeHtml(p.title)}</h1>
-      <div id="pd-rating-line" class="mt-2 flex items-center gap-1.5 flex-wrap text-[13px] text-[var(--pd-rating-text-color,#6b7280)]">
+      <div class="px-5 pt-5 pb-6">
+      <h1 id="pd-product-title" class="text-[22px] font-bold leading-[1.35] tracking-[-0.015em] text-balance break-words text-[var(--pd-title-color,#111827)]">${escapeHtml(p.title)}</h1>
+      <div id="pd-rating-line" class="mt-2 flex items-center gap-3 flex-wrap text-sm text-[var(--pd-rating-text-color,#6b7280)]">
         ${ratingLineHtml()}
       </div>
 
       <!-- Ready to Ship Badge — varyant seçimine tepki verdiği için seçicilerle
-           aynı sütunda durur (variantMatrix.updateReadyBadge id ile bulur). -->
-      <span id="pd-ready-badge" class="th-badge inline-flex items-center self-start my-4 mb-3 px-2.5 py-[3px] text-[11px] font-semibold border-[1.5px] border-[#16a34a] rounded text-[#16a34a] bg-[#f0fdf4] [&.is-out-of-stock]:border-[#dc2626] [&.is-out-of-stock]:text-[#dc2626] [&.is-out-of-stock]:bg-[#fef2f2]">${t("product.readyToShip")}</span>
+           aynı sütunda durur (variantMatrix.updateReadyBadge id ile bulur).
+           Referansta uyumluluk rozetinin durduğu konum: meta satırının altı. -->
+      <span id="pd-ready-badge" class="th-badge inline-flex items-center self-start mt-2 px-2 py-[3px] text-[13px] font-medium border border-[#16a34a] rounded-[3px] text-[#16a34a] bg-[#f0fdf4] [&.is-out-of-stock]:border-[#dc2626] [&.is-out-of-stock]:text-[#dc2626] [&.is-out-of-stock]:bg-[#fef2f2]">${t("product.readyToShip")}</span>
 
-      <div class="mt-4">
+      ${SECTION_DIVIDER}
+
+      <div class="flex flex-col">
         ${
           p.sellerKybVerified === false
             ? `
@@ -211,19 +324,20 @@ export function ProductBuyBox(): string {
         </div>
         `
             : `
-        <!-- Price Tiers -->
+        <!-- İndirim rozeti + fiyat kademeleri -->
+        ${discountBadgeHtml(p.priceTiers)}
         ${renderPriceTiers(p.priceTiers)}
 
         <!-- Sample Price -->
         ${
           p.samplePrice
             ? `
-        <div id="pd-sample-price" class="flex flex-wrap items-center justify-between gap-x-3 gap-y-2 px-3.5 py-2.5 rounded-md mb-5" style="background: var(--color-surface-raised, #f5f5f5);">
-          <div class="flex items-center gap-1.5 text-[13px] min-w-0" style="color: var(--color-text-primary);">
-            <svg class="shrink-0" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/></svg>
-            <span class="whitespace-nowrap">${t("product.samplePrice")}: <strong>${formatCurrency(p.samplePrice, getSelectedCurrency())}</strong></span>
+        <div id="pd-sample-price" class="mt-5 flex flex-wrap items-center justify-between gap-x-3 gap-y-2 px-4 py-3 rounded-md" style="background: var(--color-surface-raised, #f5f5f5);">
+          <div class="flex items-center gap-2 text-sm min-w-0" style="color: var(--color-text-primary);">
+            <svg class="shrink-0" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/></svg>
+            <span class="whitespace-nowrap"><strong class="font-semibold">${t("product.samplePrice")}:</strong> ${formatCurrency(p.samplePrice, getSelectedCurrency())}</span>
           </div>
-          <button type="button" data-order-sample="${p.id}" class="pd-sample-btn shrink-0 cursor-pointer whitespace-nowrap px-3.5 py-1.5 text-[13px] font-medium border-[length:var(--btn-outline-border-width)] border-[var(--btn-outline-border-color)] rounded-[var(--radius-button)] bg-[var(--btn-outline-bg)] text-[var(--btn-outline-text)] transition-[background,color,border-color] duration-150 hover:bg-[var(--btn-outline-hover-bg,var(--btn-outline-bg))] hover:text-[var(--btn-outline-hover-text,var(--btn-outline-text))]">${t("cart.orderSample")}</button>
+          <button type="button" data-order-sample="${p.id}" class="pd-sample-btn shrink-0 cursor-pointer whitespace-nowrap px-4 py-1.5 text-[13px] font-medium border-[length:var(--btn-outline-border-width)] border-[var(--btn-outline-border-color)] rounded-[var(--radius-button)] bg-[var(--btn-outline-bg)] text-[var(--btn-outline-text)] transition-[background,color,border-color] duration-150 hover:bg-[var(--btn-outline-hover-bg,var(--btn-outline-bg))] hover:text-[var(--btn-outline-hover-text,var(--btn-outline-text))]">${t("cart.orderSample")}</button>
         </div>
         `
             : ""
@@ -232,22 +346,21 @@ export function ProductBuyBox(): string {
         }
       </div>
 
-      <!-- Variations Header — yalnızca backend varyant döndürdüyse göster -->
+      <!-- Varyant eksenleri — her biri kendi başlığını taşır, seçim butonu
+           yalnız ilkinin sağında durur (referans düzen). -->
       ${
         p.variants.length > 0
           ? `
-      <div id="pd-variations-section" class="pb-4" style="border-bottom: 1px solid var(--color-border-light, #f0f0f0);">
-        <div class="flex justify-between items-center mb-4">
-          <h2 class="text-base font-bold m-0" style="color: var(--pd-title-color, #111827);">${t("product.variants")}</h2>
-          <a href="#" class="text-sm font-medium no-underline hover:underline" style="color: var(--pd-breadcrumb-link-color, #cc9900);">${t("product.makeSelection")}</a>
-        </div>
-
-        <!-- Variant Groups -->
-        ${p.variants.map((v) => renderVariant(v, p.variants)).join("")}
+      ${SECTION_DIVIDER}
+      <div id="pd-variations-section">
+        ${p.variants.map((v, i) => renderVariant(v, p.variants, i)).join("")}
       </div>
       `
           : ""
       }
+
+      ${keyAttributesHtml()}
+      </div>
     </div>
   `;
 }
@@ -298,12 +411,13 @@ export function initProductBuyBox(options: { signal?: AbortSignal } = {}): void 
     };
   };
 
-  // "Seçim yap" link → open cart drawer
-  const makeSelectionLink = document.querySelector<HTMLAnchorElement>(
-    '#pd-variations-section a[href="#"]'
+  // "Seçim yap" butonu → sepet çekmecesini aç. Eskiden bir <a href="#"> idi;
+  // referans düzende varyant başlığının sağında outline butona dönüştü.
+  const makeSelectionBtn = document.querySelector<HTMLButtonElement>(
+    "#pd-variations-section [data-open-selection]"
   );
-  if (makeSelectionLink) {
-    makeSelectionLink.addEventListener("click", (e) => {
+  if (makeSelectionBtn) {
+    makeSelectionBtn.addEventListener("click", (e) => {
       e.preventDefault();
       const { color, size } = getSelectedVariantLabels();
       openCartDrawer(color, size);

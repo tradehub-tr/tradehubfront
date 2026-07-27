@@ -2172,6 +2172,7 @@ const tr = {
       wholesaleSales: "Toptan Satış",
       customization: "Özelleştirme",
       readyToShip: "Sevkiyata Hazır",
+      noReviewsYet: "Henüz yorum yok",
       salesRank: "Satış Sıralaması",
       bestSeller: "En Çok Satan",
       salesRankSubtitle: "Bu ürünün kategorilerindeki satış performansı",

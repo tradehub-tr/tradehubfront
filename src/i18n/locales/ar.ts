@@ -2165,6 +2165,7 @@ const ar = {
       wholesaleSales: "مبيعات البيع بالجملة",
       customization: "التخصيص",
       readyToShip: "جاهز للشحن",
+      noReviewsYet: "لا توجد تقييمات بعد",
       salesRank: "ترتيب المبيعات",
       bestSeller: "الأكثر مبيعًا",
       salesRankSubtitle: "أداء المبيعات لهذا المنتج عبر فئاته",

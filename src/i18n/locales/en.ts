@@ -2176,6 +2176,7 @@ const en = {
       wholesaleSales: "Wholesale Sales",
       customization: "Customization",
       readyToShip: "Ready to Ship",
+      noReviewsYet: "No reviews yet",
       salesRank: "Sales Rank",
       bestSeller: "Best Seller",
       salesRankSubtitle: "Sales performance across this product's categories",
