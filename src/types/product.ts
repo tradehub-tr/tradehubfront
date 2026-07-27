@@ -156,6 +156,14 @@ export interface SupplierInfo {
   employees: string;
   annualRevenue: string;
   certifications: string[];
+  /** Mağaza puanı (satıcı profili) — ürün puanından ayrıdır. Faz 2'de dolar. */
+  rating?: number;
+  /** Mağaza yorum sayısı. Faz 2'de dolar. */
+  reviewCount?: number;
+  /** Ana pazarlar (Admin Seller Profile.main_markets). Faz 2'de dolar. */
+  mainMarkets?: string[];
+  /** Tekrar sipariş oranı (%). Veri yetersizse null. Faz 2'de dolar. */
+  reorderRate?: number | null;
   /** Saha doğrulama kaynakları — backend get_listing_detail.supplier.verifications */
   verifications?: Array<{
     source_name: string;
