@@ -196,7 +196,7 @@ test("tekrarlanan viewport geçişleri eski ürün layout document listenerları
     return window.__pdReviewListenerCalls;
   });
 
-  // Son aktif desktop composition yalnız ProductTitleBar + ProductReviews
+  // Son aktif desktop composition yalnız ProductBuyBox + ProductReviews
   // listenerlarını taşır; önceki mobile/desktop mountları event alamaz.
   expect(listenerCalls).toBe(2);
 });

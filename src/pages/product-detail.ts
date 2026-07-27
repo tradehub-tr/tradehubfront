@@ -33,9 +33,9 @@ import { Breadcrumb } from '../components/shared/Breadcrumb'
 
 // Product detail components
 import {
-  ProductTitleBar,
+  ProductBuyBox,
   ProductSellerPanel,
-  initProductTitleBar,
+  initProductBuyBox,
   ProductImageGallery,
   ProductInfo,
   initProductInfo,
@@ -259,7 +259,7 @@ async function renderProductPage() {
               ${ProductSellerPanel()}
             </div>
             <div id="pd-hero-center" class="w-full min-w-0">
-              ${ProductTitleBar()}
+              ${ProductBuyBox()}
             </div>
             <div id="pd-hero-info" class="w-full min-w-0 col-span-2 min-[1280px]:col-span-1 min-[1280px]:flex min-[1280px]:flex-col min-[1280px]:[&.pd-sticky]:sticky min-[1280px]:[&.pd-sticky]:top-[165px] min-[1280px]:[&.pd-sticky]:max-h-[calc(100vh-180px)]">${ProductInfo()}</div>
           </div>
@@ -297,7 +297,7 @@ async function renderProductPage() {
     host.dataset.pdLayout = nextMode;
 
     if (desktop) {
-      initProductTitleBar({ signal: lifecycle.signal });
+      initProductBuyBox({ signal: lifecycle.signal });
       initProductInfo({ signal: lifecycle.signal });
       initProductTabs({ signal: lifecycle.signal });
       initAttributesTab();

@@ -230,9 +230,11 @@ test.describe("Ürün detay — varyant etkileşimi (karakterizasyon)", () => {
     const mBtn = bedenGroup.locator('.variant-option[data-variant-label="M"]');
     const lBtn = bedenGroup.locator('.variant-option[data-variant-label="L"]');
 
-    // Başlangıçta Renk=Siyah aktif; Siyah+L skuMatrix'te available:false →
-    // L, sayfa yüklendiğinde zaten crossDisableVariants tarafından (initProductInfo
-    // sonundaki "initially active color" çağrısı) devre dışı bırakılmış olmalı.
+    // Başlangıçta Renk=Siyah aktif; Siyah+L skuMatrix'te available:false → L
+    // devre dışı gelir. Bu ilk durum RENDER anında statik hesaplanır
+    // (renderVariant → isOptionAvailableForColor), DOM sorgusuna bağlı değil;
+    // init sonundaki crossDisableVariants çağrısı ise aynı durumu çalışma
+    // zamanında (ve her tıklamada) yeniden hesaplar. İki mekanizma ayrıdır.
     await expect(lBtn).toBeDisabled();
     await expect(lBtn).toHaveClass(/opacity-40/);
     await expect(lBtn).toHaveClass(/line-through/);
