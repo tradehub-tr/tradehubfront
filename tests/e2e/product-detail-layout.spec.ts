@@ -70,6 +70,14 @@ test.describe("Ürün detay — 3 sütunlu masaüstü düzeni", () => {
     expect(Math.abs(lBox!.y - rBox!.y)).toBeLessThan(40);
     // Sol sütun 465px'i aşmaz.
     expect(lBox!.width).toBeLessThanOrEqual(470);
+
+    // Satıcı kartı sol sütunda, galerinin altında.
+    const panel = page.locator("#pd-seller-panel");
+    await expect(panel).toBeVisible();
+    const pBox = await panel.boundingBox();
+    expect(pBox!.x).toBeLessThan(cBox!.x);
+    // Eski yatay güven şeridi masaüstü düzende artık yok.
+    await expect(page.locator("#pd-seller-strip")).toHaveCount(0);
   });
 
   test("1100px'de sağ sütun ortanın altına iner", async ({ page }) => {

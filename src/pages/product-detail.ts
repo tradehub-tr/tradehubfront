@@ -34,7 +34,7 @@ import { Breadcrumb } from '../components/shared/Breadcrumb'
 // Product detail components
 import {
   ProductTitleBar,
-  SellerTrustCard,
+  ProductSellerPanel,
   initProductTitleBar,
   ProductImageGallery,
   ProductInfo,
@@ -256,7 +256,7 @@ async function renderProductPage() {
           <div id="pd-hero-grid" class="grid grid-cols-[minmax(0,420px)_minmax(0,1fr)] gap-5 pt-3 items-start min-[1280px]:grid-cols-[minmax(0,465px)_minmax(0,1fr)_380px] min-[1280px]:gap-6">
             <div id="pd-hero-left" class="w-full min-w-0">
               <div id="pd-hero-gallery" class="w-full">${ProductImageGallery()}</div>
-              ${SellerTrustCard()}
+              ${ProductSellerPanel()}
             </div>
             <div id="pd-hero-center" class="w-full min-w-0">
               ${ProductTitleBar()}
