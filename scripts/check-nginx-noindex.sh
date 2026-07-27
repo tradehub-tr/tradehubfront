@@ -63,11 +63,11 @@ assert 'hayalet path kalıntısı' 0 "$n"
 grep -q 'location = /markalar' "$T" && grep -q 'return 301 /ureticiler;' "$T"
 assert '/markalar → 301 /ureticiler' 0 $?
 
-# 10. robots dosyaları: prod'da Allow + env marker + (henüz) Sitemap YOK
+# 10. robots dosyaları: prod'da Allow + env marker + canlı sitemap bildirimi
 grep -q '^# env: prod' public/robots-prod.txt && grep -q '^Allow: /$' public/robots-prod.txt
 assert 'robots-prod.txt marker + Allow' 0 $?
 n=$(grep -c '^Sitemap:' public/robots-prod.txt || true)
-assert 'robots-prod.txt Sitemap satırı (BE-MAP öncesi 0 olmalı)' 0 "$n"
+assert 'robots-prod.txt Sitemap satırı' 1 "$n"
 grep -q '^# env: noindex' public/robots-noindex.txt && grep -q '^Disallow: /$' public/robots-noindex.txt
 assert 'robots-noindex.txt marker + Disallow' 0 $?
 
