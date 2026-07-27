@@ -1322,7 +1322,7 @@ function isVideoFileUrl(url: string): boolean {
   return /\.(mp4|webm|ogg|mov|m4v)(\?|$)/i.test(url);
 }
 
-function mapListingDetail(raw: any): ProductDetail {
+export function mapListingDetail(raw: any): ProductDetail {
   // Map images — auto-detect video files by extension so uploaded .mp4/.webm
   // files in the gallery render as video slides, not broken <img> tags.
   const images: ProductImage[] = (raw.images || []).map((src: string, i: number) => ({
@@ -1447,6 +1447,12 @@ function mapListingDetail(raw: any): ProductDetail {
         employees: raw.supplier.employees || "",
         annualRevenue: raw.supplier.annualRevenue || "",
         certifications: raw.supplier.certifications || [],
+        rating: typeof raw.supplier.rating === "number" ? raw.supplier.rating : 0,
+        reviewCount: raw.supplier.reviewCount || 0,
+        // Backend `mainProducts` adıyla da gönderir (deprecated, aslında main_markets).
+        mainMarkets: raw.supplier.mainMarkets || raw.supplier.mainProducts || [],
+        reorderRate:
+          typeof raw.supplier.reorderRate === "number" ? raw.supplier.reorderRate : null,
         verifications: Array.isArray(raw.supplier.verifications)
           ? raw.supplier.verifications
           : [],
@@ -1464,6 +1470,10 @@ function mapListingDetail(raw: any): ProductDetail {
         employees: "",
         annualRevenue: "",
         certifications: [],
+        rating: 0,
+        reviewCount: 0,
+        mainMarkets: [],
+        reorderRate: null,
       };
 
   // Map customization options
