@@ -181,7 +181,7 @@ export function ProductImageGallery(): string {
     <div id="product-gallery" class="flex gap-2.5 items-stretch w-full relative overflow-hidden">
 
       <!-- LEFT: Vertical Thumbnail Strip (hidden on narrow desktop, shown on wider) -->
-      <div id="pd-thumb-strip" class="hidden 2xl:flex flex-col items-center shrink-0 w-[68px]">
+      <div id="pd-thumb-strip" class="flex flex-col items-center shrink-0 w-[68px]">
 
         <!-- "+N" taşma karosu ilk 4'ten fazla görselde JS (applyThumbOverflow) tarafından
              eklenir; hem ilk render hem varyant swap'i tek koddan geçsin diye deklaratif değil. -->
@@ -196,7 +196,7 @@ export function ProductImageGallery(): string {
            koyu cam oklar + WCAG favori. Wrapper görsel boyutunda (max 560px, 2xl'de 680px, ortalı);
            oklar/kalp innerHTML replace'inden etkilenmesin diye #gallery-main-image
            DIŞINDA, wrapper içinde durur. Özellikler sekmesinde wrapper komple gizlenir. -->
-      <div class="relative flex-1 min-w-0 w-full max-w-[560px] 2xl:max-w-[680px] mx-auto" :class="{ 'hidden': currentIndex === attrsIndex }">
+      <div class="relative flex-1 min-w-0 w-full max-w-[465px] mx-auto" :class="{ 'hidden': currentIndex === attrsIndex }">
         <div id="gallery-main-image"
           class="relative aspect-square w-full rounded-md overflow-hidden bg-[var(--product-image-bg,#ffffff)] pointer-coarse:cursor-default [&.zoom-enabled]:cursor-zoom-in [&.zoom-enabled>[data-gallery-main-media=true]]:transition-transform [&.zoom-enabled>[data-gallery-main-media=true]]:duration-[180ms] [&.zoom-enabled>[data-gallery-main-media=true]]:ease-out [&.zoom-enabled>[data-gallery-main-media=true]]:origin-center [&.zoom-enabled>[data-gallery-main-media=true]]:will-change-transform [&.is-zooming>[data-gallery-main-media=true]]:transition-transform [&.is-zooming>[data-gallery-main-media=true]]:duration-[30ms] [&.is-zooming>[data-gallery-main-media=true]]:ease-linear motion-reduce:[&.zoom-enabled>[data-gallery-main-media=true]]:transition-none motion-reduce:[&.is-zooming>[data-gallery-main-media=true]]:transition-none"
           x-ref="mainImage"
@@ -236,9 +236,11 @@ export function ProductImageGallery(): string {
     </div>
 
     <!-- Photos / Attributes tabs -->
-    <div id="pd-gallery-tabs" class="inline-flex gap-0.5 mt-3 rounded-full p-[3px]" style="background: var(--color-border-light);">
-      <button type="button" class="gallery-view-tab th-no-press px-5 py-1.5 text-[13px] font-medium rounded-[20px] bg-transparent text-[var(--color-text-muted,#666)] border-0 cursor-pointer transition-[background-color,color,box-shadow] duration-150 [&.active]:bg-[var(--color-surface,#fff)] [&.active]:text-[var(--color-text-primary)] [&.active]:font-bold [&.active]:shadow-[0_1px_3px_rgba(0,0,0,0.1)]" :class="{ 'active': currentIndex !== attrsIndex }" @click="goToSlide(0)">${t("product.photosTab")}</button>
-      <button type="button" class="gallery-view-tab th-no-press px-5 py-1.5 text-[13px] font-medium rounded-[20px] bg-transparent text-[var(--color-text-muted,#666)] border-0 cursor-pointer transition-[background-color,color,box-shadow] duration-150 [&.active]:bg-[var(--color-surface,#fff)] [&.active]:text-[var(--color-text-primary)] [&.active]:font-bold [&.active]:shadow-[0_1px_3px_rgba(0,0,0,0.1)]" :class="{ 'active': currentIndex === attrsIndex }" @click="goToSlide(attrsIndex)">${t("product.attributesTab")}</button>
+    <div class="mt-3 flex justify-center">
+      <div id="pd-gallery-tabs" class="inline-flex gap-0.5 rounded-full p-[3px]" style="background: var(--color-border-light);">
+        <button type="button" class="gallery-view-tab th-no-press px-5 py-1.5 text-[13px] font-medium rounded-[20px] bg-transparent text-[var(--color-text-muted,#666)] border-0 cursor-pointer transition-[background-color,color,box-shadow] duration-150 [&.active]:bg-[var(--color-surface,#fff)] [&.active]:text-[var(--color-text-primary)] [&.active]:font-bold [&.active]:shadow-[0_1px_3px_rgba(0,0,0,0.1)]" :class="{ 'active': currentIndex !== attrsIndex }" @click="goToSlide(0)">${t("product.photosTab")}</button>
+        <button type="button" class="gallery-view-tab th-no-press px-5 py-1.5 text-[13px] font-medium rounded-[20px] bg-transparent text-[var(--color-text-muted,#666)] border-0 cursor-pointer transition-[background-color,color,box-shadow] duration-150 [&.active]:bg-[var(--color-surface,#fff)] [&.active]:text-[var(--color-text-primary)] [&.active]:font-bold [&.active]:shadow-[0_1px_3px_rgba(0,0,0,0.1)]" :class="{ 'active': currentIndex === attrsIndex }" @click="goToSlide(attrsIndex)">${t("product.attributesTab")}</button>
+      </div>
     </div>
 
     <div id="gallery-lightbox" x-show="isLightboxOpen" x-cloak :aria-hidden="(!isLightboxOpen).toString()" @click.self="closeLightbox()" class="fixed inset-0 z-[var(--z-spotlight,90)] bg-[rgba(7,10,16,0.86)] backdrop-blur-[8px] flex items-center justify-center pt-[90px] px-5 pb-5 max-[960px]:!p-[72px_12px_12px]"
