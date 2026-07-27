@@ -91,12 +91,18 @@ export function updateReadyBadge(skuMatrix: SkuMatrixEntry[], variants: ProductV
     });
   }
 
-  const readyText = t("product.readyToShip");
   const outText = t("cart.outOfStock");
 
   if (desktopBadge) {
-    desktopBadge.textContent = inStock ? readyText : outText;
-    desktopBadge.classList.toggle("is-out-of-stock", !inStock);
+    // Masaüstü rozeti de mobil gibi yalnızca stok-yok uyarısıdır. Stok varken
+    // "Sevkiyata Hazır" basmak belirsizdi — her durumda bir şey iddia ediyor
+    // gibi görünüyordu; artık söyleyecek bir şey yoksa alan tamamen boş kalır.
+    desktopBadge.textContent = outText;
+    desktopBadge.classList.add("is-out-of-stock");
+    // `hidden` ile `inline-flex` aynı Tailwind katmanında çakışır; sınıf sırası
+    // önceliği belirlemediği için ikisini birlikte yönetmek zorundayız.
+    desktopBadge.classList.toggle("hidden", inStock);
+    desktopBadge.classList.toggle("inline-flex", !inStock);
   }
   if (mobileBadge) {
     // Mobil rozet yalnızca stok-yok uyarısıdır; stok varken alan tamamen gizli.

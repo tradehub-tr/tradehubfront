@@ -273,6 +273,30 @@ function scrollToReviewsTab(): void {
     ?.scrollIntoView({ behavior: "smooth", block: "start" });
 }
 
+/**
+ * Satıcının doğrulanmış sertifikaları — referansta uyumluluk rozetinin
+ * (RoHS compliant) durduğu konum: meta satırının hemen altı.
+ * Backend yalnız verification_status='Verified' ve süresi geçmemiş
+ * sertifikaları döndürür (listing.py), yani burada basılan her rozet doğrulanmıştır.
+ * Sertifika yoksa satır hiç basılmaz — boş alan bırakılmaz.
+ */
+function certificationsHtml(): string {
+  const certs = (getCurrentProduct().supplier?.certifications ?? []).filter(Boolean).slice(0, 4);
+  if (certs.length === 0) return "";
+
+  const chips = certs
+    .map(
+      (cert) => `
+      <span class="inline-flex items-center gap-1 rounded-[3px] bg-[#eff6ff] px-2 py-[3px] text-sm text-[#1e40af]">
+        <svg class="shrink-0" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l7 3v5c0 4.5-3 8-7 10-4-2-7-5.5-7-10V6z"/><path d="M9 12l2 2 4-4"/></svg>
+        ${escapeHtml(cert)}
+      </span>`
+    )
+    .join("");
+
+  return `<div id="pd-certifications" class="mt-2 flex flex-wrap items-center gap-1.5">${chips}</div>`;
+}
+
 /** Kampanya varsa ilk kademenin indirim yüzdesi — fiyatın üstündeki kırmızı rozet. */
 function discountBadgeHtml(tiers: PriceTier[]): string {
   const first = tiers[0];
@@ -298,15 +322,17 @@ export function ProductBuyBox(): string {
       </div>
 
       <div class="px-5 pt-5 pb-6">
-      <h1 id="pd-product-title" class="text-[22px] font-bold leading-[1.35] tracking-[-0.015em] text-balance break-words text-[var(--pd-title-color,#111827)]">${escapeHtml(p.title)}</h1>
-      <div id="pd-rating-line" class="mt-2 flex items-center gap-3 flex-wrap text-sm text-[var(--pd-rating-text-color,#6b7280)]">
+      <h1 id="pd-product-title" class="text-2xl font-bold leading-[1.35] tracking-[-0.015em] text-balance break-words text-[var(--pd-title-color,#111827)]">${escapeHtml(p.title)}</h1>
+      <div id="pd-rating-line" class="mt-2.5 flex items-center gap-3 flex-wrap text-[15px] text-[var(--pd-rating-text-color,#6b7280)]">
         ${ratingLineHtml()}
       </div>
 
-      <!-- Ready to Ship Badge — varyant seçimine tepki verdiği için seçicilerle
-           aynı sütunda durur (variantMatrix.updateReadyBadge id ile bulur).
-           Referansta uyumluluk rozetinin durduğu konum: meta satırının altı. -->
-      <span id="pd-ready-badge" class="th-badge inline-flex items-center self-start mt-2 px-2 py-[3px] text-[13px] font-medium border border-[#16a34a] rounded-[3px] text-[#16a34a] bg-[#f0fdf4] [&.is-out-of-stock]:border-[#dc2626] [&.is-out-of-stock]:text-[#dc2626] [&.is-out-of-stock]:bg-[#fef2f2]">${t("product.readyToShip")}</span>
+      ${certificationsHtml()}
+
+      <!-- Stok rozeti — yalnızca stok YOKKEN görünür; stok varken alan boş kalır.
+           Varyant seçimine tepki verdiği için seçicilerle aynı sütunda durur
+           (variantMatrix.updateReadyBadge id ile bulur). -->
+      <span id="pd-ready-badge" class="th-badge is-out-of-stock ${p.outOfStock ? "inline-flex" : "hidden"} items-center self-start mt-2 px-2 py-[3px] text-sm font-medium border border-[#dc2626] rounded-[3px] text-[#dc2626] bg-[#fef2f2]">${t("cart.outOfStock")}</span>
 
       ${SECTION_DIVIDER}
 

@@ -261,19 +261,16 @@ test.describe("Ürün detay — varyant etkileşimi (karakterizasyon)", () => {
     await expect(lBtn).toHaveClass(/opacity-40/);
   });
 
-  test("ready-to-ship rozeti başlangıçta stoklu (Siyah+M mevcut) kombinasyonu yansıtır", async ({
-    page,
-  }) => {
-    const badge = page.locator("#pd-ready-badge");
-    await expect(badge).toBeVisible();
-    await expect(badge).not.toHaveClass(classToken("is-out-of-stock"));
-    // t("product.readyToShip") metni — tam string'e bağımlı kalmamak için
-    // out-of-stock class'ının YOK olduğunu asıl sinyal olarak kullanıyoruz.
+  test("stok rozeti stoklu (Siyah+M mevcut) kombinasyonda hiç görünmez", async ({ page }) => {
+    // Rozet yalnızca stok-yok uyarısıdır: stok varken söyleyecek bir şeyi
+    // olmadığı için gizlenir. Eskiden "Sevkiyata Hazır" basıyordu; her iki
+    // durumda da bir iddia taşıdığı için belirsizdi.
+    await expect(page.locator("#pd-ready-badge")).toBeHidden();
   });
 });
 
-test.describe("Ürün detay — ready-to-ship rozeti (listing-seviyesi outOfStock bayrağı)", () => {
-  test("listing outOfStock:true olduğunda rozet stok-yok metnine döner", async ({ page }) => {
+test.describe("Ürün detay — stok rozeti (listing-seviyesi outOfStock bayrağı)", () => {
+  test("listing outOfStock:true olduğunda rozet stok-yok uyarısıyla belirir", async ({ page }) => {
     await mockBackend(page, PRODUCT_OUT_OF_STOCK);
     await page.goto("/pages/product-detail.html?id=LST-TEST-0004");
     await page.waitForSelector("#pd-variations-section");
