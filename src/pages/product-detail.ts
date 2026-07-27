@@ -252,16 +252,20 @@ async function renderProductPage() {
     <div id="pd-desktop-layout">
       <section style="background: var(--pd-bg, #ffffff);">
         <div class="mx-auto w-full max-w-[1600px] px-4 2xl:px-8">
-          <div id="pd-hero-grid" class="flex flex-col gap-5 pt-3 xl:grid xl:grid-cols-[1fr_380px] xl:gap-10 xl:items-start 2xl:grid-cols-[1fr_460px] 2xl:gap-12">
+          ${Breadcrumb(pdCrumbs)}
+          <div id="pd-hero-grid" class="grid grid-cols-[minmax(0,420px)_minmax(0,1fr)] gap-5 pt-3 items-start min-[1280px]:grid-cols-[minmax(0,465px)_minmax(0,1fr)_380px] min-[1280px]:gap-6">
             <div id="pd-hero-left" class="w-full min-w-0">
-              ${Breadcrumb(pdCrumbs)}
-              ${ProductTitleBar()}
-              <div id="pd-hero-gallery" class="w-full text-center">${ProductImageGallery()}</div>
+              <div id="pd-hero-gallery" class="w-full">${ProductImageGallery()}</div>
               ${SellerTrustCard()}
-              ${ProductTabs()}
-              ${RelatedProducts()}
             </div>
-            <div id="pd-hero-info" class="w-full xl:flex xl:flex-col xl:[&.pd-sticky]:sticky xl:[&.pd-sticky]:top-[165px] xl:[&.pd-sticky]:max-h-[calc(100vh-180px)] xl:[&.pd-sticky]:flex xl:[&.pd-sticky]:flex-col">${ProductInfo()}</div>
+            <div id="pd-hero-center" class="w-full min-w-0">
+              ${ProductTitleBar()}
+            </div>
+            <div id="pd-hero-info" class="w-full min-w-0 col-span-2 min-[1280px]:col-span-1 min-[1280px]:flex min-[1280px]:flex-col min-[1280px]:[&.pd-sticky]:sticky min-[1280px]:[&.pd-sticky]:top-[165px] min-[1280px]:[&.pd-sticky]:max-h-[calc(100vh-180px)]">${ProductInfo()}</div>
+          </div>
+          <div id="pd-below-hero" class="mt-6">
+            ${ProductTabs()}
+            ${RelatedProducts()}
           </div>
         </div>
       </section>
