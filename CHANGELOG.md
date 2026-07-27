@@ -1,3 +1,13 @@
+## [v2.2.4-alpha.2] - 2026-07-27 ALPHA
+
+Bu surum alpha.istoc.com'da gelistirme asamasindadir.
+
+### Duzeltildi
+- fix(dev): Vite proxy backend bağlantı düzeltmesi (@boraydeger32)
+  - vite.config.ts: local backend'e Host header gönderimi eklendi
+  - .env.development: VITE_API_PROXY ve FRAPPE_SITE_NAME eklendi
+
+---
 ## [v2.2.4-alpha.1] - 2026-07-27 ALPHA
 
 Bu surum alpha.istoc.com'da gelistirme asamasindadir.
