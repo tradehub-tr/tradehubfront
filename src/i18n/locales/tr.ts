@@ -2101,7 +2101,7 @@ const tr = {
         okPending: "Yorumunuz alındı, moderasyon sonrası yayınlanacaktır.",
       },
       moqSingle: "{{count}} adet",
-      moqRange: "{{min}} - {{max}} adet",
+      moqRange: "{{min}}-{{max}} adet",
       attributes: "Özellikler",
       reviews: "Yorumlar",
       supplier: "Tedarikçi",

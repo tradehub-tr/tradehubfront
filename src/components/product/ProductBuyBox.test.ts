@@ -1,10 +1,10 @@
 /**
- * ProductBuyBox — KYB satın alma kapısının KISITLAYICI dalı.
+ * ProductBuyBox — orta sütun ürünün KİMLİĞİNİ basar: başlık, meta satırı,
+ * satıcı sertifikaları, stok uyarısı, Teknik Özellikler.
  *
- * Repodaki diğer testler `kybVerified` alanını hep `true` bırakıyordu; yani
- * güvenlik karakteri taşıyan tek davranış (KYB doğrulanmamış satıcıda fiyat
- * göstermeme) hiç çalıştırılmıyordu. Buradaki testler doğru olan mevcut
- * davranışı KİLİTLER — regresyonu yakalamak için.
+ * Satın almaya ait hiçbir şey (fiyat, numune, varyant, CTA) burada
+ * OLMAMALI — hepsi sağ paneldeki ProductOrderPanel'de toplanır. Aşağıdaki
+ * testler hem basılanı hem basılmaması gerekeni kilitler.
  *
  * Sınıf adı regex'i KULLANMA: Tailwind arbitrary-variant sınıfları
  * (`[&.active]:…`) literal alt dize barındırdığı için naif regex'ler sessizce
@@ -57,37 +57,67 @@ function parse(html: string): Document {
   return new DOMParser().parseFromString(html, "text/html");
 }
 
-describe("ProductBuyBox — KYB kapısı", () => {
+describe("ProductBuyBox — bilgi sütunu sınırı", () => {
   beforeEach(() => vi.clearAllMocks());
 
-  it("satıcı KYB doğrulanmamışsa fiyat kademelerini basmaz", () => {
-    getCurrentProduct.mockReturnValue(makeProduct({ sellerKybVerified: false }));
+  it("satın alma öğelerinin hiçbirini basmaz", () => {
+    // KYB durumundan bağımsız: fiyat/numune/varyant/CTA sağ panele ait.
+    getCurrentProduct.mockReturnValue(makeProduct({ sellerKybVerified: true }));
     const doc = parse(ProductBuyBox());
 
     expect(doc.querySelector("#pd-price-tiers")).toBeNull();
     expect(doc.querySelectorAll("[data-tier-index]").length).toBe(0);
-    // Numune fiyatı da fiyat bloğunun içinde — o da düşmeli.
     expect(doc.querySelector("#pd-sample-price")).toBeNull();
     expect(doc.querySelector("[data-order-sample]")).toBeNull();
+    expect(doc.querySelector("#pd-variations-section")).toBeNull();
+    expect(doc.querySelector("#pd-card-tabs")).toBeNull();
+    expect(doc.querySelector("#pd-add-to-cart")).toBeNull();
   });
 
-  it("satıcı KYB doğrulanmamışsa uyarı banner'ını basar", () => {
-    getCurrentProduct.mockReturnValue(makeProduct({ sellerKybVerified: false }));
+  it("başlığı ve yorum/sipariş meta satırını basar", () => {
+    getCurrentProduct.mockReturnValue(makeProduct());
     const doc = parse(ProductBuyBox());
 
-    const banner = doc.querySelector('[role="alert"]');
-    expect(banner).not.toBeNull();
-    expect(banner?.classList.contains("pd-kyb-banner-large")).toBe(true);
-    expect(banner?.textContent?.trim().length).toBeGreaterThan(0);
+    expect(doc.querySelector("#pd-product-title")?.textContent).toContain("Test Ürün");
+    // Yorum sayısı 12 → link metni yorum sayısını taşır, "henüz yorum yok" değil.
+    expect(doc.querySelector("#pd-review-count-link")).not.toBeNull();
+    expect(doc.querySelector("#pd-rating-line")?.textContent).toContain("12");
   });
 
-  it("satıcı KYB doğrulanmışsa fiyat kademeleri basılır, banner basılmaz", () => {
-    getCurrentProduct.mockReturnValue(makeProduct({ sellerKybVerified: true }));
-    const doc = parse(ProductBuyBox());
+  it("satıcı sertifikalarını rozet olarak basar, yoksa bölümü hiç açmaz", () => {
+    getCurrentProduct.mockReturnValue(
+      makeProduct({ supplier: { id: "SEL-1", name: "T", certifications: ["ISO 9001"] } })
+    );
+    let doc = parse(ProductBuyBox());
+    expect(doc.querySelector("#pd-certifications")?.textContent).toContain("ISO 9001");
 
-    expect(doc.querySelector("#pd-price-tiers")).not.toBeNull();
-    expect(doc.querySelectorAll("[data-tier-index]").length).toBe(2);
-    expect(doc.querySelector(".pd-kyb-banner-large")).toBeNull();
-    expect(doc.querySelector('[role="alert"]')).toBeNull();
+    getCurrentProduct.mockReturnValue(
+      makeProduct({ supplier: { id: "SEL-1", name: "T", certifications: [] } })
+    );
+    doc = parse(ProductBuyBox());
+    expect(doc.querySelector("#pd-certifications")).toBeNull();
+  });
+
+  it("stok rozeti yalnız outOfStock durumunda görünür durumda basılır", () => {
+    getCurrentProduct.mockReturnValue(makeProduct({ outOfStock: false }));
+    let badge = parse(ProductBuyBox()).querySelector("#pd-ready-badge");
+    expect(badge).not.toBeNull();
+    expect(badge?.classList.contains("hidden")).toBe(true);
+
+    getCurrentProduct.mockReturnValue(makeProduct({ outOfStock: true }));
+    badge = parse(ProductBuyBox()).querySelector("#pd-ready-badge");
+    expect(badge?.classList.contains("hidden")).toBe(false);
+    expect(badge?.classList.contains("inline-flex")).toBe(true);
+  });
+
+  it("Teknik Özellikler ızgarasını ilk 6 özellikle basar", () => {
+    const specs = Array.from({ length: 8 }, (_, i) => ({ key: `K${i}`, value: `V${i}` }));
+    getCurrentProduct.mockReturnValue(makeProduct({ specs }));
+    const grid = parse(ProductBuyBox()).querySelector("#pd-key-attributes");
+
+    expect(grid).not.toBeNull();
+    expect(grid?.children.length).toBe(6);
+    expect(grid?.textContent).toContain("K0");
+    expect(grid?.textContent).not.toContain("K6");
   });
 });

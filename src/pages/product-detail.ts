@@ -253,19 +253,27 @@ async function renderProductPage() {
       <section style="background: var(--pd-bg, #ffffff);">
         <div class="mx-auto w-full max-w-[1600px] px-4 2xl:px-8">
           ${Breadcrumb(pdCrumbs)}
-          <div id="pd-hero-grid" class="grid grid-cols-[minmax(0,420px)_minmax(0,1fr)] gap-5 pt-3 items-start min-[1280px]:grid-cols-[minmax(0,465px)_minmax(0,1fr)_380px] min-[1280px]:gap-6">
-            <div id="pd-hero-left" class="w-full min-w-0">
-              <div id="pd-hero-gallery" class="w-full">${ProductImageGallery()}</div>
-              ${ProductSellerPanel()}
+          <!-- Dış ızgara: akan İÇERİK | sabit SATIN ALMA paneli.
+               Panelin sayfa boyunca sağda kalabilmesi için sekmeler ve ilgili
+               ürünler de içerik sütununun İÇİNDE durur — sticky bir öğe ancak
+               kapsayıcısı kadar yaşar, bu yüzden kapsayıcı tüm sayfadır. -->
+          <div id="pd-hero-grid" class="grid grid-cols-1 gap-5 pt-3 items-start min-[1280px]:grid-cols-[minmax(0,1fr)_440px] min-[1280px]:gap-6">
+            <div id="pd-content-col" class="w-full min-w-0">
+              <div class="grid grid-cols-[minmax(0,420px)_minmax(0,1fr)] gap-5 items-start min-[1280px]:grid-cols-[minmax(0,465px)_minmax(0,1fr)] min-[1280px]:gap-6">
+                <div id="pd-hero-left" class="w-full min-w-0">
+                  <div id="pd-hero-gallery" class="w-full">${ProductImageGallery()}</div>
+                  ${ProductSellerPanel()}
+                </div>
+                <div id="pd-hero-center" class="w-full min-w-0">
+                  ${ProductBuyBox()}
+                </div>
+              </div>
+              <div id="pd-below-hero" class="mt-6">
+                ${ProductTabs()}
+                ${RelatedProducts()}
+              </div>
             </div>
-            <div id="pd-hero-center" class="w-full min-w-0">
-              ${ProductBuyBox()}
-            </div>
-            <div id="pd-hero-info" class="w-full min-w-0 col-span-2 min-[1280px]:col-span-1 min-[1280px]:flex min-[1280px]:flex-col min-[1280px]:[&.pd-sticky]:sticky min-[1280px]:[&.pd-sticky]:top-[165px] min-[1280px]:[&.pd-sticky]:max-h-[calc(100vh-180px)]">${ProductOrderPanel()}</div>
-          </div>
-          <div id="pd-below-hero" class="mt-6">
-            ${ProductTabs()}
-            ${RelatedProducts()}
+            <div id="pd-hero-info" class="w-full min-w-0 min-[1280px]:flex min-[1280px]:flex-col min-[1280px]:[&.pd-sticky]:sticky min-[1280px]:[&.pd-sticky]:top-[165px] min-[1280px]:[&.pd-sticky]:max-h-[calc(100vh-180px)]">${ProductOrderPanel()}</div>
           </div>
         </div>
       </section>

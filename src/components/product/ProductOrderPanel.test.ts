@@ -21,9 +21,13 @@ vi.mock("../../services/currencyService", () => ({
   formatCurrency: (v: number) => `$${v}`,
   getSelectedCurrency: () => "USD",
 }));
-vi.mock("./CartDrawer", () => ({ openShippingModal: vi.fn() }));
+vi.mock("./CartDrawer", () => ({ openShippingModal: vi.fn(), openCartDrawer: vi.fn() }));
 
 import { ProductOrderPanel } from "./ProductOrderPanel";
+
+function parse(html: string): Document {
+  return new DOMParser().parseFromString(html, "text/html");
+}
 
 function makeProduct(overrides: Record<string, unknown> = {}): ProductDetail {
   return {
@@ -83,5 +87,76 @@ describe("ProductOrderPanel — KYB kapısı", () => {
     expect(btn?.hasAttribute("disabled")).toBe(false);
     expect(btn?.getAttribute("data-add-to-cart")).toBe("LST-1");
     expect(doc.querySelector(".pd-kyb-hint")).toBeNull();
+  });
+
+  it("satıcı KYB doğrulanmamışsa fiyat kademelerini ve numuneyi basmaz", () => {
+    getCurrentProduct.mockReturnValue(
+      makeProduct({ sellerKybVerified: false, samplePrice: 12 })
+    );
+    const doc = parse(ProductOrderPanel());
+
+    expect(doc.querySelector("#pd-price-tiers")).toBeNull();
+    expect(doc.querySelectorAll("[data-tier-index]").length).toBe(0);
+    expect(doc.querySelector("#pd-sample-price")).toBeNull();
+    expect(doc.querySelector("[data-order-sample]")).toBeNull();
+
+    const banner = doc.querySelector('[role="alert"]');
+    expect(banner?.classList.contains("pd-kyb-banner-large")).toBe(true);
+  });
+
+  it("satıcı KYB doğrulanmışsa fiyat kademeleri basılır, banner basılmaz", () => {
+    getCurrentProduct.mockReturnValue(
+      makeProduct({
+        sellerKybVerified: true,
+        priceTiers: [
+          { minQty: 1, maxQty: 9, price: 10, currency: "USD" },
+          { minQty: 10, maxQty: null, price: 8, currency: "USD" },
+        ],
+      })
+    );
+    const doc = parse(ProductOrderPanel());
+
+    expect(doc.querySelector("#pd-price-tiers")).not.toBeNull();
+    expect(doc.querySelectorAll("[data-tier-index]").length).toBe(2);
+    expect(doc.querySelector(".pd-kyb-banner-large")).toBeNull();
+  });
+});
+
+describe("ProductOrderPanel — satın alma bloğu sağ panelde toplanır", () => {
+  beforeEach(() => vi.clearAllMocks());
+
+  it("sekme şeridini ve varyant eksenlerini basar", () => {
+    getCurrentProduct.mockReturnValue(
+      makeProduct({
+        variants: [
+          {
+            type: "color",
+            label: "Renk",
+            options: [{ id: "V1", label: "Kırmızı", value: "#f00", available: true, isDefault: true }],
+          },
+        ],
+      })
+    );
+    const doc = parse(ProductOrderPanel());
+
+    expect(doc.querySelector("#pd-card-tabs")).not.toBeNull();
+    expect(doc.querySelector("#pd-variations-section")).not.toBeNull();
+    expect(doc.querySelectorAll(".variant-group").length).toBe(1);
+    // Seçim bağlantısı yalnız ilk eksende basılır.
+    expect(doc.querySelectorAll("[data-open-selection]").length).toBe(1);
+  });
+
+  it("kampanya varken indirim rozetini basar, kampanya yokken basmaz", () => {
+    getCurrentProduct.mockReturnValue(
+      makeProduct({
+        priceTiers: [{ minQty: 1, maxQty: null, price: 90, originalPrice: 100, currency: "USD" }],
+      })
+    );
+    expect(parse(ProductOrderPanel()).querySelector(".pd-discount-badge")?.textContent).toContain(
+      "10%"
+    );
+
+    getCurrentProduct.mockReturnValue(makeProduct());
+    expect(parse(ProductOrderPanel()).querySelector(".pd-discount-badge")).toBeNull();
   });
 });
