@@ -205,10 +205,11 @@ export function ProductOrderPanel(): string {
   return `
     <div id="pd-order-panel" class="bg-[var(--color-surface,#fff)] flex flex-col border border-[var(--color-border-default,#e5e5e5)] rounded-md overflow-hidden min-[1280px]:[.pd-sticky_&]:flex-1 min-[1280px]:[.pd-sticky_&]:min-h-0 min-[1280px]:[.pd-sticky_&]:max-h-full min-[1280px]:[.pd-sticky_&]:overflow-hidden">
       <!-- Sekme şeridi panelin tepesinde; aktif sekme beyaz zemin + üst vurgu
-           çizgisiyle içerikle birleşir. Genişliği yarımla sınırlı ki ikinci
-           sekme (Özelleştirme) geldiğinde düzen kaymasın. -->
+           çizgisiyle içerikle birleşir. flex-1 sekme sayısına göre kendini
+           paylaştırır: tek sekme şeridi komple kaplar, Özelleştirme sekmesi
+           eklendiğinde ikisi 50/50 olur — sabit genişlik verilmez. -->
       <div id="pd-card-tabs" class="flex p-0 shrink-0 bg-[var(--color-surface-raised,#f5f5f5)] border-b border-[var(--color-border-default,#e5e5e5)]">
-        <button type="button" class="pd-card-tab th-no-press flex-1 max-w-[50%] px-4 py-3.5 text-[15px] font-semibold text-center bg-transparent border-0 border-t-[3px] border-t-transparent cursor-pointer text-[var(--color-text-muted,#666)] relative transition-[background,color] duration-150 [&:not(:first-child)]:border-s [&:not(:first-child)]:border-s-[var(--color-border-default,#e5e5e5)] [&.active]:text-[var(--color-text-primary)] [&.active]:font-bold [&.active]:bg-[var(--color-surface,#fff)] [&.active]:border-t-[var(--pd-tab-active-border,#cc9900)] active">${t("product.wholesaleSales")}</button>
+        <button type="button" class="pd-card-tab th-no-press flex-1 px-4 py-3.5 text-[15px] font-semibold text-center bg-transparent border-0 border-t-[3px] border-t-transparent cursor-pointer text-[var(--color-text-muted,#666)] relative transition-[background,color] duration-150 [&:not(:first-child)]:border-s [&:not(:first-child)]:border-s-[var(--color-border-default,#e5e5e5)] [&.active]:text-[var(--color-text-primary)] [&.active]:font-bold [&.active]:bg-[var(--color-surface,#fff)] [&.active]:border-t-[var(--pd-tab-active-border,#cc9900)] active">${t("product.wholesaleSales")}</button>
       </div>
 
       <div id="pd-info-scrollable" class="p-5 flex flex-col scrollbar-hide min-[1280px]:[.pd-sticky_&]:flex-1 min-[1280px]:[.pd-sticky_&]:overflow-y-auto min-[1280px]:[.pd-sticky_&]:min-h-0">
