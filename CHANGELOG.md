@@ -1,3 +1,11 @@
+## [v2.2.4-alpha.1] - 2026-07-27 ALPHA
+
+Bu surum alpha.istoc.com'da gelistirme asamasindadir.
+
+### Duzeltildi
+- fix(security): allow GTM tracking providers in CSP (@TurksabYonetim)
+
+---
 ## [v2.2.4] - 2026-07-27 PROD
 
 Bu surum istoc.com'da yayindadir.
