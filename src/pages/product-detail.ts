@@ -37,8 +37,8 @@ import {
   ProductSellerPanel,
   initProductBuyBox,
   ProductImageGallery,
-  ProductInfo,
-  initProductInfo,
+  ProductOrderPanel,
+  initProductOrderPanel,
   ProductTabs,
   initProductTabs,
   initReviews,
@@ -261,7 +261,7 @@ async function renderProductPage() {
             <div id="pd-hero-center" class="w-full min-w-0">
               ${ProductBuyBox()}
             </div>
-            <div id="pd-hero-info" class="w-full min-w-0 col-span-2 min-[1280px]:col-span-1 min-[1280px]:flex min-[1280px]:flex-col min-[1280px]:[&.pd-sticky]:sticky min-[1280px]:[&.pd-sticky]:top-[165px] min-[1280px]:[&.pd-sticky]:max-h-[calc(100vh-180px)]">${ProductInfo()}</div>
+            <div id="pd-hero-info" class="w-full min-w-0 col-span-2 min-[1280px]:col-span-1 min-[1280px]:flex min-[1280px]:flex-col min-[1280px]:[&.pd-sticky]:sticky min-[1280px]:[&.pd-sticky]:top-[165px] min-[1280px]:[&.pd-sticky]:max-h-[calc(100vh-180px)]">${ProductOrderPanel()}</div>
           </div>
           <div id="pd-below-hero" class="mt-6">
             ${ProductTabs()}
@@ -298,7 +298,7 @@ async function renderProductPage() {
 
     if (desktop) {
       initProductBuyBox({ signal: lifecycle.signal });
-      initProductInfo({ signal: lifecycle.signal });
+      initProductOrderPanel({ signal: lifecycle.signal });
       initProductTabs({ signal: lifecycle.signal });
       initAttributesTab();
     } else {

@@ -1,8 +1,8 @@
 /**
- * ProductInfo Component
- * Right sticky card (iSTOC layout-stick style).
- * Contains: shipping, CTAs. Başlık, puan satırı, fiyat kademeleri ve
- * varyant seçiciler orta sütuna (ProductBuyBox) taşındı.
+ * ProductOrderPanel — ürün detay SAĞ sütunu.
+ * Kargo kartı, sosyal kanıt rozeti ve CTA'lar (Sepete Ekle / Sohbet et).
+ * 1280px altında sağ panel ortanın altına akar; sticky yalnız 1280px ve
+ * üstünde devreye girer (CSS tarafı `#pd-hero-info` üzerinde `min-[1280px]:`).
  */
 
 import { getCurrentProduct } from "../../alpine/product";
@@ -12,24 +12,13 @@ import { openShippingModal } from "./CartDrawer";
 import { SocialProofBadge } from "./SocialProofBadge";
 import { escapeHtml, sanitizeUrl } from "../../utils/sanitize";
 
-export function ProductInfo(): string {
+export function ProductOrderPanel(): string {
   const mockProduct = getCurrentProduct();
   const p = mockProduct;
 
   return `
-    <div id="product-info" class="bg-[var(--color-surface,#fff)] flex flex-col border border-[var(--color-border-default,#e5e5e5)] rounded-md overflow-hidden [.pd-sticky_&]:flex-1 [.pd-sticky_&]:min-h-0 [.pd-sticky_&]:max-h-full [.pd-sticky_&]:overflow-hidden">
+    <div id="pd-order-panel" class="bg-[var(--color-surface,#fff)] flex flex-col border border-[var(--color-border-default,#e5e5e5)] rounded-md overflow-hidden [.pd-sticky_&]:flex-1 [.pd-sticky_&]:min-h-0 [.pd-sticky_&]:max-h-full [.pd-sticky_&]:overflow-hidden">
       <div id="pd-info-scrollable" class="p-5 flex flex-col scrollbar-hide [.pd-sticky_&]:flex-1 [.pd-sticky_&]:overflow-y-auto [.pd-sticky_&]:min-h-0">
-        <!-- Wholesale Tab -->
-        <div id="pd-card-tabs" class="flex -mx-5 mt-[-20px] p-0 bg-[var(--color-surface-raised,#f5f5f5)] border-b border-[var(--color-border-default,#e5e5e5)]">
-          <button type="button" class="pd-card-tab flex-1 px-4 py-3.5 text-[15px] font-semibold text-center bg-transparent border-0 border-t-[3px] border-t-transparent cursor-pointer text-[var(--color-text-muted,#666)] relative transition-[background,color] duration-150 [&:not(:first-child)]:border-s [&:not(:first-child)]:border-s-[var(--color-border-default,#e5e5e5)] [&.active]:text-[var(--color-text-primary)] [&.active]:font-bold [&.active]:bg-[var(--color-surface,#fff)] [&.active]:border-t-[var(--pd-tab-active-border,#cc9900)] active">${t("product.wholesaleSales")}</button>
-        </div>
-
-        <!-- Ready to Ship Badge -->
-        <span id="pd-ready-badge" class="th-badge inline-flex items-center my-4 mb-3 px-2.5 py-[3px] text-[11px] font-semibold border-[1.5px] border-[#16a34a] rounded text-[#16a34a] bg-[#f0fdf4] [&.is-out-of-stock]:border-[#dc2626] [&.is-out-of-stock]:text-[#dc2626] [&.is-out-of-stock]:bg-[#fef2f2]">${t("product.readyToShip")}</span>
-
-        <!-- Fiyat kademeleri, numune fiyatı ve varyant seçiciler orta sütunda
-             (ProductBuyBox) render edilir; KYB kapısı da oraya taşındı. -->
-
         <!-- Shipping — yöntem belli değilse bölüm hiç render edilmez -->
         ${
           p.shipping[0]?.method
@@ -48,7 +37,7 @@ export function ProductInfo(): string {
             : ""
         }
 
-        <!-- Social Proof Badge — fiyat/stok ile CTA arası -->
+        <!-- Social Proof Badge — kargo ile CTA arası -->
         ${SocialProofBadge({
           listingId: p.id,
           supplierId: p.supplier?.id ?? "",
@@ -101,19 +90,12 @@ export function ProductInfo(): string {
   `;
 }
 
-export function initProductInfo(options: { signal?: AbortSignal } = {}): void {
-  // Card tab switching (Toptan Satış / Özelleştirme)
-  const cardTabs = document.querySelectorAll<HTMLButtonElement>(".pd-card-tab");
-  cardTabs.forEach((tab) => {
-    tab.addEventListener("click", () => {
-      cardTabs.forEach((t) => t.classList.remove("active"));
-      tab.classList.add("active");
-    });
-  });
-
-  // Sticky card: add .pd-sticky once user scrolls past the card's bottom
+export function initProductOrderPanel(options: { signal?: AbortSignal } = {}): void {
+  // Sticky card: add .pd-sticky once user scrolls past the card's bottom.
+  // Eşik 1280px — altındaki iki sütunlu kırılımda sağ panel ortanın altına
+  // aktığı için sticky anlamsız (CSS tarafı da `min-[1280px]:` kullanıyor).
   const heroInfo = document.getElementById("pd-hero-info");
-  if (heroInfo && window.matchMedia("(min-width: 1024px)").matches) {
+  if (heroInfo && window.matchMedia("(min-width: 1280px)").matches) {
     const stickyTop = 130;
     const cardBottom = heroInfo.getBoundingClientRect().bottom + window.scrollY;
 
@@ -131,7 +113,7 @@ export function initProductInfo(options: { signal?: AbortSignal } = {}): void {
     pdShipChangeBtn.addEventListener("click", (e) => {
       e.preventDefault();
       openShippingModal();
-    });
+    }, options);
   }
 
   // Listen for shipping changes from shared modal — update both desktop and mobile layouts

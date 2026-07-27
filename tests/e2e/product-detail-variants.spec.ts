@@ -3,8 +3,9 @@
  *
  * `src/components/product/variantMatrix.ts` içindeki `getSelectedAxes()`,
  * `updateReadyBadge()`, `crossDisableVariants()` fonksiyonlarının bugünkü
- * DOM davranışını sabitler (Task 8.5). Task 9/10'da ProductInfo.ts ikiye
- * bölünürken bu selector'lar (`.variant-group[data-variant-label]`,
+ * DOM davranışını sabitler (Task 8.5). Eski sağ kart ProductBuyBox (orta) ve
+ * ProductOrderPanel (sağ) olarak ikiye bölündü; bu selector'lar
+ * (`.variant-group[data-variant-label]`,
  * `.variant-option[data-variant-label]`, `.variant-option.active`,
  * `#pd-ready-badge`, `[data-ready-badge="mobile"]`) sessizce kırılırsa bu
  * paket kırmızı olmalı.

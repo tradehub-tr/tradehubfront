@@ -6,7 +6,7 @@ export { ProductBreadcrumb } from "./Breadcrumb";
 export { ProductBuyBox, initProductBuyBox } from "./ProductBuyBox";
 export { ProductSellerPanel } from "./ProductSellerPanel";
 export { ProductImageGallery, initImageGallery } from "./ProductImageGallery";
-export { ProductInfo, initProductInfo } from "./ProductInfo";
+export { ProductOrderPanel, initProductOrderPanel } from "./ProductOrderPanel";
 export { ProductSupplierCard } from "./SupplierCard";
 export { ProductTabs, initProductTabs } from "./ProductTabs";
 export { ProductDescription } from "./ProductDescription";

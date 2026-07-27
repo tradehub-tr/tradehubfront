@@ -1,7 +1,7 @@
 /**
  * ProductBuyBox — ürün detay ORTA sütunu.
- * Başlık, puan/sipariş satırı, fiyat kademeleri, varyant seçiciler.
- * Kargo / CTA'lar sağ sütundaki ProductInfo kartında durur.
+ * Kart sekmeleri, başlık, puan/sipariş satırı, stok rozeti, fiyat kademeleri,
+ * varyant seçiciler. Kargo / CTA'lar sağ sütundaki ProductOrderPanel'de durur.
  */
 
 import { getCurrentProduct } from "../../alpine/product";
@@ -182,10 +182,20 @@ export function ProductBuyBox(): string {
 
   return `
     <div id="pd-buy-box" class="flex flex-col">
+      <!-- Wholesale Tab — eskiden sağ karttaydı; negatif kenar boşlukları o
+           kartın p-5 dolgusunu iptal etmek içindi, bu sütunda dolgu yok. -->
+      <div id="pd-card-tabs" class="flex p-0 mb-4 bg-[var(--color-surface-raised,#f5f5f5)] border-b border-[var(--color-border-default,#e5e5e5)]">
+        <button type="button" class="pd-card-tab flex-1 px-4 py-3.5 text-[15px] font-semibold text-center bg-transparent border-0 border-t-[3px] border-t-transparent cursor-pointer text-[var(--color-text-muted,#666)] relative transition-[background,color] duration-150 [&:not(:first-child)]:border-s [&:not(:first-child)]:border-s-[var(--color-border-default,#e5e5e5)] [&.active]:text-[var(--color-text-primary)] [&.active]:font-bold [&.active]:bg-[var(--color-surface,#fff)] [&.active]:border-t-[var(--pd-tab-active-border,#cc9900)] active">${t("product.wholesaleSales")}</button>
+      </div>
+
       <h1 id="pd-product-title" class="text-2xl font-bold leading-snug tracking-[-0.015em] text-balance break-words text-[var(--pd-title-color,#111827)]">${escapeHtml(p.title)}</h1>
       <div id="pd-rating-line" class="mt-2 flex items-center gap-1.5 flex-wrap text-[13px] text-[var(--pd-rating-text-color,#6b7280)]">
         ${ratingLineHtml()}
       </div>
+
+      <!-- Ready to Ship Badge — varyant seçimine tepki verdiği için seçicilerle
+           aynı sütunda durur (variantMatrix.updateReadyBadge id ile bulur). -->
+      <span id="pd-ready-badge" class="th-badge inline-flex items-center self-start my-4 mb-3 px-2.5 py-[3px] text-[11px] font-semibold border-[1.5px] border-[#16a34a] rounded text-[#16a34a] bg-[#f0fdf4] [&.is-out-of-stock]:border-[#dc2626] [&.is-out-of-stock]:text-[#dc2626] [&.is-out-of-stock]:bg-[#fef2f2]">${t("product.readyToShip")}</span>
 
       <div class="mt-4">
         ${
@@ -250,6 +260,15 @@ export function ProductBuyBox(): string {
  * - Varyant seçimi: aktif durum, etiket, fiyat, galeri olayı, cross-disable.
  */
 export function initProductBuyBox(options: { signal?: AbortSignal } = {}): void {
+  // Card tab switching (Toptan Satış / Özelleştirme)
+  const cardTabs = document.querySelectorAll<HTMLButtonElement>(".pd-card-tab");
+  cardTabs.forEach((tab) => {
+    tab.addEventListener("click", () => {
+      cardTabs.forEach((t) => t.classList.remove("active"));
+      tab.classList.add("active");
+    }, options);
+  });
+
   const update = () => {
     const el = document.getElementById("pd-rating-line");
     if (el) el.innerHTML = ratingLineHtml();

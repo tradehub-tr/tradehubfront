@@ -1,5 +1,5 @@
 /**
- * Varyant fiyat güncelleme — masaüstü (ProductInfo) ve mobil (MobileLayout)
+ * Varyant fiyat güncelleme — masaüstü (ProductBuyBox) ve mobil (MobileLayout)
  * varyant seçim handler'larının ortak yardımcısı.
  *
  * `data-variant-price`, varyant butonuna `listingService.mapListingDetail`
