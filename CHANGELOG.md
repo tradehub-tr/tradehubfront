@@ -1,3 +1,61 @@
+## [v2.2.4-alpha.2] - 2026-07-27 ALPHA
+
+Bu surum alpha.istoc.com'da gelistirme asamasindadir.
+
+### Duzeltildi
+- fix(dev): Vite proxy backend bağlantı düzeltmesi (@boraydeger32)
+  - vite.config.ts: local backend'e Host header gönderimi eklendi
+  - .env.development: VITE_API_PROXY ve FRAPPE_SITE_NAME eklendi
+
+---
+## [v2.2.4-alpha.1] - 2026-07-27 ALPHA
+
+Bu surum alpha.istoc.com'da gelistirme asamasindadir.
+
+### Duzeltildi
+- fix(security): allow GTM tracking providers in CSP (@TurksabYonetim)
+
+---
+## [v2.2.4] - 2026-07-27 PROD
+
+Bu surum istoc.com'da yayindadir.
+
+### Duzeltildi
+- fix(seo): refresh static metadata on page load (@TurksabYonetim)
+- fix(seo): normalize static metadata language (@TurksabYonetim)
+- fix(seo): preserve storefront document language (@TurksabYonetim)
+
+---
+## [v2.2.3-rc.1] - 2026-07-27 RC
+
+Bu surum rc.istoc.com'da onay asamasindadir.
+
+### Duzeltildi
+- fix(seo): refresh static metadata on page load (@TurksabYonetim)
+- fix(seo): normalize static metadata language (@TurksabYonetim)
+- fix(seo): preserve storefront document language (@TurksabYonetim)
+
+---
+## [v2.2.3-beta.2] - 2026-07-27 BETA
+
+Bu surum beta.istoc.com'da test asamasindadir.
+
+### Duzeltildi
+- fix(seo): refresh static metadata on page load (@TurksabYonetim)
+- fix(seo): normalize static metadata language (@TurksabYonetim)
+- fix(seo): preserve storefront document language (@TurksabYonetim)
+
+---
+## [v2.2.3-alpha.2] - 2026-07-27 ALPHA
+
+Bu surum alpha.istoc.com'da gelistirme asamasindadir.
+
+### Duzeltildi
+- fix(seo): refresh static metadata on page load (@TurksabYonetim)
+- fix(seo): normalize static metadata language (@TurksabYonetim)
+- fix(seo): preserve storefront document language (@TurksabYonetim)
+
+---
 ## [v2.2.3] - 2026-07-23 PROD
 
 Bu surum istoc.com'da yayindadir.

@@ -318,6 +318,8 @@ function seoPlaceholderPlugin(): Plugin {
 // eder (docker frontend: container 8080 → host 8000, site: dev.localhost);
 // farklı dev kurulumu için VITE_API_PROXY ile override edilebilir.
 const API_PROXY_TARGET = process.env.VITE_API_PROXY || 'http://localhost:8000';
+const FRAPPE_SITE_NAME = process.env.FRAPPE_SITE_NAME || 'dev.localhost';
+const isLocalBackend = API_PROXY_TARGET.includes('localhost');
 
 export default defineConfig({
     base: process.env.GITHUB_PAGES === 'true' ? '/tradehubfront/' : '/',
@@ -336,14 +338,17 @@ export default defineConfig({
             '/api': {
                 target: API_PROXY_TARGET,
                 changeOrigin: true,
+                ...(isLocalBackend ? { headers: { Host: FRAPPE_SITE_NAME } } : {}),
             },
             '/files': {
                 target: API_PROXY_TARGET,
                 changeOrigin: true,
+                ...(isLocalBackend ? { headers: { Host: FRAPPE_SITE_NAME } } : {}),
             },
             '/private/files': {
                 target: API_PROXY_TARGET,
                 changeOrigin: true,
+                ...(isLocalBackend ? { headers: { Host: FRAPPE_SITE_NAME } } : {}),
             },
         },
     },
