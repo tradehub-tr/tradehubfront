@@ -112,8 +112,8 @@
 
   /* --- Font Family --- */
   --font-sans:
-    "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Arial, ui-sans-serif,
-    system-ui, sans-serif;
+    "istoc-sans", "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Arial,
+    ui-sans-serif, system-ui, sans-serif;
   --font-mono: ui-monospace, "Cascadia Code", "Fira Code", monospace;
 
   /* --- Font Size Scale --- */
