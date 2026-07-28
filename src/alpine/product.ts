@@ -455,6 +455,18 @@ Alpine.data("imageGallery", () => ({
     return !!(img && img.isVideo);
   },
 
+  // currentProduct modül objesi Alpine-reaktif değil; attrsIndex'e dokunmak
+  // varyant swap'inde (swapGalleryImages attrsIndex'i günceller) x-show'un
+  // yeniden değerlenmesini sağlar — yoksa sekme videosuz varyantta asılı kalır.
+  hasVideoSlide(): boolean {
+    void this.attrsIndex;
+    return currentProduct.images.some((img) => img.isVideo);
+  },
+
+  videoSlideIndex(): number {
+    return currentProduct.images.findIndex((img) => img.isVideo);
+  },
+
   getMainMedia(): HTMLElement | null {
     const mainImage = (this.$refs as Record<string, HTMLElement>).mainImage;
     return mainImage?.querySelector<HTMLElement>('[data-gallery-main-media="true"]') ?? null;

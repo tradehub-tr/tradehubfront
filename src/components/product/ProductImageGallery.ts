@@ -196,7 +196,7 @@ export function ProductImageGallery(): string {
            koyu cam oklar + WCAG favori. Wrapper görsel boyutunda (max 560px, 2xl'de 680px, ortalı);
            oklar/kalp innerHTML replace'inden etkilenmesin diye #gallery-main-image
            DIŞINDA, wrapper içinde durur. Özellikler sekmesinde wrapper komple gizlenir. -->
-      <div class="relative flex-1 min-w-0 w-full max-w-[465px] mx-auto" :class="{ 'hidden': currentIndex === attrsIndex }">
+      <div class="relative flex-1 min-w-0 w-full max-w-[512px] mx-auto" :class="{ 'hidden': currentIndex === attrsIndex }">
         <div id="gallery-main-image"
           class="relative aspect-square w-full rounded-md overflow-hidden bg-[var(--product-image-bg,#ffffff)] pointer-coarse:cursor-default [&.zoom-enabled]:cursor-zoom-in [&.zoom-enabled>[data-gallery-main-media=true]]:transition-transform [&.zoom-enabled>[data-gallery-main-media=true]]:duration-[180ms] [&.zoom-enabled>[data-gallery-main-media=true]]:ease-out [&.zoom-enabled>[data-gallery-main-media=true]]:origin-center [&.zoom-enabled>[data-gallery-main-media=true]]:will-change-transform [&.is-zooming>[data-gallery-main-media=true]]:transition-transform [&.is-zooming>[data-gallery-main-media=true]]:duration-[30ms] [&.is-zooming>[data-gallery-main-media=true]]:ease-linear motion-reduce:[&.zoom-enabled>[data-gallery-main-media=true]]:transition-none motion-reduce:[&.is-zooming>[data-gallery-main-media=true]]:transition-none"
           x-ref="mainImage"
@@ -235,11 +235,14 @@ export function ProductImageGallery(): string {
 
     </div>
 
-    <!-- Photos / Attributes tabs -->
-    <div class="mt-3 flex justify-center">
-      <div id="pd-gallery-tabs" class="inline-flex gap-0.5 rounded-full p-[3px]" style="background: var(--color-border-light);">
-        <button type="button" class="gallery-view-tab th-no-press px-5 py-1.5 text-[13px] font-medium rounded-[20px] bg-transparent text-[var(--color-text-muted,#666)] border-0 cursor-pointer transition-[background-color,color,box-shadow] duration-150 [&.active]:bg-[var(--color-surface,#fff)] [&.active]:text-[var(--color-text-primary)] [&.active]:font-bold [&.active]:shadow-[0_1px_3px_rgba(0,0,0,0.1)]" :class="{ 'active': currentIndex !== attrsIndex }" @click="goToSlide(0)">${t("product.photosTab")}</button>
-        <button type="button" class="gallery-view-tab th-no-press px-5 py-1.5 text-[13px] font-medium rounded-[20px] bg-transparent text-[var(--color-text-muted,#666)] border-0 cursor-pointer transition-[background-color,color,box-shadow] duration-150 [&.active]:bg-[var(--color-surface,#fff)] [&.active]:text-[var(--color-text-primary)] [&.active]:font-bold [&.active]:shadow-[0_1px_3px_rgba(0,0,0,0.1)]" :class="{ 'active': currentIndex === attrsIndex }" @click="goToSlide(attrsIndex)">${t("product.attributesTab")}</button>
+    <!-- Fotoğraflar / Video segment'i — yalnız üründe video varken görünür.
+         Hover'da kalınlaşma referans davranış; grid-üstüste + görünmez kalın
+         kopya (after:content) genişliği baştan rezerve eder, layout shift olmaz.
+         Özellikler slide'ına erişim thumb şeridindeki karosundan sürer. -->
+    <div class="mt-3 flex justify-center" x-show="hasVideoSlide()" x-cloak>
+      <div id="pd-gallery-tabs" class="flex items-center justify-center gap-2 rounded-md p-1 bg-[var(--color-surface-raised,#f4f4f4)]">
+        <button type="button" data-text="${t("product.photosTab")}" class="gallery-view-tab th-no-press inline-grid place-items-center px-2 py-1 rounded-md text-[14px] leading-[20px] bg-transparent text-[var(--color-text-primary,#000)] border-0 cursor-pointer transition-[background-color] duration-150 after:content-[attr(data-text)] after:font-bold after:invisible after:h-0 after:overflow-hidden after:[grid-area:1/1] [&>span]:[grid-area:1/1] hover:font-bold [&.active]:bg-[var(--color-surface,#fff)] [&.active]:font-bold" :class="{ 'active': currentIndex !== attrsIndex && !isVideoSlide() }" @click="goToSlide(0)"><span>${t("product.photosTab")}</span></button>
+        <button type="button" data-text="${t("product.videoTab")}" class="gallery-view-tab th-no-press inline-grid place-items-center px-2 py-1 rounded-md text-[14px] leading-[20px] bg-transparent text-[var(--color-text-primary,#000)] border-0 cursor-pointer transition-[background-color] duration-150 after:content-[attr(data-text)] after:font-bold after:invisible after:h-0 after:overflow-hidden after:[grid-area:1/1] [&>span]:[grid-area:1/1] hover:font-bold [&.active]:bg-[var(--color-surface,#fff)] [&.active]:font-bold" :class="{ 'active': isVideoSlide() }" @click="goToSlide(videoSlideIndex())"><span>${t("product.videoTab")}</span></button>
       </div>
     </div>
 

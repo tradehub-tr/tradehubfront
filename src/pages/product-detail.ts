@@ -251,15 +251,15 @@ async function renderProductPage() {
   const renderDesktopLayout = () => `
     <div id="pd-desktop-layout">
       <section style="background: var(--pd-bg, #ffffff);">
-        <div class="mx-auto w-full max-w-[1600px] px-4 2xl:px-8">
+        <div class="mx-auto w-full max-w-[1736px] px-4 min-[1280px]:px-10">
           ${Breadcrumb(pdCrumbs)}
           <!-- Dış ızgara: akan İÇERİK | sabit SATIN ALMA paneli.
                Panelin sayfa boyunca sağda kalabilmesi için sekmeler ve ilgili
                ürünler de içerik sütununun İÇİNDE durur — sticky bir öğe ancak
                kapsayıcısı kadar yaşar, bu yüzden kapsayıcı tüm sayfadır. -->
-          <div id="pd-hero-grid" class="grid grid-cols-1 gap-5 pt-3 items-start min-[1280px]:grid-cols-[minmax(0,1fr)_440px] min-[1280px]:gap-6">
+          <div id="pd-hero-grid" class="grid grid-cols-1 gap-5 pt-3 items-start min-[1280px]:grid-cols-[minmax(0,1fr)_394px] min-[1280px]:gap-4">
             <div id="pd-content-col" class="w-full min-w-0">
-              <div class="grid grid-cols-[minmax(0,420px)_minmax(0,1fr)] gap-5 items-start min-[1280px]:grid-cols-[minmax(0,465px)_minmax(0,1fr)] min-[1280px]:gap-6">
+              <div class="grid grid-cols-[minmax(0,420px)_minmax(0,1fr)] gap-5 items-start min-[1280px]:grid-cols-[minmax(0,465px)_minmax(0,1fr)] min-[1280px]:gap-4 min-[1536px]:grid-cols-[minmax(0,590px)_minmax(0,1fr)]">
                 <div id="pd-hero-left" class="w-full min-w-0">
                   <div id="pd-hero-gallery" class="w-full">${ProductImageGallery()}</div>
                   ${ProductSellerPanel()}
