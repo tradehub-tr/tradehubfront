@@ -2190,6 +2190,8 @@ const en = {
       sampleCustomization: "Sample-based customization",
       fullCustomization: "Full customization (OEM/ODM)",
       shippingLabel: "Shipping",
+      shippingContactSeller:
+        "Please contact the supplier to determine the shipping cost and delivery date.",
       shippingCost: "Shipping: {{cost}} \u00b7 {{days}}",
       changeLabel: "Change",
       orderProtectionTitle: "iStoc Order Protection",
@@ -2227,6 +2229,8 @@ const en = {
       findSimilar: "Find similar",
       photosTab: "Photos",
       attributesTab: "Attributes",
+      reviewsSectionTitle: "Ratings & Reviews",
+      verifiedOrders: "Verified Orders",
       productReviewsTab: "Product Reviews ({{count}})",
       storeReviewsTab: "Store Reviews ({{count}})",
       noRatingNote:

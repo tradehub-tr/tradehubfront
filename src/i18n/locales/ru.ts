@@ -2225,6 +2225,8 @@ const ru = {
       sampleCustomization: "Кастомизация по образцу",
       fullCustomization: "Полная кастомизация (OEM/ODM)",
       shippingLabel: "Доставка",
+      shippingContactSeller:
+        "Свяжитесь с поставщиком, чтобы уточнить стоимость доставки и дату получения.",
       shippingCost: "Доставка: {{cost}} · {{days}}",
       changeLabel: "Изменить",
       orderProtectionTitle: "Защита заказа iStoc",
@@ -2262,6 +2264,8 @@ const ru = {
       findSimilar: "Найти похожие",
       photosTab: "Фотографии",
       attributesTab: "Характеристики",
+      reviewsSectionTitle: "Оценки и отзывы",
+      verifiedOrders: "Проверенные заказы",
       productReviewsTab: "Отзывы о товаре ({{count}})",
       storeReviewsTab: "Отзывы о магазине ({{count}})",
       noRatingNote:

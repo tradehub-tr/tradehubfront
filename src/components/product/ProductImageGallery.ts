@@ -10,7 +10,6 @@
 
 import { getCurrentProduct } from "../../alpine/product";
 import { t } from "../../i18n";
-import { ProductAttributes } from "./ProductAttributes";
 import { escapeHtml as escapeHtmlAttr } from "../../utils/sanitize";
 
 interface GalleryVisual {
@@ -53,7 +52,7 @@ export function renderGalleryMedia(
       <img
         src="${src}"
         alt="${safeAlt}"
-        width="${size === "thumb" ? "60" : "800"}" height="${size === "thumb" ? "60" : "800"}"
+        width="${size === "thumb" ? "70" : "800"}" height="${size === "thumb" ? "70" : "800"}"
         data-gallery-main-media="true"
         class="gallery-media-asset gallery-media-asset--${size} w-full h-full ${fitClass} select-none pointer-events-none"
         loading="${size === "thumb" ? "lazy" : "eager"}"
@@ -66,10 +65,41 @@ export function renderGalleryMedia(
   return renderPlaceholder(visual, size);
 }
 
-export const THUMB_SIZE = 60;
-export const THUMB_GAP = 6;
+// Referans düzenden ölçülen değerler: küçük görsel 70×70, aralarındaki dikey
+// boşluk 12px (referansta sarmalayıcının `pt-3`'ü; bizde listenin `gap-3`'ü).
+// alpine/product.ts:631 ok tuşlarının kaydırma adımını bu ikisinden hesaplar.
+export const THUMB_SIZE = 70;
+export const THUMB_GAP = 12;
 export const LIGHTBOX_THUMB_SIZE = 76;
 export const LIGHTBOX_THUMB_GAP = 10;
+
+/**
+ * Karo sınıfları TEK KAYNAK — hem bu şablon hem varyant değişiminde karoları
+ * yeniden kuran alpine/product.ts:swapGalleryImages buradan okur.
+ *
+ * Neden: `.gallery-thumb` yalnızca bir işaretçi sınıf, style.css'te karşılığı
+ * YOK. Eskiden swapGalleryImages karoya sadece o işaretçiyi veriyordu; varyant
+ * seçilince karolar boyutsuz/zeminsiz/kenarlıksız kalıyordu (2026-07-28'de
+ * yakalandı — koyu ürün görsellerinde seçili karo hiç belli olmuyordu).
+ *
+ * `p-1` şart: görsel kenarlığa değmesin diye. Değerse koyu ürün fotoğrafında
+ * siyah kenarlık görselin üstüne binip kayboluyor.
+ */
+const THUMB_BASE =
+  "w-[70px] h-[70px] rounded-lg overflow-hidden shrink-0 border-[1.5px] border-transparent " +
+  "cursor-pointer transition-colors duration-150 [&.active]:border-[#222] [&:hover:not(.active)]:border-[#222]";
+
+export const THUMB_CLASS = `gallery-thumb ${THUMB_BASE} bg-[#f5f5f5] p-1 [&_img]:!object-contain`;
+export const THUMB_VIDEO_CLASS = `gallery-thumb gallery-thumb-video relative ${THUMB_BASE}`;
+
+// Lightbox koyu zeminli — aktif kenarlık orada BEYAZ, siyah görünmezdi.
+const LIGHTBOX_THUMB_BASE =
+  "w-[76px] h-[76px] border-2 border-white/30 rounded-md bg-white/10 p-0 overflow-hidden " +
+  "cursor-pointer shrink-0 transition-colors duration-150 ease-out [&.active]:border-white " +
+  "max-[960px]:!w-[68px] max-[960px]:!h-[68px]";
+
+export const LIGHTBOX_THUMB_CLASS = `gallery-lightbox-thumb ${LIGHTBOX_THUMB_BASE}`;
+export const LIGHTBOX_THUMB_VIDEO_CLASS = `gallery-lightbox-thumb relative ${LIGHTBOX_THUMB_BASE}`;
 
 export function ProductImageGallery(): string {
   const mockProduct = getCurrentProduct();
@@ -81,7 +111,7 @@ export function ProductImageGallery(): string {
       if (img.isVideo && img.src && img.src.trim()) {
         return `
         <div
-          class="gallery-thumb gallery-thumb-video relative w-[60px] h-[60px] rounded-md overflow-hidden shrink-0 border-2 border-[var(--color-border-default,#e5e5e5)] cursor-pointer transition-colors duration-150 [&.active]:border-[#f5b800] [&.active]:shadow-[inset_3px_0_0_#f5b800] [&:hover:not(.active)]:border-[var(--color-border-strong)]"
+          class="${THUMB_VIDEO_CLASS}"
           :class="{ 'active': currentIndex === ${i} }"
           data-index="${i}"
           aria-label="Video"
@@ -99,7 +129,7 @@ export function ProductImageGallery(): string {
       }
       return `
       <div
-        class="gallery-thumb w-[60px] h-[60px] rounded-md overflow-hidden shrink-0 bg-white [&_img]:!object-contain [&_img]:!p-0.5 border-2 border-[var(--color-border-default,#e5e5e5)] cursor-pointer transition-colors duration-150 [&.active]:border-[#f5b800] [&.active]:shadow-[inset_3px_0_0_#f5b800] [&:hover:not(.active)]:border-[var(--color-border-strong)]"
+        class="${THUMB_CLASS}"
         :class="{ 'active': currentIndex === ${i} }"
         data-index="${i}"
         aria-label="${img.alt}"
@@ -110,23 +140,10 @@ export function ProductImageGallery(): string {
     })
     .join("");
 
-  // Attributes thumbnail — last slide
-  const attrThumbHtml = `
-    <div
-      class="gallery-thumb gallery-thumb-attrs w-[60px] h-[60px] rounded-md overflow-hidden shrink-0 border-2 border-[var(--color-border-default,#e5e5e5)] cursor-pointer transition-colors duration-150 [&.active]:border-[#f5b800] [&:hover:not(.active)]:border-[var(--color-border-strong)]"
-      :class="{ 'active': currentIndex === attrsIndex }"
-      :data-index="attrsIndex"
-      aria-label="${t("product.attributesTab")}"
-      @mouseenter="goToSlide(attrsIndex)"
-      @click="goToSlide(attrsIndex)"
-    >
-      <div class="relative w-full h-full overflow-hidden flex items-center justify-center" style="background: linear-gradient(180deg, #f0f4f8 0%, #e2e8f0 100%);" aria-hidden="true">
-        <svg width="24" height="24" fill="none" stroke="#64748b" stroke-width="1.4" viewBox="0 0 24 24">
-          <rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/>
-        </svg>
-      </div>
-    </div>
-  `;
+  // NOT: Galerinin son karosu olan "Özellikler" sekmesi kaldırıldı (2026-07-28).
+  // Aynı bilgi zaten iki yerde duruyor: ProductBuyBox'taki "Key attributes"
+  // ızgarası ve detay sekmeleri. Referans düzende de galeri şeridinde yalnızca
+  // görsel/video karoları var. `attrsIndex` mantığı da alpine/product.ts'ten çıktı.
 
   const lightboxThumbsHtml = images
     .map((img, i) => {
@@ -134,7 +151,7 @@ export function ProductImageGallery(): string {
         return `
         <button
           type="button"
-          class="gallery-lightbox-thumb relative w-[76px] h-[76px] border-2 border-white/30 rounded-md bg-white/10 p-0 overflow-hidden cursor-pointer shrink-0 transition-colors duration-150 ease-out [&.active]:border-[#f5b800] max-[960px]:!w-[68px] max-[960px]:!h-[68px]"
+          class="${LIGHTBOX_THUMB_VIDEO_CLASS}"
           :class="{ 'active': lightboxIndex === ${i} }"
           data-index="${i}"
           aria-label="Video"
@@ -150,7 +167,7 @@ export function ProductImageGallery(): string {
       return `
       <button
         type="button"
-        class="gallery-lightbox-thumb w-[76px] h-[76px] border-2 border-white/30 rounded-md bg-white/10 p-0 overflow-hidden cursor-pointer shrink-0 transition-colors duration-150 ease-out [&.active]:border-[#f5b800] max-[960px]:!w-[68px] max-[960px]:!h-[68px]"
+        class="${LIGHTBOX_THUMB_CLASS}"
         :class="{ 'active': lightboxIndex === ${i} }"
         data-index="${i}"
         aria-label="${img.alt}"
@@ -181,14 +198,24 @@ export function ProductImageGallery(): string {
     <div id="product-gallery" class="flex gap-2.5 items-stretch w-full relative overflow-hidden">
 
       <!-- LEFT: Vertical Thumbnail Strip (hidden on narrow desktop, shown on wider) -->
-      <div id="pd-thumb-strip" class="flex flex-col items-center shrink-0 w-[68px]">
+      <div id="pd-thumb-strip" class="relative flex flex-col items-center shrink-0 w-[78px]">
 
-        <!-- "+N" taşma karosu ilk 4'ten fazla görselde JS (applyThumbOverflow) tarafından
-             eklenir; hem ilk render hem varyant swap'i tek koddan geçsin diye deklaratif değil. -->
-        <div id="gallery-thumb-list" x-ref="thumbList" class="flex flex-col gap-1.5 overflow-y-auto scrollbar-hide flex-1 py-1.5">
+        <!-- Kaydırma okları — referans düzendeki ölçü: 32×32 beyaz daire, şeridin
+             üstüne/altına binen konumda. Şerit taşmıyorsa (kaydırma yoksa) basılmaz;
+             görünürlüğü alpine/product.ts:updateThumbScrollButtons() yönetir. -->
+        <button type="button" data-thumb-scroll="up" class="gallery-thumb-scroll absolute top-0 start-1/2 -translate-x-1/2 z-[6] w-8 h-8 rounded-full bg-white shadow-[0_2px_8px_rgba(0,0,0,0.15)] flex items-center justify-center border-0 cursor-pointer transition-opacity duration-150 disabled:opacity-0 disabled:pointer-events-none" aria-label="${t("product.previous")}" @click.stop="scrollThumbs(-1)">
+          <svg width="16" height="16" fill="none" stroke="#222" stroke-width="2.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 15l7-7 7 7"/></svg>
+        </button>
+
+        <!-- Tüm karolar burada durur; şerit ana görselin yüksekliğini aşmaz
+             (flex-1 + overflow-y-auto), fazlası yukarıdaki/aşağıdaki oklarla gezilir. -->
+        <div id="gallery-thumb-list" x-ref="thumbList" class="flex flex-col justify-start gap-3 overflow-y-auto scrollbar-hide flex-1 min-h-0 py-1.5" @scroll="updateThumbScrollButtons()">
           ${thumbsHtml}
-          ${attrThumbHtml}
         </div>
+
+        <button type="button" data-thumb-scroll="down" class="gallery-thumb-scroll absolute bottom-0 start-1/2 -translate-x-1/2 z-[6] w-8 h-8 rounded-full bg-white shadow-[0_2px_8px_rgba(0,0,0,0.15)] flex items-center justify-center border-0 cursor-pointer transition-opacity duration-150 disabled:opacity-0 disabled:pointer-events-none" aria-label="${t("product.nextLabel")}" @click.stop="scrollThumbs(1)">
+          <svg width="16" height="16" fill="none" stroke="#222" stroke-width="2.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+        </button>
 
       </div>
 
@@ -196,30 +223,32 @@ export function ProductImageGallery(): string {
            koyu cam oklar + WCAG favori. Wrapper görsel boyutunda (max 560px, 2xl'de 680px, ortalı);
            oklar/kalp innerHTML replace'inden etkilenmesin diye #gallery-main-image
            DIŞINDA, wrapper içinde durur. Özellikler sekmesinde wrapper komple gizlenir. -->
-      <div class="relative flex-1 min-w-0 w-full max-w-[512px] mx-auto" :class="{ 'hidden': currentIndex === attrsIndex }">
+      <div class="relative flex-1 min-w-0 w-full max-w-[512px] mx-auto">
         <div id="gallery-main-image"
           class="relative aspect-square w-full rounded-md overflow-hidden bg-[var(--product-image-bg,#ffffff)] pointer-coarse:cursor-default [&.zoom-enabled]:cursor-zoom-in [&.zoom-enabled>[data-gallery-main-media=true]]:transition-transform [&.zoom-enabled>[data-gallery-main-media=true]]:duration-[180ms] [&.zoom-enabled>[data-gallery-main-media=true]]:ease-out [&.zoom-enabled>[data-gallery-main-media=true]]:origin-center [&.zoom-enabled>[data-gallery-main-media=true]]:will-change-transform [&.is-zooming>[data-gallery-main-media=true]]:transition-transform [&.is-zooming>[data-gallery-main-media=true]]:duration-[30ms] [&.is-zooming>[data-gallery-main-media=true]]:ease-linear motion-reduce:[&.zoom-enabled>[data-gallery-main-media=true]]:transition-none motion-reduce:[&.is-zooming>[data-gallery-main-media=true]]:transition-none"
           x-ref="mainImage"
           :class="{ 'zoom-enabled': supportsHoverZoom && !isVideoSlide(), 'is-zooming': isZooming && !isVideoSlide() }"
           @pointermove="!isVideoSlide() && handleZoomMove($event)"
           @pointerleave="resetZoom()"
-          @click="currentIndex !== attrsIndex && !isVideoSlide() && openLightbox(currentIndex)"
+          @click="!isVideoSlide() && openLightbox(currentIndex)"
         >
           ${renderGalleryMedia(firstImage?.src, firstImage?.alt ?? t("product.productImage"), defaultVisual, "large")}
         </div>
 
-        <!-- Ray: koyu cam oklar — görselin iç kenarında, her fotoğrafta okunur -->
-        <button type="button" id="gallery-prev" class="gallery-nav-btn absolute top-1/2 -translate-y-1/2 z-[5] w-11 h-11 rounded-full bg-[rgba(20,20,24,0.55)] backdrop-blur-[6px] shadow-[0_3px_12px_rgba(0,0,0,0.28)] flex items-center justify-center border-0 cursor-pointer transition-[transform,background-color] duration-150 hover:bg-[rgba(20,20,24,0.78)] hover:scale-105 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-primary-600,#d39c00)] start-3" aria-label="${t("product.previous")}" @click.stop="goToSlide(currentIndex - 1)">
-          <svg width="20" height="20" fill="none" stroke="#ffffff" stroke-width="2.4" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/></svg>
+        <!-- Oklar — referans düzendeki ölçü: 32×32, düz beyaz zemin, koyu ok.
+             WCAG 2.2 hedef boyutu (2.5.8 Minimum) 24px olduğundan 32px AA'yı karşılar;
+             eski 44px AAA (2.5.5 Enhanced) seviyesiydi. -->
+        <button type="button" id="gallery-prev" class="gallery-nav-btn absolute top-1/2 -translate-y-1/2 z-[5] w-8 h-8 rounded-full bg-white shadow-[0_2px_8px_rgba(0,0,0,0.15)] flex items-center justify-center border-0 cursor-pointer transition-[transform,background-color] duration-150 hover:scale-105 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-primary-600,#d39c00)] start-3" aria-label="${t("product.previous")}" @click.stop="goToSlide(currentIndex - 1)">
+          <svg width="16" height="16" fill="none" stroke="#222" stroke-width="2.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/></svg>
         </button>
-        <button type="button" id="gallery-next" class="gallery-nav-btn absolute top-1/2 -translate-y-1/2 z-[5] w-11 h-11 rounded-full bg-[rgba(20,20,24,0.55)] backdrop-blur-[6px] shadow-[0_3px_12px_rgba(0,0,0,0.28)] flex items-center justify-center border-0 cursor-pointer transition-[transform,background-color] duration-150 hover:bg-[rgba(20,20,24,0.78)] hover:scale-105 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-primary-600,#d39c00)] end-3" aria-label="${t("product.nextLabel")}" @click.stop="goToSlide(currentIndex + 1)">
-          <svg width="20" height="20" fill="none" stroke="#ffffff" stroke-width="2.4" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
+        <button type="button" id="gallery-next" class="gallery-nav-btn absolute top-1/2 -translate-y-1/2 z-[5] w-8 h-8 rounded-full bg-white shadow-[0_2px_8px_rgba(0,0,0,0.15)] flex items-center justify-center border-0 cursor-pointer transition-[transform,background-color] duration-150 hover:scale-105 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-primary-600,#d39c00)] end-3" aria-label="${t("product.nextLabel")}" @click.stop="goToSlide(currentIndex + 1)">
+          <svg width="16" height="16" fill="none" stroke="#222" stroke-width="2.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
         </button>
 
-        <!-- Favori — WCAG 2.2: 44px hedef, kenarlıklı beyaz (beyaz zeminde kaybolmaz) -->
+        <!-- Favori — referans ölçü 32×32 beyaz daire -->
         <div class="absolute top-3 end-3 z-[5] flex flex-col gap-2">
-          <button type="button" data-favorite-btn class="gallery-action-btn w-11 h-11 rounded-full flex items-center justify-center border border-black/10 cursor-pointer transition-colors hover:text-[#e0324f]" style="background: var(--color-surface, #ffffff); box-shadow: 0 2px 10px rgba(0,0,0,.18); color: var(--color-text-tertiary);" aria-label="${t("product.addToFavorites")}">
-            <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>
+          <button type="button" data-favorite-btn class="gallery-action-btn w-8 h-8 rounded-full flex items-center justify-center border border-black/10 cursor-pointer transition-colors hover:text-[#e0324f]" style="background: var(--color-surface, #ffffff); box-shadow: 0 2px 8px rgba(0,0,0,.15); color: var(--color-text-tertiary);" aria-label="${t("product.addToFavorites")}">
+            <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>
           </button>
           <!-- Gorsel arama (kamera) butonu — DISABLED, ileride tekrar etkinlestirilecek -->
           <!--
@@ -231,7 +260,6 @@ export function ProductImageGallery(): string {
       </div>
 
       <!-- RIGHT: Attributes Card (hidden by default, replaces main image) -->
-      ${ProductAttributes()}
 
     </div>
 
@@ -241,7 +269,7 @@ export function ProductImageGallery(): string {
          Özellikler slide'ına erişim thumb şeridindeki karosundan sürer. -->
     <div class="mt-3 flex justify-center" x-show="hasVideoSlide()" x-cloak>
       <div id="pd-gallery-tabs" class="flex items-center justify-center gap-2 rounded-md p-1 bg-[var(--color-surface-raised,#f4f4f4)]">
-        <button type="button" data-text="${t("product.photosTab")}" class="gallery-view-tab th-no-press inline-grid place-items-center px-2 py-1 rounded-md text-[14px] leading-[20px] bg-transparent text-[var(--color-text-primary,#000)] border-0 cursor-pointer transition-[background-color] duration-150 after:content-[attr(data-text)] after:font-bold after:invisible after:h-0 after:overflow-hidden after:[grid-area:1/1] [&>span]:[grid-area:1/1] hover:font-bold [&.active]:bg-[var(--color-surface,#fff)] [&.active]:font-bold" :class="{ 'active': currentIndex !== attrsIndex && !isVideoSlide() }" @click="goToSlide(0)"><span>${t("product.photosTab")}</span></button>
+        <button type="button" data-text="${t("product.photosTab")}" class="gallery-view-tab th-no-press inline-grid place-items-center px-2 py-1 rounded-md text-[14px] leading-[20px] bg-transparent text-[var(--color-text-primary,#000)] border-0 cursor-pointer transition-[background-color] duration-150 after:content-[attr(data-text)] after:font-bold after:invisible after:h-0 after:overflow-hidden after:[grid-area:1/1] [&>span]:[grid-area:1/1] hover:font-bold [&.active]:bg-[var(--color-surface,#fff)] [&.active]:font-bold" :class="{ 'active': !isVideoSlide() }" @click="goToSlide(0)"><span>${t("product.photosTab")}</span></button>
         <button type="button" data-text="${t("product.videoTab")}" class="gallery-view-tab th-no-press inline-grid place-items-center px-2 py-1 rounded-md text-[14px] leading-[20px] bg-transparent text-[var(--color-text-primary,#000)] border-0 cursor-pointer transition-[background-color] duration-150 after:content-[attr(data-text)] after:font-bold after:invisible after:h-0 after:overflow-hidden after:[grid-area:1/1] [&>span]:[grid-area:1/1] hover:font-bold [&.active]:bg-[var(--color-surface,#fff)] [&.active]:font-bold" :class="{ 'active': isVideoSlide() }" @click="goToSlide(videoSlideIndex())"><span>${t("product.videoTab")}</span></button>
       </div>
     </div>

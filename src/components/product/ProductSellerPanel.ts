@@ -24,11 +24,16 @@ interface SellerMetric {
   label: string;
 }
 
+/**
+ * Metrik hücresi — referans düzenden ölçülen değerler:
+ * hücre `min-w-0 flex-1 flex flex-col gap-[2px]`,
+ * değer 14px/18px/700, etiket 12px/16px/400, ikisi de #222222.
+ */
 function metricCell(m: SellerMetric): string {
   return `
-    <div data-seller-metric="${m.key}" class="min-w-0">
-      <div class="text-[15px] font-bold leading-tight text-[var(--pd-title-color,#111827)] truncate">${m.value}</div>
-      <div class="mt-0.5 text-[11px] leading-tight text-[var(--color-text-tertiary,#737373)]">${m.label}</div>
+    <div data-seller-metric="${m.key}" class="min-w-0 flex-1 flex flex-col gap-[2px]">
+      <div class="text-[14px] font-bold leading-[18px] text-[#222] truncate">${m.value}</div>
+      <div class="text-xs leading-4 text-[#222]">${m.label}</div>
     </div>
   `;
 }
@@ -74,31 +79,33 @@ export function ProductSellerPanel(): string {
     });
   }
 
+  // Metrikler ayrı bir iç kutuda durur (ayraç çizgisiyle değil):
+  // mt-3 · rounded-lg · bg-white/80 · p-3 — referans düzenden birebir.
   const metricsHtml = metrics.length
-    ? `<div class="grid grid-cols-4 gap-3 border-t border-[var(--color-border-default,#e5e5e5)] pt-3">
+    ? `<div class="mt-3 flex gap-3 rounded-lg bg-white/80 p-3">
          ${metrics.map(metricCell).join("")}
        </div>`
     : "";
 
   const markets = (s.mainMarkets || []).filter(Boolean);
   const marketsHtml = markets.length
-    ? `<div data-seller-markets class="flex items-start gap-1.5 border-t border-[var(--color-border-default,#e5e5e5)] pt-3 text-xs text-[var(--color-text-secondary,#525252)]">
-         <svg class="mt-px h-3.5 w-3.5 shrink-0 text-[var(--color-text-tertiary,#737373)]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18"/><path d="M12 3a15 15 0 0 1 0 18 15 15 0 0 1 0-18"/></svg>
-         <span class="line-clamp-2"><span class="text-[var(--color-text-tertiary,#737373)]">${t("product.mainMarkets", { defaultValue: "Ana pazarlar" })}:</span> <strong class="font-semibold text-[var(--pd-title-color,#111827)]">${escapeHtml(markets.join(", "))}</strong></span>
+    ? `<div data-seller-markets class="mt-3 flex items-start gap-1.5 text-xs leading-4 text-[#222]">
+         <svg class="mt-px h-3.5 w-3.5 shrink-0 text-[#222]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18"/><path d="M12 3a15 15 0 0 1 0 18 15 15 0 0 1 0-18"/></svg>
+         <span class="line-clamp-2"><span>${t("product.mainMarkets", { defaultValue: "Ana pazarlar" })}:</span> <strong class="font-semibold">${escapeHtml(markets.join(", "))}</strong></span>
        </div>`
     : "";
 
   return `
-    <section id="pd-seller-panel" class="mt-4 flex flex-col gap-3 rounded-md border border-[var(--color-border-default,#e5e5e5)] bg-[var(--color-surface,#fff)] p-4">
-      <!-- Kimlik -->
+    <section id="pd-seller-panel" class="mt-4 rounded-md border border-[var(--color-border-default,#e5e5e5)] bg-[var(--color-surface-raised,#f5f5f5)] p-3">
+      <!-- Kimlik: satır yüksekliği 40px, logo 40×40, gap 12px -->
       <div class="flex items-start gap-3 min-w-0">
-        <span class="shrink-0 w-11 h-11 rounded-md bg-gradient-to-br from-[#3b3b3b] to-[#111111] text-white text-base font-extrabold inline-flex items-center justify-center" aria-hidden="true">${sellerInitial}</span>
+        <span class="shrink-0 w-10 h-10 rounded-md bg-gradient-to-br from-[#3b3b3b] to-[#111111] text-white text-base font-extrabold inline-flex items-center justify-center" aria-hidden="true">${sellerInitial}</span>
         <div class="min-w-0 flex-1">
           <div class="flex items-center gap-1.5 flex-wrap">
-            <a href="${sellerUrl}" class="truncate text-sm font-bold underline underline-offset-2 text-[var(--pd-title-color,#111827)]">${escapeHtml(s.name)}</a>
+            <a href="${sellerUrl}" class="truncate text-[14px] font-semibold leading-[18px] underline underline-offset-2 text-[#222]">${escapeHtml(s.name)}</a>
             ${VerificationBadge(s.verifications ?? [])}
           </div>
-          <span class="mt-0.5 flex items-center gap-1.5 flex-wrap text-xs text-[var(--color-text-tertiary,#737373)]">
+          <span class="mt-1 flex flex-wrap items-center gap-x-1.5 gap-y-1 text-xs leading-4 text-[#222]">
             ${s.country ? `<span class="inline-flex items-center gap-1.5">${getFlagSvg(getCountryCode(s.country))}${escapeHtml(getCountryCode(s.country))}</span>` : ""}
             ${s.yearsInBusiness > 0 ? `<span class="text-gray-300">·</span><span>${t("product.yearsLabel", { count: String(s.yearsInBusiness) })}</span>` : ""}
           </span>
@@ -109,7 +116,7 @@ export function ProductSellerPanel(): string {
       ${marketsHtml}
 
       <!-- Aksiyonlar -->
-      <div class="grid grid-cols-2 gap-2 border-t border-[var(--color-border-default,#e5e5e5)] pt-3">
+      <div class="mt-3 grid grid-cols-2 gap-2 border-t border-[var(--color-border-default,#e5e5e5)] pt-3">
         <a href="${sellerUrl}" class="th-btn-outline th-btn-sm inline-flex items-center justify-center gap-1.5 whitespace-nowrap">
           <svg class="w-[15px] h-[15px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9l1-5h14l1 5M4 9v10h16V9M4 9a2.5 2.5 0 005 0 2.5 2.5 0 005 0 2.5 2.5 0 005 0M9 19v-5h6v5"/></svg>
           ${t("product.visitStore", { defaultValue: "Mağazayı Ziyaret Et" })}

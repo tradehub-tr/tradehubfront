@@ -2179,6 +2179,8 @@ const ar = {
       sampleCustomization: "تخصيص حسب العينة",
       fullCustomization: "تخصيص كامل (OEM/ODM)",
       shippingLabel: "الشحن",
+      shippingContactSeller:
+        "يرجى التواصل مع المورد لتحديد تكلفة الشحن وتاريخ التسليم.",
       shippingCost: "الشحن: {{cost}} · {{days}}",
       changeLabel: "تغيير",
       orderProtectionTitle: "حماية الطلب من iStoc",
@@ -2216,6 +2218,8 @@ const ar = {
       findSimilar: "البحث عن مماثل",
       photosTab: "الصور",
       attributesTab: "الخصائص",
+      reviewsSectionTitle: "التقييمات والمراجعات",
+      verifiedOrders: "الطلبات الموثقة",
       productReviewsTab: "تقييمات المنتج ({{count}})",
       storeReviewsTab: "تقييمات المتجر ({{count}})",
       noRatingNote:

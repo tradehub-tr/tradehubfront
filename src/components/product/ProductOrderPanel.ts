@@ -27,23 +27,29 @@ export function ProductOrderPanel(): string {
         <!-- Sticky'de #pd-wholesale-blocks buraya taşınır; ayraç da yalnız o durumda basılır -->
         <div id="pd-panel-wholesale-slot" class="hidden min-[1280px]:[.pd-sticky_&]:block"></div>
         <hr class="hidden min-[1280px]:[.pd-sticky_&]:block my-4 border-0 border-t border-[var(--color-border-default,#e5e5e5)]" />
-        <!-- Shipping — yöntem belli değilse bölüm hiç render edilmez -->
-        ${
-          p.shipping[0]?.method
-            ? `
+        <!-- Kargo — referans düzendeki iki durum:
+             (a) yöntem tanımlıysa gri kart + yöntem adı (14/18/600) + detay (14/18/400)
+             (b) tanımlı DEĞİLSE bölüm gizlenmez, "tedarikçiyle iletişime geçin" metni basılır -->
         <div>
           <div class="flex items-center justify-between gap-3">
-            <h2 class="text-[16px] leading-[22px] font-bold m-0 text-[var(--pd-title-color,#111827)]">${t("product.shippingLabel")}</h2>
-            <a href="javascript:void(0)" class="text-sm font-medium no-underline whitespace-nowrap cursor-pointer text-[var(--pd-title-color,#111827)] hover:opacity-70 transition-opacity duration-150" id="pd-ship-card-change">${t("product.changeLabel")} ›</a>
+            <h2 class="text-[16px] leading-[24px] font-semibold m-0 text-[#222]">${t("product.shippingLabel")}</h2>
+            ${
+              p.shipping[0]?.method
+                ? `<a href="javascript:void(0)" class="text-[14px] leading-[20px] font-normal no-underline whitespace-nowrap cursor-pointer text-[#222] hover:opacity-70 transition-opacity duration-150" id="pd-ship-card-change">${t("product.changeLabel")} ›</a>`
+                : ""
+            }
           </div>
+          ${
+            p.shipping[0]?.method
+              ? `
           <div class="flex flex-col gap-0.5 min-w-0 mt-3 px-4 py-3 rounded-md" id="pd-shipping-card" style="background: var(--color-surface-raised, #f5f5f5);">
-            <span class="text-sm font-semibold truncate" id="pd-ship-card-method" style="color: var(--pd-title-color, #111827);">${escapeHtml(p.shipping[0].method)}</span>
-            <span class="pd-shipping-card-detail text-[13px] truncate" style="color: var(--pd-rating-text-color, #6b7280);">${t("product.shippingCost", { cost: p.shipping[0].cost, days: p.shipping[0].estimatedDays })}</span>
-          </div>
+            <span class="text-[14px] leading-[18px] font-semibold text-[#222] truncate" id="pd-ship-card-method">${escapeHtml(p.shipping[0].method)}</span>
+            <span class="pd-shipping-card-detail text-[14px] leading-[18px] font-normal text-[#222] truncate">${t("product.shippingCost", { cost: p.shipping[0].cost, days: p.shipping[0].estimatedDays })}</span>
+          </div>`
+              : `
+          <p class="mt-3 m-0 text-[14px] leading-[20px] font-normal text-[#222]">${t("product.shippingContactSeller")}</p>`
+          }
         </div>
-        `
-            : ""
-        }
 
         <!-- Social Proof Badge — kargo ile CTA arası. Sinyal yokken iç kutu
              x-show ile gizlenir ama dış sarmalayıcı DOM'da kalır, yani bu

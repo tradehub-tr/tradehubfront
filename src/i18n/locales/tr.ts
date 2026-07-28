@@ -2186,6 +2186,9 @@ const tr = {
       sampleCustomization: "Numune bazlı özelleştirme",
       fullCustomization: "Tam özelleştirme (OEM/ODM)",
       shippingLabel: "Sevkiyat",
+      // Kargo verisi girilmemiş satıcılarda bölümü boş bırakmak yerine bu metin basılır.
+      shippingContactSeller:
+        "Kargo ücreti ve teslimat tarihini belirlemek için tedarikçiyle iletişime geçmeniz gerekmektedir.",
       shippingCost: "Sevkiyat: {{cost}} \u00b7 {{days}}",
       changeLabel: "Değiştir",
       orderProtectionTitle: "iStoc Sipariş Koruma",
@@ -2223,6 +2226,8 @@ const tr = {
       findSimilar: "Benzerini bul",
       photosTab: "Fotoğraflar",
       attributesTab: "Özellikler",
+      reviewsSectionTitle: "Değerlendirme ve Yorumlar",
+      verifiedOrders: "Doğrulanmış Siparişler",
       productReviewsTab: "Ürün Yorumları ({{count}})",
       storeReviewsTab: "Mağaza Yorumları ({{count}})",
       noRatingNote:

@@ -16,6 +16,10 @@ import {
   THUMB_GAP,
   LIGHTBOX_THUMB_SIZE,
   LIGHTBOX_THUMB_GAP,
+  THUMB_CLASS,
+  THUMB_VIDEO_CLASS,
+  LIGHTBOX_THUMB_CLASS,
+  LIGHTBOX_THUMB_VIDEO_CLASS,
 } from "../components/product/ProductImageGallery";
 import { toVideoEmbedHtml } from "../components/product/ProductVideoSection";
 import { escapeHtml, sanitizeUrl } from "../utils/sanitize";
@@ -243,27 +247,21 @@ Alpine.data("reviewsModal", () => ({
   },
 }));
 
-// "+N" taşma karosu görseli — ilk 4'ten sonrakiler bunun ardında gizlenir.
-const THUMB_MORE_CLASS =
-  "w-[60px] h-[60px] rounded-md border-2 border-dashed border-[var(--color-border-strong,#a3a3a3)] " +
-  "bg-transparent text-[13px] font-bold text-[var(--color-text-secondary,#525252)] cursor-pointer shrink-0 " +
-  "transition-colors hover:border-[#cc9900] hover:text-[#cc9900] focus-visible:outline focus-visible:outline-2 " +
-  "focus-visible:outline-offset-2 focus-visible:outline-[#cc9900]";
-
-const THUMB_VISIBLE_LIMIT = 4;
+// NOT: "+N" taşma karosu ve ilk-4 sınırı 2026-07-28'de kaldırıldı. Artık tüm
+// karolar şeritte duruyor; şerit ana görselin yüksekliğini aşmıyor (flex-1 +
+// overflow-y-auto) ve fazlası kaydırma oklarıyla geziliyor — referans düzendeki
+// davranışın aynısı.
 
 Alpine.data("imageGallery", () => ({
   currentIndex: 0,
   lightboxIndex: 0,
   isLightboxOpen: false,
-  // Ray galerisi: 4'ten fazla görselde ilk 4 + "+N" karosu gösterilir (Baymard
-  // işaret kuralı); karoya tıklayınca tamamı açılır.
-  thumbsExpanded: false,
   isZooming: false,
   supportsHoverZoom: false,
   imageCount: currentProduct.images.length,
-  totalSlides: currentProduct.images.length + 1,
-  attrsIndex: currentProduct.images.length,
+  // "Özellikler" slaydı kaldırıldığından (2026-07-28) slayt sayısı = görsel sayısı;
+  // eskiden sona eklenen +1 o sekmeye aitti.
+  totalSlides: currentProduct.images.length,
 
   init() {
     this.supportsHoverZoom = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
@@ -291,43 +289,9 @@ Alpine.data("imageGallery", () => ({
       }
     }) as EventListener);
 
-    // İlk render'da "+N" karosunu kur — $refs.thumbList init anında henüz
-    // dolmamış olabilir, $nextTick ile tüm alt ağaç hazır olunca çalıştır.
-    this.$nextTick(() => this.applyThumbOverflow());
-  },
-
-  // İlk 4 dışındaki thumbnail'ları gizleyip "+N" karosu ekler; karoya tıklayınca
-  // kalanları açar. Hem ilk render hem swapGalleryImages sonrası buradan geçer —
-  // böylece deklaratif/imperatif iki ayrı yol yerine tek kaynak (stale "+N" bug'ı çözer).
-  applyThumbOverflow() {
-    const thumbList = (this.$refs as Record<string, HTMLElement>).thumbList;
-    if (!thumbList) return;
-
-    thumbList.querySelector("#thumb-show-more")?.remove();
-    const thumbs = Array.from(
-      thumbList.querySelectorAll<HTMLElement>(".gallery-thumb:not(.gallery-thumb-attrs)")
-    );
-    thumbs.forEach((el, i) => {
-      el.style.display = i >= THUMB_VISIBLE_LIMIT && !this.thumbsExpanded ? "none" : "";
-    });
-
-    if (thumbs.length <= THUMB_VISIBLE_LIMIT || this.thumbsExpanded) return;
-
-    const hiddenCount = thumbs.length - THUMB_VISIBLE_LIMIT;
-    const more = document.createElement("button");
-    more.type = "button";
-    more.id = "thumb-show-more";
-    more.className = THUMB_MORE_CLASS;
-    more.textContent = `+${hiddenCount}`;
-    more.title = `+${hiddenCount}`;
-    more.setAttribute("aria-label", `+${hiddenCount}`);
-    more.addEventListener("click", () => {
-      this.thumbsExpanded = true;
-      this.applyThumbOverflow();
-    });
-    const attrThumb = thumbList.querySelector(".gallery-thumb-attrs");
-    if (attrThumb) thumbList.insertBefore(more, attrThumb);
-    else thumbList.appendChild(more);
+    // $refs.thumbList init anında henüz dolmamış olabilir — $nextTick ile tüm
+    // alt ağaç hazır olunca kaydırma oklarının durumunu hesapla.
+    this.$nextTick(() => this.updateThumbScrollButtons());
   },
 
   swapGalleryImages(imageUrls: string[], videoUrl?: string) {
@@ -358,22 +322,20 @@ Alpine.data("imageGallery", () => ({
 
     const totalCount = newImages.length;
     this.imageCount = totalCount;
-    this.totalSlides = totalCount + 1;
-    this.attrsIndex = totalCount;
+    this.totalSlides = totalCount;
 
     // Re-render thumbnail strips + main image
     const thumbList = (this.$refs as Record<string, HTMLElement>).thumbList;
     if (thumbList) {
       thumbList
-        .querySelectorAll<HTMLElement>(".gallery-thumb:not(.gallery-thumb-attrs)")
+        .querySelectorAll<HTMLElement>(".gallery-thumb")
         .forEach((el) => el.remove());
-      const attrThumb = thumbList.querySelector(".gallery-thumb-attrs");
       newImages.forEach((img, i) => {
         const thumb = document.createElement("div");
+        // Sınıf listesi şablonla TEK KAYNAKTAN gelir; burada elle "gallery-thumb"
+        // yazmak karoyu stilsiz bırakıyordu (bkz. ProductImageGallery.ts:THUMB_CLASS).
         thumb.className =
-          "gallery-thumb" +
-          (img.isVideo ? " gallery-thumb-video relative" : "") +
-          (i === 0 ? " active" : "");
+          (img.isVideo ? THUMB_VIDEO_CLASS : THUMB_CLASS) + (i === 0 ? " active" : "");
         thumb.setAttribute("data-index", String(i));
         if (img.isVideo) {
           thumb.innerHTML = `
@@ -387,12 +349,11 @@ Alpine.data("imageGallery", () => ({
         }
         thumb.addEventListener("click", () => this.goToSlide(i));
         thumb.addEventListener("mouseenter", () => this.goToSlide(i));
-        if (attrThumb) thumbList.insertBefore(thumb, attrThumb);
-        else thumbList.appendChild(thumb);
+        thumbList.appendChild(thumb);
       });
-      // Yeni görsel seti — koleps'i sıfırla ve "+N" karosunu yeni sayıya göre kur.
-      this.thumbsExpanded = false;
-      this.applyThumbOverflow();
+      // Yeni görsel seti — şeridi başa sar ve okların durumunu yeniden hesapla.
+      thumbList.scrollTop = 0;
+      this.updateThumbScrollButtons();
     }
 
     // Lightbox thumbs (include video)
@@ -402,7 +363,7 @@ Alpine.data("imageGallery", () => ({
         .map((img, i) => {
           if (img.isVideo) {
             return `
-            <button type="button" class="gallery-lightbox-thumb relative ${i === 0 ? "active" : ""}" data-index="${i}">
+            <button type="button" class="${LIGHTBOX_THUMB_VIDEO_CLASS}${i === 0 ? " active" : ""}" data-index="${i}">
               <div class="absolute inset-0 bg-gradient-to-br from-gray-700 to-gray-900 flex items-center justify-center">
                 <svg width="22" height="22" fill="#fff" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
               </div>
@@ -411,7 +372,7 @@ Alpine.data("imageGallery", () => ({
           `;
           }
           return `
-          <button type="button" class="gallery-lightbox-thumb ${i === 0 ? "active" : ""}" data-index="${i}">
+          <button type="button" class="${LIGHTBOX_THUMB_CLASS}${i === 0 ? " active" : ""}" data-index="${i}">
             <img src="${escapeHtml(sanitizeUrl(img.src))}" alt="${escapeHtml(img.alt)}" class="gallery-media-asset gallery-media-asset--thumb" loading="lazy" />
           </button>
         `;
@@ -455,11 +416,11 @@ Alpine.data("imageGallery", () => ({
     return !!(img && img.isVideo);
   },
 
-  // currentProduct modül objesi Alpine-reaktif değil; attrsIndex'e dokunmak
-  // varyant swap'inde (swapGalleryImages attrsIndex'i günceller) x-show'un
+  // currentProduct modül objesi Alpine-reaktif değil; reaktif bir alana dokunmak
+  // varyant swap'inde (swapGalleryImages imageCount'u günceller) x-show'un
   // yeniden değerlenmesini sağlar — yoksa sekme videosuz varyantta asılı kalır.
   hasVideoSlide(): boolean {
-    void this.attrsIndex;
+    void this.imageCount;
     return currentProduct.images.some((img) => img.isVideo);
   },
 
@@ -530,30 +491,22 @@ Alpine.data("imageGallery", () => ({
       new CustomEvent("gallery-slide-change", { detail: { index: this.currentIndex } })
     );
 
-    const isAttrs = index === this.attrsIndex;
-
-    // Toggle attributes card visibility (ProductAttributes renders its own HTML with id)
-    const attrCard = document.getElementById("pd-attributes-card");
-    attrCard?.classList.toggle("hidden", !isAttrs);
-
-    // Update main image content when showing a photo/video slide
-    if (!isAttrs) {
-      const mainImage = (this.$refs as Record<string, HTMLElement>).mainImage;
-      if (mainImage) {
-        const image = currentProduct.images[index];
-        if (image && image.isVideo) {
-          mainImage.innerHTML = renderInlineVideo(image.src);
-          this.resetZoom();
-        } else {
-          mainImage.innerHTML = renderGalleryMedia(
-            image?.src,
-            image?.alt ?? `Product view ${index + 1}`,
-            defaultVisual,
-            "large"
-          );
-          this.resetZoom();
-        }
+    // Ana görseli güncelle. ("Özellikler" slaydı 2026-07-28'de kaldırıldı —
+    // artık her slayt bir görsel ya da video.)
+    const mainImage = (this.$refs as Record<string, HTMLElement>).mainImage;
+    if (mainImage) {
+      const image = currentProduct.images[index];
+      if (image && image.isVideo) {
+        mainImage.innerHTML = renderInlineVideo(image.src);
+      } else {
+        mainImage.innerHTML = renderGalleryMedia(
+          image?.src,
+          image?.alt ?? `Product view ${index + 1}`,
+          defaultVisual,
+          "large"
+        );
       }
+      this.resetZoom();
     }
 
     // Scroll the active thumbnail into view within the thumb list
@@ -633,6 +586,28 @@ Alpine.data("imageGallery", () => ({
       top: direction * scrollAmount,
       behavior: prefersReducedMotion() ? "auto" : "smooth",
     });
+    // Yumuşak kaydırma bitiminde durumu tazele — scroll olayı da tetikler ama
+    // hareket yoksa (uçta tıklama) olay gelmez, buton kilitli kalırdı.
+    window.setTimeout(() => this.updateThumbScrollButtons(), 350);
+  },
+
+  /**
+   * Kaydırma oklarını şeridin gerçek taşma durumuna göre aç/kapat.
+   * Taşma yoksa ikisi de gizli; uçlardayken ilgili ok gizli (CSS: disabled:opacity-0).
+   */
+  updateThumbScrollButtons() {
+    const thumbList = (this.$refs as Record<string, HTMLElement>).thumbList;
+    const strip = document.getElementById("pd-thumb-strip");
+    if (!thumbList || !strip) return;
+
+    const overflows = thumbList.scrollHeight - thumbList.clientHeight > 1;
+    const atTop = thumbList.scrollTop <= 1;
+    const atBottom = thumbList.scrollTop + thumbList.clientHeight >= thumbList.scrollHeight - 1;
+
+    const up = strip.querySelector<HTMLButtonElement>('[data-thumb-scroll="up"]');
+    const down = strip.querySelector<HTMLButtonElement>('[data-thumb-scroll="down"]');
+    if (up) up.disabled = !overflows || atTop;
+    if (down) down.disabled = !overflows || atBottom;
   },
 
   scrollLightboxThumbs(direction: number) {

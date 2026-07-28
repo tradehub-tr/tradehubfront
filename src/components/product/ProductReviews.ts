@@ -407,13 +407,16 @@ export function ProductReviews(): string {
   const photoReviewCount = p.reviews.filter((r) => r.images && r.images.length > 0).length;
 
   return `
-    <div class="py-6 max-[374px]:py-4">
+    <!-- Referans düzen: sarmalayıcı üstten 32px margin + 32px padding,
+         başlık 20px/26px/700/#222 ve altında 20px boşluk. -->
+    <div id="review-layout" class="mt-8 pt-8 max-[374px]:mt-4 max-[374px]:pt-4">
+      <h2 class="m-0 mb-[20px] text-[20px] leading-[26px] font-bold text-[#222]">${t("product.reviewsSectionTitle")}</h2>
       <!-- Sub-tabs + Yorum Yaz CTA -->
       <div class="flex items-center justify-between gap-3 border-b-2 border-border-default mb-6 max-[374px]:mb-4 flex-wrap">
         <div class="flex">
-          <button type="button" class="rv-sub-tab px-5 py-2.5 text-[14px] font-medium text-[var(--pd-rating-text-color,#6b7280)] bg-none border-none cursor-pointer relative whitespace-nowrap transition-colors duration-150 [&.active]:text-[var(--pd-title-color,#111827)] [&.active]:font-bold [&.active]:after:content-[''] [&.active]:after:absolute [&.active]:after:bottom-[-2px] [&.active]:after:start-0 [&.active]:after:end-0 [&.active]:after:h-[2px] [&.active]:after:bg-[var(--pd-tab-active-border,#cc9900)] max-[374px]:text-[13px] max-[374px]:px-2 max-[374px]:py-2 active" data-rv-panel="rv-product-panel">${t("product.productReviewsTab", { count: String(p.reviewCount) })}</button>
-          <button type="button" class="rv-sub-tab px-5 py-2.5 text-[14px] font-medium text-[var(--pd-rating-text-color,#6b7280)] bg-none border-none cursor-pointer relative whitespace-nowrap transition-colors duration-150 [&.active]:text-[var(--pd-title-color,#111827)] [&.active]:font-bold [&.active]:after:content-[''] [&.active]:after:absolute [&.active]:after:bottom-[-2px] [&.active]:after:start-0 [&.active]:after:end-0 [&.active]:after:h-[2px] [&.active]:after:bg-[var(--pd-tab-active-border,#cc9900)] max-[374px]:text-[13px] max-[374px]:px-2 max-[374px]:py-2" data-rv-panel="rv-store-panel">${t("product.storeReviewsTab", { count: String(p.storeReviewCount) })}</button>
-          <button type="button" class="rv-sub-tab px-5 py-2.5 text-[14px] font-medium text-[var(--pd-rating-text-color,#6b7280)] bg-none border-none cursor-pointer relative whitespace-nowrap transition-colors duration-150 [&.active]:text-[var(--pd-title-color,#111827)] [&.active]:font-bold [&.active]:after:content-[''] [&.active]:after:absolute [&.active]:after:bottom-[-2px] [&.active]:after:start-0 [&.active]:after:end-0 [&.active]:after:h-[2px] [&.active]:after:bg-[var(--pd-tab-active-border,#cc9900)] max-[374px]:text-[13px] max-[374px]:px-2 max-[374px]:py-2" data-rv-panel="rv-qa-panel" id="rv-qa-tab-btn">${t("product.reviewWrite.qaTab")} <span id="rv-qa-count">(0)</span></button>
+          <button type="button" class="rv-sub-tab px-3 py-6 me-8 last:me-0 text-[16px] font-medium text-[#71717A] bg-none border-none cursor-pointer relative whitespace-nowrap transition-colors duration-150 [&.active]:text-[#222] [&.active]:font-bold [&.active]:after:content-[''] [&.active]:after:absolute [&.active]:after:bottom-[-2px] [&.active]:after:start-0 [&.active]:after:end-0 [&.active]:after:h-[2px] [&.active]:after:bg-[#222] max-[374px]:text-[13px] max-[374px]:px-2 max-[374px]:py-2 max-[374px]:me-3 active" data-rv-panel="rv-product-panel">${t("product.productReviewsTab", { count: String(p.reviewCount) })}</button>
+          <button type="button" class="rv-sub-tab px-3 py-6 me-8 last:me-0 text-[16px] font-medium text-[#71717A] bg-none border-none cursor-pointer relative whitespace-nowrap transition-colors duration-150 [&.active]:text-[#222] [&.active]:font-bold [&.active]:after:content-[''] [&.active]:after:absolute [&.active]:after:bottom-[-2px] [&.active]:after:start-0 [&.active]:after:end-0 [&.active]:after:h-[2px] [&.active]:after:bg-[#222] max-[374px]:text-[13px] max-[374px]:px-2 max-[374px]:py-2 max-[374px]:me-3" data-rv-panel="rv-store-panel">${t("product.storeReviewsTab", { count: String(p.storeReviewCount) })}</button>
+          <button type="button" class="rv-sub-tab px-3 py-6 me-8 last:me-0 text-[16px] font-medium text-[#71717A] bg-none border-none cursor-pointer relative whitespace-nowrap transition-colors duration-150 [&.active]:text-[#222] [&.active]:font-bold [&.active]:after:content-[''] [&.active]:after:absolute [&.active]:after:bottom-[-2px] [&.active]:after:start-0 [&.active]:after:end-0 [&.active]:after:h-[2px] [&.active]:after:bg-[#222] max-[374px]:text-[13px] max-[374px]:px-2 max-[374px]:py-2 max-[374px]:me-3" data-rv-panel="rv-qa-panel" id="rv-qa-tab-btn">${t("product.reviewWrite.qaTab")} <span id="rv-qa-count">(0)</span></button>
         </div>
         <button
           type="button"
@@ -450,27 +453,26 @@ export function ProductReviews(): string {
 
       <!-- Store Reviews Panel (hidden) -->
       <div id="rv-store-panel" class="hidden">
-        <!-- Rating Summary -->
-        <div class="rv-rating-summary grid grid-cols-1 sm:grid-cols-[minmax(0,240px)_1fr] mb-5 rounded-xl overflow-hidden text-white bg-gradient-to-br from-[#1c2027] to-[#14171c]">
-          <div class="flex flex-col items-center justify-center p-6 border-white/10 border-b sm:border-b-0 sm:border-e max-[374px]:p-4">
-            <span class="rv-rating-number text-[48px] font-extrabold leading-none text-white">${formatRating(p.rating)}</span>
-            <div class="flex items-center gap-0.5 mt-2">${renderStars(p.rating)}</div>
-            <span class="rv-rating-label inline-block text-[13px] font-bold text-[#1a1400] bg-[var(--color-primary-500,#f5b800)] px-3 py-1 rounded-full mt-3">${satisfactionLabel(p.rating)}</span>
-            <span class="rv-rating-subtitle text-[12px] text-[#aeb4bf] mt-2.5 text-center">${t("product.basedOnReviews", { count: String(p.storeReviewCount) })}</span>
+        <!-- Puan özeti — referans düzenden ölçülen değerler:
+             sarmalayıcı pt-24px/mb-12px · üst satır mb-4px · puan 48px/700/#222
+             (sağdan 12px) · yıldız 26px · "Doğrulanmış Siparişler" #22891F,
+             1.5px alt çizgi · kategori etiketi 14px, skoru 16px/700. -->
+        <div class="rv-rating-summary pt-[24px] mb-[12px]">
+          <div class="mb-[4px] flex items-center flex-wrap gap-y-1">
+            <span class="rv-rating-number me-[12px] text-[48px] font-bold leading-[30px] text-[#222]">${formatRating(p.rating)}</span>
+            <span class="flex items-center [&_svg]:h-[26px] [&_svg]:w-[26px]">${renderStars(p.rating)}</span>
+            <span class="rv-rating-label ps-[4px] text-[14px] leading-[18px] font-semibold text-[#222]">${satisfactionLabel(p.rating)}</span>
+            <span class="rv-rating-subtitle ms-3 text-[14px] text-[#666]">${t("product.basedOnReviews", { count: String(p.storeReviewCount) })}</span>
+            <span class="ms-[4px] border-b-[1.5px] border-[#22891F] pb-[1px] text-[14px] text-[#22891F]">${t("product.verifiedOrders")}</span>
+            <img src="/images/dogrulanmis-siparis.png" alt="" width="18" height="18" class="ms-1 h-[18px] w-[18px] shrink-0" aria-hidden="true" />
           </div>
-          <div class="flex flex-col gap-2.5 justify-center p-6 max-[374px]:p-4">
-            <h3 class="text-[11px] font-bold tracking-[0.06em] uppercase text-[#c3c8d1] mb-1">${t("product.whatBuyersRated")}</h3>
+          <div class="flex items-center flex-wrap gap-x-1 gap-y-1">
             ${p.reviewCategoryRatings
               .map(
-                (cat) => `
-              <div class="flex items-center gap-2.5">
-                <span class="rv-category-label text-[13px] text-[#c7ccd4] min-w-[140px] shrink-0 max-sm:!min-w-[100px]">${cat.label}</span>
-                <div class="rv-category-bar-track flex-1 h-[6px] rounded-[3px] bg-white/[0.12] overflow-hidden">
-                  <div class="rv-category-bar-fill h-full w-full origin-left rounded-[3px] bg-[var(--color-primary-500,#f5b800)] transition-transform duration-300 ease-[cubic-bezier(0.23,1,0.32,1)] motion-reduce:transition-none" style="transform: scaleX(${cat.score / 5});"></div>
-                </div>
-                <span class="rv-category-score text-[13px] font-bold text-white min-w-[28px] text-end">${cat.score}</span>
-              </div>
-            `
+                (cat, i) => `
+              ${i > 0 ? '<span class="mx-3 h-[14px] w-px bg-[#e5e5e5]" aria-hidden="true"></span>' : ""}
+              <span class="rv-category-label text-[14px] text-[#222]">${cat.label}</span>
+              <span class="rv-category-score ms-1.5 text-[16px] font-bold text-[#222]">${cat.score}</span>`
               )
               .join("")}
           </div>

@@ -9,10 +9,15 @@ import { escapeHtml } from "../../utils/sanitize";
 import { ProductSalesRank } from "./ProductSalesRank";
 // Product loaded lazily via getCurrentProduct() inside functions
 
-const KEY_CLS =
-  "pd-attrs-key text-[var(--pd-spec-key-color,#6b7280)] w-1/4 bg-[var(--pd-spec-header-bg,#f9fafb)] px-4 py-3 border-b border-[var(--pd-spec-border,#e5e5e5)] align-top";
-const VAL_CLS =
-  "pd-attrs-val text-[var(--pd-spec-value-color,#111827)] font-semibold w-1/4 px-4 py-3 border-b border-[var(--pd-spec-border,#e5e5e5)] align-top";
+// Referans düzenden ölçülen hücre değerleri (Alibaba "Öne çıkan özellikler"):
+//   etiket → 14px/18px, weight 400, #222, p-4 (16px), zemin #f8f8f8
+//   değer  → 14px/18px, weight 500, #222, p-4 (16px), zemin beyaz
+//   hücre yüksekliği 50px = 18px satır + 2×16px padding — birebir tutuyor.
+// Ayraç yalnızca yatay (referansta dikey çizgi yok).
+const CELL_BASE =
+  "p-4 text-[14px] leading-[18px] text-[#222] border-b border-[var(--pd-spec-border,#e5e5e5)] align-middle";
+const KEY_CLS = `pd-attrs-key ${CELL_BASE} w-1/4 font-normal bg-[#f8f8f8]`;
+const VAL_CLS = `pd-attrs-val ${CELL_BASE} w-1/4 font-medium`;
 
 function buildTableRows(specs: { key: string; value: string }[]): string {
   const rows: string[] = [];
@@ -32,12 +37,10 @@ function buildTableRows(specs: { key: string; value: string }[]): string {
   return rows.join("");
 }
 
-// ── Simetrik gruplu tablo (variant B) — tam-kenarlıklı, tint anahtar, AAA ──
-const N_CELL =
-  "px-4 py-3 border border-[var(--pd-spec-border,#e5e5e5)] align-top leading-snug";
-const N_KEY = `pd-attrs-key ${N_CELL} font-medium text-[#374151] bg-[var(--pd-spec-header-bg,#f9fafb)]`;
-const N_VAL = `pd-attrs-val ${N_CELL} font-semibold text-[var(--pd-spec-value-color,#111827)]`;
-const N_CAT = `${N_CELL} bg-[var(--color-surface-raised,#f1f5f9)] text-[13px] font-bold text-[#1f2937]`;
+// ── Gruplu tablo — yukarıdaki referans ölçülerinin aynısı ──
+const N_CELL = CELL_BASE;
+const N_KEY = `pd-attrs-key ${N_CELL} font-normal bg-[#f8f8f8]`;
+const N_VAL = `pd-attrs-val ${N_CELL} font-medium`;
 
 function specTableRows(items: { key: string; value: string }[]): string {
   const rows: string[] = [];
@@ -107,17 +110,10 @@ export function AttributesTabContent(): string {
   const hl = pickHighlights(flat);
   const bandHtml = hl ? highlightBand(hl) : "";
 
-  const tableBody =
-    specGroups && specGroups.length > 0
-      ? specGroups
-          .map(
-            (g) =>
-              `<tr><td class="${N_CAT}" colspan="4">${escapeHtml(g.label)}</td></tr>${specTableRows(
-                g.items.map((it) => ({ key: it.label, value: it.value }))
-              )}`
-          )
-          .join("")
-      : specTableRows(p.specs);
+  // Referans düzende grup başlığı satırı YOK — tüm özellikler tek düz tabloda
+  // akar (2026-07-28). `flat` zaten specGroups'u düzleştirilmiş halde tutuyor;
+  // gruplar sadece backend'in veri organizasyonu, görsel bir ayrım değil.
+  const tableBody = specTableRows(flat);
 
   const keyAttrsTable = `
     <div class="rounded-md overflow-hidden">
@@ -138,22 +134,24 @@ export function AttributesTabContent(): string {
   const keyAttrsSection = hasSpecs
     ? `
       ${bandHtml}
-      <h3 class="text-lg font-bold mb-4" style="color: var(--pd-title-color, #111827);">${t("product.keyAttributes")}</h3>
+      <h3 class="text-[20px] leading-[28px] font-bold text-[#222] mb-4">${t("product.keyAttributes")}</h3>
       ${keyAttrsTable}`
     : "";
 
   const packagingSection = hasPackaging
     ? `
-      <h3 class="text-lg font-bold mb-4 ${hasSpecs ? "mt-8" : ""}" style="color: var(--pd-title-color, #111827);">${t("product.packagingDelivery")}</h3>
-      <table class="pd-attrs-table">
-        <tbody>${buildTableRows(p.packagingSpecs)}</tbody>
-      </table>`
+      <h3 class="text-[20px] leading-[28px] font-bold text-[#222] mb-4 ${hasSpecs ? "mt-8" : ""}">${t("product.packagingDelivery")}</h3>
+      <div class="rounded-md overflow-hidden">
+        <table class="pd-attrs-table w-full table-fixed border-collapse">
+          <tbody>${buildTableRows(p.packagingSpecs)}</tbody>
+        </table>
+      </div>`
     : "";
 
   const leadTimeSection = hasLeadTime
     ? `
       <div class="${hasAbove ? "mt-8 border-t border-[var(--pd-spec-border,#e5e5e5)]" : ""}">
-        <button type="button" class="pd-section-collapsible th-no-press flex items-center justify-between w-full py-4 border-0 bg-transparent text-lg font-bold cursor-pointer [&_svg]:transition-transform [&_svg]:duration-200 [&.open_svg]:rotate-180" id="pd-leadtime-toggle" style="color: var(--pd-title-color, #111827);">
+        <button type="button" class="pd-section-collapsible th-no-press flex items-center justify-between w-full py-4 border-0 bg-transparent text-[20px] leading-[28px] font-bold text-[#222] cursor-pointer [&_svg]:transition-transform [&_svg]:duration-200 [&.open_svg]:rotate-180" id="pd-leadtime-toggle">
           <span>${t("product.leadTime")}</span>
           <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
         </button>
