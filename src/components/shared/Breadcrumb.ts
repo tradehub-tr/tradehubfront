@@ -20,36 +20,44 @@ export interface BreadcrumbItem {
  */
 export function Breadcrumb(items: BreadcrumbItem[]): string {
   const allItems: BreadcrumbItem[] = [{ label: t("shared.home"), href: "/" }, ...items];
+  // Referans ölçüler: kırıntılar 12px/regular/#222222, hover yalnız renk
+  // koyulaşması (layout shift yok); ayraç sprite'taki lucide chevron-right.
   const separatorIcon = getLucideIcon(
     "chevron-right",
-    "h-3 w-3 flex-shrink-0 text-gray-400 dark:text-gray-500"
+    "h-3.5 w-3.5 flex-shrink-0 text-gray-400"
   );
+  const LINK_CLS =
+    "text-[12px] leading-[16px] text-[#222] transition-colors hover:text-black hover:underline whitespace-nowrap truncate max-w-[60px] xs:max-w-[80px] sm:max-w-none";
 
   const crumbs = allItems.map((item, i) => {
     const isLast = i === allItems.length - 1;
     const isHome = i === 0;
 
     if (isLast) {
-      return `<span class="text-[12px] sm:text-sm truncate max-w-[100px] xs:max-w-[140px] sm:max-w-[200px] text-gray-500 dark:text-gray-400">${escapeHtml(item.label)}</span>`;
+      // Referans davranış: son kırıntı da tıklanabilir (kategori sayfasına gider);
+      // href yoksa düz metin olarak kalır.
+      return item.href
+        ? `<a href="${escapeHtml(sanitizeUrl(item.href))}" class="text-[12px] leading-[16px] text-[#222] transition-colors hover:text-black hover:underline truncate max-w-[140px] sm:max-w-[240px]">${escapeHtml(item.label)}</a>`
+        : `<span class="text-[12px] leading-[16px] text-[#222] truncate max-w-[100px] xs:max-w-[140px] sm:max-w-[240px]">${escapeHtml(item.label)}</span>`;
     }
 
     if (isHome) {
       return `
-        <a href="${escapeHtml(sanitizeUrl(item.href ?? "#"))}" class="text-[12px] sm:text-sm hover:underline whitespace-nowrap truncate max-w-[60px] xs:max-w-[80px] sm:max-w-none text-primary-500 dark:text-primary-400"><span data-i18n="shared.home">${item.label}</span></a>
+        <a href="${escapeHtml(sanitizeUrl(item.href ?? "#"))}" class="${LINK_CLS}"><span data-i18n="shared.home">${item.label}</span></a>
         ${separatorIcon}
       `;
     }
 
     return `
-      <a href="${escapeHtml(sanitizeUrl(item.href ?? "#"))}" class="text-[12px] sm:text-sm hover:underline whitespace-nowrap truncate max-w-[60px] xs:max-w-[80px] sm:max-w-none text-primary-500 dark:text-primary-400">${escapeHtml(item.label)}</a>
+      <a href="${escapeHtml(sanitizeUrl(item.href ?? "#"))}" class="${LINK_CLS}">${escapeHtml(item.label)}</a>
       ${separatorIcon}
     `;
   });
 
   return `
-    <nav aria-label="Breadcrumb" class="py-2 sm:py-3 overflow-hidden">
-      <ol class="flex items-center gap-1 xs:gap-1.5 sm:gap-2 flex-nowrap overflow-x-auto scrollbar-hide">
-        ${crumbs.map((c) => `<li class="flex items-center gap-1 xs:gap-1.5 sm:gap-2 min-w-0">${c}</li>`).join("")}
+    <nav aria-label="Breadcrumb" class="py-2 sm:py-3">
+      <ol class="flex flex-wrap items-center gap-[4px]">
+        ${crumbs.map((c) => `<li class="flex items-center gap-[4px] min-w-0">${c}</li>`).join("")}
       </ol>
     </nav>
   `;

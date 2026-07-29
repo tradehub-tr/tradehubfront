@@ -226,15 +226,12 @@ async function renderProductPage() {
   const pdPath = product.categoryPath?.length
     ? product.categoryPath
     : product.category.map((name) => ({ name, slug: '' }));
-  const pdCrumbs = pdPath.slice(1).map(({ name, slug }, i, arr) => ({
+  // Referans davranış: SON kırıntı dahil hepsi tıklanabilir kategori linki.
+  const pdCrumbs = pdPath.slice(1).map(({ name, slug }) => ({
     label: name,
-    ...(i < arr.length - 1
-      ? {
-          href: slug
-            ? `/pages/products.html?cat=${encodeURIComponent(slug)}`
-            : `/pages/products.html?q=${encodeURIComponent(name)}`,
-        }
-      : {}),
+    href: slug
+      ? `/pages/products.html?cat=${encodeURIComponent(slug)}`
+      : `/pages/products.html?q=${encodeURIComponent(name)}`,
   }));
 
   // Faz 4d: admin'in girdiği SEO meta'larını (title, description, OG,
@@ -257,9 +254,11 @@ async function renderProductPage() {
                Panelin sayfa boyunca sağda kalabilmesi için sekmeler ve ilgili
                ürünler de içerik sütununun İÇİNDE durur — sticky bir öğe ancak
                kapsayıcısı kadar yaşar, bu yüzden kapsayıcı tüm sayfadır. -->
-          <div id="pd-hero-grid" class="grid grid-cols-1 gap-5 pt-3 items-start min-[1280px]:grid-cols-[minmax(0,1fr)_394px] min-[1280px]:gap-4">
+          <!-- 1024-1279 bandında (küçük laptop/tablet-yatay) sağ sipariş rayı
+               KAYBOLMAZ — referans düzendeki gibi 300px'e daralır; 1280+'da 394px. -->
+          <div id="pd-hero-grid" class="grid gap-4 pt-3 items-start grid-cols-[minmax(0,1fr)_300px] min-[1280px]:grid-cols-[minmax(0,1fr)_394px]">
             <div id="pd-content-col" class="w-full min-w-0">
-              <div class="grid grid-cols-[minmax(0,420px)_minmax(0,1fr)] gap-5 items-start min-[1280px]:grid-cols-[minmax(0,465px)_minmax(0,1fr)] min-[1280px]:gap-4 min-[1536px]:grid-cols-[minmax(0,590px)_minmax(0,1fr)]">
+              <div class="grid grid-cols-[minmax(0,300px)_minmax(0,1fr)] gap-4 items-start min-[1280px]:grid-cols-[minmax(0,465px)_minmax(0,1fr)] min-[1536px]:grid-cols-[minmax(0,590px)_minmax(0,1fr)]">
                 <div id="pd-hero-left" class="w-full min-w-0">
                   <div id="pd-hero-gallery" class="w-full">${ProductImageGallery()}</div>
                   ${ProductSellerPanel()}
@@ -273,7 +272,7 @@ async function renderProductPage() {
                 ${RelatedProducts()}
               </div>
             </div>
-            <div id="pd-hero-info" class="w-full min-w-0 min-[1280px]:flex min-[1280px]:flex-col min-[1280px]:[&.pd-sticky]:sticky min-[1280px]:[&.pd-sticky]:top-[165px] min-[1280px]:[&.pd-sticky]:max-h-[calc(100vh-180px)]">${ProductOrderPanel()}</div>
+            <div id="pd-hero-info" class="w-full min-w-0 flex flex-col [&.pd-sticky]:sticky [&.pd-sticky]:top-[165px] [&.pd-sticky]:max-h-[calc(100vh-180px)]">${ProductOrderPanel()}</div>
           </div>
         </div>
       </section>

@@ -461,9 +461,10 @@
   --badge-padding-y: 4px;
 
   /* --- Navigation Link --- */
-  --nav-font-size: 0.8125rem;
-  --nav-font-weight: 300;
-  --nav-text-color: #000000;
+  /* Referans ölçü: 14px / Regular(400) / #222 — px sabit, rem 18px kökte şişer. */
+  --nav-font-size: 14px;
+  --nav-font-weight: 400;
+  --nav-text-color: #222222;
   --nav-hover-color: var(--color-primary-600);
 
   /* === 9. PAGE SECTION TOKENS === */
@@ -1405,7 +1406,7 @@
 
   /* --- SubHeader Link (statik renk, admin tarafından yönetilmez) --- */
   .th-subheader-link {
-    color: #000000;
+    color: var(--nav-text-color, #222222);
     font-size: var(--nav-font-size);
     font-weight: var(--nav-font-weight);
     transition:

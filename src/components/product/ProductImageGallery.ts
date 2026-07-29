@@ -195,10 +195,17 @@ export function ProductImageGallery(): string {
 
   return `
     <div x-data="imageGallery">
-    <div id="product-gallery" class="flex gap-2.5 items-stretch w-full relative overflow-hidden">
+    <div id="product-gallery" class="relative flex w-full min-[1280px]:ps-[88px] overflow-hidden">
 
-      <!-- LEFT: Vertical Thumbnail Strip (hidden on narrow desktop, shown on wider) -->
-      <div id="pd-thumb-strip" class="relative flex flex-col items-center shrink-0 w-[78px]">
+      <!-- LEFT: Vertical Thumbnail Strip.
+           Şerit ABSOLUTE: normal akışta kalsaydı içerik yüksekliği (tüm karolar)
+           flex satırının (varsayılan align stretch) boyunu belirler, liste hiç taşmaz ve kaydırma
+           okları gizli kalırdı (çok görselli üründe sayfa dibe uzuyordu).
+           inset-y-0 şeridi ana görselin (aspect-square) yüksekliğine kelepçeler;
+           kapladığı alan konteynerin ps-[88px]'i (78px şerit + 10px boşluk). -->
+      <!-- 1024-1279 bandında (dar desktop) şerit gizli — galeri kolonu 300px'e
+           daralır, ana görsel tam genişlik kullanır; gezinme oklarla sürer. -->
+      <div id="pd-thumb-strip" class="absolute inset-y-0 start-0 hidden min-[1280px]:flex flex-col items-center w-[78px]">
 
         <!-- Kaydırma okları — referans düzendeki ölçü: 32×32 beyaz daire, şeridin
              üstüne/altına binen konumda. Şerit taşmıyorsa (kaydırma yoksa) basılmaz;
@@ -207,8 +214,7 @@ export function ProductImageGallery(): string {
           <svg width="16" height="16" fill="none" stroke="#222" stroke-width="2.2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 15l7-7 7 7"/></svg>
         </button>
 
-        <!-- Tüm karolar burada durur; şerit ana görselin yüksekliğini aşmaz
-             (flex-1 + overflow-y-auto), fazlası yukarıdaki/aşağıdaki oklarla gezilir. -->
+        <!-- Taşan karolar oklarla gezilir; yükseklik kelepçesi yukarıdaki şerit yorumunda. -->
         <div id="gallery-thumb-list" x-ref="thumbList" class="flex flex-col justify-start gap-3 overflow-y-auto scrollbar-hide flex-1 min-h-0 py-1.5" @scroll="updateThumbScrollButtons()">
           ${thumbsHtml}
         </div>

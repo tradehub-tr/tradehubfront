@@ -6,6 +6,7 @@
  */
 
 import { AttributesTabContent } from "./AttributesTabContent";
+import { ProductCertificates } from "./ProductCertificates";
 import { ProductReviews } from "./ProductReviews";
 import { CompanyProfile } from "./CompanyProfile";
 import { ProductDescription } from "./ProductDescription";
@@ -30,7 +31,9 @@ const tabs: TabConfig[] = [
     id: "attributes",
     label: t("product.attributes"),
     i18nKey: "product.attributes",
-    content: AttributesTabContent,
+    // Sertifikalar referans düzendeki gibi özellik içeriğinin altında,
+    // yorumlar bölümünün hemen üstünde durur.
+    content: () => AttributesTabContent() + ProductCertificates(),
   },
   {
     id: "reviews",
@@ -83,22 +86,28 @@ export function ProductTabs(): string {
 
       <!-- İçerik Bölümleri — hepsi görünür, sekme anchor hedefleri -->
       ${tabs
-        .map(
-          (tab) => `
-        <section
-          id="tab-content-${tab.id}"
-          class="product-tab-panel scroll-mt-28 pt-6 mt-6 border-t border-[var(--pd-spec-border,#e5e5e5)] first:mt-0 first:border-t-0"
-          aria-labelledby="tab-heading-${tab.id}"
-        >
-          <h2
+        .map((tab) => {
+          // Reviews paneli kendi büyük başlığını ("Değerlendirme ve Yorumlar")
+          // basar — panel h2'si onunla alt alta çift başlık görünüyordu.
+          const heading =
+            tab.id === "reviews"
+              ? ""
+              : `<h2
             id="tab-heading-${tab.id}"
             class="mb-4 text-lg font-bold tracking-[-0.01em] text-[var(--pd-title-color,#111827)]"
             data-i18n="${tab.i18nKey}"
-          >${tab.label}</h2>
+          >${tab.label}</h2>`;
+          return `
+        <section
+          id="tab-content-${tab.id}"
+          class="product-tab-panel scroll-mt-28 pt-6 mt-6 border-t border-[var(--pd-spec-border,#e5e5e5)] first:mt-0 first:border-t-0"
+          ${heading ? `aria-labelledby="tab-heading-${tab.id}"` : `aria-label="${tab.label}"`}
+        >
+          ${heading}
           ${tab.content()}
         </section>
-      `
-        )
+      `;
+        })
         .join("")}
      </div>
     </section>

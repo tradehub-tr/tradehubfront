@@ -4,9 +4,9 @@
  * Fiyat, numune ve varyantlar orta sütundaki sekmeli kartta durur
  * (ProductBuyBox) — referans düzenin "Toptan satış" kartı orasıdır.
  *
- * 1280px altında sağ panel ortanın altına akar; sticky yalnız 1280px ve
- * üstünde devreye girer. Eşiğin tek hakemi CSS: hem dıştaki `#pd-hero-info`
- * hem içerideki `[.pd-sticky_&]:` grupları `min-[1280px]:` ile kapılıdır.
+ * Sağ ray desktop düzeninin her genişliğinde (1024+) kolondadır — 1024-1279
+ * bandında 300px'e daralır (referans tablet düzeni), 1280+'da 394px.
+ * Sticky grupları `min-[1024px]:[.pd-sticky_&]:` ile kapılıdır;
  * JS `.pd-sticky` class'ını her genişlikte toggle eder (bkz. init).
  */
 
@@ -22,11 +22,11 @@ export function ProductOrderPanel(): string {
   const p = mockProduct;
 
   return `
-    <div id="pd-order-panel" class="bg-[var(--color-surface,#fff)] flex flex-col border border-[var(--color-border-default,#e5e5e5)] rounded-md overflow-hidden min-[1280px]:[.pd-sticky_&]:flex-1 min-[1280px]:[.pd-sticky_&]:min-h-0 min-[1280px]:[.pd-sticky_&]:max-h-full min-[1280px]:[.pd-sticky_&]:overflow-hidden">
-      <div id="pd-info-scrollable" class="p-5 flex flex-col scrollbar-hide min-[1280px]:[.pd-sticky_&]:flex-1 min-[1280px]:[.pd-sticky_&]:overflow-y-auto min-[1280px]:[.pd-sticky_&]:min-h-0">
+    <div id="pd-order-panel" class="bg-[var(--color-surface,#fff)] flex flex-col border border-[var(--color-border-default,#e5e5e5)] rounded-md overflow-hidden min-[1024px]:[.pd-sticky_&]:flex-1 min-[1024px]:[.pd-sticky_&]:min-h-0 min-[1024px]:[.pd-sticky_&]:max-h-full min-[1024px]:[.pd-sticky_&]:overflow-hidden">
+      <div id="pd-info-scrollable" class="p-5 flex flex-col scrollbar-hide min-[1024px]:[.pd-sticky_&]:flex-1 min-[1024px]:[.pd-sticky_&]:overflow-y-auto min-[1024px]:[.pd-sticky_&]:min-h-0">
         <!-- Sticky'de #pd-wholesale-blocks buraya taşınır; ayraç da yalnız o durumda basılır -->
-        <div id="pd-panel-wholesale-slot" class="hidden min-[1280px]:[.pd-sticky_&]:block"></div>
-        <hr class="hidden min-[1280px]:[.pd-sticky_&]:block my-4 border-0 border-t border-[var(--color-border-default,#e5e5e5)]" />
+        <div id="pd-panel-wholesale-slot" class="hidden min-[1024px]:[.pd-sticky_&]:block"></div>
+        <hr class="hidden min-[1024px]:[.pd-sticky_&]:block my-4 border-0 border-t border-[var(--color-border-default,#e5e5e5)]" />
         <!-- Kargo — referans düzendeki iki durum:
              (a) yöntem tanımlıysa gri kart + yöntem adı (14/18/600) + detay (14/18/400)
              (b) tanımlı DEĞİLSE bölüm gizlenmez, "tedarikçiyle iletişime geçin" metni basılır -->
@@ -68,7 +68,7 @@ export function ProductOrderPanel(): string {
         <!-- px-4 YOK: panelin kendi dolgusu var, buraya da eklemek butonları
              kargo bloğundan dar bırakıyordu. Sticky halinde -mx-4 ile kenara
              yayılırken px-4 ayrıca uygulanıyor. -->
-        <div id="pd-cta-buttons" class="grid grid-cols-2 gap-3 mt-5 py-4 border-t border-b border-[var(--color-border-default,#e5e5e5)] bg-[var(--color-surface,#fff)] min-[1280px]:[.pd-sticky_&]:sticky min-[1280px]:[.pd-sticky_&]:-bottom-[22px] min-[1280px]:[.pd-sticky_&]:z-[2] min-[1280px]:[.pd-sticky_&]:bg-[var(--color-surface,#fff)] min-[1280px]:[.pd-sticky_&]:border-b-0 min-[1280px]:[.pd-sticky_&]:-mx-5 min-[1280px]:[.pd-sticky_&]:-mb-[20px] min-[1280px]:[.pd-sticky_&]:px-5 min-[1280px]:[.pd-sticky_&]:py-4 min-[1280px]:[.pd-sticky_&]:pb-5 min-[1280px]:[.pd-sticky_&]:shadow-[0_-4px_14px_-8px_rgba(17,24,39,0.12)]">
+        <div id="pd-cta-buttons" class="grid grid-cols-2 gap-3 mt-5 py-4 border-t border-b border-[var(--color-border-default,#e5e5e5)] bg-[var(--color-surface,#fff)] min-[1024px]:[.pd-sticky_&]:sticky min-[1024px]:[.pd-sticky_&]:-bottom-[22px] min-[1024px]:[.pd-sticky_&]:z-[2] min-[1024px]:[.pd-sticky_&]:bg-[var(--color-surface,#fff)] min-[1024px]:[.pd-sticky_&]:border-b-0 min-[1024px]:[.pd-sticky_&]:-mx-5 min-[1024px]:[.pd-sticky_&]:-mb-[20px] min-[1024px]:[.pd-sticky_&]:px-5 min-[1024px]:[.pd-sticky_&]:py-4 min-[1024px]:[.pd-sticky_&]:pb-5 min-[1024px]:[.pd-sticky_&]:shadow-[0_-4px_14px_-8px_rgba(17,24,39,0.12)]">
           ${
             mockProduct.sellerKybVerified === false
               ? `
@@ -113,21 +113,20 @@ export function ProductOrderPanel(): string {
 
 export function initProductOrderPanel(options: { signal?: AbortSignal } = {}): void {
   // Sticky card: add .pd-sticky once user scrolls past the card's bottom.
-  // Class HER genişlikte toggle edilir; 1280px eşiğinin TEK hakemi CSS'tir
+  // Class HER genişlikte toggle edilir; eşiğin TEK hakemi CSS'tir
   // (hem `#pd-hero-info` hem buradaki `[.pd-sticky_&]:` grupları
-  // `min-[1280px]:` ile kapılı). Düzen yalnızca 1024px geçilince yeniden
-  // mount edildiği için matchMedia'yı mount anında ölçmek 1100↔1440 canlı
-  // resize'ında ya sticky'yi hiç bağlamıyor ya da tek sütunda çalıştırıyordu.
+  // `min-[1024px]:` ile kapılı — sağ ray artık desktop düzeninin her
+  // genişliğinde kolonda). matchMedia'yı mount anında ölçmek canlı
+  // resize'da sticky'yi yanlış bağlıyordu; bu yüzden listener'lı query.
   const heroInfo = document.getElementById("pd-hero-info");
   if (heroInfo) {
     const stickyTop = 130;
     const cardBottom = heroInfo.getBoundingClientRect().bottom + window.scrollY;
-    const wideQuery = window.matchMedia("(min-width: 1280px)");
+    const wideQuery = window.matchMedia("(min-width: 1024px)");
 
     // Sticky'ye girerken fiyat/numune/varyant bloğunu panele TAŞI, çıkarken
     // orta karttaki yuvasına geri koy. Kopya değil taşıma: listener'lar ve
-    // seçim durumu node ile birlikte gider, senkron gerekmez. 1280 altında
-    // panel akışta görünür olduğundan taşıma yapılmaz (slot zaten gizli).
+    // seçim durumu node ile birlikte gider, senkron gerekmez.
     const placeWholesaleBlocks = (sticky: boolean) => {
       const blocks = document.getElementById("pd-wholesale-blocks");
       if (!blocks) return;
@@ -143,8 +142,6 @@ export function initProductOrderPanel(options: { signal?: AbortSignal } = {}): v
       placeWholesaleBlocks(sticky);
     };
     window.addEventListener("scroll", onScroll, { passive: true, signal: options.signal });
-    // 1280 sınırı canlı resize'da geçilirse blok doğru tarafa dönmeli —
-    // düzen 1024'te remount olur ama 1280 geçişi remount tetiklemez.
     wideQuery.addEventListener("change", onScroll, { signal: options.signal });
     onScroll();
   }

@@ -151,25 +151,28 @@ export function AttributesTabContent(): string {
   const leadTimeSection = hasLeadTime
     ? `
       <div class="${hasAbove ? "mt-8 border-t border-[var(--pd-spec-border,#e5e5e5)]" : ""}">
-        <button type="button" class="pd-section-collapsible th-no-press flex items-center justify-between w-full py-4 border-0 bg-transparent text-[20px] leading-[28px] font-bold text-[#222] cursor-pointer [&_svg]:transition-transform [&_svg]:duration-200 [&.open_svg]:rotate-180" id="pd-leadtime-toggle">
+        <button type="button" class="pd-section-collapsible th-no-press open flex items-center justify-between w-full py-4 border-0 bg-transparent text-[20px] leading-[28px] font-bold text-[#222] cursor-pointer [&_svg]:transition-transform [&_svg]:duration-200 [&.open_svg]:rotate-180" id="pd-leadtime-toggle">
           <span>${t("product.leadTime")}</span>
           <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
         </button>
-        <div id="pd-leadtime-content" class="hidden">
-          <table class="pd-attrs-table w-full border-separate border-spacing-0 border border-[var(--pd-spec-border,#e5e5e5)] rounded-md overflow-hidden text-sm [&_th]:px-4 [&_th]:py-3 [&_th]:text-[13px] [&_th]:font-semibold [&_th]:text-[var(--pd-spec-key-color,#6b7280)] [&_th]:bg-[var(--pd-spec-header-bg,#f9fafb)] [&_th]:border-b [&_th]:border-[var(--pd-spec-border,#e5e5e5)] [&_th]:text-start">
-            <thead>
-              <tr>
-                <th>${t("product.leadTimeQty")}</th>
-                ${p.leadTimeRanges.map((r) => `<th>${escapeHtml(r.quantityRange)}</th>`).join("")}
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td class="${KEY_CLS}">${t("product.leadTimeDays")}</td>
-                ${p.leadTimeRanges.map((r) => `<td class="${VAL_CLS}">${escapeHtml(r.days)}</td>`).join("")}
-              </tr>
-            </tbody>
-          </table>
+        <!-- Diğer tablolarla aynı hücre dili (KEY/VAL) — eski tasarımın gri
+             başlık satırı + dış çerçevesi bölümü sayfanın geri kalanından
+             koparıyordu. Varsayılan AÇIK; chevron ile katlanabilir. -->
+        <div id="pd-leadtime-content">
+          <div class="rounded-md overflow-hidden">
+            <table class="pd-attrs-table w-full table-fixed border-collapse text-sm">
+              <tbody>
+                <tr>
+                  <td class="${KEY_CLS}">${t("product.leadTimeQty")}</td>
+                  ${p.leadTimeRanges.map((r) => `<td class="${VAL_CLS}">${escapeHtml(r.quantityRange)}</td>`).join("")}
+                </tr>
+                <tr class="[&>td]:border-b-0">
+                  <td class="${KEY_CLS}">${t("product.leadTimeDays")}</td>
+                  ${p.leadTimeRanges.map((r) => `<td class="${VAL_CLS}">${escapeHtml(r.days)}</td>`).join("")}
+                </tr>
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>`
     : "";

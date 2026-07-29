@@ -5,7 +5,7 @@
  */
 
 import { getCurrentProduct } from "../../alpine/product";
-import { t } from "../../i18n";
+import { t, getCurrentLang } from "../../i18n";
 import type { ProductReview } from "../../types/product";
 import { openLoginModal } from "./LoginModal";
 import { isLoggedIn as isUserLoggedIn } from "../../utils/auth";
@@ -19,6 +19,8 @@ import { openEditReviewModal } from "./EditReviewModal";
 import { openReportAbuseModal } from "./ReportAbuseModal";
 import { showToast } from "../../utils/toast";
 import { escapeHtml, sanitizeHtml } from "../../utils/sanitize";
+import { getFlagSvg } from "../../utils/flags";
+import { formatPriceRange } from "../../services/currencyService";
 
 /* ── Utility helpers ─────────────────────────────────── */
 
@@ -26,7 +28,8 @@ const STAR_PATH =
   "M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z";
 
 function starIconPartial(fillPercent: number, small = false): string {
-  const size = small ? "h-3.5 w-3.5" : "h-4 w-4";
+  // Kart yıldızı referans ölçüsü 16×16 — h-4 kök font 18px'te 18px'e şişer.
+  const size = small ? "h-[16px] w-[16px]" : "h-4 w-4";
   const pct = Math.max(0, Math.min(100, fillPercent));
   if (pct === 0) {
     return `<svg class="${size} text-[#d1d5db]" viewBox="0 0 20 20" fill="currentColor"><path d="${STAR_PATH}"/></svg>`;
@@ -94,19 +97,6 @@ function formatRating(rating: number): string {
     minimumFractionDigits: 1,
     maximumFractionDigits: 1,
   });
-}
-
-function countryFlag(country: string): string {
-  const flags: Record<string, string> = {
-    TR: "\u{1F1F9}\u{1F1F7}",
-    DE: "\u{1F1E9}\u{1F1EA}",
-    US: "\u{1F1FA}\u{1F1F8}",
-    IT: "\u{1F1EE}\u{1F1F9}",
-    CN: "\u{1F1E8}\u{1F1F3}",
-    UK: "\u{1F1EC}\u{1F1E7}",
-    FR: "\u{1F1EB}\u{1F1F7}",
-  };
-  return flags[country] || "\u{1F310}";
 }
 
 export function anonymizeName(name: string): string {
@@ -204,28 +194,36 @@ function photoStripSection(reviews: ProductReview[]): string {
 /* ── Review card renderer ────────────────────────────── */
 
 export function renderReviewCard(review: ProductReview, showProductThumb = false): string {
-  const badges: string[] = [];
-  if (review.isOwnPending) {
-    badges.push(
-      `<span class="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-md text-[10px] font-semibold bg-amber-100 text-amber-700">⏳ ${t("prodUi.pendingApproval")}</span>`
+  // Sol kolonda alt alta dizilen kimlik satırları (referans düzen).
+  const sideRows: string[] = [];
+  const countryLabel = review.countryName || review.country;
+  if (countryLabel) {
+    sideRows.push(
+      `<span class="flex max-w-full items-center gap-[6px]">${getFlagSvg(review.country)}<span class="min-w-0 truncate text-[12px] leading-[16px] text-[#222]">${escapeHtml(countryLabel)}</span></span>`
     );
   }
   if (review.verified) {
-    badges.push(
-      `<span class="rv-badge inline-flex items-center gap-[3px] px-2 py-0.5 text-[11px] font-semibold rounded-[3px] bg-[#f0fdf4] text-[#15803d]">${t("product.verifiedPurchase")}</span>`
+    // Üst özetteki "Doğrulanmış Siparişler" rozetinin aynısı, 11×11 (referans ölçü).
+    sideRows.push(
+      `<span class="flex items-center gap-[4px] text-[12px] leading-[16px] text-[#22891F]"><img src="/images/dogrulanmis-siparis.png" alt="" width="11" height="11" class="h-[11px] w-[11px] shrink-0" aria-hidden="true" />${t("product.verifiedPurchase")}</span>`
     );
   }
   if (review.repeatBuyer) {
-    badges.push(
-      `<span class="rv-badge inline-flex items-center gap-[3px] px-2 py-0.5 text-[11px] font-semibold rounded-[3px] bg-[var(--color-primary-50,#fef9e7)] text-[var(--color-cta-primary,#cc9900)]">${t("product.repeatBuyer")}</span>`
+    sideRows.push(
+      `<span class="inline-block scale-[0.9] origin-left rounded-[2px] bg-[#F4F4F4] p-[4px] text-[12px] leading-[16px] text-[#444444]">${t("product.repeatBuyer")}</span>`
+    );
+  }
+  if (review.isOwnPending) {
+    sideRows.push(
+      `<span class="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-md text-[10px] font-semibold bg-amber-100 text-amber-700">${t("prodUi.pendingApproval")}</span>`
     );
   }
   // Reviewer reputation tier — Top/Trusted/Verified (B2B güven göstergesi)
   if (review.reviewerTier) {
     const tierLabels: Record<string, string> = {
-      Top: "⭐ " + t("product.reviewWrite.reviewerTop"),
-      Trusted: "🛡 " + t("product.reviewWrite.reviewerTrusted"),
-      Verified: "✓ " + t("product.reviewWrite.reviewerVerified"),
+      Top: t("product.reviewWrite.reviewerTop"),
+      Trusted: t("product.reviewWrite.reviewerTrusted"),
+      Verified: t("product.reviewWrite.reviewerVerified"),
     };
     const tierClasses: Record<string, string> = {
       Top: "bg-purple-100 text-purple-700",
@@ -234,28 +232,20 @@ export function renderReviewCard(review: ProductReview, showProductThumb = false
     };
     const cls = tierClasses[review.reviewerTier] || "bg-gray-100 text-gray-700";
     const label = tierLabels[review.reviewerTier] || review.reviewerTier;
-    badges.push(
+    sideRows.push(
       `<span class="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-md text-[10px] font-semibold ${cls}">${label}</span>`
     );
   }
-  // Reviewer reputation tier — Top/Trusted/Verified (B2B güven göstergesi)
-  if (review.reviewerTier) {
-    const tierLabels: Record<string, string> = {
-      Top: "⭐ " + t("product.reviewWrite.reviewerTop"),
-      Trusted: "🛡 " + t("product.reviewWrite.reviewerTrusted"),
-      Verified: "✓ " + t("product.reviewWrite.reviewerVerified"),
-    };
-    const tierClasses: Record<string, string> = {
-      Top: "bg-purple-100 text-purple-700",
-      Trusted: "bg-indigo-100 text-indigo-700",
-      Verified: "bg-emerald-100 text-emerald-700",
-    };
-    const cls = tierClasses[review.reviewerTier] || "bg-gray-100 text-gray-700";
-    const label = tierLabels[review.reviewerTier] || review.reviewerTier;
-    badges.push(
-      `<span class="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-md text-[10px] font-semibold ${cls}">${label}</span>`
-    );
-  }
+
+  // Referans format: "18 Oca 2026". Ham string parse edilemezse olduğu gibi kalır.
+  const parsedDate = new Date(review.date);
+  const dateLabel = isNaN(parsedDate.getTime())
+    ? review.date
+    : parsedDate.toLocaleDateString(getCurrentLang(), {
+        day: "numeric",
+        month: "short",
+        year: "numeric",
+      });
 
   // Backend "trust" yetersiz: satıcı/alıcı kontrollü tüm metin alanları XSS
   // riski taşır. Reply zengin metin barındırabildiği için sanitizeHtml ile
@@ -269,88 +259,107 @@ export function renderReviewCard(review: ProductReview, showProductThumb = false
 
   const imagesHtml =
     Array.isArray(review.images) && review.images.length > 0
-      ? `<div class="flex gap-2 flex-wrap mt-3">
+      ? `<div class="flex gap-[6px] flex-wrap mb-[8px]">
           ${review.images
             .map(
               (src) => `
             <button
               type="button"
-              class="rv-image-thumb shrink-0 w-20 h-20 rounded-lg overflow-hidden border border-border-default/60 hover:border-primary-500 transition-colors cursor-zoom-in bg-secondary-50"
+              class="rv-image-thumb th-no-press shrink-0 w-[72px] h-[72px] rounded-[4px] overflow-hidden bg-[#f5f5f5] cursor-zoom-in appearance-none focus:outline-none border-0 p-0"
               data-image-url="${escapeHtml(src)}"
               aria-label="${t("product.productImage")}"
             >
-              <img src="${escapeHtml(src)}" width="96" height="96" decoding="async" class="w-full h-full object-cover" loading="lazy" alt="" />
+              <img src="${escapeHtml(src)}" width="72" height="72" decoding="async" class="w-full h-full object-contain" loading="lazy" alt="" />
             </button>`
             )
             .join("")}
         </div>`
       : "";
 
-  const productThumbHtml =
-    showProductThumb && review.productTitle
-      ? `<div class="rv-product-card flex items-center gap-3 rounded-lg p-3 mt-3 bg-[var(--color-surface-raised,#f5f5f5)]">
-        <img class="rv-product-card-img w-12 h-12 rounded object-cover shrink-0 bg-[var(--pd-spec-header-bg,#f9fafb)]" src="${escapeHtml(review.productImage || "")}" alt="${t("product.productImage")}" width="48" height="48" decoding="async">
-        <div class="flex-1 min-w-0">
-          <span class="rv-product-card-title block text-[13px] text-[var(--color-text-body,#333333)] overflow-hidden text-ellipsis whitespace-nowrap">${escapeHtml(review.productTitle)}</span>
-          <span class="rv-product-card-price block text-[13px] font-semibold text-[var(--pd-title-color,#111827)] mt-0.5">${escapeHtml(review.productPrice || "")}</span>
+  // Referans ürün barı ölçüleri: bar bg #f4f4f4, p 4px, rounded 4px; görsel
+  // 32×32; iç satır px 8px; fiyat 14px/#222; sağda "Ürün detaylarına göz atın ›".
+  // Yorum payload'ında ürün bilgisi yoksa sayfadaki üründen türet — mağaza
+  // sekmesindeki kartlar zaten bu ürünün yorumları. formatPriceRange min===max
+  // halini içeride ele alır, ayrı formatPrice dalı gerekmez.
+  let productThumbHtml = "";
+  if (showProductThumb) {
+    const cp = getCurrentProduct();
+    const tierPrices = cp.priceTiers.map((ti) => ti.basePrice ?? ti.price);
+    const barPrice =
+      review.productPrice ||
+      (tierPrices.length
+        ? formatPriceRange(Math.min(...tierPrices), Math.max(...tierPrices), cp.baseCurrency)
+        : "");
+    const barImage = review.productImage || cp.images.find((im) => !im.isVideo)?.src || "";
+    if (barPrice) {
+      productThumbHtml = `<div class="rv-product-card mb-[8px] flex items-center rounded-[4px] bg-[#f4f4f4] p-[4px]">
+        <img class="rv-product-card-img h-[32px] w-[32px] shrink-0 rounded-[2px] object-cover" src="${escapeHtml(barImage)}" alt="${t("product.productImage")}" width="32" height="32" decoding="async">
+        <div class="flex flex-1 items-center justify-between gap-2 overflow-hidden px-[8px]">
+          <span class="rv-product-card-price truncate text-[14px] font-semibold text-[#222]">${escapeHtml(barPrice)}</span>
+          <a class="rv-product-card-link flex shrink-0 items-center gap-[2px] whitespace-nowrap text-[14px] text-[#222] no-underline hover:underline" href="javascript:void(0)">${t("product.viewProductDetails")} ›</a>
         </div>
-        <a class="rv-product-card-link text-[12px] text-[var(--color-text-body,#333333)] whitespace-nowrap shrink-0 no-underline hover:underline" href="javascript:void(0)">${t("product.viewProductDetails")} ›</a>
-      </div>`
-      : "";
+      </div>`;
+    }
+  }
 
+  // Referans kart düzeni: sol kimlik kolonu + orta içerik + sağ üstte tarih.
+  // Ölçüler DevTools'tan: kart pt 20 + border-b #E8E8E8, kolon gap 12,
+  // sol kolon 200px, kimlik satırları arası 8px, avatar satırı mb 16 / gap 4.
   return `
-    <div class="rv-card py-5 border-b border-[var(--pd-spec-border,#e5e5e5)] last-of-type:border-b-0 max-[374px]:px-3 max-[374px]:py-3">
-      <div class="flex items-start gap-3 mb-2.5 max-[374px]:gap-2 max-[374px]:mb-2">
-        <div class="rv-avatar w-9 h-9 rounded-full flex items-center justify-center text-[14px] font-bold shrink-0 text-[var(--color-text-inverse,#fff)] max-[374px]:w-8 max-[374px]:h-8 max-[374px]:text-xs" style="background: ${avatarColor(review.author)};">
-          ${escapeHtml(review.author.charAt(0))}
+    <!-- Referans kart ölçüsü: padding 20px 0px (dikey iki yönde). -->
+    <div class="rv-card relative flex gap-[12px] py-[20px] border-b border-[#E8E8E8] last-of-type:border-b-0 max-sm:flex-col max-sm:gap-3 max-[374px]:py-3">
+      <span class="rv-card-date absolute top-[20px] end-0 text-[12px] leading-[16px] text-[#767676] max-[374px]:top-3">${escapeHtml(dateLabel)}</span>
+
+      <div class="w-[200px] shrink-0 max-sm:w-full">
+        <div class="flex items-center gap-[4px] mb-[16px]">
+          <div class="rv-avatar w-[28px] h-[28px] rounded-full flex items-center justify-center text-[12px] font-bold shrink-0 text-[var(--color-text-inverse,#fff)]" style="background: ${avatarColor(review.author)};">
+            ${escapeHtml(review.author.charAt(0))}
+          </div>
+          <span class="rv-card-name min-w-0 truncate text-[14px] font-semibold text-[#222]">${escapeHtml(anonymizeName(review.author))}</span>
         </div>
-        <div class="flex-1 min-w-0">
-          <div class="flex items-center gap-2 flex-wrap max-[374px]:gap-1">
-            <span class="rv-card-name text-[13px] font-semibold text-[var(--pd-title-color,#111827)] max-[374px]:text-[13px]">${escapeHtml(anonymizeName(review.author))}</span>
-            <span class="rv-card-country text-[12px] text-[var(--pd-rating-text-color,#6b7280)] flex items-center gap-1 max-[374px]:text-[11px]">${countryFlag(review.country)} ${escapeHtml(review.countryName || review.country)}</span>
-            ${badges.join("")}
-          </div>
-          <div class="flex items-center gap-2 mt-1">
-            <div class="flex items-center gap-0.5">${renderStars(displayRating(review), true)}</div>
-            <span class="rv-card-date text-[12px] text-[var(--pd-rating-text-color,#6b7280)]">${escapeHtml(review.date)}</span>
-          </div>
+        <div class="flex flex-col items-start gap-[8px]">
+          ${sideRows.join("")}
         </div>
       </div>
-      <div class="rv-card-comment text-[13px] leading-[1.6] text-[var(--pd-spec-value-color,#111827)] mb-3 max-[374px]:text-[13px] max-[374px]:leading-[1.5]">${escapeHtml(review.comment)}</div>
-      ${imagesHtml}
-      ${supplierReplyHtml}
-      ${productThumbHtml}
-      <div class="flex items-center gap-2 flex-wrap">
-        <button type="button" class="rv-helpful-btn flex items-center gap-1.5 text-[12px] text-[var(--pd-rating-text-color,#6b7280)] bg-none border border-[var(--pd-spec-border,#e5e5e5)] rounded px-2.5 py-1 cursor-pointer transition-colors duration-150 hover:border-[var(--color-border-medium,#d1d5db)] hover:text-[var(--pd-title-color,#111827)] [&.voted]:border-[var(--pd-tab-active-border,#cc9900)] [&.voted]:text-[var(--pd-tab-active-color,#cc9900)]" data-review-id="${review.id}" data-vote="helpful">
-          <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M14 10h4.764a2 2 0 011.789 2.894l-3.5 7A2 2 0 0115.263 21h-4.017c-.163 0-.326-.02-.485-.06L7 20m7-10V5a2 2 0 00-2-2h-.095c-.5 0-.905.405-.905.905 0 .714-.211 1.412-.608 2.006L7 11v9m7-10h-2M7 20H5a2 2 0 01-2-2v-6a2 2 0 012-2h2.5"/>
-          </svg>
-          ${t("product.helpful", { count: String(review.helpful) })}
-        </button>
-        <button
-          type="button"
-          class="rv-helpful-btn flex items-center gap-1.5 text-[12px] text-[var(--pd-rating-text-color,#6b7280)] bg-none border border-[var(--pd-spec-border,#e5e5e5)] rounded px-2.5 py-1 cursor-pointer transition-colors duration-150 hover:border-[var(--color-border-medium,#d1d5db)] hover:text-[var(--pd-title-color,#111827)] [&.voted]:border-[var(--pd-tab-active-border,#cc9900)] [&.voted]:text-[var(--pd-tab-active-color,#cc9900)]"
-          data-review-id="${review.id}"
-          data-vote="not_helpful"
-          title="${t("prodUi.notHelpful")}"
-          aria-label="${t("prodUi.notHelpful")}"
-        >
-          <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" style="transform: rotate(180deg);">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M14 10h4.764a2 2 0 011.789 2.894l-3.5 7A2 2 0 0115.263 21h-4.017c-.163 0-.326-.02-.485-.06L7 20m7-10V5a2 2 0 00-2-2h-.095c-.5 0-.905.405-.905.905 0 .714-.211 1.412-.608 2.006L7 11v9m7-10h-2M7 20H5a2 2 0 01-2-2v-6a2 2 0 012-2h2.5"/>
-          </svg>
-        </button>
-        ${
-          review.canEdit
-            ? `<button type="button" class="rv-edit-own-btn text-[12px] text-primary-600 hover:text-primary-700 transition-colors inline-flex items-center gap-1 ms-auto" data-review-id="${review.id}" title="${t("product.reviewWrite.editMyReviewHint")}">
-                <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487a2.032 2.032 0 112.872 2.872L7.5 21.613H4v-3.5L16.862 4.487z"/></svg>
-                ${t("prodUi.edit")}
-              </button>`
-            : ""
-        }
-        <button type="button" class="rv-report-btn text-[12px] text-secondary-400 hover:text-red-600 transition-colors inline-flex items-center gap-1 ${review.canEdit ? "" : "ms-auto"}" data-review-id="${review.id}" title="${t("prodUi.reportAction")}">
-          <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 21v-4m0 0V5a2 2 0 012-2h6.5l1 2H21l-3 6 3 6h-8.5l-1-2H5a2 2 0 00-2 2zm9-13.5V9"/></svg>
-          ${t("prodUi.reportShort")}
-        </button>
+
+      <div class="flex-1 min-w-0 pe-[90px] max-sm:pe-0">
+        <div class="flex items-center gap-0.5">${renderStars(displayRating(review), true)}</div>
+        <div class="rv-card-comment mt-[4px] mb-[8px] text-[14px] leading-[1.5] text-[#222] max-[374px]:text-[13px]">${escapeHtml(review.comment)}</div>
+        ${imagesHtml}
+        ${supplierReplyHtml}
+        ${productThumbHtml}
+        <div class="flex items-center gap-3 flex-wrap">
+          <button type="button" class="rv-helpful-btn th-no-press appearance-none focus:outline-none flex items-center gap-1 text-[11px] leading-[16px] text-[#767676] bg-transparent border-0 p-0 cursor-pointer transition-colors duration-150 hover:text-[#222] [&.voted]:text-[var(--pd-tab-active-color,#cc9900)]" data-review-id="${review.id}" data-vote="helpful">
+            <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M14 10h4.764a2 2 0 011.789 2.894l-3.5 7A2 2 0 0115.263 21h-4.017c-.163 0-.326-.02-.485-.06L7 20m7-10V5a2 2 0 00-2-2h-.095c-.5 0-.905.405-.905.905 0 .714-.211 1.412-.608 2.006L7 11v9m7-10h-2M7 20H5a2 2 0 01-2-2v-6a2 2 0 012-2h2.5"/>
+            </svg>
+            <span class="rv-helpful-label">${t("product.helpful", { count: String(review.helpful) })}</span>
+          </button>
+          <button
+            type="button"
+            class="rv-helpful-btn th-no-press appearance-none focus:outline-none flex items-center gap-1 text-[11px] leading-[16px] text-[#767676] bg-transparent border-0 p-0 cursor-pointer transition-colors duration-150 hover:text-[#222] [&.voted]:text-[var(--pd-tab-active-color,#cc9900)]"
+            data-review-id="${review.id}"
+            data-vote="not_helpful"
+            title="${t("prodUi.notHelpful")}"
+            aria-label="${t("prodUi.notHelpful")}"
+          >
+            <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24" style="transform: rotate(180deg);">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M14 10h4.764a2 2 0 011.789 2.894l-3.5 7A2 2 0 0115.263 21h-4.017c-.163 0-.326-.02-.485-.06L7 20m7-10V5a2 2 0 00-2-2h-.095c-.5 0-.905.405-.905.905 0 .714-.211 1.412-.608 2.006L7 11v9m7-10h-2M7 20H5a2 2 0 01-2-2v-6a2 2 0 012-2h2.5"/>
+            </svg>
+          </button>
+          ${
+            review.canEdit
+              ? `<button type="button" class="rv-edit-own-btn th-no-press appearance-none focus:outline-none inline-flex items-center gap-1 border-0 bg-transparent p-0 text-[11px] leading-[16px] text-[#767676] cursor-pointer transition-colors hover:text-[#222]" data-review-id="${review.id}" title="${t("product.reviewWrite.editMyReviewHint")}">
+                  <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487a2.032 2.032 0 112.872 2.872L7.5 21.613H4v-3.5L16.862 4.487z"/></svg>
+                  ${t("prodUi.edit")}
+                </button>`
+              : ""
+          }
+          <button type="button" class="rv-report-btn th-no-press appearance-none focus:outline-none inline-flex items-center gap-1 border-0 bg-transparent p-0 text-[11px] leading-[16px] text-[#767676] cursor-pointer transition-colors hover:text-[#222]" data-review-id="${review.id}" title="${t("prodUi.reportAction")}">
+            <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 21v-4m0 0V5a2 2 0 012-2h6.5l1 2H21l-3 6 3 6h-8.5l-1-2H5a2 2 0 00-2 2zm9-13.5V9"/></svg>
+            ${t("prodUi.reportShort")}
+          </button>
+        </div>
       </div>
     </div>
   `;
@@ -358,44 +367,120 @@ export function renderReviewCard(review: ProductReview, showProductThumb = false
 
 /* ── Shared sub-component helpers ─────────────────────── */
 
+// Alibaba referans PDP'den DevTools ile ölçülen chip değerleri (2026-07-29):
+// 14px/32px metin, #222; aktif chip 600 + koyu kalın kenarlık. Kalın kenarlık
+// border-2 yerine inset ring ile — genişlik değişip layout shift yapmasın.
+// Filtre toggle'ları olduğundan global press efekti th-no-press ile kapalı.
+/** Sayfada gösterilen yorum sayısı sınırı — fazlası "Tümünü göster" modalında. */
+export const INLINE_REVIEW_LIMIT = 4;
+
+/** Boş liste durumu — 4 ayrı listede aynı blok kullanılıyor, tek kaynak. */
+export const emptyListHtml = (msg: string): string =>
+  `<div class="py-10 text-center text-[14px] text-[var(--pd-rating-text-color,#6b7280)]">${msg}</div>`;
+
+export const CHIP_CLASS =
+  "th-no-press appearance-none focus:outline-none px-[20px] py-[5px] text-[14px] leading-[32px] font-normal rounded-full border border-[#dddddd] bg-white text-[#222] cursor-pointer transition-colors duration-150 whitespace-nowrap [&.active]:font-semibold [&.active]:border-[#222] [&.active]:shadow-[inset_0_0_0_1px_#222] [&:hover:not(.active)]:border-[#999]";
+
+// Dropdown menü öğesi — referans ölçüler: 14px metin, 12×20 padding, #222.
+export const MENU_ITEM_CLASS =
+  "th-no-press appearance-none focus:outline-none flex items-center w-full text-start gap-[8px] px-[20px] py-[12px] text-[14px] leading-[20px] text-[#222] bg-transparent border-0 cursor-pointer transition-colors duration-100 hover:bg-[#f5f5f5]";
+
+export const MENU_PANEL_CLASS =
+  "hidden absolute top-[calc(100%+8px)] z-10 rounded-lg bg-white py-[8px] shadow-[0_4px_16px_rgba(0,0,0,0.14)]";
+
 function ratingDropdownHtml(idPrefix: string): string {
+  const reviews = getCurrentProduct().reviews;
+  const rows = [5, 4, 3, 2, 1]
+    .map((n) => {
+      const count = reviews.filter((r) => r.rating === n).length;
+      return `
+        <button type="button" class="rv-rating-dropdown-item ${MENU_ITEM_CLASS} [&.active]:font-semibold [&.active_.rv-check]:border-[#222] [&.active_.rv-check]:bg-[#222] [&.active_.rv-check_svg]:opacity-100" data-rv-rating="${n}">
+          <span>${t("product.starLabel", { count: String(n) })}</span>
+          <span class="rv-star-count">(${count})</span>
+          <span class="rv-check ms-auto inline-flex h-[20px] w-[20px] shrink-0 items-center justify-center rounded-[4px] border border-[#c4c4c4] bg-white transition-colors duration-100">
+            <svg class="opacity-0" width="12" height="12" fill="none" stroke="#fff" stroke-width="2.5" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+          </span>
+        </button>`;
+    })
+    .join("");
   return `
-    <div class="rv-rating-dropdown relative inline-block [&.open_.rv-rating-dropdown-panel]:block" id="${idPrefix}-rating-dropdown">
-      <button type="button" class="rv-rating-dropdown-trigger px-3.5 py-1.5 text-[12px] font-medium rounded-full border border-[var(--pd-spec-border,#e5e5e5)] bg-[var(--color-surface,#ffffff)] text-[var(--pd-rating-text-color,#6b7280)] cursor-pointer flex items-center gap-1.5 transition-colors duration-150 whitespace-nowrap hover:border-[var(--color-border-medium,#d1d5db)] [&.active]:border-[var(--pd-tab-active-border,#cc9900)] [&.active]:text-[var(--pd-tab-active-color,#cc9900)] [&.active]:bg-[var(--pd-price-tier-active-bg,#fef9e7)]">
-        ${t("product.ratingLabel")}
-        <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+    <div class="rv-rating-dropdown relative inline-block [&.open_.rv-rating-dropdown-panel]:block [&.open_.rv-rating-chevron]:rotate-180" id="${idPrefix}-rating-dropdown">
+      <button type="button" class="rv-rating-dropdown-trigger ${CHIP_CLASS} inline-flex items-center gap-[6px]">
+        <span class="rv-rating-trigger-label">${t("product.ratingLabel")}</span>
+        <svg class="rv-rating-chevron transition-transform duration-150" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
       </button>
-      <div class="rv-rating-dropdown-panel hidden absolute top-[calc(100%+4px)] start-0 min-w-[180px] bg-[var(--color-surface,#ffffff)] border border-[var(--pd-spec-border,#e5e5e5)] rounded-md shadow-[var(--shadow-dropdown)] z-10 overflow-hidden max-sm:!min-w-[160px]"
-        <button type="button" class="rv-rating-dropdown-item flex items-center gap-2 px-4 py-2 text-[13px] text-[var(--pd-spec-value-color,#111827)] cursor-pointer transition-[background] duration-100 border-none bg-none w-full text-start hover:bg-[var(--pd-spec-header-bg,#f9fafb)] [&.active]:text-[var(--pd-tab-active-color,#cc9900)] [&.active]:font-semibold active" data-rv-rating="all">${t("product.allRatings")}</button>
-        <button type="button" class="rv-rating-dropdown-item flex items-center gap-2 px-4 py-2 text-[13px] text-[var(--pd-spec-value-color,#111827)] cursor-pointer transition-[background] duration-100 border-none bg-none w-full text-start hover:bg-[var(--pd-spec-header-bg,#f9fafb)] [&.active]:text-[var(--pd-tab-active-color,#cc9900)] [&.active]:font-semibold" data-rv-rating="5">${renderStars(5, true)} ${t("product.starLabel", { count: "5" })}</button>
-        <button type="button" class="rv-rating-dropdown-item flex items-center gap-2 px-4 py-2 text-[13px] text-[var(--pd-spec-value-color,#111827)] cursor-pointer transition-[background] duration-100 border-none bg-none w-full text-start hover:bg-[var(--pd-spec-header-bg,#f9fafb)] [&.active]:text-[var(--pd-tab-active-color,#cc9900)] [&.active]:font-semibold" data-rv-rating="4">${renderStars(4, true)} ${t("product.starLabel", { count: "4" })}</button>
-        <button type="button" class="rv-rating-dropdown-item flex items-center gap-2 px-4 py-2 text-[13px] text-[var(--pd-spec-value-color,#111827)] cursor-pointer transition-[background] duration-100 border-none bg-none w-full text-start hover:bg-[var(--pd-spec-header-bg,#f9fafb)] [&.active]:text-[var(--pd-tab-active-color,#cc9900)] [&.active]:font-semibold" data-rv-rating="3">${renderStars(3, true)} ${t("product.starLabel", { count: "3" })}</button>
-        <button type="button" class="rv-rating-dropdown-item flex items-center gap-2 px-4 py-2 text-[13px] text-[var(--pd-spec-value-color,#111827)] cursor-pointer transition-[background] duration-100 border-none bg-none w-full text-start hover:bg-[var(--pd-spec-header-bg,#f9fafb)] [&.active]:text-[var(--pd-tab-active-color,#cc9900)] [&.active]:font-semibold" data-rv-rating="2">${renderStars(2, true)} ${t("product.starLabel", { count: "2" })}</button>
-        <button type="button" class="rv-rating-dropdown-item flex items-center gap-2 px-4 py-2 text-[13px] text-[var(--pd-spec-value-color,#111827)] cursor-pointer transition-[background] duration-100 border-none bg-none w-full text-start hover:bg-[var(--pd-spec-header-bg,#f9fafb)] [&.active]:text-[var(--pd-tab-active-color,#cc9900)] [&.active]:font-semibold" data-rv-rating="1">${renderStars(1, true)} ${t("product.starLabel", { count: "1" })}</button>
+      <div class="rv-rating-dropdown-panel ${MENU_PANEL_CLASS} start-0 min-w-[236px]">
+        ${rows}
       </div>
     </div>`;
 }
 
 function sortDropdownHtml(idPrefix: string): string {
   return `
-    <div class="rv-sort-dropdown relative inline-block ms-auto [&.open_.rv-sort-dropdown-panel]:block max-sm:!ml-0 max-sm:!w-full" id="${idPrefix}-sort-dropdown">
-      <button type="button" class="rv-sort-dropdown-trigger px-3.5 py-1.5 text-[12px] font-medium rounded-full border border-[var(--pd-spec-border,#e5e5e5)] bg-[var(--color-surface,#ffffff)] text-[var(--pd-rating-text-color,#6b7280)] cursor-pointer flex items-center gap-1 transition-colors duration-150 whitespace-nowrap hover:border-[var(--color-border-medium,#d1d5db)] max-sm:!w-full max-sm:!justify-between">
-        ${t("product.sortLabel")}: ${t("product.sortRelevant")}
-        <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+    <div class="rv-sort-dropdown relative inline-block ms-auto [&.open_.rv-sort-dropdown-panel]:block [&.open_.rv-sort-chevron]:rotate-180 max-sm:!ms-0" id="${idPrefix}-sort-dropdown">
+      <button type="button" class="rv-sort-dropdown-trigger th-no-press appearance-none focus:outline-none flex items-center gap-[6px] bg-transparent border-0 p-0 text-[14px] font-semibold text-[#222] cursor-pointer whitespace-nowrap">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="m3 16 4 4 4-4M7 20V4m14 4-4-4-4 4m4-4v16"/></svg>
+        <span class="rv-sort-trigger-label">${t("product.sortLabel")}: ${t("product.sortRelevant")}</span>
+        <svg class="rv-sort-chevron transition-transform duration-150" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
       </button>
-      <div class="rv-sort-dropdown-panel hidden absolute top-[calc(100%+4px)] end-0 min-w-[160px] bg-[var(--color-surface,#ffffff)] border border-[var(--pd-spec-border,#e5e5e5)] rounded-md shadow-[var(--shadow-dropdown)] z-10 overflow-hidden max-sm:!left-0 max-sm:!right-0"
-        <button type="button" class="rv-sort-dropdown-item flex items-center gap-2 px-4 py-2 text-[13px] text-[var(--pd-spec-value-color,#111827)] cursor-pointer transition-[background] duration-100 border-none bg-none w-full text-start hover:bg-[var(--pd-spec-header-bg,#f9fafb)] [&.active]:text-[var(--pd-tab-active-color,#cc9900)] [&.active]:font-semibold active" data-rv-sort="relevant">${t("product.sortRelevant")}</button>
-        <button type="button" class="rv-sort-dropdown-item flex items-center gap-2 px-4 py-2 text-[13px] text-[var(--pd-spec-value-color,#111827)] cursor-pointer transition-[background] duration-100 border-none bg-none w-full text-start hover:bg-[var(--pd-spec-header-bg,#f9fafb)] [&.active]:text-[var(--pd-tab-active-color,#cc9900)] [&.active]:font-semibold" data-rv-sort="newest">${t("product.sortNewest")}</button>
+      <div class="rv-sort-dropdown-panel ${MENU_PANEL_CLASS} end-0 min-w-[158px] max-sm:!left-0 max-sm:!right-auto">
+        <button type="button" class="rv-sort-dropdown-item ${MENU_ITEM_CLASS} [&.active]:font-bold active" data-rv-sort="relevant">${t("product.sortRelevant")}</button>
+        <button type="button" class="rv-sort-dropdown-item ${MENU_ITEM_CLASS} [&.active]:font-bold" data-rv-sort="newest">${t("product.sortNewest")}</button>
       </div>
     </div>`;
+}
+
+function categoryRowHtml(cats: Array<{ label: string; score: string | number }>): string {
+  return cats
+    .map(
+      (cat, i) => `
+      ${i > 0 ? '<span class="mx-3 h-[14px] w-px bg-[#e5e5e5]" aria-hidden="true"></span>' : ""}
+      <span class="rv-category-label text-[14px] text-[#222]">${cat.label}</span>
+      <span class="rv-category-score ms-1.5 text-[16px] font-bold text-[#222]">${cat.score}</span>`
+    )
+    .join("");
+}
+
+/**
+ * Puan özeti — referans düzende hem Ürün hem Mağaza sekmesinin başında aynı
+ * blok durur; yalnız Mağaza'da altına kategori skorları satırı eklenir.
+ * Ölçüler: sarmalayıcı pt-24/mb-12 · puan 48px/700/#222 (sağdan 12px) ·
+ * yıldız 26px · "Doğrulanmış Siparişler" #22891F, 1.5px alt çizgi.
+ */
+function ratingSummaryHtml(rating: number, countText: string, categoriesHtml = ""): string {
+  return `
+    <div class="rv-rating-summary pt-[24px] mb-[12px]">
+      <div class="mb-[4px] flex items-center flex-wrap gap-y-1">
+        <span class="rv-rating-number me-[12px] text-[48px] font-bold leading-[30px] text-[#222]">${formatRating(rating)}</span>
+        <span class="rv-rating-stars flex items-center [&_svg]:h-[26px] [&_svg]:w-[26px]">${renderStars(rating)}</span>
+        <span class="rv-rating-label ps-[4px] text-[14px] leading-[18px] font-semibold text-[#222]">${satisfactionLabel(rating)}</span>
+        <span class="rv-rating-subtitle ms-3 text-[14px] text-[#666]">${countText}</span>
+        <span class="rv-verified-orders group relative ms-[4px] inline-flex items-center">
+          <span class="border-b-[1.5px] border-[#22891F] pb-[1px] text-[14px] text-[#22891F] cursor-default">${t("product.verifiedOrders")}</span>
+          <img src="/images/dogrulanmis-siparis.png" alt="" width="18" height="18" class="ms-1 h-[18px] w-[18px] shrink-0" aria-hidden="true" />
+          <!-- Referans davranış: etikete hover'da siyah açıklama balonu. -->
+          <span class="rv-verified-tooltip invisible opacity-0 group-hover:visible group-hover:opacity-100 transition-opacity duration-150 absolute top-[calc(100%+12px)] start-[-40px] z-30 w-[min(620px,88vw)] rounded-[10px] bg-black p-[20px] text-[15px] leading-[1.6] font-normal text-white before:content-[''] before:absolute before:-top-[6px] before:start-[60px] before:size-[12px] before:rotate-45 before:bg-black">${t("product.verifiedOrdersTooltip")}</span>
+        </span>
+      </div>
+      <div class="rv-category-row flex items-center flex-wrap gap-x-1 gap-y-1 empty:hidden">${categoriesHtml}</div>
+    </div>`;
+}
+
+/**
+ * "Tümünü göster" — referans ölçüler: 364×48 pill, 16px #09090B, mt 8.
+ * Sınırdan az yorum varsa gizli; sayıya göre applyReviewsToPanels de toggle eder.
+ * data-rv-modal-mode modal başlığını/kart tipini belirler (ürün | mağaza).
+ */
+function showAllButtonHtml(mode: "product" | "store", total: number): string {
+  return `<button type="button" data-rv-modal-mode="${mode}" class="rv-show-all-btn ${total > INLINE_REVIEW_LIMIT ? "" : "hidden "}mt-[8px] inline-flex h-[48px] w-[364px] max-w-full items-center justify-center whitespace-nowrap rounded-full border border-[#09090B] bg-white text-[16px] text-[#09090B] cursor-pointer transition-colors duration-150 hover:bg-[#f5f5f5]">${t("product.showAll")}</button>`;
 }
 
 function langToggleHtml(): string {
   return `
     <div class="rv-lang-row flex items-center gap-2 mt-2 mb-3">
-      <svg class="w-3.5 h-3.5 shrink-0 text-[var(--pd-rating-text-color,#6b7280)]" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM4.332 8.027a6.012 6.012 0 011.912-2.706C6.512 5.73 6.974 6 7.5 6A1.5 1.5 0 019 7.5V8a2 2 0 004 0 2 2 0 011.523-1.943A5.977 5.977 0 0116 10c0 .34-.028.675-.083 1H15a2 2 0 00-2 2v2.197A5.973 5.973 0 0110 16v-2a2 2 0 00-2-2 2 2 0 01-2-2 2 2 0 00-1.668-1.973z" clip-rule="evenodd"/></svg>
-      <span class="text-[13px] text-[var(--pd-rating-text-color,#6b7280)]">${t("product.langNote")}</span>
-      <a class="rv-lang-toggle-link text-[13px] font-medium text-[var(--pd-rating-text-color,#6b7280)] underline cursor-pointer hover:text-[var(--pd-title-color,#111827)]" href="javascript:void(0)">${t("product.showOriginal")}</a>
+      <svg class="w-[18px] h-[18px] shrink-0 text-[#222]" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM4.332 8.027a6.012 6.012 0 011.912-2.706C6.512 5.73 6.974 6 7.5 6A1.5 1.5 0 019 7.5V8a2 2 0 004 0 2 2 0 011.523-1.943A5.977 5.977 0 0116 10c0 .34-.028.675-.083 1H15a2 2 0 00-2 2v2.197A5.973 5.973 0 0110 16v-2a2 2 0 00-2-2 2 2 0 01-2-2 2 2 0 00-1.668-1.973z" clip-rule="evenodd"/></svg>
+      <span class="text-[14px] leading-[1.5] text-[#222]">${t("product.langNote")}</span>
+      <a class="rv-lang-toggle-link text-[14px] leading-[1.5] text-[#222] underline cursor-pointer hover:text-black" href="javascript:void(0)">${t("product.showOriginal")}</a>
     </div>`;
 }
 
@@ -407,9 +492,9 @@ export function ProductReviews(): string {
   const photoReviewCount = p.reviews.filter((r) => r.images && r.images.length > 0).length;
 
   return `
-    <!-- Referans düzen: sarmalayıcı üstten 32px margin + 32px padding,
-         başlık 20px/26px/700/#222 ve altında 20px boşluk. -->
-    <div id="review-layout" class="mt-8 pt-8 max-[374px]:mt-4 max-[374px]:pt-4">
+    <!-- Üst boşluk ProductTabs panelinden gelir (pt-6 + border-t); panel h2'si
+         reviews için basılmaz — başlık buradaki reviewsSectionTitle'dır. -->
+    <div id="review-layout">
       <h2 class="m-0 mb-[20px] text-[20px] leading-[26px] font-bold text-[#222]">${t("product.reviewsSectionTitle")}</h2>
       <!-- Sub-tabs + Yorum Yaz CTA -->
       <div class="flex items-center justify-between gap-3 border-b-2 border-border-default mb-6 max-[374px]:mb-4 flex-wrap">
@@ -432,14 +517,12 @@ export function ProductReviews(): string {
 
       <!-- Product Reviews Panel -->
       <div id="rv-product-panel">
-        <!-- Info text -->
-        <p style="font-size: 13px; color: var(--pd-rating-text-color, #6b7280); padding: 16px 0 12px; border-bottom: 1px solid var(--pd-spec-border, #e5e5e5); margin-bottom: 16px;">
-          ${t("product.noRatingNote")}
-        </p>
+        ${ratingSummaryHtml(p.rating, t("product.basedOnReviews", { count: String(p.reviewCount) }))}
 
         <!-- Filter Row -->
         <div class="rv-filter-row flex items-center gap-2 flex-wrap mb-4">
-          <button type="button" class="rv-filter-pill px-3.5 py-1.5 text-[12px] font-medium rounded-full border border-[var(--pd-spec-border,#e5e5e5)] bg-[var(--color-surface,#ffffff)] text-[var(--pd-rating-text-color,#6b7280)] cursor-pointer transition-colors duration-150 whitespace-nowrap [&.active]:border-[var(--pd-tab-active-border,#cc9900)] [&.active]:text-[var(--pd-tab-active-color,#cc9900)] [&.active]:bg-[var(--pd-price-tier-active-bg,#fef9e7)] [&:hover:not(.active)]:border-[var(--color-border-medium,#d1d5db)] active" data-rv-filter="all">${t("product.allFilter")}</button>
+          <button type="button" class="rv-filter-pill ${CHIP_CLASS} active" data-rv-filter="all">${t("product.allFilter")}</button>
+          <button type="button" class="rv-filter-pill ${CHIP_CLASS}" data-rv-filter="photo">${t("product.withPhotos", { count: String(photoReviewCount) })}</button>
           ${ratingDropdownHtml("rv-product")}
           ${sortDropdownHtml("rv-product")}
         </div>
@@ -447,44 +530,27 @@ export function ProductReviews(): string {
         <!-- Language Toggle -->
         ${langToggleHtml()}
 
-        <!-- Review Cards -->
-        ${p.reviews.map((r) => renderReviewCard(r, false)).join("")}
+        <!-- Review Cards (sayfada ilk ${INLINE_REVIEW_LIMIT}; tamamı modalda) -->
+        ${p.reviews.slice(0, INLINE_REVIEW_LIMIT).map((r) => renderReviewCard(r, false)).join("")}
+
+        ${showAllButtonHtml("product", p.reviews.length)}
       </div>
 
       <!-- Store Reviews Panel (hidden) -->
       <div id="rv-store-panel" class="hidden">
-        <!-- Puan özeti — referans düzenden ölçülen değerler:
-             sarmalayıcı pt-24px/mb-12px · üst satır mb-4px · puan 48px/700/#222
-             (sağdan 12px) · yıldız 26px · "Doğrulanmış Siparişler" #22891F,
-             1.5px alt çizgi · kategori etiketi 14px, skoru 16px/700. -->
-        <div class="rv-rating-summary pt-[24px] mb-[12px]">
-          <div class="mb-[4px] flex items-center flex-wrap gap-y-1">
-            <span class="rv-rating-number me-[12px] text-[48px] font-bold leading-[30px] text-[#222]">${formatRating(p.rating)}</span>
-            <span class="flex items-center [&_svg]:h-[26px] [&_svg]:w-[26px]">${renderStars(p.rating)}</span>
-            <span class="rv-rating-label ps-[4px] text-[14px] leading-[18px] font-semibold text-[#222]">${satisfactionLabel(p.rating)}</span>
-            <span class="rv-rating-subtitle ms-3 text-[14px] text-[#666]">${t("product.basedOnReviews", { count: String(p.storeReviewCount) })}</span>
-            <span class="ms-[4px] border-b-[1.5px] border-[#22891F] pb-[1px] text-[14px] text-[#22891F]">${t("product.verifiedOrders")}</span>
-            <img src="/images/dogrulanmis-siparis.png" alt="" width="18" height="18" class="ms-1 h-[18px] w-[18px] shrink-0" aria-hidden="true" />
-          </div>
-          <div class="flex items-center flex-wrap gap-x-1 gap-y-1">
-            ${p.reviewCategoryRatings
-              .map(
-                (cat, i) => `
-              ${i > 0 ? '<span class="mx-3 h-[14px] w-px bg-[#e5e5e5]" aria-hidden="true"></span>' : ""}
-              <span class="rv-category-label text-[14px] text-[#222]">${cat.label}</span>
-              <span class="rv-category-score ms-1.5 text-[16px] font-bold text-[#222]">${cat.score}</span>`
-              )
-              .join("")}
-          </div>
-        </div>
+        ${ratingSummaryHtml(
+          p.rating,
+          t("product.basedOnReviews", { count: String(p.storeReviewCount) }),
+          categoryRowHtml(p.reviewCategoryRatings)
+        )}
 
         <!-- Buyer Photos Strip -->
         <div id="rv-store-photos">${photoStripSection(p.reviews)}</div>
 
         <!-- Filter Row -->
         <div class="rv-filter-row flex items-center gap-2 flex-wrap mb-4">
-          <button type="button" class="rv-filter-pill px-3.5 py-1.5 text-[12px] font-medium rounded-full border border-[var(--pd-spec-border,#e5e5e5)] bg-[var(--color-surface,#ffffff)] text-[var(--pd-rating-text-color,#6b7280)] cursor-pointer transition-colors duration-150 whitespace-nowrap [&.active]:border-[var(--pd-tab-active-border,#cc9900)] [&.active]:text-[var(--pd-tab-active-color,#cc9900)] [&.active]:bg-[var(--pd-price-tier-active-bg,#fef9e7)] [&:hover:not(.active)]:border-[var(--color-border-medium,#d1d5db)] active" data-rv-filter="all">${t("product.allFilter")}</button>
-          <button type="button" class="rv-filter-pill px-3.5 py-1.5 text-[12px] font-medium rounded-full border border-[var(--pd-spec-border,#e5e5e5)] bg-[var(--color-surface,#ffffff)] text-[var(--pd-rating-text-color,#6b7280)] cursor-pointer transition-colors duration-150 whitespace-nowrap [&.active]:border-[var(--pd-tab-active-border,#cc9900)] [&.active]:text-[var(--pd-tab-active-color,#cc9900)] [&.active]:bg-[var(--pd-price-tier-active-bg,#fef9e7)] [&:hover:not(.active)]:border-[var(--color-border-medium,#d1d5db)]" data-rv-filter="photo">${t("product.withPhotos", { count: String(photoReviewCount) })}</button>
+          <button type="button" class="rv-filter-pill ${CHIP_CLASS} active" data-rv-filter="all">${t("product.allFilter")}</button>
+          <button type="button" class="rv-filter-pill ${CHIP_CLASS}" data-rv-filter="photo">${t("product.withPhotos", { count: String(photoReviewCount) })}</button>
           ${ratingDropdownHtml("rv-store")}
           ${sortDropdownHtml("rv-store")}
         </div>
@@ -504,11 +570,10 @@ export function ProductReviews(): string {
         <!-- Language Toggle -->
         ${langToggleHtml()}
 
-        <!-- Review Cards (with product thumbnails) -->
-        ${p.reviews.map((r) => renderReviewCard(r, true)).join("")}
+        <!-- Review Cards (with product thumbnails; sayfada ilk ${INLINE_REVIEW_LIMIT}) -->
+        ${p.reviews.slice(0, INLINE_REVIEW_LIMIT).map((r) => renderReviewCard(r, true)).join("")}
 
-        <!-- Show All Button -->
-        <button type="button" class="rv-show-all-btn block w-full p-3 mt-5 text-[14px] font-semibold text-center border border-[var(--pd-spec-border,#e5e5e5)] rounded-lg bg-[var(--color-surface,#ffffff)] text-[var(--pd-title-color,#111827)] cursor-pointer transition-colors duration-150 hover:border-[var(--color-border-medium,#d1d5db)] hover:bg-[var(--pd-spec-header-bg,#f9fafb)]">${t("product.showAll")}</button>
+        ${showAllButtonHtml("store", p.reviews.length)}
       </div>
 
       <!-- Q&A Panel (hidden by default) -->
@@ -688,13 +753,11 @@ export function bindHelpfulButtons(container: HTMLElement): void {
         // Sadece bu butona "voted" stili ver, diğeri locked-out kalır.
         btn.classList.add("voted");
         if (voteType === "helpful") {
-          const count = res.helpful_count ?? 0;
-          btn.innerHTML = `
-            <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M14 10h4.764a2 2 0 011.789 2.894l-3.5 7A2 2 0 0115.263 21h-4.017c-.163 0-.326-.02-.485-.06L7 20m7-10V5a2 2 0 00-2-2h-.095c-.5 0-.905.405-.905.905 0 .714-.211 1.412-.608 2.006L7 11v9m7-10h-2M7 20H5a2 2 0 01-2-2v-6a2 2 0 012-2h2.5"/>
-            </svg>
-            ${t("product.helpful", { count: String(count) })}
-          `;
+          // Sadece sayı değişiyor — SVG'yi yeniden basmak yerine label güncellenir.
+          const labelEl = btn.querySelector<HTMLElement>(".rv-helpful-label");
+          if (labelEl) {
+            labelEl.textContent = t("product.helpful", { count: String(res.helpful_count ?? 0) });
+          }
         } else {
           showToast({ message: t("prodUi.feedbackReceived"), type: "success" });
         }
@@ -826,13 +889,10 @@ function initScopedReviewPanel(
     const filtered = filterAndSortReviews(state);
 
     if (filtered.length === 0) {
-      cardsContainer.innerHTML = `
-        <div style="text-align: center; padding: 40px 0; color: var(--pd-rating-text-color, #6b7280); font-size: 14px;">
-          ${t("product.noReviewsForFilter")}
-        </div>
-      `;
+      cardsContainer.innerHTML = emptyListHtml(t("product.noReviewsForFilter"));
     } else {
       cardsContainer.innerHTML = filtered
+        .slice(0, INLINE_REVIEW_LIMIT)
         .map((r) => renderReviewCard(r, showProductThumb))
         .join("");
     }
@@ -869,19 +929,23 @@ function initScopedReviewPanel(
 
     items.forEach((item) => {
       item.addEventListener("click", () => {
+        // Referans davranış: seçili satıra tekrar tıklamak filtreyi kaldırır
+        // (panelde ayrıca "tümü" satırı yok).
+        const wasActive = item.classList.contains("active");
         items.forEach((i) => i.classList.remove("active"));
-        item.classList.add("active");
+        if (!wasActive) item.classList.add("active");
         ratingDropdown.classList.remove("open");
 
-        const rating = item.getAttribute(ratingAttr);
-        state.ratingFilter = rating === "all" ? "all" : parseInt(rating || "0", 10);
+        const rating = wasActive ? null : item.getAttribute(ratingAttr);
+        state.ratingFilter = rating ? parseInt(rating, 10) : "all";
 
-        if (trigger) {
-          const label =
-            rating === "all" ? t("product.ratingLabel") : `${rating} ${t("product.starSuffix")}`;
-          trigger.innerHTML = `${label} <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>`;
-          trigger.classList.toggle("active", rating !== "all");
+        const labelEl = trigger?.querySelector<HTMLElement>(".rv-rating-trigger-label");
+        if (labelEl) {
+          labelEl.textContent = rating
+            ? `${rating} ${t("product.starSuffix")}`
+            : t("product.ratingLabel");
         }
+        trigger?.classList.toggle("active", !!rating);
         renderFilteredReviews();
       });
     });
@@ -911,8 +975,9 @@ function initScopedReviewPanel(
           state.sortBy = sortVal;
         }
 
-        if (trigger) {
-          trigger.innerHTML = `${t("product.sortLabel")}: ${SORT_LABELS[state.sortBy]} <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>`;
+        const labelEl = trigger?.querySelector<HTMLElement>(".rv-sort-trigger-label");
+        if (labelEl) {
+          labelEl.textContent = `${t("product.sortLabel")}: ${SORT_LABELS[state.sortBy]}`;
         }
         renderFilteredReviews();
       });
@@ -971,6 +1036,19 @@ export function initReviews(options: { signal?: AbortSignal } = {}): void {
       }
     });
   });
+
+  // ── "Tümünü göster" → modal köprüsü ────────────────
+  // Delegasyon: listeler canlı veriyle yeniden kurulsa da dinleyici kalır.
+  // mode, modal başlığını ve kart tipini belirler (ürün | mağaza).
+  document.addEventListener("click", (e) => {
+    const btn = (e.target as HTMLElement).closest<HTMLElement>(".rv-show-all-btn");
+    if (!btn) return;
+    window.dispatchEvent(
+      new CustomEvent("reviews-modal-show", {
+        detail: { mode: btn.dataset.rvModalMode === "product" ? "product" : "store" },
+      })
+    );
+  }, options);
 
   // ── Init scoped panels ─────────────────────────────
   initScopedReviewPanel(productPanel, "rv-product", "rv", false);
@@ -1091,12 +1169,50 @@ function applyReviewsToPanels(payload: {
   const storePanel = document.getElementById("rv-store-panel");
   const photoCount = payload.reviews.filter((r) => r.images && r.images.length > 0).length;
 
+  // Filtre chip'i, yıldız-dropdown sayaçları ve puan özeti — iki panelde de
+  // canlı veriyle güncelle (ilk render'da reviews boş dizi olduğundan
+  // sayaçlar (0) basılmıştı). Özet sayısı panele göre değişir: ürün sekmesi
+  // reviewCount, mağaza sekmesi storeReviewCount gösterir.
+  const starCounts: Record<number, number> = {};
+  payload.reviews.forEach((r) => (starCounts[r.rating] = (starCounts[r.rating] ?? 0) + 1));
+  (
+    [
+      { pnl: productPanel, count: payload.reviewCount },
+      { pnl: storePanel, count: payload.storeReviewCount },
+      // Modal da aynı sayaçları taşır (fotoğraf chip'i + yıldız satırları).
+      { pnl: document.getElementById("rv-reviews-modal"), count: payload.storeReviewCount },
+    ] as const
+  ).forEach(({ pnl, count }) => {
+    if (!pnl) return;
+    const pill = pnl.querySelector<HTMLButtonElement>('[data-rv-filter="photo"]');
+    if (pill) pill.textContent = t("product.withPhotos", { count: String(photoCount) });
+    // Sorgu panel-scoped kalmalı — ReviewsModal'ın Alpine dropdown'ı etkilenmesin.
+    pnl.querySelectorAll<HTMLElement>("[data-rv-rating] .rv-star-count").forEach((el) => {
+      const n = Number(el.closest<HTMLElement>("[data-rv-rating]")?.dataset.rvRating);
+      el.textContent = `(${starCounts[n] ?? 0})`;
+    });
+
+    const showAll = pnl.querySelector<HTMLElement>(".rv-show-all-btn");
+    if (showAll) showAll.classList.toggle("hidden", payload.reviews.length <= INLINE_REVIEW_LIMIT);
+
+    const subtitle = pnl.querySelector<HTMLElement>(".rv-rating-subtitle");
+    if (subtitle) subtitle.textContent = t("product.basedOnReviews", { count: String(count) });
+    if (payload.rating != null) {
+      const num = pnl.querySelector<HTMLElement>(".rv-rating-number");
+      if (num) num.textContent = formatRating(payload.rating);
+      const label = pnl.querySelector<HTMLElement>(".rv-rating-label");
+      if (label) label.textContent = satisfactionLabel(payload.rating);
+      const stars = pnl.querySelector<HTMLElement>(".rv-rating-stars");
+      if (stars) stars.innerHTML = renderStars(payload.rating);
+    }
+  });
+
   if (productPanel) {
     const list = productPanel.querySelector<HTMLElement>("#rv-product-reviews-list");
     if (list) {
       list.innerHTML = payload.reviews.length
-        ? payload.reviews.map((r) => renderReviewCard(r, false)).join("")
-        : `<div style="text-align: center; padding: 40px 0; color: var(--pd-rating-text-color, #6b7280); font-size: 14px;">${t("product.noReviewsForFilter")}</div>`;
+        ? payload.reviews.slice(0, INLINE_REVIEW_LIMIT).map((r) => renderReviewCard(r, false)).join("")
+        : emptyListHtml(t("product.noReviewsForFilter"));
       bindHelpfulButtons(list);
     }
   }
@@ -1104,38 +1220,31 @@ function applyReviewsToPanels(payload: {
     const list = storePanel.querySelector<HTMLElement>("#rv-store-reviews-list");
     if (list) {
       list.innerHTML = payload.reviews.length
-        ? payload.reviews.map((r) => renderReviewCard(r, true)).join("")
-        : `<div style="text-align: center; padding: 40px 0; color: var(--pd-rating-text-color, #6b7280); font-size: 14px;">${t("product.noReviewsForFilter")}</div>`;
+        ? payload.reviews.slice(0, INLINE_REVIEW_LIMIT).map((r) => renderReviewCard(r, true)).join("")
+        : emptyListHtml(t("product.noReviewsForFilter"));
       bindHelpfulButtons(list);
     }
 
-    // Rating özet bloğu
-    const ratingNum = storePanel.querySelector<HTMLElement>(".rv-rating-number");
-    const ratingLabel = storePanel.querySelector<HTMLElement>(".rv-rating-label");
-    const ratingSubtitle = storePanel.querySelector<HTMLElement>(".rv-rating-subtitle");
-    const ratingStars = storePanel.querySelector<HTMLElement>(
-      ".rv-rating-summary .flex.items-center.gap-0\\.5"
-    );
-    if (payload.rating != null && ratingNum) {
-      ratingNum.textContent = formatRating(payload.rating);
-    }
-    if (payload.rating != null && ratingLabel) {
-      ratingLabel.textContent = satisfactionLabel(payload.rating);
-    }
-    if (ratingSubtitle) {
-      ratingSubtitle.textContent = t("product.basedOnReviews", {
-        count: String(payload.storeReviewCount),
-      });
-    }
-    if (payload.rating != null && ratingStars) {
-      ratingStars.innerHTML = renderStars(payload.rating);
-    }
-
-    // Fotoğraflı filter pill — "Fotoğraflı (N)"
-    const photoPill = storePanel.querySelector<HTMLButtonElement>('[data-rv-filter="photo"]');
-    if (photoPill) {
-      photoPill.textContent = t("product.withPhotos", { count: String(photoCount) });
-    }
+    // Kategori skorları (Hizmet/Teslimat/Kalite) — yorumların aspect
+    // ortalamalarından hesaplanır; hiç aspect verisi yoksa satır gizli kalır.
+    const catDefs: Array<{
+      label: string;
+      pick: (a: NonNullable<ProductReview["aspects"]>) => number | null | undefined;
+    }> = [
+      { label: t("product.catService"), pick: (a) => a.service },
+      { label: t("product.catShipping"), pick: (a) => a.shipping },
+      { label: t("product.catQuality"), pick: (a) => a.product_quality },
+    ];
+    const cats = catDefs.flatMap((d) => {
+      const vals = payload.reviews
+        .map((r) => (r.aspects ? d.pick(r.aspects) : null))
+        .filter((v): v is number => typeof v === "number" && v > 0);
+      return vals.length
+        ? [{ label: d.label, score: (vals.reduce((s, v) => s + v, 0) / vals.length).toFixed(1) }]
+        : [];
+    });
+    const catRow = storePanel.querySelector<HTMLElement>(".rv-category-row");
+    if (catRow) catRow.innerHTML = categoryRowHtml(cats);
 
     // Alıcı fotoğrafları vitrini — canlı görsellerle yeniden kur
     const photoStrip = storePanel.querySelector<HTMLElement>("#rv-store-photos");
@@ -1154,29 +1263,11 @@ function applyReviewsToPanels(payload: {
       count: String(payload.storeReviewCount),
     });
 
-  // "Tümünü Göster" modal'ı (ReviewsModal) — başlık, foto filter ve liste
-  const modal = document.getElementById("rv-reviews-modal");
-  if (modal) {
-    const modalTitle = modal.querySelector<HTMLElement>("#rv-modal-title");
-    if (modalTitle) {
-      modalTitle.textContent = t("product.storeReviewsTitle", {
-        count: String(payload.storeReviewCount),
-      });
-    }
-    const modalPhotoPill = modal.querySelector<HTMLButtonElement>("#rv-modal-photo-filter");
-    if (modalPhotoPill) {
-      modalPhotoPill.textContent = t("product.withPhotos", {
-        count: String(photoCount),
-      });
-    }
-    const modalList = modal.querySelector<HTMLElement>("#rv-modal-reviews-list");
-    if (modalList) {
-      modalList.innerHTML = payload.reviews.length
-        ? payload.reviews.map((r) => renderReviewCard(r, true)).join("")
-        : `<div style="text-align: center; padding: 40px 0; color: var(--pd-rating-text-color, #6b7280); font-size: 14px;">${t("product.noReviewsForFilter")}</div>`;
-      bindHelpfulButtons(modalList);
-    }
-  }
+  // NOT: Modal listesi/başlığı burada GÜNCELLENMEZ — foto chip'i ve yıldız
+  // sayaçlarını yukarıdaki panel dizisi (modal dahil) günceller; listeyi
+  // reviewsModal.show() açılışta canlı veriyle kurar. Buradan da yazmak
+  // gizli modala her yüklemede boşa render + açık modalda sayfalama/filtre
+  // durumunu ezme demekti.
 }
 
 async function reloadReviewsAndRerender(listingId: string): Promise<void> {

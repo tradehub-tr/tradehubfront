@@ -148,6 +148,8 @@ export interface SupplierInfo {
   kybVerified?: boolean;
   /** Backend'den gelen ülke ismi ("Turkey", "China", vs.) — flag/kod hesabında kullanılır. */
   country?: string;
+  /** Mağaza logosu (Admin Seller Profile.logo). */
+  logo?: string;
   yearsInBusiness: number;
   responseTime: string;
   responseRate: string;
@@ -247,6 +249,11 @@ export interface ProductDetail {
   specs: ProductSpec[];
   specGroups?: ProductSpecGroup[];
   packagingSpecs: ProductSpec[];
+  /**
+   * Ürün-seviyesi sertifikalar (Listing Certification). Satıcı-seviyesi
+   * supplier.certifications'tan AYRI kavramdır — ikisini birleştirme.
+   */
+  productCertifications?: Array<{ name: string; description: string }>;
   brandInfo?: BrandInfo | null;
   productTypeName?: string;
   productFamilyName?: string;
@@ -254,7 +261,6 @@ export interface ProductDetail {
   /** Optional listing-level promo video URL (YouTube/Vimeo/MP4). */
   videoUrl?: string;
   description: string;
-  packaging: string;
   rating: number;
   reviewCount: number;
   orderCount: string;

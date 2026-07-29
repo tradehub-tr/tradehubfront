@@ -5,6 +5,7 @@ import {
   renderReviewCard,
   bindHelpfulButtons,
   displayRating,
+  emptyListHtml,
   SORT_LABELS,
 } from "../components/product/ProductReviews";
 import type { ReviewFilterState, SortMode } from "../components/product/ProductReviews";
@@ -38,7 +39,7 @@ function renderInlineVideo(url: string): string {
   `;
 }
 import { getListingDetail, getProductReviews } from "../services/listingService";
-import type { ProductDetail, ProductImage } from "../types/product";
+import type { ProductDetail, ProductImage, ProductReview } from "../types/product";
 
 // Empty default product — no mock data
 const emptyProduct: ProductDetail = {
@@ -55,7 +56,6 @@ const emptyProduct: ProductDetail = {
   specs: [],
   packagingSpecs: [],
   description: "",
-  packaging: "",
   rating: 0,
   reviewCount: 0,
   orderCount: "0",
@@ -154,18 +154,40 @@ registerProductQA();
 // loginModal → src/alpine/loginModal.ts'e taşındı (B-2: çapraz + self-contained).
 // orderProtectionModal → src/alpine/orderProtectionModal.ts'e taşındı (yalnız checkout).
 
+// Modalda kaydırdıkça yüklenen sayfa boyu — referans davranış: liste tek
+// seferde değil, scroll dibe yaklaştıkça parça parça basılır (DOM sınırı).
+const MODAL_PAGE_SIZE = 10;
+
 Alpine.data("reviewsModal", () => ({
   open: false,
+  /** Hangi sekmeden açıldı — başlığı ve kartlardaki ürün barını belirler. */
+  mode: "store" as "product" | "store",
   filterType: "all" as "all" | "photo",
   ratingFilter: "all" as "all" | number,
   mentionFilter: null as string | null,
   sortBy: "relevant" as SortMode,
   ratingOpen: false,
   sortOpen: false,
+  visibleCount: MODAL_PAGE_SIZE,
+  titleText: "",
+  /** refilter() ile tazelenen filtrelenmiş liste — scroll handler hesap yapmaz. */
+  filtered: [] as ProductReview[],
 
-  show() {
+  show(mode?: string) {
+    this.mode = mode === "product" ? "product" : "store";
+    // Başlık her açılışta güncel sayıyla kurulur. getCurrentProduct() Alpine
+    // reaktifi DEĞİL — x-text'i method'a bağlamak, mode değişmeden yeniden
+    // açılışta bayat sayı gösteriyordu; reaktif state'e yazmak bunu çözer.
+    const p = getCurrentProduct();
+    this.titleText =
+      this.mode === "product"
+        ? t("product.productReviewsTab", { count: String(p.reviewCount) })
+        : t("product.storeReviewsTab", { count: String(p.storeReviewCount) });
     this.open = true;
     document.body.style.overflow = "hidden";
+    // Sayfa ilk render'ında liste boş datayla basılmıştı — açılışta canlı
+    // veriyle (ve mode'a uygun kartla) yeniden kur.
+    this.refilter();
   },
 
   close() {
@@ -175,8 +197,8 @@ Alpine.data("reviewsModal", () => ({
 
   ratingLabel(): string {
     return this.ratingFilter === "all"
-      ? t("reviews.rating")
-      : t("reviews.stars", { count: this.ratingFilter });
+      ? t("product.ratingLabel")
+      : `${this.ratingFilter} ${t("product.starSuffix")}`;
   },
 
   sortLabel(): string {
@@ -185,13 +207,15 @@ Alpine.data("reviewsModal", () => ({
 
   setFilter(type: "all" | "photo") {
     this.filterType = type;
-    this.renderReviews();
+    this.refilter();
   },
 
   setRating(rating: string) {
-    this.ratingFilter = rating === "all" ? "all" : parseInt(rating, 10);
+    // Referans davranış: seçili yıldıza tekrar tıklamak filtreyi kaldırır.
+    const next = rating === "all" ? "all" : parseInt(rating, 10);
+    this.ratingFilter = this.ratingFilter === next ? "all" : next;
     this.ratingOpen = false;
-    this.renderReviews();
+    this.refilter();
   },
 
   setSort(sort: string) {
@@ -199,7 +223,7 @@ Alpine.data("reviewsModal", () => ({
       this.sortBy = sort as SortMode;
     }
     this.sortOpen = false;
-    this.renderReviews();
+    this.refilter();
   },
 
   toggleMention(label: string) {
@@ -208,6 +232,28 @@ Alpine.data("reviewsModal", () => ({
     } else {
       this.mentionFilter = label;
     }
+    this.refilter();
+  },
+
+  /** Filtre girdileri değişince listeyi bir kez hesapla, sayfalamayı sıfırla. */
+  refilter() {
+    const state: ReviewFilterState = {
+      filterType: this.filterType as "all" | "photo",
+      ratingFilter: this.ratingFilter as "all" | number,
+      mentionFilter: this.mentionFilter as string | null,
+      sortBy: this.sortBy as SortMode,
+    };
+    this.filtered = filterAndSortReviews(state);
+    this.visibleCount = MODAL_PAGE_SIZE;
+    this.renderReviews();
+  },
+
+  /** Modal gövdesi dibe yaklaşınca bir sayfa daha bas (kaydırdıkça yükleme). */
+  onBodyScroll(event: Event) {
+    const el = event.target as HTMLElement;
+    if (el.scrollTop + el.clientHeight < el.scrollHeight - 300) return;
+    if (this.visibleCount >= this.filtered.length) return;
+    this.visibleCount += MODAL_PAGE_SIZE;
     this.renderReviews();
   },
 
@@ -215,24 +261,16 @@ Alpine.data("reviewsModal", () => ({
     const container = (this.$refs as Record<string, HTMLElement>).reviewsList;
     if (!container) return;
 
-    const state: ReviewFilterState = {
-      filterType: this.filterType as "all" | "photo",
-      ratingFilter: this.ratingFilter as "all" | number,
-      mentionFilter: this.mentionFilter as string | null,
-      sortBy: this.sortBy as SortMode,
-    };
-
-    const filtered = filterAndSortReviews(state);
+    const filtered = this.filtered;
 
     if (filtered.length === 0) {
-      container.innerHTML = `
-        <div style="text-align: center; padding: 40px 0; color: var(--pd-rating-text-color, #6b7280); font-size: 14px;">
-          ${t("reviews.noReviews")}
-        </div>
-      `;
+      container.innerHTML = emptyListHtml(t("reviews.noReviews"));
     } else {
       container.innerHTML = filtered
-        .map((r: Parameters<typeof renderReviewCard>[0]) => renderReviewCard(r, true))
+        .slice(0, this.visibleCount)
+        .map((r: Parameters<typeof renderReviewCard>[0]) =>
+          renderReviewCard(r, this.mode === "store")
+        )
         .join("");
     }
     bindHelpfulButtons(container);

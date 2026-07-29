@@ -144,32 +144,6 @@ export function getMockProduct(): ProductDetail {
       <p class="text-sm" style="color: var(--color-text-secondary);">${t("mockProduct.descQc")}</p>
     </div>
   `,
-    packaging: `
-    <table class="w-full text-sm">
-      <tbody>
-        <tr style="border-bottom: 1px solid var(--pd-spec-border, #e5e5e5);">
-          <td class="py-2 font-medium" style="color: var(--pd-spec-key-color, #6b7280); width: 40%;">${t("mockProduct.pkgTableUnit")}</td>
-          <td class="py-2">${t("mockProduct.pkgTableUnitVal")}</td>
-        </tr>
-        <tr style="border-bottom: 1px solid var(--pd-spec-border, #e5e5e5);">
-          <td class="py-2 font-medium" style="color: var(--pd-spec-key-color, #6b7280);">${t("mockProduct.pkgTableSize")}</td>
-          <td class="py-2">10cm x 8cm x 3cm</td>
-        </tr>
-        <tr style="border-bottom: 1px solid var(--pd-spec-border, #e5e5e5);">
-          <td class="py-2 font-medium" style="color: var(--pd-spec-key-color, #6b7280);">${t("mockProduct.pkgTableWeight")}</td>
-          <td class="py-2">${t("mockProduct.pkgTableWeightVal")}</td>
-        </tr>
-        <tr style="border-bottom: 1px solid var(--pd-spec-border, #e5e5e5);">
-          <td class="py-2 font-medium" style="color: var(--pd-spec-key-color, #6b7280);">${t("mockProduct.pkgTableBoxSize")}</td>
-          <td class="py-2">40cm x 30cm x 25cm</td>
-        </tr>
-        <tr>
-          <td class="py-2 font-medium" style="color: var(--pd-spec-key-color, #6b7280);">${t("mockProduct.pkgTableBoxQty")}</td>
-          <td class="py-2">${t("mockProduct.pkgTableBoxQtyVal")}</td>
-        </tr>
-      </tbody>
-    </table>
-  `,
     samplePrice: 30,
     rating: 4.7,
     reviewCount: 328,

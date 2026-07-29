@@ -121,7 +121,7 @@ function renderPriceTiers(tiers: PriceTier[]): string {
             : "";
           return `
           <div class="pd-price-tier flex flex-col p-0 cursor-default min-w-0 ${i === 0 ? "active" : ""}" data-tier-index="${i}">
-            <span class="pd-price-tier-price text-[26px] font-bold leading-[1.2] break-words text-[var(--color-text-heading,#111827)] ${activePriceColor}">${formatCurrency(tier.price, getSelectedCurrency())}</span>
+            <span class="pd-price-tier-price text-[20px] min-[1280px]:text-[26px] font-bold leading-[1.2] break-words text-[var(--color-text-heading,#111827)] ${activePriceColor}">${formatCurrency(tier.price, getSelectedCurrency())}</span>
             ${strikethrough}
             <span class="pd-price-tier-qty mt-0.5 text-[14px] leading-[20px] text-[var(--color-text-muted,#666)] break-words">${tierQtyLabel(tier)}</span>
           </div>
@@ -283,7 +283,7 @@ function keyAttributesHtml(): string {
   return `
     ${SECTION_DIVIDER}
     <h2 class="text-[16px] leading-[22px] font-bold text-[var(--pd-title-color,#111827)]">${t("product.keyAttributes")}</h2>
-    <div id="pd-key-attributes" class="mt-3 grid grid-cols-3 gap-y-5 rounded-md bg-[var(--color-surface-raised,#f5f5f5)] p-3">
+    <div id="pd-key-attributes" class="mt-3 grid grid-cols-2 min-[1280px]:grid-cols-3 gap-y-5 rounded-md bg-[var(--color-surface-raised,#f5f5f5)] p-3">
       ${cells}
     </div>
   `;
