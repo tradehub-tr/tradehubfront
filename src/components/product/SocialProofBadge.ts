@@ -1,7 +1,7 @@
 /**
  * Social Proof Badge — rotating sosyal kanıt rozeti.
  *
- * Desktop: ProductInfo içinde fiyat/stok ile CTA arası
+ * Desktop: ProductOrderPanel içinde kargo kartı ile CTA arası
  * Mobile: MobileLayout'ta priceTiers ile sampleSection arası
  *
  * Alpine module: src/alpine/socialProofBadge.ts (G1)

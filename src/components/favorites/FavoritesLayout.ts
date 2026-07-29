@@ -623,7 +623,7 @@ function renderProductCardGrid(p: FavoriteItem): string {
       <a href="${escapeHtml(sanitizeUrl(detailHref))}" class="relative block aspect-square overflow-hidden bg-[#fafafa] no-underline">
         <img src="${escapeHtml(sanitizeUrl(p.image))}" alt="${escapeHtml(p.title)}"
              width="400" height="400" decoding="async"
-             class="w-full h-full object-cover mix-blend-multiply transition-transform duration-300 ease-out [@media(hover:hover)and(pointer:fine)]:group-hover:scale-[1.03] motion-reduce:transition-none"
+             class="w-full h-full object-cover mix-blend-multiply transition-transform duration-300 ease-out [@media(hover:hover)_and_(pointer:fine)]:group-hover:scale-[1.03] motion-reduce:transition-none"
              loading="lazy" />
         ${renderStockPill(enrichment)}
       </a>
@@ -687,7 +687,7 @@ function renderProductRowList(p: FavoriteItem): string {
       <a href="${escapeHtml(sanitizeUrl(detailHref))}" class="relative w-[88px] h-[88px] shrink-0 rounded-md overflow-hidden bg-[#fafafa] no-underline max-sm:w-full max-sm:h-[160px]">
         <img src="${escapeHtml(sanitizeUrl(p.image))}" alt="${escapeHtml(p.title)}"
              width="176" height="176" decoding="async"
-             class="w-full h-full object-cover mix-blend-multiply transition-transform duration-300 ease-out [@media(hover:hover)and(pointer:fine)]:group-hover:scale-[1.04] motion-reduce:transition-none"
+             class="w-full h-full object-cover mix-blend-multiply transition-transform duration-300 ease-out [@media(hover:hover)_and_(pointer:fine)]:group-hover:scale-[1.04] motion-reduce:transition-none"
              loading="lazy" />
       </a>
       <div class="flex-1 min-w-0 flex flex-col gap-1">
@@ -985,9 +985,9 @@ function renderBrowsingHistory(): string {
   const productCards = history
     .map(
       (p) => `
-    <a href="${escapeHtml(sanitizeUrl(p.href))}" class="group flex flex-col no-underline text-inherit transition-transform duration-150 [@media(hover:hover)and(pointer:fine)]:hover:-translate-y-0.5 motion-reduce:transition-none motion-reduce:translate-y-0">
+    <a href="${escapeHtml(sanitizeUrl(p.href))}" class="group flex flex-col no-underline text-inherit transition-transform duration-150 [@media(hover:hover)_and_(pointer:fine)]:hover:-translate-y-0.5 motion-reduce:transition-none motion-reduce:translate-y-0">
       <div class="w-full aspect-square rounded-lg overflow-hidden border border-[#f0f0f0] mb-2.5">
-        <img src="${escapeHtml(sanitizeUrl(p.image))}" alt="${escapeHtml(p.title)}" width="400" height="400" decoding="async" class="w-full h-full object-cover transition-transform duration-300 [@media(hover:hover)and(pointer:fine)]:group-hover:scale-[1.04] motion-reduce:transition-none" loading="lazy" />
+        <img src="${escapeHtml(sanitizeUrl(p.image))}" alt="${escapeHtml(p.title)}" width="400" height="400" decoding="async" class="w-full h-full object-cover transition-transform duration-300 [@media(hover:hover)_and_(pointer:fine)]:group-hover:scale-[1.04] motion-reduce:transition-none" loading="lazy" />
       </div>
       <h4 class="text-[13px] text-text-secondary leading-[1.4] line-clamp-2 mb-1.5" title="${escapeHtml(p.title)}">${escapeHtml(p.title)}</h4>
       ${typeof p.price === "number" ? `<p class="text-sm font-bold text-text-primary mb-0.5">${formatCurrency(convertPrice(p.price, p.currency || getSelectedCurrency()), getSelectedCurrency())}</p>` : p.priceRange ? `<p class="text-sm font-bold text-text-primary mb-0.5">${localizePriceString(p.priceRange)}</p>` : ""}

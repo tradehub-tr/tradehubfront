@@ -51,7 +51,7 @@ function renderProductImage(p: ExploreProduct): string {
         width="400" height="400"
         loading="lazy"
         decoding="async"
-        class="w-full h-full object-cover transition-transform duration-200 motion-reduce:transition-none [@media(hover:hover)and(pointer:fine)]:group-hover/card:scale-110"
+        class="w-full h-full object-cover transition-transform duration-200 motion-reduce:transition-none [@media(hover:hover)_and_(pointer:fine)]:group-hover/card:scale-110"
       />
     </div>
   `;

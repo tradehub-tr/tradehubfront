@@ -127,7 +127,7 @@ export function HeaderNotice(
     >
       <div class="container-boxed">
         <div class="relative h-9 flex items-center [mask-image:linear-gradient(90deg,transparent,#000_6%,#000_94%,transparent)]">
-          <div class="flex items-center gap-12 whitespace-nowrap animate-notice-scroll [@media(hover:hover)and(pointer:fine)]:hover:[animation-play-state:paused]">
+          <div class="flex items-center gap-12 whitespace-nowrap animate-notice-scroll [@media(hover:hover)_and_(pointer:fine)]:hover:[animation-play-state:paused]">
             ${renderItems(notices)}
             ${renderItems(notices)}
           </div>

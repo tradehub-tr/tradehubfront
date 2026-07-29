@@ -1322,7 +1322,7 @@ function isVideoFileUrl(url: string): boolean {
   return /\.(mp4|webm|ogg|mov|m4v)(\?|$)/i.test(url);
 }
 
-function mapListingDetail(raw: any): ProductDetail {
+export function mapListingDetail(raw: any): ProductDetail {
   // Map images — auto-detect video files by extension so uploaded .mp4/.webm
   // files in the gallery render as video slides, not broken <img> tags.
   const images: ProductImage[] = (raw.images || []).map((src: string, i: number) => ({
@@ -1439,6 +1439,7 @@ function mapListingDetail(raw: any): ProductDetail {
         verified: supplierVerified,
         kybVerified: supplierVerified,
         country: raw.supplier.country || "",
+        logo: raw.supplier.logo || "",
         yearsInBusiness: raw.supplier.yearsInBusiness || 0,
         responseTime: raw.supplier.responseTime || "",
         responseRate: raw.supplier.responseRate ? `${raw.supplier.responseRate}%` : "",
@@ -1447,6 +1448,12 @@ function mapListingDetail(raw: any): ProductDetail {
         employees: raw.supplier.employees || "",
         annualRevenue: raw.supplier.annualRevenue || "",
         certifications: raw.supplier.certifications || [],
+        rating: typeof raw.supplier.rating === "number" ? raw.supplier.rating : 0,
+        reviewCount: raw.supplier.reviewCount || 0,
+        // Backend `mainProducts` adıyla da gönderir (deprecated, aslında main_markets).
+        mainMarkets: raw.supplier.mainMarkets || raw.supplier.mainProducts || [],
+        reorderRate:
+          typeof raw.supplier.reorderRate === "number" ? raw.supplier.reorderRate : null,
         verifications: Array.isArray(raw.supplier.verifications)
           ? raw.supplier.verifications
           : [],
@@ -1464,6 +1471,10 @@ function mapListingDetail(raw: any): ProductDetail {
         employees: "",
         annualRevenue: "",
         certifications: [],
+        rating: 0,
+        reviewCount: 0,
+        mainMarkets: [],
+        reorderRate: null,
       };
 
   // Map customization options
@@ -1502,19 +1513,13 @@ function mapListingDetail(raw: any): ProductDetail {
     variants,
     specs,
     packagingSpecs,
+    productCertifications: Array.isArray(raw.productCertifications)
+      ? raw.productCertifications.map((c: any) => ({
+          name: String(c.name || ""),
+          description: String(c.description || ""),
+        }))
+      : [],
     description: raw.description || "",
-    packaging:
-      packagingSpecs.length > 0
-        ? `<table class="w-full text-sm"><tbody>${packagingSpecs
-            .map(
-              (s, i) =>
-                `<tr style="${i < packagingSpecs.length - 1 ? "border-bottom: 1px solid var(--pd-spec-border, #e5e5e5);" : ""}">
-            <td class="py-2.5 font-medium" style="color: var(--pd-spec-key-color, #6b7280); width: 35%; padding-left: 12px;">${s.key}</td>
-            <td class="py-2.5 ps-4" style="color: var(--pd-spec-value-color, #111827);">${s.value}</td>
-          </tr>`
-            )
-            .join("")}</tbody></table>`
-        : "",
     rating: raw.rating || 0,
     reviewCount: raw.reviewCount || 0,
     orderCount: raw.orderCount ? Number(raw.orderCount).toLocaleString("tr-TR") : "0",

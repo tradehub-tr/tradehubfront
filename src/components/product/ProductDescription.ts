@@ -1,56 +1,23 @@
 /**
- * ProductDescription Component
- * Description tab content: rich HTML description + specs table + packaging info.
+ * ProductDescription Component — yalnız zengin HTML açıklama.
+ *
+ * Teknik özellikler ve paketleme burada BASILMAZ: tüm paneller alt alta
+ * durduğundan (anchor-nav) aynı veri Özellikler panelinde zaten var;
+ * burada tekrar basmak sayfada mükerrer bölüm üretiyordu.
  */
 
 import { getCurrentProduct } from "../../alpine/product";
-import { t } from "../../i18n";
-import { escapeHtml, sanitizeRichHtml } from "../../utils/sanitize";
-
-function renderSpecsTable(): string {
-  const mockProduct = getCurrentProduct();
-  return `
-    <div class="mt-6">
-      <h2 class="text-base font-semibold mb-3" style="color: var(--pd-title-color, #111827);">${t("product.technicalSpecs")}</h2>
-      <table class="w-full text-sm">
-        <tbody>
-          ${mockProduct.specs
-            .map(
-              (spec, i) => `
-            <tr style="${i < mockProduct.specs.length - 1 ? `border-bottom: 1px solid var(--pd-spec-border, #e5e5e5);` : ""}">
-              <td class="py-2.5 font-medium" style="color: var(--pd-spec-key-color, #6b7280); width: 35%; ${i % 2 === 0 ? `background: var(--pd-spec-header-bg, #f9fafb);` : ""} padding-left: 12px;">${escapeHtml(spec.key)}</td>
-              <td class="py-2.5 ps-4" style="color: var(--pd-spec-value-color, #111827); ${i % 2 === 0 ? `background: var(--pd-spec-header-bg, #f9fafb);` : ""}">${escapeHtml(spec.value)}</td>
-            </tr>
-          `
-            )
-            .join("")}
-        </tbody>
-      </table>
-    </div>
-  `;
-}
-
-function renderPackaging(): string {
-  const mockProduct = getCurrentProduct();
-  return `
-    <div class="mt-6">
-      <h2 class="text-base font-semibold mb-3" style="color: var(--pd-title-color, #111827);">${t("product.packagingDelivery")}</h2>
-      ${sanitizeRichHtml(mockProduct.packaging)}
-    </div>
-  `;
-}
+import { sanitizeRichHtml } from "../../utils/sanitize";
 
 export function ProductDescription(): string {
   const mockProduct = getCurrentProduct();
   return `
     <div class="py-6">
-      <!-- Rich Description Content -->
-      <div class="prose prose-sm max-w-none" style="color: var(--pd-title-color, #111827);">
+      <!-- Rich Description Content — eski "prose" sınıfları ölüydü (typography
+           plugin'i yok); tipografi admin editörüyle (RichTextEditor.vue) aynı. -->
+      <div class="max-w-none text-[14px] leading-[1.7] text-[var(--pd-title-color,#111827)] [&_p]:mb-[8px] [&_h2]:mt-[16px] [&_h2]:mb-[8px] [&_h2]:text-[18px] [&_h2]:font-bold [&_h3]:mt-[12px] [&_h3]:mb-[6px] [&_h3]:text-[15px] [&_h3]:font-semibold [&_ul]:mb-[8px] [&_ul]:list-disc [&_ul]:ps-[20px] [&_ol]:mb-[8px] [&_ol]:list-decimal [&_ol]:ps-[20px] [&_li]:mb-[2px] [&_a]:text-[#2563eb] [&_a]:underline [&_img]:my-[12px] [&_img]:max-w-full [&_img]:rounded-md">
         ${sanitizeRichHtml(mockProduct.description)}
       </div>
-
-      ${renderSpecsTable()}
-      ${renderPackaging()}
     </div>
   `;
 }

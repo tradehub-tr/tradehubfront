@@ -796,16 +796,19 @@ function updateShippingModal(quantityOverride?: number): void {
     .map((option, index) => {
       const active = index === state.selectedShippingIndex;
       const deliveryText = formatDeliveryEstimate(option.estimatedDays);
+      // Referans ölçüleri: kart dolgusu 20px 16px · yöntem adı 14/18/600 ·
+      // teslimat satırı üstten 10px boşluk · tutar 14px/600 — hepsi #333.
+      // Seçim göstergesi onay işareti değil, klasik radyo (dolu iç daire).
       return `
-      <label class="grid grid-cols-[24px_1fr_auto] items-start gap-x-3 gap-y-0 rounded-md border px-3 py-3 sm:px-4 sm:py-3.5 cursor-pointer transition-colors ${active ? "border-primary-500 bg-primary-50" : "border-border-default bg-surface-muted hover:bg-surface"}" data-shipping-option-index="${index}">
-        <span class="w-6 h-6 sm:w-7 sm:h-7 rounded-full border inline-flex items-center justify-center mt-0.5 ${active ? "border-primary-500 bg-primary-500 text-white" : "border-border-medium text-transparent"}">
-          ${active ? '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m5 13 4 4L19 7"/></svg>' : ""}
+      <label class="grid grid-cols-[20px_1fr_auto] items-start gap-x-3 gap-y-0 rounded-md border px-4 py-5 cursor-pointer transition-colors ${active ? "border-[#222] bg-surface" : "border-border-default bg-surface-muted hover:bg-surface"}" data-shipping-option-index="${index}">
+        <span class="w-5 h-5 rounded-full border-2 inline-flex items-center justify-center shrink-0 ${active ? "border-[#222]" : "border-[#ccc]"}">
+          ${active ? '<span class="w-2.5 h-2.5 rounded-full bg-[#222]"></span>' : ""}
         </span>
         <span class="min-w-0">
-          <strong class="block text-[14px] sm:text-base text-text-heading leading-snug">${escapeHtml(option.method)}</strong>
-          <span class="block text-[12px] sm:text-sm text-text-secondary mt-0.5">${escapeHtml(deliveryText)}</span>
+          <strong class="block text-[14px] leading-[18px] font-semibold text-[#333]">${escapeHtml(option.method)}</strong>
+          <span class="block text-[14px] leading-[18px] font-normal text-[#333] mt-[10px]">${escapeHtml(deliveryText)}</span>
         </span>
-        <strong class="text-[14px] sm:text-base text-text-heading whitespace-nowrap mt-0.5">${escapeHtml(option.costText)}</strong>
+        <strong class="text-[14px] leading-[1.5] font-semibold text-[#333] whitespace-nowrap">${escapeHtml(option.costText)}</strong>
       </label>
     `;
     })
@@ -1548,13 +1551,14 @@ export function SharedShippingModal(): string {
     <div id="shared-cart-shipping-modal" class="fixed inset-0 z-[210] bg-black/50 opacity-0 pointer-events-none transition-opacity duration-300 ease-out motion-reduce:transition-none flex items-end md:items-center justify-center">
       <div id="shared-cart-shipping-sheet" class="w-full md:w-[min(92vw,760px)] bg-surface rounded-t-md md:rounded-md border border-border-default shadow-xl p-4 sm:p-6 translate-y-4 transition-transform duration-300 ease-[cubic-bezier(0.23,1,0.32,1)] motion-reduce:transition-none motion-reduce:translate-y-0 max-h-[90vh] md:max-h-[80vh] flex flex-col">
         <div class="flex items-center justify-between">
-          <h4 class="text-[15px] sm:text-xl font-bold text-text-heading">${t("cart.selectShipping")}</h4>
+          <h4 class="text-[15px] sm:text-[20px] sm:leading-[26px] font-bold tracking-tight text-[#222]">${t("cart.selectShipping")}</h4>
           <button type="button" id="shared-cart-shipping-close" class="w-7 h-7 sm:w-8 sm:h-8 rounded-full text-secondary-400 hover:text-secondary-900 hover:bg-surface-raised transition-colors inline-flex items-center justify-center shrink-0">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-4 h-4 sm:w-[18px] sm:h-[18px]"><path d="M6 18 18 6M6 6l12 12"/></svg>
           </button>
         </div>
 
-        <p class="mt-2.5 sm:mt-4 text-[13px] sm:text-base text-text-secondary">${t("cart.shippingTo")}: <strong>${t("countries.TR")}</strong> · ${t("cart.shippingQty")}: <span id="shared-cart-shipping-qty">1 ${state.item?.unit ?? "pc"}</span></p>
+        <!-- Referans: 14px / lh 1.5 / 400 / #333; vurgulu parçalar 600 -->
+        <p class="mt-2.5 sm:mt-4 text-[13px] sm:text-[14px] sm:leading-[1.5] font-normal text-[#333]">${t("cart.shippingTo")}: <strong class="font-semibold">${t("countries.TR")}</strong> · ${t("cart.shippingQty")}: <strong class="font-semibold" id="shared-cart-shipping-qty">1 ${state.item?.unit ?? "pc"}</strong></p>
         <div id="shared-cart-shipping-options" class="mt-3 sm:mt-5 space-y-2 sm:space-y-3 flex-1 overflow-y-auto min-h-0"></div>
 
         <button type="button" id="shared-cart-shipping-apply" class="mt-3 sm:mt-6 w-full th-btn-dark h-11 sm:h-12 text-[13px] sm:text-[14px] shrink-0">${t("common.apply")}</button>

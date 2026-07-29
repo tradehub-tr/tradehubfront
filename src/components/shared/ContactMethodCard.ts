@@ -32,7 +32,7 @@ export function ContactMethodCard({
     : `<button type="button" ${ctaAction ? `@click="${ctaAction}"` : ""} class="px-5 py-2 text-sm font-medium rounded-lg transition-colors cursor-pointer ${btnClass}">${ctaLabel}</button>`;
 
   return `
-    <div class="bg-white rounded-lg border border-gray-200 p-6 text-center [@media(hover:hover)and(pointer:fine)]:hover:shadow-md transition-shadow">
+    <div class="bg-white rounded-lg border border-gray-200 p-6 text-center [@media(hover:hover)_and_(pointer:fine)]:hover:shadow-md transition-shadow">
       <div class="w-12 h-12 mx-auto mb-4 rounded-full bg-primary-50 flex items-center justify-center text-primary-500">
         ${icon}
       </div>

@@ -3,9 +3,10 @@
  */
 
 export { ProductBreadcrumb } from "./Breadcrumb";
-export { ProductTitleBar, SellerTrustCard, initProductTitleBar } from "./ProductTitleBar";
+export { ProductBuyBox, initProductBuyBox } from "./ProductBuyBox";
+export { ProductSellerPanel } from "./ProductSellerPanel";
 export { ProductImageGallery, initImageGallery } from "./ProductImageGallery";
-export { ProductInfo, initProductInfo } from "./ProductInfo";
+export { ProductOrderPanel, initProductOrderPanel } from "./ProductOrderPanel";
 export { ProductSupplierCard } from "./SupplierCard";
 export { ProductTabs, initProductTabs } from "./ProductTabs";
 export { ProductDescription } from "./ProductDescription";
@@ -15,6 +16,7 @@ export { ProductFAQ } from "./ProductFAQ";
 export { RelatedProducts, initRelatedProducts } from "./RelatedProducts";
 export { ProductAttributes } from "./ProductAttributes";
 export { AttributesTabContent, initAttributesTab } from "./AttributesTabContent";
+export { ProductCertificates } from "./ProductCertificates";
 export {
   ProductVideoSection,
   initProductVideoSection,

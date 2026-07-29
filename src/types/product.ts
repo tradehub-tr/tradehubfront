@@ -148,14 +148,30 @@ export interface SupplierInfo {
   kybVerified?: boolean;
   /** Backend'den gelen ülke ismi ("Turkey", "China", vs.) — flag/kod hesabında kullanılır. */
   country?: string;
+  /** Mağaza logosu (Admin Seller Profile.logo). */
+  logo?: string;
   yearsInBusiness: number;
   responseTime: string;
   responseRate: string;
   onTimeDelivery: string;
+  /**
+   * @deprecated `mainMarkets`'in yanlış adlandırılmış takma adı — backend
+   * `main_markets` içeriğini geriye uyumluluk için bu anahtarla da gönderiyor
+   * (ürün listesi DEĞİL). Yeni kod `mainMarkets` okumalı; backend alanı
+   * bıraktığında bu alan kaldırılabilir.
+   */
   mainProducts: string[];
   employees: string;
   annualRevenue: string;
   certifications: string[];
+  /** Mağaza puanı (satıcı profili) — ürün puanından ayrıdır. Faz 2'de dolar. */
+  rating?: number;
+  /** Mağaza yorum sayısı. Faz 2'de dolar. */
+  reviewCount?: number;
+  /** Ana pazarlar (Admin Seller Profile.main_markets). Faz 2'de dolar. */
+  mainMarkets?: string[];
+  /** Tekrar sipariş oranı (%). Veri yetersizse null. Faz 2'de dolar. */
+  reorderRate?: number | null;
   /** Saha doğrulama kaynakları — backend get_listing_detail.supplier.verifications */
   verifications?: Array<{
     source_name: string;
@@ -233,6 +249,11 @@ export interface ProductDetail {
   specs: ProductSpec[];
   specGroups?: ProductSpecGroup[];
   packagingSpecs: ProductSpec[];
+  /**
+   * Ürün-seviyesi sertifikalar (Listing Certification). Satıcı-seviyesi
+   * supplier.certifications'tan AYRI kavramdır — ikisini birleştirme.
+   */
+  productCertifications?: Array<{ name: string; description: string }>;
   brandInfo?: BrandInfo | null;
   productTypeName?: string;
   productFamilyName?: string;
@@ -240,7 +261,6 @@ export interface ProductDetail {
   /** Optional listing-level promo video URL (YouTube/Vimeo/MP4). */
   videoUrl?: string;
   description: string;
-  packaging: string;
   rating: number;
   reviewCount: number;
   orderCount: string;

@@ -75,7 +75,7 @@ export function renderAttachmentCard(att: RfqAttachment, idx: number, scope: str
 
   return `
     <div class="bg-white border border-gray-200 rounded-lg overflow-hidden flex flex-col">
-      <div class="rfq-attach-thumb ${isPreviewable ? "cursor-pointer transition-opacity duration-150 motion-reduce:transition-none [@media(hover:hover)and(pointer:fine)]:hover:opacity-90" : ""}" data-attach-scope="${scope}" data-attach-idx="${idx}">
+      <div class="rfq-attach-thumb ${isPreviewable ? "cursor-pointer transition-opacity duration-150 motion-reduce:transition-none [@media(hover:hover)_and_(pointer:fine)]:hover:opacity-90" : ""}" data-attach-scope="${scope}" data-attach-idx="${idx}">
         ${thumb}
       </div>
       <div class="p-2.5 flex flex-col gap-1.5">

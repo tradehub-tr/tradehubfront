@@ -123,6 +123,20 @@ test.describe("Ürün detay — anchor sekmeler", () => {
     await expect(page.locator("#tab-btn-description")).toHaveAttribute("data-active", "false");
   });
 
+  // Orta sütundaki puan satırının "N yorum" linki (ProductBuyBox) → Yorumlar bölümü.
+  // Task 9'da ProductTitleBar'dan taşındı; hedef sekme kartının EN ÜSTÜ değil,
+  // Yorumlar panelinin kendisi olmalı.
+  test("yorum sayısı linki Yorumlar bölümünü görünür alana getirir", async ({ page }) => {
+    const reviewsPanel = page.locator("#tab-content-reviews");
+    // Test vacuous olmasın: bölüm başlangıçta ekran dışında.
+    await expect(reviewsPanel).not.toBeInViewport();
+
+    await page.locator("#pd-review-count-link").click();
+
+    await expect(reviewsPanel).toBeInViewport();
+    await expect(page.locator("#tab-btn-reviews")).toHaveAttribute("data-active", "true");
+  });
+
   test("kaydırınca scroll-spy başlangıç sekmesini bırakır", async ({ page }) => {
     // Başta Açıklama aktif
     await expect(page.locator("#tab-btn-description")).toHaveAttribute("data-active", "true");
@@ -196,7 +210,7 @@ test("tekrarlanan viewport geçişleri eski ürün layout document listenerları
     return window.__pdReviewListenerCalls;
   });
 
-  // Son aktif desktop composition yalnız ProductTitleBar + ProductReviews
+  // Son aktif desktop composition yalnız ProductBuyBox + ProductReviews
   // listenerlarını taşır; önceki mobile/desktop mountları event alamaz.
   expect(listenerCalls).toBe(2);
 });

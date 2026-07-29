@@ -81,7 +81,7 @@ function renderPaymentManagement(): string {
 
   // Add-card button as a card-shaped tile
   const addCardTile = `
-    <div id="pay-add-card-btn" class="pay-add-card shrink-0 w-[200px] max-sm:w-[160px] h-[120px] max-sm:h-[100px] rounded-md flex flex-col items-center justify-center gap-2 border-2 border-dashed cursor-pointer transition-[border-color,background] duration-200 border-[var(--color-border-strong,#ccc)] bg-transparent [@media(hover:hover)and(pointer:fine)]:hover:border-[var(--btn-bg,#ff6600)] [@media(hover:hover)and(pointer:fine)]:hover:bg-[var(--color-primary-50,#fff9f5)]"
+    <div id="pay-add-card-btn" class="pay-add-card shrink-0 w-[200px] max-sm:w-[160px] h-[120px] max-sm:h-[100px] rounded-md flex flex-col items-center justify-center gap-2 border-2 border-dashed cursor-pointer transition-[border-color,background] duration-200 border-[var(--color-border-strong,#ccc)] bg-transparent [@media(hover:hover)_and_(pointer:fine)]:hover:border-[var(--btn-bg,#ff6600)] [@media(hover:hover)_and_(pointer:fine)]:hover:bg-[var(--color-primary-50,#fff9f5)]"
          data-action="open-card-modal">
       <span style="font-size: 28px; line-height: 1; color: var(--color-text-secondary, #888);">+</span>
       <span class="text-xs font-medium text-center px-2" style="color: var(--color-text-primary, #333);">${t("payment.addNewCard")}</span>

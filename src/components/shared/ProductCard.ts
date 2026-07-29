@@ -9,7 +9,7 @@ import { escapeHtml, sanitizeUrl } from "../../utils/sanitize";
 
 export function ProductCard({ image, price, currency, minOrder, href }: ProductCardProps): string {
   return `
-    <a href="${escapeHtml(sanitizeUrl(href))}" aria-label="${escapeHtml(`Ürün detayı — ${price} ${currency}`)}" class="pc-mini block w-full min-w-0 max-w-[169.5px] flex-shrink-0 overflow-hidden [@media(hover:hover)and(pointer:fine)]:hover:shadow-md transition-shadow cursor-pointer">
+    <a href="${escapeHtml(sanitizeUrl(href))}" aria-label="${escapeHtml(`Ürün detayı — ${price} ${currency}`)}" class="pc-mini block w-full min-w-0 max-w-[169.5px] flex-shrink-0 overflow-hidden [@media(hover:hover)_and_(pointer:fine)]:hover:shadow-md transition-shadow cursor-pointer">
       <div class="w-full aspect-square bg-gray-100 dark:bg-gray-700 overflow-hidden">
         <img
           src="${escapeHtml(sanitizeUrl(image))}"

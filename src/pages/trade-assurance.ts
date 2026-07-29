@@ -162,7 +162,7 @@ function stepCard(num: string, title: string, desc: string): string {
 
 function coverageCard(icon: string, title: string, href: string): string {
   return `
-    <a href="${href}" class="bg-white rounded-md [@media(hover:hover)and(pointer:fine)]:hover:shadow-md transition-shadow duration-200 ease-out motion-reduce:transition-none group block" style="padding:26px 26px 38px">
+    <a href="${href}" class="bg-white rounded-md [@media(hover:hover)_and_(pointer:fine)]:hover:shadow-md transition-shadow duration-200 ease-out motion-reduce:transition-none group block" style="padding:26px 26px 38px">
       <div class="w-12 h-12 sm:w-14 sm:h-14 rounded-full flex items-center justify-center mb-6 bg-[#FFF3C4] text-[#92400e]">
         ${icon}
       </div>
