@@ -10,6 +10,10 @@
 /* upload-ui vendored at src/lib/upload-ui — Tailwind v4 auto-source scans src/ by default,
    açıkça belirtmek explicit'lik için. */
 @source "./lib/upload-ui/**/*.{ts,js}";
+/* css-optimization-reports/ geçmiş refactor raporlarını tutar; içindeki örnek class
+   metinleri (ör. [&.open_.rv-*-panel]:block) Tailwind tarafından gerçek utility
+   sanılıp geçersiz CSS üretiyor ve Lightning CSS uyarısına yol açıyordu. */
+@source not "../css-optimization-reports";
 
 /* --- Dark Mode: class-based --- */
 @variant dark (&:where(.dark, .dark *));

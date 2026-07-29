@@ -293,7 +293,7 @@ function renderSocials(brand: BrandDetail): string {
   const buttonsHtml = entries.map(([platform, url]) => {
     const icon = iconMap[platform] || ''
     return `<a href="${escapeHtml(sanitizeUrl(url))}" target="_blank" rel="noopener"
-              class="inline-flex items-center justify-center w-10 h-10 rounded-full border border-gray-200 bg-white transition-colors duration-200 motion-reduce:transition-none no-underline text-gray-600 [@media(hover:hover)and(pointer:fine)]:hover:bg-[var(--hover-bg,#111827)] [@media(hover:hover)and(pointer:fine)]:hover:text-white [@media(hover:hover)and(pointer:fine)]:hover:border-transparent"
+              class="inline-flex items-center justify-center w-10 h-10 rounded-full border border-gray-200 bg-white transition-colors duration-200 motion-reduce:transition-none no-underline text-gray-600 [@media(hover:hover)_and_(pointer:fine)]:hover:bg-[var(--hover-bg,#111827)] [@media(hover:hover)_and_(pointer:fine)]:hover:text-white [@media(hover:hover)_and_(pointer:fine)]:hover:border-transparent"
               style="--hover-bg:${theme}"
               title="${escapeHtml(platform.charAt(0).toUpperCase() + platform.slice(1))}">
         ${icon}

@@ -203,7 +203,7 @@ function PricingCard(plan: PricingPlan, idx: number, trial?: TrialConfig): strin
 
   const cardCls = isFeat
     ? "bg-[#1a1a1a] text-white border-[#1a1a1a] shadow-[0_10px_30px_-10px_rgba(213,156,0,0.35)]"
-    : "bg-white text-[#1a1a1a] border-[#e8e6e0] hover:border-[#d5d2c9] hover:shadow-[0_2px_6px_rgba(20,20,18,0.06)] [@media(hover:hover)and(pointer:fine)]:motion-safe:hover:-translate-y-0.5";
+    : "bg-white text-[#1a1a1a] border-[#e8e6e0] hover:border-[#d5d2c9] hover:shadow-[0_2px_6px_rgba(20,20,18,0.06)] [@media(hover:hover)_and_(pointer:fine)]:motion-safe:hover:-translate-y-0.5";
 
   const tagCls = isFeat ? "text-white/65" : "text-[#8a877f]";
   const nameCls = isFeat ? "text-[#f5b800]" : "text-[#1a1a1a]";
