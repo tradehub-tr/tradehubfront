@@ -38,11 +38,33 @@ function metricCell(m: SellerMetric): string {
   `;
 }
 
+/**
+ * "Mağazayı Ziyaret Et" + "Sohbet et" aksiyon çifti — satıcı panelinde ve
+ * Tedarikçi sekmesinde (CompanyProfile) birebir aynı görünür. Outline
+ * token'ları nötr ezilir (beyaz zemin, siyah border). `slug` dalı bilinçli:
+ * `id` dalının ürettiği ?seller= query URL'i gateway'de 404 veriyor.
+ */
+export function SellerActionButtons(wrapperClass = ""): string {
+  const p = getCurrentProduct();
+  const url = escapeHtml(sanitizeUrl(getSellerUrl({ slug: p.supplier.id })));
+  return `
+    <div class="grid grid-cols-2 gap-2 [--btn-outline-bg:#fff] [--btn-outline-text:#222] [--btn-outline-border-color:#222] [--btn-outline-border-width:1px] [--btn-outline-hover-bg:#f5f5f5] [--btn-outline-hover-text:#222]${wrapperClass ? ` ${wrapperClass}` : ""}">
+      <a href="${url}" class="th-btn-outline th-btn-sm inline-flex items-center justify-center gap-1.5 whitespace-nowrap">
+        <svg class="w-[15px] h-[15px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9l1-5h14l1 5M4 9v10h16V9M4 9a2.5 2.5 0 005 0 2.5 2.5 0 005 0 2.5 2.5 0 005 0M9 19v-5h6v5"/></svg>
+        ${t("product.visitStore", { defaultValue: "Mağazayı Ziyaret Et" })}
+      </a>
+      <button type="button" ${chatTriggerAttrs(p)} class="th-btn-outline th-btn-sm inline-flex items-center justify-center gap-1.5 whitespace-nowrap cursor-pointer">
+        <svg class="w-[15px] h-[15px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.4 8.4 0 0 1-8.5 8.5 8.4 8.4 0 0 1-3.8-.9L3 21l1.9-5.7a8.4 8.4 0 0 1-.9-3.8A8.5 8.5 0 0 1 12.5 3a8.5 8.5 0 0 1 8.5 8.5z"/></svg>
+        ${t("chat.chatWithSeller")}
+      </button>
+    </div>`;
+}
+
 export function ProductSellerPanel(): string {
   const p = getCurrentProduct();
   const s = p.supplier;
 
-  const sellerUrl = escapeHtml(sanitizeUrl(getSellerUrl({ id: s.id })));
+  const sellerUrl = escapeHtml(sanitizeUrl(getSellerUrl({ slug: s.id })));
   const sellerInitial = escapeHtml((s.name || "?").trim().charAt(0).toUpperCase() || "?");
 
   const metrics: SellerMetric[] = [];
@@ -115,17 +137,7 @@ export function ProductSellerPanel(): string {
       ${metricsHtml}
       ${marketsHtml}
 
-      <!-- Aksiyonlar -->
-      <div class="mt-3 grid grid-cols-2 gap-2 border-t border-[var(--color-border-default,#e5e5e5)] pt-3">
-        <a href="${sellerUrl}" class="th-btn-outline th-btn-sm inline-flex items-center justify-center gap-1.5 whitespace-nowrap">
-          <svg class="w-[15px] h-[15px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9l1-5h14l1 5M4 9v10h16V9M4 9a2.5 2.5 0 005 0 2.5 2.5 0 005 0 2.5 2.5 0 005 0M9 19v-5h6v5"/></svg>
-          ${t("product.visitStore", { defaultValue: "Mağazayı Ziyaret Et" })}
-        </a>
-        <button type="button" ${chatTriggerAttrs(p)} class="th-btn-outline th-btn-sm inline-flex items-center justify-center gap-1.5 whitespace-nowrap cursor-pointer">
-          <svg class="w-[15px] h-[15px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.4 8.4 0 0 1-8.5 8.5 8.4 8.4 0 0 1-3.8-.9L3 21l1.9-5.7a8.4 8.4 0 0 1-.9-3.8A8.5 8.5 0 0 1 12.5 3a8.5 8.5 0 0 1 8.5 8.5z"/></svg>
-          ${t("chat.chatWithSeller")}
-        </button>
-      </div>
+      ${SellerActionButtons("mt-3 border-t border-[var(--color-border-default,#e5e5e5)] pt-3")}
     </section>
   `;
 }

@@ -11,6 +11,7 @@ import { getCurrentProduct } from "../../alpine/product";
 import { t } from "../../i18n";
 import { escapeHtml, sanitizeUrl } from "../../utils/sanitize";
 import { getSellerUrl } from "../../utils/sellerUrl";
+import { SellerActionButtons } from "./ProductSellerPanel";
 
 interface InfoRow {
   icon: string;
@@ -147,14 +148,7 @@ export function CompanyProfile(): string {
             </div>`
           : ""
       }
-      ${
-        storeUrl
-          ? `<div class="mt-[16px] flex items-center gap-[12px] max-sm:flex-col">
-              <a href="${storeUrl}" class="th-btn inline-flex h-[36px] flex-1 items-center justify-center whitespace-nowrap rounded-full px-[16px] text-[14px] font-medium no-underline max-sm:w-full">${t("product.viewCompanyProfile")}</a>
-              <a href="${storeUrl}" class="th-btn-outline h-[36px] flex-1 whitespace-nowrap rounded-full px-[16px] text-[14px] font-medium no-underline max-sm:w-full">${t("product.showMoreProducts")}</a>
-            </div>`
-          : ""
-      }
+      ${storeUrl ? SellerActionButtons("mt-[16px]") : ""}
     </div>`;
 
   return `

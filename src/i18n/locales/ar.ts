@@ -1830,6 +1830,7 @@ const ar = {
       shippingNegotiable: "قابل للتفاوض",
       changeShipping: "تغيير",
       changeShippingLong: "تغيير خيارات الشحن",
+      shippingFeeForQty: "رسوم الشحن: {{cost}} لعدد {{qty}} {{unit}}",
       deliveryInDays: "يُسلّم خلال {{days}} أيام عمل",
       deliveryDiscussWithSeller: "ناقش وقت التسليم مع البائع",
       favorite: "المفضلة",

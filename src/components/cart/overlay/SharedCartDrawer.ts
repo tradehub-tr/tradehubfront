@@ -668,6 +668,10 @@ function renderDrawerBody(): void {
     `;
   }
 
+  // Sevkiyat kartı — modaldan seçilen servis; hiç seçenek yoksa "görüşülür" metni
+  const selectedShipping = item.shippingOptions[state.selectedShippingIndex];
+  const shippingQty = Math.max(totals.totalQty, item.moq);
+
   body.innerHTML = `
     <h4 class="text-[15px] sm:text-base font-bold text-text-heading leading-snug mb-3 sm:mb-4">${escapeHtml(item.title)}</h4>
 
@@ -679,46 +683,26 @@ function renderDrawerBody(): void {
 
     ${sizeSection}
 
-    <div class="mt-3 sm:mt-4 mb-2 rounded-md border border-border-default overflow-hidden bg-surface">
-      <div class="flex items-center gap-2 sm:gap-2.5 px-3 sm:px-4 pt-2.5 sm:pt-3 pb-1.5 sm:pb-2">
-        <span
-          class="shrink-0 w-7 h-7 sm:w-8 sm:h-8 rounded-full inline-flex items-center justify-center"
-          style="background: var(--color-primary-50, #fdf3dd); color: var(--color-primary-600, #b88600);"
-          aria-hidden="true"
-        >
-          <svg class="w-4 h-4 sm:w-[18px] sm:h-[18px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M3 7h11v10H3z"/>
-            <path d="M14 10h4l3 4v3h-7"/>
-            <circle cx="7.5" cy="18.5" r="1.75"/>
-            <circle cx="17.5" cy="18.5" r="1.75"/>
-          </svg>
-        </span>
+    <!-- Sevkiyat — ürün panelindeki Kargo bloğuyla aynı düzen:
+         başlık + "Değiştir ›" linki + gri kart (ikonlu/kesikli kart kaldırıldı) -->
+    <div class="mt-3 sm:mt-4 mb-2">
+      <div class="flex items-center justify-between gap-3">
         <h5 class="text-[14px] sm:text-[15px] font-bold text-text-heading leading-tight">${t("cart.shipping")}</h5>
+        <button
+          type="button"
+          data-shipping-change
+          class="th-no-press appearance-none focus:outline-none border-0 bg-transparent p-0 text-[13px] sm:text-[14px] leading-[20px] font-normal whitespace-nowrap cursor-pointer text-[#222] hover:opacity-70 transition-opacity duration-150"
+        >${t("product.changeLabel")} ›</button>
       </div>
-
-      <p class="px-3 sm:px-4 pb-2.5 sm:pb-3 text-[12px] sm:text-[13px] leading-snug text-text-secondary">
-        ${t("cart.shippingNegotiate")}
-      </p>
-
-      <div class="mx-3 sm:mx-4 border-t border-dashed border-border-default"></div>
-
-      <button
-        type="button"
-        data-shipping-change
-        class="group th-no-press w-full flex items-center justify-between gap-2 sm:gap-3 px-3 sm:px-4 py-2 sm:py-2.5 transition-colors hover:bg-surface-muted focus:outline-none focus-visible:bg-surface-muted"
-      >
-        <span class="text-[12px] sm:text-[13px] font-semibold text-text-heading">${t("cart.changeShippingLong")}</span>
-        <span
-          class="shrink-0 w-5 h-5 sm:w-6 sm:h-6 rounded-full inline-flex items-center justify-center transition-transform duration-200 group-hover:translate-x-0.5"
-          style="background: var(--color-primary-500, #cc9900); color: #ffffff;"
-          aria-hidden="true"
-        >
-          <svg class="w-[10px] h-[10px] sm:w-3 sm:h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M5 12h14"/>
-            <path d="M13 5l7 7-7 7"/>
-          </svg>
-        </span>
-      </button>
+      <div class="mt-3 px-4 py-3 rounded-md bg-[var(--color-surface-raised,#f5f5f5)]">
+        ${
+          selectedShipping
+            ? `<span class="block text-[13px] sm:text-[14px] leading-[20px] font-semibold text-[#222] truncate">${escapeHtml(selectedShipping.method)}</span>
+        <span class="block mt-1 text-[12px] sm:text-[13px] leading-snug font-normal text-[#222]">${t("cart.shippingFeeForQty", { qty: String(shippingQty), unit: item.unit, cost: selectedShipping.costText })}</span>
+        <span class="block text-[12px] sm:text-[13px] leading-snug font-normal text-[#222]">${escapeHtml(formatDeliveryEstimate(selectedShipping.estimatedDays))}</span>`
+            : `<p class="m-0 text-[12px] sm:text-[13px] leading-snug text-text-secondary">${t("cart.shippingNegotiate")}</p>`
+        }
+      </div>
     </div>
   `;
 }
@@ -1507,7 +1491,8 @@ function bindShippingEvents(): void {
     }
 
     setShippingModalOpen(false);
-    renderDrawerFooter();
+    // Gövde de çizilir ki sevkiyat kartı seçilen servisi göstersin
+    rerenderDrawer();
   });
 
   document.addEventListener("keydown", (event) => {
