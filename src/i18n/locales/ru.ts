@@ -1871,6 +1871,7 @@ const ru = {
       shippingNegotiable: "Обсуждается",
       changeShipping: "Изменить",
       changeShippingLong: "Изменить варианты доставки",
+      shippingFeeForQty: "Стоимость доставки: {{cost}} за {{qty}} {{unit}}",
       deliveryInDays: "Доставка в течение {{days}} рабочих дней",
       deliveryDiscussWithSeller: "Обсудите срок доставки с продавцом",
       favorite: "Избранное",

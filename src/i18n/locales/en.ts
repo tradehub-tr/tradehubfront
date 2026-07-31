@@ -1854,6 +1854,7 @@ const en = {
       shippingNegotiable: "Negotiable",
       changeShipping: "Change",
       changeShippingLong: "Change shipping options",
+      shippingFeeForQty: "Shipping fee: {{cost}} for {{qty}} {{unit}}",
       deliveryInDays: "Delivered within {{days}} business days",
       deliveryDiscussWithSeller: "Discuss delivery time with the seller",
       favorite: "Favorite",

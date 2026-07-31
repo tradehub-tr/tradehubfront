@@ -60,44 +60,6 @@ function specTableRows(items: { key: string; value: string }[]): string {
   return rows.join("");
 }
 
-/** Öne çıkan band verisi: kısa değerli spec'lerden 1 feature + ≤4 stat seç. */
-function pickHighlights(
-  flat: { key: string; value: string }[]
-): { feature: { key: string; value: string }; stats: { key: string; value: string }[] } | null {
-  const short = flat.filter((s) => s.value && s.value.trim().length > 0 && s.value.length <= 26);
-  if (short.length < 3) return null;
-  const heroRe = /malzeme|material|öne ç|featured|model|ürün tipi/i;
-  const feature = short.find((s) => heroRe.test(s.key)) ?? short[0];
-  const stats = short.filter((s) => s !== feature).slice(0, 4);
-  if (stats.length < 2) return null;
-  return { feature, stats };
-}
-
-function highlightBand(hl: {
-  feature: { key: string; value: string };
-  stats: { key: string; value: string }[];
-}): string {
-  return `
-    <div class="mb-6 grid grid-cols-1 xl:grid-cols-[1.1fr_2fr] rounded-lg overflow-hidden bg-gradient-to-br from-[#1c2027] to-[#14171c] text-white">
-      <div class="p-6 flex flex-col justify-center">
-        <span class="inline-flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-wider text-[var(--color-primary-500,#f5b800)] mb-2.5">
-          <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l1.8 5.6L19.5 9l-4.8 3.1L16 18l-4-3.3L8 18l1.3-5.9L4.5 9l5.7-1.4z"/></svg>
-          ${t("product.featured", { defaultValue: "Öne Çıkan" })}
-        </span>
-        <div class="text-xl font-extrabold leading-tight tracking-[-0.01em]">${escapeHtml(hl.feature.value)}</div>
-        <div class="mt-1.5 text-[13px] text-[#c7ccd4]">${escapeHtml(hl.feature.key)}</div>
-      </div>
-      <div class="grid gap-px bg-white/10" style="grid-template-columns:repeat(${hl.stats.length},minmax(0,1fr))">
-        ${hl.stats
-          .map(
-            (s) =>
-              `<div class="bg-[#14171c] px-4 py-4"><div class="text-[15px] font-extrabold text-white leading-tight">${escapeHtml(s.value)}</div><div class="mt-1 text-[12px] text-[#aeb4bf]">${escapeHtml(s.key)}</div></div>`
-          )
-          .join("")}
-      </div>
-    </div>`;
-}
-
 export function AttributesTabContent(): string {
   const p = getCurrentProduct();
 
@@ -106,9 +68,6 @@ export function AttributesTabContent(): string {
     specGroups && specGroups.length > 0
       ? specGroups.flatMap((g) => g.items.map((it) => ({ key: it.label, value: it.value })))
       : p.specs;
-
-  const hl = pickHighlights(flat);
-  const bandHtml = hl ? highlightBand(hl) : "";
 
   // Referans düzende grup başlığı satırı YOK — tüm özellikler tek düz tabloda
   // akar (2026-07-28). `flat` zaten specGroups'u düzleştirilmiş halde tutuyor;
@@ -133,7 +92,6 @@ export function AttributesTabContent(): string {
 
   const keyAttrsSection = hasSpecs
     ? `
-      ${bandHtml}
       <h3 class="text-[20px] leading-[28px] font-bold text-[#222] mb-4">${t("product.keyAttributes")}</h3>
       ${keyAttrsTable}`
     : "";

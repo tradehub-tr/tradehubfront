@@ -1850,6 +1850,7 @@ const tr = {
       shippingNegotiable: "Görüşülebilir",
       changeShipping: "Değiştir",
       changeShippingLong: "Sevkiyat seçeneklerini değiştir",
+      shippingFeeForQty: "Sevkiyat ücreti: {{qty}} {{unit}} için {{cost}}",
       deliveryInDays: "{{days}} iş günü içinde teslim",
       deliveryDiscussWithSeller: "Teslim süresini satıcı ile görüşün",
       favorite: "Favori",

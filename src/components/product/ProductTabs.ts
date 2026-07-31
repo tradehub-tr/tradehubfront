@@ -54,18 +54,19 @@ export function ProductTabs(): string {
 
   return `
     <section id="product-tabs-section" class="mt-6">
-     <div class="rounded-lg border border-[var(--pd-spec-border,#e5e5e5)] bg-[var(--pd-bg,#ffffff)] px-4 pt-4 pb-6 sm:px-6">
-      <!-- Anchor Navigation (boxed card tabs) -->
+     <div class="rounded-md border border-[var(--pd-spec-border,#e5e5e5)] bg-[var(--pd-bg,#ffffff)] px-4 pt-4 pb-6 sm:px-6">
+      <!-- Anchor Navigation — referans tasarım: kapsayıcı kutu yok,
+           aktif sekme gri pill, pasifler düz metin -->
       <div
         id="product-tabs-nav"
-        class="inline-flex max-w-full gap-[3px] overflow-x-auto scrollbar-hide rounded-lg bg-[var(--color-surface-raised,#f1f5f9)] p-1"
+        class="inline-flex max-w-full gap-1 overflow-x-auto scrollbar-hide rounded-md p-1.5 -m-1.5"
         role="tablist"
       >
         ${tabs
           .map((tab, i) => {
             const badge =
               tab.id === "reviews" && reviewCount > 0
-                ? `<span class="ms-0.5 text-[11px] font-bold px-1.5 py-px rounded-full bg-[#e4e8ee] text-[var(--pd-tab-color,#6b7280)] [font-variant-numeric:tabular-nums]">${reviewCount}</span>`
+                ? `<span class="ms-0.5 text-[11px] font-bold px-1.5 py-px rounded-full bg-[#e5e7eb] text-[#374151] [font-variant-numeric:tabular-nums]">${reviewCount}</span>`
                 : "";
             return `
           <button
@@ -73,7 +74,7 @@ export function ProductTabs(): string {
             id="tab-btn-${tab.id}"
             data-tab-target="tab-content-${tab.id}"
             data-active="${i === 0 ? "true" : "false"}"
-            class="th-no-press product-tab-btn whitespace-nowrap inline-flex items-center gap-1.5 px-4 py-2 text-sm rounded-md transition-colors cursor-pointer appearance-none focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-primary-500,#f5b800)] bg-transparent font-medium text-[var(--pd-tab-color,#6b7280)] hover:text-[var(--pd-title-color,#111827)] data-[active=true]:bg-[var(--pd-bg,#ffffff)] data-[active=true]:font-bold data-[active=true]:text-[var(--pd-title-color,#111827)] data-[active=true]:shadow-[0_1px_2px_rgba(16,24,40,0.08),0_1px_3px_rgba(16,24,40,0.06)]"
+            class="th-no-press product-tab-btn whitespace-nowrap inline-flex items-center gap-1.5 px-4 py-2 text-sm rounded-md transition-colors cursor-pointer appearance-none focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-primary-500,#f5b800)] bg-transparent font-medium text-[#4b5563] hover:text-[#111827] data-[active=true]:bg-[#e5e5e5] data-[active=true]:font-bold data-[active=true]:text-[#111827]"
             role="tab"
             aria-controls="tab-content-${tab.id}"
           >
@@ -100,7 +101,7 @@ export function ProductTabs(): string {
           return `
         <section
           id="tab-content-${tab.id}"
-          class="product-tab-panel scroll-mt-28 pt-6 mt-6 border-t border-[var(--pd-spec-border,#e5e5e5)] first:mt-0 first:border-t-0"
+          class="product-tab-panel scroll-mt-28 pt-6 mt-6 border-t border-[var(--pd-spec-border,#e5e5e5)]"
           ${heading ? `aria-labelledby="tab-heading-${tab.id}"` : `aria-label="${tab.label}"`}
         >
           ${heading}
@@ -173,18 +174,17 @@ export function initProductTabs(options: { signal?: AbortSignal } = {}): void {
     ([entry]) => {
       if (!entry.isIntersecting) {
         tabNav.style.position = "sticky";
-        tabNav.style.top = `${offset}px`;
+        // Header ile arasında boşluk kalmasın diye tam header altına yapışır
+        tabNav.style.top = `${headerHeight}px`;
         tabNav.style.zIndex = "20";
-        tabNav.style.boxShadow = "0 6px 16px -6px rgba(16,24,40,0.18)";
         // Frosted: arkadaki içerik blur olsun (yarı-saydam surface + backdrop-blur)
-        tabNav.style.background = "rgba(241,245,247,0.72)";
+        tabNav.style.background = "rgba(255,255,255,0.85)";
         tabNav.style.backdropFilter = "blur(10px)";
         tabNav.style.setProperty("-webkit-backdrop-filter", "blur(10px)");
       } else {
         tabNav.style.position = "";
         tabNav.style.top = "";
         tabNav.style.zIndex = "";
-        tabNav.style.boxShadow = "";
         tabNav.style.background = "";
         tabNav.style.backdropFilter = "";
         tabNav.style.removeProperty("-webkit-backdrop-filter");
