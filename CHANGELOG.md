@@ -1,3 +1,72 @@
+## [v2.2.4-rc.1] - 2026-07-31 RC
+
+Bu surum rc.istoc.com'da onay asamasindadir.
+
+### Eklendi
+- feat(product-detail): masaüstü düzeni 3 sütuna çıkar (@TurksabYonetim)
+- feat(product-detail): galeriyi 465px sol sütuna uyarla (@TurksabYonetim)
+- feat(product-detail): ProductSellerPanel dikey satıcı kartı (@TurksabYonetim)
+  - makeProduct(): dış `...overrides` spread'i, supplier için yapılan iç deep-merge'i eziyordu (supplier override verildiğinde id/name/ responseTime gibi varsayılan alanlar tamamen kayboluyordu). `supplier` artık outer spread'den önce ayrıştırılıyor.
+  - XSS testindeki `not.toContain("onerror=")` iddiası escapeHtml()'in bu kod tabanındaki (SellerTrustCard ile aynı) davranışıyla tutarsızdı — escapeHtml yalnız yapısal karakterleri (`<>&"'`) kodlar, "onerror=" kelimesini metinden silmez. `toContain("&lt;img")` zaten payload'ın etkisiz metne dönüştüğünü kanıtlıyor; iddia daha isabetli bir kontrolle değiştirildi.
+- feat(product-detail): yatay satıcı şeridini dikey panelle değiştir (@TurksabYonetim)
+- feat(product-detail): satıcı metriklerini storefront'a taşı (@TurksabYonetim)
+- feat(product-detail): orta sütun ProductBuyBox bileşeni (@TurksabYonetim)
+- feat(product-detail): sağ sütun ProductOrderPanel bileşeni (@TurksabYonetim)
+- feat(product-detail): orta sütunu referans düzene hizala (@TurksabYonetim)
+  - Kart çerçevesi + yarım genişlikte sekme şeridi
+  - Meta satırı dikey çizgi ayraçlı: yorum durumu | sipariş sayısı
+  - Fiyat sırası tersine: büyük fiyat > üstü çizili > adet etiketi
+  - Kampanya varsa kırmızı indirim rozeti ve kırmızı ilk kademe; kampanya yokken tüm kademeler nötr
+  - Varyant eksenleri kendi başlığını taşır, seçim butonu outline pill
+  - Renk/metin varyantları kare (rounded-md) — repo radius standardı
+  - Teknik Özellikler ızgarası eklendi (3 sütun, dikey ayraçlı)
+  - Bölümler arası yatay ayraçlar
+  - product.noReviewsYet 4 dile eklendi
+- feat(product-detail): stok rozetini sadeleştir, sertifika rozetleri ekle (@TurksabYonetim)
+- feat(product-detail): satın alma bloğunu sabit sağ panelde topla (@TurksabYonetim)
+  - Dış ızgara artık "akan içerik | sabit panel": sekmeler ve ilgili ürünler içerik sütununun içine alındı, böylece panel tüm sayfa boyunca sağda kalır (sticky öğe ancak kapsayıcısı kadar yaşar)
+  - Fiyat, indirim rozeti, numune, sekme şeridi ve varyant eksenleri ProductBuyBox'tan ProductOrderPanel'e taşındı (varyant init'leri dahil)
+  - Orta sütun artık kimlik sütunu: başlık, meta, sertifikalar, stok uyarısı, Teknik Özellikler
+  - Sağ sütun 380px → 440px (üç fiyat kademesi sığsın)
+  - Adet etiketlerinden MSQ/uzun önekler kaldırıldı (4 dil) — referansta yok, dar sütunda iki satıra kırılıyordu
+  - Testler yeni sorumluluk sınırlarına göre bölündü
+- feat(urun-detay): ürün detay sayfası Alibaba referansına göre yeniden düzenlendi (@ahmeetseker)
+  - Fiyat, numune ve varyant seçicileri orta "Toptan Satış" kartına taşındı; sağ panel kargo + sosyal kanıt + CTA'lara sadeleştirildi
+  - Sayfa kaydırılınca fiyat/numune/varyant bloğu sağ sticky panele taşınır hale getirildi (kopya değil node taşıma, tek state)
+  - Özelleştirme seçeneği olan üründe Toptan Satış / Özelleştirme sekmeleri eklendi (46px şerit, aktif sekmede 3px üst vurgu)
+  - Galeri altına Fotoğraflar/Video segmenti eklendi (yalnız videolu üründe); Özellikler sekmesi kaldırıldı, erişim thumb karosunda sürüyor
+  - Tüm ölçüler referansla birebir eşitlendi: kart padding 16/16/20, başlık 18px, fiyat 26px, rozet ve ayraç boyutları, swatch 60px, seçili varyantta 1.5px double-border, sayfa düzeni 1736px (galeri 590 / kart 640 / panel 394)
+  - Başlıktaki text-balance kaldırıldı; satır referanstaki gibi tam genişlik dolduruyor
+- feat: Enhance product order panel and reviews section (@TurksabYonetim)
+  - Updated the ProductOrderPanel to display shipping information more clearly, including a message to contact the seller when shipping method is not defined.
+  - Improved styling for shipping details and added localization for new strings in multiple languages.
+  - Refined the ProductReviews component layout, including a new rating summary design and improved accessibility.
+  - Added verified orders label and updated the seller panel metrics display for better clarity and consistency.
+  - Introduced a new image for verified orders.
+
+### Duzeltildi
+- fix(security): allow GTM tracking providers in CSP (@TurksabYonetim)
+- fix(dev): Vite proxy backend bağlantı düzeltmesi (@boraydeger32)
+  - vite.config.ts: local backend'e Host header gönderimi eklendi
+  - .env.development: VITE_API_PROXY ve FRAPPE_SITE_NAME eklendi
+- fix(product-detail): yorum sayısı linkini Yorumlar bölümüne bağla (@TurksabYonetim)
+- fix(product-detail): branch review bulguları — i18n, mainMarkets etiketi, KYB testleri, sticky eşiği (@TurksabYonetim)
+- fix(product-detail): tek sekme şeridi komple kaplasın (@TurksabYonetim)
+- fix(product-detail): sipariş panelinde boşluk ve hizalama düzeltmeleri (@TurksabYonetim)
+  - Sosyal kanıt rozeti kargo kutusuna yapışıktı: wrapperClass ile mt-4 verildi (prop zaten vardı, masaüstünde boş geçilmişti)
+  - CTA bloğu ile üstündeki içerik arasına mt-5 eklendi
+  - CTA bloğundan px-5 kaldırıldı: panelin kendi p-5 dolgusu üstüne binerek butonları kargo/fiyat bloklarından 20px dar bırakıyordu. Sticky halinde mx-[-20px] ile birlikte px-5 ayrıca uygulanıyor.
+- fix(css): hover variant'ındaki bozuk media query yazımını düzelt (@TurksabYonetim)
+  - 22 dosyadaki 46 kullanım `_and_` biçimine çevrildi
+  - Etkilenen utility'ler (hover:scale-105, hover:shadow-md, hover:bg-gray-50, hover:-translate-y-1 vb.) çıktı CSS'te hiç üretilmiyordu; masaüstünde hover büyüme/gölge/renk efektleri bu 22 dosyada ölüydü
+  - Üretilen kural sayısı 1 → 28, bundle CSS 429.6 → 433.9 kB
+  - Build'deki 29 Lightning CSS uyarısının 28'i kalktı
+  - Doğru yazım projede zaten vardı (ShippingLogisticsPage.ts), referans alındı
+
+### Degistirildi
+- refactor(product-detail): SKU/varyant yardımcılarını variantMatrix'e çıkar (@TurksabYonetim)
+
+---
 ## [v2.2.4-beta.2] - 2026-07-31 BETA
 
 Bu surum beta.istoc.com'da test asamasindadir.
