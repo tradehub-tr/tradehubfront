@@ -1,3 +1,17 @@
+## [v2.3.0-alpha.1] - 2026-08-03 ALPHA
+
+Bu surum alpha.istoc.com'da gelistirme asamasindadir.
+
+### Eklendi
+- feat(mobile): add BottomNav to all browsing pages, fix iOS Capacitor navigation (@boraydeger32)
+  - Add BottomNav component to 13 pages (cart, categories, product-detail, brand, top-deals, top-ranking, tailored-selections, favorites, orders, messages, profile, addresses, contacts)
+  - Increase BottomNav touch targets (h-14, w-6 icons, larger text)
+  - Add safe-area-inset-bottom padding for iPhone home indicator
+  - Fix pretty URL navigation in Capacitor bundle mode (listing, category, brand, seller URLs fallback to legacy format)
+  - Add viewport-fit=cover to all HTML entries for edge-to-edge rendering
+  - Fix sticky header positioning on iOS (contentInset: automatic + safe-area top padding)
+
+---
 ## [v2.3.0] - 2026-08-01 PROD
 
 Bu surum istoc.com'da yayindadir.
