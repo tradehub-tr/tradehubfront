@@ -1,3 +1,28 @@
+## [v2.3.0-rc.1] - 2026-08-03 RC
+
+Bu surum rc.istoc.com'da onay asamasindadir.
+
+### Eklendi
+- feat(mobile): add BottomNav to all browsing pages, fix iOS Capacitor navigation (@boraydeger32)
+  - Add BottomNav component to 13 pages (cart, categories, product-detail, brand, top-deals, top-ranking, tailored-selections, favorites, orders, messages, profile, addresses, contacts)
+  - Increase BottomNav touch targets (h-14, w-6 icons, larger text)
+  - Add safe-area-inset-bottom padding for iPhone home indicator
+  - Fix pretty URL navigation in Capacitor bundle mode (listing, category, brand, seller URLs fallback to legacy format)
+  - Add viewport-fit=cover to all HTML entries for edge-to-edge rendering
+  - Fix sticky header positioning on iOS (contentInset: automatic + safe-area top padding)
+- feat(seo): global konumlandırmaya geç, favicon setini ve manifest mime t (@ahmeetseker)
+  - Ana sayfa meta title/description ve OG etiketleri "Türkiye'nin B2B pazaryeri" mesajından "Global B2B toptan satış ve ticaret" mesajına çevrildi; TR/EN i18n çevirileri ve staticMeta.ts SEO metni bu yeni konumlandırmayla senkron edildi.
+  - vite.config.ts static SEO plugin'ine favicon.ico + 96x96/48x48 PNG link etiketleri eklendi; Google favicon crawler'ının /favicon.ico ve 48'in katı boyut beklentisini karşılamak için (tek 32x32 link SERP'te jenerik ikon çıkmasına yol açıyordu).
+  - public/favicon.ico ve istoc-favicon-48/96.png eklendi.
+  - nginx.conf.template'e /manifest.webmanifest için application/manifest+json mime tipi eklendi; nginx mime.types'ta .webmanifest tanımlı olmadığından varsayılan olarak application/octet-stream dönüyor ve Lighthouse manifest uyarısına neden oluyordu.
+
+### Duzeltildi
+- fix(galeri): varyant görsellerini ortak render ile bas (@ahmeetseker)
+  - Varyant swap, lightbox ve thumbnail görsellerini tek render yoluna taşı
+  - Görsel src değerlerini ortak noktada sanitize ederek manuel img üretimini kaldır
+  - Eksik boyut ve object-fit sınıfları yüzünden oluşan taşma/zoom sorununu önle
+
+---
 ## [v2.3.0-beta.2] - 2026-08-03 BETA
 
 Bu surum beta.istoc.com'da test asamasindadir.
