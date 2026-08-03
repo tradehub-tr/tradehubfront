@@ -82,7 +82,7 @@ export const INDEXABLE_META: Record<string, StaticPageMeta> = {
   "index.html": {
     prettyPath: "/",
     description:
-      "Türkiye'nin B2B toptan satış pazaryeri iStoc'ta doğrulanmış tedarikçilerden güvenli ödemeyle toptan ürün alın. Toptan fiyat avantajını keşfedin.",
+      "Dünya çapındaki doğrulanmış tedarikçilerle sınır ötesi B2B toptan ticaret yapın. iStoc'ta güvenli ödeme ve global toptan fiyat avantajlarını keşfedin.",
   },
   "pages/products.html": {
     prettyPath: "/urunler",

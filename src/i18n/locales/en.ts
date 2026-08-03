@@ -1,7 +1,7 @@
 const en = {
   translation: {
     pageTitle: {
-      home: "iStoc | Turkey's B2B Wholesale Marketplace",
+      home: "iStoc | Global B2B Wholesale & Trade Marketplace",
       auth_forgot_password: "Forgot Password | iStoc",
       auth_login: "Sign In | iStoc",
       auth_register: "Sign Up | iStoc",

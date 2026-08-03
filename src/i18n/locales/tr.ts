@@ -1,7 +1,7 @@
 const tr = {
   translation: {
     pageTitle: {
-      home: "iStoc | Türkiye'nin B2B Toptan Satış Pazaryeri",
+      home: "iStoc | Global B2B Toptan Satış ve Ticaret Pazaryeri",
       auth_forgot_password: "Şifremi Unuttum | iStoc",
       auth_login: "Giriş Yap | iStoc",
       auth_register: "Kayıt Ol | iStoc",

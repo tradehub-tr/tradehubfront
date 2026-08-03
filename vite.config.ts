@@ -245,6 +245,18 @@ function staticSeoPlugin(): Plugin {
                 if (!/rel="apple-touch-icon"/i.test(out)) {
                     tags.push('<link rel="apple-touch-icon" sizes="180x180" href="/icons/apple-touch-icon.png" />');
                 }
+                // Favicon seti — Google favicon crawler'ı önce /favicon.ico ister
+                // (yoksa SERP'te jenerik dünya ikonu çıkar) ve 48'in katı boyut
+                // bekler; kaynak HTML'lerdeki tek 32x32 link ikisini de karşılamıyor.
+                if (!/href="\/favicon\.ico"/i.test(out)) {
+                    tags.push('<link rel="icon" href="/favicon.ico" sizes="any" />');
+                }
+                if (!/href="\/images\/istoc-favicon-96\.png"/i.test(out)) {
+                    tags.push('<link rel="icon" type="image/png" sizes="96x96" href="/images/istoc-favicon-96.png" />');
+                }
+                if (!/href="\/images\/istoc-favicon-48\.png"/i.test(out)) {
+                    tags.push('<link rel="icon" type="image/png" sizes="48x48" href="/images/istoc-favicon-48.png" />');
+                }
                 if (NOINDEX_FILES.has(rel)) {
                     const value = NOINDEX_FOLLOW_FILES.has(rel) ? 'noindex, follow' : 'noindex, nofollow';
                     tags.push(`<meta name="robots" content="${value}" />`);
