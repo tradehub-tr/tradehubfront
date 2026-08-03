@@ -1,3 +1,14 @@
+## [v2.3.0-alpha.3] - 2026-08-03 ALPHA
+
+Bu surum alpha.istoc.com'da gelistirme asamasindadir.
+
+### Duzeltildi
+- fix(galeri): varyant görsellerini ortak render ile bas (@ahmeetseker)
+  - Varyant swap, lightbox ve thumbnail görsellerini tek render yoluna taşı
+  - Görsel src değerlerini ortak noktada sanitize ederek manuel img üretimini kaldır
+  - Eksik boyut ve object-fit sınıfları yüzünden oluşan taşma/zoom sorununu önle
+
+---
 ## [v2.3.0-alpha.2] - 2026-08-03 ALPHA
 
 Bu surum alpha.istoc.com'da gelistirme asamasindadir.
