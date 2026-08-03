@@ -10,7 +10,7 @@
 
 import { getCurrentProduct } from "../../alpine/product";
 import { t } from "../../i18n";
-import { escapeHtml as escapeHtmlAttr } from "../../utils/sanitize";
+import { escapeHtml as escapeHtmlAttr, sanitizeUrl } from "../../utils/sanitize";
 
 interface GalleryVisual {
   background: string;
@@ -39,6 +39,19 @@ function renderPlaceholder(visual: GalleryVisual, size: "large" | "thumb"): stri
   `;
 }
 
+/**
+ * Galeri görselinin TEK KAYNAK'ı — hem şablon hem alpine/product.ts (slayt
+ * değişimi, lightbox, varyant swap) buradan geçmek ZORUNDA.
+ *
+ * Neden: `gallery-media-asset` yalnızca bir işaretçi sınıf, style.css'te
+ * karşılığı YOK. Boyut/oturma tamamen buradaki `w-full h-full object-*`
+ * utility'lerinden geliyor. Elle `<img class="gallery-media-asset">` yazılırsa
+ * görsel doğal (intrinsic) boyutunda basılır: büyük dosya kareyi taşırıp
+ * kırpılmış/zoom'lu, küçük dosya sol-üste yapışıp ortalanmamış görünür
+ * (2026-08-03'te varyant swap'inde yakalandı — `THUMB_CLASS`'takinin aynısı).
+ *
+ * `src` burada sanitize edilir; çağıranın ayrıca kaçışlamasına gerek yok.
+ */
 export function renderGalleryMedia(
   src: string | undefined,
   alt: string,
@@ -47,10 +60,11 @@ export function renderGalleryMedia(
 ): string {
   if (src) {
     const safeAlt = escapeHtmlAttr(alt);
+    const safeSrc = escapeHtmlAttr(sanitizeUrl(src));
     const fitClass = size === "large" ? "object-contain" : "object-cover";
     return `
       <img
-        src="${src}"
+        src="${safeSrc}"
         alt="${safeAlt}"
         width="${size === "thumb" ? "70" : "800"}" height="${size === "thumb" ? "70" : "800"}"
         data-gallery-main-media="true"
