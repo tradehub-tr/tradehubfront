@@ -146,7 +146,7 @@ appEl.classList.add("relative");
 appEl.innerHTML = `
   <h1 class="sr-only">iStoc – Türkiye'nin B2B Toptan Satış Pazaryeri</h1>
   <!-- Sticky Header (global, stays sticky across full page) -->
-  <div id="sticky-header" class="sticky top-0 z-(--z-header) bg-white dark:bg-gray-900">
+  <div id="sticky-header" class="sticky top-0 z-(--z-header) bg-white dark:bg-gray-900" style="padding-top:env(safe-area-inset-top,0px)">
     ${TopBar()}
     ${SubHeader()}
   </div>

@@ -11,7 +11,7 @@ import { mountChatPopup, initChatTriggers } from '../components/chat-popup'
 import { initLanguageSelector } from '../components/header/TopBar'
 import { Breadcrumb } from '../components/shared/Breadcrumb'
 import { FooterLinks } from '../components/footer'
-import { FloatingPanel } from '../components/floating'
+import { FloatingPanel, BottomNav, initBottomNav } from '../components/floating'
 import { startAlpine } from '../alpine'
 // B-2: sidebar Alpine modülü page-specific (dashboard sidebar bu sayfada).
 import '../alpine/sidebar'
@@ -53,6 +53,9 @@ appEl.innerHTML = `
   </div>
 
   ${FloatingPanel()}
+
+  <!-- Bottom Navigation (mobile/tablet) -->
+  ${BottomNav()}
 `;
 
 initFlowbite();
@@ -60,6 +63,7 @@ mountChatPopup();
 initChatTriggers();
 initSidebar()
 startAlpine();
+initBottomNav();
 initHeaderCart();
 initLanguageSelector();
 initProfileLayout();

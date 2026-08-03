@@ -21,7 +21,7 @@ import { saveRecentProduct } from '../services/recentHistoryService'
 import { recordListingView } from '../services/socialProofService'
 
 // Floating components
-import { FloatingPanel } from '../components/floating'
+import { FloatingPanel, BottomNav, initBottomNav } from '../components/floating'
 import { mountChatPopup, initChatTriggers } from '../components/chat-popup'
 import { chatTriggerAttrs } from '../components/chat-popup/chatTriggerAttrs'
 
@@ -343,6 +343,9 @@ async function renderProductPage() {
     <!-- Floating Panel -->
     ${FloatingPanel()}
 
+    <!-- Bottom Navigation (mobile/tablet) -->
+    ${BottomNav()}
+
     <!-- Modals / Drawers -->
     ${ReviewsModal()}
     ${QAModal()}
@@ -420,6 +423,7 @@ async function renderProductPage() {
 
   // Start Alpine LAST
   startAlpine();
+  initBottomNav();
 
   // View tracking — idle'da fire-and-forget POST
   if (product.id) {

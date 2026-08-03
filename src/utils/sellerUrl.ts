@@ -5,6 +5,8 @@
  * Multi-language: lang='en' verilirse /en/magaza/<slug> (Faz 7 path prefix).
  */
 
+import { isNativeBundleContext } from "./nativeHttp";
+
 export interface SellerUrlInput {
   slug?: string;
   href?: string;
@@ -16,11 +18,10 @@ export function getSellerUrl(
   lang: "tr" | "en" = "tr"
 ): string {
   if (!seller) return "#";
-  if (seller.href) return seller.href;
+  if (seller.href && !isNativeBundleContext()) return seller.href;
+  if (isNativeBundleContext() && seller.id) return `/pages/seller/seller-shop.html?seller=${encodeURIComponent(seller.id)}`;
   const prefix = lang === "en" ? "/en" : "";
   if (seller.slug) return `${prefix}/magaza/${seller.slug}`;
-  // seller-shop.html `?seller=<code>` parametresini okur (slug olarak fetch eder).
-  // Eskiden `?id=` üretiliyordu → sayfa parametreyi bulamayıp mock'a düşüyordu.
   if (seller.id) return `/pages/seller/seller-shop.html?seller=${encodeURIComponent(seller.id)}`;
   return "#";
 }

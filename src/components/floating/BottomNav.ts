@@ -24,7 +24,7 @@ function renderCategoryOverlay(): string {
       <!-- Header -->
       <div class="flex items-center justify-between px-4 h-12 border-b border-gray-100 dark:border-gray-700 shrink-0">
         <button type="button" id="cat-fullscreen-back" class="th-no-press p-1 -ms-1 text-gray-700 dark:text-gray-300" aria-label="${t("common.back")}">
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5"/>
           </svg>
         </button>
@@ -90,7 +90,7 @@ function populateCategoryOverlay(overlay: HTMLElement): () => void {
       const viewAllItem = `
         <a href="/pages/products.html?cat=${escapeHtml(cat.slug)}" class="flex flex-col items-center gap-1">
           <div class="w-12 h-12 min-[400px]:w-14 min-[400px]:h-14 sm:w-16 sm:h-16 rounded-full border-2 border-dashed border-gray-300 dark:border-gray-600 flex items-center justify-center">
-            <svg class="w-5 h-5 sm:w-6 sm:h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5">
+            <svg class="w-6 h-6 sm:w-6 sm:h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5">
               <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6A2.25 2.25 0 0 1 6 3.75h2.25A2.25 2.25 0 0 1 10.5 6v2.25a2.25 2.25 0 0 1-2.25 2.25H6a2.25 2.25 0 0 1-2.25-2.25V6ZM3.75 15.75A2.25 2.25 0 0 1 6 13.5h2.25a2.25 2.25 0 0 1 2.25 2.25V18a2.25 2.25 0 0 1-2.25 2.25H6A2.25 2.25 0 0 1 3.75 18v-2.25ZM13.5 6a2.25 2.25 0 0 1 2.25-2.25H18A2.25 2.25 0 0 1 20.25 6v2.25A2.25 2.25 0 0 1 18 10.5h-2.25a2.25 2.25 0 0 1-2.25-2.25V6ZM13.5 15.75a2.25 2.25 0 0 1 2.25-2.25H18a2.25 2.25 0 0 1 2.25 2.25V18A2.25 2.25 0 0 1 18 20.25h-2.25A2.25 2.25 0 0 1 13.5 18v-2.25Z"/>
             </svg>
           </div>
@@ -195,7 +195,7 @@ function renderAccountOverlay(): string {
       <!-- Header -->
       <div class="flex items-center justify-between px-4 h-12 border-b border-gray-100 dark:border-gray-700 shrink-0">
         <button type="button" id="account-fullscreen-back" class="th-no-press p-1 -ms-1 text-gray-700 dark:text-gray-300" aria-label="${t("common.back")}">
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5"/>
           </svg>
         </button>
@@ -410,7 +410,7 @@ function initAccountOverlay(overlay: HTMLElement): () => void {
           <div class="mx-3 min-[400px]:mx-4 mt-4 rounded-md bg-[var(--color-primary-50,#fff8e1)] border border-[var(--color-primary-200,#ffe57a)] p-3 min-[400px]:p-4">
             <div class="flex items-center gap-3">
               <div class="w-10 h-10 min-[400px]:w-12 min-[400px]:h-12 rounded-full bg-gray-200 flex items-center justify-center shrink-0">
-                <svg class="w-5 h-5 min-[400px]:w-6 min-[400px]:h-6 text-gray-400" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z"/></svg>
+                <svg class="w-6 h-6 min-[400px]:w-6 min-[400px]:h-6 text-gray-400" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z"/></svg>
               </div>
               <div class="flex-1 min-w-0">
                 <p class="text-[13px] min-[400px]:text-sm font-semibold text-gray-900">${t("accountMenu.loginTitle")}</p>
@@ -554,51 +554,51 @@ function initAccountOverlay(overlay: HTMLElement): () => void {
 
 export function BottomNav(): string {
   return `
-    <div id="bottom-nav" class="fixed bottom-0 start-0 z-30 w-full bg-white border-t border-gray-200 dark:bg-gray-800 dark:border-gray-700 xl:hidden safe-area-bottom">
-      <div class="grid h-12 sm:h-14 grid-cols-5 mx-auto max-w-lg">
+    <div id="bottom-nav" class="fixed bottom-0 start-0 z-30 w-full bg-white border-t border-gray-200 dark:bg-gray-800 dark:border-gray-700 xl:hidden" style="padding-bottom:env(safe-area-inset-bottom,0px)">
+      <div class="grid h-14 grid-cols-5 mx-auto max-w-lg">
         <!-- Ana Sayfa -->
         <a href="/" class="th-no-press inline-flex flex-col items-center justify-center px-1 group" aria-label="${t("bottomNav.home")}">
-          <svg class="w-5 h-5 text-primary-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+          <svg class="w-6 h-6 text-primary-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m4 12 8-8 8 8M6 10.5V19a1 1 0 0 0 1 1h3v-3a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v3h3a1 1 0 0 0 1-1v-8.5"/>
           </svg>
-          <span class="text-[9px] sm:text-[10px] mt-0.5 text-primary-500 font-medium" data-i18n="bottomNav.home">${t("bottomNav.home")}</span>
+          <span class="text-[10px] sm:text-xs mt-0.5 text-primary-500 font-medium" data-i18n="bottomNav.home">${t("bottomNav.home")}</span>
         </a>
 
         <!-- Kategoriler -->
         <button type="button" id="bottom-nav-categories" class="th-no-press inline-flex flex-col items-center justify-center px-1 group" aria-label="${t("bottomNav.categories")}" aria-controls="cat-fullscreen-overlay" aria-expanded="false" aria-haspopup="dialog">
-          <svg class="w-5 h-5 text-gray-500 group-hover:text-primary-500 dark:text-gray-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+          <svg class="w-6 h-6 text-gray-500 group-hover:text-primary-500 dark:text-gray-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.75 6A2.25 2.25 0 0 1 6 3.75h2.25A2.25 2.25 0 0 1 10.5 6v2.25a2.25 2.25 0 0 1-2.25 2.25H6a2.25 2.25 0 0 1-2.25-2.25V6ZM3.75 15.75A2.25 2.25 0 0 1 6 13.5h2.25a2.25 2.25 0 0 1 2.25 2.25V18a2.25 2.25 0 0 1-2.25 2.25H6A2.25 2.25 0 0 1 3.75 18v-2.25ZM13.5 6a2.25 2.25 0 0 1 2.25-2.25H18A2.25 2.25 0 0 1 20.25 6v2.25A2.25 2.25 0 0 1 18 10.5h-2.25a2.25 2.25 0 0 1-2.25-2.25V6ZM13.5 15.75a2.25 2.25 0 0 1 2.25-2.25H18a2.25 2.25 0 0 1 2.25 2.25V18A2.25 2.25 0 0 1 18 20.25h-2.25A2.25 2.25 0 0 1 13.5 18v-2.25Z"/>
           </svg>
-          <span class="text-[9px] sm:text-[10px] mt-0.5 text-gray-500 group-hover:text-primary-500 dark:text-gray-400" data-i18n="bottomNav.categories">${t("bottomNav.categories")}</span>
+          <span class="text-[10px] sm:text-xs mt-0.5 text-gray-500 group-hover:text-primary-500 dark:text-gray-400" data-i18n="bottomNav.categories">${t("bottomNav.categories")}</span>
         </button>
 
         <!-- Mesaj -->
         <a href="/hesabim/mesajlar" class="th-no-press inline-flex flex-col items-center justify-center px-1 group" aria-label="${t("bottomNav.messages")}">
           <div class="relative">
-            <svg class="w-5 h-5 text-gray-500 group-hover:text-primary-500 dark:text-gray-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+            <svg class="w-6 h-6 text-gray-500 group-hover:text-primary-500 dark:text-gray-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.625 12a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0H8.25m4.125 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0H12m4.125 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0h-.375M21 12c0 4.556-4.03 8.25-9 8.25a9.764 9.764 0 0 1-2.555-.337A5.972 5.972 0 0 1 5.41 20.97a5.969 5.969 0 0 1-.474-.065 4.48 4.48 0 0 0 .978-2.025c.09-.457-.133-.901-.467-1.226C3.93 16.178 3 14.189 3 12c0-4.556 4.03-8.25 9-8.25s9 3.694 9 8.25Z"/>
             </svg>
           </div>
-          <span class="text-[9px] sm:text-[10px] mt-0.5 text-gray-500 group-hover:text-primary-500 dark:text-gray-400" data-i18n="bottomNav.messages">${t("bottomNav.messages")}</span>
+          <span class="text-[10px] sm:text-xs mt-0.5 text-gray-500 group-hover:text-primary-500 dark:text-gray-400" data-i18n="bottomNav.messages">${t("bottomNav.messages")}</span>
         </a>
 
         <!-- Sepet -->
         <a href="/pages/cart.html" class="th-no-press inline-flex flex-col items-center justify-center px-1 group" aria-label="${t("bottomNav.cart")}">
           <div class="relative">
-            <svg class="w-5 h-5 text-gray-500 group-hover:text-primary-500 dark:text-gray-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+            <svg class="w-6 h-6 text-gray-500 group-hover:text-primary-500 dark:text-gray-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 0 0-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 0 0-16.536-1.84M7.5 14.25 5.106 5.272M6 20.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Zm12.75 0a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z"/>
             </svg>
             <span id="bottom-nav-cart-badge" class="hidden absolute -top-1.5 -end-2 min-w-4 h-4 px-0.5 bg-error-500 text-white text-[10px] font-bold rounded-full items-center justify-center"></span>
           </div>
-          <span class="text-[9px] sm:text-[10px] mt-0.5 text-gray-500 group-hover:text-primary-500 dark:text-gray-400" data-i18n="bottomNav.cart">${t("bottomNav.cart")}</span>
+          <span class="text-[10px] sm:text-xs mt-0.5 text-gray-500 group-hover:text-primary-500 dark:text-gray-400" data-i18n="bottomNav.cart">${t("bottomNav.cart")}</span>
         </a>
 
         <!-- Hesabım (hamburger) -->
         <button type="button" id="bottom-nav-account" class="th-no-press inline-flex flex-col items-center justify-center px-1 group" aria-label="${t("bottomNav.account")}" aria-controls="account-fullscreen-overlay" aria-expanded="false" aria-haspopup="dialog">
-          <svg class="w-5 h-5 text-gray-500 group-hover:text-primary-500 dark:text-gray-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+          <svg class="w-6 h-6 text-gray-500 group-hover:text-primary-500 dark:text-gray-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"/>
           </svg>
-          <span class="text-[9px] sm:text-[10px] mt-0.5 text-gray-500 group-hover:text-primary-500 dark:text-gray-400" data-i18n="bottomNav.account">${t("bottomNav.account")}</span>
+          <span class="text-[10px] sm:text-xs mt-0.5 text-gray-500 group-hover:text-primary-500 dark:text-gray-400" data-i18n="bottomNav.account">${t("bottomNav.account")}</span>
         </button>
       </div>
     </div>

@@ -8,7 +8,7 @@ import { initFlowbite } from 'flowbite'
 
 import { TopBar, initHeaderCart } from '../components/header'
 import { initLanguageSelector } from '../components/header/TopBar'
-import { FloatingPanel } from '../components/floating'
+import { FloatingPanel, BottomNav, initBottomNav } from '../components/floating'
 import { startAlpine } from '../alpine'
 // B-2: sidebar Alpine modülü page-specific (dashboard sidebar bu sayfada).
 import '../alpine/sidebar'
@@ -46,11 +46,15 @@ appEl.innerHTML = `
 
   <!-- Floating Panel -->
   ${FloatingPanel()}
+
+  <!-- Bottom Navigation (mobile/tablet) -->
+  ${BottomNav()}
 `;
 
 initFlowbite();
 initSidebar()
 startAlpine();
+initBottomNav();
 initHeaderCart();
 initLanguageSelector();
 initMessagesLayout();

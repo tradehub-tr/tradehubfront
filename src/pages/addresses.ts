@@ -18,7 +18,7 @@ import { mountChatPopup, initChatTriggers } from '../components/chat-popup'
 import { initLanguageSelector } from '../components/header/TopBar'
 import { Breadcrumb } from '../components/shared/Breadcrumb'
 import { FooterLinks } from '../components/footer'
-import { FloatingPanel, initFloatingPanel } from '../components/floating'
+import { FloatingPanel, initFloatingPanel, BottomNav, initBottomNav } from '../components/floating'
 import { renderSidebarColumn, initSidebar } from '../components/sidebar'
 import { AddressesLayout } from '../components/addresses/AddressesLayout'
 
@@ -55,6 +55,9 @@ appEl.innerHTML = `
   </div>
 
   ${FloatingPanel()}
+
+  <!-- Bottom Navigation (mobile/tablet) -->
+  ${BottomNav()}
 `;
 
 initFlowbite();
@@ -66,3 +69,4 @@ initSidebar();
 mountChatPopup();
 initChatTriggers();
 startAlpine();
+initBottomNav();
