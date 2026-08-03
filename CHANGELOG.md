@@ -1,3 +1,15 @@
+## [v2.3.0-alpha.2] - 2026-08-03 ALPHA
+
+Bu surum alpha.istoc.com'da gelistirme asamasindadir.
+
+### Eklendi
+- feat(seo): global konumlandırmaya geç, favicon setini ve manifest mime t (@ahmeetseker)
+  - Ana sayfa meta title/description ve OG etiketleri "Türkiye'nin B2B pazaryeri" mesajından "Global B2B toptan satış ve ticaret" mesajına çevrildi; TR/EN i18n çevirileri ve staticMeta.ts SEO metni bu yeni konumlandırmayla senkron edildi.
+  - vite.config.ts static SEO plugin'ine favicon.ico + 96x96/48x48 PNG link etiketleri eklendi; Google favicon crawler'ının /favicon.ico ve 48'in katı boyut beklentisini karşılamak için (tek 32x32 link SERP'te jenerik ikon çıkmasına yol açıyordu).
+  - public/favicon.ico ve istoc-favicon-48/96.png eklendi.
+  - nginx.conf.template'e /manifest.webmanifest için application/manifest+json mime tipi eklendi; nginx mime.types'ta .webmanifest tanımlı olmadığından varsayılan olarak application/octet-stream dönüyor ve Lighthouse manifest uyarısına neden oluyordu.
+
+---
 ## [v2.3.0-alpha.1] - 2026-08-03 ALPHA
 
 Bu surum alpha.istoc.com'da gelistirme asamasindadir.
