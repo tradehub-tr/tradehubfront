@@ -262,6 +262,14 @@ server {
         try_files $robots_file =404;
     }
 
+    # ── PWA manifest — nginx mime.types'ta .webmanifest yok, varsayılan
+    # application/octet-stream ile gidiyordu (Lighthouse "manifest" uyarısı).
+    # add_header YOK: server-level X-Robots-Tag miras kalsın.
+    location = /manifest.webmanifest {
+        default_type application/manifest+json;
+        try_files $uri =404;
+    }
+
     # ── sitemap.xml — backend proxy (BE-MAP canlıya çıkana kadar bilinçli 404)
     location = /sitemap.xml {
         proxy_hide_header X-Robots-Tag;
