@@ -6,6 +6,8 @@
  * Helper her ikisini de kabul eder — `url_slug` öncelikli.
  */
 
+import { isNativeBundleContext } from "./nativeHttp";
+
 export interface CategoryUrlInput {
   /** Category.url_slug öncelikli */
   url_slug?: string;
@@ -20,7 +22,8 @@ export function getCategoryUrl(
   lang: "tr" | "en" = "tr"
 ): string {
   if (!category) return "#";
-  if (category.href) return category.href;
+  if (category.href && !isNativeBundleContext()) return category.href;
+  if (isNativeBundleContext() && category.id) return `/pages/categories.html?id=${category.id}`;
   const prefix = lang === "en" ? "/en" : "";
   const slug = category.url_slug || category.slug;
   if (slug) return `${prefix}/kategori/${slug}`;

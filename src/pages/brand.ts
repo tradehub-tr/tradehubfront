@@ -20,7 +20,7 @@ import {
 import { mountChatPopup, initChatTriggers } from '../components/chat-popup'
 import { initLanguageSelector } from '../components/header/TopBar'
 import { FooterLinks } from '../components/footer'
-import { FloatingPanel } from '../components/floating'
+import { FloatingPanel, BottomNav, initBottomNav } from '../components/floating'
 import { startAlpine } from '../alpine'
 import { Breadcrumb } from '../components/shared/Breadcrumb'
 import { ProductListingGrid } from '../components/products/ProductListingGrid'
@@ -393,6 +393,9 @@ async function main() {
 
     ${FooterLinks()}
     ${FloatingPanel()}
+
+    <!-- Bottom Navigation (mobile/tablet) -->
+    ${BottomNav()}
   `
 
   // Render featured grid (if any)
@@ -414,6 +417,7 @@ async function main() {
   mountChatPopup();
   initChatTriggers();
   startAlpine()
+  initBottomNav()
 }
 
 main().catch(err => {

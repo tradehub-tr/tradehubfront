@@ -6,6 +6,7 @@
  */
 
 import { sanitizeUrl } from "./sanitize";
+import { isNativeBundleContext } from "./nativeHttp";
 
 export interface BrandUrlInput {
   slug?: string;
@@ -20,9 +21,8 @@ export function getBrandUrl(
   lang: "tr" | "en" = "tr"
 ): string {
   if (!brand) return "#";
-  // brand.href backend/kullanıcı kaynaklı — open-redirect ve javascript:/data:
-  // şemalarını reddetmek için sanitizeUrl'den geçir.
-  if (brand.href) return sanitizeUrl(brand.href);
+  if (brand.href && !isNativeBundleContext()) return sanitizeUrl(brand.href);
+  if (isNativeBundleContext() && brand.id) return `/pages/brand.html?id=${brand.id}`;
   const prefix = lang === "en" ? "/en" : "";
   if (brand.slug) return `${prefix}/marka/${brand.slug}`;
   if (brand.id) return `/pages/brand.html?id=${brand.id}`;

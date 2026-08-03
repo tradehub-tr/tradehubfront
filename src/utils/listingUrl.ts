@@ -12,6 +12,7 @@
  */
 
 import { sanitizeUrl } from "./sanitize";
+import { isNativeBundleContext } from "./nativeHttp";
 
 export interface ListingUrlInput {
   /** Listing.name (örn. "LST-00201"). slug yoksa fallback için kullanılır. */
@@ -26,6 +27,9 @@ export interface ListingUrlInput {
  * Bir listing kaydı için ürün detay sayfasının URL'ini döner.
  *
  * Öncelik: href > /urun/<slug> > /pages/product-detail.html?id=<id> (legacy fallback)
+ *
+ * Capacitor bundle modunda pretty URL'ler (/urun/<slug>) fiziksel dosyaya karşılık
+ * gelmediği için daima legacy formata düşer.
  */
 export function getListingUrl(
   listing: ListingUrlInput | null | undefined,
@@ -34,7 +38,12 @@ export function getListingUrl(
   if (!listing) return "#";
   // Backend href is untrusted — reject javascript:/data:/protocol-relative
   // (open redirect / XSS) before it reaches an href attribute sink.
-  if (listing.href) return sanitizeUrl(listing.href);
+  // Native bundle'da backend href'i de legacy'ye çevir (pretty URL dosya yok).
+  if (listing.href && !isNativeBundleContext()) return sanitizeUrl(listing.href);
+  // Native bundle modunda pretty URL çalışmaz → legacy fallback kullan
+  if (isNativeBundleContext() && listing.id) {
+    return `/pages/product-detail.html?id=${listing.id}`;
+  }
   const prefix = lang === "en" ? "/en" : "";
   if (listing.slug) return `${prefix}/urun/${listing.slug}`;
   if (listing.id) return `/pages/product-detail.html?id=${listing.id}`;

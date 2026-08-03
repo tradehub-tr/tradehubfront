@@ -22,7 +22,7 @@ import { Breadcrumb } from '../components/shared/Breadcrumb'
 import { FooterLinks } from '../components/footer'
 
 // Floating components
-import { FloatingPanel } from '../components/floating'
+import { FloatingPanel, BottomNav, initBottomNav } from '../components/floating'
 
 // Alpine.js
 import { startAlpine } from '../alpine'
@@ -65,6 +65,9 @@ function renderPage(suppliers: ReturnType<typeof cartStore.getSuppliers>, summar
 
     <!-- Floating Panel -->
     ${FloatingPanel()}
+
+    <!-- Bottom Navigation (mobile/tablet) -->
+    ${BottomNav()}
   `;
 
   initFlowbite();
@@ -79,6 +82,7 @@ function renderPage(suppliers: ReturnType<typeof cartStore.getSuppliers>, summar
   mountChatPopup();
   initChatTriggers();
   startAlpine();
+  initBottomNav();
 }
 
 function renderCartSkeleton(): void {

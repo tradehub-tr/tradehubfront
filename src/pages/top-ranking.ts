@@ -22,7 +22,7 @@ import { Breadcrumb } from '../components/shared/Breadcrumb'
 import { FooterLinks } from '../components/footer'
 
 // Floating components
-import { FloatingPanel } from '../components/floating'
+import { FloatingPanel, BottomNav, initBottomNav } from '../components/floating'
 
 // Alpine.js
 import { startAlpine } from '../alpine'
@@ -383,6 +383,9 @@ appEl.innerHTML = `
 
   <!-- Floating Panel -->
   ${FloatingPanel()}
+
+  <!-- Bottom Navigation (mobile/tablet) -->
+  ${BottomNav()}
 `;
 
 // Initialize
@@ -391,6 +394,7 @@ initFlowbite();
 mountChatPopup();
 initChatTriggers();
 startAlpine();
+initBottomNav();
 initHeaderCart();
 initLanguageSelector();
 initRankingCategoryTabs();
