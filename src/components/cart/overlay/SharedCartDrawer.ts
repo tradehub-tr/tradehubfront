@@ -115,6 +115,8 @@ interface DrawerState {
   sizeQuantities: Map<string, number>;
   /** single qty when there are no sizeGroups (colors-only or no-variant) */
   noVariantQty: number;
+  /** Tek-eksen (satır) modunda seçenek id → adet. Bkz. getSingleAxis(). */
+  rowQuantities: Map<string, number>;
   previewColorIndex: number;
   footerExpanded: boolean;
 }
@@ -184,6 +186,7 @@ const state: DrawerState = {
   selectedSelectables: new Map(),
   sizeQuantities: new Map(),
   noVariantQty: 0,
+  rowQuantities: new Map(),
   previewColorIndex: 0,
   footerExpanded: false,
 };
@@ -199,6 +202,121 @@ let onItemMissing: ((id: string, mode: "cart" | "sample") => Promise<void>) | nu
 
 function hasSizeGroups(): boolean {
   return (state.item?.sizeGroups.length ?? 0) > 0;
+}
+
+// ─── Tek-eksen (satır) modu ───────────────────────────────────────────────────
+// Üründe TEK varyant ekseni varsa (yalnız renk, yalnız beden veya yalnız
+// malzeme) chip + tek adet kutusu yerine referans B2B düzeni uygulanır: her
+// seçenek görsel + fiyat + adet stepper'ı taşıyan bir SATIRDIR, alıcı tek
+// açılışta birden çok seçeneği farklı adetlerle sepete atabilir.
+
+interface SingleAxisOption {
+  id: string;
+  label: string;
+  imageUrl?: string;
+  colorHex?: string;
+  /** Seçili para birimine çevrilmiş varyant fiyatı. */
+  rawPrice?: number;
+  /** Native (çevrilmemiş) varyant fiyatı — sepete native saklamak için (Y1). */
+  basePrice?: number;
+}
+
+interface SingleAxisModel {
+  kind: "color" | "selectable" | "size";
+  /** skuMatrix eşleşmesi + sepet etiketi için ham eksen adı (çevrilmez). */
+  axisName: string;
+  /** Başlıkta gösterilen ad. */
+  groupLabel: string;
+  options: SingleAxisOption[];
+}
+
+let cachedAxisItem: CartDrawerItemModel | null = null;
+let cachedAxis: SingleAxisModel | null = null;
+
+function computeSingleAxis(): SingleAxisModel | null {
+  const item = state.item;
+  if (!item) return null;
+
+  const selectables = item.selectableGroups ?? [];
+  const axisCount = (item.colors.length > 0 ? 1 : 0) + selectables.length + item.sizeGroups.length;
+  if (axisCount !== 1) return null;
+
+  if (item.colors.length > 0) {
+    const axisName = item.colorAxisLabel || t("cart.colorLabel");
+    return {
+      kind: "color",
+      axisName,
+      groupLabel: axisName,
+      options: item.colors.map((c) => ({
+        id: c.id,
+        label: c.label,
+        imageUrl: c.imageUrl,
+        colorHex: c.colorHex,
+        rawPrice: c.rawPrice,
+        basePrice: c.basePrice,
+      })),
+    };
+  }
+
+  const selectable = selectables[0];
+  if (selectable) {
+    return {
+      kind: "selectable",
+      axisName: selectable.axisName,
+      groupLabel: selectable.groupLabel,
+      options: selectable.options.map((o) => ({ id: o.id, label: o.label })),
+    };
+  }
+
+  const sizeGroup = item.sizeGroups[0];
+  if (sizeGroup) {
+    return {
+      kind: "size",
+      axisName: sizeGroup.groupLabel,
+      groupLabel: sizeGroup.groupLabel,
+      options: sizeGroup.options.map((o) => ({
+        id: o.id,
+        label: o.label,
+        rawPrice: o.rawPrice,
+        basePrice: o.basePrice,
+      })),
+    };
+  }
+
+  return null;
+}
+
+/** Tek eksenli ürünlerde satır modelini döner; çok eksenli/varyantsızda null. */
+function getSingleAxis(): SingleAxisModel | null {
+  if (state.item !== cachedAxisItem) {
+    cachedAxisItem = state.item;
+    cachedAxis = computeSingleAxis();
+  }
+  return cachedAxis;
+}
+
+function skuValueForSingleAxis(axis: SingleAxisModel, row: SkuMatrixRow): string {
+  if (axis.kind === "color") return row.axis1;
+  if (axis.kind === "size") return row.axis2;
+  return (row.extraAxes || {})[axis.axisName] ?? "";
+}
+
+function isRowOptionAvailable(axis: SingleAxisModel, option: SingleAxisOption): boolean {
+  const matrix = state.item?.skuMatrix;
+  if (!matrix || matrix.length === 0) return true;
+  return matrix.some((row) => row.available && skuValueForSingleAxis(axis, row) === option.label);
+}
+
+/** -1 = stok takibi yok (sınırsız). */
+function getRowOptionStock(axis: SingleAxisModel, option: SingleAxisOption): number {
+  const matrix = state.item?.skuMatrix;
+  if (!matrix || matrix.length === 0) return -1;
+  const match = matrix.find((row) => skuValueForSingleAxis(axis, row) === option.label);
+  return match ? match.stock : 0;
+}
+
+function findRowOption(axis: SingleAxisModel, id: string): SingleAxisOption | undefined {
+  return axis.options.find((o) => o.id === id);
 }
 
 /** Check if a specific color+size combination is available based on skuMatrix (including extra selectables). */
@@ -249,11 +367,17 @@ function getSizeStock(sizeLabel: string): number {
 function getBasePrice(tierPrice: number): number {
   if (!state.item) return tierPrice;
   if (state.mode === "sample") return tierPrice;
+  // Satır modunda tek bir "seçili renk" yoktur — her satır kendi fiyatını taşır,
+  // kademe fiyatı yalnız fiyatsız satırların fallback'idir.
+  if (getSingleAxis()) return tierPrice;
   const color = state.item.colors.find((c) => c.id === state.selectedColorId);
   return color?.rawPrice != null && color.rawPrice > 0 ? color.rawPrice : tierPrice;
 }
 
 function getTotalQty(): number {
+  if (getSingleAxis()) {
+    return Array.from(state.rowQuantities.values()).reduce((acc, q) => acc + q, 0);
+  }
   if (hasSizeGroups()) {
     return Array.from(state.sizeQuantities.values()).reduce((acc, q) => acc + q, 0);
   }
@@ -263,6 +387,12 @@ function getTotalQty(): number {
 function formatTierLabel(tier: CartDrawerTierModel, unit: string): string {
   if (tier.maxQty === null) return `≥ ${tier.minQty.toLocaleString()} ${unit}`;
   return `${tier.minQty.toLocaleString()} - ${tier.maxQty.toLocaleString()} ${unit}`;
+}
+
+/** Satır modu kademe etiketi — referans düzende boşluksuz: "1-399 Adet" / "≥400 Adet". */
+function formatCompactTierLabel(tier: CartDrawerTierModel, unit: string): string {
+  if (tier.maxQty === null) return `≥${tier.minQty.toLocaleString()} ${unit}`;
+  return `${tier.minQty.toLocaleString()}-${tier.maxQty.toLocaleString()} ${unit}`;
 }
 
 function getActiveTierIndex(totalQty: number): number {
@@ -293,7 +423,16 @@ function getTotals(): {
 
   let itemSubtotal = 0;
   const isSampleMode = state.mode === "sample";
-  if (hasSizeGroups() && state.item) {
+  const singleAxis = getSingleAxis();
+  if (singleAxis) {
+    for (const opt of singleAxis.options) {
+      const qty = state.rowQuantities.get(opt.id) ?? 0;
+      if (qty === 0) continue;
+      const unitPrice =
+        !isSampleMode && opt.rawPrice != null && opt.rawPrice > 0 ? opt.rawPrice : activePrice;
+      itemSubtotal += unitPrice * qty;
+    }
+  } else if (hasSizeGroups() && state.item) {
     for (const group of state.item.sizeGroups) {
       for (const opt of group.options) {
         const qty = state.sizeQuantities.get(opt.id) ?? 0;
@@ -312,7 +451,9 @@ function getTotals(): {
   const grandTotal = itemSubtotal + shippingCost;
 
   let variationCount: number;
-  if (hasSizeGroups()) {
+  if (singleAxis) {
+    variationCount = Array.from(state.rowQuantities.values()).filter((q) => q > 0).length;
+  } else if (hasSizeGroups()) {
     variationCount = Array.from(state.sizeQuantities.values()).filter((q) => q > 0).length;
   } else {
     variationCount = totalQty > 0 ? 1 : 0;
@@ -405,11 +546,11 @@ function updatePreview(): void {
   if (color.imageUrl) {
     // imageUrl backend listing varyant verisinden geliyor; quote breakout +
     // event handler injection riski. URL'i escape edip src'ye yaz.
-    image.innerHTML = `<img src="${escapeHtml(sanitizeUrl(color.imageUrl))}" alt="${escapeHtml(color.label)}" width="56" height="56" decoding="async" style="width:100%;height:100%;object-fit:cover;" />`;
+    image.innerHTML = `<img src="${escapeHtml(sanitizeUrl(color.imageUrl))}" alt="${escapeHtml(color.label)}" decoding="async" class="max-w-full max-h-full w-auto h-auto object-contain" />`;
   } else {
     // colorHex satıcı kontrollü; CSS context injection (";background:url(...)")
     // engellemek için hex pattern doğrulamasından geçir.
-    image.innerHTML = `<div style="width:100%;height:100%;background:${safeHexColor(color.colorHex)};"></div>`;
+    image.innerHTML = `<div class="w-full h-full rounded-md" style="background:${safeHexColor(color.colorHex)};"></div>`;
   }
   label.textContent = `color : ${color.label}`;
 }
@@ -464,6 +605,159 @@ function renderPriceSectionHtml(totals: ReturnType<typeof getTotals>): string {
 }
 
 /**
+ * Tek-eksen (satır) modu fiyat bloğu — referans ölçüleri:
+ * blok `border-b #e6e7eb` + `pb-5 mb-5`; kademe ızgarası `flex-wrap gap-x-6 gap-y-3`;
+ * fiyat 26px/1.5 bold #222; üstü çizili eski fiyat 14px/18px #666 `mt-1`;
+ * adet etiketi 14px/20px #666 `mt-0.5`.
+ */
+function renderRowModePriceSectionHtml(totals: ReturnType<typeof getTotals>): string {
+  const item = state.item;
+  if (!item) return "";
+  const currency = item.currency || getSelectedCurrency();
+
+  if (state.mode === "sample") {
+    return `
+      <div class="border-b border-b-[#e6e7eb] pb-5 mb-5">
+        <p class="text-sm leading-[18px] text-[#666] mb-1">${t("cart.sampleMaxNote")}</p>
+        <p class="text-[26px] leading-[1.5] font-bold text-[#222]">${formatCurrency(item.samplePrice ?? 30, currency)} <span class="text-base font-normal text-[#666]">${t("cart.perUnit")}</span></p>
+      </div>
+    `;
+  }
+
+  const firstTier = item.priceTiers[0];
+  const discountPct =
+    firstTier?.originalPrice && firstTier.originalPrice > firstTier.price
+      ? Math.round((1 - firstTier.price / firstTier.originalPrice) * 100)
+      : 0;
+  const badge =
+    discountPct > 0
+      ? `<span class="inline-block rounded-[2px] bg-[#d0021b] px-1 mb-2 text-[13px] leading-[18px] font-normal text-white">${escapeHtml(t("cart.offPercent", { percent: String(discountPct) }))}</span>`
+      : "";
+
+  const tiers = item.priceTiers
+    .map((tier, index) => {
+      const priceColor = index === totals.tierIndex ? "text-error-500" : "text-[#222]";
+      const original =
+        tier.originalPrice && tier.originalPrice > tier.price
+          ? `<span class="block font-normal text-[#666] line-through mt-1 text-sm leading-[18px]">${formatCurrency(tier.originalPrice, currency)}</span>`
+          : "";
+      return `
+        <div class="cart-tier-item" data-tier-index="${index}">
+          <div class="text-[26px] leading-[1.5] font-bold ${priceColor}">${formatCurrency(tier.rawPrice ?? tier.price, currency)}</div>
+          ${original}
+          <div class="flex whitespace-nowrap text-[#666] mt-0.5 text-sm leading-[20px]">${escapeHtml(formatCompactTierLabel(tier, item.unit))}</div>
+        </div>
+      `;
+    })
+    .join("");
+
+  return `
+    <div class="border-b border-b-[#e6e7eb] pb-5 mb-5">
+      ${badge}
+      <div class="flex flex-wrap gap-x-6 gap-y-3">${tiers}</div>
+    </div>
+  `;
+}
+
+/**
+ * Satır adet stepper'ı — referans: 32px yüksekliğinde pill, uçlarda 32px daire
+ * butonlar, ortada 16px/24px değer (#111827).
+ */
+function renderRowStepper(id: string, qty: number, disabled: boolean): string {
+  const minusTone = qty <= 0 ? "bg-[#eee] text-[#bbb]" : "bg-transparent text-[#222]";
+  return `
+    <div class="inline-flex items-center h-8 shrink-0 rounded-full border border-[#e6e7eb] overflow-hidden">
+      <button type="button" data-row-qty-action="minus" data-row-qty-id="${escapeHtml(id)}"
+        aria-label="${t("cart.quantityDecrease")}"
+        class="th-no-press w-8 h-8 shrink-0 rounded-full inline-flex items-center justify-center transition-colors ${minusTone}"
+        ${qty <= 0 ? "disabled" : ""}>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M5 12h14"/></svg>
+      </button>
+      <input type="number" data-row-qty-input="${escapeHtml(id)}" value="${qty}" min="0"
+        class="w-[52px] h-8 text-center border-0 bg-transparent text-base leading-6 text-[#111827] [appearance:textfield] focus:outline-none [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
+        ${disabled ? "disabled" : ""} />
+      <button type="button" data-row-qty-action="plus" data-row-qty-id="${escapeHtml(id)}"
+        aria-label="${t("cart.quantityIncrease")}"
+        class="th-no-press w-8 h-8 shrink-0 rounded-full inline-flex items-center justify-center border border-[#e6e7eb] text-[#222] disabled:text-[#bbb] disabled:border-[#eee]"
+        ${disabled ? "disabled" : ""}>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+      </button>
+    </div>
+  `;
+}
+
+/**
+ * Tek-eksen satır listesi — referans ölçüleri: satır `flex w-full items-center
+ * justify-between gap-1` 64px; sol blok `inline-flex w-5/12 items-center gap-2`
+ * (64px görsel + 16px/24px etiket); sağ blok `flex w-7/12 items-center
+ * justify-end gap-2 overflow-hidden` (fiyat `truncate text-base me-2` + stepper).
+ */
+function renderSingleAxisSectionHtml(
+  axis: SingleAxisModel,
+  totals: ReturnType<typeof getTotals>
+): string {
+  const item = state.item;
+  if (!item) return "";
+  const currency = item.currency || getSelectedCurrency();
+
+  const rows = axis.options
+    .map((opt, index) => {
+      const qty = state.rowQuantities.get(opt.id) ?? 0;
+      const available = isRowOptionAvailable(axis, opt);
+      const stock = getRowOptionStock(axis, opt);
+      const displayPrice =
+        state.mode !== "sample" && opt.rawPrice != null && opt.rawPrice > 0
+          ? opt.rawPrice
+          : totals.activePrice;
+
+      // Seçili satırın görseli koyu çerçeveyle işaretlenir (referans deseni).
+      // Çerçeve kutunun İÇİNDE kalır (w-16/h-16 border-box) → seçim değişince
+      // satır yüksekliği/hizası kaymaz, yalnız görsel 64 → 56'ya küçülür.
+      const selected = index === state.previewColorIndex;
+      const frame = selected ? "border-2 border-[#222] p-[2px]" : "border-2 border-transparent p-0";
+      const thumb = opt.imageUrl
+        ? `<span class="w-16 h-16 shrink-0 block rounded-md ${frame}">
+             <img src="${escapeHtml(sanitizeUrl(opt.imageUrl))}" alt="${escapeHtml(opt.label)}" width="64" height="64" decoding="async" loading="lazy"
+               class="w-full h-full rounded-[3px] object-contain bg-[var(--color-surface-raised,#f5f5f5)]${available ? "" : " grayscale"}" />
+           </span>`
+        : opt.colorHex
+          ? `<span class="w-16 h-16 shrink-0 block rounded-md ${selected ? "border-2 border-[#222] p-[2px]" : "border border-[#e6e7eb] p-0"}">
+               <span class="block w-full h-full rounded-[3px]" style="background:${safeHexColor(opt.colorHex)};"></span>
+             </span>`
+          : "";
+
+      const stockNote = !available
+        ? `<span class="block text-xs leading-[18px] font-medium text-red-500">${t("cart.outOfStock")}</span>`
+        : stock > 0 && stock <= 10
+          ? `<span class="block text-xs leading-[18px] font-medium text-amber-500">${t("cart.lowStock", { count: stock })}</span>`
+          : "";
+
+      return `
+        <div class="flex w-full items-center justify-between gap-1 h-16${available ? "" : " opacity-50"}"
+          data-row-option-index="${index}">
+          <div class="relative inline-flex w-5/12 items-center justify-start gap-2 overflow-hidden">
+            ${thumb}
+            <span class="min-w-0">
+              <span class="block truncate text-base leading-6 text-[#222]">${escapeHtml(opt.label)}</span>
+              ${stockNote}
+            </span>
+          </div>
+          <div class="flex w-7/12 items-center justify-end gap-2 overflow-hidden">
+            <span class="truncate text-base leading-6 text-[#222] me-2">${formatCurrency(displayPrice, currency)}</span>
+            ${renderRowStepper(opt.id, qty, !available)}
+          </div>
+        </div>
+      `;
+    })
+    .join("");
+
+  return `
+    <h4 class="relative mb-2 flex items-center justify-between text-base leading-6 font-bold text-[#222]">${escapeHtml(axis.groupLabel)}</h4>
+    <div class="space-y-3">${rows}</div>
+  `;
+}
+
+/**
  * Check if a color has ANY available SKU given the current selectable selections.
  * Returns true if no skuMatrix (no stock tracking).
  */
@@ -507,7 +801,7 @@ function renderColorChip(color: CartDrawerColorModel, isSelected: boolean): stri
       : "border-border-default bg-surface opacity-40 cursor-not-allowed";
 
   const thumb = color.imageUrl
-    ? `<img src="${escapeHtml(sanitizeUrl(color.imageUrl))}" alt="${escapeHtml(color.label)}" width="28" height="28" decoding="async" class="w-7 h-7 rounded object-cover shrink-0${!available ? " grayscale" : ""}" loading="lazy" />`
+    ? `<img src="${escapeHtml(sanitizeUrl(color.imageUrl))}" alt="${escapeHtml(color.label)}" width="28" height="28" decoding="async" class="w-7 h-7 rounded-md object-contain shrink-0${!available ? " grayscale" : ""}" loading="lazy" />`
     : `<span class="w-5 h-5 rounded shrink-0 border border-border-default" style="background:${safeHexColor(color.colorHex || "#e5e5e5")};${!available ? "opacity:0.4;" : ""}"></span>`;
 
   return `
@@ -566,11 +860,14 @@ function renderDrawerBody(): void {
   const item = state.item;
   const totals = getTotals();
   const itemCurrency = item.currency || getSelectedCurrency();
-  const priceSection = renderPriceSectionHtml(totals);
+  const singleAxis = getSingleAxis();
+  const priceSection = singleAxis
+    ? renderRowModePriceSectionHtml(totals)
+    : renderPriceSectionHtml(totals);
 
   // ── Color chips section ──
   let colorSection = "";
-  if (item.colors.length > 0) {
+  if (!singleAxis && item.colors.length > 0) {
     const selectedColor = item.colors.find((c) => c.id === state.selectedColorId);
     const colorLabel = selectedColor
       ? `${t("cart.colorLabel")}: <span class="font-normal text-text-secondary">${escapeHtml(selectedColor.label)}</span>`
@@ -588,7 +885,7 @@ function renderDrawerBody(): void {
 
   // ── Selectable groups (e.g. Malzeme — chip selection like color) ──
   let selectableSection = "";
-  if (item.selectableGroups && item.selectableGroups.length > 0) {
+  if (!singleAxis && item.selectableGroups && item.selectableGroups.length > 0) {
     selectableSection = item.selectableGroups
       .map((group) => {
         const selectedVal = state.selectedSelectables.get(group.axisName) || "";
@@ -608,9 +905,11 @@ function renderDrawerBody(): void {
   }
 
   // ── Size rows section (leaf variant with qty steppers) ──
-  let sizeSection = "";
-  if (item.sizeGroups.length > 0) {
-    sizeSection = item.sizeGroups
+  let variantSection = "";
+  if (singleAxis) {
+    variantSection = renderSingleAxisSectionHtml(singleAxis, totals);
+  } else if (item.sizeGroups.length > 0) {
+    variantSection = item.sizeGroups
       .map((group) => {
         const rows = group.options
           .map((opt) => {
@@ -655,7 +954,7 @@ function renderDrawerBody(): void {
     // No size groups → single qty row (colors-only or no-variant)
     const qty = state.noVariantQty;
     const singleId = "__no_variant__";
-    sizeSection = `
+    variantSection = `
       <div class="mb-4">
         <div class="grid grid-cols-[minmax(0,1fr)_auto_auto] items-center gap-x-2 py-2 border-b border-border-default">
           <span class="text-[13px] font-medium text-text-heading min-w-0 truncate">${escapeHtml(item.title)}</span>
@@ -671,6 +970,9 @@ function renderDrawerBody(): void {
   // Sevkiyat kartı — modaldan seçilen servis; hiç seçenek yoksa "görüşülür" metni
   const selectedShipping = item.shippingOptions[state.selectedShippingIndex];
   const shippingQty = Math.max(totals.totalQty, item.moq);
+  // "Değiştir" sadece seçilebilir servis varsa anlamlı — ürün panelindeki
+  // `pd-ship-card-change` ile aynı koşul (ProductOrderPanel.ts:37).
+  const canChangeShipping = hasSelectableShipping(item);
 
   body.innerHTML = `
     <h4 class="text-[15px] sm:text-base font-bold text-text-heading leading-snug mb-3 sm:mb-4">${escapeHtml(item.title)}</h4>
@@ -681,18 +983,22 @@ function renderDrawerBody(): void {
 
     ${selectableSection}
 
-    ${sizeSection}
+    ${variantSection}
 
     <!-- Sevkiyat — ürün panelindeki Kargo bloğuyla aynı düzen:
          başlık + "Değiştir ›" linki + gri kart (ikonlu/kesikli kart kaldırıldı) -->
     <div class="mt-3 sm:mt-4 mb-2">
       <div class="flex items-center justify-between gap-3">
         <h5 class="text-[14px] sm:text-[15px] font-bold text-text-heading leading-tight">${t("cart.shipping")}</h5>
-        <button
+        ${
+          canChangeShipping
+            ? `<button
           type="button"
           data-shipping-change
           class="th-no-press appearance-none focus:outline-none border-0 bg-transparent p-0 text-[13px] sm:text-[14px] leading-[20px] font-normal whitespace-nowrap cursor-pointer text-[#222] hover:opacity-70 transition-opacity duration-150"
-        >${t("product.changeLabel")} ›</button>
+        >${t("product.changeLabel")} ›</button>`
+            : ""
+        }
       </div>
       <div class="mt-3 px-4 py-3 rounded-md bg-[var(--color-surface-raised,#f5f5f5)]">
         ${
@@ -715,43 +1021,41 @@ function renderDrawerFooter(): void {
   const perPiece = totals.totalQty > 0 ? totals.grandTotal / totals.totalQty : 0;
   const itemCurrency = state.item.currency || getSelectedCurrency();
 
-  const details = state.footerExpanded
-    ? `
-      <div class="mb-4">
-        <button type="button" id="shared-cart-footer-toggle" class="th-no-press w-full flex items-center justify-center gap-1 text-[13px] sm:text-sm font-semibold text-text-heading border-b border-border-default pb-2.5 sm:pb-3 mb-2.5 sm:mb-3">
-          ${t("cart.price")}
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-3.5 h-3.5 sm:w-4 sm:h-4"><path d="m18 15-6-6-6 6"/></svg>
-        </button>
+  // Referans ölçüleri: "Fiyat" başlığı 16px/1.5 bold #222 · kırılım satırları
+  // 14px/18px normal + `mb-[6px]` · "Ara toplam" satırı 16px/24px semibold #222
+  // + `mb-[15px]`, etiket `mr-1`, birim-fiyat parantezi 14px #222.
+  const subtotalRow = `
+    <span class="font-semibold mr-1 whitespace-nowrap shrink-0">${t("cart.subtotal")}</span>
+    <span class="flex items-center gap-1 min-w-0">
+      <span class="whitespace-nowrap">${formatCurrency(totals.grandTotal, itemCurrency)}</span>
+      <span class="text-sm font-normal text-[#222] whitespace-nowrap">(${formatCurrency(perPiece, itemCurrency)}${t("cart.perUnit")})</span>
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-4 h-4 text-text-tertiary shrink-0"><path d="${state.footerExpanded ? "m18 15-6-6-6 6" : "m6 9 6 6 6-6"}"/></svg>
+    </span>
+  `;
 
-        <div class="space-y-1.5 sm:space-y-2 text-[12px] sm:text-sm text-text-secondary">
-          <div class="flex items-center justify-between gap-2">
-            <span class="min-w-0 truncate">${t("cart.productTotal")} (${t("cart.variationItems", { variation: String(totals.variationCount), items: String(totals.totalQty) })})</span>
-            <strong class="text-text-heading shrink-0">${formatCurrency(totals.itemSubtotal, itemCurrency)}</strong>
-          </div>
-          <div class="flex items-center justify-between gap-2">
-            <span>${t("cart.shippingTotal")}</span>
-            <span class="shrink-0">${escapeHtml(state.item.shippingOptions[state.selectedShippingIndex]?.costText ?? formatCurrency(0, itemCurrency))}</span>
-          </div>
-          <div class="flex items-center justify-between border-t border-border-default pt-2.5 sm:pt-3 mt-2.5 sm:mt-3">
-            <strong class="text-[13px] sm:text-base text-text-heading">${t("cart.subtotal")}</strong>
-            <div class="text-end">
-              <strong class="text-[14px] sm:text-base text-text-heading">${formatCurrency(totals.grandTotal, itemCurrency)}</strong>
-              <p class="text-[10px] sm:text-xs text-text-tertiary">(${formatCurrency(perPiece, itemCurrency)}${t("cart.perUnit")})</p>
-            </div>
-          </div>
-        </div>
+  const breakdown = state.footerExpanded
+    ? `
+      <div class="text-base leading-[1.5] font-bold text-[#222] border-b border-border-default pb-2.5 mb-3 flex items-center justify-center gap-1">
+        ${t("cart.price")}
+      </div>
+      <div class="flex justify-between gap-2 mb-[6px] text-sm leading-[18px] font-normal text-[#222]">
+        <span class="min-w-0 truncate">${t("cart.productTotal")} (${t("cart.variationItems", { variation: String(totals.variationCount), items: String(totals.totalQty) })})</span>
+        <span class="shrink-0">${formatCurrency(totals.itemSubtotal, itemCurrency)}</span>
+      </div>
+      <div class="flex justify-between gap-2 mb-[6px] text-sm leading-[18px] font-normal text-[#222]">
+        <span>${t("cart.shippingTotal")}</span>
+        <span class="shrink-0">${escapeHtml(state.item.shippingOptions[state.selectedShippingIndex]?.costText ?? formatCurrency(0, itemCurrency))}</span>
       </div>
     `
-    : `
-      <button type="button" id="shared-cart-footer-toggle" class="th-no-press w-full flex items-center justify-between mb-3 sm:mb-4">
-        <strong class="text-[13px] sm:text-base text-text-heading whitespace-nowrap shrink-0">${t("cart.subtotal")}</strong>
-        <span class="flex items-center gap-1 sm:gap-1.5 min-w-0">
-          <strong class="text-[15px] sm:text-[17px] text-text-heading whitespace-nowrap">${formatCurrency(totals.grandTotal, itemCurrency)}</strong>
-          <span class="text-[10px] sm:text-xs text-text-tertiary whitespace-nowrap">(${formatCurrency(perPiece, itemCurrency)}${t("cart.perUnit")})</span>
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-3.5 h-3.5 sm:w-4 sm:h-4 text-text-tertiary shrink-0"><path d="m6 9 6 6 6-6"/></svg>
-        </span>
-      </button>
-    `;
+    : "";
+
+  const details = `
+    ${breakdown}
+    <button type="button" id="shared-cart-footer-toggle"
+      class="th-no-press w-full flex justify-between items-center gap-2 font-semibold text-base leading-6 text-[#222] mb-[15px]">
+      ${subtotalRow}
+    </button>
+  `;
 
   footer.innerHTML = `
     ${details}
@@ -766,6 +1070,14 @@ function rerenderDrawer(): void {
 }
 
 // ─── Shipping modal ───────────────────────────────────────────────────────────
+
+/**
+ * Sevkiyat modalı ancak gerçekten seçilebilir bir servis varsa anlamlı.
+ * Yöntem adı boş kayıtlar (backend'de kargo tanımlanmamış satıcı) seçenek sayılmaz.
+ */
+function hasSelectableShipping(item: CartDrawerItemModel): boolean {
+  return item.shippingOptions.some((option) => (option.method ?? "").trim() !== "");
+}
 
 function updateShippingModal(quantityOverride?: number): void {
   const qtyEl = document.getElementById("shared-cart-shipping-qty");
@@ -1071,6 +1383,10 @@ export interface CartSubmitLine {
   extraAxes?: Record<string, string>;
   /** Guest sepette gösterilecek görsel (yoksa placeholder). */
   imageUrl?: string;
+  /** Satıra özel birim fiyat (seçili para biriminde); yoksa çağıranın unitPrice'ı. */
+  unitPrice?: number;
+  /** Satıra özel NATIVE birim fiyat; yoksa çağıranın nativeUnitPrice'ı. */
+  nativeUnitPrice?: number;
   qty: number;
 }
 
@@ -1151,12 +1467,19 @@ export async function submitCartLines(
   ensureGuestSupplierProduct(item.supplierName, item);
 
   const nativeCurrency = item.baseCurrency || getSelectedCurrency();
-  const persisted =
-    nativeUnitPrice != null && nativeUnitPrice > 0 && item.baseCurrency
-      ? { price: nativeUnitPrice, currency: nativeCurrency }
-      : { price: unitPrice, currency: getSelectedCurrency() };
 
   for (const line of active) {
+    // Satır kendi fiyatını taşıyorsa (varyant-bazlı fiyat) onu kullan.
+    const lineConverted = line.unitPrice != null && line.unitPrice > 0 ? line.unitPrice : unitPrice;
+    const lineNative =
+      line.nativeUnitPrice != null && line.nativeUnitPrice > 0
+        ? line.nativeUnitPrice
+        : nativeUnitPrice;
+    const persisted =
+      lineNative != null && lineNative > 0 && item.baseCurrency
+        ? { price: lineNative, currency: nativeCurrency }
+        : { price: lineConverted, currency: getSelectedCurrency() };
+
     const skuId = `${item.id}-${line.colorId || "no-color"}-${line.variantId || "no-variant"}${
       line.extraAxes ? `-${extraAxesKey(line.extraAxes)}` : ""
     }${isSample ? "-sample" : ""}`;
@@ -1187,8 +1510,62 @@ export async function submitCartLines(
   return true;
 }
 
+/**
+ * Tek-eksen (satır) modunda sepete ekleme — her satır ayrı bir cart line'dır.
+ * `submitCartLines` çekirdeğini kullanır; çok-eksenli `dispatchCartAdd` yolu
+ * (chip + beden matrisi) değişmeden kalır.
+ */
+async function dispatchRowCartAdd(axis: SingleAxisModel): Promise<boolean> {
+  const item = state.item;
+  if (!item) return false;
+
+  const totals = getTotals();
+  if (totals.totalQty <= 0) return false;
+
+  const isSampleMode = state.mode === "sample";
+  const activeTier = item.priceTiers[totals.tierIndex];
+  const fallbackPrice = isSampleMode
+    ? (item.samplePrice ?? 0)
+    : (activeTier?.rawPrice ?? activeTier?.price ?? 0);
+  const fallbackNative = isSampleMode ? item.baseSamplePrice : activeTier?.basePrice;
+
+  const lines: CartSubmitLine[] = axis.options.map((opt) => ({
+    qty: state.rowQuantities.get(opt.id) ?? 0,
+    variantId: opt.id,
+    colorId: axis.kind === "color" ? opt.id : undefined,
+    variantLabel: `${axis.axisName}: ${opt.label}`,
+    extraAxes: axis.kind === "selectable" ? { [axis.axisName]: opt.label } : undefined,
+    imageUrl: opt.imageUrl,
+    // Numune fiyatı varyanta göre değişmez; toptanda satır fiyatı önceliklidir.
+    unitPrice: isSampleMode ? undefined : opt.rawPrice,
+    nativeUnitPrice: isSampleMode ? undefined : opt.basePrice,
+  }));
+
+  const ok = await submitCartLines(
+    {
+      id: item.id,
+      title: item.title,
+      supplierName: item.supplierName,
+      unit: item.unit,
+      moq: item.moq,
+      currency: item.currency,
+      baseCurrency: item.baseCurrency,
+    },
+    lines,
+    fallbackPrice,
+    fallbackNative,
+    isSampleMode
+  );
+
+  if (ok) document.dispatchEvent(new CustomEvent("cart-add"));
+  return ok;
+}
+
 async function dispatchCartAdd(): Promise<boolean> {
   if (!state.item) return false;
+
+  const singleAxis = getSingleAxis();
+  if (singleAxis) return dispatchRowCartAdd(singleAxis);
 
   const totals = getTotals();
   if (totals.totalQty <= 0) return false;
@@ -1436,6 +1813,37 @@ function openDrawer(
   // No-variant qty: sample → 1, cart → MOQ
   state.noVariantQty = item.sizeGroups.length === 0 ? initialQty : 0;
 
+  // Tek-eksen (satır) modu: chip seçimi yok — adet satır bazında tutulur.
+  // Toptanda ilk uygun satır MOQ ile tohumlanır (mevcut drawer semantiği),
+  // numunede tüm satırlar 0'dan başlar (toplam en fazla 1).
+  const singleAxis = getSingleAxis();
+  state.rowQuantities = new Map();
+  if (singleAxis) {
+    state.selectedColorId = "";
+    state.noVariantQty = 0;
+    let seedId: string | undefined;
+    if (mode !== "sample") {
+      const needle = (preselectedColor || preselectedSize || "").toLowerCase();
+      const preselected = needle
+        ? singleAxis.options.find(
+            (o) =>
+              (o.id === preselectedColor ||
+                o.id === preselectedSize ||
+                o.label.toLowerCase() === needle) &&
+              isRowOptionAvailable(singleAxis, o)
+          )
+        : undefined;
+      seedId = (preselected ?? singleAxis.options.find((o) => isRowOptionAvailable(singleAxis, o)))
+        ?.id;
+    }
+    for (const opt of singleAxis.options) {
+      state.rowQuantities.set(opt.id, opt.id === seedId ? initialQty : 0);
+    }
+    // Çerçeveli (seçili) satır = önizlemedeki satır; tohumlanan satırla başlar.
+    const seedIndex = seedId ? singleAxis.options.findIndex((o) => o.id === seedId) : -1;
+    state.previewColorIndex = seedIndex >= 0 ? seedIndex : 0;
+  }
+
   const heading = document.getElementById("shared-cart-heading");
   if (heading) {
     heading.textContent =
@@ -1510,7 +1918,7 @@ export function SharedCartDrawer(): string {
       <div id="shared-cart-preview" class="hidden fixed start-0 top-0 bottom-0 end-[600px] z-[120] items-center justify-center px-8 pointer-events-none">
         <div class="relative w-full max-w-[760px] h-[78vh] rounded-md overflow-hidden pointer-events-auto shadow-xl bg-surface">
           <button type="button" id="shared-cart-preview-prev" class="absolute start-5 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-white/90 hover:bg-white text-secondary-700 border border-border-default shadow-md z-20">‹</button>
-          <div id="shared-cart-preview-image" class="w-full h-full"></div>
+          <div id="shared-cart-preview-image" class="w-full h-full flex items-center justify-center px-20 pt-8 pb-16"></div>
           <button type="button" id="shared-cart-preview-next" class="absolute end-5 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-white/90 hover:bg-white text-secondary-700 border border-border-default shadow-md z-20">›</button>
           <div id="shared-cart-preview-label" class="absolute start-0 end-0 bottom-0 px-6 py-4 text-white text-xl font-medium bg-gradient-to-t from-black/60 to-transparent">color : -</div>
         </div>
@@ -1611,6 +2019,65 @@ export function initSharedCartDrawer(items: CartDrawerItemModel[]): void {
   // Body click events
   body.addEventListener("click", (event) => {
     const target = event.target as HTMLElement;
+
+    // Tek-eksen satır stepper'ı (renk/beden/malzeme satır listesi)
+    const rowBtn = target.closest<HTMLElement>("[data-row-qty-action]");
+    const rowAxis = getSingleAxis();
+    if (rowBtn && rowAxis && state.item) {
+      const optionId = rowBtn.dataset.rowQtyId ?? "";
+      const option = findRowOption(rowAxis, optionId);
+      if (!option) return;
+
+      // Adet değiştirilen satır aynı zamanda seçili satır olur (çerçeve + önizleme).
+      const optionIndex = rowAxis.options.indexOf(option);
+      if (optionIndex >= 0) state.previewColorIndex = optionIndex;
+
+      const current = state.rowQuantities.get(optionId) ?? 0;
+      const moq = Math.max(1, state.item.moq || 1);
+      const step = state.mode !== "sample" && state.item.sellInMoqMultiples ? moq : 1;
+
+      if (rowBtn.dataset.rowQtyAction === "plus") {
+        if (state.mode === "sample") {
+          if (getTotalQty() >= 1) {
+            showSampleMaxToast();
+            return;
+          }
+          state.rowQuantities.set(optionId, current + 1);
+        } else {
+          const next = current + step;
+          const stock = getRowOptionStock(rowAxis, option);
+          if (stock >= 0 && next > stock) {
+            showCartError(t("cart.stockError"));
+            return;
+          }
+          state.rowQuantities.set(optionId, next);
+        }
+      } else if (state.mode === "sample") {
+        state.rowQuantities.set(optionId, Math.max(0, current - 1));
+      } else {
+        // MOQ toplam üzerinden korunur: diğer satırlar MOQ'yu karşılıyorsa
+        // bu satır 0'a inebilir.
+        const othersSum = Array.from(state.rowQuantities.entries())
+          .filter(([id]) => id !== optionId)
+          .reduce((acc, [, q]) => acc + q, 0);
+        const minForThis = Math.max(0, moq - othersSum);
+        state.rowQuantities.set(optionId, Math.max(minForThis, current - step));
+      }
+
+      rerenderDrawer();
+      return;
+    }
+
+    // Satıra tıklayınca o satır seçilir: görselde çerçeve + soldaki önizleme
+    const rowEl = target.closest<HTMLElement>("[data-row-option-index]");
+    if (rowEl && rowAxis) {
+      const idx = Number(rowEl.dataset.rowOptionIndex ?? 0);
+      if (!Number.isNaN(idx) && idx !== state.previewColorIndex) {
+        state.previewColorIndex = idx;
+        rerenderDrawer();
+      }
+      return;
+    }
 
     // Color chip selection
     const colorChip = target.closest<HTMLElement>("[data-color-chip]");
@@ -1720,6 +2187,46 @@ export function initSharedCartDrawer(items: CartDrawerItemModel[]): void {
 
   // Body change events (qty inputs)
   body.addEventListener("change", (event) => {
+    const rowInput = (event.target as HTMLElement).closest<HTMLInputElement>(
+      "[data-row-qty-input]"
+    );
+    const rowAxis = getSingleAxis();
+    if (rowInput && rowAxis && state.item) {
+      const optionId = rowInput.dataset.rowQtyInput ?? "";
+      const option = findRowOption(rowAxis, optionId);
+      if (!option) return;
+
+      let next = Number(rowInput.value);
+      if (Number.isNaN(next) || next < 0) next = 0;
+
+      const moq = Math.max(1, state.item.moq || 1);
+      const othersSum = Array.from(state.rowQuantities.entries())
+        .filter(([id]) => id !== optionId)
+        .reduce((acc, q) => acc + q[1], 0);
+
+      if (state.mode === "sample") {
+        if (othersSum + next > 1) {
+          next = Math.max(0, 1 - othersSum);
+          showSampleMaxToast();
+        }
+      } else {
+        next = Math.max(Math.max(0, moq - othersSum), next);
+        if (state.item.sellInMoqMultiples && moq > 1 && next > 0 && next % moq !== 0) {
+          next = Math.ceil(next / moq) * moq;
+        }
+        const stock = getRowOptionStock(rowAxis, option);
+        if (stock >= 0 && next > stock) {
+          next = stock;
+          showCartError(t("cart.stockError"));
+        }
+      }
+
+      rowInput.value = String(next);
+      state.rowQuantities.set(optionId, next);
+      rerenderDrawer();
+      return;
+    }
+
     const input = (event.target as HTMLElement).closest<HTMLInputElement>("[data-qty-input-size]");
     if (!input) return;
 
@@ -1790,12 +2297,19 @@ export function initSharedCartDrawer(items: CartDrawerItemModel[]): void {
 
     if (target.closest("#shared-cart-confirm")) {
       const totals = getTotals();
-      if (totals.totalQty <= 0) {
+      // Satır modunda satırlar 0'a inebildiği için MOQ altı toplam da uyarılır.
+      const moq = Math.max(1, state.item?.moq || 1);
+      const belowMoq = state.mode !== "sample" && getSingleAxis() !== null && totals.totalQty < moq;
+
+      if (totals.totalQty <= 0 || belowMoq) {
         const confirmBtn = document.getElementById("shared-cart-confirm");
         if (!confirmBtn) return;
 
         const originalText = confirmBtn.textContent;
-        confirmBtn.textContent = t("cart.pleaseSelectQty");
+        confirmBtn.textContent =
+          totals.totalQty <= 0
+            ? t("cart.pleaseSelectQty")
+            : t("product.optionsMinOrderHint", { moq, unit: state.item?.unit ?? "" });
         confirmBtn.classList.add("bg-error-500");
 
         setTimeout(() => {
@@ -1816,20 +2330,21 @@ export function initSharedCartDrawer(items: CartDrawerItemModel[]): void {
   });
 
   // Preview navigation
-  previewPrev?.addEventListener("click", () => {
+  // Satır modunda tek bir "seçili renk" yoktur; önizleme gezinmesi yalnız
+  // görseli değiştirir, fiyat/sepet state'ine dokunmaz.
+  const stepPreview = (delta: number): void => {
     if (!state.item || state.item.colors.length === 0) return;
-    state.previewColorIndex =
-      (state.previewColorIndex - 1 + state.item.colors.length) % state.item.colors.length;
-    state.selectedColorId = state.item.colors[state.previewColorIndex]?.id ?? state.selectedColorId;
+    const count = state.item.colors.length;
+    state.previewColorIndex = (state.previewColorIndex + delta + count) % count;
+    if (!getSingleAxis()) {
+      state.selectedColorId =
+        state.item.colors[state.previewColorIndex]?.id ?? state.selectedColorId;
+    }
     updatePreview();
-  });
+  };
 
-  previewNext?.addEventListener("click", () => {
-    if (!state.item || state.item.colors.length === 0) return;
-    state.previewColorIndex = (state.previewColorIndex + 1) % state.item.colors.length;
-    state.selectedColorId = state.item.colors[state.previewColorIndex]?.id ?? state.selectedColorId;
-    updatePreview();
-  });
+  previewPrev?.addEventListener("click", () => stepPreview(-1));
+  previewNext?.addEventListener("click", () => stepPreview(1));
 
   document.addEventListener("keydown", (event) => {
     if (event.key === "Escape" && !overlay.classList.contains("opacity-0")) {
@@ -1886,7 +2401,20 @@ export function openSharedShippingModal(quantity?: number): void {
       )
     );
     state.noVariantQty = fallbackMoq;
+    const fallbackAxis = getSingleAxis();
+    state.rowQuantities = new Map();
+    if (fallbackAxis) {
+      state.selectedColorId = "";
+      state.noVariantQty = 0;
+      const seedId = fallbackAxis.options[0]?.id;
+      for (const opt of fallbackAxis.options) {
+        state.rowQuantities.set(opt.id, opt.id === seedId ? fallbackMoq : 0);
+      }
+    }
   }
+  // Kargo verisi girilmemişse modal boş açılırdı (sadece "Uygula" butonu görünürdü).
+  // Bu durumda ürün/sepet kartındaki "görüşülecektir" metni tek doğru gösterim.
+  if (!hasSelectableShipping(state.item)) return;
   updateShippingModal(quantity);
   setShippingModalOpen(true);
 }

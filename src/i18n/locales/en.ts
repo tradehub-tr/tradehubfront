@@ -1836,6 +1836,7 @@ const en = {
       sampleBadge: "Sample",
       sampleNote: "1-piece sample order",
       perUnit: "/pc",
+      offPercent: "{{percent}}% off",
       price: "Price",
       productTotal: "Product total",
       variationItems: "{{variation}} variations {{items}} items",

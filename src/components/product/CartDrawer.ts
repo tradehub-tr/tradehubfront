@@ -139,6 +139,8 @@ function toDrawerItem(
           rawPrice: tier.price,
           // Native (çevrilmemiş) tier fiyatı — sepete native saklamak için (Y1).
           basePrice: tier.basePrice,
+          // Kampanya öncesi fiyat — tek-eksen düzeninde üstü çizili gösterilir.
+          originalPrice: tier.originalPrice,
         }));
 
   return {
