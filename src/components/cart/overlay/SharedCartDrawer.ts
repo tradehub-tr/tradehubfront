@@ -1311,6 +1311,8 @@ function syncToCartStore(item: CartDrawerItemModel, unitPrice: number): void {
             unit: item.unit,
             quantity: qty,
             minQty: isSampleMode ? 1 : item.moq,
+            // Numune satırı MOQ katı kuralından muaf (backend get_cart ile aynı semantik).
+            sellInMoqMultiples: !isSampleMode && !!item.sellInMoqMultiples,
             maxQty: isSampleMode ? 1 : 9999,
             selected: true,
             baseUnitPrice: persisted.price,
@@ -1356,6 +1358,7 @@ function syncToCartStore(item: CartDrawerItemModel, unitPrice: number): void {
         unit: item.unit,
         quantity: qty,
         minQty: isSampleMode ? 1 : item.moq,
+        sellInMoqMultiples: !isSampleMode && !!item.sellInMoqMultiples,
         maxQty: isSampleMode ? 1 : 9999,
         selected: true,
         baseUnitPrice: persisted.price,
@@ -1396,6 +1399,8 @@ export interface CartSubmitItem {
   supplierName: string;
   unit: string;
   moq: number;
+  /** Listing "MOQ katlarıyla sat" bayrağı — misafir sepetinde satır adımını (step) MOQ yapar. */
+  sellInMoqMultiples?: boolean;
   currency?: string;
   baseCurrency?: string;
 }
@@ -1497,6 +1502,7 @@ export async function submitCartLines(
       unit: item.unit,
       quantity: line.qty,
       minQty: isSample ? 1 : item.moq,
+      sellInMoqMultiples: !isSample && !!item.sellInMoqMultiples,
       maxQty: isSample ? 1 : 9999,
       selected: true,
       baseUnitPrice: persisted.price,

@@ -408,6 +408,7 @@ function currentSubmitItem(p: ProductDetail): CartSubmitItem {
     supplierName: p.supplier?.name || "",
     unit: p.unit,
     moq: p.moq,
+    sellInMoqMultiples: !!p.sellInMoqMultiples,
     currency: getSelectedCurrency(),
     baseCurrency: p.baseCurrency,
   };
