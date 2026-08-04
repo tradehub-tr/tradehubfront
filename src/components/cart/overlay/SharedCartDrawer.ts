@@ -1554,6 +1554,7 @@ async function dispatchRowCartAdd(axis: SingleAxisModel): Promise<boolean> {
       supplierName: item.supplierName,
       unit: item.unit,
       moq: item.moq,
+      sellInMoqMultiples: !!item.sellInMoqMultiples,
       currency: item.currency,
       baseCurrency: item.baseCurrency,
     },
