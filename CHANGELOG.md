@@ -1,3 +1,14 @@
+## [v2.4.0-alpha.1] - 2026-08-07 ALPHA
+
+Bu surum alpha.istoc.com'da gelistirme asamasindadir.
+
+### Eklendi
+- feat(cart): tek eksenli ürünler için satır bazlı sepet ekle (@ahmeetseker)
+  - Tek varyant ekseninde her seçeneği fiyat, stok ve adet kontrolüyle satır olarak göster
+  - Varyant bazlı fiyatları sepete satır özelinde taşıyarak toplamları doğru hesapla
+  - Kargo seçimi olmayan ürünlerde boş modal yerine mevcut görüşülecektir akışını koru
+
+---
 ## [v2.4.0] - 2026-08-03 PROD
 
 Bu surum istoc.com'da yayindadir.
