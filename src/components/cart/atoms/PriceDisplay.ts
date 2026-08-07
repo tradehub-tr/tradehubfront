@@ -2,7 +2,12 @@
  * PriceDisplay Atom
  */
 
-import { formatPrice as csFormatPrice } from "../../../services/currencyService";
+import {
+  convertPrice,
+  formatPrice as csFormatPrice,
+  getSelectedCurrency,
+} from "../../../services/currencyService";
+import { moneyFlowHtml } from "../../../utils/moneyFlow";
 
 export interface PriceDisplayProps {
   amount: number;
@@ -10,6 +15,12 @@ export interface PriceDisplayProps {
   bold?: boolean;
   unit?: string;
   emphasize?: boolean;
+  /**
+   * Verilirse tutar `<number-flow>` slot'u olarak basılır: değer değiştiğinde
+   * basamaklar döner. Güncelleme `updateMoneyFlow()` ile yapılmalı — bu
+   * elemana `textContent` yazmak animasyonlu düğümü siler.
+   */
+  flowKey?: string;
   /** @deprecated Use fromCurrency instead */
   currency?: string;
 }
@@ -20,8 +31,11 @@ export function PriceDisplay({
   bold: _bold = false,
   unit,
   emphasize: _emphasize = false,
+  flowKey,
 }: PriceDisplayProps): string {
-  const price = csFormatPrice(amount, fromCurrency);
+  const price = flowKey
+    ? moneyFlowHtml(flowKey, convertPrice(amount, fromCurrency), getSelectedCurrency())
+    : csFormatPrice(amount, fromCurrency);
   let unitHtml = "";
   if (unit) {
     unitHtml = `

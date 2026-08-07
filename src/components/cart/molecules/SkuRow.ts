@@ -8,7 +8,8 @@ import type { CartSku } from "../../../types/cart";
 import { Checkbox } from "../atoms/Checkbox";
 import { PriceDisplay } from "../atoms/PriceDisplay";
 import { QuantityInput } from "../atoms/QuantityInput";
-import { formatPrice } from "../../../services/currencyService";
+import { convertPrice, getSelectedCurrency } from "../../../services/currencyService";
+import { moneyFlowHtml } from "../../../utils/moneyFlow";
 import { t } from "../../../i18n";
 import trashIcon from "../../../assets/images/trash.png";
 import { escapeHtml, sanitizeUrl } from "../../../utils/sanitize";
@@ -62,14 +63,14 @@ export function SkuRow({ sku, productHref }: SkuRowProps): string {
               : ""
           }
           <div class="text-[12px] text-text-secondary font-medium">
-            ${PriceDisplay({ amount: sku.unitPrice, fromCurrency: sku.baseCurrency || "USD", unit: `/${sku.unit}` })}
+            ${PriceDisplay({ amount: sku.unitPrice, fromCurrency: sku.baseCurrency || "USD", unit: `/${sku.unit}`, flowKey: `cartpage:unit:${sku.id}` })}
           </div>
         </div>
 
         <!-- Adet + satır toplamı: desktop'ta inline, mobilde alt satıra tam genişlik sağa yaslı -->
         <div class="flex items-center gap-2 sm:gap-3 max-sm:order-last max-sm:w-full max-sm:justify-end ${unavailable ? "pointer-events-none opacity-50" : ""}">
           ${QuantityInput({ id: `sku-qty-${sku.id}`, value: sku.quantity, min: sku.minQty || 1, max: sku.maxQty, step: sku.sellInMoqMultiples ? sku.minQty || 1 : 1 })}
-          ${!unavailable ? `<span class="sc-c-sku-line-total text-[12px] sm:text-[14px] font-bold text-[#1a1a1a] m-0 whitespace-nowrap">${formatPrice(sku.unitPrice * sku.quantity, sku.baseCurrency || "USD")}</span>` : ""}
+          ${!unavailable ? `<span class="sc-c-sku-line-total text-[12px] sm:text-[14px] font-bold text-[#1a1a1a] m-0 whitespace-nowrap">${moneyFlowHtml(`cartpage:line:${sku.id}`, convertPrice(sku.unitPrice * sku.quantity, sku.baseCurrency || "USD"), getSelectedCurrency())}</span>` : ""}
         </div>
 
         <div class="relative group shrink-0">
