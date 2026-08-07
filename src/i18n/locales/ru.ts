@@ -1853,6 +1853,7 @@ const ru = {
       sampleBadge: "Образец",
       sampleNote: "Заказ образца — 1 штука",
       perUnit: "/шт",
+      offPercent: "Скидка {{percent}}%",
       price: "Цена",
       productTotal: "Итого за товар",
       variationItems: "{{variation}} вариантов {{items}} шт.",

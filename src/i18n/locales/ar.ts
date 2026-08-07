@@ -1812,6 +1812,7 @@ const ar = {
       sampleBadge: "عينة",
       sampleNote: "طلب عينة من قطعة واحدة",
       perUnit: "/قطعة",
+      offPercent: "خصم {{percent}}%",
       price: "السعر",
       productTotal: "إجمالي المنتج",
       variationItems: "{{variation}} أنواع {{items}} عناصر",

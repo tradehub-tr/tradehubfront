@@ -56,6 +56,7 @@ function toDrawerItem(product: ProductDetail): CartDrawerItemModel {
       maxQty: tier.maxQty,
       price: tier.price,
       rawPrice: tier.price,
+      originalPrice: tier.originalPrice,
     })),
     colors: toColors(product),
     colorAxisLabel: colorVariant?.label,

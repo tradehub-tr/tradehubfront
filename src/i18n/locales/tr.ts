@@ -1832,6 +1832,7 @@ const tr = {
       sampleBadge: "Numune",
       sampleNote: "1 adetlik numune siparişi",
       perUnit: "/adet",
+      offPercent: "%{{percent}} indirim",
       price: "Fiyat",
       productTotal: "Ürün toplamı",
       variationItems: "{{variation}} varyasyon {{items}} ürün",
