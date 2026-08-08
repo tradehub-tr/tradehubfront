@@ -170,18 +170,32 @@ export function formatPriceRange(
   return `${info.symbol}${_formatNumber(min)}-${_formatNumber(max)}`;
 }
 
-export function formatCurrency(amount: number, currencyCode: string): string {
+/**
+ * `formatCurrency`'nin kullandığı biçim kuralları — sembol, ondalık hane ve
+ * hangi locale ile gruplandığı. Aynı görüntüyü `Intl.NumberFormat` üzerinden
+ * üretmesi gereken tüketiciler (ör. number-flow digit animasyonu) kuralları
+ * yeniden yazmasın diye dışa açıldı.
+ */
+export function getCurrencyFormatSpec(currencyCode: string): {
+  symbol: string;
+  decimalPlaces: number;
+  locale: string;
+} {
   const info = _currencyMeta[currencyCode] || DEFAULT_CURRENCY_META["USD"];
+  return {
+    symbol: info.symbol,
+    decimalPlaces: info.decimalPlaces,
+    // TRY binlik ayıracı "." ve ondalık ","; diğerleri en-US düzeni.
+    locale: currencyCode === "TRY" ? "tr-TR" : "en-US",
+  };
+}
 
-  if (currencyCode === "TRY") {
-    const parts = amount.toFixed(info.decimalPlaces).split(".");
-    const intPart = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ".");
-    return `${info.symbol}${intPart},${parts[1]}`;
-  }
+export function formatCurrency(amount: number, currencyCode: string): string {
+  const { symbol, decimalPlaces, locale } = getCurrencyFormatSpec(currencyCode);
 
-  return `${info.symbol}${amount.toLocaleString("en-US", {
-    minimumFractionDigits: info.decimalPlaces,
-    maximumFractionDigits: info.decimalPlaces,
+  return `${symbol}${amount.toLocaleString(locale, {
+    minimumFractionDigits: decimalPlaces,
+    maximumFractionDigits: decimalPlaces,
   })}`;
 }
 

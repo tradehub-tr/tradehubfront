@@ -10,7 +10,8 @@ import { SkuRow } from "./SkuRow";
 import favIcon from "../../../assets/images/fav.png";
 import trashIcon from "../../../assets/images/trash.png";
 import { t } from "../../../i18n";
-import { formatPrice } from "../../../services/currencyService";
+import { convertPrice, getSelectedCurrency } from "../../../services/currencyService";
+import { moneyFlowHtml } from "../../../utils/moneyFlow";
 import { isItemFavorited } from "../../../stores/favorites";
 import { escapeHtml } from "../../../utils/sanitize";
 
@@ -52,7 +53,13 @@ export function ProductItem({ product }: ProductItemProps): string {
     (sum, s) => sum + (s.selected ? s.unitPrice * s.quantity : 0),
     0
   );
-  const totalText = initialTotal > 0 ? formatPrice(initialTotal, baseCurrency) : "";
+  // Tutar 0 iken slot gizlenir; boşaltılmaz — number-flow düğümü yerinde kalmalı.
+  const totalHidden = initialTotal > 0 ? "" : " hidden";
+  const totalHtml = moneyFlowHtml(
+    `cartpage:spu:${product.id}`,
+    convertPrice(initialTotal, baseCurrency),
+    getSelectedCurrency()
+  );
 
   // Tüm ürünler kapalı başlar — kullanıcı düzenlemek istediğini açar.
   const productOpen = false;
@@ -92,7 +99,7 @@ export function ProductItem({ product }: ProductItemProps): string {
         </div>
 
         <div class="flex items-center justify-end gap-1.5 sm:gap-2 mt-1 ps-[calc(18px+0.5rem)] sm:ps-[calc(20px+0.75rem)]" @click.stop x-show="!productOpen" x-cloak>
-          <span class="sc-c-spu-total whitespace-nowrap text-[12px] sm:text-[14.5px] font-bold text-[#1a1a1a] tabular-nums">${totalText}</span>
+          <span class="sc-c-spu-total whitespace-nowrap text-[12px] sm:text-[14.5px] font-bold text-[#1a1a1a] tabular-nums${totalHidden}">${totalHtml}</span>
           <button type="button" class="sc-c-spu-favorite-btn th-no-press w-6 h-6 sm:w-7 sm:h-7 inline-flex items-center justify-center rounded-full transition-colors ${isFav ? "text-amber-500" : "text-text-tertiary"} bg-transparent hover:bg-white hover:text-text-secondary" data-product-id="${escapeHtml(product.id)}" @click="$dispatch('product-favorite', { productId: '${escapeHtml(product.id)}' })" aria-label="${t("cart.favorite")}">
             <img src="${favIcon}" width="72" height="72" decoding="async" class="w-3.5 h-3.5 sm:w-4 sm:h-4 object-contain" alt="${t("cart.favorite")}" />
           </button>

@@ -6,6 +6,7 @@
 import '../style.css'
 import { initFlowbite } from 'flowbite'
 import { initStickyHeights } from '../utils/stickyHeights'
+import { mountMoneyFlows } from '../utils/moneyFlow'
 import { initCurrency, getSelectedCurrencyInfo } from '../services/currencyService'
 
 // Header components (reuse from main page)
@@ -69,6 +70,9 @@ function renderPage(suppliers: ReturnType<typeof cartStore.getSuppliers>, summar
     <!-- Bottom Navigation (mobile/tablet) -->
     ${BottomNav()}
   `;
+
+  // Tutar slot'larına animasyonlu <number-flow> elemanlarını yerleştir.
+  mountMoneyFlows(appEl);
 
   initFlowbite();
   initStickyHeights();

@@ -56,14 +56,14 @@ export function CartSummary(data: CartSummaryData): string {
       <div class="flex flex-col gap-3">
         <div class="flex justify-between items-center text-[13px] sm:text-[14px] leading-5 text-text-secondary">
           <span data-i18n="cart.productSubtotal">${t("cart.productSubtotal")}</span>
-          <span class="sc-summary-product-subtotal">${PriceDisplay({ amount: data.productSubtotal, fromCurrency: getSelectedCurrency() })}</span>
+          <span class="sc-summary-product-subtotal">${PriceDisplay({ amount: data.productSubtotal, fromCurrency: getSelectedCurrency(), flowKey: "cartpage:productSubtotal" })}</span>
         </div>
         ${
           data.discount > 0
             ? `
         <div class="sc-summary-discount-row flex justify-between items-center text-[13px] sm:text-[14px] leading-5">
           <span class="text-[#16a34a]" data-i18n="cart.productDiscount">${t("cart.productDiscount")}</span>
-          <span class="sc-summary-discount text-[#16a34a] font-semibold">- ${PriceDisplay({ amount: data.discount, fromCurrency: getSelectedCurrency() })}</span>
+          <span class="sc-summary-discount text-[#16a34a] font-semibold">- ${PriceDisplay({ amount: data.discount, fromCurrency: getSelectedCurrency(), flowKey: "cartpage:discount" })}</span>
         </div>`
             : `
         <div class="sc-summary-discount-row flex justify-between items-center text-[13px] sm:text-[14px] leading-5 hidden">
@@ -73,13 +73,13 @@ export function CartSummary(data: CartSummaryData): string {
         }
         <div class="flex justify-between items-center text-[13px] sm:text-[14px] leading-5 text-text-secondary">
           <span data-i18n="cart.shippingFee">${t("cart.shippingFee")}</span>
-          <span>${PriceDisplay({ amount: data.shippingFee, fromCurrency: getSelectedCurrency() })}</span>
+          <span class="sc-summary-shipping">${PriceDisplay({ amount: data.shippingFee, fromCurrency: getSelectedCurrency(), flowKey: "cartpage:shippingFee" })}</span>
         </div>
       </div>
 
       <div class="flex justify-between items-center text-[15px] sm:text-[17px] font-bold leading-6 text-text-primary pt-3 sm:pt-4 border-t border-[#e5e5e5] mt-2">
         <span class="min-w-0 truncate me-2" data-i18n="cart.subtotalExTax">${t("cart.subtotalExTax")}</span>
-        <span class="sc-summary-subtotal">${PriceDisplay({ amount: data.subtotal, fromCurrency: getSelectedCurrency(), bold: true })}</span>
+        <span class="sc-summary-subtotal">${PriceDisplay({ amount: data.subtotal, fromCurrency: getSelectedCurrency(), bold: true, flowKey: "cartpage:subtotal" })}</span>
       </div>
 
       ${

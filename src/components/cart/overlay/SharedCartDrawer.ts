@@ -11,6 +11,7 @@ import { apiCheckStock, apiAddToCart, fetchCart } from "../../../services/cartSe
 import { getCurrencySymbol as _getCurrencySymbolForCart } from "../../../utils/currency";
 import { showCartError } from "../page/CartPage";
 import { safeHexColor, escapeHtml, sanitizeUrl } from "../../../utils/sanitize";
+import { moneyFlowHtml, mountMoneyFlows, resetMoneyFlows } from "../../../utils/moneyFlow";
 
 export interface CartDrawerTierModel {
   minQty: number;
@@ -743,7 +744,7 @@ function renderSingleAxisSectionHtml(
             </span>
           </div>
           <div class="flex w-7/12 items-center justify-end gap-2 overflow-hidden">
-            <span class="truncate text-base leading-6 text-[#222] me-2">${formatCurrency(displayPrice, currency)}</span>
+            <span class="truncate text-base leading-6 text-[#222] me-2">${moneyFlowHtml(`cart:row:${opt.id}`, displayPrice, currency)}</span>
             ${renderRowStepper(opt.id, qty, !available)}
           </div>
         </div>
@@ -934,7 +935,7 @@ function renderDrawerBody(): void {
               ${stockLabel ? `<span class="block">${stockLabel}</span>` : ""}
             </div>
             <span class="text-[13px] font-semibold ${hasQty ? "text-text-heading" : "text-text-tertiary"} whitespace-nowrap">
-              ${formatCurrency(displayPrice, itemCurrency)}
+              ${moneyFlowHtml(`cart:size:${opt.id}`, displayPrice, itemCurrency)}
             </span>
             ${available ? renderQtyStepper(opt.id, qty) : `<span class="inline-flex items-center justify-center w-[112px] h-8 text-xs text-red-400 font-medium">${t("cart.outOfStock")}</span>`}
           </div>
@@ -959,7 +960,7 @@ function renderDrawerBody(): void {
         <div class="grid grid-cols-[minmax(0,1fr)_auto_auto] items-center gap-x-2 py-2 border-b border-border-default">
           <span class="text-[13px] font-medium text-text-heading min-w-0 truncate">${escapeHtml(item.title)}</span>
           <span class="text-[13px] font-semibold text-text-tertiary whitespace-nowrap">
-            ${formatCurrency(totals.activePrice, itemCurrency)}
+            ${moneyFlowHtml("cart:noVariant", totals.activePrice, itemCurrency)}
           </span>
           ${renderQtyStepper(singleId, qty)}
         </div>
@@ -1011,6 +1012,8 @@ function renderDrawerBody(): void {
       </div>
     </div>
   `;
+
+  mountMoneyFlows(body);
 }
 
 function renderDrawerFooter(): void {
@@ -1027,8 +1030,8 @@ function renderDrawerFooter(): void {
   const subtotalRow = `
     <span class="font-semibold mr-1 whitespace-nowrap shrink-0">${t("cart.subtotal")}</span>
     <span class="flex items-center gap-1 min-w-0">
-      <span class="whitespace-nowrap">${formatCurrency(totals.grandTotal, itemCurrency)}</span>
-      <span class="text-sm font-normal text-[#222] whitespace-nowrap">(${formatCurrency(perPiece, itemCurrency)}${t("cart.perUnit")})</span>
+      ${moneyFlowHtml("cart:grandTotal", totals.grandTotal, itemCurrency)}
+      <span class="text-sm font-normal text-[#222] whitespace-nowrap">(${moneyFlowHtml("cart:perPiece", perPiece, itemCurrency)}${t("cart.perUnit")})</span>
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-4 h-4 text-text-tertiary shrink-0"><path d="${state.footerExpanded ? "m18 15-6-6-6 6" : "m6 9 6 6 6-6"}"/></svg>
     </span>
   `;
@@ -1040,7 +1043,7 @@ function renderDrawerFooter(): void {
       </div>
       <div class="flex justify-between gap-2 mb-[6px] text-sm leading-[18px] font-normal text-[#222]">
         <span class="min-w-0 truncate">${t("cart.productTotal")} (${t("cart.variationItems", { variation: String(totals.variationCount), items: String(totals.totalQty) })})</span>
-        <span class="shrink-0">${formatCurrency(totals.itemSubtotal, itemCurrency)}</span>
+        <span class="shrink-0">${moneyFlowHtml("cart:itemSubtotal", totals.itemSubtotal, itemCurrency)}</span>
       </div>
       <div class="flex justify-between gap-2 mb-[6px] text-sm leading-[18px] font-normal text-[#222]">
         <span>${t("cart.shippingTotal")}</span>
@@ -1061,6 +1064,8 @@ function renderDrawerFooter(): void {
     ${details}
     <button type="button" id="shared-cart-confirm" class="w-full th-btn-dark h-10 sm:h-12 text-[13px] sm:text-lg">${state.mode === "sample" ? t("cart.orderSample") : t("cart.addToCartBtn")}</button>
   `;
+
+  mountMoneyFlows(footer);
 }
 
 function rerenderDrawer(): void {
@@ -1311,6 +1316,8 @@ function syncToCartStore(item: CartDrawerItemModel, unitPrice: number): void {
             unit: item.unit,
             quantity: qty,
             minQty: isSampleMode ? 1 : item.moq,
+            // Numune satırı MOQ katı kuralından muaf (backend get_cart ile aynı semantik).
+            sellInMoqMultiples: !isSampleMode && !!item.sellInMoqMultiples,
             maxQty: isSampleMode ? 1 : 9999,
             selected: true,
             baseUnitPrice: persisted.price,
@@ -1356,6 +1363,7 @@ function syncToCartStore(item: CartDrawerItemModel, unitPrice: number): void {
         unit: item.unit,
         quantity: qty,
         minQty: isSampleMode ? 1 : item.moq,
+        sellInMoqMultiples: !isSampleMode && !!item.sellInMoqMultiples,
         maxQty: isSampleMode ? 1 : 9999,
         selected: true,
         baseUnitPrice: persisted.price,
@@ -1396,6 +1404,8 @@ export interface CartSubmitItem {
   supplierName: string;
   unit: string;
   moq: number;
+  /** Listing "MOQ katlarıyla sat" bayrağı — misafir sepetinde satır adımını (step) MOQ yapar. */
+  sellInMoqMultiples?: boolean;
   currency?: string;
   baseCurrency?: string;
 }
@@ -1497,6 +1507,7 @@ export async function submitCartLines(
       unit: item.unit,
       quantity: line.qty,
       minQty: isSample ? 1 : item.moq,
+      sellInMoqMultiples: !isSample && !!item.sellInMoqMultiples,
       maxQty: isSample ? 1 : 9999,
       selected: true,
       baseUnitPrice: persisted.price,
@@ -1548,6 +1559,7 @@ async function dispatchRowCartAdd(axis: SingleAxisModel): Promise<boolean> {
       supplierName: item.supplierName,
       unit: item.unit,
       moq: item.moq,
+      sellInMoqMultiples: !!item.sellInMoqMultiples,
       currency: item.currency,
       baseCurrency: item.baseCurrency,
     },
@@ -1849,6 +1861,10 @@ function openDrawer(
     heading.textContent =
       mode === "sample" ? t("cart.sampleVariations") : t("cart.selectVariation");
   }
+
+  // Drawer başka bir ürün/mod ile açılıyor — önceki üründen kalan değerler
+  // yanlış yönde flash tetiklemesin.
+  resetMoneyFlows("cart:");
 
   rerenderDrawer();
   applyDrawerTransform(true);

@@ -11,6 +11,7 @@ import {
   getSelectedCurrency,
   convertPrice,
 } from "../services/currencyService";
+import { updateMoneyFlow } from "../utils/moneyFlow";
 import { getBaseUrl } from "../components/auth/AuthLayout";
 import { apiUpdateCartItem, apiRemoveCartItem } from "../services/cartService";
 import { isLoggedIn } from "../utils/auth";
@@ -482,18 +483,24 @@ Alpine.data("cartPage", () => ({
     const countEl = el.querySelector<HTMLElement>(".sc-summary-selected-count");
     if (countEl) countEl.textContent = String(summary.selectedCount);
 
-    const subtotalEl = el.querySelector<HTMLElement>(".sc-summary-product-subtotal");
     const cur = getSelectedCurrency();
-    if (subtotalEl) subtotalEl.textContent = formatCurrency(summary.productSubtotal, cur);
+    updateMoneyFlow(
+      el.querySelector<HTMLElement>(".sc-summary-product-subtotal [data-money-flow]"),
+      summary.productSubtotal,
+      cur
+    );
 
     const discountRow = el.querySelector<HTMLElement>(".sc-summary-discount-row");
     const discountEl = el.querySelector<HTMLElement>(".sc-summary-discount");
     const banner = el.querySelector<HTMLElement>(".sc-summary-savings-banner");
 
     if (summary.discount > 0) {
-      const formatted = `- ${formatCurrency(summary.discount, cur)}`;
       discountRow?.classList.remove("hidden");
-      if (discountEl) discountEl.textContent = formatted;
+      updateMoneyFlow(
+        discountEl?.querySelector<HTMLElement>("[data-money-flow]") ?? null,
+        summary.discount,
+        cur
+      );
       if (banner) {
         banner.classList.remove("hidden");
         banner.innerHTML = sanitizeHtml(
@@ -507,8 +514,11 @@ Alpine.data("cartPage", () => ({
       banner?.classList.add("hidden");
     }
 
-    const totalEl = el.querySelector<HTMLElement>(".sc-summary-subtotal");
-    if (totalEl) totalEl.textContent = formatCurrency(summary.subtotal, cur);
+    updateMoneyFlow(
+      el.querySelector<HTMLElement>(".sc-summary-subtotal [data-money-flow]"),
+      summary.subtotal,
+      cur
+    );
 
     this.updateThumbnailGrid(summary.items);
   },
@@ -535,11 +545,18 @@ Alpine.data("cartPage", () => ({
 
       const totalEl = container.querySelector<HTMLElement>(".sc-c-supplier-total-text");
       if (totalEl) {
-        if (subtotal > 0) {
-          totalEl.textContent = `${t("checkoutMfr.totalLabel")}: ${formatCurrency(subtotal, getSelectedCurrency())}`;
-        } else {
-          totalEl.textContent = "";
+        // Etiket + animasyonlu tutar; tutar 0 iken satır gizlenir, içerik
+        // boşaltılmaz — number-flow düğümü yerinde kalmalı.
+        let slot = totalEl.querySelector<HTMLElement>("[data-money-flow]");
+        if (!slot) {
+          totalEl.textContent = `${t("checkoutMfr.totalLabel")}: `;
+          slot = document.createElement("span");
+          slot.dataset.moneyFlow = `cartpage:supplier:${supplierId}`;
+          slot.className = "inline-flex items-center";
+          totalEl.appendChild(slot);
         }
+        totalEl.classList.toggle("hidden", subtotal <= 0);
+        updateMoneyFlow(slot, subtotal, getSelectedCurrency());
       }
     });
 
@@ -562,7 +579,12 @@ Alpine.data("cartPage", () => ({
 
       const totalEl = spuEl.querySelector<HTMLElement>(".sc-c-spu-total");
       if (totalEl) {
-        totalEl.textContent = pSubtotal > 0 ? formatCurrency(pSubtotal, getSelectedCurrency()) : "";
+        totalEl.classList.toggle("hidden", pSubtotal <= 0);
+        updateMoneyFlow(
+          totalEl.querySelector<HTMLElement>("[data-money-flow]"),
+          pSubtotal,
+          getSelectedCurrency()
+        );
       }
     });
   },
@@ -596,10 +618,14 @@ Alpine.data("cartPage", () => ({
       if (!skuId) return;
       const found = cartStore.getSku(skuId);
       if (!found) return;
-      const lineEl = skuRow.querySelector<HTMLElement>(".sc-c-sku-line-total");
+      const lineEl = skuRow.querySelector<HTMLElement>(".sc-c-sku-line-total [data-money-flow]");
       if (!lineEl) return;
       const { sku } = found;
-      lineEl.textContent = formatPrice(sku.unitPrice * sku.quantity, sku.baseCurrency || "USD");
+      updateMoneyFlow(
+        lineEl,
+        convertPrice(sku.unitPrice * sku.quantity, sku.baseCurrency || "USD"),
+        getSelectedCurrency()
+      );
     });
   },
 
