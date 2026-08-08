@@ -1,3 +1,21 @@
+## [v2.4.0-alpha.2] - 2026-08-08 ALPHA
+
+Bu surum alpha.istoc.com'da gelistirme asamasindadir.
+
+### Eklendi
+- feat(cart): tutar değişimlerine number-flow animasyonu ekle (@TurksabYonetim)
+  - Sepet sayfası ve drawer tutarlarını number-flow slotlarıyla render et
+  - Para birimi format kurallarını ortaklaştırarak animasyonlu ve düz gösterimi hizala
+  - Drawer yeniden açıldığında eski ürün tutarlarından kalan animasyon durumunu sıfırla
+
+### Duzeltildi
+- fix(cart): misafir sepetinde MOQ katı adımını koru (@ahmeetseker)
+  - syncToCartStore'un iki CartSku üretim noktasına bayrak eklendi
+  - submitCartLines (OptionsSheet yolu) CartSku'suna bayrak eklendi
+  - CartSubmitItem'a sellInMoqMultiples alanı eklendi; OptionsSheet currentSubmitItem ProductDetail'den dolduruyor
+- fix(cart): satır bazlı eklemede MOQ katı bayrağını taşı (@ahmeetseker)
+
+---
 ## [v2.4.0-alpha.1] - 2026-08-07 ALPHA
 
 Bu surum alpha.istoc.com'da gelistirme asamasindadir.
