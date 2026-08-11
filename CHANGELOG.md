@@ -1,3 +1,18 @@
+## [v2.4.0-alpha.3] - 2026-08-11 ALPHA
+
+Bu surum alpha.istoc.com'da gelistirme asamasindadir.
+
+### Eklendi
+- feat(theme): marka rengini iSTOC turuncusuna (#ff8600) çevir, gri zeminleri #f9f9f9 yap (@TurksabYonetim)
+  - @theme primary skalası #ff8600 merkezli yeniden üretildi (50-950)
+  - Tüm hardcoded sarı fallback'ler (#f5b800 ailesi, ~420 geçiş) turuncu karşılıklarıyla eşlendi
+  - Link/focus rengi #cc9900 → #cc6b00, hover #b38600 → #b35e00
+  - Sayfa zemin grileri (#f0f2f5, cart/checkout #fafafa, --color-surface-muted) → #f9f9f9
+- feat(theme): turuncu zeminli butonlarda yazı rengini beyaza çevir (@TurksabYonetim)
+  - --btn-text ve --btn-hover-text #1a1a1a → #ffffff (th-btn tüm CTA'lar)
+  - Elle yazılmış koyu yazı + turuncu zemin kombinasyonları beyaza çevrildi: HeroSidePanel, SellPageLayout, CategoryShowcase, SubHeader, FooterPolicy
+
+---
 ## [v2.4.0-alpha.2] - 2026-08-08 ALPHA
 
 Bu surum alpha.istoc.com'da gelistirme asamasindadir.
