@@ -1,3 +1,11 @@
+## [v2.4.0-alpha.4] - 2026-08-11 ALPHA
+
+Bu surum alpha.istoc.com'da gelistirme asamasindadir.
+
+### Eklendi
+- feat(theme): PWA manifest ve meta theme-color'ı marka turuncusuna (#ff8600) güncelle (@TurksabYonetim)
+
+---
 ## [v2.4.0-alpha.3] - 2026-08-11 ALPHA
 
 Bu surum alpha.istoc.com'da gelistirme asamasindadir.
