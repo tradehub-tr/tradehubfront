@@ -34,7 +34,7 @@ function flameIcon(): string {
 function renderDealSlide(deal: SideDeal, index: number): string {
   const badge =
     deal.discountPercent && deal.discountPercent > 0
-      ? `<span class="absolute start-1.5 top-1.5 z-10 rounded-sm bg-[#ff8600] px-1.5 py-0.5 text-[10px] font-extrabold leading-none text-[#1a1a1a]">-%${deal.discountPercent}</span>`
+      ? `<span class="absolute start-1.5 top-1.5 z-10 rounded-sm bg-[#ff8600] px-1.5 py-0.5 text-[10px] font-extrabold leading-none text-white">-%${deal.discountPercent}</span>`
       : "";
   const img = deal.imageSrc
     ? `<img src="${escapeHtml(sanitizeUrl(deal.imageSrc))}" alt="${escapeHtml(deal.name)}" width="400" height="400" decoding="async" class="h-full w-full object-contain">`
@@ -86,7 +86,7 @@ export function HeroSidePanel(): string {
           <span class="block text-[12.5px] font-bold leading-tight text-[#171717]">${t("heroSide.rfqTitle")}</span>
           <span class="block truncate text-[10.5px] text-[#737373]">${t("heroSide.rfqDesc")}</span>
         </span>
-        <span class="ms-auto flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[#ff8600] text-[#1a1a1a]">
+        <span class="ms-auto flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[#ff8600] text-white">
           <svg class="h-3.5 w-3.5 rtl:rotate-180" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
         </span>
       </a>

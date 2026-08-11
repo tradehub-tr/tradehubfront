@@ -360,7 +360,7 @@
 
   /* --- Button — Primary token'ına bağlı --- */
   --btn-bg: var(--color-primary-500);
-  --btn-text: #1a1a1a;
+  --btn-text: #ffffff;
   --btn-border-width: 1px;
   --btn-border-color: var(--color-primary-600);
   --btn-font-size: 0.875rem;
@@ -368,7 +368,7 @@
   /* Emil: glossy inset highlight kaldırıldı — yalnız ince alt keyline (paint'siz, animate edilmez). */
   --btn-shadow: 0 1px 0 var(--color-primary-600);
   --btn-hover-bg: var(--color-primary-600);
-  --btn-hover-text: #1a1a1a;
+  --btn-hover-text: #ffffff;
 
   /* --- Button Outline Variant --- */
   --btn-outline-bg: transparent;

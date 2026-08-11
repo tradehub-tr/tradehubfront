@@ -157,7 +157,7 @@ function renderSortDropdown(options: SortOption[], selectedValue: string): strin
         id="sub-header-sort-btn"
         type="button"
         @click="sortOpen = !sortOpen"
-        class="inline-flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-2 text-[13px] sm:text-sm font-medium rounded-full bg-primary-500 border border-primary-600 text-gray-900 hover:bg-primary-600 transition-colors focus:outline-none focus:ring-2 focus:ring-primary-500/40 dark:text-gray-900"
+        class="inline-flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-2 text-[13px] sm:text-sm font-medium rounded-full bg-primary-500 border border-primary-600 text-white hover:bg-primary-600 transition-colors focus:outline-none focus:ring-2 focus:ring-primary-500/40 dark:text-white"
         aria-haspopup="listbox"
         :aria-expanded="sortOpen"
       >

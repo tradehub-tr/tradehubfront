@@ -206,7 +206,7 @@ function PricingCard(plan: PricingPlan, idx: number, trial?: TrialConfig): strin
     : "bg-white text-[#1a1a1a] border-[#e8e6e0] hover:border-[#d5d2c9] hover:shadow-[0_2px_6px_rgba(20,20,18,0.06)] [@media(hover:hover)_and_(pointer:fine)]:motion-safe:hover:-translate-y-0.5";
 
   const tagCls = isFeat ? "text-white/65" : "text-[#8a877f]";
-  const nameCls = isFeat ? "text-[#ff8600]" : "text-[#1a1a1a]";
+  const nameCls = isFeat ? "text-[#ff8600]" : "text-white";
   const subCls = isFeat ? "text-white/65" : "text-[#4a4a48]";
   const amountCls = isFeat ? "text-white" : "text-[#1a1a1a]";
   const perCls = isFeat ? "text-white/65" : "text-[#8a877f]";
@@ -233,7 +233,7 @@ function PricingCard(plan: PricingPlan, idx: number, trial?: TrialConfig): strin
     <div class="relative flex flex-col gap-3.5 rounded-2xl border p-5 lg:p-[26px_22px_22px] transition-[border-color,box-shadow,transform] duration-150 motion-reduce:transition-none ${cardCls}">
       ${
         badge
-          ? `<span class="absolute -top-2.5 start-[22px] bg-[#ff8600] text-[#1a1a1a] text-[10.5px] font-bold uppercase tracking-[0.08em] px-2.5 py-1 rounded-full border border-[#db7300]">${escapeHtml(badge)}</span>`
+          ? `<span class="absolute -top-2.5 start-[22px] bg-[#ff8600] text-white text-[10.5px] font-bold uppercase tracking-[0.08em] px-2.5 py-1 rounded-full border border-[#db7300]">${escapeHtml(badge)}</span>`
           : ""
       }
       <span class="text-[11px] font-semibold uppercase tracking-[0.1em] ${tagCls}">${escapeHtml(tag)}</span>
@@ -839,7 +839,7 @@ function PricingSection(
             class="appearance-none border-0 text-[12.5px] font-medium px-4 py-2 rounded-full focus:outline-none transition-colors duration-150"
           >
             ${t("sellPage.yearlyToggle")}
-            ${discountBadge ? `<span class="text-[10px] bg-[#ff8600] text-[#1a1a1a] px-1.5 py-0.5 rounded-full font-bold ms-1.5 tracking-[0.04em]">${discountBadge}</span>` : ""}
+            ${discountBadge ? `<span class="text-[10px] bg-[#ff8600] text-white px-1.5 py-0.5 rounded-full font-bold ms-1.5 tracking-[0.04em]">${discountBadge}</span>` : ""}
           </button>
         </div>
 
