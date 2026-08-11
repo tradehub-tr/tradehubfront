@@ -103,8 +103,8 @@ export function ReportAbuseModal(): string {
         `<button type="button" @click="reason = '${r.value}'"
         class="px-3.5 py-1.5 rounded-full text-sm font-medium border transition-colors cursor-pointer"
         :class="reason === '${r.value}'
-          ? 'bg-[var(--color-primary-500,#cc9900)] text-white border-[var(--color-primary-500,#cc9900)]'
-          : 'bg-white text-secondary-700 border-border-default hover:border-[var(--color-primary-500,#cc9900)]'">
+          ? 'bg-[var(--color-primary-500,#cc6b00)] text-white border-[var(--color-primary-500,#cc6b00)]'
+          : 'bg-white text-secondary-700 border-border-default hover:border-[var(--color-primary-500,#cc6b00)]'">
         ${r.label}
       </button>`
     )

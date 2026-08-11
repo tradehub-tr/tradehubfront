@@ -138,7 +138,7 @@ export function RelatedProducts(): string {
 
 function renderTabButton(meta: TabMeta, count: number, active: boolean): string {
   const activeStyle = active
-    ? "color: var(--pd-tab-active-color, #cc9900); font-weight: 600;"
+    ? "color: var(--pd-tab-active-color, #cc6b00); font-weight: 600;"
     : "color: var(--pd-tab-color, #6b7280); font-weight: 500;";
   const activeClass = active ? "rp-tab-active" : "";
   return `
@@ -147,7 +147,7 @@ function renderTabButton(meta: TabMeta, count: number, active: boolean): string 
       role="tab"
       data-rp-tab="${meta.key}"
       aria-selected="${active ? "true" : "false"}"
-      class="rp-tab ${activeClass} relative py-3.5 px-1 text-sm whitespace-nowrap border-0 bg-transparent cursor-pointer hover:text-gray-900 [&.rp-tab-active]:after:content-[''] [&.rp-tab-active]:after:absolute [&.rp-tab-active]:after:start-0 [&.rp-tab-active]:after:end-0 [&.rp-tab-active]:after:-bottom-px [&.rp-tab-active]:after:h-0.5 [&.rp-tab-active]:after:bg-[var(--pd-tab-active-border,#cc9900)]"
+      class="rp-tab ${activeClass} relative py-3.5 px-1 text-sm whitespace-nowrap border-0 bg-transparent cursor-pointer hover:text-gray-900 [&.rp-tab-active]:after:content-[''] [&.rp-tab-active]:after:absolute [&.rp-tab-active]:after:start-0 [&.rp-tab-active]:after:end-0 [&.rp-tab-active]:after:-bottom-px [&.rp-tab-active]:after:h-0.5 [&.rp-tab-active]:after:bg-[var(--pd-tab-active-border,#cc6b00)]"
       style="${activeStyle}"
     >
       ${meta.label}
@@ -332,7 +332,7 @@ function renderIntoRoot(root: HTMLElement, data: RelatedListingsGrouped): void {
       b.setAttribute("aria-selected", isActive ? "true" : "false");
       b.classList.toggle("rp-tab-active", isActive);
       if (isActive) {
-        b.style.color = "var(--pd-tab-active-color, #cc9900)";
+        b.style.color = "var(--pd-tab-active-color, #cc6b00)";
         b.style.fontWeight = "600";
       } else {
         b.style.color = "var(--pd-tab-color, #6b7280)";

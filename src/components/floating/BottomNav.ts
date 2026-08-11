@@ -169,7 +169,7 @@ function renderAccountCountryOptions(): string {
       ([code, name], index) => `
         <button type="button" data-country-switch="${code}" class="th-no-press w-full flex items-center justify-between px-4 py-3 text-sm hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors text-start${index < countries.length - 1 ? " border-b border-gray-100 dark:border-gray-700" : ""}">
           <span>${name}</span>
-          <span class="country-check text-[var(--color-primary-500,#f5b800)] hidden" data-country-check="${code}">✓</span>
+          <span class="country-check text-[var(--color-primary-500,#ff8600)] hidden" data-country-check="${code}">✓</span>
         </button>
       `
     )
@@ -180,11 +180,11 @@ function renderAccountLanguageOptions(): string {
   return `
     <button type="button" data-lang-switch="tr" class="th-no-press w-full flex items-center justify-between px-4 py-3 text-sm hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors text-start border-b border-gray-100 dark:border-gray-700">
       <span>Türkçe — TRY (₺)</span>
-      <span id="lang-check-tr" class="text-[var(--color-primary-500,#f5b800)] hidden">✓</span>
+      <span id="lang-check-tr" class="text-[var(--color-primary-500,#ff8600)] hidden">✓</span>
     </button>
     <button type="button" data-lang-switch="en" class="th-no-press w-full flex items-center justify-between px-4 py-3 text-sm hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors text-start">
       <span>English — TRY (₺)</span>
-      <span id="lang-check-en" class="text-[var(--color-primary-500,#f5b800)] hidden">✓</span>
+      <span id="lang-check-en" class="text-[var(--color-primary-500,#ff8600)] hidden">✓</span>
     </button>
   `;
 }
@@ -236,24 +236,24 @@ function renderAccountOverlay(): string {
           <p class="px-3 min-[400px]:px-4 text-[10px] min-[400px]:text-[11px] font-semibold text-gray-400 uppercase tracking-wider mb-1">${t("accountMenu.discover")}</p>
           ${renderAccountMenuItem(
             "/pages/top-ranking.html",
-            "bg-[var(--color-primary-50,#fff8e1)]",
-            "text-[var(--color-primary-500,#f5b800)]",
+            "bg-[var(--color-primary-50,#fff3e6)]",
+            "text-[var(--color-primary-500,#ff8600)]",
             "M15.362 5.214A8.252 8.252 0 0 1 12 21 8.25 8.25 0 0 1 6.038 7.047 8.287 8.287 0 0 0 9 9.601a8.983 8.983 0 0 1 3.361-6.867 8.21 8.21 0 0 0 3 2.48Z",
             t("accountMenu.bestSellers"),
             t("accountMenu.bestSellersDesc")
           )}
           ${renderAccountMenuItem(
             "/pages/tailored-selections.html",
-            "bg-[var(--color-primary-50,#fff8e1)]",
-            "text-[var(--color-primary-500,#f5b800)]",
+            "bg-[var(--color-primary-50,#fff3e6)]",
+            "text-[var(--color-primary-500,#ff8600)]",
             "M11.48 3.499a.562.562 0 0 1 1.04 0l2.125 5.111a.563.563 0 0 0 .475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 0 0-.182.557l1.285 5.385a.562.562 0 0 1-.84.61l-4.725-2.885a.562.562 0 0 0-.586 0L6.982 20.54a.562.562 0 0 1-.84-.61l1.285-5.386a.562.562 0 0 0-.182-.557l-4.204-3.602a.562.562 0 0 1 .321-.988l5.518-.442a.563.563 0 0 0 .475-.345L11.48 3.5Z",
             t("accountMenu.personalSelections"),
             t("accountMenu.personalSelectionsDesc")
           )}
           ${renderAccountMenuItem(
             "/pages/top-deals.html",
-            "bg-[var(--color-primary-50,#fff8e1)]",
-            "text-[var(--color-primary-500,#f5b800)]",
+            "bg-[var(--color-primary-50,#fff3e6)]",
+            "text-[var(--color-primary-500,#ff8600)]",
             "M9.568 3H5.25A2.25 2.25 0 0 0 3 5.25v4.318c0 .597.237 1.17.659 1.591l9.581 9.581c.699.699 1.78.872 2.607.33a18.095 18.095 0 0 0 5.223-5.223c.542-.827.369-1.908-.33-2.607L11.16 3.66A2.25 2.25 0 0 0 9.568 3Z M6 6h.008v.008H6V6Z",
             t("accountMenu.bestDeals"),
             t("accountMenu.bestDealsDesc")
@@ -397,7 +397,7 @@ function initAccountOverlay(overlay: HTMLElement): () => void {
           : "";
         authArea.innerHTML = `
           <a href="/pages/dashboard/buyer-dashboard.html" class="mx-3 min-[400px]:mx-4 mt-4 rounded-md bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 p-3 min-[400px]:p-4 flex items-center gap-3 no-underline">
-            <div class="w-10 h-10 min-[400px]:w-12 min-[400px]:h-12 rounded-full bg-[var(--color-primary-500,#f5b800)] flex items-center justify-center text-white font-bold text-sm min-[400px]:text-lg shrink-0">${escapeHtml(initials)}</div>
+            <div class="w-10 h-10 min-[400px]:w-12 min-[400px]:h-12 rounded-full bg-[var(--color-primary-500,#ff8600)] flex items-center justify-center text-white font-bold text-sm min-[400px]:text-lg shrink-0">${escapeHtml(initials)}</div>
             <div class="flex-1 min-w-0">
               <p class="text-[13px] min-[400px]:text-sm font-bold text-gray-900 dark:text-white">${escapeHtml(user.full_name || "")}</p>
               <p class="text-[10px] min-[400px]:text-xs text-gray-500 mt-0.5 truncate">${escapeHtml(user.email || "")}</p>
@@ -407,7 +407,7 @@ function initAccountOverlay(overlay: HTMLElement): () => void {
         `;
       } else {
         authArea.innerHTML = `
-          <div class="mx-3 min-[400px]:mx-4 mt-4 rounded-md bg-[var(--color-primary-50,#fff8e1)] border border-[var(--color-primary-200,#ffe57a)] p-3 min-[400px]:p-4">
+          <div class="mx-3 min-[400px]:mx-4 mt-4 rounded-md bg-[var(--color-primary-50,#fff3e6)] border border-[var(--color-primary-200,#ffc78a)] p-3 min-[400px]:p-4">
             <div class="flex items-center gap-3">
               <div class="w-10 h-10 min-[400px]:w-12 min-[400px]:h-12 rounded-full bg-gray-200 flex items-center justify-center shrink-0">
                 <svg class="w-6 h-6 min-[400px]:w-6 min-[400px]:h-6 text-gray-400" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z"/></svg>
@@ -517,7 +517,7 @@ function initAccountOverlay(overlay: HTMLElement): () => void {
           const checkHidden = currency.code === selected ? "" : " hidden";
           return `<button type="button" data-currency-switch="${escapeHtml(currency.code)}" class="th-no-press w-full flex items-center justify-between px-4 py-3 text-sm hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors text-start${divider}">
               <span>${escapeHtml(currency.symbol)} ${escapeHtml(currency.nameTr || currency.name)} — ${escapeHtml(currency.code)}</span>
-              <span class="text-[var(--color-primary-500,#f5b800)]${checkHidden}">✓</span>
+              <span class="text-[var(--color-primary-500,#ff8600)]${checkHidden}">✓</span>
             </button>`;
         })
         .join("");

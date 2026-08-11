@@ -312,7 +312,7 @@ function renderPanelItems(select: HTMLSelectElement, panel: HTMLElement): void {
       .map((opt) => {
         const on = opt.value === select.value;
         return `<button type="button" role="option" aria-selected="${on}" data-select-menu-value="${escapeHtml(opt.value)}"
-          class="th-no-press w-full flex items-center justify-between gap-2 bg-transparent border-0 px-2.5 py-2 rounded-md text-[13px] cursor-pointer text-start transition-colors hover:bg-surface-raised appearance-none focus:outline-none ${on ? "font-semibold text-[var(--color-cta-primary,#F5B800)]" : "text-text-primary"}">
+          class="th-no-press w-full flex items-center justify-between gap-2 bg-transparent border-0 px-2.5 py-2 rounded-md text-[13px] cursor-pointer text-start transition-colors hover:bg-surface-raised appearance-none focus:outline-none ${on ? "font-semibold text-[var(--color-cta-primary,#FF8600)]" : "text-text-primary"}">
           <span class="truncate">${escapeHtml(opt.text)}</span>
           ${on ? CHECK_SVG : ""}
         </button>`;
@@ -328,7 +328,7 @@ function renderPanelItems(select: HTMLSelectElement, panel: HTMLElement): void {
   panel.innerHTML = `
     <div class="sticky top-0 -m-1.5 mb-1 p-1.5 bg-white border-b border-border-default">
       <input type="text" data-select-menu-search placeholder="${escapeHtml(t("common.search", { defaultValue: "Ara" }))}"
-        class="w-full h-8 px-2.5 text-[12.5px] bg-white border border-border-default rounded-md focus:border-[var(--color-cta-primary,#F5B800)] focus:outline-none appearance-none" />
+        class="w-full h-8 px-2.5 text-[12.5px] bg-white border border-border-default rounded-md focus:border-[var(--color-cta-primary,#FF8600)] focus:outline-none appearance-none" />
     </div>
     <div data-select-menu-items>${itemsHtml("")}</div>
   `;

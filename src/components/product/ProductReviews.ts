@@ -165,7 +165,7 @@ function photoStripSection(reviews: ProductReview[]): string {
       <button type="button" class="rv-image-thumb relative shrink-0 w-[108px] h-[108px] rounded-md overflow-hidden border border-[var(--pd-spec-border,#e5e5e5)] cursor-zoom-in bg-[var(--color-surface-raised,#f5f5f5)] transition-transform duration-150 hover:-translate-y-0.5 [scroll-snap-align:start] max-[374px]:w-[88px] max-[374px]:h-[88px]" data-image-url="${escapeHtml(im.src)}" aria-label="${t("product.buyerPhoto", { count: String(im.rating) })}">
         <img src="${escapeHtml(im.src)}" width="96" height="96" decoding="async" class="w-full h-full object-cover" loading="lazy" alt="" />
         <span class="absolute start-1.5 bottom-1.5 inline-flex items-center gap-0.5 bg-[rgba(20,23,28,0.78)] text-white rounded-[6px] px-1.5 py-0.5 text-[11px] font-bold">
-          <svg class="w-3 h-3 text-[var(--color-primary-500,#f5b800)]" viewBox="0 0 20 20" fill="currentColor"><path d="${STAR_PATH}"/></svg>${im.rating}
+          <svg class="w-3 h-3 text-[var(--color-primary-500,#ff8600)]" viewBox="0 0 20 20" fill="currentColor"><path d="${STAR_PATH}"/></svg>${im.rating}
         </span>
       </button>`
     )
@@ -329,7 +329,7 @@ export function renderReviewCard(review: ProductReview, showProductThumb = false
         ${supplierReplyHtml}
         ${productThumbHtml}
         <div class="flex items-center gap-3 flex-wrap">
-          <button type="button" class="rv-helpful-btn th-no-press appearance-none focus:outline-none flex items-center gap-1 text-[11px] leading-[16px] text-[#767676] bg-transparent border-0 p-0 cursor-pointer transition-colors duration-150 hover:text-[#222] [&.voted]:text-[var(--pd-tab-active-color,#cc9900)]" data-review-id="${review.id}" data-vote="helpful">
+          <button type="button" class="rv-helpful-btn th-no-press appearance-none focus:outline-none flex items-center gap-1 text-[11px] leading-[16px] text-[#767676] bg-transparent border-0 p-0 cursor-pointer transition-colors duration-150 hover:text-[#222] [&.voted]:text-[var(--pd-tab-active-color,#cc6b00)]" data-review-id="${review.id}" data-vote="helpful">
             <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" d="M14 10h4.764a2 2 0 011.789 2.894l-3.5 7A2 2 0 0115.263 21h-4.017c-.163 0-.326-.02-.485-.06L7 20m7-10V5a2 2 0 00-2-2h-.095c-.5 0-.905.405-.905.905 0 .714-.211 1.412-.608 2.006L7 11v9m7-10h-2M7 20H5a2 2 0 01-2-2v-6a2 2 0 012-2h2.5"/>
             </svg>
@@ -337,7 +337,7 @@ export function renderReviewCard(review: ProductReview, showProductThumb = false
           </button>
           <button
             type="button"
-            class="rv-helpful-btn th-no-press appearance-none focus:outline-none flex items-center gap-1 text-[11px] leading-[16px] text-[#767676] bg-transparent border-0 p-0 cursor-pointer transition-colors duration-150 hover:text-[#222] [&.voted]:text-[var(--pd-tab-active-color,#cc9900)]"
+            class="rv-helpful-btn th-no-press appearance-none focus:outline-none flex items-center gap-1 text-[11px] leading-[16px] text-[#767676] bg-transparent border-0 p-0 cursor-pointer transition-colors duration-150 hover:text-[#222] [&.voted]:text-[var(--pd-tab-active-color,#cc6b00)]"
             data-review-id="${review.id}"
             data-vote="not_helpful"
             title="${t("prodUi.notHelpful")}"
@@ -561,7 +561,7 @@ export function ProductReviews(): string {
           ${p.reviewMentionTags
             .map(
               (tag) => `
-            <button type="button" class="rv-mention-tag py-1 px-3 text-[12px] rounded bg-[var(--pd-spec-header-bg,#f9fafb)] text-[var(--pd-rating-text-color,#6b7280)] border border-[var(--pd-spec-border,#e5e5e5)] cursor-pointer transition-colors duration-150 hover:border-[var(--color-border-medium,#d1d5db)] [&.active]:border-[var(--pd-tab-active-border,#cc9900)] [&.active]:text-[var(--pd-tab-active-color,#cc9900)] [&.active]:bg-[var(--pd-price-tier-active-bg,#fef9e7)] [&.active]:font-semibold" data-rv-mention="${tag.label}">${tag.label} (${tag.count})</button>
+            <button type="button" class="rv-mention-tag py-1 px-3 text-[12px] rounded bg-[var(--pd-spec-header-bg,#f9fafb)] text-[var(--pd-rating-text-color,#6b7280)] border border-[var(--pd-spec-border,#e5e5e5)] cursor-pointer transition-colors duration-150 hover:border-[var(--color-border-medium,#d1d5db)] [&.active]:border-[var(--pd-tab-active-border,#cc6b00)] [&.active]:text-[var(--pd-tab-active-color,#cc6b00)] [&.active]:bg-[var(--pd-price-tier-active-bg,#fef9e7)] [&.active]:font-semibold" data-rv-mention="${tag.label}">${tag.label} (${tag.count})</button>
           `
             )
             .join("")}

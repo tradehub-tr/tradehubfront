@@ -352,17 +352,17 @@ function OverviewTab(): string {
           <div class="flex-1 flex flex-col gap-3">
             <div class="flex items-center gap-3">
               <span class="text-[13px] text-gray-600 w-[160px] shrink-0">${t("seller.sf.supplierService")}</span>
-              <div class="flex-1 h-2 bg-gray-100 rounded-full overflow-hidden"><div class="h-full bg-(--btn-bg,#f5b800) rounded-full" :style="'width:' + ((seller?.rating || 0) / 5 * 100) + '%'"></div></div>
+              <div class="flex-1 h-2 bg-gray-100 rounded-full overflow-hidden"><div class="h-full bg-(--btn-bg,#ff8600) rounded-full" :style="'width:' + ((seller?.rating || 0) / 5 * 100) + '%'"></div></div>
               <span class="text-[13px] font-medium text-gray-900 w-8 text-end" x-text="seller?.rating ? seller.rating.toFixed(1) : '\u2014'"></span>
             </div>
             <div class="flex items-center gap-3">
               <span class="text-[13px] text-gray-600 w-[160px] shrink-0">${t("seller.sf.onTimeDeliveryRate")}</span>
-              <div class="flex-1 h-2 bg-gray-100 rounded-full overflow-hidden"><div class="h-full bg-(--btn-bg,#f5b800) rounded-full" :style="'width:' + (seller?.on_time_delivery || 0) + '%'"></div></div>
+              <div class="flex-1 h-2 bg-gray-100 rounded-full overflow-hidden"><div class="h-full bg-(--btn-bg,#ff8600) rounded-full" :style="'width:' + (seller?.on_time_delivery || 0) + '%'"></div></div>
               <span class="text-[13px] font-medium text-gray-900 w-8 text-end" x-text="seller?.on_time_delivery ? (seller.on_time_delivery / 20).toFixed(1) : '\u2014'"></span>
             </div>
             <div class="flex items-center gap-3">
               <span class="text-[13px] text-gray-600 w-[160px] shrink-0">${t("seller.sf.productQuality")}</span>
-              <div class="flex-1 h-2 bg-gray-100 rounded-full overflow-hidden"><div class="h-full bg-(--btn-bg,#f5b800) rounded-full" :style="'width:' + ((seller?.rating || 0) / 5 * 100) + '%'"></div></div>
+              <div class="flex-1 h-2 bg-gray-100 rounded-full overflow-hidden"><div class="h-full bg-(--btn-bg,#ff8600) rounded-full" :style="'width:' + ((seller?.rating || 0) / 5 * 100) + '%'"></div></div>
               <span class="text-[13px] font-medium text-gray-900 w-8 text-end" x-text="seller?.rating ? (seller.rating - 0.1).toFixed(1) : '\u2014'"></span>
             </div>
           </div>
@@ -554,7 +554,7 @@ function ReviewsTab(): string {
                 <div class="flex items-center gap-3">
                   <span class="text-[13px] text-gray-600 w-40 shrink-0">${t("seller.sf.supplierService")}</span>
                   <div class="flex-1 bg-gray-100 rounded-full h-2.5 overflow-hidden">
-                    <div class="h-full bg-(--btn-bg,#f5b800) rounded-full transition-[width] duration-300 motion-reduce:transition-none" :style="'width:' + ratingPct(seller?.rating)"></div>
+                    <div class="h-full bg-(--btn-bg,#ff8600) rounded-full transition-[width] duration-300 motion-reduce:transition-none" :style="'width:' + ratingPct(seller?.rating)"></div>
                   </div>
                   <span class="text-[13px] text-gray-700 font-medium w-8 text-end" x-text="seller?.rating ? Number(seller.rating).toFixed(1) : '\u2014'"></span>
                 </div>
@@ -562,7 +562,7 @@ function ReviewsTab(): string {
                 <div class="flex items-center gap-3">
                   <span class="text-[13px] text-gray-600 w-40 shrink-0">${t("seller.sf.onTimeShipment")}</span>
                   <div class="flex-1 bg-gray-100 rounded-full h-2.5 overflow-hidden">
-                    <div class="h-full bg-(--btn-bg,#f5b800) rounded-full transition-[width] duration-300 motion-reduce:transition-none" :style="'width:' + ratingPct(seller?.rating)"></div>
+                    <div class="h-full bg-(--btn-bg,#ff8600) rounded-full transition-[width] duration-300 motion-reduce:transition-none" :style="'width:' + ratingPct(seller?.rating)"></div>
                   </div>
                   <span class="text-[13px] text-gray-700 font-medium w-8 text-end" x-text="seller?.rating ? Number(seller.rating).toFixed(1) : '\u2014'"></span>
                 </div>
@@ -570,7 +570,7 @@ function ReviewsTab(): string {
                 <div class="flex items-center gap-3">
                   <span class="text-[13px] text-gray-600 w-40 shrink-0">${t("seller.sf.productQuality")}</span>
                   <div class="flex-1 bg-gray-100 rounded-full h-2.5 overflow-hidden">
-                    <div class="h-full bg-(--btn-bg,#f5b800) rounded-full transition-[width] duration-300 motion-reduce:transition-none" :style="'width:' + ratingPct(seller?.rating)"></div>
+                    <div class="h-full bg-(--btn-bg,#ff8600) rounded-full transition-[width] duration-300 motion-reduce:transition-none" :style="'width:' + ratingPct(seller?.rating)"></div>
                   </div>
                   <span class="text-[13px] text-gray-700 font-medium w-8 text-end" x-text="seller?.rating ? Number(seller.rating).toFixed(1) : '\u2014'"></span>
                 </div>
@@ -608,7 +608,7 @@ function ReviewsTab(): string {
                   <button type="button"
                     @click="submitReview"
                     :disabled="form.submitting"
-                    class="px-6 py-2.5 rounded-full text-[14px] font-medium bg-(--btn-bg,#f5b800) hover:bg-(--btn-hover-bg,#d39c00) active:bg-(--btn-hover-bg,#d39c00) text-(--btn-text,#1a1a1a) border border-(--btn-border-color,#d39c00) active:scale-[0.97] transition-[background-color,color,transform] duration-150 disabled:opacity-50 disabled:cursor-not-allowed">
+                    class="px-6 py-2.5 rounded-full text-[14px] font-medium bg-(--btn-bg,#ff8600) hover:bg-(--btn-hover-bg,#db7300) active:bg-(--btn-hover-bg,#db7300) text-(--btn-text,#1a1a1a) border border-(--btn-border-color,#db7300) active:scale-[0.97] transition-[background-color,color,transform] duration-150 disabled:opacity-50 disabled:cursor-not-allowed">
                     <span x-show="!form.submitting">${t("seller.sf.submitReview")}</span>
                     <span x-show="form.submitting">${t("seller.sf.submittingReview")}</span>
                   </button>
@@ -841,7 +841,7 @@ function ProductsTab(): string {
               <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
             </button>
             <template x-for="pg in totalPages" :key="pg">
-              <button @click="currentPage = pg" :class="currentPage === pg ? 'bg-(--btn-bg,#f5b800) text-(--btn-text,#1a1a1a) border-amber-500' : 'bg-white text-gray-700 border-gray-200 hover:bg-gray-50'" class="w-8 h-8 flex items-center justify-center rounded border text-[13px] font-medium transition-colors" x-text="pg"></button>
+              <button @click="currentPage = pg" :class="currentPage === pg ? 'bg-(--btn-bg,#ff8600) text-(--btn-text,#1a1a1a) border-amber-500' : 'bg-white text-gray-700 border-gray-200 hover:bg-gray-50'" class="w-8 h-8 flex items-center justify-center rounded border text-[13px] font-medium transition-colors" x-text="pg"></button>
             </template>
             <button @click="currentPage = Math.min(totalPages, currentPage + 1)" :disabled="currentPage === totalPages" aria-label="${t("common.next")}" class="w-8 h-8 flex items-center justify-center rounded border border-gray-200 text-gray-500 hover:bg-gray-50 disabled:opacity-30 disabled:cursor-not-allowed transition-colors">
               <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
@@ -1037,10 +1037,10 @@ function ContactSidebar(): string {
 
         <!-- CTA Buttons -->
         <div class="flex flex-col gap-3 mb-5">
-          <button data-chat-trigger :data-seller-id="sellerCode" class="w-full bg-(--btn-bg,#f5b800) hover:bg-(--btn-hover-bg,#d39c00) active:bg-(--btn-hover-bg,#d39c00) text-(--btn-text,#1a1a1a) font-semibold py-3 px-4 border border-(--btn-border-color,#d39c00) rounded-[var(--radius-button,8px)] active:scale-[0.97] transition-[background-color,color,transform] duration-150 text-[14px] focus-visible:outline-2 focus-visible:outline-[var(--color-store-accent,#cc9900)] focus-visible:outline-offset-2 company-profile__contact-btn">
+          <button data-chat-trigger :data-seller-id="sellerCode" class="w-full bg-(--btn-bg,#ff8600) hover:bg-(--btn-hover-bg,#db7300) active:bg-(--btn-hover-bg,#db7300) text-(--btn-text,#1a1a1a) font-semibold py-3 px-4 border border-(--btn-border-color,#db7300) rounded-[var(--radius-button,8px)] active:scale-[0.97] transition-[background-color,color,transform] duration-150 text-[14px] focus-visible:outline-2 focus-visible:outline-[var(--color-store-accent,#cc6b00)] focus-visible:outline-offset-2 company-profile__contact-btn">
             ${t("seller.sf.contactNow")}
           </button>
-          <button @click="setTab('contact')" class="th-btn-outline w-full text-gray-900 font-medium py-3 px-4 text-[14px] focus-visible:outline-2 focus-visible:outline-[var(--color-store-accent,#cc9900)] focus-visible:outline-offset-2 company-profile__inquiry-btn">
+          <button @click="setTab('contact')" class="th-btn-outline w-full text-gray-900 font-medium py-3 px-4 text-[14px] focus-visible:outline-2 focus-visible:outline-[var(--color-store-accent,#cc6b00)] focus-visible:outline-offset-2 company-profile__inquiry-btn">
             ${t("seller.sf.sendInquiry")}
           </button>
         </div>
@@ -1059,7 +1059,7 @@ function ContactSidebar(): string {
 
     <!-- Mobile Contact Bar (shown on small screens) -->
     <div class="lg:hidden fixed bottom-0 start-0 end-0 bg-white border-t border-gray-200 p-3 z-50 flex gap-3 shadow-lg">
-      <button data-chat-trigger :data-seller-id="sellerCode" class="flex-1 bg-(--btn-bg,#f5b800) hover:bg-(--btn-hover-bg,#d39c00) active:bg-(--btn-hover-bg,#d39c00) text-(--btn-text,#1a1a1a) font-semibold py-2.5 px-4 border border-(--btn-border-color,#d39c00) rounded-[var(--radius-button,8px)] active:scale-[0.97] transition-[background-color,color,transform] duration-150 text-[14px]">
+      <button data-chat-trigger :data-seller-id="sellerCode" class="flex-1 bg-(--btn-bg,#ff8600) hover:bg-(--btn-hover-bg,#db7300) active:bg-(--btn-hover-bg,#db7300) text-(--btn-text,#1a1a1a) font-semibold py-2.5 px-4 border border-(--btn-border-color,#db7300) rounded-[var(--radius-button,8px)] active:scale-[0.97] transition-[background-color,color,transform] duration-150 text-[14px]">
         ${t("seller.sf.contactNow")}
       </button>
       <button @click="setTab('contact')" class="th-btn-outline flex-1 text-gray-900 font-medium py-2.5 px-4 text-[14px]">
@@ -1185,7 +1185,7 @@ function ContactTab(): string {
 
             <!-- Send Button -->
             <div x-show="!msgSent" class="flex justify-center mb-4">
-              <button @click="sendMsg()" :disabled="sending || !msgText || msgText.trim().length < 10" class="bg-(--btn-bg,#f5b800) hover:bg-(--btn-hover-bg,#d39c00) active:bg-(--btn-hover-bg,#d39c00) text-(--btn-text,#1a1a1a) font-semibold py-2.5 px-8 rounded-full border border-(--btn-border-color,#d39c00) active:scale-[0.97] transition-[background-color,color,transform] duration-150 text-[14px] disabled:opacity-50 disabled:cursor-not-allowed">
+              <button @click="sendMsg()" :disabled="sending || !msgText || msgText.trim().length < 10" class="bg-(--btn-bg,#ff8600) hover:bg-(--btn-hover-bg,#db7300) active:bg-(--btn-hover-bg,#db7300) text-(--btn-text,#1a1a1a) font-semibold py-2.5 px-8 rounded-full border border-(--btn-border-color,#db7300) active:scale-[0.97] transition-[background-color,color,transform] duration-150 text-[14px] disabled:opacity-50 disabled:cursor-not-allowed">
                 <span x-show="!sending">${t("seller.sf.send")}</span>
                 <span x-show="sending">${t("sellPage.sending")}</span>
               </button>

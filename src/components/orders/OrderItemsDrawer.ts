@@ -127,7 +127,7 @@ export function OrderItemsDrawer(): string {
           </div>
           <div class="flex justify-between items-baseline pt-2 border-t border-dashed border-gray-200">
             <span class="text-xs font-semibold text-gray-700">${t("orders.grandTotal")}</span>
-            <span class="text-[20px] font-extrabold text-[#cc9900]"
+            <span class="text-[20px] font-extrabold text-[#cc6b00]"
               x-text="currentOrder ? currentOrder.currency + ' ' + formattedGrandTotal() : ''"></span>
           </div>
           <template x-if="canPay()">

@@ -51,8 +51,8 @@ function chipFacetBody(facetKey: string, model: string): string {
           @click="${model} = ${model} === opt.value ? '' : opt.value; apply()"
           class="px-3 py-1 rounded-full text-[13px] font-medium border transition-colors cursor-pointer"
           :class="${model} === opt.value
-            ? 'bg-[var(--color-primary-500,#cc9900)] text-white border-[var(--color-primary-500,#cc9900)]'
-            : 'bg-white text-[color:var(--filter-text-color,#374151)] border-gray-300 hover:border-[var(--color-primary-500,#cc9900)]'"
+            ? 'bg-[var(--color-primary-500,#cc6b00)] text-white border-[var(--color-primary-500,#cc6b00)]'
+            : 'bg-white text-[color:var(--filter-text-color,#374151)] border-gray-300 hover:border-[var(--color-primary-500,#cc6b00)]'"
           x-text="opt.label + ' (' + opt.count + ')'"
         ></button>
       </template>

@@ -7,7 +7,7 @@ export function MobileTabs(): string {
               @click="$store.chatPopup.setActiveTab('chat')"
               class="flex-1 appearance-none border-0 border-b-2 bg-transparent py-2.5 text-[13px] font-medium cursor-pointer focus:outline-none transition-colors"
               :class="$store.chatPopup.activeTab === 'chat'
-                ? 'border-[var(--color-primary-500,#f5b800)] text-[var(--color-text-primary,#0a0a0a)]'
+                ? 'border-[var(--color-primary-500,#ff8600)] text-[var(--color-text-primary,#0a0a0a)]'
                 : 'border-transparent text-[var(--color-text-tertiary,#a3a3a3)]'">
         ${t("chat.tabs.chat")}
       </button>
@@ -15,7 +15,7 @@ export function MobileTabs(): string {
               @click="$store.chatPopup.setActiveTab('inbox')"
               class="flex-1 appearance-none border-0 border-b-2 bg-transparent py-2.5 text-[13px] font-medium cursor-pointer focus:outline-none transition-colors"
               :class="$store.chatPopup.activeTab === 'inbox'
-                ? 'border-[var(--color-primary-500,#f5b800)] text-[var(--color-text-primary,#0a0a0a)]'
+                ? 'border-[var(--color-primary-500,#ff8600)] text-[var(--color-text-primary,#0a0a0a)]'
                 : 'border-transparent text-[var(--color-text-tertiary,#a3a3a3)]'">
         ${t("chat.tabs.inbox")}
         <template x-if="$store.chatPopup.totalUnread > 0">

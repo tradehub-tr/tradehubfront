@@ -21,7 +21,7 @@ export function Gallery(photos: GalleryPhoto[], title?: string): string {
           ${photos
             .map(
               (photo) => `
-            <div class="gallery__item relative rounded-(--radius-md) overflow-hidden aspect-[4/3] group cursor-pointer hover:shadow-md transition-shadow duration-300 focus-visible:ring-2 focus-visible:ring-[#cc9900] focus-visible:ring-offset-2 outline-none"
+            <div class="gallery__item relative rounded-(--radius-md) overflow-hidden aspect-[4/3] group cursor-pointer hover:shadow-md transition-shadow duration-300 focus-visible:ring-2 focus-visible:ring-[#cc6b00] focus-visible:ring-offset-2 outline-none"
                  tabindex="0"
                  role="button"
                  aria-label="${escapeHtml(photo.caption || t("seller.sf.factoryPhoto"))}">

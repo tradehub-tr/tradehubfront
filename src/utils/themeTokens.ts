@@ -71,12 +71,12 @@ export const themeTokenGroups: TokenGroup[] = [
       { var: "--color-primary-200", type: "color", default: "#fbe08a" },
       { var: "--color-primary-300", type: "color", default: "#f6c94d" },
       { var: "--color-primary-400", type: "color", default: "#e6b212" },
-      { var: "--color-primary-500", type: "color", default: "#cc9900" },
-      { var: "--color-primary-600", type: "color", default: "#b38600" },
+      { var: "--color-primary-500", type: "color", default: "#cc6b00" },
+      { var: "--color-primary-600", type: "color", default: "#b35e00" },
       { var: "--color-primary-700", type: "color", default: "#8a6800" },
       { var: "--color-primary-800", type: "color", default: "#6b5100" },
-      { var: "--color-primary-900", type: "color", default: "#4d3a00" },
-      { var: "--color-primary-950", type: "color", default: "#2e2200" },
+      { var: "--color-primary-900", type: "color", default: "#4f2a00" },
+      { var: "--color-primary-950", type: "color", default: "#2e1800" },
     ],
   },
   {
@@ -151,8 +151,8 @@ export const themeTokenGroups: TokenGroup[] = [
       { var: "--color-text-tertiary", type: "color", default: "#a3a3a3" },
       { var: "--color-text-disabled", type: "color", default: "#d4d4d4" },
       { var: "--color-text-inverse", type: "color", default: "#fafafa" },
-      { var: "--color-text-link", type: "color", default: "#cc9900" },
-      { var: "--color-text-link-hover", type: "color", default: "#b38600" },
+      { var: "--color-text-link", type: "color", default: "#cc6b00" },
+      { var: "--color-text-link-hover", type: "color", default: "#b35e00" },
     ],
   },
   {
@@ -161,7 +161,7 @@ export const themeTokenGroups: TokenGroup[] = [
     tokens: [
       { var: "--color-border-default", type: "color", default: "#e5e5e5" },
       { var: "--color-border-strong", type: "color", default: "#a3a3a3" },
-      { var: "--color-border-focus", type: "color", default: "#cc9900" },
+      { var: "--color-border-focus", type: "color", default: "#cc6b00" },
       { var: "--color-border-error", type: "color", default: "#ef4444" },
     ],
   },
@@ -998,7 +998,7 @@ export const componentEditors: ComponentEditor[] = [
     name: "Buttons",
     icon: "▣",
     tokens: [
-      { var: "--btn-bg", type: "color", default: "#cc9900", label: "Background" },
+      { var: "--btn-bg", type: "color", default: "#cc6b00", label: "Background" },
       { var: "--btn-text", type: "color", default: "#ffffff", label: "Text Color" },
       {
         var: "--radius-button",
@@ -1020,7 +1020,7 @@ export const componentEditors: ComponentEditor[] = [
         unit: "px",
         label: "Border Width",
       },
-      { var: "--btn-border-color", type: "color", default: "#cc9900", label: "Border Color" },
+      { var: "--btn-border-color", type: "color", default: "#cc6b00", label: "Border Color" },
       {
         var: "--spacing-button-x",
         type: "range",
@@ -1062,12 +1062,12 @@ export const componentEditors: ComponentEditor[] = [
         label: "Font Weight",
       },
       { var: "--btn-shadow", type: "text", default: "none", label: "Shadow" },
-      { var: "--btn-hover-bg", type: "color", default: "#b38600", label: "Hover Background" },
+      { var: "--btn-hover-bg", type: "color", default: "#b35e00", label: "Hover Background" },
       { var: "--btn-hover-text", type: "color", default: "#ffffff", label: "Hover Text" },
     ],
     outlineTokens: [
       { var: "--btn-outline-bg", type: "color", default: "#ffffff", label: "Outline Background" },
-      { var: "--btn-outline-text", type: "color", default: "#cc9900", label: "Outline Text" },
+      { var: "--btn-outline-text", type: "color", default: "#cc6b00", label: "Outline Text" },
       {
         var: "--btn-outline-border-width",
         type: "range",
@@ -1081,7 +1081,7 @@ export const componentEditors: ComponentEditor[] = [
       {
         var: "--btn-outline-border-color",
         type: "color",
-        default: "#cc9900",
+        default: "#cc6b00",
         label: "Outline Border Color",
       },
       {
@@ -1093,7 +1093,7 @@ export const componentEditors: ComponentEditor[] = [
       {
         var: "--btn-outline-hover-text",
         type: "color",
-        default: "#cc9900",
+        default: "#cc6b00",
         label: "Outline Hover Text",
       },
     ],
@@ -1220,7 +1220,7 @@ export const componentEditors: ComponentEditor[] = [
         unit: "px",
         label: "Badge Radius",
       },
-      { var: "--card-verified-color", type: "color", default: "#cc9900", label: "Verified Color" },
+      { var: "--card-verified-color", type: "color", default: "#cc6b00", label: "Verified Color" },
       {
         var: "--card-verified-size",
         type: "range",
@@ -1275,7 +1275,7 @@ export const componentEditors: ComponentEditor[] = [
       {
         var: "--input-focus-border-color",
         type: "color",
-        default: "#cc9900",
+        default: "#cc6b00",
         label: "Focus Border",
       },
       {
@@ -1379,11 +1379,11 @@ export const sectionEditors: SectionEditor[] = [
     icon: "⌕",
     tokens: [
       { var: "--search-tab-color", type: "color", default: "#6b7280", label: "Tab Color" },
-      { var: "--search-tab-active-color", type: "color", default: "#cc9900", label: "Active Tab" },
+      { var: "--search-tab-active-color", type: "color", default: "#cc6b00", label: "Active Tab" },
       {
         var: "--search-input-border-color",
         type: "color",
-        default: "#cc9900",
+        default: "#cc6b00",
         label: "Input Border",
       },
       { var: "--search-input-text", type: "color", default: "#111827", label: "Input Text" },
@@ -1447,7 +1447,7 @@ export const sectionEditors: SectionEditor[] = [
         label: "Ranking Label",
       },
       { var: "--mfr-profile-text-color", type: "color", default: "#222222", label: "Profile Text" },
-      { var: "--mfr-profile-btn-bg", type: "color", default: "#cc9900", label: "Button BG" },
+      { var: "--mfr-profile-btn-bg", type: "color", default: "#cc6b00", label: "Button BG" },
       { var: "--mfr-profile-btn-hover", type: "color", default: "#8a6800", label: "Button Hover" },
       { var: "--mfr-profile-btn-text", type: "color", default: "#ffffff", label: "Button Text" },
       { var: "--mfr-profile-rfq-border", type: "color", default: "#222222", label: "RFQ Border" },
@@ -1462,8 +1462,8 @@ export const sectionEditors: SectionEditor[] = [
       { var: "--catpopup-border", type: "color", default: "#e5e7eb", label: "Border Color" },
       { var: "--catpopup-heading", type: "color", default: "#111827", label: "Heading Color" },
       { var: "--catpopup-text", type: "color", default: "#4b5563", label: "Text Color" },
-      { var: "--catpopup-link", type: "color", default: "#cc9900", label: "Link Color" },
-      { var: "--catpopup-link-hover", type: "color", default: "#b38600", label: "Link Hover" },
+      { var: "--catpopup-link", type: "color", default: "#cc6b00", label: "Link Color" },
+      { var: "--catpopup-link-hover", type: "color", default: "#b35e00", label: "Link Hover" },
       { var: "--catpopup-icon", type: "color", default: "#9ca3af", label: "Icon Color" },
       {
         var: "--catpopup-product-bg",
@@ -1490,7 +1490,7 @@ export const sectionEditors: SectionEditor[] = [
       {
         var: "--catpopup-sidebar-active-border",
         type: "color",
-        default: "#cc9900",
+        default: "#cc6b00",
         label: "Active Border",
       },
       { var: "--catpopup-text", type: "color", default: "#4b5563", label: "Text Color" },

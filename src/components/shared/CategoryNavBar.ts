@@ -254,7 +254,7 @@ export async function initCategoryNavBar(
     // iOS-segmented stil (Emil: aktif thumb 200ms ease-out kayar, press scale .97,
     // sadece transform/box-shadow/color, reduced-motion'da hareket yok) vs. klasik.
     const segBase =
-      "th-no-press whitespace-nowrap cursor-pointer inline-flex items-center justify-center h-8 px-3.5 text-[13px] leading-none shrink-0 rounded-md text-[#525252] transition-[background-color,box-shadow,color,transform] duration-200 ease-[cubic-bezier(0.23,1,0.32,1)] active:scale-[0.97] motion-reduce:transition-none motion-reduce:active:scale-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--input-focus-border-color,#f5b800)] focus-visible:ring-inset";
+      "th-no-press whitespace-nowrap cursor-pointer inline-flex items-center justify-center h-8 px-3.5 text-[13px] leading-none shrink-0 rounded-md text-[#525252] transition-[background-color,box-shadow,color,transform] duration-200 ease-[cubic-bezier(0.23,1,0.32,1)] active:scale-[0.97] motion-reduce:transition-none motion-reduce:active:scale-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--input-focus-border-color,#ff8600)] focus-visible:ring-inset";
     const classicBase =
       "th-no-press whitespace-nowrap cursor-pointer px-4 py-2.5 text-[13px] shrink-0 text-gray-600 transition-colors";
     const liExtra = config.mobileSegmented ? ' tabindex="0" role="button"' : "";

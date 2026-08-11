@@ -18,7 +18,7 @@ export function CallMenu(): string {
          x-cloak
          class="absolute bottom-[150px] start-32 z-30 w-[240px] origin-bottom-left rounded-lg border border-[var(--color-border-default,#e5e5e5)] bg-white shadow-lg overflow-hidden">
       <div class="flex items-center gap-2 border-b border-[var(--color-border-light,#f0f0f0)] px-3 py-2.5">
-        <div class="size-8 shrink-0 rounded-full bg-[var(--color-primary-100,#ffefb3)] overflow-hidden">
+        <div class="size-8 shrink-0 rounded-full bg-[var(--color-primary-100,#ffe1c2)] overflow-hidden">
           <template x-if="$store.chatPopup.activeConversation?.avatar">
             <img :src="$store.chatPopup.activeConversation.avatar"
                  :alt="$store.chatPopup.activeConversation.name"

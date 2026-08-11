@@ -435,35 +435,35 @@ function renderAllOrders(): string {
               <!-- Step 1: Siparis -->
               <div class="flex flex-col items-center gap-1.5 relative z-10">
                 <div class="w-8 h-8 max-sm:w-6 max-sm:h-6 rounded-full flex items-center justify-center text-xs font-bold transition-colors"
-                     :class="getStepIndex(selectedOrder) >= 0 ? 'bg-(--btn-bg,#f5b800) text-(--btn-text,#1a1a1a)' : 'bg-gray-200 text-gray-500'">1</div>
+                     :class="getStepIndex(selectedOrder) >= 0 ? 'bg-(--btn-bg,#ff8600) text-(--btn-text,#1a1a1a)' : 'bg-gray-200 text-gray-500'">1</div>
                 <span class="text-xs max-sm:text-[9px] text-gray-600 text-center max-sm:whitespace-normal max-sm:leading-tight max-sm:max-w-[52px]">${t("orders.stepOrder")}</span>
               </div>
-              <div class="flex-1 h-0.5 -mt-4 max-sm:-mt-3" :class="getStepIndex(selectedOrder) >= 1 ? 'bg-(--btn-bg,#f5b800)' : 'bg-gray-200'"></div>
+              <div class="flex-1 h-0.5 -mt-4 max-sm:-mt-3" :class="getStepIndex(selectedOrder) >= 1 ? 'bg-(--btn-bg,#ff8600)' : 'bg-gray-200'"></div>
               <!-- Step 2: Ödeme -->
               <div class="flex flex-col items-center gap-1.5 relative z-10">
                 <div class="w-8 h-8 max-sm:w-6 max-sm:h-6 rounded-full flex items-center justify-center text-xs font-bold transition-colors"
-                     :class="getStepIndex(selectedOrder) >= 1 ? 'bg-(--btn-bg,#f5b800) text-(--btn-text,#1a1a1a)' : 'bg-gray-200 text-gray-500'">2</div>
+                     :class="getStepIndex(selectedOrder) >= 1 ? 'bg-(--btn-bg,#ff8600) text-(--btn-text,#1a1a1a)' : 'bg-gray-200 text-gray-500'">2</div>
                 <span class="text-xs max-sm:text-[9px] text-gray-600 text-center max-sm:whitespace-normal max-sm:leading-tight max-sm:max-w-[52px]">${t("orders.stepPayment")}</span>
               </div>
-              <div class="flex-1 h-0.5 -mt-4 max-sm:-mt-3" :class="getStepIndex(selectedOrder) >= 2 ? 'bg-(--btn-bg,#f5b800)' : 'bg-gray-200'"></div>
+              <div class="flex-1 h-0.5 -mt-4 max-sm:-mt-3" :class="getStepIndex(selectedOrder) >= 2 ? 'bg-(--btn-bg,#ff8600)' : 'bg-gray-200'"></div>
               <!-- Step 3: Hazırlanıyor -->
               <div class="flex flex-col items-center gap-1.5 relative z-10">
                 <div class="w-8 h-8 max-sm:w-6 max-sm:h-6 rounded-full flex items-center justify-center text-xs font-bold transition-colors"
-                     :class="getStepIndex(selectedOrder) >= 2 ? 'bg-(--btn-bg,#f5b800) text-(--btn-text,#1a1a1a)' : 'bg-gray-200 text-gray-500'">3</div>
+                     :class="getStepIndex(selectedOrder) >= 2 ? 'bg-(--btn-bg,#ff8600) text-(--btn-text,#1a1a1a)' : 'bg-gray-200 text-gray-500'">3</div>
                 <span class="text-xs max-sm:text-[9px] text-gray-600 text-center max-sm:whitespace-normal max-sm:leading-tight max-sm:max-w-[52px]">${t("orders.stepShipping")}</span>
               </div>
-              <div class="flex-1 h-0.5 -mt-4 max-sm:-mt-3" :class="getStepIndex(selectedOrder) >= 3 ? 'bg-(--btn-bg,#f5b800)' : 'bg-gray-200'"></div>
+              <div class="flex-1 h-0.5 -mt-4 max-sm:-mt-3" :class="getStepIndex(selectedOrder) >= 3 ? 'bg-(--btn-bg,#ff8600)' : 'bg-gray-200'"></div>
               <!-- Step 4: Kargoda -->
               <div class="flex flex-col items-center gap-1.5 relative z-10">
                 <div class="w-8 h-8 max-sm:w-6 max-sm:h-6 rounded-full flex items-center justify-center text-xs font-bold transition-colors"
-                     :class="getStepIndex(selectedOrder) >= 3 ? 'bg-(--btn-bg,#f5b800) text-(--btn-text,#1a1a1a)' : 'bg-gray-200 text-gray-500'">4</div>
+                     :class="getStepIndex(selectedOrder) >= 3 ? 'bg-(--btn-bg,#ff8600) text-(--btn-text,#1a1a1a)' : 'bg-gray-200 text-gray-500'">4</div>
                 <span class="text-xs max-sm:text-[9px] text-gray-600 text-center max-sm:whitespace-normal max-sm:leading-tight max-sm:max-w-[52px]">${t("orders.stepDelivery")}</span>
               </div>
-              <div class="flex-1 h-0.5 -mt-4 max-sm:-mt-3" :class="getStepIndex(selectedOrder) >= 4 ? 'bg-(--btn-bg,#f5b800)' : 'bg-gray-200'"></div>
+              <div class="flex-1 h-0.5 -mt-4 max-sm:-mt-3" :class="getStepIndex(selectedOrder) >= 4 ? 'bg-(--btn-bg,#ff8600)' : 'bg-gray-200'"></div>
               <!-- Step 5: Teslim Edildi -->
               <div class="flex flex-col items-center gap-1.5 relative z-10">
                 <div class="w-8 h-8 max-sm:w-6 max-sm:h-6 rounded-full flex items-center justify-center text-xs font-bold transition-colors"
-                     :class="getStepIndex(selectedOrder) >= 4 ? 'bg-(--btn-bg,#f5b800) text-(--btn-text,#1a1a1a)' : 'bg-gray-200 text-gray-500'">5</div>
+                     :class="getStepIndex(selectedOrder) >= 4 ? 'bg-(--btn-bg,#ff8600) text-(--btn-text,#1a1a1a)' : 'bg-gray-200 text-gray-500'">5</div>
                 <span class="text-xs max-sm:text-[9px] text-gray-600 text-center max-sm:whitespace-normal max-sm:leading-tight max-sm:max-w-[52px]">${t("orders.stepReview")}</span>
               </div>
             </div>
@@ -534,7 +534,7 @@ function renderAllOrders(): string {
                 x-model="productSearch"
                 placeholder="${t("orders.productName")}"
                 aria-label="${t("orders.productName")}"
-                class="w-full ps-8 pe-3 py-2 text-sm border border-gray-200 rounded-md focus:outline-none focus:ring-2 focus:ring-[var(--btn-bg,#cc9900)]/30 focus:border-[var(--btn-bg,#cc9900)]" />
+                class="w-full ps-8 pe-3 py-2 text-sm border border-gray-200 rounded-md focus:outline-none focus:ring-2 focus:ring-[var(--btn-bg,#cc6b00)]/30 focus:border-[var(--btn-bg,#cc6b00)]" />
             </div>
             <div class="relative" x-data="{ sortOpen: false }">
               <button @click="sortOpen = !sortOpen" class="flex items-center gap-1.5 px-3 py-2 text-sm border border-gray-200 rounded-md bg-white text-gray-700 hover:bg-gray-50 whitespace-nowrap cursor-pointer">
@@ -614,7 +614,7 @@ function renderAllOrders(): string {
               id="tab-shipping"
               :aria-selected="activeDetailTab === 'shipping'"
               aria-controls="panel-shipping">
-              <svg class="w-4 h-4 max-sm:w-3.5 max-sm:h-3.5" :class="activeDetailTab === 'shipping' ? 'text-[var(--btn-bg,#cc9900)]' : 'text-gray-400'" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+              <svg class="w-4 h-4 max-sm:w-3.5 max-sm:h-3.5" :class="activeDetailTab === 'shipping' ? 'text-[var(--btn-bg,#cc6b00)]' : 'text-gray-400'" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
                 <path d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10a1 1 0 001 1h1m8-1a1 1 0 01-1 1H9m4-1V8a1 1 0 011-1h2.586a1 1 0 01.707.293l3.414 3.414a1 1 0 01.293.707V16a1 1 0 01-1 1h-1m-6-1a1 1 0 001 1h1M5 17a2 2 0 104 0m-4 0a2 2 0 114 0m6 0a2 2 0 104 0m-4 0a2 2 0 114 0"/>
               </svg>
               <span>${t("orders.tabShipping")}</span>
@@ -629,7 +629,7 @@ function renderAllOrders(): string {
               id="tab-payment"
               :aria-selected="activeDetailTab === 'payment'"
               aria-controls="panel-payment">
-              <svg class="w-4 h-4 max-sm:w-3.5 max-sm:h-3.5" :class="activeDetailTab === 'payment' ? 'text-[var(--btn-bg,#cc9900)]' : 'text-gray-400'" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+              <svg class="w-4 h-4 max-sm:w-3.5 max-sm:h-3.5" :class="activeDetailTab === 'payment' ? 'text-[var(--btn-bg,#cc6b00)]' : 'text-gray-400'" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
                 <rect x="1" y="4" width="22" height="16" rx="2"/><path d="M1 10h22"/>
               </svg>
               <span>${t("orders.tabPayment")}</span>
@@ -644,7 +644,7 @@ function renderAllOrders(): string {
               id="tab-supplier"
               :aria-selected="activeDetailTab === 'supplier'"
               aria-controls="panel-supplier">
-              <svg class="w-4 h-4 max-sm:w-3.5 max-sm:h-3.5" :class="activeDetailTab === 'supplier' ? 'text-[var(--btn-bg,#cc9900)]' : 'text-gray-400'" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
+              <svg class="w-4 h-4 max-sm:w-3.5 max-sm:h-3.5" :class="activeDetailTab === 'supplier' ? 'text-[var(--btn-bg,#cc6b00)]' : 'text-gray-400'" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24">
                 <path d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
               </svg>
               <span>${t("orders.tabSupplier")}</span>
@@ -814,7 +814,7 @@ function renderAllOrders(): string {
               <div class="relative ps-6 border-s-2 border-gray-200 space-y-6">
                 <!-- Step 1: Order submitted (always) -->
                 <div class="relative">
-                  <div class="absolute -start-[25px] top-1 w-3 h-3 bg-(--btn-bg,#f5b800) rounded-full border-2 border-white"></div>
+                  <div class="absolute -start-[25px] top-1 w-3 h-3 bg-(--btn-bg,#ff8600) rounded-full border-2 border-white"></div>
                   <p class="text-sm font-medium text-gray-900">${t("orders.orderSubmitted")}</p>
                   <p class="text-xs text-gray-500 mt-0.5" x-text="selectedOrder.orderDate"></p>
                   <p class="text-xs text-gray-400 mt-1" x-text="'${t("orders.orderPrefix")} ' + selectedOrder.orderNumber"></p>
@@ -835,7 +835,7 @@ function renderAllOrders(): string {
                     <!-- Step 2: Payment -->
                     <div class="relative">
                       <div class="absolute -start-[25px] top-1 w-3 h-3 rounded-full border-2 border-white"
-                           :class="getStepIndex(selectedOrder) >= 1 ? 'bg-(--btn-bg,#f5b800)' : 'bg-gray-300'"></div>
+                           :class="getStepIndex(selectedOrder) >= 1 ? 'bg-(--btn-bg,#ff8600)' : 'bg-gray-300'"></div>
                       <p class="text-sm font-medium" :class="getStepIndex(selectedOrder) >= 1 ? 'text-gray-900' : 'text-gray-400'"
                          x-text="getStepIndex(selectedOrder) === 0 ? '${t("orders.awaitingPayment")}' : '${t("orders.orderConfirming")}'"></p>
                       <p class="text-xs text-gray-400 mt-1"
@@ -844,7 +844,7 @@ function renderAllOrders(): string {
                     <!-- Step 3: Preparing -->
                     <template x-if="getStepIndex(selectedOrder) >= 2">
                       <div class="relative">
-                        <div class="absolute -start-[25px] top-1 w-3 h-3 bg-(--btn-bg,#f5b800) rounded-full border-2 border-white"></div>
+                        <div class="absolute -start-[25px] top-1 w-3 h-3 bg-(--btn-bg,#ff8600) rounded-full border-2 border-white"></div>
                         <p class="text-sm font-medium text-gray-900">${t("orders.orderPreparing")}</p>
                         <p class="text-xs text-gray-400 mt-1">${t("orders.orderPreparingMessage")}</p>
                       </div>
@@ -852,7 +852,7 @@ function renderAllOrders(): string {
                     <!-- Step 4: Delivering -->
                     <template x-if="getStepIndex(selectedOrder) >= 3">
                       <div class="relative">
-                        <div class="absolute -start-[25px] top-1 w-3 h-3 bg-(--btn-bg,#f5b800) rounded-full border-2 border-white"></div>
+                        <div class="absolute -start-[25px] top-1 w-3 h-3 bg-(--btn-bg,#ff8600) rounded-full border-2 border-white"></div>
                         <p class="text-sm font-medium text-gray-900">${t("orders.orderDelivering")}</p>
                         <p class="text-xs text-gray-400 mt-1">${t("orders.orderDeliveringMessage")}</p>
                       </div>
@@ -1138,7 +1138,7 @@ function renderAllOrders(): string {
                 </div>
                 <h4 class="text-base font-semibold text-gray-900 mb-2">${t("ordersUi.refundCannotCreate")}</h4>
                 <p class="text-sm text-gray-500 mb-6" x-text="refundError"></p>
-                <button @click="closeModal('showRefundModal')" class="px-6 py-2 text-sm font-medium bg-(--btn-bg,#f5b800) hover:bg-(--btn-hover-bg,#d39c00) active:bg-(--btn-hover-bg,#d39c00) text-(--btn-text,#1a1a1a) rounded-full border border-(--btn-border-color,#d39c00) cursor-pointer active:scale-[0.97] motion-reduce:active:scale-100 transition-[transform,background-color] duration-150">${t("common.close")}</button>
+                <button @click="closeModal('showRefundModal')" class="px-6 py-2 text-sm font-medium bg-(--btn-bg,#ff8600) hover:bg-(--btn-hover-bg,#db7300) active:bg-(--btn-hover-bg,#db7300) text-(--btn-text,#1a1a1a) rounded-full border border-(--btn-border-color,#db7300) cursor-pointer active:scale-[0.97] motion-reduce:active:scale-100 transition-[transform,background-color] duration-150">${t("common.close")}</button>
               </div>
             </template>
             <!-- Success state -->
@@ -1392,9 +1392,9 @@ function renderAllOrders(): string {
               <h3 class="text-lg font-bold text-gray-900" x-text="isCheckPayment ? '${t("ordersUi.submitDocument")}' : '${t("orders.submitRemittanceProof")}'"></h3>
               <!-- Step indicator (3 steps) -->
               <div class="flex items-center gap-1.5" x-show="step !== 'success'">
-                <span class="w-2 h-2 rounded-full transition-colors" :class="step === 'iban' ? 'bg-(--btn-bg,#f5b800)' : 'bg-gray-300'"></span>
-                <span class="w-2 h-2 rounded-full transition-colors" :class="step === 'upload' ? 'bg-(--btn-bg,#f5b800)' : 'bg-gray-300'"></span>
-                <span class="w-2 h-2 rounded-full transition-colors" :class="step === 'form' || step === 'submitting' ? 'bg-(--btn-bg,#f5b800)' : 'bg-gray-300'"></span>
+                <span class="w-2 h-2 rounded-full transition-colors" :class="step === 'iban' ? 'bg-(--btn-bg,#ff8600)' : 'bg-gray-300'"></span>
+                <span class="w-2 h-2 rounded-full transition-colors" :class="step === 'upload' ? 'bg-(--btn-bg,#ff8600)' : 'bg-gray-300'"></span>
+                <span class="w-2 h-2 rounded-full transition-colors" :class="step === 'form' || step === 'submitting' ? 'bg-(--btn-bg,#ff8600)' : 'bg-gray-300'"></span>
               </div>
             </div>
             <button @click="reset()" class="os-modal__close bg-transparent border-none cursor-pointer p-1.5 rounded-lg flex items-center justify-center transition-colors hover:bg-gray-100" aria-label="${t("common.close")}">
@@ -1922,7 +1922,7 @@ function renderReviews(): string {
                     <div class="flex items-center gap-2 min-w-0">
                       <div class="flex items-center gap-0.5 shrink-0" :aria-label="r.rating + '/5'">
                         <template x-for="i in 5">
-                          <svg class="w-4 h-4 max-sm:w-3.5 max-sm:h-3.5" :class="i <= r.rating ? 'text-[#f5b800]' : 'text-gray-200'" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><polygon points="${STAR_POINTS}"/></svg>
+                          <svg class="w-4 h-4 max-sm:w-3.5 max-sm:h-3.5" :class="i <= r.rating ? 'text-[#ff8600]' : 'text-gray-200'" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><polygon points="${STAR_POINTS}"/></svg>
                         </template>
                       </div>
                       <span class="text-[12px] max-sm:text-[11px] text-gray-400 whitespace-nowrap truncate" x-text="fmtDate(r.submitted_at)"></span>

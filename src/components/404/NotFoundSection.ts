@@ -15,7 +15,7 @@ function telescopeIllustration(): string {
       <circle cx="135" cy="190" r="3" fill="var(--color-error-500, #ef4444)"/>
       <circle cx="100" cy="195" r="3" fill="var(--color-error-500, #ef4444)"/>
       <!-- Telescope body -->
-      <rect x="58" y="62" width="90" height="36" rx="18" transform="rotate(-25 103 80)" fill="var(--color-primary-500, #cc9900)"/>
+      <rect x="58" y="62" width="90" height="36" rx="18" transform="rotate(-25 103 80)" fill="var(--color-primary-500, #cc6b00)"/>
       <!-- Lens (front) -->
       <ellipse cx="60" cy="58" rx="22" ry="22" fill="var(--color-primary-600, #a37a00)" stroke="var(--color-primary-700, #7a5c00)" stroke-width="3"/>
       <ellipse cx="60" cy="58" rx="16" ry="16" fill="var(--color-primary-100, #fef3c7)"/>

@@ -28,13 +28,13 @@ interface SideDeal {
 }
 
 function flameIcon(): string {
-  return `<svg class="h-4 w-4 shrink-0 text-[#f5b800]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"/></svg>`;
+  return `<svg class="h-4 w-4 shrink-0 text-[#ff8600]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"/></svg>`;
 }
 
 function renderDealSlide(deal: SideDeal, index: number): string {
   const badge =
     deal.discountPercent && deal.discountPercent > 0
-      ? `<span class="absolute start-1.5 top-1.5 z-10 rounded-sm bg-[#f5b800] px-1.5 py-0.5 text-[10px] font-extrabold leading-none text-[#1a1a1a]">-%${deal.discountPercent}</span>`
+      ? `<span class="absolute start-1.5 top-1.5 z-10 rounded-sm bg-[#ff8600] px-1.5 py-0.5 text-[10px] font-extrabold leading-none text-white">-%${deal.discountPercent}</span>`
       : "";
   const img = deal.imageSrc
     ? `<img src="${escapeHtml(sanitizeUrl(deal.imageSrc))}" alt="${escapeHtml(deal.name)}" width="400" height="400" decoding="async" class="h-full w-full object-contain">`
@@ -76,17 +76,17 @@ export function HeroSidePanel(): string {
         </div>
         <div class="flex items-center justify-between px-3.5 pb-2.5 pt-1.5">
           <span id="hero-deals-dots" class="flex gap-1.5"></span>
-          <a href="/pages/top-deals.html" class="text-[11px] font-bold text-[#f5b800] no-underline appearance-none focus:outline-none hover:text-[#ffd75e]">${t("heroSide.allDeals")} ›</a>
+          <a href="/pages/top-deals.html" class="text-[11px] font-bold text-[#ff8600] no-underline appearance-none focus:outline-none hover:text-[#ffd75e]">${t("heroSide.allDeals")} ›</a>
         </div>
       </div>
       <a href="/pages/dashboard/rfq-form.html"
-         class="flex items-center gap-3 rounded-md border border-[var(--color-border,#e5e5e5)] bg-white p-3.5 no-underline appearance-none focus:outline-none transition-colors duration-150 hover:border-[#f5b800]">
-        <svg class="h-6 w-6 shrink-0 text-[#d39c00]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M9 15h6M9 11h2"/></svg>
+         class="flex items-center gap-3 rounded-md border border-[var(--color-border,#e5e5e5)] bg-white p-3.5 no-underline appearance-none focus:outline-none transition-colors duration-150 hover:border-[#ff8600]">
+        <svg class="h-6 w-6 shrink-0 text-[#db7300]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M9 15h6M9 11h2"/></svg>
         <span class="min-w-0">
           <span class="block text-[12.5px] font-bold leading-tight text-[#171717]">${t("heroSide.rfqTitle")}</span>
           <span class="block truncate text-[10.5px] text-[#737373]">${t("heroSide.rfqDesc")}</span>
         </span>
-        <span class="ms-auto flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[#f5b800] text-[#1a1a1a]">
+        <span class="ms-auto flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[#ff8600] text-white">
           <svg class="h-3.5 w-3.5 rtl:rotate-180" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
         </span>
       </a>
@@ -163,7 +163,7 @@ export function initHeroSidePanel(): Promise<void> {
       dotsWrap.innerHTML = deals
         .map(
           (_, i) =>
-            `<button type="button" class="th-no-press h-1.5 w-1.5 cursor-pointer rounded-full bg-white/25 transition-colors data-[state=on]:bg-[#f5b800]" data-state="${i === 0 ? "on" : "off"}" aria-label="${t("heroSide.bestDeals")} ${i + 1}"></button>`
+            `<button type="button" class="th-no-press h-1.5 w-1.5 cursor-pointer rounded-full bg-white/25 transition-colors data-[state=on]:bg-[#ff8600]" data-state="${i === 0 ? "on" : "off"}" aria-label="${t("heroSide.bestDeals")} ${i + 1}"></button>`
         )
         .join("");
 

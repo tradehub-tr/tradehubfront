@@ -54,7 +54,7 @@ export function InboxPanel(): string {
                @keydown.escape.stop="$store.chatPopup.toggleSearch()"
                placeholder="${t("chat.search")}"
                aria-label="${t("chat.search")}"
-               class="w-full appearance-none rounded-md border border-[var(--color-border-light,#f0f0f0)] bg-[var(--color-surface-muted,#fafafa)] px-3 py-1.5 text-[12px] text-[var(--color-text-primary,#0a0a0a)] placeholder:text-[var(--color-text-tertiary,#a3a3a3)] focus:outline-none focus:border-[var(--color-primary-500,#f5b800)]" />
+               class="w-full appearance-none rounded-md border border-[var(--color-border-light,#f0f0f0)] bg-[var(--color-surface-muted,#fafafa)] px-3 py-1.5 text-[12px] text-[var(--color-text-primary,#0a0a0a)] placeholder:text-[var(--color-text-tertiary,#a3a3a3)] focus:outline-none focus:border-[var(--color-primary-500,#ff8600)]" />
       </div>
 
       <!-- List -->
@@ -66,7 +66,7 @@ export function InboxPanel(): string {
                   :class="$store.chatPopup.activeConversationId === conv.id
                     ? 'bg-[var(--color-surface-raised,#f5f5f5)]'
                     : 'hover:bg-[var(--color-surface-muted,#fafafa)]'">
-            <div class="size-9 shrink-0 rounded-full bg-[var(--color-primary-100,#ffefb3)] overflow-hidden">
+            <div class="size-9 shrink-0 rounded-full bg-[var(--color-primary-100,#ffe1c2)] overflow-hidden">
               <template x-if="conv.avatar">
                 <img :src="conv.avatar" alt="" width="40" height="40" decoding="async" class="size-full object-cover" />
               </template>

@@ -659,7 +659,7 @@ Alpine.data("faqPage", () => ({
     const re = new RegExp(`(${this.escapeRegex(q)})`, "gi");
     return escaped.replace(
       re,
-      '<mark class="bg-[var(--color-primary-100,#ffefb3)] text-[var(--color-primary-700,#a87c00)] rounded-sm px-0.5">$1</mark>'
+      '<mark class="bg-[var(--color-primary-100,#ffe1c2)] text-[var(--color-primary-700,#ad5b00)] rounded-sm px-0.5">$1</mark>'
     );
   },
 

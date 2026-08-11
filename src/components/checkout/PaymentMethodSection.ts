@@ -45,7 +45,7 @@ export function PaymentMethodSection({
         <div class="co-pay-list flex flex-col gap-1.5 sm:gap-2">
           <!-- Option 1: Banka Havalesi / EFT (önerilen) -->
           <label class="co-pay-row relative flex items-start gap-2.5 sm:gap-3 px-3 sm:px-4 py-3 sm:py-[14px] border rounded-md bg-white cursor-pointer transition-[border-color,background-color,box-shadow] duration-150 motion-reduce:transition-none"
-            :class="selectedMethod === 'banka_havale' ? 'is-selected border-primary-500 bg-primary-50 shadow-[0_0_0_3px_var(--color-primary-500,#cc9900)]/12' : 'border-[#e5e5e5] hover:border-[#d4d4d4]'">
+            :class="selectedMethod === 'banka_havale' ? 'is-selected border-primary-500 bg-primary-50 shadow-[0_0_0_3px_var(--color-primary-500,#cc6b00)]/12' : 'border-[#e5e5e5] hover:border-[#d4d4d4]'">
             <input type="radio" name="payment_method" value="banka_havale" x-model="selectedMethod" class="absolute opacity-0 pointer-events-none">
             <span class="co-radio w-4 h-4 sm:w-[18px] sm:h-[18px] rounded-full shrink-0 border-[1.5px] bg-white inline-flex items-center justify-center mt-[1px] transition-all"
               :class="selectedMethod === 'banka_havale' ? 'border-primary-600' : 'border-[#d4d4d4]'">
@@ -63,7 +63,7 @@ export function PaymentMethodSection({
 
           <!-- Option 2: Çek / Senet -->
           <label class="co-pay-row relative flex items-start gap-2.5 sm:gap-3 px-3 sm:px-4 py-3 sm:py-[14px] border rounded-md bg-white cursor-pointer transition-[border-color,background-color,box-shadow] duration-150 motion-reduce:transition-none"
-            :class="selectedMethod === 'cek_senet' ? 'is-selected border-primary-500 bg-primary-50 shadow-[0_0_0_3px_var(--color-primary-500,#cc9900)]/12' : 'border-[#e5e5e5] hover:border-[#d4d4d4]'">
+            :class="selectedMethod === 'cek_senet' ? 'is-selected border-primary-500 bg-primary-50 shadow-[0_0_0_3px_var(--color-primary-500,#cc6b00)]/12' : 'border-[#e5e5e5] hover:border-[#d4d4d4]'">
             <input type="radio" name="payment_method" value="cek_senet" x-model="selectedMethod" class="absolute opacity-0 pointer-events-none">
             <span class="co-radio w-4 h-4 sm:w-[18px] sm:h-[18px] rounded-full shrink-0 border-[1.5px] bg-white inline-flex items-center justify-center mt-[1px] transition-all"
               :class="selectedMethod === 'cek_senet' ? 'border-primary-600' : 'border-[#d4d4d4]'">

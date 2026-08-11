@@ -17,7 +17,7 @@ function renderUserSection(): string {
     return `
       <a
         href="/giris"
-        class="flex items-center gap-1.5 sm:gap-2 px-2 sm:px-3 py-1 sm:py-1.5 rounded-md text-[12px] sm:text-[14px] text-[#333] hover:text-[var(--color-primary-500,#f5b800)] hover:bg-[#f9fafb] transition-colors no-underline"
+        class="flex items-center gap-1.5 sm:gap-2 px-2 sm:px-3 py-1 sm:py-1.5 rounded-md text-[12px] sm:text-[14px] text-[#333] hover:text-[var(--color-primary-500,#ff8600)] hover:bg-[#f9fafb] transition-colors no-underline"
       >
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="shrink-0 sm:w-[22px] sm:h-[22px]">
           <path d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0"/>

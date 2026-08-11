@@ -191,7 +191,7 @@ function renderChipsHtml(model: SheetModel): string {
           const isSel = opt.label === selected;
           const available = isChipOptionAvailable(model, chip, opt.label);
           const cls = isSel
-            ? "border-primary-500 bg-primary-50/40 shadow-[0_0_0_1px_var(--color-primary-500,#cc9900)]"
+            ? "border-primary-500 bg-primary-50/40 shadow-[0_0_0_1px_var(--color-primary-500,#cc6b00)]"
             : available
               ? "border-border-default bg-surface"
               : "border-border-default bg-surface opacity-40 cursor-not-allowed";
@@ -372,7 +372,7 @@ function render(): void {
   if (minHintEl) {
     minHintEl.innerHTML =
       total > 0 && total < p.moq
-        ? `<div class="text-xs text-[#92700c] bg-[#fff8e1] border border-[#f0e2b6] rounded-md px-2.5 py-1.5 mb-2.5">${escapeHtml(t("product.optionsMinOrderHint", { moq: p.moq, unit: p.unit }))}</div>`
+        ? `<div class="text-xs text-[#92700c] bg-[#fff3e6] border border-[#f0e2b6] rounded-md px-2.5 py-1.5 mb-2.5">${escapeHtml(t("product.optionsMinOrderHint", { moq: p.moq, unit: p.unit }))}</div>`
         : "";
   }
 

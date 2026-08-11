@@ -788,7 +788,7 @@ function renderDashDrawerTrigger(): string {
       aria-label="${t("dashboard.myDashboard")}"
       class="th-no-press hidden items-center gap-1 ps-1 pe-1.5 h-9 rounded-full border border-gray-300 bg-white hover:border-gray-400 lg:hidden appearance-none cursor-pointer focus:outline-none transition-colors duration-150 motion-reduce:transition-none"
     >
-      <span class="w-7 h-7 rounded-full flex items-center justify-center text-[13px] font-bold text-white uppercase" style="background:linear-gradient(135deg, var(--color-primary-400, #e6b212) 0%, var(--color-primary-500, #cc9900) 100%)" aria-hidden="true">${escapeHtml(initial)}</span>
+      <span class="w-7 h-7 rounded-full flex items-center justify-center text-[13px] font-bold text-white uppercase" style="background:linear-gradient(135deg, var(--color-primary-400, #e6b212) 0%, var(--color-primary-500, #cc6b00) 100%)" aria-hidden="true">${escapeHtml(initial)}</span>
       <svg class="w-3.5 h-3.5 text-gray-500" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
         <path stroke-linecap="round" stroke-linejoin="round" d="M6 9l6 6 6-6"/>
       </svg>

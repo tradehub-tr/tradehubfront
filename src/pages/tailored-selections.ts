@@ -113,7 +113,7 @@ appEl.innerHTML = `
         <input
           id="ts-hdr-search-input" name="q" type="search" autocomplete="off"
           placeholder="${t('common.search') || 'Ara'}"
-          class="w-full h-9 rounded-full border border-gray-300 bg-white px-4 text-sm text-gray-900 placeholder:text-[#737373] focus:outline-none focus:border-[#f5b800]"
+          class="w-full h-9 rounded-full border border-gray-300 bg-white px-4 text-sm text-gray-900 placeholder:text-[#737373] focus:outline-none focus:border-[#ff8600]"
         />
       </form>
       <button id="ts-hdr-search-btn" class="th-no-press flex items-center justify-center w-9 h-9 lg:w-11 lg:h-11 rounded-full transition-colors" aria-label="${t('common.search') || 'Ara'}">

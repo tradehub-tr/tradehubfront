@@ -26,7 +26,7 @@ export function MessageList(): string {
         <div class="relative">
           <button @click="toggleFilter()"
                   class="flex items-center justify-center w-7 h-7 border-none bg-transparent cursor-pointer rounded transition-colors duration-150"
-                  :class="filterType !== 'all' ? 'text-(--color-cta-primary,#cc9900)' : 'text-(--color-text-placeholder,#999999) hover:text-(--color-text-body,#333333)'"
+                  :class="filterType !== 'all' ? 'text-(--color-cta-primary,#cc6b00)' : 'text-(--color-text-placeholder,#999999) hover:text-(--color-text-body,#333333)'"
                   aria-label="${t("messages.filter")}">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"/>
@@ -45,19 +45,19 @@ export function MessageList(): string {
                class="absolute end-0 top-full mt-1 w-40 origin-top-end bg-(--color-surface,#ffffff) rounded-lg shadow-lg border border-(--color-border-light,#f0f0f0) py-1 z-20">
             <button @click="setFilter('all')"
                     class="w-full flex items-center gap-2 px-3 py-2 text-[13px] text-start border-none bg-transparent cursor-pointer hover:bg-(--color-surface-muted,#fafafa) transition-colors"
-                    :class="filterType === 'all' ? 'text-(--color-cta-primary,#cc9900) font-semibold' : 'text-(--color-text-body,#333333)'">
+                    :class="filterType === 'all' ? 'text-(--color-cta-primary,#cc6b00) font-semibold' : 'text-(--color-text-body,#333333)'">
               <svg class="w-3.5 h-3.5" :class="filterType === 'all' ? 'opacity-100' : 'opacity-0'" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
               ${t("common.all")}
             </button>
             <button @click="setFilter('unread')"
                     class="w-full flex items-center gap-2 px-3 py-2 text-[13px] text-start border-none bg-transparent cursor-pointer hover:bg-(--color-surface-muted,#fafafa) transition-colors"
-                    :class="filterType === 'unread' ? 'text-(--color-cta-primary,#cc9900) font-semibold' : 'text-(--color-text-body,#333333)'">
+                    :class="filterType === 'unread' ? 'text-(--color-cta-primary,#cc6b00) font-semibold' : 'text-(--color-text-body,#333333)'">
               <svg class="w-3.5 h-3.5" :class="filterType === 'unread' ? 'opacity-100' : 'opacity-0'" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
               ${t("messages.unread")}
             </button>
             <button @click="setFilter('read')"
                     class="w-full flex items-center gap-2 px-3 py-2 text-[13px] text-start border-none bg-transparent cursor-pointer hover:bg-(--color-surface-muted,#fafafa) transition-colors"
-                    :class="filterType === 'read' ? 'text-(--color-cta-primary,#cc9900) font-semibold' : 'text-(--color-text-body,#333333)'">
+                    :class="filterType === 'read' ? 'text-(--color-cta-primary,#cc6b00) font-semibold' : 'text-(--color-text-body,#333333)'">
               <svg class="w-3.5 h-3.5" :class="filterType === 'read' ? 'opacity-100' : 'opacity-0'" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg>
               ${t("messages.read")}
             </button>
@@ -75,9 +75,9 @@ export function MessageList(): string {
            x-transition:leave-end="opacity-0"
            class="flex items-center gap-2 px-5 max-sm:px-3 py-2 border-b border-(--color-border-light,#f0f0f0) bg-(--color-surface-muted,#fafafa)">
         <template x-if="filterType !== 'all'">
-          <span class="inline-flex items-center gap-1 text-xs bg-(--color-cta-primary,#cc9900)/10 text-(--color-cta-primary,#cc9900) px-2 py-0.5 rounded-full">
+          <span class="inline-flex items-center gap-1 text-xs bg-(--color-cta-primary,#cc6b00)/10 text-(--color-cta-primary,#cc6b00) px-2 py-0.5 rounded-full">
             <span x-text="filterType === 'unread' ? '${t("messages.unread")}' : '${t("messages.read")}'"></span>
-            <button @click="setFilter('all')" class="th-no-press border-none bg-transparent cursor-pointer text-(--color-cta-primary,#cc9900) p-0 leading-none">&times;</button>
+            <button @click="setFilter('all')" class="th-no-press border-none bg-transparent cursor-pointer text-(--color-cta-primary,#cc6b00) p-0 leading-none">&times;</button>
           </span>
         </template>
         <template x-if="searchQuery.length > 0">
@@ -125,7 +125,7 @@ export function MessageList(): string {
           </svg>
           <p class="text-sm text-(--color-text-placeholder,#999999)" data-i18n="messages.noResults">${t("messages.noResults")}</p>
           <button @click="searchQuery = ''; filterType = 'all'"
-                  class="mt-2 text-xs text-(--color-cta-primary,#cc9900) border-none bg-transparent cursor-pointer hover:underline">
+                  class="mt-2 text-xs text-(--color-cta-primary,#cc6b00) border-none bg-transparent cursor-pointer hover:underline">
             <span data-i18n="messages.clearFilters">${t("messages.clearFilters")}</span>
           </button>
         </div>

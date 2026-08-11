@@ -55,4 +55,4 @@ export const KPI_META: Record<
 };
 
 /** Kategori donut dilim renkleri — index ile atanır, taşarsa döner. */
-export const CATEGORY_PALETTE = ["#f5b800", "#06b6d4", "#3b82f6", "#22c55e", "#a3a3a3"];
+export const CATEGORY_PALETTE = ["#ff8600", "#06b6d4", "#3b82f6", "#22c55e", "#a3a3a3"];

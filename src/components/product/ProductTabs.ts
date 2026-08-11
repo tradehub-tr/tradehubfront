@@ -74,7 +74,7 @@ export function ProductTabs(): string {
             id="tab-btn-${tab.id}"
             data-tab-target="tab-content-${tab.id}"
             data-active="${i === 0 ? "true" : "false"}"
-            class="th-no-press product-tab-btn whitespace-nowrap inline-flex items-center gap-1.5 px-4 py-2 text-sm rounded-md transition-colors cursor-pointer appearance-none focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-primary-500,#f5b800)] bg-transparent font-medium text-[#4b5563] hover:text-[#111827] data-[active=true]:bg-[#e5e5e5] data-[active=true]:font-bold data-[active=true]:text-[#111827]"
+            class="th-no-press product-tab-btn whitespace-nowrap inline-flex items-center gap-1.5 px-4 py-2 text-sm rounded-md transition-colors cursor-pointer appearance-none focus:outline-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-primary-500,#ff8600)] bg-transparent font-medium text-[#4b5563] hover:text-[#111827] data-[active=true]:bg-[#e5e5e5] data-[active=true]:font-bold data-[active=true]:text-[#111827]"
             role="tab"
             aria-controls="tab-content-${tab.id}"
           >

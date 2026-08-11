@@ -301,7 +301,7 @@ function renderSidebarLists(kind: "products" | "suppliers" = "products"): string
           <span class="${countBase}">${t("favorites.itemCount", { count })}</span>
         </span>
         <button type="button"
-                class="fav-delete-list-btn shrink-0 w-7 h-7 inline-flex items-center justify-center rounded-md text-text-tertiary opacity-0 group-hover:opacity-100 hover:bg-white hover:text-red-500 transition-opacity appearance-none focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-cta-primary,#F5B800)]"
+                class="fav-delete-list-btn shrink-0 w-7 h-7 inline-flex items-center justify-center rounded-md text-text-tertiary opacity-0 group-hover:opacity-100 hover:bg-white hover:text-red-500 transition-opacity appearance-none focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-cta-primary,#FF8600)]"
                 data-delete-list="${list.id}"
                 aria-label="${t("favorites.deleteList")}"
                 title="${t("favorites.deleteList")}">
@@ -425,7 +425,7 @@ function renderFilterButton(): string {
   ): string => `
     <label class="flex items-center gap-2 px-2 py-1.5 max-lg:py-2.5 rounded-md cursor-pointer hover:bg-surface-raised transition-colors">
       <input type="checkbox" data-fav-filter-group="${group}" data-fav-filter-val="${escapeHtml(val)}" ${checked ? "checked" : ""}
-             class="w-3.5 h-3.5 max-lg:w-4 max-lg:h-4 rounded border-border-strong text-[var(--color-cta-primary,#F5B800)] focus:ring-1 focus:ring-[var(--color-cta-primary,#F5B800)] focus:ring-offset-0 cursor-pointer" />
+             class="w-3.5 h-3.5 max-lg:w-4 max-lg:h-4 rounded border-border-strong text-[var(--color-cta-primary,#FF8600)] focus:ring-1 focus:ring-[var(--color-cta-primary,#FF8600)] focus:ring-offset-0 cursor-pointer" />
       <span class="flex-1 min-w-0 text-[12.5px] text-text-primary truncate">${escapeHtml(label)}</span>
       ${typeof count === "number" ? `<span class="text-[11px] text-text-tertiary tabular-nums">${count}</span>` : ""}
     </label>
@@ -444,10 +444,10 @@ function renderFilterButton(): string {
   return `
     <div class="relative" data-fav-filter-wrap>
       <button type="button" data-fav-filter-toggle
-              class="relative inline-flex items-center gap-1.5 h-8 bg-white border border-border-default text-[12.5px] font-medium text-text-secondary px-2.5 rounded-md cursor-pointer transition-colors hover:border-text-secondary hover:text-text-primary appearance-none focus:outline-none focus-visible:border-[var(--color-cta-primary,#F5B800)] ${badge ? "border-[var(--color-cta-primary,#F5B800)] text-text-primary" : ""}">
+              class="relative inline-flex items-center gap-1.5 h-8 bg-white border border-border-default text-[12.5px] font-medium text-text-secondary px-2.5 rounded-md cursor-pointer transition-colors hover:border-text-secondary hover:text-text-primary appearance-none focus:outline-none focus-visible:border-[var(--color-cta-primary,#FF8600)] ${badge ? "border-[var(--color-cta-primary,#FF8600)] text-text-primary" : ""}">
         <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M6 12h12M10 18h4"/></svg>
         ${t("favorites.filter", { defaultValue: "Filtrele" })}
-        ${badge ? `<span class="inline-flex items-center justify-center min-w-[16px] h-4 px-1 text-[10px] font-bold rounded-full bg-[var(--color-cta-primary,#F5B800)] text-white tabular-nums">${badge}</span>` : ""}
+        ${badge ? `<span class="inline-flex items-center justify-center min-w-[16px] h-4 px-1 text-[10px] font-bold rounded-full bg-[var(--color-cta-primary,#FF8600)] text-white tabular-nums">${badge}</span>` : ""}
         <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
       </button>
       <div data-fav-filter-menu class="hidden absolute top-[calc(100%+6px)] end-0 z-30 w-[300px] max-h-[480px] overflow-y-auto bg-white border border-border-default rounded-md shadow-[0_24px_60px_-12px_rgba(20,20,18,0.18),0_8px_20px_-6px_rgba(20,20,18,0.08)] p-2 max-lg:fixed max-lg:start-0 max-lg:end-0 max-lg:bottom-0 max-lg:top-auto max-lg:w-auto max-lg:max-h-[75dvh] max-lg:z-[80] max-lg:rounded-b-none max-lg:border-x-0 max-lg:border-b-0 max-lg:p-3 max-lg:pb-[calc(env(safe-area-inset-bottom)+12px)] max-lg:shadow-[0_-16px_48px_rgba(20,20,18,0.28)]">
@@ -482,9 +482,9 @@ function renderFilterButton(): string {
           <div class="text-[10.5px] uppercase tracking-[0.1em] font-semibold text-text-tertiary px-2 py-1">${t("favorites.filterPriceRange", { defaultValue: "Fiyat aralığı" })}</div>
           <div class="flex items-center gap-2 px-2 py-1.5">
             <input type="number" data-fav-filter-min value="${escapeHtml(activeFilters.minPrice)}" placeholder="${t("buyerUi.priceMin")}"
-                   class="flex-1 min-w-0 h-7 max-lg:h-10 px-2 text-[12px] max-lg:text-[13px] bg-white border border-border-default rounded-md focus:border-[var(--color-cta-primary,#F5B800)] focus:outline-none appearance-none" />
+                   class="flex-1 min-w-0 h-7 max-lg:h-10 px-2 text-[12px] max-lg:text-[13px] bg-white border border-border-default rounded-md focus:border-[var(--color-cta-primary,#FF8600)] focus:outline-none appearance-none" />
             <input type="number" data-fav-filter-max value="${escapeHtml(activeFilters.maxPrice)}" placeholder="${t("buyerUi.priceMax")}"
-                   class="flex-1 min-w-0 h-7 max-lg:h-10 px-2 text-[12px] max-lg:text-[13px] bg-white border border-border-default rounded-md focus:border-[var(--color-cta-primary,#F5B800)] focus:outline-none appearance-none" />
+                   class="flex-1 min-w-0 h-7 max-lg:h-10 px-2 text-[12px] max-lg:text-[13px] bg-white border border-border-default rounded-md focus:border-[var(--color-cta-primary,#FF8600)] focus:outline-none appearance-none" />
           </div>
         </div>
         <div class="flex items-center justify-between gap-2 mt-2 pt-2 border-t border-border-default px-1">
@@ -526,7 +526,7 @@ function renderToolbar(count: number): string {
         <span class="inline-flex items-center px-2 py-0.5 text-[11px] font-semibold rounded-full bg-surface-raised text-text-secondary">${t("favorites.itemCount", { count })}</span>
       </div>
 
-      <label class="flex-1 min-w-[180px] max-w-[340px] inline-flex items-center gap-1.5 h-8 bg-white border border-border-default rounded-md px-2.5 focus-within:border-[var(--color-cta-primary,#F5B800)] transition-colors">
+      <label class="flex-1 min-w-[180px] max-w-[340px] inline-flex items-center gap-1.5 h-8 bg-white border border-border-default rounded-md px-2.5 focus-within:border-[var(--color-cta-primary,#FF8600)] transition-colors">
         <svg class="w-3.5 h-3.5 text-text-tertiary shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
         <input type="text"
                data-fav-search
@@ -544,7 +544,7 @@ function renderToolbar(count: number): string {
 
       <div class="relative" data-fav-sort-wrap>
         <button type="button" data-fav-sort-toggle
-                class="inline-flex items-center gap-1.5 h-8 bg-white border border-border-default text-[12.5px] font-medium text-text-secondary px-2.5 rounded-md cursor-pointer transition-colors hover:border-text-secondary hover:text-text-primary appearance-none focus:outline-none focus-visible:border-[var(--color-cta-primary,#F5B800)]">
+                class="inline-flex items-center gap-1.5 h-8 bg-white border border-border-default text-[12.5px] font-medium text-text-secondary px-2.5 rounded-md cursor-pointer transition-colors hover:border-text-secondary hover:text-text-primary appearance-none focus:outline-none focus-visible:border-[var(--color-cta-primary,#FF8600)]">
           <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h13M3 12h9M3 18h5"/><path d="M18 9V4M18 9l-2-2M18 9l2-2M18 15v5M18 15l-2 2M18 15l2 2"/></svg>
           ${sortBtnLabel}
           <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
@@ -554,7 +554,7 @@ function renderToolbar(count: number): string {
           ${SORTS.map((s) => {
             const on = sortId === s.id;
             return `<button type="button" data-fav-sort-pick="${s.id}"
-                            class="th-no-press w-full flex items-center justify-between gap-2 bg-transparent border-0 px-2.5 py-2 max-lg:py-3 rounded-md text-[13px] cursor-pointer text-start transition-colors hover:bg-surface-raised appearance-none focus:outline-none ${on ? "font-semibold text-[var(--color-cta-primary,#F5B800)]" : "text-text-primary"}">
+                            class="th-no-press w-full flex items-center justify-between gap-2 bg-transparent border-0 px-2.5 py-2 max-lg:py-3 rounded-md text-[13px] cursor-pointer text-start transition-colors hover:bg-surface-raised appearance-none focus:outline-none ${on ? "font-semibold text-[var(--color-cta-primary,#FF8600)]" : "text-text-primary"}">
                       <span>${escapeHtml(t(s.labelKey, { defaultValue: s.defaultLabel }))}</span>
                       ${on ? `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>` : ""}
                     </button>`;
@@ -597,7 +597,7 @@ function renderSupplierLine(en: FavEnrichment | undefined): string {
       <span class="truncate">${escapeHtml(sup.name)}</span>
       ${
         sup.verified
-          ? `<span class="text-[var(--color-cta-primary,#F5B800)] shrink-0" title="${t("buyerUi.verified")}"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/></svg></span>`
+          ? `<span class="text-[var(--color-cta-primary,#FF8600)] shrink-0" title="${t("buyerUi.verified")}"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/></svg></span>`
           : ""
       }
     </div>
@@ -619,7 +619,7 @@ function renderProductCardGrid(p: FavoriteItem): string {
     .join("");
 
   return `
-    <article class="group relative flex flex-col bg-white border border-[#eee] rounded-md overflow-hidden transition-all duration-150 hover:border-[var(--color-cta-primary,#F5B800)] hover:shadow-[0_4px_10px_-6px_rgba(20,20,18,0.12)]" data-fav-item-id="${escapeHtml(p.id)}">
+    <article class="group relative flex flex-col bg-white border border-[#eee] rounded-md overflow-hidden transition-all duration-150 hover:border-[var(--color-cta-primary,#FF8600)] hover:shadow-[0_4px_10px_-6px_rgba(20,20,18,0.12)]" data-fav-item-id="${escapeHtml(p.id)}">
       <a href="${escapeHtml(sanitizeUrl(detailHref))}" class="relative block aspect-square overflow-hidden bg-[#fafafa] no-underline">
         <img src="${escapeHtml(sanitizeUrl(p.image))}" alt="${escapeHtml(p.title)}"
              width="400" height="400" decoding="async"
@@ -628,7 +628,7 @@ function renderProductCardGrid(p: FavoriteItem): string {
         ${renderStockPill(enrichment)}
       </a>
       <button type="button"
-              class="fav-remove-item absolute top-1.5 end-1.5 w-8 h-8 inline-flex items-center justify-center rounded-full bg-white shadow-[0_1px_3px_rgba(20,20,18,0.12)] text-[#ef4444] cursor-pointer p-0 border-0 transition-transform duration-150 hover:scale-110 active:scale-95 appearance-none focus:outline-none focus-visible:border focus-visible:border-[var(--color-cta-primary,#F5B800)]"
+              class="fav-remove-item absolute top-1.5 end-1.5 w-8 h-8 inline-flex items-center justify-center rounded-full bg-white shadow-[0_1px_3px_rgba(20,20,18,0.12)] text-[#ef4444] cursor-pointer p-0 border-0 transition-transform duration-150 hover:scale-110 active:scale-95 appearance-none focus:outline-none focus-visible:border focus-visible:border-[var(--color-cta-primary,#FF8600)]"
               data-remove-id="${escapeHtml(p.id)}"
               aria-label="${t("favorites.removeFromAll")}"
               title="${t("favorites.removeFromAll")}">
@@ -637,7 +637,7 @@ function renderProductCardGrid(p: FavoriteItem): string {
       <div class="flex flex-1 flex-col p-2 max-sm:p-1.5">
         ${renderSupplierLine(enrichment)}
         <a href="${escapeHtml(sanitizeUrl(detailHref))}" class="no-underline text-inherit">
-          <h4 class="text-[11.5px] leading-[1.3] text-text-primary font-normal line-clamp-2 m-0 min-h-[30px] group-hover:text-[var(--color-cta-primary,#F5B800)] transition-colors">${escapeHtml(p.title)}</h4>
+          <h4 class="text-[11.5px] leading-[1.3] text-text-primary font-normal line-clamp-2 m-0 min-h-[30px] group-hover:text-[var(--color-cta-primary,#FF8600)] transition-colors">${escapeHtml(p.title)}</h4>
         </a>
         <div class="text-[13px] font-bold text-text-primary leading-none tracking-[-0.01em] tabular-nums mt-1">${enrichment?.priceDisplay ?? localizePriceString(p.priceRange)}</div>
         <p class="text-[10.5px] text-text-tertiary m-0 leading-[13px] mt-0.5 truncate">${escapeHtml(p.minOrder)}</p>
@@ -683,7 +683,7 @@ function renderProductRowList(p: FavoriteItem): string {
     .join("");
 
   return `
-    <article class="group relative flex items-center gap-3 bg-white border border-[#eee] rounded-lg p-2.5 transition-all duration-150 hover:border-[var(--color-cta-primary,#F5B800)] hover:shadow-[0_4px_12px_-6px_rgba(20,20,18,0.12)] max-sm:flex-col max-sm:items-start" data-fav-item-id="${escapeHtml(p.id)}">
+    <article class="group relative flex items-center gap-3 bg-white border border-[#eee] rounded-lg p-2.5 transition-all duration-150 hover:border-[var(--color-cta-primary,#FF8600)] hover:shadow-[0_4px_12px_-6px_rgba(20,20,18,0.12)] max-sm:flex-col max-sm:items-start" data-fav-item-id="${escapeHtml(p.id)}">
       <a href="${escapeHtml(sanitizeUrl(detailHref))}" class="relative w-[88px] h-[88px] shrink-0 rounded-md overflow-hidden bg-[#fafafa] no-underline max-sm:w-full max-sm:h-[160px]">
         <img src="${escapeHtml(sanitizeUrl(p.image))}" alt="${escapeHtml(p.title)}"
              width="176" height="176" decoding="async"
@@ -692,7 +692,7 @@ function renderProductRowList(p: FavoriteItem): string {
       </a>
       <div class="flex-1 min-w-0 flex flex-col gap-1">
         <a href="${escapeHtml(sanitizeUrl(detailHref))}" class="no-underline text-inherit">
-          <h4 class="text-[12.5px] leading-[1.4] text-text-primary font-medium line-clamp-2 m-0 group-hover:text-[var(--color-cta-primary,#F5B800)] transition-colors">${escapeHtml(p.title)}</h4>
+          <h4 class="text-[12.5px] leading-[1.4] text-text-primary font-medium line-clamp-2 m-0 group-hover:text-[var(--color-cta-primary,#FF8600)] transition-colors">${escapeHtml(p.title)}</h4>
         </a>
         <p class="text-[11px] text-text-tertiary m-0">${escapeHtml(p.minOrder)}</p>
         ${tagChips ? `<div class="flex flex-wrap gap-1">${tagChips}</div>` : ""}
@@ -754,7 +754,7 @@ function renderPagination(total: number, page: number): string {
   const btnIdle =
     "bg-white border-border-default text-text-secondary hover:border-text-secondary hover:text-text-primary";
   const btnOn =
-    "bg-[var(--color-cta-primary,#F5B800)] border-[var(--color-cta-primary,#F5B800)] text-white hover:opacity-95";
+    "bg-[var(--color-cta-primary,#FF8600)] border-[var(--color-cta-primary,#FF8600)] text-white hover:opacity-95";
   const btnDisabled = "opacity-40 cursor-not-allowed";
 
   const pageBtns = pages
@@ -877,7 +877,7 @@ function renderProductCards(items: FavoriteItem[]): string {
 
 function renderFavorites(): string {
   const tabBase =
-    "fav-tabs__tab th-no-press relative inline-flex items-center gap-2 py-2 px-3 text-[13px] font-medium text-text-tertiary bg-transparent border-0 cursor-pointer transition-colors duration-150 hover:text-text-primary appearance-none focus:outline-none [&.fav-tabs__tab--active]:text-text-primary [&.fav-tabs__tab--active]:font-semibold [&.fav-tabs__tab--active]:after:content-[''] [&.fav-tabs__tab--active]:after:absolute [&.fav-tabs__tab--active]:after:start-3 [&.fav-tabs__tab--active]:after:end-3 [&.fav-tabs__tab--active]:after:-bottom-px [&.fav-tabs__tab--active]:after:h-0.5 [&.fav-tabs__tab--active]:after:bg-[var(--color-cta-primary,#F5B800)] [&.fav-tabs__tab--active]:after:rounded-sm";
+    "fav-tabs__tab th-no-press relative inline-flex items-center gap-2 py-2 px-3 text-[13px] font-medium text-text-tertiary bg-transparent border-0 cursor-pointer transition-colors duration-150 hover:text-text-primary appearance-none focus:outline-none [&.fav-tabs__tab--active]:text-text-primary [&.fav-tabs__tab--active]:font-semibold [&.fav-tabs__tab--active]:after:content-[''] [&.fav-tabs__tab--active]:after:absolute [&.fav-tabs__tab--active]:after:start-3 [&.fav-tabs__tab--active]:after:end-3 [&.fav-tabs__tab--active]:after:-bottom-px [&.fav-tabs__tab--active]:after:h-0.5 [&.fav-tabs__tab--active]:after:bg-[var(--color-cta-primary,#FF8600)] [&.fav-tabs__tab--active]:after:rounded-sm";
 
   const productsCount = getTotalCount();
   const suppliersCount = getSellerTotalCount();
@@ -886,7 +886,7 @@ function renderFavorites(): string {
     <div class="flex items-center justify-between px-2 mb-2">
       <h3 class="text-[11px] uppercase tracking-[0.1em] font-semibold text-text-tertiary m-0">${t("favorites.myList")}</h3>
       <button type="button" data-action="create-list"
-              class="inline-flex items-center gap-1 px-2.5 py-1 text-[11.5px] font-semibold rounded-full border border-dashed border-border-strong text-text-secondary hover:border-[var(--color-cta-primary,#F5B800)] hover:text-[var(--color-cta-primary,#F5B800)] hover:bg-surface-raised transition-colors appearance-none focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-cta-primary,#F5B800)] cursor-pointer">
+              class="inline-flex items-center gap-1 px-2.5 py-1 text-[11.5px] font-semibold rounded-full border border-dashed border-border-strong text-text-secondary hover:border-[var(--color-cta-primary,#FF8600)] hover:text-[var(--color-cta-primary,#FF8600)] hover:bg-surface-raised transition-colors appearance-none focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-cta-primary,#FF8600)] cursor-pointer">
         <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>
         ${t("favorites.newList", { defaultValue: "Yeni" })}
       </button>
@@ -901,7 +901,7 @@ function renderFavorites(): string {
     <div class="fav-tabs flex gap-1 px-6 max-sm:px-2 border-b border-border-default mt-2" data-tabgroup="fav">
       <button class="${tabBase} fav-tabs__tab--active" data-tab="fav-products">
         ${t("favorites.products")}
-        <span class="inline-flex items-center px-1.5 py-0 text-[10px] font-bold rounded-full bg-[#fff4cc] text-[var(--color-cta-primary,#F5B800)] leading-[16px]">${productsCount}</span>
+        <span class="inline-flex items-center px-1.5 py-0 text-[10px] font-bold rounded-full bg-[#fff4cc] text-[var(--color-cta-primary,#FF8600)] leading-[16px]">${productsCount}</span>
       </button>
       <button class="${tabBase}" data-tab="fav-suppliers">
         ${t("favorites.suppliers")}

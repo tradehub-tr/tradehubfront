@@ -29,8 +29,8 @@ export function AttachmentToolbar(): string {
               data-submenu-trigger
               @click.stop="${clickHandler}"
               :disabled="${b.action === "startVideoCall" ? "$store.chatPopup.startingCall" : "false"}"
-              class="appearance-none border-0 bg-transparent p-1 rounded cursor-pointer text-[var(--color-text-tertiary,#a3a3a3)] hover:text-[var(--color-primary-600,#d39c00)] focus:outline-none transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
-              :class="$store.chatPopup.openSubMenu === '${b.key}' ? 'text-[var(--color-primary-600,#d39c00)] bg-[var(--color-primary-50,#fff8e1)]' : ''"
+              class="appearance-none border-0 bg-transparent p-1 rounded cursor-pointer text-[var(--color-text-tertiary,#a3a3a3)] hover:text-[var(--color-primary-600,#db7300)] focus:outline-none transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+              :class="$store.chatPopup.openSubMenu === '${b.key}' ? 'text-[var(--color-primary-600,#db7300)] bg-[var(--color-primary-50,#fff3e6)]' : ''"
               aria-label="${label}">
         ${icon}
       </button>`;

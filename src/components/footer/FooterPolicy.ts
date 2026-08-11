@@ -53,7 +53,7 @@ function renderSocialRow(): string {
           href="${link.href}"
           target="_blank"
           rel="noopener noreferrer"
-          class="inline-flex items-center justify-center w-9 h-9 rounded-full border border-neutral-700 text-neutral-400 transition-colors duration-200 hover:bg-primary-500 hover:border-primary-500 hover:text-secondary-900"
+          class="inline-flex items-center justify-center w-9 h-9 rounded-full border border-neutral-700 text-neutral-400 transition-colors duration-200 hover:bg-primary-500 hover:border-primary-500 hover:text-white"
           aria-label="${link.ariaLabel}"
         >
           ${getSocialIcon(link.platform)}

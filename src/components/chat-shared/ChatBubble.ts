@@ -13,7 +13,7 @@ const CHECK_DOUBLE = /* html */ `<svg width="13" height="13" viewBox="0 0 24 24"
 const CHECK_SINGLE = /* html */ `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>`;
 
 export function ChatBubble(): string {
-  const fileIcon = getLucideIcon("file-text", "w-4 h-4 text-[var(--color-primary-700,#a87c00)]");
+  const fileIcon = getLucideIcon("file-text", "w-4 h-4 text-[var(--color-primary-700,#ad5b00)]");
   const productIcon = getLucideIcon("package", "w-3.5 h-3.5");
   return /* html */ `
     <div :class="msg.direction === 'me' ? 'flex justify-end' : 'flex justify-start'">
@@ -44,7 +44,7 @@ export function ChatBubble(): string {
                        ? 'border-white/20 text-white/85 hover:text-white'
                        : 'border-black/10 text-[var(--color-text-secondary,#525252)] hover:text-[var(--color-text-primary,#0a0a0a)]'">
                     <span class="flex size-6 shrink-0 items-center justify-center rounded-md"
-                          :class="msg.direction === 'me' ? 'bg-white/10 text-[#f5b800]' : 'bg-black/5 text-[#857216]'">
+                          :class="msg.direction === 'me' ? 'bg-white/10 text-[#ff8600]' : 'bg-black/5 text-[#857216]'">
                       ${productIcon}
                     </span>
                     <span class="min-w-0 truncate" x-text="msg.productRef.label"></span>
@@ -74,8 +74,8 @@ export function ChatBubble(): string {
             <!-- File -->
             <template x-if="msg.body.type === 'file'">
               <a :href="msg.body.url" target="_blank" rel="noopener noreferrer" :download="msg.body.name"
-                 class="inline-flex items-center gap-2.5 rounded-[12px] border border-[var(--color-border-default,#e5e5e5)] bg-white px-3 py-2.5 text-[12px] no-underline text-[var(--color-text-primary,#0a0a0a)] hover:bg-[var(--color-primary-50,#fff8e1)] transition-colors">
-                <div class="grid size-8 shrink-0 place-items-center rounded-md bg-[var(--color-primary-50,#fff8e1)]">
+                 class="inline-flex items-center gap-2.5 rounded-[12px] border border-[var(--color-border-default,#e5e5e5)] bg-white px-3 py-2.5 text-[12px] no-underline text-[var(--color-text-primary,#0a0a0a)] hover:bg-[var(--color-primary-50,#fff3e6)] transition-colors">
+                <div class="grid size-8 shrink-0 place-items-center rounded-md bg-[var(--color-primary-50,#fff3e6)]">
                   ${fileIcon}
                 </div>
                 <div class="min-w-0">
@@ -91,7 +91,7 @@ export function ChatBubble(): string {
                  :class="msg.direction === 'me' ? 'justify-end' : 'justify-start'">
               <span x-text="msg.time"></span>
               <template x-if="msg.direction === 'me' && msg.read && !msg.pending">
-                <span class="text-[#d39c00]" role="img" aria-label="${t("chat.read")}">${CHECK_DOUBLE}</span>
+                <span class="text-[#db7300]" role="img" aria-label="${t("chat.read")}">${CHECK_DOUBLE}</span>
               </template>
               <template x-if="msg.direction === 'me' && (!msg.read || msg.pending)">
                 <span class="text-[#9b9b95]" role="img" aria-label="${t("chat.pending")}">${CHECK_SINGLE}</span>

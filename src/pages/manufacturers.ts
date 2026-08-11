@@ -68,7 +68,7 @@ appEl.innerHTML = `
   ${MegaMenu()}
 
   <!-- Main Content -->
-  <main class="flex-1 min-w-0 bg-[#f0f2f5] dark:bg-gray-900 pb-12">
+  <main class="flex-1 min-w-0 bg-[#f9f9f9] dark:bg-gray-900 pb-12">
     <div class="container-boxed pt-2 lg:pt-4">
       ${SubHeader({
         activeTab: 'manufacturers',

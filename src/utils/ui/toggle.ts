@@ -81,7 +81,7 @@ export function renderSwitch(opts: SwitchOptions): string {
       ${hidden}
       <span class="relative inline-flex shrink-0">
         <input type="checkbox"${checkboxAttrs} ${checked ? "checked" : ""} class="peer sr-only" />
-        <span class="block w-11 h-6 rounded-full bg-gray-300 transition-colors duration-200 peer-checked:bg-[var(--color-primary-500,#cc9900)] peer-focus-visible:ring-2 peer-focus-visible:ring-[var(--color-primary-500,#cc9900)] peer-focus-visible:ring-offset-1"></span>
+        <span class="block w-11 h-6 rounded-full bg-gray-300 transition-colors duration-200 peer-checked:bg-[var(--color-primary-500,#cc6b00)] peer-focus-visible:ring-2 peer-focus-visible:ring-[var(--color-primary-500,#cc6b00)] peer-focus-visible:ring-offset-1"></span>
         <span class="absolute top-0.5 left-0.5 w-5 h-5 rounded-full bg-white shadow transition-transform duration-200 motion-reduce:transition-none peer-checked:translate-x-5"></span>
       </span>
     </label>
@@ -127,7 +127,7 @@ export function renderSegmented(opts: SegmentedOptions): string {
       return `
         <label class="flex-1 cursor-pointer">
           <input type="radio" name="${escapeHtml(name)}" value="${escapeHtml(opt.value)}"${fieldAttr}${xModelAttr} ${checked} class="peer sr-only" />
-          <span class="block text-center text-sm font-medium py-2 px-3 rounded-md transition-colors select-none text-[color:var(--color-text-secondary)] peer-checked:bg-[var(--color-primary-500,#cc9900)] peer-checked:text-white">${escapeHtml(opt.label)}</span>
+          <span class="block text-center text-sm font-medium py-2 px-3 rounded-md transition-colors select-none text-[color:var(--color-text-secondary)] peer-checked:bg-[var(--color-primary-500,#cc6b00)] peer-checked:text-white">${escapeHtml(opt.label)}</span>
         </label>
       `;
     })

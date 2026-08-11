@@ -246,10 +246,10 @@ export function TailoredSelections(): string {
           <!-- Lead panel — Editorial Split: başlık + açıklama + CTA -->
           <a
             href="/size-ozel"
-            class="flex flex-col rounded-md p-5 md:p-6 bg-[linear-gradient(160deg,#fffdf4,var(--tailored-lead-bg,#fff8e1)_60%,#ffefb3_130%)]"
+            class="flex flex-col rounded-md p-5 md:p-6 bg-[linear-gradient(160deg,#fffdf4,var(--tailored-lead-bg,#fff3e6)_60%,#ffe1c2_130%)]"
             aria-label="${escapeHtml(t("tailored.title"))}"
           >
-            <p class="text-[11px] font-bold uppercase tracking-[0.12em] mb-2.5 text-[var(--tailored-lead-eyebrow-color,#a87c00)]"><span data-i18n="tailored.eyebrow">${t("tailored.eyebrow")}</span></p>
+            <p class="text-[11px] font-bold uppercase tracking-[0.12em] mb-2.5 text-[var(--tailored-lead-eyebrow-color,#ad5b00)]"><span data-i18n="tailored.eyebrow">${t("tailored.eyebrow")}</span></p>
             <h2
               class="text-[20px] md:text-[24px] font-bold leading-tight text-balance mb-2.5"
               style="color: var(--tailored-title-color, #111827);"

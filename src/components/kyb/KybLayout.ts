@@ -29,7 +29,7 @@ export const KYB_DOCUMENT_FIELDS: Array<{ key: string; labelKey: string; require
 function renderEmptyState(): string {
   return `
     <div class="bg-white rounded-md p-12 max-sm:px-5 max-sm:py-10 text-center border border-gray-200">
-      <div class="inline-flex items-center justify-center w-20 h-20 max-sm:w-16 max-sm:h-16 rounded-full mb-4" style="background:linear-gradient(135deg, var(--color-primary-400, #e6b212) 0%, var(--color-primary-500, #cc9900) 100%);color:white">
+      <div class="inline-flex items-center justify-center w-20 h-20 max-sm:w-16 max-sm:h-16 rounded-full mb-4" style="background:linear-gradient(135deg, var(--color-primary-400, #e6b212) 0%, var(--color-primary-500, #cc6b00) 100%);color:white">
         ${ICONS.shield}
       </div>
       <h2 class="text-xl max-sm:text-lg font-bold mb-2 text-balance">${t("kyb.notStartedTitle")}</h2>
