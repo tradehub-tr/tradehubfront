@@ -431,7 +431,7 @@ Alpine.data("sellerShop", () => ({
       sections: DEFAULT_SECTIONS,
       theme: {
         primaryColor: "#1e3a5f",
-        accentColor: "#cc9900",
+        accentColor: "#cc6b00",
         navBgColor: "#1f1f1f",
         navTextColor: "#ffffff",
       },

@@ -77,7 +77,7 @@ export function BillingInfoSection({
             :aria-selected="type === 'Bireysel'"
             @click="setType('Bireysel')"
             class="co-billing-toggle-card bg-white border border-[#e5e5e5] rounded-md p-[12px_14px] sm:p-[14px_16px] text-start flex flex-col gap-0.5 sm:gap-1 transition-[border-color,background-color,box-shadow] duration-150 motion-reduce:transition-none cursor-pointer hover:border-[#d4d4d4]"
-            :class="type === 'Bireysel' ? 'is-active bg-[#fff8e1] border-[#f5b800] shadow-[0_0_0_3px_rgba(245,184,0,0.12)]' : ''"
+            :class="type === 'Bireysel' ? 'is-active bg-[#fff3e6] border-[#ff8600] shadow-[0_0_0_3px_rgba(245,184,0,0.12)]' : ''"
           >
             <div class="co-bt-title font-semibold text-[12.5px] sm:text-[13.5px] text-[#1a1a1a]" data-i18n="checkout.billingIndividual">${t("checkout.billingIndividual")}</div>
             <div class="co-bt-sub text-[11px] sm:text-[12px] text-text-tertiary" data-i18n="checkout.billingIndividualDesc">${t("checkout.billingIndividualDesc")}</div>
@@ -88,7 +88,7 @@ export function BillingInfoSection({
             :aria-selected="type === 'Şirket'"
             @click="setType('Şirket')"
             class="co-billing-toggle-card bg-white border border-[#e5e5e5] rounded-md p-[12px_14px] sm:p-[14px_16px] text-start flex flex-col gap-0.5 sm:gap-1 transition-[border-color,background-color,box-shadow] duration-150 motion-reduce:transition-none cursor-pointer hover:border-[#d4d4d4]"
-            :class="type === 'Şirket' ? 'is-active bg-[#fff8e1] border-[#f5b800] shadow-[0_0_0_3px_rgba(245,184,0,0.12)]' : ''"
+            :class="type === 'Şirket' ? 'is-active bg-[#fff3e6] border-[#ff8600] shadow-[0_0_0_3px_rgba(245,184,0,0.12)]' : ''"
           >
             <div class="co-bt-title font-semibold text-[12.5px] sm:text-[13.5px] text-[#1a1a1a]" data-i18n="checkout.billingCompany">${t("checkout.billingCompany")}</div>
             <div class="co-bt-sub text-[11px] sm:text-[12px] text-text-tertiary" data-i18n="checkout.billingCompanyDesc">${t("checkout.billingCompanyDesc")}</div>
@@ -110,7 +110,7 @@ export function BillingInfoSection({
           </div>
           <label class="flex items-center gap-2 sm:gap-2.5 cursor-pointer text-[12px] sm:text-[13px] text-text-secondary select-none">
             <span class="relative flex items-center justify-center w-4 h-4 sm:w-[18px] sm:h-[18px] rounded-[4px] border transition-colors shrink-0"
-              :class="eInvoice ? 'bg-[var(--btn-bg,#f5b800)] border-[var(--btn-bg,#f5b800)]' : 'bg-white border-[#d4d4d4]'">
+              :class="eInvoice ? 'bg-[var(--btn-bg,#ff8600)] border-[var(--btn-bg,#ff8600)]' : 'bg-white border-[#d4d4d4]'">
               <input type="checkbox" x-model="eInvoice" class="absolute inset-0 opacity-0 cursor-pointer">
               <svg x-show="eInvoice" x-cloak class="w-2.5 h-2.5 sm:w-3 sm:h-3 text-white" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
             </span>
@@ -124,7 +124,7 @@ export function BillingInfoSection({
 
           <label class="flex items-center gap-2 sm:gap-2.5 cursor-pointer text-[12px] sm:text-[13px] text-[#1a1a1a] select-none">
             <span class="relative flex items-center justify-center w-4 h-4 sm:w-[18px] sm:h-[18px] rounded-[4px] border transition-colors shrink-0"
-              :class="sameAsShipping ? 'bg-[var(--btn-bg,#f5b800)] border-[var(--btn-bg,#f5b800)]' : 'bg-white border-[#d4d4d4]'">
+              :class="sameAsShipping ? 'bg-[var(--btn-bg,#ff8600)] border-[var(--btn-bg,#ff8600)]' : 'bg-white border-[#d4d4d4]'">
               <input type="checkbox" x-model="sameAsShipping" class="absolute inset-0 opacity-0 cursor-pointer">
               <svg x-show="sameAsShipping" x-cloak class="w-2.5 h-2.5 sm:w-3 sm:h-3 text-white" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
             </span>
@@ -183,7 +183,7 @@ function field(
         autocomplete="off"
         placeholder="${placeholder}"
         ${ml}${minl}
-        class="w-full h-10 sm:h-[44px] px-3 text-[13px] sm:text-[14px] text-[#1a1a1a] bg-white border rounded-md outline-none transition-colors placeholder:text-text-tertiary focus:border-[var(--btn-bg,#f5b800)] focus:shadow-[0_0_0_3px_rgba(245,184,0,0.12)]"
+        class="w-full h-10 sm:h-[44px] px-3 text-[13px] sm:text-[14px] text-[#1a1a1a] bg-white border rounded-md outline-none transition-colors placeholder:text-text-tertiary focus:border-[var(--btn-bg,#ff8600)] focus:shadow-[0_0_0_3px_rgba(245,184,0,0.12)]"
         :class="errors.${modelKey} ? 'border-[#b42318]' : 'border-[#e5e5e5]'"
       />
       <span x-show="errors.${modelKey}" x-cloak class="text-[11px] sm:text-[12px] text-[#b42318]" x-text="errors.${modelKey}"></span>

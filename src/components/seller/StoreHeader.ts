@@ -58,7 +58,7 @@ export function StoreHeader(): string {
               ${t("seller.sf.viewStore")}
             </a>
             <button
-              class="bg-(--btn-bg,#f5b800) hover:bg-(--btn-hover-bg,#d39c00) active:bg-(--btn-hover-bg,#d39c00) text-(--btn-text,#1a1a1a) text-[14px] font-semibold border border-(--btn-border-color,#d39c00) rounded-[var(--radius-button,8px)] active:scale-[0.97] transition-[background-color,color,transform] duration-150 motion-reduce:transition-none whitespace-nowrap"
+              class="bg-(--btn-bg,#ff8600) hover:bg-(--btn-hover-bg,#db7300) active:bg-(--btn-hover-bg,#db7300) text-(--btn-text,#1a1a1a) text-[14px] font-semibold border border-(--btn-border-color,#db7300) rounded-[var(--radius-button,8px)] active:scale-[0.97] transition-[background-color,color,transform] duration-150 motion-reduce:transition-none whitespace-nowrap"
               style="width: 180px; height: 40px; padding: 0px 12px;"
               data-chat-trigger :data-seller-id="sellerCode">
               ${t("seller.sf.contactNow")}
@@ -101,7 +101,7 @@ export function StoreHeader(): string {
             <!-- Best seller badge -->
             <template x-if="seller?.best_seller_rank">
               <a href="#" @click.prevent
-                 class="inline-flex items-center gap-1 text-sm text-[#222] border-b border-[#222] pb-0.5 hover:text-[#cc9900] hover:border-[#cc9900] transition-colors">
+                 class="inline-flex items-center gap-1 text-sm text-[#222] border-b border-[#222] pb-0.5 hover:text-[#cc6b00] hover:border-[#cc6b00] transition-colors">
                 <span x-text="'#' + seller.best_seller_rank + ' best seller in ' + (seller.best_seller_category || '')"></span>
               </a>
             </template>
@@ -113,12 +113,12 @@ export function StoreHeader(): string {
             <!-- Mobile CTA buttons — stacked below header -->
             <div class="flex flex-col lg:hidden gap-2 px-4 py-3 sm:px-6">
               <a :href="sellerCode ? '/magaza/' + sellerCode + '/dukkan' : '#'"
-                 class="w-full inline-flex items-center justify-center gap-1.5 py-2.5 border-(length:--btn-outline-border-width) border-(--btn-outline-border-color,#f5b800) rounded-[var(--radius-button,8px)] bg-(--btn-outline-bg,transparent) text-[13px] font-medium text-(--btn-outline-text,#d39c00) hover:bg-(--btn-outline-hover-bg,#fff8e1) hover:text-(--btn-outline-hover-text,#d39c00) hover:border-(--btn-outline-hover-text,#d39c00) active:scale-[0.97] transition-[background-color,color,transform] duration-150 motion-reduce:transition-none">
+                 class="w-full inline-flex items-center justify-center gap-1.5 py-2.5 border-(length:--btn-outline-border-width) border-(--btn-outline-border-color,#ff8600) rounded-[var(--radius-button,8px)] bg-(--btn-outline-bg,transparent) text-[13px] font-medium text-(--btn-outline-text,#db7300) hover:bg-(--btn-outline-hover-bg,#fff3e6) hover:text-(--btn-outline-hover-text,#db7300) hover:border-(--btn-outline-hover-text,#db7300) active:scale-[0.97] transition-[background-color,color,transform] duration-150 motion-reduce:transition-none">
                 ${storeIcon}
                 ${t("seller.sf.viewStore")}
               </a>
               <button
-                class="w-full py-2.5 bg-(--btn-bg,#f5b800) hover:bg-(--btn-hover-bg,#d39c00) active:bg-(--btn-hover-bg,#d39c00) text-(--btn-text,#1a1a1a) text-[13px] font-semibold border border-(--btn-border-color,#d39c00) rounded-[var(--radius-button,8px)] active:scale-[0.97] transition-[background-color,color,transform] duration-150 motion-reduce:transition-none"
+                class="w-full py-2.5 bg-(--btn-bg,#ff8600) hover:bg-(--btn-hover-bg,#db7300) active:bg-(--btn-hover-bg,#db7300) text-(--btn-text,#1a1a1a) text-[13px] font-semibold border border-(--btn-border-color,#db7300) rounded-[var(--radius-button,8px)] active:scale-[0.97] transition-[background-color,color,transform] duration-150 motion-reduce:transition-none"
                 data-chat-trigger :data-seller-id="sellerCode">
                 ${t("seller.sf.contactNow")}
               </button>
@@ -141,7 +141,7 @@ export function StoreHeader(): string {
                   <template x-if="seller?.review_count">
                     <a href="#reviews"
                        @click.prevent="setTab('reviews')"
-                       class="text-[12px] sm:text-[13px] text-[#cc9900] hover:underline leading-snug"
+                       class="text-[12px] sm:text-[13px] text-[#cc6b00] hover:underline leading-snug"
                        x-text="seller.review_count + ' ${t("seller.sf.reviews")}'"></a>
                   </template>
                 </div>
@@ -185,7 +185,7 @@ export function StoreHeader(): string {
                     </template>
                     <template x-if="items.length > 5">
                       <a href="#"
-                         class="inline-flex items-center gap-1 text-[13px] text-[#cc9900] hover:underline font-medium mt-1"
+                         class="inline-flex items-center gap-1 text-[13px] text-[#cc6b00] hover:underline font-medium mt-1"
                          aria-label="${t("seller.sf.viewAllCapabilities").replace("({{count}})", "")}"
                          @click.prevent>
                         <span x-text="'${t("seller.sf.viewAllCapabilities").replace("({{count}})", "")}(' + items.length + ')'"></span>

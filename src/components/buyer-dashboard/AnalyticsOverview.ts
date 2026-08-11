@@ -175,7 +175,7 @@ export async function initAnalyticsOverview(): Promise<void> {
           barWidth: "46%",
           itemStyle: {
             color: "rgba(245,184,0,0.18)",
-            borderColor: "#f5b800",
+            borderColor: "#ff8600",
             borderWidth: 1.5,
             borderRadius: [6, 6, 0, 0],
           },

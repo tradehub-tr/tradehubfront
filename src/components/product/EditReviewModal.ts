@@ -276,7 +276,7 @@ export function EditReviewModal(): string {
             <button
               type="submit"
               :disabled="loading || !bodyValid()"
-              class="h-9 px-5 rounded-lg bg-(--btn-bg,#f5b800) hover:bg-(--btn-hover-bg,#d39c00) active:bg-(--btn-hover-bg,#d39c00) text-(--btn-text,#1a1a1a) text-sm font-semibold border border-(--btn-border-color,#d39c00) disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-150 flex items-center gap-2"
+              class="h-9 px-5 rounded-lg bg-(--btn-bg,#ff8600) hover:bg-(--btn-hover-bg,#db7300) active:bg-(--btn-hover-bg,#db7300) text-(--btn-text,#1a1a1a) text-sm font-semibold border border-(--btn-border-color,#db7300) disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-150 flex items-center gap-2"
             >
               <svg x-show="loading" class="animate-spin h-4 w-4" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/></svg>
               <span x-text="loading ? '${t("prodUi.submitting")}' : '${t("prodUi.editReviewSave")}'"></span>

@@ -796,7 +796,7 @@ function isSelectableAvailable(axisName: string, optionLabel: string): boolean {
 function renderColorChip(color: CartDrawerColorModel, isSelected: boolean): string {
   const available = isColorAvailable(color.label);
   const borderStyle = isSelected
-    ? "border-primary-500 bg-primary-50/40 shadow-[0_0_0_1px_var(--color-primary-500,#cc9900)]"
+    ? "border-primary-500 bg-primary-50/40 shadow-[0_0_0_1px_var(--color-primary-500,#cc6b00)]"
     : available
       ? "border-border-default bg-surface hover:border-text-tertiary"
       : "border-border-default bg-surface opacity-40 cursor-not-allowed";
@@ -824,7 +824,7 @@ function renderSelectableChip(
 ): string {
   const available = isSelectableAvailable(axisName, option.label);
   const borderStyle = isSelected
-    ? "border-primary-500 bg-primary-50/40 shadow-[0_0_0_1px_var(--color-primary-500,#cc9900)]"
+    ? "border-primary-500 bg-primary-50/40 shadow-[0_0_0_1px_var(--color-primary-500,#cc6b00)]"
     : available
       ? "border-border-default bg-surface hover:border-text-tertiary"
       : "border-border-default bg-surface opacity-40 cursor-not-allowed";

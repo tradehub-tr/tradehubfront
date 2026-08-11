@@ -160,7 +160,7 @@ function categoryTile(t: ShowcaseTile, columns: number): string {
   return `
     <a
       href="${href}"
-      class="group relative block overflow-hidden rounded-md bg-gray-100 ${sizeCls} appearance-none focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-primary-500,#f5b800)] focus-visible:ring-offset-2"
+      class="group relative block overflow-hidden rounded-md bg-gray-100 ${sizeCls} appearance-none focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-primary-500,#ff8600)] focus-visible:ring-offset-2"
     >
       ${media}
       <span class="absolute inset-x-0 bottom-0 z-10 p-2.5 sm:p-3 lg:p-4">
@@ -185,14 +185,14 @@ function promoTile(t: ShowcaseTile, columns: number): string {
   return `
     <a
       href="${href}"
-      class="group relative flex flex-col justify-between gap-2 overflow-hidden rounded-md p-2.5 sm:p-3 lg:p-4 xl:p-5 text-white ${sizeCls} appearance-none focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-primary-500,#f5b800)] focus-visible:ring-offset-2"
+      class="group relative flex flex-col justify-between gap-2 overflow-hidden rounded-md p-2.5 sm:p-3 lg:p-4 xl:p-5 text-white ${sizeCls} appearance-none focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-primary-500,#ff8600)] focus-visible:ring-offset-2"
       style="background-color:${bg}"
     >
       <span class="pointer-events-none absolute inset-0 bg-white/0 transition-colors duration-200 group-hover:bg-white/10 motion-reduce:transition-none"></span>
       <span class="pointer-events-none absolute -bottom-4 -right-4 h-20 w-20 text-white/10 sm:h-24 sm:w-24 lg:h-28 lg:w-28" aria-hidden="true">${SHIELD_SVG}</span>
       ${
         badge
-          ? `<span class="relative z-10 inline-flex w-fit max-w-full items-center truncate rounded bg-[var(--color-primary-500,#f5b800)] px-2 py-0.5 text-[10px] xl:px-2.5 xl:py-1 xl:text-[11px] font-bold uppercase tracking-wide text-[#1a1a1a]">${escapeText(badge)}</span>`
+          ? `<span class="relative z-10 inline-flex w-fit max-w-full items-center truncate rounded bg-[var(--color-primary-500,#ff8600)] px-2 py-0.5 text-[10px] xl:px-2.5 xl:py-1 xl:text-[11px] font-bold uppercase tracking-wide text-[#1a1a1a]">${escapeText(badge)}</span>`
           : ""
       }
       ${title ? `<span class="relative z-10 line-clamp-3 break-words text-xs font-bold leading-snug sm:text-sm xl:text-base">${escapeText(title)}</span>` : ""}
@@ -238,7 +238,7 @@ export function CategoryShowcase(data: ShowcaseData = getCachedShowcase()): stri
         title
           ? `<div class="mb-4 flex items-baseline justify-between gap-3">
               <h2 class="text-sm sm:text-lg lg:text-xl font-semibold text-gray-900">${escapeText(title)}</h2>
-              <a href="/kategoriler" class="inline-flex shrink-0 items-center gap-1 text-xs sm:text-sm font-medium text-gray-600 transition-colors duration-150 hover:text-gray-900 appearance-none focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-primary-500,#f5b800)] focus-visible:ring-offset-2 rounded-md motion-reduce:transition-none">${getCurrentLang() === "en" ? "All categories" : "Tüm kategoriler"} ${ARROW_SVG}</a>
+              <a href="/kategoriler" class="inline-flex shrink-0 items-center gap-1 text-xs sm:text-sm font-medium text-gray-600 transition-colors duration-150 hover:text-gray-900 appearance-none focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-primary-500,#ff8600)] focus-visible:ring-offset-2 rounded-md motion-reduce:transition-none">${getCurrentLang() === "en" ? "All categories" : "Tüm kategoriler"} ${ARROW_SVG}</a>
             </div>`
           : ""
       }

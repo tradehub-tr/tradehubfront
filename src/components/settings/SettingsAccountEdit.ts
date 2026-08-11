@@ -221,7 +221,7 @@ function buyerBasicView(d: ProfileData): string {
     : "";
   const avatarHtml = d.avatar
     ? `<img src="${escapeHtml(sanitizeUrl(d.avatar))}" width="64" height="64" decoding="async" class="w-16 h-16 rounded-full object-cover border-2 border-gray-200" alt="avatar" />`
-    : `<div class="w-16 h-16 rounded-full flex items-center justify-center border-2 border-gray-200 text-2xl font-bold text-white" style="background:linear-gradient(135deg, var(--color-primary-400, #e6b212) 0%, var(--color-primary-500, #cc9900) 100%)">${escapeHtml((fullName || "?")[0].toLowerCase())}</div>`;
+    : `<div class="w-16 h-16 rounded-full flex items-center justify-center border-2 border-gray-200 text-2xl font-bold text-white" style="background:linear-gradient(135deg, var(--color-primary-400, #e6b212) 0%, var(--color-primary-500, #cc6b00) 100%)">${escapeHtml((fullName || "?")[0].toLowerCase())}</div>`;
 
   return `
     <div class="flex items-center gap-4 mb-4">${avatarHtml}<div>
@@ -333,7 +333,7 @@ function sellerBasicView(d: ProfileData): string {
   const fullName = `${d.first_name} ${d.last_name}`.trim();
   const avatarHtml = d.avatar
     ? `<img src="${escapeHtml(sanitizeUrl(d.avatar))}" width="64" height="64" decoding="async" class="w-16 h-16 rounded-full object-cover border-2 border-gray-200" alt="avatar" />`
-    : `<div class="w-16 h-16 rounded-full flex items-center justify-center border-2 border-gray-200 text-2xl font-bold text-white" style="background:linear-gradient(135deg, var(--color-primary-400, #e6b212) 0%, var(--color-primary-500, #cc9900) 100%)">${escapeHtml((fullName || "?")[0].toLowerCase())}</div>`;
+    : `<div class="w-16 h-16 rounded-full flex items-center justify-center border-2 border-gray-200 text-2xl font-bold text-white" style="background:linear-gradient(135deg, var(--color-primary-400, #e6b212) 0%, var(--color-primary-500, #cc6b00) 100%)">${escapeHtml((fullName || "?")[0].toLowerCase())}</div>`;
 
   return `
     <div class="flex items-center gap-4 mb-4">${avatarHtml}<div>

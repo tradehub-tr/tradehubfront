@@ -144,7 +144,7 @@ async function loadQuotes() {
                   <td class="p-3 text-center text-sm border-s border-gray-100 align-top">
                     ${q.status === 'Submitted' ? `
                       <div class="flex justify-center gap-1.5">
-                        <button class="quote-accept-btn px-3 py-1 rounded-full bg-(--btn-bg,#f5b800) hover:bg-(--btn-hover-bg,#d39c00) active:bg-(--btn-hover-bg,#d39c00) text-(--btn-text,#1a1a1a) text-xs font-medium border border-(--btn-border-color,#d39c00) active:scale-[0.97] transition-[transform,background-color] duration-150 motion-reduce:transition-none motion-reduce:active:scale-100" data-quote="${escapeHtml(q.name)}">${t('rfq.accept')}</button>
+                        <button class="quote-accept-btn px-3 py-1 rounded-full bg-(--btn-bg,#ff8600) hover:bg-(--btn-hover-bg,#db7300) active:bg-(--btn-hover-bg,#db7300) text-(--btn-text,#1a1a1a) text-xs font-medium border border-(--btn-border-color,#db7300) active:scale-[0.97] transition-[transform,background-color] duration-150 motion-reduce:transition-none motion-reduce:active:scale-100" data-quote="${escapeHtml(q.name)}">${t('rfq.accept')}</button>
                         <button class="quote-reject-btn px-3 py-1 rounded-full border border-gray-300 text-gray-700 text-xs font-medium [@media(hover:hover)_and_(pointer:fine)]:hover:bg-gray-50" data-quote="${escapeHtml(q.name)}">${t('rfq.reject')}</button>
                       </div>
                     ` : `<span class="text-xs font-medium ${q.status === 'Accepted' ? 'text-green-600' : q.status === 'Rejected' ? 'text-red-500' : 'text-gray-400'}">${escapeHtml(q.status)}</span>`}

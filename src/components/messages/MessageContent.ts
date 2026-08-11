@@ -155,7 +155,7 @@ export function MessageContent(): string {
             <template x-if="msg.isMe">
               <div class="flex items-end gap-2 max-w-[75%] max-sm:max-w-[85%] flex-row-reverse">
                 <div>
-                  <div class="bg-(--color-cta-primary,#cc9900)/10 rounded-md rounded-ee-sm px-4 py-2.5">
+                  <div class="bg-(--color-cta-primary,#cc6b00)/10 rounded-md rounded-ee-sm px-4 py-2.5">
                     ${productRefChip()}
                     <p class="text-[13px] text-(--color-text-body,#333333) leading-relaxed whitespace-pre-wrap break-words" x-html="msg.textHtml || msg.text"></p>
                     <template x-if="msg.videoCallUrl">
@@ -190,7 +190,7 @@ export function MessageContent(): string {
           <button type="button"
                   @click="startVideoCall()"
                   :disabled="startingCall"
-                  class="flex items-center justify-center w-9 h-9 border-none bg-transparent text-(--color-text-placeholder,#999999) cursor-pointer rounded-full hover:bg-(--color-surface-muted,#fafafa) hover:text-(--color-cta-primary,#cc9900) transition-colors flex-shrink-0 disabled:opacity-40 disabled:cursor-not-allowed"
+                  class="flex items-center justify-center w-9 h-9 border-none bg-transparent text-(--color-text-placeholder,#999999) cursor-pointer rounded-full hover:bg-(--color-surface-muted,#fafafa) hover:text-(--color-cta-primary,#cc6b00) transition-colors flex-shrink-0 disabled:opacity-40 disabled:cursor-not-allowed"
                   aria-label="${t("commonSvc.startVideoCall")}">
             <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 10.5l4.72-4.72a.75.75 0 011.28.53v11.38a.75.75 0 01-1.28.53l-4.72-4.72M4.5 18.75h9a2.25 2.25 0 002.25-2.25v-9a2.25 2.25 0 00-2.25-2.25h-9A2.25 2.25 0 002.25 7.5v9a2.25 2.25 0 002.25 2.25z"/>
@@ -210,7 +210,7 @@ export function MessageContent(): string {
           <!-- Send button -->
           <button type="submit"
                   class="flex items-center justify-center w-9 h-9 rounded-full border-none cursor-pointer transition-[background-color,color,opacity] duration-150 flex-shrink-0"
-                  :class="newMessage.trim() ? 'bg-(--color-cta-primary,#cc9900) text-(--color-surface,#ffffff) hover:opacity-90' : 'bg-(--color-surface-muted,#fafafa) text-(--color-text-placeholder,#999999) cursor-not-allowed'"
+                  :class="newMessage.trim() ? 'bg-(--color-cta-primary,#cc6b00) text-(--color-surface,#ffffff) hover:opacity-90' : 'bg-(--color-surface-muted,#fafafa) text-(--color-text-placeholder,#999999) cursor-not-allowed'"
                   :disabled="!newMessage.trim()"
                   aria-label="${t("messages.send")}">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">

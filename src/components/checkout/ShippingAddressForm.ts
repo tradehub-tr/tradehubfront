@@ -371,7 +371,7 @@ export function ShippingAddressForm(props: ShippingAddressFormProps = {}): strin
           x-show="!selectedAddressId && !showAddressForm"
           type="button"
           @click="showAddressForm = true"
-          class="co-add-row th-no-press m-0 p-[14px] border-[1.5px] border-dashed border-[#d4d4d4] rounded-md bg-[#fafafa] flex items-center justify-center gap-2 w-full text-text-secondary font-medium text-[13px] sm:text-[14px] cursor-pointer transition-colors hover:border-[#f5b800] hover:text-[#0a0a0a] hover:bg-[#fff8e1]"
+          class="co-add-row th-no-press m-0 p-[14px] border-[1.5px] border-dashed border-[#d4d4d4] rounded-md bg-[#fafafa] flex items-center justify-center gap-2 w-full text-text-secondary font-medium text-[13px] sm:text-[14px] cursor-pointer transition-colors hover:border-[#ff8600] hover:text-[#0a0a0a] hover:bg-[#fff3e6]"
         >
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M12 5v14M5 12h14"/>

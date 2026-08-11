@@ -72,8 +72,8 @@ export function TopRankingFilters(): string {
                   @click="pendingSubCategory = null"
                   class="px-3 py-1.5 rounded-full text-sm font-medium border transition-colors cursor-pointer"
                   :class="pendingSubCategory === null
-                    ? 'bg-[var(--color-primary-500,#cc9900)] text-white border-[var(--color-primary-500,#cc9900)]'
-                    : 'bg-white text-text-secondary border-border-default hover:border-[var(--color-primary-500,#cc9900)]'"
+                    ? 'bg-[var(--color-primary-500,#cc6b00)] text-white border-[var(--color-primary-500,#cc6b00)]'
+                    : 'bg-white text-text-secondary border-border-default hover:border-[var(--color-primary-500,#cc6b00)]'"
                   x-text="$t('topRankingPage.allCategories') + ' - ' + cat.name"
                 ></button>
                 <template x-for="sub in cat.children" :key="sub.slug">
@@ -82,8 +82,8 @@ export function TopRankingFilters(): string {
                     @click="pendingSubCategory = sub.slug"
                     class="px-3 py-1.5 rounded-full text-sm font-medium border transition-colors cursor-pointer"
                     :class="pendingSubCategory === sub.slug
-                      ? 'bg-[var(--color-primary-500,#cc9900)] text-white border-[var(--color-primary-500,#cc9900)]'
-                      : 'bg-white text-text-secondary border-border-default hover:border-[var(--color-primary-500,#cc9900)]'"
+                      ? 'bg-[var(--color-primary-500,#cc6b00)] text-white border-[var(--color-primary-500,#cc6b00)]'
+                      : 'bg-white text-text-secondary border-border-default hover:border-[var(--color-primary-500,#cc6b00)]'"
                     x-text="sub.name"
                   ></button>
                 </template>

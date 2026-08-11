@@ -59,8 +59,8 @@ function sparklineSvg(series: number[]): string {
   const [endX, endY] = pts[pts.length - 1].split(",");
   return `
     <svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="none" class="block w-full h-[42px]" aria-hidden="true">
-      <polyline points="${pts.join(" ")}" fill="none" stroke="#f5b800" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-      <circle cx="${endX}" cy="${endY}" r="3" fill="#f5b800"/>
+      <polyline points="${pts.join(" ")}" fill="none" stroke="#ff8600" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      <circle cx="${endX}" cy="${endY}" r="3" fill="#ff8600"/>
     </svg>
   `;
 }
@@ -129,7 +129,7 @@ function renderChannel(category: TailoredCategory, isActive: boolean): string {
          </span>`
       : "";
   const stateCls = isActive
-    ? "border-[#f5b800]/85 bg-white/[0.06]"
+    ? "border-[#ff8600]/85 bg-white/[0.06]"
     : "border-white/10 hover:border-white/25";
   return `
     <button type="button" role="tab" aria-selected="${isActive}" data-slug="${escapeHtml(slug)}"

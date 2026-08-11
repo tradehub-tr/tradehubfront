@@ -29,7 +29,7 @@ const ICONS: Record<ToastType, string> = {
 const COLORS: Record<ToastType, { bar: string; icon: string; iconBg: string }> = {
   success: { bar: "#16a34a", icon: "#16a34a", iconBg: "rgba(22,163,74,0.1)" },
   error: { bar: "#dc2626", icon: "#dc2626", iconBg: "rgba(220,38,38,0.1)" },
-  warning: { bar: "#cc9900", icon: "#cc9900", iconBg: "rgba(204,153,0,0.1)" },
+  warning: { bar: "#cc6b00", icon: "#cc6b00", iconBg: "rgba(204,153,0,0.1)" },
   info: { bar: "#2563eb", icon: "#2563eb", iconBg: "rgba(37,99,235,0.1)" },
 };
 

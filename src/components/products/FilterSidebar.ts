@@ -226,11 +226,11 @@ function renderPriceRange(section: PriceRangeFilterSection): string {
     "[&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:pointer-events-auto " +
     "[&::-webkit-slider-thumb]:h-3.5 [&::-webkit-slider-thumb]:w-3.5 [&::-webkit-slider-thumb]:rounded-full " +
     "[&::-webkit-slider-thumb]:bg-white [&::-webkit-slider-thumb]:border-2 " +
-    "[&::-webkit-slider-thumb]:border-[var(--color-primary-500,#f5b800)] [&::-webkit-slider-thumb]:shadow " +
+    "[&::-webkit-slider-thumb]:border-[var(--color-primary-500,#ff8600)] [&::-webkit-slider-thumb]:shadow " +
     "[&::-webkit-slider-thumb]:cursor-pointer " +
     "[&::-moz-range-thumb]:h-3.5 [&::-moz-range-thumb]:w-3.5 [&::-moz-range-thumb]:rounded-full " +
     "[&::-moz-range-thumb]:bg-white [&::-moz-range-thumb]:border-2 [&::-moz-range-thumb]:border-solid " +
-    "[&::-moz-range-thumb]:border-[var(--color-primary-500,#f5b800)] [&::-moz-range-thumb]:cursor-pointer " +
+    "[&::-moz-range-thumb]:border-[var(--color-primary-500,#ff8600)] [&::-moz-range-thumb]:cursor-pointer " +
     "[&::-moz-range-thumb]:pointer-events-auto";
   const rangeInput =
     "pointer-events-none absolute inset-x-0 top-1/2 m-0 h-0 w-full -translate-y-1/2 appearance-none " +
@@ -241,7 +241,7 @@ function renderPriceRange(section: PriceRangeFilterSection): string {
       <div class="mb-1 flex h-9 items-end gap-px" data-price-histogram aria-hidden="true"></div>
       <div class="relative mb-2.5 hidden h-4" data-price-slider>
         <div class="absolute inset-x-0 top-1/2 h-1 -translate-y-1/2 rounded-full bg-[var(--filter-input-border,#e5e7eb)]"></div>
-        <div class="absolute top-1/2 h-1 -translate-y-1/2 rounded-full bg-[var(--color-primary-500,#f5b800)]" data-price-fill></div>
+        <div class="absolute top-1/2 h-1 -translate-y-1/2 rounded-full bg-[var(--color-primary-500,#ff8600)]" data-price-fill></div>
         <input type="range" min="0" max="1000" value="0" step="1" data-price-handle="min"
           class="${rangeInput}" aria-label="${t("products.filterMin")}" />
         <input type="range" min="0" max="1000" value="1000" step="1" data-price-handle="max"

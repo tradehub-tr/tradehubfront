@@ -321,7 +321,7 @@ export function ProductQA(): string {
                         type="button"
                         :disabled="savingEdit || editText.trim().length < 10"
                         @click.stop="saveEditQuestion(q)"
-                        class="h-8 px-4 rounded-lg bg-(--btn-bg,#f5b800) hover:bg-(--btn-hover-bg,#d39c00) text-(--btn-text,#1a1a1a) text-[12px] font-semibold border border-(--btn-border-color,#d39c00) disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                        class="h-8 px-4 rounded-lg bg-(--btn-bg,#ff8600) hover:bg-(--btn-hover-bg,#db7300) text-(--btn-text,#1a1a1a) text-[12px] font-semibold border border-(--btn-border-color,#db7300) disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
                       >${t("product.qa.editSave")}</button>
                     </div>
                   </div>

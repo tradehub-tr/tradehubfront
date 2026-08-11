@@ -111,9 +111,9 @@ export function ReservationModal(): string {
 								<button @click="$store.reservationModal.selectSlot(slot.id)"
 										class="w-full flex items-start gap-3 p-3 rounded-lg border text-start cursor-pointer transition-colors bg-white"
 										:class="$store.reservationModal.selectedSlotId === slot.id
-											? 'border-(--color-cta-primary,#cc9900) bg-(--color-primary-50,#fff8e1)'
+											? 'border-(--color-cta-primary,#cc6b00) bg-(--color-primary-50,#fff3e6)'
 											: 'border-gray-200 hover:border-gray-300'">
-									<div class="w-10 h-10 flex items-center justify-center rounded-full bg-(--color-primary-50,#fff8e1) text-(--color-cta-primary,#cc9900) flex-shrink-0">
+									<div class="w-10 h-10 flex items-center justify-center rounded-full bg-(--color-primary-50,#fff3e6) text-(--color-cta-primary,#cc6b00) flex-shrink-0">
 										<svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
 											<path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z"/>
 										</svg>
@@ -124,7 +124,7 @@ export function ReservationModal(): string {
 										<div class="text-xs text-gray-500 mt-0.5" x-text="slot.notes || '${t("commonSvc.availableForMeeting")}'"></div>
 									</div>
 									<template x-if="$store.reservationModal.selectedSlotId === slot.id">
-										<div class="w-5 h-5 rounded-full bg-(--color-cta-primary,#cc9900) text-white flex items-center justify-center flex-shrink-0">
+										<div class="w-5 h-5 rounded-full bg-(--color-cta-primary,#cc6b00) text-white flex items-center justify-center flex-shrink-0">
 											<svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24">
 												<path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/>
 											</svg>

@@ -47,7 +47,7 @@ function linkify(text: string): string {
     const safeText = escapeHtml(url);
     out +=
       `<a href="${safeHref}" target="_blank" rel="noopener noreferrer" ` +
-      `class="underline text-(--color-cta-primary,#cc9900) hover:opacity-80 break-all">` +
+      `class="underline text-(--color-cta-primary,#cc6b00) hover:opacity-80 break-all">` +
       `${safeText}</a>`;
     last = start + url.length;
   }
@@ -96,7 +96,7 @@ interface RawChatwootMessage {
 
 function avatarFor(name: string): string {
   const seed = (name || "S").trim().charAt(0).toUpperCase();
-  return `https://ui-avatars.com/api/?name=${encodeURIComponent(seed)}&size=80&background=cc9900&color=fff&bold=true&format=png`;
+  return `https://ui-avatars.com/api/?name=${encodeURIComponent(seed)}&size=80&background=cc6b00&color=fff&bold=true&format=png`;
 }
 
 function todayLabel(): string {

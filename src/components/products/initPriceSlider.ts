@@ -62,7 +62,7 @@ export function updatePriceFacet(facets: FilterFacets): void {
     histo.innerHTML = pr.buckets
       .map((b) => {
         const h = Math.max(Math.round((b.count / maxCount) * 100), 4);
-        return `<div class="flex-1 rounded-t-sm bg-[var(--color-primary-500,#f5b800)]/40" style="height:${h}%"></div>`;
+        return `<div class="flex-1 rounded-t-sm bg-[var(--color-primary-500,#ff8600)]/40" style="height:${h}%"></div>`;
       })
       .join("");
 

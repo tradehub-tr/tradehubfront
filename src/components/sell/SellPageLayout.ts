@@ -9,7 +9,7 @@
  *   3. FinalCtaSection  "Başvuru 4 dakikada biter."
  *
  * Stil: Tailwind v4 utility-first, hex değerleri referans seller.css token'larından
- *   --brand=#f5b800  --brand-700=#d39c00  --brand-50=#fff8e1
+ *   --brand=#ff8600  --brand-700=#db7300  --brand-50=#fff3e6
  *   --bg=#f7f7f5     --surface=#ffffff    --surface-2=#fafaf8
  *   --border=#e8e6e0 --border-strong=#d5d2c9
  *   --text=#1a1a1a   --text-2=#4a4a48     --muted=#8a877f
@@ -61,8 +61,8 @@ const SVG_DASH = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" st
 const SVG_CHEVRON_DOWN = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>`;
 // ---------- Paylaşılan class'lar ----------
 const EYEBROW_CLS =
-  "inline-flex items-center gap-2 text-[11.5px] font-semibold uppercase tracking-[0.12em] text-[#d39c00] " +
-  "before:content-[''] before:inline-block before:w-[18px] before:h-px before:bg-[#d39c00]";
+  "inline-flex items-center gap-2 text-[11.5px] font-semibold uppercase tracking-[0.12em] text-[#db7300] " +
+  "before:content-[''] before:inline-block before:w-[18px] before:h-px before:bg-[#db7300]";
 
 const SECTION_HEAD_CLS = "flex flex-col gap-3.5 mb-12 max-w-[56ch]";
 const SECTION_H2_CLS =
@@ -206,7 +206,7 @@ function PricingCard(plan: PricingPlan, idx: number, trial?: TrialConfig): strin
     : "bg-white text-[#1a1a1a] border-[#e8e6e0] hover:border-[#d5d2c9] hover:shadow-[0_2px_6px_rgba(20,20,18,0.06)] [@media(hover:hover)_and_(pointer:fine)]:motion-safe:hover:-translate-y-0.5";
 
   const tagCls = isFeat ? "text-white/65" : "text-[#8a877f]";
-  const nameCls = isFeat ? "text-[#f5b800]" : "text-[#1a1a1a]";
+  const nameCls = isFeat ? "text-[#ff8600]" : "text-[#1a1a1a]";
   const subCls = isFeat ? "text-white/65" : "text-[#4a4a48]";
   const amountCls = isFeat ? "text-white" : "text-[#1a1a1a]";
   const perCls = isFeat ? "text-white/65" : "text-[#8a877f]";
@@ -233,7 +233,7 @@ function PricingCard(plan: PricingPlan, idx: number, trial?: TrialConfig): strin
     <div class="relative flex flex-col gap-3.5 rounded-2xl border p-5 lg:p-[26px_22px_22px] transition-[border-color,box-shadow,transform] duration-150 motion-reduce:transition-none ${cardCls}">
       ${
         badge
-          ? `<span class="absolute -top-2.5 start-[22px] bg-[#f5b800] text-[#1a1a1a] text-[10.5px] font-bold uppercase tracking-[0.08em] px-2.5 py-1 rounded-full border border-[#d39c00]">${escapeHtml(badge)}</span>`
+          ? `<span class="absolute -top-2.5 start-[22px] bg-[#ff8600] text-[#1a1a1a] text-[10.5px] font-bold uppercase tracking-[0.08em] px-2.5 py-1 rounded-full border border-[#db7300]">${escapeHtml(badge)}</span>`
           : ""
       }
       <span class="text-[11px] font-semibold uppercase tracking-[0.1em] ${tagCls}">${escapeHtml(tag)}</span>
@@ -622,8 +622,8 @@ function PricingMatrixDesktop(
         ${cols
           .map(
             (c) => `
-          <div class="text-center ${c.featured ? "bg-[#fff8e1] rounded-lg px-2 py-2.5 -mx-1 -my-2.5" : ""}">
-            <div class="text-[15px] font-semibold ${c.featured ? "text-[#d39c00]" : "text-[#1a1a1a]"}">${escapeHtml(c.n)}</div>
+          <div class="text-center ${c.featured ? "bg-[#fff3e6] rounded-lg px-2 py-2.5 -mx-1 -my-2.5" : ""}">
+            <div class="text-[15px] font-semibold ${c.featured ? "text-[#db7300]" : "text-[#1a1a1a]"}">${escapeHtml(c.n)}</div>
             <div class="text-xs text-[#8a877f] mt-0.5 tabular-nums" x-text="yearly ? '${escJs(c.py)}' : '${escJs(c.pm)}'">${escapeHtml(c.pm)}</div>
           </div>
         `
@@ -646,7 +646,7 @@ function PricingMatrixDesktop(
                 <span class="text-[#1a1a1a] font-medium">${escapeHtml(r.f)}</span>
                 ${
                   r.coming_soon
-                    ? `<span class="inline-block align-middle text-[9.5px] font-semibold uppercase tracking-[0.04em] px-1.5 py-0.5 rounded-full bg-[#f5b800]/15 text-[#9a7400]">Yakında</span>`
+                    ? `<span class="inline-block align-middle text-[9.5px] font-semibold uppercase tracking-[0.04em] px-1.5 py-0.5 rounded-full bg-[#ff8600]/15 text-[#9a7400]">Yakında</span>`
                     : ""
                 }
                 ${
@@ -714,7 +714,7 @@ function PricingMatrixAccordion(
                 ${plans
                   .map(
                     (p, j) => `
-                  <div class="text-center ${j === featuredIdx ? "text-[#d39c00]" : ""}">${escapeHtml(p.plan_name)}</div>
+                  <div class="text-center ${j === featuredIdx ? "text-[#db7300]" : ""}">${escapeHtml(p.plan_name)}</div>
                 `
                   )
                   .join("")}
@@ -769,7 +769,7 @@ function PricingEmpty(): string {
     <div class="rounded-2xl border border-[#e8e6e0] bg-white p-10 text-center text-[#4a4a48]">
       <p class="m-0 mb-2 text-base font-medium text-[#1a1a1a]">${t("sellPage.plansLoadFailed")}</p>
       <p class="m-0 text-sm">${t("sellPage.plansLoadRetry")}
-        <a href="${SELL_HREF}" data-seller-cta class="text-[#d39c00] font-medium underline">${t("sellPage.startApplication")}</a>.
+        <a href="${SELL_HREF}" data-seller-cta class="text-[#db7300] font-medium underline">${t("sellPage.startApplication")}</a>.
       </p>
     </div>
   `;
@@ -839,7 +839,7 @@ function PricingSection(
             class="appearance-none border-0 text-[12.5px] font-medium px-4 py-2 rounded-full focus:outline-none transition-colors duration-150"
           >
             ${t("sellPage.yearlyToggle")}
-            ${discountBadge ? `<span class="text-[10px] bg-[#f5b800] text-[#1a1a1a] px-1.5 py-0.5 rounded-full font-bold ms-1.5 tracking-[0.04em]">${discountBadge}</span>` : ""}
+            ${discountBadge ? `<span class="text-[10px] bg-[#ff8600] text-[#1a1a1a] px-1.5 py-0.5 rounded-full font-bold ms-1.5 tracking-[0.04em]">${discountBadge}</span>` : ""}
           </button>
         </div>
 

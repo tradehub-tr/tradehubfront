@@ -185,7 +185,7 @@ async function renderPage() {
                       <span class="text-[10px] text-[#999] font-medium">${t("sellPage.with")}</span>
                     </div>
                     <button
-                      class="bg-(--btn-bg,#f5b800) hover:bg-(--btn-hover-bg,#d39c00) active:bg-(--btn-hover-bg,#d39c00) text-(--btn-text,#1a1a1a) text-[12px] font-medium border border-(--btn-border-color,#d39c00) rounded-[var(--radius-button,8px)] px-5 py-2 active:scale-[0.97] transition-[background-color,transform] duration-150 motion-reduce:transition-none motion-reduce:active:scale-100 whitespace-nowrap"
+                      class="bg-(--btn-bg,#ff8600) hover:bg-(--btn-hover-bg,#db7300) active:bg-(--btn-hover-bg,#db7300) text-(--btn-text,#1a1a1a) text-[12px] font-medium border border-(--btn-border-color,#db7300) rounded-[var(--radius-button,8px)] px-5 py-2 active:scale-[0.97] transition-[background-color,transform] duration-150 motion-reduce:transition-none motion-reduce:active:scale-100 whitespace-nowrap"
                       @click="switchPage('contacts')">
                       ${t("sellPage.contactSupplier")}
                     </button>

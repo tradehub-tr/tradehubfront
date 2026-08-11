@@ -102,7 +102,7 @@ function renderSlideImage(slide: HeroSlide, isStatic: boolean): string {
   const heightCls = isStatic
     ? "w-full h-[180px] sm:h-[220px] md:h-[320px] lg:h-[400px] object-cover"
     : "w-full h-full object-cover";
-  const fallback = `this.style.display='none'; this.parentElement.style.background='linear-gradient(135deg, #1f1f1f, #cc9900)'; this.parentElement.style.minHeight='300px';`;
+  const fallback = `this.style.display='none'; this.parentElement.style.background='linear-gradient(135deg, #1f1f1f, #cc6b00)'; this.parentElement.style.minHeight='300px';`;
   const wrapper = isStatic ? "block relative" : "block relative w-full h-full";
   // CTA varsa link sarmalayalim, ama overlay icindeki CTA da link; cakismayi onlemek icin sadece overlay yoksa whole image link
   const hasOverlay = !!(slide.title || slide.subtitle || slide.ctaText);
@@ -436,7 +436,7 @@ const SECTION_RENDERERS: Record<string, SectionRenderer> = {
                     <template x-for="pg in visiblePages" :key="pg">
                       <button @click="goToPage(pg)"
                               :class="currentPage === pg ? 'text-white border-transparent' : 'bg-white text-gray-700 border-gray-200 hover:bg-gray-50'"
-                              :style="currentPage === pg ? 'background: var(--store-accent, #cc9900)' : ''"
+                              :style="currentPage === pg ? 'background: var(--store-accent, #cc6b00)' : ''"
                               class="w-9 h-9 flex items-center justify-center rounded-md border text-[13px] font-medium transition-colors" x-text="pg"></button>
                     </template>
                     <button @click="goToPage(currentPage + 1)" :disabled="currentPage === totalPages" aria-label="${t("common.next")}"
@@ -755,7 +755,7 @@ const SECTION_RENDERERS: Record<string, SectionRenderer> = {
                 <!-- CTA Butonlari -->
                 <div class="space-y-2.5">
                   <button
-                    class="w-full bg-(--btn-bg,#f5b800) hover:bg-(--btn-hover-bg,#d39c00) active:bg-(--btn-hover-bg,#d39c00) text-(--btn-text,#1a1a1a) text-[13px] font-semibold border border-(--btn-border-color,#d39c00) rounded-[var(--radius-button,8px)] py-2.5 shadow-[0_1px_0_#d39c00] active:scale-[0.97] transition-[background-color,color,transform] duration-150"
+                    class="w-full bg-(--btn-bg,#ff8600) hover:bg-(--btn-hover-bg,#db7300) active:bg-(--btn-hover-bg,#db7300) text-(--btn-text,#1a1a1a) text-[13px] font-semibold border border-(--btn-border-color,#db7300) rounded-[var(--radius-button,8px)] py-2.5 shadow-[0_1px_0_#db7300] active:scale-[0.97] transition-[background-color,color,transform] duration-150"
                     data-chat-trigger :data-seller-id="sellerCode">
                     ${t("sellerApp.contactNow")}
                   </button>

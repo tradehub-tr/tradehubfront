@@ -241,7 +241,7 @@ export function MobileProductLayout(): string {
       ${p.priceTiers
         .map(
           (tier, i) => `
-        <div class="pdm-tier-col flex flex-col items-center px-3 py-3.5 border-e border-border-default last:border-e-0 transition-colors duration-150 [&.pdm-tier-active]:bg-[#fff8e1]${i === 0 ? " pdm-tier-active" : ""}" data-tier-index="${i}">
+        <div class="pdm-tier-col flex flex-col items-center px-3 py-3.5 border-e border-border-default last:border-e-0 transition-colors duration-150 [&.pdm-tier-active]:bg-[#fff3e6]${i === 0 ? " pdm-tier-active" : ""}" data-tier-index="${i}">
           <span class="pdm-tier-price text-lg max-[374px]:text-[15px] font-bold text-[#111] leading-[1.3] [.pdm-tier-active_&]:text-[#b45309]">${formatCurrency(tier.price, getSelectedCurrency())}</span>
           <span class="pdm-tier-qty text-[11px] max-[374px]:text-[10px] text-text-placeholder mt-[3px] text-center [.pdm-tier-active_&]:text-[#92700c] [.pdm-tier-active_&]:font-medium">${tierQtyLabel(tier)}</span>
         </div>
@@ -510,9 +510,9 @@ export function MobileProductLayout(): string {
 
   const sectionTabs = `
     <div id="pdm-section-tabs" class="flex items-center gap-0 bg-surface border-b border-border-default sticky top-0 z-30 p-0">
-      <button type="button" class="pdm-section-tab pdm-section-tab-active flex-1 py-3 max-[374px]:py-2.5 text-sm max-[374px]:text-[13px] font-normal text-text-muted bg-transparent border-none border-b-2 border-b-transparent cursor-pointer text-center whitespace-nowrap transition-[color,border-color] duration-200 [&.pdm-section-tab-active]:text-[var(--pd-tab-active-color,#cc9900)] [&.pdm-section-tab-active]:font-semibold [&.pdm-section-tab-active]:border-b-[var(--pd-tab-active-border,#cc9900)]" data-pdm-tab="pdm-sec-overview">${t("product.overviewTab")}</button>
-      <button type="button" class="pdm-section-tab flex-1 py-3 max-[374px]:py-2.5 text-sm max-[374px]:text-[13px] font-normal text-text-muted bg-transparent border-none border-b-2 border-b-transparent cursor-pointer text-center whitespace-nowrap transition-[color,border-color] duration-200 [&.pdm-section-tab-active]:text-[var(--pd-tab-active-color,#cc9900)] [&.pdm-section-tab-active]:font-semibold [&.pdm-section-tab-active]:border-b-[var(--pd-tab-active-border,#cc9900)]" data-pdm-tab="pdm-sec-details">${t("product.detailsTab")}</button>
-      <button type="button" class="pdm-section-tab flex-1 py-3 max-[374px]:py-2.5 text-sm max-[374px]:text-[13px] font-normal text-text-muted bg-transparent border-none border-b-2 border-b-transparent cursor-pointer text-center whitespace-nowrap transition-[color,border-color] duration-200 [&.pdm-section-tab-active]:text-[var(--pd-tab-active-color,#cc9900)] [&.pdm-section-tab-active]:font-semibold [&.pdm-section-tab-active]:border-b-[var(--pd-tab-active-border,#cc9900)]" data-pdm-tab="pdm-sec-supplier">${t("product.recommendationsTab")}</button>
+      <button type="button" class="pdm-section-tab pdm-section-tab-active flex-1 py-3 max-[374px]:py-2.5 text-sm max-[374px]:text-[13px] font-normal text-text-muted bg-transparent border-none border-b-2 border-b-transparent cursor-pointer text-center whitespace-nowrap transition-[color,border-color] duration-200 [&.pdm-section-tab-active]:text-[var(--pd-tab-active-color,#cc6b00)] [&.pdm-section-tab-active]:font-semibold [&.pdm-section-tab-active]:border-b-[var(--pd-tab-active-border,#cc6b00)]" data-pdm-tab="pdm-sec-overview">${t("product.overviewTab")}</button>
+      <button type="button" class="pdm-section-tab flex-1 py-3 max-[374px]:py-2.5 text-sm max-[374px]:text-[13px] font-normal text-text-muted bg-transparent border-none border-b-2 border-b-transparent cursor-pointer text-center whitespace-nowrap transition-[color,border-color] duration-200 [&.pdm-section-tab-active]:text-[var(--pd-tab-active-color,#cc6b00)] [&.pdm-section-tab-active]:font-semibold [&.pdm-section-tab-active]:border-b-[var(--pd-tab-active-border,#cc6b00)]" data-pdm-tab="pdm-sec-details">${t("product.detailsTab")}</button>
+      <button type="button" class="pdm-section-tab flex-1 py-3 max-[374px]:py-2.5 text-sm max-[374px]:text-[13px] font-normal text-text-muted bg-transparent border-none border-b-2 border-b-transparent cursor-pointer text-center whitespace-nowrap transition-[color,border-color] duration-200 [&.pdm-section-tab-active]:text-[var(--pd-tab-active-color,#cc6b00)] [&.pdm-section-tab-active]:font-semibold [&.pdm-section-tab-active]:border-b-[var(--pd-tab-active-border,#cc6b00)]" data-pdm-tab="pdm-sec-supplier">${t("product.recommendationsTab")}</button>
     </div>
   `;
 
@@ -1013,7 +1013,7 @@ function reviewsTabsHtml(hasStore: boolean): string {
   if (!hasStore) return "";
   const p = getCurrentProduct();
   const tabCls =
-    "pdm-rev-tab pb-2 text-sm text-text-muted border-b-2 border-transparent font-medium whitespace-nowrap [&.pdm-rev-tab-active]:text-text-heading [&.pdm-rev-tab-active]:font-bold [&.pdm-rev-tab-active]:border-b-[var(--pd-tab-active-border,#cc9900)]";
+    "pdm-rev-tab pb-2 text-sm text-text-muted border-b-2 border-transparent font-medium whitespace-nowrap [&.pdm-rev-tab-active]:text-text-heading [&.pdm-rev-tab-active]:font-bold [&.pdm-rev-tab-active]:border-b-[var(--pd-tab-active-border,#cc6b00)]";
   return `
     <div class="flex gap-4 border-b border-border-default mb-3">
       <button type="button" data-rev-tab="product" class="${tabCls} pdm-rev-tab-active">${t("product.productReviewsTab", { count: String(p.reviewCount) })}</button>

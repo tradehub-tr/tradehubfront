@@ -115,7 +115,7 @@ export function LoginModal(): string {
             <button
               type="submit"
               :disabled="loading"
-              class="w-full h-12 bg-(--btn-bg,#f5b800) hover:bg-(--btn-hover-bg,#d39c00) active:bg-(--btn-hover-bg,#d39c00) text-(--btn-text,#1a1a1a) text-[15px] font-semibold border border-(--btn-border-color,#d39c00) rounded-lg active:scale-[0.97] motion-reduce:active:scale-100 transition-[transform,background-color,color] duration-150 motion-reduce:transition-none disabled:opacity-60 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+              class="w-full h-12 bg-(--btn-bg,#ff8600) hover:bg-(--btn-hover-bg,#db7300) active:bg-(--btn-hover-bg,#db7300) text-(--btn-text,#1a1a1a) text-[15px] font-semibold border border-(--btn-border-color,#db7300) rounded-lg active:scale-[0.97] motion-reduce:active:scale-100 transition-[transform,background-color,color] duration-150 motion-reduce:transition-none disabled:opacity-60 disabled:cursor-not-allowed flex items-center justify-center gap-2"
             >
               <svg x-show="loading" class="animate-spin h-4 w-4" fill="none" viewBox="0 0 24 24">
                 <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/>

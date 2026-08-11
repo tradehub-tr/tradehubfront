@@ -49,7 +49,7 @@ function mobileFilterButton(): string {
   // Detaylı filtre sheet'ini açar (ManufacturerFilterSheet `mfr-filter-open` dinler).
   return `
     <button type="button" data-mfr-filter-btn aria-label="${t("mfr.list.filter")}"
-      class="th-no-press shrink-0 inline-flex items-center justify-center w-12 self-stretch text-[#222] hover:bg-gray-50 border-e border-gray-100 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--input-focus-border-color,#f5b800)] focus-visible:ring-inset">
+      class="th-no-press shrink-0 inline-flex items-center justify-center w-12 self-stretch text-[#222] hover:bg-gray-50 border-e border-gray-100 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--input-focus-border-color,#ff8600)] focus-visible:ring-inset">
       <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M4 5h16M7 12h10M10 19h4"/></svg>
     </button>
   `;
