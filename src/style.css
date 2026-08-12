@@ -414,7 +414,7 @@
 
   /* Focus state */
   --input-focus-border-color: var(--color-primary-500);
-  --input-focus-ring-color: rgba(204, 153, 0, 0.12);
+  --input-focus-ring-color: rgba(255, 134, 0, 0.12);
   --input-focus-ring-width: 2px;
 
   /* Disabled state */
