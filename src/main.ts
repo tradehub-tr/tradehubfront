@@ -160,7 +160,7 @@ appEl.innerHTML = `
   <!-- Main Content -->
   <main>
     <!-- Top Hero: Split hero — Sarı İmza slider + En İyi Fırsatlar/RFQ yan paneli -->
-    <section class="pt-1 pb-2 xl:pt-3 xl:pb-4" aria-label="${t("commonNav.featuredCampaigns")}">
+    <section class="pt-1 pb-3 xl:pt-3 xl:pb-4" aria-label="${t("commonNav.featuredCampaigns")}">
       <div class="container-boxed">
         <div class="grid gap-3 xl:grid-cols-[minmax(0,1fr)_312px]">
           <div class="h-[280px] min-w-0 sm:h-[360px]">
@@ -172,14 +172,14 @@ appEl.innerHTML = `
     </section>
 
     <!-- Category Showcase: Bento grid (journal-style) -->
-    <section class="pt-1 pb-2 xl:py-6" aria-label="Kategori vitrini">
+    <section class="py-3 xl:py-6" aria-label="Kategori vitrini">
       <div class="container-boxed">
         ${CategoryShowcase(initialCategoryShowcase)}
       </div>
     </section>
 
     <!-- Hero: Categories + Recommendation Slider + Right Banner Slider -->
-    <section class="pt-1 pb-2 xl:py-6" aria-label="Browse categories and recommendations">
+    <section class="py-3 xl:py-6" aria-label="Browse categories and recommendations">
       <div class="container-boxed">
         <div class="flex flex-col xl:flex-row gap-(--space-card-gap) items-stretch">
           <div class="hidden xl:block xl:w-[300px] xl:flex-shrink-0">

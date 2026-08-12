@@ -202,12 +202,11 @@ export function TopDeals(): string {
 
   return `
     <section
-      class="py-4 lg:py-6"
+      class="py-3 lg:py-6 lg:mt-7"
       aria-label="Top Deals"
       aria-busy="true"
       data-home-section="top-deals"
       data-home-section-state="pending"
-      style="margin-top: 28px;"
     >
       <div class="container-boxed">
         <div class="rounded-md" style="background-color: var(--topdeals-bg, #F8F8F8); padding: var(--space-card-padding, 16px);">

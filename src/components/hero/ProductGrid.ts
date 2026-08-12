@@ -175,7 +175,8 @@ export function ProductGrid(): string {
       data-home-section-state="pending"
       aria-label="Recommended Products"
       aria-busy="true"
-      style="background-color: var(--product-bg, #f4f4f4); padding-top: 28px; padding-bottom: 28px;"
+      class="py-3 lg:py-7"
+      style="background-color: var(--product-bg, #f4f4f4);"
     >
       <div class="container-wide">
         <div

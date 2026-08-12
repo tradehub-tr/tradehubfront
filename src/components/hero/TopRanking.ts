@@ -87,12 +87,11 @@ export function TopRanking(): string {
 
   return `
     <section
-      class="py-4 lg:py-6"
+      class="py-3 lg:py-6 lg:mt-7"
       aria-label="Top Ranking"
       aria-busy="true"
       data-home-section="top-ranking"
       data-home-section-state="pending"
-      style="margin-top: 28px;"
     >
       <div class="container-boxed">
         <div class="relative overflow-hidden rounded-md" style="background-color: var(--topranking-bg, #F5F5F5);">

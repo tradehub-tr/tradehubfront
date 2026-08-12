@@ -234,12 +234,11 @@ export function initTailoredSelections(): Promise<void> {
 export function TailoredSelections(): string {
   return `
     <section
-      class="py-4 lg:py-6"
+      class="py-3 lg:py-6 lg:mt-7"
       aria-label="Tailored Selections"
       aria-busy="true"
       data-home-section="tailored-selections"
       data-home-section-state="pending"
-      style="margin-top: 28px;"
     >
       <div class="container-boxed">
         <div class="min-h-[328px] rounded-md grid grid-cols-1 lg:grid-cols-[260px_minmax(0,1fr)] gap-3" style="background-color: var(--tailored-bg, #F5F5F5); padding: var(--space-card-padding, 16px);">
