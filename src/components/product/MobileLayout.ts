@@ -23,7 +23,7 @@ import { VerificationBadge, resolveVerifications } from "../seller/VerificationB
 import { getSellerUrl } from "../../utils/sellerUrl";
 import { getCountryCode } from "../../utils/country";
 import { getFlagSvg } from "../../utils/flags";
-import { escapeHtml, sanitizeUrl } from "../../utils/sanitize";
+import { escapeHtml, sanitizeUrl, sanitizeRichHtml } from "../../utils/sanitize";
 import { OptionsSheet, initOptionsSheet } from "./OptionsSheet";
 import { MediaViewer, initMediaViewer, openMediaViewer, collectVideoUrls } from "./MediaViewer";
 
@@ -371,6 +371,21 @@ export function MobileProductLayout(): string {
       })
     : "";
 
+  // ── Section: Açıklama (rich HTML) — masaüstündeki "Açıklama" sekmesinin
+  // mobil karşılığı; Detaylar bölümünün başında, başlığa dokununca açılır.
+  // Tipografi ProductDescription.ts ile birebir (admin RichTextEditor uyumu).
+  const descriptionSection = p.description?.trim()
+    ? collapsibleSection({
+        id: "pdm-description-section",
+        title: t("product.description"),
+        bodyHtml: `
+      <div class="max-w-none text-[14px] leading-[1.7] text-[var(--pd-title-color,#111827)] [&_p]:mb-[8px] [&_h2]:mt-[16px] [&_h2]:mb-[8px] [&_h2]:text-[18px] [&_h2]:font-bold [&_h3]:mt-[12px] [&_h3]:mb-[6px] [&_h3]:text-[15px] [&_h3]:font-semibold [&_ul]:mb-[8px] [&_ul]:list-disc [&_ul]:ps-[20px] [&_ol]:mb-[8px] [&_ol]:list-decimal [&_ol]:ps-[20px] [&_li]:mb-[2px] [&_a]:text-[#2563eb] [&_a]:underline [&_img]:my-[12px] [&_img]:max-w-full [&_img]:rounded-md">
+        ${sanitizeRichHtml(p.description)}
+      </div>
+    `,
+      })
+    : "";
+
   // ── Section: Order protection (static assurance, istoc-branded) ──
   // Sprint note: backend yok — bu blok platform güvence bilgisini özetleyen
   // STATİK içeriktir, listing-level veri çekmez.
@@ -539,6 +554,7 @@ export function MobileProductLayout(): string {
 
       <!-- Details section -->
       <div id="pdm-sec-details">
+        ${descriptionSection}
         ${shippingSection}
         ${processingTimeSection}
         ${keyAttrsSection}

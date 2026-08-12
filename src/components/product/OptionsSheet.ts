@@ -13,6 +13,7 @@
 import { getCurrentProduct } from "../../alpine/product";
 import { t } from "../../i18n";
 import { formatCurrency, getSelectedCurrency } from "../../services/currencyService";
+import { moneyFlowHtml, resetMoneyFlows, updateMoneyFlow } from "../../utils/moneyFlow";
 import { tierQtyLabel } from "./variantPrice";
 import type { ProductDetail, ProductVariant, SkuMatrixEntry, VariantOption } from "../../types/product";
 import { bottomSheet, closeSheet, syncPriceTiersPanel } from "./MobileLayout";
@@ -117,6 +118,8 @@ function resetState(): void {
   state.noVariantQty = 0;
   state.breakdownOpen = false;
   state.chipSelections = new Map();
+  // Sheet başka ürünle/sıfır seçimle kurulurken eski tutardan yuvarlanmasın.
+  resetMoneyFlows("optsheet:");
   const model = buildModel(getCurrentProduct());
   for (const chip of model.chipVariants) {
     const first = chip.options.find((o) => o.available) ?? chip.options[0];
@@ -386,8 +389,10 @@ function render(): void {
 
   document.getElementById("pdm-opt-chevron")?.classList.toggle("rotate-180", state.breakdownOpen);
 
-  const subtotalAmtEl = document.getElementById("pdm-opt-subtotal-amt");
-  if (subtotalAmtEl) subtotalAmtEl.textContent = formatCurrency(total * unitPrice, currency);
+  // Masaüstü drawer'daki number-flow "odometre" animasyonunun aynısı: metni
+  // komple değiştirmek yerine yalnız değişen basamaklar döner.
+  const subtotalSlot = document.querySelector<HTMLElement>('[data-money-flow="optsheet:subtotal"]');
+  updateMoneyFlow(subtotalSlot, total * unitPrice, currency);
 
   const enabled = total >= p.moq;
   const addBtn = document.getElementById("pdm-opt-add") as HTMLButtonElement | null;
@@ -469,9 +474,16 @@ function onStartOrder(): void {
   void submitOrderAndGoToCart();
 }
 
-function onStepper(optId: string, delta: number): void {
+/** Masaüstü drawer'la aynı kural (SharedCartDrawer): MOQ katlarıyla satılan
+ *  üründe stepper adımı = MOQ, aksi halde 1. */
+function getStepQty(p: ProductDetail): number {
+  return p.sellInMoqMultiples ? Math.max(1, p.moq || 1) : 1;
+}
+
+function onStepper(optId: string, direction: 1 | -1): void {
+  const step = getStepQty(getCurrentProduct());
   const current = state.rowQty.get(optId) ?? 0;
-  state.rowQty.set(optId, Math.max(0, current + delta));
+  state.rowQty.set(optId, Math.max(0, current + direction * step));
   render();
 }
 
@@ -495,13 +507,13 @@ function bindEvents(root: HTMLElement): void {
       return;
     }
     if (target.closest<HTMLButtonElement>("[data-opt-novariant-inc]")) {
-      state.noVariantQty += 1;
+      state.noVariantQty += getStepQty(getCurrentProduct());
       render();
       return;
     }
     const noVariantDec = target.closest<HTMLButtonElement>("[data-opt-novariant-dec]");
     if (noVariantDec && !noVariantDec.disabled) {
-      state.noVariantQty = Math.max(0, state.noVariantQty - 1);
+      state.noVariantQty = Math.max(0, state.noVariantQty - getStepQty(getCurrentProduct()));
       render();
       return;
     }
@@ -557,7 +569,7 @@ export function OptionsSheet(): string {
       <div id="pdm-opt-breakdown" class="hidden"></div>
       <button type="button" id="pdm-opt-subtotal-btn" class="th-no-press appearance-none w-full flex items-center gap-2 pb-2.5 text-start focus:outline-none">
         <span class="text-[13px] text-text-secondary flex-1">${t("cart.subtotalExTax")}</span>
-        <span id="pdm-opt-subtotal-amt" class="text-[17px] font-bold text-text-heading tabular-nums"></span>
+        <span id="pdm-opt-subtotal-amt" class="text-[17px] font-bold text-text-heading tabular-nums">${moneyFlowHtml("optsheet:subtotal", 0, getSelectedCurrency())}</span>
         <svg id="pdm-opt-chevron" class="shrink-0 transition-transform duration-200 text-text-tertiary" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m18 15-6-6-6 6"/></svg>
       </button>
       <div class="flex items-center gap-2 pb-3">
