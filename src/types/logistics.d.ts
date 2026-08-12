@@ -227,6 +227,361 @@ export interface ShipmentExceptionCodeDetail extends ShipmentExceptionCodeListIt
   suggested_action?: string;
 }
 
+// ── Sevkiyat ve ilgili varlıklar (GEÇİCİ SÖZLEŞME) ──
+// DocType'ları henüz yok; alanlar logistics/contract.py'de beyan edildi.
+// Faz F backend'i bu sözleşmeye implement edecek.
+/** Sevkiyat — kaynak: TUR-105, TUR-106, TUR-107 */
+export interface ShipmentListItem {
+  name: string;
+  order: string;
+  seller_profile: string;
+  buyer?: string;
+  status: string;
+  shipment_type: string;
+  channel?: string;
+  carrier?: string;
+  carrier_service?: string;
+  tracking_number?: string;
+  package_count?: number;
+  chargeable_weight?: number;
+  shipped_date?: string;
+  estimated_delivery_date?: string;
+  delivered_date?: string;
+  is_delayed?: number;
+  modified?: string;
+}
+
+export interface ShipmentItemsRow {
+  item: string;
+  item_name: string;
+  ordered_qty: number;
+  shipped_qty: number;
+  remaining_qty?: number;
+  uom?: string;
+  weight_kg?: number;
+  returned_qty?: number;
+}
+
+export interface ShipmentPackagesRow {
+  package_code: string;
+  sequence_label: string;
+  package_type?: string;
+  parent_package?: string;
+  length_cm?: number;
+  width_cm?: number;
+  height_cm?: number;
+  weight_kg?: number;
+  desi?: number;
+  barcode_url?: string;
+  label_url?: string;
+  label_printed_at?: string;
+}
+
+export interface ShipmentLegsRow {
+  sequence: number;
+  leg_type: string;
+  status: string;
+  carrier?: string;
+  origin_branch?: string;
+  destination_branch?: string;
+  handover_point?: string;
+  handover_proof?: string;
+  vehicle_type?: string;
+  started_at?: string;
+  completed_at?: string;
+  cost?: number;
+}
+
+export interface ShipmentEventsRow {
+  event_time: string;
+  status: string;
+  source: string;
+  carrier_status_code?: string;
+  carrier_status_text?: string;
+  location?: string;
+  description?: string;
+  exception_code?: string;
+  actor?: string;
+  reason?: string;
+  dedupe_key?: string;
+}
+
+export interface ShipmentDetail extends ShipmentListItem {
+  origin_address_snapshot?: Record<string, unknown> | null;
+  destination_address_snapshot?: Record<string, unknown> | null;
+  warehouse?: string;
+  total_weight?: number;
+  total_desi?: number;
+  cost_paid_by?: string;
+  carrier_cost?: number;
+  customer_charge?: number;
+  currency?: string;
+  exception_code?: string;
+  delivery_code_required?: number;
+  payment_required_before_delivery?: number;
+  notes?: string;
+  driver_name?: string;
+  driver_phone?: string;
+  vehicle_plate?: string;
+  appointment_at?: string;
+  appointment_window?: string;
+  delivery_code_status?: string;
+  delivery_code_attempts?: number;
+  pickup_location?: string;
+  payment_status?: string;
+  items: ShipmentItemsRow[];
+  packages: ShipmentPackagesRow[];
+  legs: ShipmentLegsRow[];
+  events: ShipmentEventsRow[];
+}
+
+/** Teslim Kanıtı — kaynak: TUR-115 */
+export interface ProofOfDeliveryListItem {
+  delivered_at: string;
+  received_by: string;
+  delivery_code_used?: number;
+  signature_url?: string;
+  photo_url?: string;
+  document_url?: string;
+  location_source?: string;
+  location_recorded_at?: string;
+}
+
+export type ProofOfDeliveryDetail = ProofOfDeliveryListItem;
+
+/** İade Talebi — kaynak: TUR-116 */
+export interface ReturnRequestListItem {
+  name: string;
+  order: string;
+  shipment?: string;
+  seller_profile: string;
+  buyer: string;
+  status: string;
+  reason: string;
+  requested_at: string;
+  decided_at?: string;
+  is_closed?: number;
+}
+
+export interface ReturnRequestItemsRow {
+  item: string;
+  item_name: string;
+  requested_qty: number;
+  received_qty?: number;
+  accepted_qty?: number;
+  uom?: string;
+  inspection_result?: string;
+  inspection_note?: string;
+  unit_refund?: number;
+}
+
+export interface ReturnRequestDetail extends ReturnRequestListItem {
+  decision_note?: string;
+  return_shipment?: string;
+  return_label_url?: string;
+  inspection_result?: string;
+  inspection_note?: string;
+  refund_amount?: number;
+  refund_triggered_at?: string;
+  exchange_shipment?: string;
+  closed_at?: string;
+  closed_by?: string;
+  items: ReturnRequestItemsRow[];
+}
+
+/** Fiyat Teklifi — kaynak: TUR-121 */
+export interface PriceQuoteListItem {
+  quote_id: string;
+  carrier: string;
+  carrier_service?: string;
+  carrier_cost: number;
+  customer_charge: number;
+  currency: string;
+  chargeable_weight?: number;
+  applied_rule?: string;
+  rule_priority?: number;
+  valid_until?: string;
+  is_snapshot?: number;
+  surcharges?: Record<string, unknown> | null;
+}
+
+export type PriceQuoteDetail = PriceQuoteListItem;
+
+/** Bağlantı Testi Sonucu — kaynak: TUR-110, TUR-111 */
+export interface ConnectionTestListItem {
+  carrier_account: string;
+  probe: string;
+  succeeded: number;
+  http_status?: number;
+  duration_ms?: number;
+  message?: string;
+  error_code?: string;
+  tested_at: string;
+  tested_by?: string;
+}
+
+export type ConnectionTestDetail = ConnectionTestListItem;
+
+/** Entegrasyon Logu — kaynak: TUR-110 */
+export interface IntegrationLogListItem {
+  name: string;
+  carrier: string;
+  carrier_account?: string;
+  operation: string;
+  direction: string;
+  shipment?: string;
+  succeeded: number;
+  http_status?: number;
+  duration_ms?: number;
+  attempt?: number;
+  error_code?: string;
+  error_message?: string;
+  request_body?: unknown;
+  response_body?: unknown;
+  is_retriable?: number;
+  created_at: string;
+}
+
+export type IntegrationLogDetail = IntegrationLogListItem;
+
+/** Palet Planı — kaynak: TUR-120 */
+export interface PalletPlanListItem {
+  name: string;
+  shipment: string;
+  pallet_code: string;
+  pallet_type?: string;
+  layer_count?: number;
+  max_layers?: number;
+  package_count?: number;
+  loaded_weight_kg?: number;
+  max_weight_kg?: number;
+  loaded_desi?: number;
+  is_overloaded?: number;
+}
+
+export type PalletPlanDetail = PalletPlanListItem;
+
+/** Toplu İçe Aktarma — kaynak: TUR-107 */
+export interface ImportJobListItem {
+  name: string;
+  file_name: string;
+  status: string;
+  total_rows: number;
+  valid_rows?: number;
+  error_rows?: number;
+  applied_rows?: number;
+  column_mapping?: Record<string, unknown> | null;
+  errors?: Record<string, unknown> | null;
+  created_at: string;
+  created_by?: string;
+}
+
+export type ImportJobDetail = ImportJobListItem;
+
+/** Bildirim Şablonu — kaynak: TUR-113 */
+export interface NotificationTemplateListItem {
+  name: string;
+  event: string;
+  channel: string;
+  recipient_role: string;
+  subject?: string;
+  body?: string;
+  is_active?: number;
+  is_mandatory?: number;
+}
+
+export type NotificationTemplateDetail = NotificationTemplateListItem;
+
+/** Bildirim Tercihi — kaynak: TUR-113 */
+export interface NotificationPreferenceListItem {
+  template: string;
+  event: string;
+  channel: string;
+  recipient_role: string;
+  enabled: number;
+  is_mandatory?: number;
+  locked_reason?: string;
+}
+
+export type NotificationPreferenceDetail = NotificationPreferenceListItem;
+
+/** Operasyon Alarmı — kaynak: TUR-113 */
+export interface OperationAlertListItem {
+  name: string;
+  alert_type: string;
+  severity: string;
+  title: string;
+  detail?: string;
+  shipment?: string;
+  carrier?: string;
+  affected_count?: number;
+  raised_at: string;
+  acknowledged_at?: string;
+  acknowledged_by?: string;
+}
+
+export type OperationAlertDetail = OperationAlertListItem;
+
+/** Fiyatlandırma Kuralı — kaynak: TUR-121 */
+export interface PricingRuleListItem {
+  name: string;
+  rule_name: string;
+  carrier?: string;
+  carrier_service?: string;
+  shipping_method?: string;
+  priority: number;
+  is_active?: number;
+  min_desi?: number;
+  max_desi?: number;
+  min_weight_kg?: number;
+  max_weight_kg?: number;
+  origin_city?: string;
+  destination_city?: string;
+  zone?: string;
+  min_order_total?: number;
+  base_cost?: number;
+  base_charge?: number;
+  per_desi_charge?: number;
+  currency?: string;
+  valid_from?: string;
+  valid_until?: string;
+}
+
+export type PricingRuleDetail = PricingRuleListItem;
+
+/** Performans Raporu — kaynak: TUR-118 */
+export interface PerformanceReportListItem {
+  dimension: string;
+  dimension_label: string;
+  shipment_count: number;
+  delivered_count?: number;
+  delayed_count?: number;
+  failed_count?: number;
+  returned_count?: number;
+  avg_delivery_days?: number;
+  p90_delivery_days?: number;
+  on_time_rate?: number;
+  failure_rate?: number;
+  return_rate?: number;
+}
+
+export type PerformanceReportDetail = PerformanceReportListItem;
+
+/** Maliyet Raporu — kaynak: TUR-118, TUR-121 */
+export interface CostReportListItem {
+  dimension: string;
+  dimension_label: string;
+  shipment_count: number;
+  carrier_cost_total: number;
+  customer_charge_total: number;
+  margin_total: number;
+  margin_rate?: number;
+  avg_cost_per_shipment?: number;
+  currency: string;
+}
+
+export type CostReportDetail = CostReportListItem;
+
 // ── Taşıyıcı hesabı ──
 export interface CarrierAccount {
   name: string;
