@@ -1,3 +1,18 @@
+## [v2.4.0-alpha.5] - 2026-08-12 ALPHA
+
+Bu surum alpha.istoc.com'da gelistirme asamasindadir.
+
+### Eklendi
+- feat(pdm): mobil Seçenekler sheet'ini masaüstü drawer'la eşitle (@TurksabYonetim)
+  - Adet stepper'ı artık masaüstündeki kuralla aynı: sellInMoqMultiples ürünlerde adım = MOQ (örn. 96'şar), diğerlerinde 1 (önceden hep 1'di).
+  - Ara toplam tutarı masaüstündeki number-flow 'odometre' animasyonuyla güncelleniyor (moneyFlow utility, optsheet: anahtar grubu).
+  - Detaylar bölümünün başına eksik olan Açıklama (rich HTML) bölümü eklendi — collapsibleSection + sanitizeRichHtml, tipografi ProductDescription ile birebir.
+
+### Duzeltildi
+- fix(theme): input focus ring rengindeki eski sarı kalıntısını turuncuya çevir (@TurksabYonetim)
+- fix(home): mobil bölüm aralıklarını 24px ritmine oturt (@TurksabYonetim)
+
+---
 ## [v2.4.0-alpha.4] - 2026-08-11 ALPHA
 
 Bu surum alpha.istoc.com'da gelistirme asamasindadir.
