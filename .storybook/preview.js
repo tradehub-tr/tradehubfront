@@ -1,6 +1,8 @@
 import Alpine from "alpinejs";
 import collapse from "@alpinejs/collapse";
 
+import { changeLanguage } from "../src/i18n";
+
 // Stil zinciri — uygulamayla AYNI giriş noktası. Tailwind v4 `@source`
 // taramasını buradan yapıyor, ayrıca Flowbite eklentisi ve tüm proje
 // stilleri bu tek dosyadan geliyor.
@@ -31,7 +33,41 @@ function ensureAlpine() {
   Alpine.start();
 }
 
+/**
+ * Dil araç çubuğu.
+ *
+ * Storefront dört dilli ve Arapça RTL — ekranın sağdan sola aynadığını
+ * görmenin başka yolu yok. `changeLanguage()` eksik locale paketini kendisi
+ * yüklüyor ve `<html dir>` niteliğini de ayarlıyor.
+ *
+ * UYARI: `shipment.*` ad alanının **ar ve ru karşılıkları henüz çeviri
+ * değil** — İngilizce yer tutucu (locale dosyalarında `// TODO çeviri`).
+ * Bu iki dilde S1–S13 metinleri İngilizce görünür; hata değil, kapanmamış iş.
+ */
+const LOCALE_ITEMS = [
+  { value: "tr", title: "Türkçe" },
+  { value: "en", title: "English" },
+  { value: "ar", title: "العربية (RTL)" },
+  { value: "ru", title: "Русский" },
+];
+
 export default {
+  globalTypes: {
+    locale: {
+      description: "Arayüz dili",
+      toolbar: { icon: "globe", items: LOCALE_ITEMS, dynamicTitle: true },
+    },
+  },
+
+  loaders: [
+    async ({ globals }) => {
+      // Render'dan ÖNCE çalışıyor: `t()` şablon dizesi içinde çağrıldığı için
+      // dil render sırasında hazır olmalı, sonradan güncellenemiyor.
+      await changeLanguage(globals.locale ?? "tr");
+      return {};
+    },
+  ],
+
   parameters: {
     controls: { matchers: { color: /(background|color)$/i, date: /Date$/ } },
     // Storefront tek temalı (style.css'te yalnız 4 `dark:` kullanımı var) —
@@ -42,8 +78,11 @@ export default {
         sayfa: { name: "Sayfa zemini", value: "#f5f6f8" },
       },
     },
-    initialGlobals: { backgrounds: { value: "sayfa" } },
   },
+
+  // `initialGlobals` `parameters`'ın KARDEŞİ — içine konursa Storybook onu
+  // sıradan bir parametre sanıp yok sayıyor, varsayılan dil/zemin uygulanmıyor.
+  initialGlobals: { backgrounds: { value: "sayfa" }, locale: "tr" },
 
   decorators: [
     (story) => {
