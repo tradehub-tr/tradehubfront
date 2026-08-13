@@ -36,6 +36,10 @@ export interface SlotDropzoneOptions {
     endpoint: string;
     formDataPerSlot?: (slotId: string) => Record<string, string>;
     headers?: Record<string, string>;
+    /** Yüklemeden önce tarayıcıda sıkıştır (görsel→WebP, video→WebM). Default true.
+     *  Kimlik/evrak slot'larında (KYC/KYB) `false` ver — OCR/manuel doğrulama
+     *  okunabilirliği bozulmasın. */
+    compress?: boolean;
   };
   /** AutoUpload için custom uploader (base64 JSON gibi non-multipart akışlar).
    *  Verilirse autoUploadConfig yerine bu çağrılır. */
@@ -231,6 +235,7 @@ export class SlotDropzoneController {
         endpoint: cfg.endpoint,
         formDataFields: cfg.formDataPerSlot?.(slot.id),
         headers: cfg.headers,
+        compress: cfg.compress,
         concurrency: 1,
         // uploader.ts kendi successHoldMs (default 350ms) ile bar'ı %100'de tutar
         onFileProgress: (_f, state) => {
@@ -300,6 +305,8 @@ export class SlotDropzoneController {
     formDataPerSlot?: (slotId: string) => Record<string, string>;
     headers?: Record<string, string>;
     concurrency?: number;
+    /** Yüklemeden önce tarayıcıda sıkıştır. Default true — kimlik/evrak slot'larında false ver. */
+    compress?: boolean;
   }): Promise<{ succeeded: string[]; failed: Array<{ slotId: string; error: string }> }> {
     this.isUploading = true;
     const slotIds = Array.from(this.files.keys());
@@ -323,6 +330,7 @@ export class SlotDropzoneController {
         endpoint: uploadOpts.endpoint,
         formDataFields: uploadOpts.formDataPerSlot?.(slotId),
         headers: uploadOpts.headers,
+        compress: uploadOpts.compress,
         concurrency: 1,
         onFileProgress: (_f, state) => {
           this.progress.set(slotId, state);

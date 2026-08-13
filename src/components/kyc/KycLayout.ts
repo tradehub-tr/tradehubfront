@@ -376,6 +376,9 @@ async function mountKycSlotDropzone(): Promise<void> {
       endpoint: "/api/method/upload_file",
       formDataPerSlot: () => ({ is_private: "1" }),
       headers: { "X-Frappe-CSRF-Token": getCsrfToken() },
+      // Kimlik belgesi — WebP/JPEG'e küçültme OCR/manuel doğrulama
+      // okunabilirliğini bozabilir. Bu WP yalnız ürün medyasını hedefliyor.
+      compress: false,
     },
     onSlotUploaded: (_slotId, fileUrl) => {
       currentIdentityUrl = fileUrl;

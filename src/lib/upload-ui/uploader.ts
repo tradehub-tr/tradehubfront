@@ -44,6 +44,11 @@ export interface UploadOptions {
   concurrency?: number;
   /** withCredentials (cookie tabanlı auth için, default true) */
   withCredentials?: boolean;
+  /** Yüklemeden önce tarayıcıda sıkıştır (görsel→WebP, video→WebM). Default true.
+   *  Kimlik/evrak gibi OKUNABİLİRLİĞİ bozulmaması gereken yüklemelerde `false` ver
+   *  (örn. KYC kimlik belgesi, KYB şirket evrağı) — sıkıştırma OCR/manuel doğrulamayı
+   *  riske atabilir. Bu iş paketinin amacı yalnız satıcı ÜRÜN medyasıdır. */
+  compress?: boolean;
   /** Tek bir dosyanın progress'i değiştiğinde tetiklenir */
   onFileProgress?: (file: File, state: FileProgress) => void;
   /** Toplam bytes-based progress */
@@ -74,7 +79,11 @@ export async function uploadFiles(opts: UploadOptions): Promise<UploadResult> {
   async function uploadOne(file: File): Promise<void> {
     // Ağa gönderilmeden önce tarayıcıda küçült — orijinal `file` progress/callback
     // key'i olarak korunur, ağa giden yalnızca `prepared.blob` + `prepared.name`.
-    const prepared = await prepareMedia(file);
+    // compress:false ise (örn. KYC/KYB kimlik/evrak yüklemeleri) dokunmadan geçir.
+    const prepared =
+      opts.compress === false
+        ? { blob: file as Blob, name: file.name, converted: "none" as const }
+        : await prepareMedia(file);
     return new Promise((resolve, reject) => {
       const xhr = new XMLHttpRequest();
       xhr.open("POST", opts.endpoint);
