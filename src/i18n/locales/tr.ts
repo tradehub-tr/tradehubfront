@@ -4,6 +4,31 @@ const tr = {
     // orası navlun pazaryeri (forwarder, deniz/hava/kara taşıma) — farklı
     // ürün, farklı sözlük. Birleştirmek iki kavramı karıştırırdı.
     shipment: {
+      page: {
+        sellerPanel: "Satıcı Paneli",
+        createNotWired: "Sevkiyat oluşturma henüz bağlı değil",
+        labelNotWired: "Etiket bilgisi şemada tanımlı değil",
+        missingShipment: "Hangi sevkiyat için iade açtığınız belirtilmemiş.",
+        notifyFeedNotWired: "Bildirim akışı henüz bağlı değil",
+        notifyPrefNotWired: "Bildirim tercihleri henüz bağlı değil",
+        returnFormNotWired: "İade talebi oluşturma henüz bağlı değil",
+        returnQueueNotWired: "İade kuyruğu henüz bağlı değil",
+        returns: "İade taleplerim",
+        returnsNotWired: "İade talepleri henüz bağlı değil",
+        sellerShipment: "Sevkiyat yönetimi",
+        backToOrders: "Siparişlerime dön",
+        loadFailed: "Sevkiyat bilgisi alınamadı.",
+        loading: "Yükleniyor…",
+        missingName: "Hangi sevkiyatı görüntülemek istediğiniz belirtilmemiş.",
+        podNotWired: "Teslim kanıtı henüz bağlı değil",
+        timelineNotWired: "Takip geçmişi henüz bağlı değil",
+        tracking: "Sevkiyat takibi",
+        trackingTitle: "Sevkiyat hareketleri",
+      },
+      notWired: {
+        title: "Bu bölüm henüz sunucuya bağlı değil",
+        hint: "Ekran hazır, ama veriyi getiren servis henüz yazılmadı. Boş liste göstermek \"kayıt yok\" anlamına gelirdi.",
+      },
       appointment: {
         change: "Randevuyu değiştir",
         current: "Mevcut randevunuz",

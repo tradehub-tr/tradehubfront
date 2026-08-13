@@ -4,6 +4,31 @@ const en = {
     // orası navlun pazaryeri (forwarder, deniz/hava/kara taşıma) — farklı
     // ürün, farklı sözlük. Birleştirmek iki kavramı karıştırırdı.
     shipment: {
+      page: {
+        sellerPanel: "Seller Panel",
+        createNotWired: "Creating shipments is not connected yet",
+        labelNotWired: "Label data is not defined in the schema",
+        missingShipment: "No shipment was specified for this return.",
+        notifyFeedNotWired: "Notification feed is not connected yet",
+        notifyPrefNotWired: "Notification preferences are not connected yet",
+        returnFormNotWired: "Creating return requests is not connected yet",
+        returnQueueNotWired: "Return queue is not connected yet",
+        returns: "My return requests",
+        returnsNotWired: "Return requests are not connected yet",
+        sellerShipment: "Shipment management",
+        backToOrders: "Back to my orders",
+        loadFailed: "Could not load the shipment.",
+        loading: "Loading…",
+        missingName: "No shipment was specified.",
+        podNotWired: "Proof of delivery is not connected yet",
+        timelineNotWired: "Tracking history is not connected yet",
+        tracking: "Shipment tracking",
+        trackingTitle: "Shipment activity",
+      },
+      notWired: {
+        title: "This section is not connected yet",
+        hint: "The screen is ready, but the service that fetches the data has not been written yet. An empty list would read as \"no records\".",
+      },
       appointment: {
         change: "Change appointment",
         current: "Your current appointment",
