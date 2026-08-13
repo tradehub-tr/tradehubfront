@@ -1,3 +1,23 @@
+## [v2.4.0-alpha.6] - 2026-08-13 ALPHA
+
+Bu surum alpha.istoc.com'da gelistirme asamasindadir.
+
+### Eklendi
+- feat(logistics): üretilmiş API tip tanımları eklendi (@aliiball)
+  - Lojistik API sözleşmesinden üretilen tip tanımları eklendi; yanıt zarfı, hata kodları, numaralandırmalar ve on katalog arayüzü
+  - Yanlış alan adı artık derleme zamanında yakalanıyor
+  - Dosya üretilmiştir, elle düzenlenmez; kaynağı tradehub_core sözleşmesidir
+- feat(lojistik): sozlesme tipleri storefront'a senkronlandi (@aliiball)
+  - 32 yeni tip: Shipment (+items/packages/legs/events), ProofOfDelivery, ReturnRequest, PriceQuote, PricingRule, ConnectionTest, IntegrationLog,
+  - Uretilmis dosya: tradehub_core/scripts/gen_logistics_types.py --sync
+  - S1-S13 storefront lojistik ekranlari bu tipleri kullanacak
+
+### Degistirildi
+- refactor(deps): lockfile peer bagimlilik isaretleri guncellendi (@aliiball)
+  - npm 11.6.2 agaci yeniden cozdugunde eklenen 11 "peer": true satiri
+  - Paket eklenmedi, surum degismedi, hicbir sey kaldirilmadi
+
+---
 ## [v2.4.0-alpha.5] - 2026-08-12 ALPHA
 
 Bu surum alpha.istoc.com'da gelistirme asamasindadir.
