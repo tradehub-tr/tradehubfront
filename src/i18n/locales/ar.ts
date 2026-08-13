@@ -6,6 +6,33 @@ const ar = {
     // ar/ru ÇEVİRİSİ BEKLİYOR — metinler şimdilik İngilizce; ham anahtar
     // göstermek yerine okunabilir yer tutucu. Satırlar TODO işaretli.
     shipment: {
+      // TODO çeviri — İngilizce yer tutucu
+      page: {
+        sellerPanel: "Seller Panel",
+        createNotWired: "Creating shipments is not connected yet",
+        labelNotWired: "Label data is not defined in the schema",
+        missingShipment: "No shipment was specified for this return.",
+        notifyFeedNotWired: "Notification feed is not connected yet",
+        notifyPrefNotWired: "Notification preferences are not connected yet",
+        returnFormNotWired: "Creating return requests is not connected yet",
+        returnQueueNotWired: "Return queue is not connected yet",
+        returns: "My return requests",
+        returnsNotWired: "Return requests are not connected yet",
+        sellerShipment: "Shipment management",
+        backToOrders: "Back to my orders",
+        loadFailed: "Could not load the shipment.",
+        loading: "Loading…",
+        missingName: "No shipment was specified.",
+        podNotWired: "Proof of delivery is not connected yet",
+        timelineNotWired: "Tracking history is not connected yet",
+        tracking: "Shipment tracking",
+        trackingTitle: "Shipment activity",
+      },
+      // TODO çeviri — İngilizce yer tutucu
+      notWired: {
+        title: "This section is not connected yet",
+        hint: "The screen is ready, but the service that fetches the data has not been written yet.",
+      },
       appointment: {
         change: "Change appointment",  // TODO çeviri
         current: "Your current appointment",  // TODO çeviri
