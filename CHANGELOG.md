@@ -1,3 +1,18 @@
+## [v2.4.0-alpha.8] - 2026-08-13 ALPHA
+
+Bu surum alpha.istoc.com'da gelistirme asamasindadir.
+
+### Eklendi
+- feat(shipment): S1-S13 ekranlari icin 6 sayfa acildi (@aliiball)
+  - Alici: sevkiyat takibi, iade taleplerim, iade talebi, bildirim tercihleri
+  - Satici: sevkiyat yonetimi, iade karari
+  - shipmentService: hangi ucun gercekten oldugu tek yerde; olmayanlar NotWiredError firlatiyor, bos dizi dondurmuyor
+  - NotWiredNotice: bos liste yerine sebep — \"kayit yok\" ile \"henuz
+  - dashboardShell: dort sayfa ayni iskeleti ve 8 init cagrisini tekrar
+  - Sayfa modulu buyer-returns adiyla: returns adi Iade Politikasi hukuki sayfasina ait
+- feat(shipment): lojistik ekranlari icin ornek veri modu eklendi (@aliiball)
+
+---
 ## [v2.4.0-alpha.7] - 2026-08-13 ALPHA
 
 Bu surum alpha.istoc.com'da gelistirme asamasindadir.
