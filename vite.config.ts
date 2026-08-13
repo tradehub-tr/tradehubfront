@@ -569,6 +569,11 @@ export default defineConfig({
                     if (id.includes('node_modules/echarts') || id.includes('node_modules/zrender')) return 'vendor-echarts';
                     // Vendor: TanStack Query + idb-keyval — client-side cache katmanı (src/lib/query)
                     if (id.includes('node_modules/@tanstack') || id.includes('node_modules/idb-keyval')) return 'vendor-tanstack';
+                    // Vendor: browser-image-compression — worker'lı, büyük; kendi chunk'ında
+                    // kalsın ki upload akışını kullanmayan sayfalar bunu indirmesin (WP1).
+                    if (id.includes('node_modules/browser-image-compression')) return 'vendor-image-compression';
+                    // Vendor: mediabunny — video transcode, büyük; ayrı chunk (WP1).
+                    if (id.includes('node_modules/mediabunny')) return 'vendor-mediabunny';
                     // App: i18n locale dosyaları — manualChunk YOK: her dil dinamik
                     // import(`./locales/${lang}`) ile ayrı chunk'a bölünsün, yalnız aktif
                     // dil yüklensin (B-1 lazy-load). Tek 'locales' chunk'ı 4 dili birleştirirdi.
