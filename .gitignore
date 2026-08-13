@@ -73,3 +73,4 @@ public/mockups/
 perf-reports/*.report.html
 perf-reports/*.report.json
 perf-reports/bundle-stats.html
+storybook-static/
