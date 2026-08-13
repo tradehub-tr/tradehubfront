@@ -67,6 +67,10 @@ import "./legal";
 // addresses — page-specific (yalnız addresses sayfası). B-2: core'dan çıkarıldı,
 // pages/addresses.ts'te import ediliyor. vite manualChunks'ta 'alpine'dan hariç.
 import "./notifications";
+// Lojistik (S1–S13) — sayfa-bağımsız, side-effect kayıtları.
+import "./logisticsBuyer";
+import "./logisticsDelivery";
+import "./logisticsSeller";
 // kyb — page-specific (yalnız kyb sayfası). B-2: core'dan çıkarıldı, pages/kyb.ts'te
 // import ediliyor → diğer sayfalar kyb modülünü yüklemez. vite manualChunks'ta 'alpine'
 // chunk'ından hariç tutuldu ki per-page chunk'a düşsün.
