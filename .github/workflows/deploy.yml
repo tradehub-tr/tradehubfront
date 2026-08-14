@@ -2,12 +2,10 @@ name: Deploy Storefront
 
 on:
   push:
-    branches: [ main, ahmet, ali, bora ]
+    branches: [ main ]
 
 permissions:
   contents: read
-  pages: write
-  id-token: write
 
 jobs:
   # ── 1. Alpha sunucuya deploy (sadece main) ────────────
@@ -33,41 +31,3 @@ jobs:
             docker compose build --no-cache storefront-alpha
             docker compose up -d --force-recreate storefront-alpha
             echo "✅ Storefront ALPHA deploy tamamlandı → https://alpha.istoc.com"
-
-  # ── 2. GitHub Pages deploy (ahmet, ali, bora) ──────────
-  deploy-pages:
-    if: github.ref != 'refs/heads/main'
-    runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Setup Node
-        uses: actions/setup-node@v4
-        with:
-          node-version: 22
-          cache: npm
-
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Build for GitHub Pages
-        run: npx vite build
-        env:
-          VITE_API_URL: https://alpha.istoc.com/api
-          VITE_MEDIA_BASE: https://alpha.istoc.com
-
-      - name: Setup Pages
-        uses: actions/configure-pages@v5
-
-      - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3
-        with:
-          path: dist
-
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v4
