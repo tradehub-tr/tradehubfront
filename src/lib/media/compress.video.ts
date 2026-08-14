@@ -1,6 +1,13 @@
 // Video sıkıştırma: mediabunny ile VP9/WebM tercih edilir, tarayıcı VP9 encode
-// desteklemiyorsa H.264/MP4'e düşülür. Süre >60sn veya boyut >100MB ise
-// dönüştürmeden orijinali geçilir — WP2'deki sunucu transcode kuyruğu devralır.
+// desteklemiyorsa H.264/MP4'e düşülür.
+//
+// İLKE (kullanıcı kararı): amaç MB azaltmak — yalnızca gerçekten küçülüyorsa
+// çevir, kaliteyi bozmadan. Zaten verimli (düşük bitrate) bir videoyu çevirmek
+// onu BÜYÜTÜR; bu yüzden çift koruma var:
+//   1) Ön kontrol: kaynak çözünürlük ≤ 1280px VE bitrate ≤ ~2 Mbps ise dokunma.
+//   2) Son kontrol: encode çıktısı orijinalden küçük değilse orijinali kullan.
+// Çok uzun + verimsiz videolar client'ta dakikalarca encode edilip sekmeyi
+// dondurmasın diye sunucudaki ffmpeg güvenlik ağına devredilir.
 import {
 	ALL_FORMATS,
 	BlobSource,
@@ -9,16 +16,19 @@ import {
 	Input,
 	Mp4OutputFormat,
 	Output,
+	Quality,
 	WebMOutputFormat,
 	getEncodableVideoCodecs,
 } from "mediabunny";
 
 import type { PreparedMedia } from "./compress";
 
-const MAX_SURE_SANIYE = 60;
-const MAX_BOYUT_BYTES = 100 * 1024 * 1024;
+const MAX_BOYUT_BYTES = 100 * 1024 * 1024; // 100MB üstü client'ta işlenmez → sunucu
+const MAX_SURE_SANIYE = 180; // 3dk üstü verimsiz video → sunucu (client donmasın)
 const HEDEF_GENISLIK = 1280;
-const HEDEF_BITRATE = 2_000_000; // 2 Mbps
+// "Zaten verimli" tavanı: bu değerin altındaki bitrate'i çevirmek MB düşürmez,
+// büyütebilir. 9mb.mp4 (720p / 0.14 Mbps / 9dk) tam bu yüzden atlanır.
+const VERIMLI_BITRATE = 2_000_000; // ~2 Mbps
 
 function tabanAd(name: string): string {
 	const idx = name.lastIndexOf(".");
@@ -30,18 +40,28 @@ function orijinaliGec(file: File): PreparedMedia {
 }
 
 export async function prepareVideo(file: File): Promise<PreparedMedia> {
-	// Büyük dosyada probe/transcode'a hiç girmeden orijinali sunucuya bırak.
+	// Çok büyük dosyada probe/encode'a hiç girmeden sunucuya bırak.
 	if (file.size > MAX_BOYUT_BYTES) return orijinaliGec(file);
 
 	try {
 		const input = new Input({ formats: ALL_FORMATS, source: new BlobSource(file) });
 
 		const sure = await input.computeDuration();
+		if (!sure || sure <= 0) return orijinaliGec(file);
+
+		// Kaynak kalitesi: ortalama bitrate ≈ boyut(bit) / süre(sn). Çözünürlük de
+		// düşükse video zaten verimli demektir — çevirmek MB düşürmez → dokunma.
+		const kaynakBitrate = (file.size * 8) / sure;
+		const track = await input.getPrimaryVideoTrack();
+		const genislik = track ? await track.getDisplayWidth() : 0;
+		if (genislik && genislik <= HEDEF_GENISLIK && kaynakBitrate <= VERIMLI_BITRATE) {
+			return orijinaliGec(file);
+		}
+
+		// Verimsiz ama çok uzun: client encode dakikalar sürer ve sekmeyi dondurur.
+		// Sunucudaki ffmpeg (async, kullanıcıyı bekletmez) devralsın.
 		if (sure > MAX_SURE_SANIYE) return orijinaliGec(file);
 
-		// getEncodableVideoCodecs'in `bitrate` seçeneği mediabunny 1.53.1'de
-		// deprecated (`quality` tercih ediliyor) — probe'da yalnız genişlik
-		// veriyoruz, gerçek bitrate hedefi Conversion.init'e gidiyor.
 		const desteklenen = await getEncodableVideoCodecs(["vp9", "avc"], {
 			width: HEDEF_GENISLIK,
 		});
@@ -61,14 +81,18 @@ export async function prepareVideo(file: File): Promise<PreparedMedia> {
 			video: {
 				width: HEDEF_GENISLIK,
 				codec: vp9Var ? "vp9" : "avc",
-				bitrate: HEDEF_BITRATE,
+				// Kalite-bazlı encode (sabit bitrate DEĞİL): düşük-bitrate kaynağı
+				// şişirmez, yüksek-bitrate kaynağı görsel kaliteyi koruyarak küçültür.
+				quality: new Quality("medium"),
 			},
 		});
-
 		if (!conversion.isValid) return orijinaliGec(file);
 
 		await conversion.execute();
 		if (!target.buffer) return orijinaliGec(file);
+
+		// SON KORUMA: çıktı orijinalden küçük değilse çevirme — asla şişirme.
+		if (target.buffer.byteLength >= file.size) return orijinaliGec(file);
 
 		const taban = tabanAd(file.name);
 		if (vp9Var) {
