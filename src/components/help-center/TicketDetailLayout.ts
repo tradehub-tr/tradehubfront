@@ -173,7 +173,7 @@ export function TicketDetailLayout(): string {
                       <p class="text-sm font-semibold text-emerald-800">${t("helpUi.markedResolvedTitle")}</p>
                       <p class="text-xs text-emerald-700 mt-0.5">${t("helpUi.markedResolvedDesc")}</p>
                     </div>
-                    <button class="th-btn-outlined th-btn-sm text-emerald-700 border-emerald-300 hover:bg-emerald-100"
+                    <button class="th-btn-outline th-btn-sm text-emerald-700 border-emerald-300 hover:bg-emerald-100"
                       :disabled="closing" @click="closeTicket()">
                       <span x-text="closing ? '${t("helpUi.processing")}' : '${t("helpUi.closeTicket")}'"></span>
                     </button>

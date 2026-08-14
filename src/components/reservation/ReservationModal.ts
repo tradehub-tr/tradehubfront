@@ -62,7 +62,7 @@ export function ReservationModal(): string {
 								${t("commonSvc.canStartChatNowPrefix")} <strong x-text="$store.reservationModal.sellerName"></strong> ${t("commonSvc.canStartChatNowSuffix")}
 							</p>
 							<button @click="$store.reservationModal.openChatAfterReserve()"
-									class="th-btn-primary w-full">
+									class="th-btn w-full">
 								${t("commonSvc.startChatBtn")}
 							</button>
 						</div>
@@ -84,7 +84,7 @@ export function ReservationModal(): string {
 								${t("commonSvc.retryChatAtTime")}
 							</p>
 							<button @click="$store.reservationModal.close()"
-									class="th-btn-primary w-full">
+									class="th-btn w-full">
 								${t("commonSvc.ok")}
 							</button>
 						</div>
@@ -151,7 +151,7 @@ export function ReservationModal(): string {
 						</button>
 						<button @click="$store.reservationModal.confirm()"
 								:disabled="!$store.reservationModal.selectedSlotId || $store.reservationModal.reserving"
-								class="th-btn-primary flex-1"
+								class="th-btn flex-1"
 								:class="(!$store.reservationModal.selectedSlotId || $store.reservationModal.reserving) ? 'opacity-50 cursor-not-allowed' : ''">
 							<span x-text="$store.reservationModal.reserving ? '${t("commonSvc.reserving")}' : '${t("commonSvc.reserve")}'"></span>
 						</button>

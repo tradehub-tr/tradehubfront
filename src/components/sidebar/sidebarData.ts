@@ -58,6 +58,9 @@ export function getSidebarSections(): SidebarSection[] {
               href: "/pages/dashboard/orders.html#refunds",
             },
             { label: t("dashboard.myReviews"), href: "/pages/dashboard/orders.html#reviews" },
+            // Sevkiyat ve iade siparişin ALTINDA: alıcı "kargom nerede"yi
+            // sipariş bağlamında arıyor, ayrı bir üst başlıkta değil.
+            { label: t("shipment.page.returns"), href: "/pages/dashboard/returns.html" },
           ],
         },
         {
@@ -112,6 +115,14 @@ export function getSidebarSections(): SidebarSection[] {
           label: t("dashboard.myAddresses"),
           icon: "addresses",
           href: "/pages/dashboard/addresses.html",
+        },
+        {
+          id: "shipment-notifications",
+          label: t("shipment.notifyPref.title"),
+          // Bildirim tercihi bir AYAR, sevkiyat ekranı değil — bu yüzden
+          // "Ayarlar" bölümünde, sipariş grubunda değil.
+          icon: "settings",
+          href: "/pages/dashboard/notification-preferences.html",
         },
         {
           id: "kyc",

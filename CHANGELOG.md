@@ -1,3 +1,67 @@
+## [v2.4.0-alpha.8] - 2026-08-13 ALPHA
+
+Bu surum alpha.istoc.com'da gelistirme asamasindadir.
+
+### Eklendi
+- feat(shipment): S1-S13 ekranlari icin 6 sayfa acildi (@aliiball)
+  - Alici: sevkiyat takibi, iade taleplerim, iade talebi, bildirim tercihleri
+  - Satici: sevkiyat yonetimi, iade karari
+  - shipmentService: hangi ucun gercekten oldugu tek yerde; olmayanlar NotWiredError firlatiyor, bos dizi dondurmuyor
+  - NotWiredNotice: bos liste yerine sebep — \"kayit yok\" ile \"henuz
+  - dashboardShell: dort sayfa ayni iskeleti ve 8 init cagrisini tekrar
+  - Sayfa modulu buyer-returns adiyla: returns adi Iade Politikasi hukuki sayfasina ait
+- feat(shipment): lojistik ekranlari icin ornek veri modu eklendi (@aliiball)
+
+---
+## [v2.4.0-alpha.7] - 2026-08-13 ALPHA
+
+Bu surum alpha.istoc.com'da gelistirme asamasindadir.
+
+### Eklendi
+- feat(storybook): storefront component gelistirme ortami kuruldu (@aliiball)
+  - @storybook/html-vite 10.5.7 (Alpine + Tailwind v4 + cok sayfali Vite)
+  - Storybook proje vite.config.ts'ini OKUYOR: VitePWA, SEO ve URL rewrite eklentileri siziyordu, iframe.html'e service worker kaydi enjekte ediliyordu. Ada gore elendiler; tailwindcss() stil zinciri icin zorunlu
+  - Alpine bir kez baslatiliyor; startAlpine() yerine elle, cunku o fonksiyon initTracking() de cagiriyor
+  - Duman testi story'si: Tailwind utility, proje siniflari, Alpine reaktivite
+  - Uretim bagimliliklarina yeni zafiyet gelmedi (kurulum oncesi/sonrasi ayni)
+- feat(lojistik): storefront mock verileri eklendi (@aliiball)
+  - 12 fixture, tradehub_core ureticisinden senkron (maskelenmiş alt küme)
+  - Elle duzenlenmez; kaynak scripts/gen_logistics_types.py
+  - 12 fixture (filtreli + maskeli alt kume), tradehub_core ureticisinden
+- feat(i18n): shipment ad alanı dört locale'e eklendi (@aliiball)
+  - Mevcut logistics ad alanı navlun pazaryerine ait (deniz/hava/kara, forwarder)
+  - Kendi shipmentStatus/pending/delivered anahtarları var, birleştirmek iki kavramı karıştırırdı
+  - ar ve ru şimdilik İngilizce yer tutucu (// TODO çeviri)
+- feat(shipment): S1-S13 storefront lojistik ekranları eklendi (@aliiball)
+  - Alıcı: çoklu sevkiyat, randevu, teslim onayı, takip, bildirim, teslim özeti, iade, checkout
+  - Satıcı: sevkiyat oluşturma, paketleme, etiket, iade kuyruğu
+  - Teslim kodunun DEĞERİ hiçbir yerde gösterilmiyor, yalnız durumu
+  - Ödeme tamamlanmadan onay formu hiç render edilmiyor (devre dışı buton değil)
+  - Ham taşıyıcı kodu ve olay kaynağı alıcıdan süzülüyor
+  - Platform maliyet alanları satıcı ekranlarında yok
+  - İade kapanışı satıcıda yok, platform kararı
+- feat(storybook): S1-S13 story'leri ve fixture köprüsü eklendi (@aliiball)
+  - 68 story, veri üretilen fixture'lardan türetiliyor, elle kurulmuyor
+  - Alan adı sözleşmeden saparsa story de sapsın diye
+  - S6 bildirim akışı elle yazıldı: sözleşmede gönderilmiş-bildirim varlığı yok
+
+### Duzeltildi
+- fix(ui): tanimsiz buton siniflari mevcut karsiliklarina eslendi (@aliiball)
+  - ReservationModal 3 butonda th-btn-primary kullaniyordu; bu sinif
+  - TicketDetailLayout'ta th-btn-outlined yazim hatasi duzeltildi
+  - Yeni CSS eklenmedi, style.css 2258 satirda kaldi
+
+### Degistirildi
+- refactor(scripts): check:dup taraması story dosyalarını atlıyor (@aliiball)
+  - Story export'ları hiçbir yerden import edilmiyor, isimler dosya kapsamında
+  - Bos/Varsayilan gibi durum adları her ekranda tekrar ediyor, bu doğru olan
+  - Allowlist'e eklemek her yeni ekranda baseline'ı büyütür, bekçiyi körelirdi
+- refactor(storybook): dil seçici eklendi, initialGlobals doğru seviyeye alındı (@aliiball)
+  - tr/en/ar/ru araç çubuğu; RTL için ar zorunlu, storefront dört dilli
+  - changeLanguage() loader'da: t() şablon dizesinde çağrılıyor, render öncesi hazır olmalı
+  - initialGlobals parameters'ın içindeydi, Storybook yok sayıyordu
+
+---
 ## [v2.4.0-alpha.6] - 2026-08-13 ALPHA
 
 Bu surum alpha.istoc.com'da gelistirme asamasindadir.

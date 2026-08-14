@@ -29,13 +29,28 @@ const ALLOWLIST = join(__dirname, "duplicate-exports-allowlist.json");
 const EXPORT_RE =
   /^export\s+(?:default\s+)?(?:async\s+)?(?:abstract\s+)?(interface|type|function|const|class|enum)\s+([A-Za-z0-9_]+)/gm;
 
+/**
+ * Storybook story dosyaları taranmıyor.
+ *
+ * Bu bekçi, iki dosyanın AYNI ismi export edip birinin yanlışlıkla import
+ * edilmesini önlüyor. Story export'ları hiçbir yerden import edilmiyor —
+ * Storybook onları modül başına okuyor ve isimler dosya kapsamında kalıyor.
+ * `Bos`, `Varsayilan` gibi durum adlarının her ekranda tekrar etmesi doğru
+ * olan: farklı isimler uydurmak story listesini okunmaz yapardı.
+ *
+ * Allowlist'e eklemek de yanlış olurdu — her yeni ekranda baseline büyür ve
+ * bekçi gerçek çakışmalara karşı körelirdi.
+ */
+const isStoryFile = (entry) => entry.endsWith(".stories.ts");
+
 function walk(dir) {
   const out = [];
   for (const entry of readdirSync(dir)) {
     const full = join(dir, entry);
     const st = statSync(full);
     if (st.isDirectory()) out.push(...walk(full));
-    else if (entry.endsWith(".ts") && !entry.endsWith(".d.ts")) out.push(full);
+    else if (entry.endsWith(".ts") && !entry.endsWith(".d.ts") && !isStoryFile(entry))
+      out.push(full);
   }
   return out;
 }
