@@ -83,8 +83,11 @@ export async function prepareVideo(file: File): Promise<PreparedMedia> {
 			name: `${taban}.mp4`,
 			converted: "mp4",
 		};
-	} catch {
-		// Probe veya transcode hatası — orijinali sunucuya bırak.
+	} catch (err) {
+		// Probe veya transcode hatası — orijinali sunucuya bırak (sunucudaki
+		// koşullu ffmpeg güvenlik ağı devralır). Hata SESSİZCE yutulmasın:
+		// client encode neden başarısız oldu görünür olsun (teşhis + izleme).
+		console.warn("[media] video sıkıştırma başarısız, orijinal yükleniyor:", err);
 		return orijinaliGec(file);
 	}
 }
