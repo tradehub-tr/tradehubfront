@@ -40,7 +40,8 @@ Dev'de Docker bind mount kullanıldığında inotify yetersiz kalıyor → `vite
 Build'te `manualChunks` vendor ayrıştırması:
 
 - `vendor-alpine`, `vendor-flowbite`, `vendor-swiper`
-- `vendor-i18next`, `vendor-dompurify`
+- `vendor-i18next`, `vendor-dompurify`, `vendor-tanstack`
+- `vendor-image-compression` (browser-image-compression, WP1), `vendor-mediabunny` (mediabunny, WP1)
 - `locales`, `alpine`
 
 Yeni büyük bağımlılık eklenirse buraya da ekle (>50KB ise `vendor-*` yap). Build'te chunk olmaması gereken bir lib'i `manualChunks`'a eklemeden bırakma.

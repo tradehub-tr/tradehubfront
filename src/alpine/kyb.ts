@@ -299,6 +299,10 @@ Alpine.data("kybPage", () => ({
       containerId: "kyb-document-slots",
       slots,
       autoUpload: true,
+      // KYB şirket evrağı — autoCustomUploader kendi base64/JSON akışını kullanıyor,
+      // uploader.ts'in uploadFiles()'ından (dolayısıyla prepareMedia sıkıştırmasından)
+      // hiç geçmiyor. Kimlik/evrak OCR/manuel doğrulama okunabilirliği bu yüzden
+      // zaten korunuyor — bilerek dokunulmadı.
       autoCustomUploader: async (slotId, file) => {
         // KYB base64 + JSON akışı
         try {
