@@ -1,3 +1,21 @@
+## [v2.4.0-alpha.9] - 2026-08-14 ALPHA
+
+Bu surum alpha.istoc.com'da gelistirme asamasindadir.
+
+### Eklendi
+- feat(media): tarayıcıda görsel WebP + video WebM/MP4 sıkıştırma (WP1) (@TurksabYonetim)
+- feat(media): uploader.ts kuyruğa girmeden prepareMedia'dan geçirir (WP1) (@TurksabYonetim)
+- feat(media): akıllı video sıkıştırma — yalnız MB düşürüyorsa çevir (@TurksabYonetim)
+  - Ön kontrol: kaynak ≤1280px VE ≤2Mbps ise dokunma (çevirmek büyütürdü)
+  - Son kontrol: encode çıktısı orijinalden küçük değilse orijinali kullan
+  - Kalite-bazlı encode (Quality medium, sabit bitrate değil) → düşük-bitrate şişmez
+  - 60sn sabit limit kalktı; 3dk üstü verimsiz video sunucuya devredilir
+
+### Duzeltildi
+- fix(media): WP1 fix round 1 — KYC kimlik belgesi sıkıştırmadan muaf (@TurksabYonetim)
+- fix(media): video sıkıştırma hatasını console'a yaz (sessiz yutma yok) (@TurksabYonetim)
+
+---
 ## [v2.4.0-alpha.8] - 2026-08-13 ALPHA
 
 Bu surum alpha.istoc.com'da gelistirme asamasindadir.
