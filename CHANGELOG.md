@@ -1,3 +1,14 @@
+## [v2.4.0-alpha.16] - 2026-08-18 ALPHA
+
+Bu surum alpha.istoc.com'da gelistirme asamasindadir.
+
+### Eklendi
+- feat(e2e): kontrast denetimi ve UI/UX regresyon testleri eklendi (@aliiball)
+  - Kontrast: 4 ekran x 2 tema x (duran + hover), efektif zemin harmanlanarak
+  - Renk ayrıştırıcı canvas tabanlı; rgb() regex'i Tailwind v4'ün oklch()'ini kaçırıyordu
+  - 9 yeni senaryo: menü, miktar kutusu, seçim çubuğu, filtre rozeti, taşma, barkod çözme
+
+---
 ## [v2.4.0-alpha.15] - 2026-08-18 ALPHA
 
 Bu surum alpha.istoc.com'da gelistirme asamasindadir.
