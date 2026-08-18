@@ -1,3 +1,13 @@
+## [v2.4.0-alpha.15] - 2026-08-18 ALPHA
+
+Bu surum alpha.istoc.com'da gelistirme asamasindadir.
+
+### Eklendi
+- feat(e2e): paketleme ve etiket ekranları için 11 senaryo eklendi (@aliiball)
+  - Frappe cookie-login + docker; tur localStorage'dan kapatılıyor
+  - Gevşek regex komşu öğeye tıkladığı için locator'lar kapsayıcıya scope'lu
+
+---
 ## [v2.4.0-alpha.9] - 2026-08-14 ALPHA
 
 Bu surum alpha.istoc.com'da gelistirme asamasindadir.
