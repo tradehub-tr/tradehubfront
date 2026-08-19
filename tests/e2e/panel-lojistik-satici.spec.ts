@@ -46,6 +46,7 @@ test.beforeEach(async ({ context }) => {
     if (!sessionStorage.getItem("__e2e_reset")) {
       localStorage.removeItem("logistics.mock.packaging.v1");
       localStorage.removeItem("logistics.mock.fault");
+      localStorage.removeItem("logistics.mock.pod.v1");
       sessionStorage.setItem("__e2e_reset", "1");
     }
     // Rehberli tur overlay'i tıklamayı yutuyor — hiç başlatma.
@@ -182,4 +183,80 @@ test("SATICI — DEMO geliştirici paneli GÖRÜNMÜYOR", async ({ page }) => {
   await page.goto(QUEUE);
   await expect(page.locator("table tbody tr").first()).toBeVisible();
   await expect(page.getByText(/Demo verisi ve hata senaryoları/i)).toHaveCount(0);
+});
+
+// ── 14-FE · Teslim kanıtı ve teslimat akışları (satıcı rolü) ─────────
+
+const POD_QUEUE = "/panel/lojistik/teslim-kaniti";
+const SELLER_FLOW = "/panel/lojistik/satici-teslimati";
+
+/** `AppSelect` native `<select>` değil: tetikleyici buton + listbox paneli. */
+async function appSelect(page, id: string, etiket: RegExp | string) {
+  await page.locator(`#${id} button.as-trigger`).click();
+  await page.locator("li.as-option").filter({ hasText: etiket }).first().click();
+}
+
+test("SATICI — K4: kanıt kuyruğunda YALNIZ kendi sevkiyatları", async ({ page }) => {
+  // Tenant izolasyonu gerçek uçta backend'de; mock onu taklit ediyor. Sabit
+  // bir satıcı adına bağlıyken bu ekran satıcıda BOŞ kalıyordu (ölçüldü
+  // 2026-08-19) — mock artık oturumdaki satıcıya uyarlanıyor.
+  await page.goto(POD_QUEUE);
+  await expect(page.getByRole("heading", { name: /Teslim kanıtı/i }).first()).toBeVisible();
+  await expect(page.locator("table tbody tr").first()).toBeVisible();
+
+  // Satıcı görünümünde "Satıcı" sütunu HİÇ çizilmiyor: kendi kayıtlarına
+  // bakan birine her satırda kendi adını yazmak gürültü.
+  const basliklar = await page.locator("table thead th").allTextContents();
+  expect(basliklar.join("|"), "satıcı görünümünde Satıcı sütunu var").not.toMatch(/Satıcı/);
+
+  // "Kendi sevkiyatlarınız" rozeti listenin neden kısa olduğunu söylüyor.
+  await expect(page.getByText(/Kendi sevkiyatlarınız/i).first()).toBeVisible();
+});
+
+test("SATICI — K4: BAŞKASININ sevkiyatına erişemiyor", async ({ page }) => {
+  // Tohumda "Yıldız Nalbur"a ait sevkiyat var; satıcı onu URL'den açmaya
+  // çalışınca yetki hatası görmeli — boş ekran değil.
+  await page.goto("/panel/lojistik/sevkiyatlar/SHP-2026-00047/teslim-kaniti");
+  await expect(page.getByText(/yetkiniz yok|size ait değil|erişim/i).first()).toBeVisible({ timeout: 10_000 });
+});
+
+test("SATICI — K5: kendi kanıtını kaydediyor, kayıt SATICI BEYANI damgası taşıyor", async ({ page }) => {
+  await page.goto(POD_QUEUE);
+  await expect(page.locator("table tbody tr").first()).toBeVisible();
+
+  // Kanıt bekleyen kendi sevkiyatını aç.
+  await page.getByRole("button", { name: /Kanıt bekliyor/i }).first().click();
+  await expect(page.locator("table tbody tr").first()).toBeVisible();
+  await page.getByRole("link", { name: /Kanıtı aç/i }).first().click();
+
+  await page.getByRole("button", { name: /Teslim kanıtı kaydet/i }).click();
+  await page.locator("#pod-delivered-at").fill("2026-08-19T11:00");
+  await page.locator("#pod-received-by").fill("Mehmet Demir");
+  await appSelect(page, "pod-title", "Depo sorumlusu");
+  await page.getByRole("button", { name: /^Kanıtı kaydet$/i }).click();
+
+  // DAMGA SUNUCUDA belirleniyor: satıcının kaydı "operasyon kaydı" olamaz.
+  await expect(page.getByText(/Satıcı beyanı/i).first()).toBeVisible();
+});
+
+test("SATICI — K5: düzeltme yetkisi YOK", async ({ page }) => {
+  // Satıcı kendi beyanını sessizce değiştirebilseydi denetim izi anlamsızdı.
+  // Kanıtı OLAN kendi sevkiyatına doğrudan gidiliyor: kova üzerinden gitmek
+  // testi tohumdaki kova dağılımına bağlar ve kırılgan olur.
+  await page.goto("/panel/lojistik/sevkiyatlar/SHP-2026-00033/teslim-kaniti");
+  await expect(page.getByText(/Taşıyıcıdan|Operasyon kaydı|Satıcı beyanı/).first()).toBeVisible();
+
+  await expect(
+    page.getByRole("button", { name: /Teslim kanıtını düzelt/i }),
+    "satıcıya düzeltme düğmesi çizilmiş"
+  ).toHaveCount(0);
+});
+
+test("SATICI — teslimat akışında kendi kayıtları ve teslim düğmesi", async ({ page }) => {
+  await page.goto(SELLER_FLOW);
+  await expect(page.getByRole("heading", { name: /Satıcı teslimatı/i })).toBeVisible();
+  await expect(page.getByText(/Kendi sevkiyatlarınız/i).first()).toBeVisible();
+
+  // Kendi aracıyla teslim satıcının fiziksel işi (K-M): ekran ona AÇIK.
+  await expect(page.getByText(/Bu ekran satıcı menüsünde yok/i)).toHaveCount(0);
 });

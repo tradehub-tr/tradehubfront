@@ -276,3 +276,116 @@ test("istasyon çizelgesi ardışık aynı konumu TEK satıra indiriyor", async 
     expect(konumlar[i], "ardışık aynı konum ayrı satır olmuş").not.toBe(konumlar[i - 1]);
   }
 });
+
+// ── K6 · Düzeltme izi ────────────────────────────────────────────────
+
+test("K6: kanıt gerekçeyle düzeltiliyor ve İZ BIRAKIYOR", async ({ page }) => {
+  await page.goto(`/panel/lojistik/sevkiyatlar/${TAM}/teslim-kaniti`);
+  await expect(page.getByText(/Taşıyıcıdan|Operasyon kaydı|Satıcı beyanı/).first()).toBeVisible();
+
+  await page.getByRole("button", { name: /Teslim kanıtını düzelt/i }).click();
+
+  // Gerekçe ZORUNLU: boşken kaydet kapalı.
+  await expect(page.getByRole("button", { name: /Düzeltmeyi kaydet/i })).toBeDisabled();
+
+  await page.locator("#pod-reason").fill("Koli sayısı yanlış girilmişti");
+  const kaydet = page.getByRole("button", { name: /Düzeltmeyi kaydet/i });
+  await expect(kaydet).toBeEnabled();
+  await kaydet.click();
+
+  // Kayıt SİLİNMİYOR, denetim izine yazılıyor.
+  await expect(page.getByText(/Düzeltme izi/i)).toBeVisible();
+  await expect(page.getByText(/Koli sayısı yanlış girilmişti/)).toBeVisible();
+});
+
+// ── K9 · Takılan gönderi ─────────────────────────────────────────────
+
+test("K9: 24 saati aşan bekleme AYIRT EDİLİYOR", async ({ page }) => {
+  // Tohumdaki "takılan gönderi" seti: son istasyonda süre "şu an"a göre
+  // hesaplanıyor, bir sonraki olay hiç gelmemiş.
+  await page.goto("/panel/lojistik/sevkiyatlar/SHP-2026-00038/istasyonlar");
+  await expect(page.locator("ol li").first()).toBeVisible();
+
+  // "Şu an burada" ifadesi ve saat bilgisi son istasyonda görünmeli.
+  const sonSatir = page.locator("ol li").last();
+  await expect(sonSatir).toContainText(/saattir burada|saat/i);
+});
+
+test("K9: konum HİÇ taşınmıyorsa çizelge çizilmiyor, sebep yazıyor", async ({ page }) => {
+  // Boş çizelge operasyona "hiç hareket yok" der — yalan olur.
+  await page.goto("/panel/lojistik/sevkiyatlar/SHP-2026-00045/istasyonlar");
+  await expect(page.getByText(/Konum bilgisi henüz taşınmıyor/i)).toBeVisible();
+  await expect(page.locator("ol li")).toHaveCount(0);
+});
+
+// ── K11 · Teslim noktası kartı ───────────────────────────────────────
+
+test("K11: teslim noktası ekranı TERK ETMEDEN görünüyor", async ({ page }) => {
+  await page.goto(BUYER_FLOW);
+  await expect(page.locator("article").first()).toBeVisible();
+
+  // Nokta bilgisi ayrı EKRAN değil, kart olarak açılıyor (K-C).
+  //
+  // "Buton yoksa sessizce geç" dalı KALDIRILDI: test hiç çalışmadan yeşil
+  // görünüyordu (ölçüldü 2026-08-19). Tohumda teslim noktası taşıyan kayıt
+  // VAR; yoksa bu bir eksiktir ve testin bunu söylemesi gerekir.
+  const noktaBtn = page.locator("article button").filter({ hasText: /^[A-Z]+-[A-Z0-9]+$/ }).first();
+  await expect(noktaBtn, "teslim noktası bağlantısı hiçbir kartta yok").toBeVisible();
+  await noktaBtn.click();
+
+  // Kart asenkron yükleniyor (katalog ucu) — görünmesini bekle.
+  await expect(page.getByText(/Çalışma saatleri/i)).toBeVisible({ timeout: 10_000 });
+  await expect(page.getByText(/Açık|Kapalı/).first()).toBeVisible();
+
+  // Sayfa DEĞİŞMEDİ: hâlâ teslim alma ekranındayız (K-C: ayrı ekran yok).
+  expect(page.url()).toContain("alici-teslim-alma");
+});
+
+// ── K13 · Hata durumu ────────────────────────────────────────────────
+
+test("K13: hata durumunda GEREKÇE gösteriliyor, sessizce boş kalmıyor", async ({ page, context }) => {
+  // Mock'un geliştirici anahtarı: sözleşmedeki her hata kodu denenebilmeli
+  // (FE-MOCK-DISIPLINI §2.4). Hata ekranları yalnız hata gerçekleşince
+  // görülebiliyor; tetiklenemezse gözden geçirilemez.
+  await context.addInitScript(() => {
+    sessionStorage.setItem("logistics.mock.pod.fault", "internal");
+  });
+
+  await page.goto(QUEUE);
+  await expect(page.getByText(/Bir sorun oluştu|hata/i).first()).toBeVisible();
+  await expect(page.getByRole("button", { name: /Yeniden dene/i })).toBeVisible();
+});
+
+test("K13: yetki hatası, genel hatadan AYRI anlatılıyor", async ({ page, context }) => {
+  await context.addInitScript(() => {
+    sessionStorage.setItem("logistics.mock.pod.fault", "permission");
+  });
+
+  await page.goto(QUEUE);
+  await expect(page.getByText(/yetki/i).first()).toBeVisible();
+});
+
+// ── K12 · Medya yetkisi ──────────────────────────────────────────────
+
+test("K12: yetki yoksa görsel kanıt gizli, üst veri GÖRÜNMEYE DEVAM ediyor", async ({ page }) => {
+  // ÇALIŞTIRMA: bu test `shipment.write` capability'si registry'de PASİF
+  // iken anlamlı ve YALNIZ o kurulumda koşuyor. Kurulumu yapan script
+  // `POD_MEDIA_DENIED=1` veriyor; normal koşuda atlanıyor, aksi hâlde
+  // "yetkiniz yok" metnini arayıp haksız yere kırmızı olurdu.
+  test.skip(
+    process.env.POD_MEDIA_DENIED !== "1",
+    "capability pasif kurulumu gerekli — scratchpad/k12.sh ile koşulur"
+  );
+  //
+  // Gerçek `view.pod_media` capability'si 14-BE'de gelecek; o güne kadar
+  // `can.viewMedia` köprüsü `shipment.write`e düşüyor (sözleşme §6.2).
+  await page.goto(`/panel/lojistik/sevkiyatlar/${TAM}/teslim-kaniti`);
+  await expect(page.getByText(/Taşıyıcıdan|Operasyon kaydı|Satıcı beyanı/).first()).toBeVisible();
+
+  // Yetki yoksa dosya HİÇ İSTENMİYOR: bulanık önizleme veriyi yine indirirdi.
+  await expect(page.getByText(/görsel kanıtı görme yetkiniz yok/i)).toBeVisible();
+  await expect(page.locator("figure img")).toHaveCount(0);
+
+  // Üst veri GÖRÜNMEYE DEVAM ediyor — yetkisizlik tüm kaydı gizlemek değil.
+  await expect(page.getByText(/Teslim alan/i).first()).toBeVisible();
+});

@@ -25,6 +25,7 @@ const ru = {
         missingName: "No shipment was specified.",
         podNotWired: "Proof of delivery is not connected yet",
         timelineNotWired: "Tracking history is not connected yet",
+        proofNotWired: "Подтверждение доставки пока не подключено",
         tracking: "Shipment tracking",
         trackingTitle: "Shipment activity",
       },
