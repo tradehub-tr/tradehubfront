@@ -1,3 +1,23 @@
+## [v2.4.0-alpha.17] - 2026-08-19 ALPHA
+
+Bu surum alpha.istoc.com'da gelistirme asamasindadir.
+
+### Eklendi
+- feat(e2e): teslim kanıtı ekranları için 14 senaryo eklendi (@aliiball)
+  - Kanıt kaydedince kova değişimi, kısmi teslimde zorunlu tutarsızlık
+  - Ödeme bloklu kayıtta teslim düğmesinin hiç çizilmediği doğrulanıyor
+  - Teslim kodunun değerinin hiçbir ekranda görünmediği doğrulanıyor
+  - Satıcı menü beklentisi G0 rol matrisine göre güncellendi
+
+### Degistirildi
+- refactor(e2e): görünüm modu ve satıcı rolü testleri eklendi (@aliiball)
+- refactor(lojistik): storefront yarım teslim kanıtı gösterimi kaldırıldı (@aliiball)
+  - Alıcıya sahte imza, fotoğraf ve teslim alan bilgisi gösteriliyordu; kayıt hiç yoktu
+  - Yerine bağlanmamış uç bildirimi kondu, dört dile de çevirisi eklendi
+  - Teslim kanıtı ekranları için yedi kabul senaryosu daha eklendi
+  - Satıcı rolüyle kendi kayıtları, başkasına erişim reddi ve beyan damgası doğrulanıyor
+
+---
 ## [v2.4.0-alpha.16] - 2026-08-18 ALPHA
 
 Bu surum alpha.istoc.com'da gelistirme asamasindadir.
