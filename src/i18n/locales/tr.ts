@@ -22,6 +22,7 @@ const tr = {
         missingName: "Hangi sevkiyatı görüntülemek istediğiniz belirtilmemiş.",
         podNotWired: "Teslim kanıtı henüz bağlı değil",
         timelineNotWired: "Takip geçmişi henüz bağlı değil",
+        proofNotWired: "Teslim kanıtı henüz bağlı değil",
         tracking: "Sevkiyat takibi",
         trackingTitle: "Sevkiyat hareketleri",
       },

@@ -402,3 +402,118 @@ test("madde 10 — filtre açılırı sayfayı YANA KAYDIRMIYOR", async ({ page 
   expect(kutu.sag, "panel sağ kenarı taşıyor").toBeLessThanOrEqual(kutu.genislik);
   expect(kutu.sol, "panel sol kenarı taşıyor").toBeGreaterThanOrEqual(0);
 });
+
+// ── Kabul 5: görünüm modları (2026-08-19) ────────────────────────────
+//
+// İŞ CİNSİNDEN: operatör aynı kuyruğa dört farklı biçimde bakabilmeli ve
+// hangi biçimi seçtiği bir dahaki girişinde hatırlanmalı. Kanban BİLGİ
+// panosu — üzerinde iş yapılmıyor, işe oradan giriliyor.
+
+test("GÖRÜNÜM — kanban dört kovayı SÜTUN olarak gösteriyor, pill'ler çekiliyor", async ({ page }) => {
+  await page.goto(QUEUE);
+  // Başlangıç: tablo + kova pill'leri.
+  await expect(page.getByRole("button", { name: /^Paketlenmedi/ })).toBeVisible();
+
+  await page.getByRole("button", { name: "Kanban Görünümü" }).click();
+
+  // Dört kova artık sütun başlığı.
+  const columns = page.locator(".kanban-col-header");
+  await expect(columns).toHaveCount(4);
+  for (const bucket of ["Paketlenmedi", "Kısmen paketlendi", "Etiket bekliyor", "Hazır"]) {
+    await expect(columns.filter({ hasText: new RegExp(bucket, "i") })).toHaveCount(1);
+  }
+
+  // Pill'ler GİZLENDİ: sütunlarla aynı işi yapıyorlardı, iki filtre yan yana
+  // durunca hangisinin geçerli olduğu okunmuyordu.
+  await expect(page.getByRole("button", { name: /^Paketlenmedi$/ })).toHaveCount(0);
+  // Tablo da yok — mod gerçekten değişti, üstüne bir şey eklenmedi.
+  await expect(page.locator("table tbody tr")).toHaveCount(0);
+
+  // DÖRDÜ BİRDEN GÖRÜNMELİ: panonun tek gerekçesi bu. Paylaşılan
+  // `.kanban-col` 280px'e sabitti ve dördüncü kova 1440px'lik ekranda pano
+  // dışına düşüyordu (ölçüldü 2026-08-19); sütunlar artık esniyor.
+  const board = page.locator(".list-kanban");
+  const tasma = await board.evaluate((el) => el.scrollWidth - el.clientWidth);
+  expect(tasma, "dördüncü kova pano dışına taşıyor — yatay kaydırma gerekiyor").toBeLessThanOrEqual(1);
+
+  // Sayfanın KENDİSİ yana kaymamalı; kaydırma panonun içinde kalır.
+  const sayfaKaydi = await page.evaluate(
+    () => document.documentElement.scrollWidth > document.documentElement.clientWidth
+  );
+  expect(sayfaKaydi, "kanban sayfayı yana kaydırıyor").toBe(false);
+});
+
+test("GÖRÜNÜM — kanban SALT-OKUNUR: kart sürüklenemiyor, uyarı görünüyor", async ({ page }) => {
+  // Kova sevkiyatın verisinden hesaplanıyor. Sürükleyip bırakmak koliyi
+  // paketlemediği için kart bir sonraki yüklemede eski kovasına dönerdi;
+  // kullanıcı işi yaptığını sanırdı.
+  await page.goto(QUEUE);
+  await page.getByRole("button", { name: "Kanban Görünümü" }).click();
+
+  await expect(page.getByText(/Salt-okunur pano/i)).toBeVisible();
+
+  const card = page.locator(".kanban-card").first();
+  await expect(card).toBeVisible();
+  expect(await card.getAttribute("draggable"), "kanban kartı sürüklenebilir yapılmış").toBeNull();
+});
+
+test("GÖRÜNÜM — kanban kartından çalışma alanına giriliyor", async ({ page }) => {
+  // Pano bilgi veriyor ama çıkmaz sokak olmamalı: işe buradan girilebilmeli.
+  await page.goto(QUEUE);
+  await page.getByRole("button", { name: "Kanban Görünümü" }).click();
+
+  await page.locator(".kanban-card").first().click();
+  await expect(page).toHaveURL(/\/lojistik\/paketleme\/SHP-/);
+  await expect(page.getByRole("heading", { name: /^Paketleme$/ })).toBeVisible();
+});
+
+test("GÖRÜNÜM — seçilen mod sayfa yenilenince HATIRLANIYOR", async ({ page }) => {
+  await page.goto(QUEUE);
+  await page.getByRole("button", { name: "Kart Görünümü" }).click();
+  await expect(page.locator(".list-grid-card").first()).toBeVisible();
+
+  await page.reload();
+  // Tercih diske yazıldı: kullanıcı her girişte modu yeniden seçmiyor.
+  await expect(page.locator(".list-grid-card").first()).toBeVisible();
+  await expect(page.locator("table tbody tr")).toHaveCount(0);
+});
+
+test("GÖRÜNÜM — kart modunda sevkiyat seçilip etiket ekranına geçiliyor", async ({ page }) => {
+  // Mod DEĞİŞTİRMEK iş akışını kırmamalı: seçim ve toplu eylem kartta da çalışır.
+  await page.goto(`${QUEUE}?bucket=partial`);
+  await page.getByRole("button", { name: "Kart Görünümü" }).click();
+
+  await page.locator('.list-grid-card input[type="checkbox"]').first().check();
+  await page.getByRole("button", { name: /Seçilenlere etiket/i }).click();
+  await expect(page).toHaveURL(/\/lojistik\/etiketler\/SHP-/);
+});
+
+test("GÖRÜNÜM — liste modu aynı sevkiyatları gösteriyor, veri kaybolmuyor", async ({ page }) => {
+  await page.goto(`${QUEUE}?bucket=partial`);
+  // Kuyruk veriyi ASENKRON çekiyor; `count()` beklemez ve iskelet aşamasında
+  // 0 döner. Önce ilk satırın görünmesini bekle, sonra say.
+  await expect(page.locator("table tbody tr").first()).toBeVisible();
+  const tableRows = await page.locator("table tbody tr").count();
+
+  await page.getByRole("button", { name: "Liste Görünümü" }).click();
+  await expect(page.locator(".list-compact-item")).toHaveCount(tableRows);
+});
+
+test("GÖRÜNÜM — etiket ekranı kart modunda her koli için ÖNİZLEME çiziyor", async ({ page }) => {
+  // Tabloda "hangi koliye ne bastım" görünmüyordu; kart modunun tek gerekçesi bu.
+  await page.goto(`/panel/lojistik/etiketler/${SHP}`);
+  await expect(page.locator("table tbody tr").first()).toBeVisible();
+  const rows = await page.locator("table tbody tr").count();
+
+  await page.getByRole("button", { name: "Kart Görünümü" }).click();
+  await expect(page.locator(".list-grid-card")).toHaveCount(rows);
+
+  // Yan önizleme KAYBOLMUYOR: üretme/iptal eylemleri orada duruyor.
+  await expect(page.getByRole("heading", { name: /^Önizleme$/ })).toBeVisible();
+});
+
+test("GÖRÜNÜM — etiket ekranında kanban YOK (durum akışı değil, bayrak)", async ({ page }) => {
+  await page.goto(`/panel/lojistik/etiketler/${SHP}`);
+  await expect(page.getByRole("button", { name: "Tablo Görünümü" })).toBeVisible();
+  await expect(page.getByRole("button", { name: "Kanban Görünümü" })).toHaveCount(0);
+});
