@@ -81,17 +81,31 @@ test("SATICI — Paketleme menüde var ve menü admin'in ALT KÜMESİ", async ({
   const links = await page.evaluate(() =>
     [...document.querySelectorAll('a[href*="/lojistik/"]')].map((a) => a.getAttribute("href"))
   );
-  expect(links, "satıcı menüsünde Paketleme yok").toContain("/panel/lojistik/paketleme");
+  // G0 rol matrisi (2026-08-19) + 14-FE menü kaydı sonrası satıcının GÖRMESİ
+  // GEREKEN kalemler. Liste 13-FE'de yalnız paketlemeydi; matris sevkiyatları,
+  // 14-FE de teslimat grubunu açtı.
+  for (const gorunmeli of [
+    "/panel/lojistik/paketleme",
+    "/panel/lojistik/sevkiyatlar",
+    "/panel/lojistik/sevkiyatlar/yeni",
+    "/panel/lojistik/teslim-kaniti",
+    "/panel/lojistik/satici-teslimati",
+    "/panel/lojistik/alici-teslim-alma",
+  ]) {
+    expect(links, `satıcı menüsünde olmalı: ${gorunmeli}`).toContain(gorunmeli);
+  }
 
   // Platform ekranları satıcıya KAPALI: katalog/ayar/taşıyıcı hesabı/durum
-  // eşlemesi/sevkiyat listesi admin işi. Menüde görünürlerse satıcı tıklar ve
-  // yetki hatası yer.
+  // eşlemesi admin işi. Menüde görünürlerse satıcı tıklar ve yetki hatası yer.
+  //
+  // NOT: "/panel/lojistik/sevkiyatlar" bu listeden ÇIKARILDI — G0 matrisi
+  // (Bora, 2026-08-19) sevkiyat listesini satıcıya açtı ve `module_navigation_spec`
+  // kaydı eklendi. Test bayatlamıştı; 13-FE'de yazıldığında karar farklıydı.
   for (const yasak of [
     "/panel/lojistik/kataloglar",
     "/panel/lojistik/ayarlar",
     "/panel/lojistik/tasiyici-hesaplari",
     "/panel/lojistik/durum-eslemesi",
-    "/panel/lojistik/sevkiyatlar",
   ]) {
     expect(links, `satıcı menüsünde olmamalı: ${yasak}`).not.toContain(yasak);
   }
