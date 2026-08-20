@@ -22,6 +22,7 @@ const en = {
         missingName: "No shipment was specified.",
         podNotWired: "Proof of delivery is not connected yet",
         timelineNotWired: "Tracking history is not connected yet",
+        proofNotWired: "Delivery evidence is not connected yet",
         tracking: "Shipment tracking",
         trackingTitle: "Shipment activity",
       },
