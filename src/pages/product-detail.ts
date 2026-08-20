@@ -3,6 +3,8 @@
  * Assembles header, product detail sections, and footer.
  */
 
+// T-123: RUM montajı — MPA ortak boot (çift başlatmaya karşı korumalı).
+import "../lib/rum/boot";
 import '../style.css'
 import { initFlowbite } from 'flowbite'
 
@@ -37,6 +39,9 @@ import {
   ProductSellerPanel,
   initProductBuyBox,
   ProductImageGallery,
+  upgradeGalleryMedia,
+  ProductVideoSection,
+  initProductVideoSection,
   ProductOrderPanel,
   initProductOrderPanel,
   ProductTabs,
@@ -60,6 +65,8 @@ import {
 } from '../components/product'
 // Product data
 import { getCurrentProduct, loadProduct } from '../alpine/product'
+// Medya teslim manifesti — galerinin <picture>/srcset üretebilmesi için.
+import { primeMediaManifests } from '../lib/media/manifest'
 // B-2: loginModal ayrı modül (product.ts'ten bölündü) — product-detail'de de kullanılıyor.
 import '../alpine/loginModal'
 import { initCurrency, getSelectedCurrency, formatPriceRange } from '../services/currencyService'
@@ -147,11 +154,29 @@ async function renderProductPage() {
   await initCurrency();
 
   // Load real data from API
+  // Medya manifesti ürün verisiyle PARALEL başlar ama BEKLENMEZ: manifest bir
+  // İYİLEŞTİRMEDİR, ürünün kendisi çizilmeden ona bağlanmak yanlış yönde bir
+  // bağımlılık olurdu — uç yavaşsa (istemcide 4 sn zaman aşımı) sayfa o kadar
+  // süre boş kalırdı. Manifest render'dan sonra gelirse görseller aşağıdaki
+  // `upgradeGalleryMedia()` ile yükseltilir (progressive enhancement).
+  // `primeMediaManifests` zaten fırlatmaz; `.catch` yine de var ki bu yol
+  // beklenmediği için sayfada işlenmemiş bir promise reddi kalmasın.
+  // Pretty URL'de (`/urun/<slug>`) buradaki anahtar slug'dır ve backend'de
+  // eşleşmez — gerçek ilan adıyla ikinci deneme aşağıda.
+  let manifestHazir: Promise<unknown> = Promise.resolve();
   if (listingId) {
+    manifestHazir = primeMediaManifests([listingId]).catch(() => undefined);
     await loadProduct(listingId);
   }
 
   const product = getCurrentProduct();
+
+  // Slug ile gelindiyse manifest ancak şimdi doğru anahtarla istenebilir.
+  // Bu da beklenmez; sonucu aynı yükseltme adımına bağlanır.
+  if (product.id && product.id !== listingId) {
+    const ikinciDeneme = primeMediaManifests([product.id]).catch(() => undefined);
+    manifestHazir = Promise.all([manifestHazir, ikinciDeneme]);
+  }
 
   // Faz 4d: Legacy URL ile (?id=LST-XX) gelen kullanıcıyı pretty URL'e taşı.
   // Backend page_resolver SEO meta'yı sadece /urun/<slug> rotasında inject
@@ -268,6 +293,12 @@ async function renderProductPage() {
                 </div>
               </div>
               <div id="pd-below-hero" class="mt-6">
+                <!-- Tanitim videosu: galeride son slayt olarak (tiklayinca
+                     autoplay) de gorunur; burada poster - onizleme klip - tam
+                     video kademeli SESSIZ onizleme yuzeyi olarak basilir.
+                     Videosuz ilanda ProductVideoSection kendini gizler (hidden);
+                     CLS yok: 56.25% padding-top orani rezerve eder. -->
+                ${ProductVideoSection()}
                 ${ProductTabs()}
                 ${RelatedProducts()}
               </div>
@@ -308,6 +339,10 @@ async function renderProductPage() {
       initProductOrderPanel({ signal: lifecycle.signal });
       initProductTabs({ signal: lifecycle.signal });
       initAttributesTab();
+      // Önizleme kancasını canlıya bağla: ilk render'ın klibini hover/odakta
+      // oynatır, varyant değişiminde videoyu swap eder. `signal` viewport
+      // değişiminde global varyant dinleyicisini temizler (üst üste binmez).
+      initProductVideoSection({ signal: lifecycle.signal });
     } else {
       initMobileLayout({ signal: lifecycle.signal });
     }
@@ -371,6 +406,14 @@ async function renderProductPage() {
   initShippingModal();
   mountDetailLayout();
   detailMediaQuery.addEventListener('change', mountDetailLayout);
+
+  // Manifest render'dan SONRA geldiyse basılmış görselleri yükselt. Bu adım
+  // olmasaydı beklenmeyen manifest sessizce yutulur, `<picture>`/`srcset` hiç
+  // uygulanmazdı. Sonradan yapılan mount'lar (viewport değişimi, varyant swap,
+  // slayt değişimi) manifesti zaten senkron önbellekten okur.
+  void manifestHazir.then(() => {
+    upgradeGalleryMedia();
+  });
 
   // ── Original images + title (for "back to default" fallback) ──
   const originalTitle = product.title || '';

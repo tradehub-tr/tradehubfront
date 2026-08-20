@@ -11,6 +11,10 @@
 import { getCurrentProduct } from "../../alpine/product";
 import { t } from "../../i18n";
 import { escapeHtml as escapeHtmlAttr, sanitizeUrl } from "../../utils/sanitize";
+import { ResponsiveImage } from "../media/ResponsiveImage";
+import { preloadLcpImageFromHtml } from "../media/LcpPreload";
+import { getMediaImageManifest } from "../../lib/media/manifest";
+import { mediaSizesFor } from "../../lib/media/sizes";
 
 interface GalleryVisual {
   background: string;
@@ -51,32 +55,126 @@ function renderPlaceholder(visual: GalleryVisual, size: "large" | "thumb"): stri
  * (2026-08-03'te varyant swap'inde yakalandı — `THUMB_CLASS`'takinin aynısı).
  *
  * `src` burada sanitize edilir; çağıranın ayrıca kaçışlamasına gerek yok.
+ *
+ * ## T-122 — `opts.lcp`
+ *
+ * `lcp: true` YALNIZ sayfanın LCP adayını basan TEK çağrı için verilir:
+ * masaüstü düzenindeki `#gallery-main-image`. `size === "large"` ölçütü
+ * YETMEZ — lightbox da "large" basar (açılana kadar görünmez, LCP olamaz) ve
+ * `alpine/product.ts` slayt/varyant değişiminde aynı fonksiyonu yine "large"
+ * ile çağırır (kullanıcı etkileşiminden SONRA; LCP çoktan ölçülmüştür).
+ * Bayrağı çağırana bırakmak, "hangi görsel LCP" kararını tek bir satırda
+ * görünür kılar. Fazladan bir çağrı yine de `lcp: true` geçse üst sınır
+ * (`MAX_LCP_PRELOADS`) devreye girer ve ikinci bağlantı basılmaz.
  */
 export function renderGalleryMedia(
   src: string | undefined,
   alt: string,
   visual: GalleryVisual,
-  size: "large" | "thumb"
+  size: "large" | "thumb",
+  opts: { lcp?: boolean } = {}
 ): string {
   if (src) {
     const safeAlt = escapeHtmlAttr(alt);
     const safeSrc = escapeHtmlAttr(sanitizeUrl(src));
     const fitClass = size === "large" ? "object-contain" : "object-cover";
-    return `
+    const kutuSinifi =
+      `gallery-media-asset gallery-media-asset--${size} w-full h-full ${fitClass} ` +
+      "select-none pointer-events-none";
+
+    // Bugünkü işaretleme — TEK KARAKTERİ DEĞİŞMEDİ, yalnız kapanışa alındı.
+    // Manifest yoksa `ResponsiveImage` birebir bunu döndürür.
+    const fallback = (): string => `
       <img
         src="${safeSrc}"
         alt="${safeAlt}"
         width="${size === "thumb" ? "70" : "800"}" height="${size === "thumb" ? "70" : "800"}"
         data-gallery-main-media="true"
-        class="gallery-media-asset gallery-media-asset--${size} w-full h-full ${fitClass} select-none pointer-events-none"
+        class="${kutuSinifi}"
         loading="${size === "thumb" ? "lazy" : "eager"}"
         decoding="${size === "thumb" ? "async" : "sync"}"
         draggable="false"
       />
     `;
+
+    // Manifest ilan ADIYLA anahtarlanır; galeri o ilanın sayfasında.
+    // `getCurrentProduct()` henüz API'den dolmadıysa `id` boş olur ve arama
+    // `null` döner — yine bugünkü yola düşülür.
+    const manifest = getMediaImageManifest(getCurrentProduct().id || "", src);
+    const isaretleme = ResponsiveImage({
+      manifest,
+      fallback,
+      // Ana görsel 1024px altında TAM viewport genişliğinde (§3.6) — sistemin
+      // en yüksek piksel talebi. Karolar sabit 70px.
+      sizes: mediaSizesFor(
+        size === "large" ? "product_detail/main_image" : "product_detail/thumb_rail"
+      ),
+      // Ana görsel sayfanın LCP adayıdır: `fetchpriority="high"` + `sync`,
+      // `loading` yazılmaz. Karolar tembel.
+      priority: size === "large",
+      alt,
+      imgClass: kutuSinifi,
+      // Ölçü yedeği bugünkü değerler; manifest gerçek oranı taşıyorsa o kazanır.
+      width: size === "thumb" ? 70 : 800,
+      height: size === "thumb" ? 70 : 800,
+      extraAttrs: { draggable: "false" },
+      // `data-gallery-main-media` EN DIŞTAKİ elemana gider: zoom CSS'i
+      // `#gallery-main-image > [data-gallery-main-media="true"]` doğrudan
+      // çocuk seçicisi, `alpine/product.ts:getMainMedia()` de aynı işaretçiyi
+      // arayıp `style.transform` yazıyor. Sarmal eklenince işaretçi `<img>`de
+      // kalsaydı zoom sessizce ölürdü.
+      hostAttrs: { "data-gallery-main-media": "true" },
+      // Sarmal, zoom `transform`ını taşıyacak: `display:contents` transform
+      // almaz, bu yüzden blok ve kutuyu tam dolduran bir sarmal gerekli.
+      pictureClass: "block w-full h-full",
+    });
+
+    // T-122: preload, DÖNDÜRÜLECEK işaretlemenin KENDİSİNDEN türetilir —
+    // `srcset`/`sizes`/`type` kopyalanmaz, aynı dizgedir. Manifest henüz
+    // gelmediyse `isaretleme` yedek `<img>`dir ve preload düz `href` olur;
+    // o adres `<img src>` ile birebir aynı olduğu için tarayıcı tek indirir.
+    if (opts.lcp) preloadLcpImageFromHtml(isaretleme);
+    return isaretleme;
   }
 
   return renderPlaceholder(visual, size);
+}
+
+/**
+ * Manifest RENDER'DAN SONRA geldiğinde basılmış galeri görsellerini yükselt.
+ *
+ * Gerekçe: `primeMediaManifests` bir iyileştirmedir, ürünün çizilmesi onu
+ * BEKLEMEZ (`pages/product-detail.ts`). Manifest sayfa çizildikten sonra
+ * gelirse `renderGalleryMedia` çoktan yedek `<img>`i basmış olur; bu fonksiyon
+ * o düğümleri yerinde yeniden üretir — yoksa manifest sessizce yutulur ve
+ * `<picture>`/`srcset` hiç uygulanmaz.
+ *
+ * Yalnız GERÇEKTEN manifesti olan düğüme dokunulur: aksi hâlde aynı
+ * işaretlemeyi tekrar basıp zoom'un yazdığı inline `transform`ı boşuna
+ * silerdik. Yükseltilmiş düğüm bir daha eşleşmez (adres artık türevin adresi),
+ * yani fonksiyon tekrar çağrılmaya dayanıklıdır.
+ *
+ * Alpine yeniden başlatılmaz: `renderGalleryMedia` çıktısı hiç direktif
+ * taşımaz, karo/lightbox davranışı sarmalayıcı elemanlarda yaşar.
+ *
+ * @returns Yükseltilen düğüm sayısı.
+ */
+export function upgradeGalleryMedia(root: ParentNode = document): number {
+  const listing = getCurrentProduct().id || "";
+  if (!listing) return 0;
+
+  let sayac = 0;
+  for (const img of Array.from(root.querySelectorAll<HTMLImageElement>("img.gallery-media-asset"))) {
+    // `<picture>` içindeyse zaten manifestten üretilmiş.
+    if (img.parentElement?.tagName === "PICTURE") continue;
+    const src = img.getAttribute("src") || "";
+    if (!src) continue;
+    if (!getMediaImageManifest(listing, src)) continue;
+    const size = img.classList.contains("gallery-media-asset--thumb") ? "thumb" : "large";
+    img.outerHTML = renderGalleryMedia(src, img.getAttribute("alt") || "", defaultVisual, size);
+    sayac += 1;
+  }
+  return sayac;
 }
 
 // Referans düzenden ölçülen değerler: küçük görsel 70×70, aralarındaki dikey
@@ -252,7 +350,8 @@ export function ProductImageGallery(): string {
           @pointerleave="resetZoom()"
           @click="!isVideoSlide() && openLightbox(currentIndex)"
         >
-          ${renderGalleryMedia(firstImage?.src, firstImage?.alt ?? t("product.productImage"), defaultVisual, "large")}
+          <!-- T-122: sayfanın LCP adayı BU görsel; lcp bayrağı yalnız burada. -->
+          ${renderGalleryMedia(firstImage?.src, firstImage?.alt ?? t("product.productImage"), defaultVisual, "large", { lcp: true })}
         </div>
 
         <!-- Oklar — referans düzendeki ölçü: 32×32, düz beyaz zemin, koyu ok.

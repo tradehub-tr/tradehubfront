@@ -3,6 +3,8 @@
  * Assembles AuthLayout with LoginPage content for the login flow.
  */
 
+// T-123: RUM montajı — MPA ortak boot (çift başlatmaya karşı korumalı).
+import "../lib/rum/boot";
 import '../style.css'
 import { initFlowbite } from 'flowbite'
 import { startAlpine } from '../alpine'

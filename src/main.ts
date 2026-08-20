@@ -273,3 +273,19 @@ void homeReady.then(() => {
     { name: "top-ranking", init: initTopRanking },
   ]);
 });
+
+// ── T-123: RUM montajı — AÇIK (2026-08-20) ───────────────────────────────────
+// Zincirin sunucu tarafı KURULU: uç
+// `POST /api/method/tradehub_core.api.rum.collect` + `Media RUM Sample`
+// DocType. İstemci çekirdeği `src/lib/rum/` altında vendor'landı (köken:
+// admin-panel/frontend/src/lib/media/rum/).
+//
+// Eski engel kalktı: `web-vitals@^6` kuruldu (Apache-2.0, 0 bağımlılık —
+// denetim: tradehub_core/docs/reports/60-fe3-rum.md §11).
+//
+// Montaj `./lib/rum/boot` üzerinden: bu bir MPA — main.ts YALNIZ ana sayfa
+// girişidir; aynı boot modülü TÜM `src/pages/*` girişlerinden de import
+// edilir. Örneklem %10 (rapor 60 §8) boot içinde; çift-başlatma koruması
+// ve gerekçe `src/lib/rum/boot.ts`'te. Telemetri sayfayı ASLA kırmaz:
+// startRum fırlatmamayı taahhüt eder; uç ulaşılamazsa toplayıcı susar.
+import "./lib/rum/boot";

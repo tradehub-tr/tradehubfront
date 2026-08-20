@@ -8,6 +8,8 @@
  * (page-1)*50 + index + 1 ile hesaplar; klasik sayfalama gösterir.
  */
 
+// T-123: RUM montajı — MPA ortak boot (çift başlatmaya karşı korumalı).
+import "../lib/rum/boot";
 import "../style.css";
 import Alpine from "alpinejs";
 import { initFlowbite } from "flowbite";

@@ -2,6 +2,8 @@
  * Payment Processing Page
  * Simulates 3D Secure / OTP verification before redirecting to success or failed.
  */
+// T-123: RUM montajı — MPA ortak boot (çift başlatmaya karşı korumalı).
+import "../lib/rum/boot";
 import '../style.css';
 import { t } from '../i18n';
 import { getBaseUrl, initLinkRewriter } from '../utils/url';

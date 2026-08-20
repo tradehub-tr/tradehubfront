@@ -201,6 +201,34 @@ map "${FRONTEND_DOMAIN}" $robots_file {
     "istoc.com" /robots-prod.txt;
 }
 
+# İçerik-hash'li adlandırma URL tahminini zorlaştırır ama tek başına yetmez:
+# toplu tarama/enumeration denemeleri hız sınırlansın (limit_req). 10r/s +
+# burst 20 normal ürün görseli yüklemesini etkilemez, otomatik taramayı
+# yavaşlatır. (2026-08-20: yerel üretilmiş şablondan buraya taşındı — kalıcı
+# ev burası; gen-local-nginx.sh her koşuda yerel kopyayı bundan türetir.)
+limit_req_zone $binary_remote_addr zone=files_zone:10m rate=10r/s;
+
+# ── T-131 · Medya servis sertleştirmesi — başlık haritaları ─────────────────
+# GERİ ALMA: bu map bloğunu ve /files/ + /private/files/ içindeki "T-131"
+# işaretli blokları sil — başka hiçbir şey değişmedi.
+# nginx boş değerli add_header'ı HİÇ basmaz → yalnız eşleşen uzantı başlık alır.
+#
+# SVG: backend zaten sanitize ediyor (reject_unsafe_files); edge yine de
+# script yürütmeyi CSP sandbox ile keser (T-131 kabul kriteri: ayrı origin
+# VEYA CSP sandbox). Yanıtın kendi CSP'si <img> içindeki render'ı ETKİLEMEZ —
+# görsel teslimi bozulmaz; yalnız SVG'ye doğrudan gidilirse script çalışmaz.
+map $uri $t131_files_csp {
+    default   "";
+    ~*\.svg$  "sandbox; default-src 'none'";
+}
+# HTML/JS-benzeri uzantı /files/ altından asla satır içi servis edilmez
+# (T-131 kabul kriteri). Görüntü/video uzantıları BİLEREK listede YOK:
+# görsele Content-Disposition: attachment basmak <img> teslimini riske atar.
+map $uri $t131_files_dispo {
+    default                                           "";
+    ~*\.(html?|xhtml|shtml|xml|xsl|xslt|js|mjs|cjs)$  "attachment";
+}
+
 server {
     listen 80;
     server_name _;
@@ -350,6 +378,22 @@ server {
     # ^~ ZORUNLU: aşağıdaki resim-uzantı regex'i (~* \.(png|jpg…)$) bu prefix'i
     # ezmesin diye. ^~ olmadan /private/files/x.jpg backend yerine regex'e düşer.
     location ^~ /private/files/ {
+        # ── T-131 · Medya servis sertleştirmesi (tek blok — geri almak için sil)
+        # DİKKAT: bloğa add_header girince server-level başlık mirası kesilir;
+        # önceki davranışı korumak için o başlıklar burada açıkça tekrarlanır.
+        # Tek bilinçli fark site CSP'si: script-src 'unsafe-inline' içerdiği
+        # için SVG'de inline script'e İZİN VERİRDİ — yerine koşullu sandbox.
+        add_header X-Robots-Tag $robots_tag always;
+        add_header X-Frame-Options "DENY" always;
+        add_header X-XSS-Protection "1; mode=block" always;
+        add_header Referrer-Policy "strict-origin-when-cross-origin" always;
+        add_header Permissions-Policy "camera=(), microphone=(), geolocation=()" always;
+        proxy_hide_header X-Content-Type-Options;
+        add_header X-Content-Type-Options "nosniff" always;
+        proxy_hide_header Content-Security-Policy;
+        add_header Content-Security-Policy $t131_files_csp always;
+        add_header Content-Disposition $t131_files_dispo always;
+        # ── /T-131 ──
         proxy_hide_header X-Robots-Tag;
         proxy_pass https://${BACKEND_DOMAIN}/private/files/;
         proxy_ssl_server_name on;
@@ -363,6 +407,21 @@ server {
     # ^~ ZORUNLU: resim-uzantı regex'i (~* \.(png|jpg…)$) bu prefix'i ezmesin.
     # ^~ olmadan /files/urun.jpg backend'e gitmez, regex'e düşer → 404.
     location ^~ /files/ {
+        # noindex + limit_req (2026-08-20: yerel kopyadan kalıcı eve taşındı):
+        # içerik-hash'li olsa da URL indexlenmesin; enumeration yavaşlasın.
+        # burst=20 nodelay sayfadaki paralel görsel isteklerini engellemez.
+        add_header X-Robots-Tag "noindex" always;
+        limit_req zone=files_zone burst=20 nodelay;
+
+        # ── T-131 · Medya servis sertleştirmesi (tek blok — geri almak için sil)
+        # nosniff'i bugüne dek yalnız upstream basıyordu; edge sahiplensin:
+        # çift başlık olmasın diye önce gizle, tek doğruyu bas.
+        proxy_hide_header X-Content-Type-Options;
+        add_header X-Content-Type-Options "nosniff" always;
+        proxy_hide_header Content-Security-Policy;
+        add_header Content-Security-Policy $t131_files_csp always;
+        add_header Content-Disposition $t131_files_dispo always;
+        # ── /T-131 ──
         proxy_hide_header X-Robots-Tag;
         proxy_pass https://${BACKEND_DOMAIN}/files/;
         proxy_ssl_server_name on;

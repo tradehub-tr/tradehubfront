@@ -3,6 +3,8 @@
  * Eski bildirim URL'lerini (ör. /buyer-dashboard?tab=orders&order=XXX)
  * doğru yola yönlendirmeyi de üstleniyor.
  */
+// T-123: RUM montajı — MPA ortak boot (çift başlatmaya karşı korumalı).
+import "../lib/rum/boot";
 import '../style.css'
 
 (function redirectLegacyPaths() {

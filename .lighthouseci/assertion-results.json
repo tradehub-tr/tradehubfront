@@ -1,0 +1,99 @@
+[
+  {
+    "name": "minScore",
+    "expected": 0.9,
+    "actual": 0.69,
+    "values": [
+      0.69,
+      0.69,
+      0.69
+    ],
+    "operator": ">=",
+    "passed": false,
+    "auditProperty": "seo",
+    "auditId": "categories",
+    "level": "warn",
+    "url": "http://istoc.localhost/"
+  },
+  {
+    "name": "maxNumericValue",
+    "expected": 2500,
+    "actual": 6277.101800000002,
+    "values": [
+      6488.318900000001,
+      6492.8207999999995,
+      6277.101800000002
+    ],
+    "operator": "<=",
+    "passed": false,
+    "auditId": "largest-contentful-paint",
+    "level": "warn",
+    "url": "http://istoc.localhost/pages/products.html",
+    "auditTitle": "Largest Contentful Paint",
+    "auditDocumentationLink": "https://developer.chrome.com/docs/lighthouse/performance/lighthouse-largest-contentful-paint/"
+  },
+  {
+    "name": "minScore",
+    "expected": 0.8,
+    "actual": 0.74,
+    "values": [
+      0.74,
+      0.74,
+      0.74
+    ],
+    "operator": ">=",
+    "passed": false,
+    "auditProperty": "performance",
+    "auditId": "categories",
+    "level": "warn",
+    "url": "http://istoc.localhost/pages/products.html"
+  },
+  {
+    "name": "minScore",
+    "expected": 0.9,
+    "actual": 0.69,
+    "values": [
+      0.69,
+      0.69,
+      0.69
+    ],
+    "operator": ">=",
+    "passed": false,
+    "auditProperty": "seo",
+    "auditId": "categories",
+    "level": "warn",
+    "url": "http://istoc.localhost/pages/products.html"
+  },
+  {
+    "name": "minScore",
+    "expected": 0.9,
+    "actual": 0.61,
+    "values": [
+      0.61,
+      0.61,
+      0.61
+    ],
+    "operator": ">=",
+    "passed": false,
+    "auditProperty": "seo",
+    "auditId": "categories",
+    "level": "warn",
+    "url": "http://istoc.localhost/pages/product-detail.html?id=LST-00202"
+  },
+  {
+    "name": "minScore",
+    "expected": 0.9,
+    "actual": 0.69,
+    "values": [
+      0.69,
+      0.69,
+      0.69
+    ],
+    "operator": ">=",
+    "passed": false,
+    "auditProperty": "seo",
+    "auditId": "categories",
+    "level": "warn",
+    "url": "http://istoc.localhost/pages/categories.html"
+  }
+]

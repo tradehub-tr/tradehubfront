@@ -2,6 +2,8 @@
  * Seller Storefront — Page Orchestrator
  * All seller data is fetched dynamically from API via Alpine.js sellerStorefront store
  */
+// T-123: RUM montajı — MPA ortak boot (çift başlatmaya karşı korumalı).
+import "../lib/rum/boot";
 import '../style.css';
 import { initFlowbite } from 'flowbite';
 import 'swiper/swiper-bundle.css';

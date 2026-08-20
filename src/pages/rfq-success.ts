@@ -3,6 +3,8 @@
  * iSTOC-style: success message, quality rating, promotional banner.
  */
 
+// T-123: RUM montajı — MPA ortak boot (çift başlatmaya karşı korumalı).
+import "../lib/rum/boot";
 import '../style.css'
 import { t } from '../i18n'
 import { initFlowbite } from 'flowbite'

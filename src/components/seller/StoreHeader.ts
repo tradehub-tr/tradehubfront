@@ -298,8 +298,10 @@ export function StoreHeader(): string {
 
                 <!-- VIDEO -->
                 <template x-if="current && isVideo">
+                  <!-- x-video-src: HLS-farkındalıklı kaynak bağlama (src/alpine/videoSrc.ts).
+                       .m3u8 kaynaklar yerli destek yoksa hls.js ile bağlanır; mp4 davranışı aynı. -->
                   <video x-ref="headerVideo"
-                         :src="current.src"
+                         x-video-src="current.src"
                          :poster="current.poster || ''"
                          class="w-full h-full object-cover"
                          @timeupdate="updateProgress()"

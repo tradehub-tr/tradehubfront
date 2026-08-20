@@ -10,6 +10,8 @@
  * (append değil) — DOM'da her an tek sayfalık kart bulunur (scale-resilience).
  */
 
+// T-123: RUM montajı — MPA ortak boot (çift başlatmaya karşı korumalı).
+import "../lib/rum/boot";
 import '../style.css'
 import Alpine from 'alpinejs'
 import { initFlowbite } from 'flowbite'

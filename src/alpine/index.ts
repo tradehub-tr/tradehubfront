@@ -11,6 +11,11 @@ import { initSelectMenus } from "../components/shared/SelectMenu";
 // seller description, ticket body etc.). Never bind `x-html` to a raw value.
 Alpine.magic("safeHtml", () => (value: unknown) => sanitizeHtml(String(value ?? "")));
 
+// x-video-src — HLS-farkındalıklı :src (StoreHeader, CompanyProfile video
+// modalı). Direktifin kendisi birkaç satır; hls.js YALNIZ .m3u8 kaynak
+// gerçekten oynatılırsa dinamik import ile iner (utils/hlsVideo.ts).
+import "./videoSrc";
+
 // Import all Alpine.data() module registrations (side-effect imports)
 // orders — page-specific (orders sayfası: ordersListComponent/refundsComponent/
 // reviewsSectionComponent; buyer-dashboard sayfası: ordersSection). B-2: core'dan

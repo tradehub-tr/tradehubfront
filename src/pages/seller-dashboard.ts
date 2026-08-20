@@ -2,6 +2,8 @@
  * Seller Dashboard — Satıcı Paneli
  * Satıcının mağazasını yönettiği sayfa
  */
+// T-123: RUM montajı — MPA ortak boot (çift başlatmaya karşı korumalı).
+import "../lib/rum/boot";
 import '../style.css';
 // Currency formatting via window.csFormatPrice (set by currencyService)
 import { initFlowbite } from 'flowbite';

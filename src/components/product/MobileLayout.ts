@@ -26,6 +26,7 @@ import { getFlagSvg } from "../../utils/flags";
 import { escapeHtml, sanitizeUrl, sanitizeRichHtml } from "../../utils/sanitize";
 import { OptionsSheet, initOptionsSheet } from "./OptionsSheet";
 import { MediaViewer, initMediaViewer, openMediaViewer, collectVideoUrls } from "./MediaViewer";
+import { preloadLcpImageFromHtml } from "../media/LcpPreload";
 
 // Product loaded lazily — getCurrentProduct() called inside functions
 
@@ -132,6 +133,23 @@ export function MobileProductLayout(): string {
 
   // ── Sections 1-5: Gallery, Badges, Price, Sample, Title ──
 
+  /**
+   * Slayt görselinin işaretlemesi — TEK KAYNAK.
+   *
+   * Şablondan çıkarılmasının tek nedeni T-122: LCP preload'u bu dizgenin
+   * KENDİSİNDEN türetiliyor, elle ikinci kez yazılmıyor. Çıktı, çıkarılmadan
+   * önceki hâliyle BAYT BAYT AYNI.
+   */
+  const slaytGorseli = (img: { src: string; alt: string }, i: number): string =>
+    `<img class="w-full h-full object-contain select-none" src="${escapeHtml(sanitizeUrl(img.src))}" alt="${escapeHtml(img.alt)}" width="800" height="800" decoding="async" draggable="false" loading="${i === 0 ? "eager" : "lazy"}">`;
+
+  // T-122 — mobilde LCP adayı İLK slayttır (tek `loading="eager"` olan o).
+  // Preload düz `href`tir çünkü bu işaretlemede `srcset` YOK; adres `<img
+  // src>` ile birebir aynı olduğundan tarayıcı tek indirir. Kalan slaytlar
+  // preload ALMAZ; ayrıca `MAX_LCP_PRELOADS` masaüstü/mobil düzenlerin
+  // ikisinin birden bağlantı basmasını yapısal olarak engeller.
+  if (p.images[0]?.src) preloadLcpImageFromHtml(slaytGorseli(p.images[0], 0));
+
   const gallerySection = `
     <div id="pdm-gallery-wrap" class="relative w-full aspect-square overflow-hidden bg-surface-raised">
       <div id="pdm-gallery-track" class="flex w-full h-full overflow-x-auto overflow-y-hidden [scroll-snap-type:x_mandatory] [-webkit-overflow-scrolling:touch] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
@@ -141,7 +159,7 @@ export function MobileProductLayout(): string {
           <div class="pdm-gallery-slide shrink-0 basis-full w-full h-full [scroll-snap-align:start] [scroll-snap-stop:always]" data-slide-index="${i}">
             ${
               img.src
-                ? `<img class="w-full h-full object-contain select-none" src="${escapeHtml(sanitizeUrl(img.src))}" alt="${escapeHtml(img.alt)}" width="800" height="800" decoding="async" draggable="false" loading="${i === 0 ? "eager" : "lazy"}">`
+                ? slaytGorseli(img, i)
                 : `<div class="pdm-gallery-placeholder w-full h-full flex items-center justify-center bg-gradient-to-b from-[#f8f9fa] to-[#e9ecef]">
                   <svg width="64" height="64" fill="none" stroke="#9ca3af" stroke-width="1.4" viewBox="0 0 24 24">
                     <rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/>

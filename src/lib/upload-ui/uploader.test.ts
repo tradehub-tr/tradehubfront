@@ -60,7 +60,7 @@ describe("uploadFiles — compress opt-out (KYC/KYB kimlik/evrak muafiyeti)", ()
     expect(prepareMediaMock).toHaveBeenCalledTimes(1);
   });
 
-  it("compress:false verilirse prepareMedia hiç çağrılmaz, orijinal dosya ağa gider", async () => {
+  it("[NFR-024] compress:false verilirse prepareMedia hiç çağrılmaz, orijinal dosya ağa gider", async () => {
     const created: FakeXHR[] = [];
     class CapturingXHR extends FakeXHR {
       constructor() {
