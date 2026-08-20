@@ -91,7 +91,11 @@ test.describe("Ürün detay — 3 sütunlu masaüstü düzeni", () => {
     await expect(page.locator("#pd-seller-strip")).toHaveCount(0);
   });
 
-  test("1100px'de sağ sütun ortanın altına iner", async ({ page }) => {
+  test("1100px'de sağ sipariş rayı DARALIR ama yan yana kalır", async ({ page }) => {
+    // BU TEST ESKİDEN "sağ sütun ortanın altına iner" diyordu ve düzen
+    // değiştiğinde güncellenmedi. Bugünkü davranış `product-detail.ts`
+    // içinde yazılı: 1024–1279 bandında sağ ray KAYBOLMAZ, 300px'e daralır;
+    // 1280+'da 394px olur. Yani sütun aşağı inmiyor — inceliyor.
     await page.setViewportSize({ width: 1100, height: 900 });
     await mockApi(page);
     await page.goto("/pages/product-detail.html?id=LST-TEST-0002");
@@ -102,8 +106,24 @@ test.describe("Ürün detay — 3 sütunlu masaüstü düzeni", () => {
     await expect(right).toBeVisible();
 
     const [cBox, rBox] = await Promise.all([center.boundingBox(), right.boundingBox()]);
-    // Sağ panel artık ortanın ALTINDA.
-    expect(rBox!.y).toBeGreaterThan(cBox!.y);
+    // Aynı satırda duruyorlar: sağ ray ortanın ALTINA inmiyor.
+    expect(rBox!.y).toBeCloseTo(cBox!.y, 0);
+    // Ve sağındalar — üst üste binmiyorlar.
+    expect(rBox!.x).toBeGreaterThan(cBox!.x);
+    // Dar banttaki genişlik 300px (1280+'da 394px olur).
+    expect(rBox!.width).toBeCloseTo(300, 0);
+  });
+
+  test("1280px'de sağ sipariş rayı 394px'e genişler", async ({ page }) => {
+    // Bandın öteki ucu: aynı kuralın ikinci yarısı ölçülmeden kalmasın.
+    await page.setViewportSize({ width: 1280, height: 900 });
+    await mockApi(page);
+    await page.goto("/pages/product-detail.html?id=LST-TEST-0002");
+
+    const right = page.locator("#pd-hero-info");
+    await expect(right).toBeVisible();
+    const rBox = await right.boundingBox();
+    expect(rBox!.width).toBeCloseTo(394, 0);
   });
 
   test("satıcı kartı dört metriği ve ana pazarları gösterir", async ({ page }) => {
