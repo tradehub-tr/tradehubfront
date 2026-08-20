@@ -73,6 +73,33 @@ export const STOREFRONT_ROUTE_MATRIX: StorefrontRouteCase[] = [
     { kind: "pretty", pathEnv: "PERF_CATEGORY_PRETTY_PATH" },
   ]),
 
+  // 12-FE ve 15-FE ile gelen sayfalar. `prettyPath` YOK — bu altısının
+  // `nginx.conf.template`'te güzel adres eşlemesi hiç tanımlanmamış, yalnız
+  // `/pages/...html` ile açılıyorlar. Matris gerçeği yansıtıyor; eşleme
+  // eklendiğinde buraya da pretty variant girer.
+  route(
+    "account-notification-preferences",
+    "C05-account",
+    "pages/dashboard/notification-preferences.html",
+    null,
+    "buyer"
+  ),
+  route(
+    "account-return-request",
+    "C05-account",
+    "pages/dashboard/return-request.html",
+    null,
+    "buyer"
+  ),
+  route("account-returns", "C05-account", "pages/dashboard/returns.html", null, "buyer"),
+  route(
+    "account-shipment-tracking",
+    "C05-account",
+    "pages/dashboard/shipment-tracking.html",
+    null,
+    "buyer"
+  ),
+
   route(
     "account-addresses",
     "C05-account",
@@ -252,6 +279,15 @@ export const STOREFRONT_ROUTE_MATRIX: StorefrontRouteCase[] = [
     { kind: "pretty", pathEnv: "PERF_PRODUCT_PRETTY_PATH" },
   ]),
   route("products", "C02-catalog", "pages/products.html", "/urunler"),
+
+  route(
+    "seller-return-decision",
+    "C09-seller",
+    "pages/seller/return-decision.html",
+    null,
+    "seller"
+  ),
+  route("seller-shipment", "C09-seller", "pages/seller/shipment.html", null, "seller"),
 
   route(
     "seller-application-pending",

@@ -71,8 +71,15 @@ test(
       }
     );
 
-    // Step 1: warm the cache via products.html (header MegaMenu → loadCategories)
-    await page.goto("/pages/products.html");
+    // Step 1: warm the cache via the HOME page (header MegaMenu → loadCategories)
+    //
+    // ESKİDEN `products.html` ile ısıtıyordu ve test bu yüzden düşüyordu:
+    // 25 Temmuz'daki lazy-mount değişikliğinden sonra mega menü ürünler
+    // sayfasında AÇILIŞTA yüklenmiyor, `get_mega_menu` hiç çağrılmıyor —
+    // ısıtma adımı 0 istekle bitiyor, testin geri kalanı anlamsızlaşıyordu.
+    // Ana sayfa menüyü hâlâ açılışta yüklüyor (ilk-açılış bütçe listesinde
+    // `get_mega_menu` görünüyor), ısıtma için doğru yer orası.
+    await page.goto("/");
     await page.waitForLoadState("networkidle");
     // Wait for IndexedDB persister to write the cached result
     await page.waitForTimeout(1500);

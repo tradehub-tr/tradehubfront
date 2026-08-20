@@ -1156,10 +1156,16 @@ test.describe("Task 4: fold-altı ana sayfa bölümleri kademeli yüklenir", () 
       type: "task4-initial-budget",
       description: JSON.stringify({ initialDomNodes, initialApiRequests }),
     });
+    // BÜTÇE 13 — 25 Temmuz'da 12 olarak konuldu ve o gün DOĞRUYDU. İki gün
+    // sonra `get_static_page_meta` (SEO sayfa meta'sı) eklendi; istek sayısı
+    // 13'e çıktı ama bütçe güncellenmedi ve test iki ay kırmızı kaldı.
+    // Sayı gerçeği yansıtıyor: on üçü de ilk boyama için gerekli.
+    // Yeni bir uç eklenirse burası BİLİNÇLİ olarak güncellenmeli — sayıyı
+    // sessizce artırmak bu testi anlamsızlaştırır.
     expect(
       initialApiRequests,
       `İlk açılış API bütçesi aşıldı:\n${initialApiUrls.join("\n")}`
-    ).toBeLessThanOrEqual(12);
+    ).toBeLessThanOrEqual(13);
     expect(initialDomNodes).toBeLessThanOrEqual(4_000);
     expect(initialApiUrls).not.toContain(
       expect.stringMatching(

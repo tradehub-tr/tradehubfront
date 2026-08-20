@@ -127,14 +127,14 @@ test.afterAll(async () => {
   );
 });
 
-test("üretim storefront matrisi 66 HTML girişini eksiksiz ve benzersiz kapsar", async () => {
+test("üretim storefront matrisi 72 HTML girişini eksiksiz ve benzersiz kapsar", async () => {
   const productionEntries = await fg(["*.html", "pages/**/*.html"], {
     ignore: ["style-test.html"],
   });
   const matrixEntries = STOREFRONT_ROUTE_MATRIX.map((route) => route.entry);
 
-  expect(matrixEntries).toHaveLength(66);
-  expect(new Set(matrixEntries).size).toBe(66);
+  expect(matrixEntries).toHaveLength(72);
+  expect(new Set(matrixEntries).size).toBe(72);
   expect([...matrixEntries].sort()).toEqual([...productionEntries].sort());
   expect(STOREFRONT_VIEWPORTS).toEqual({
     desktop: { width: 1440, height: 1000 },

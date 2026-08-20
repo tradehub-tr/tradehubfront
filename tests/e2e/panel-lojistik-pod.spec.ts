@@ -389,3 +389,99 @@ test("K12: yetki yoksa görsel kanıt gizli, üst veri GÖRÜNMEYE DEVAM ediyor"
   // Üst veri GÖRÜNMEYE DEVAM ediyor — yetkisizlik tüm kaydı gizlemek değil.
   await expect(page.getByText(/Teslim alan/i).first()).toBeVisible();
 });
+
+// ─────────────────────────────────────────────────────────────────────────
+// GÖRÜNÜM MODLARI (A6)
+//
+// Birim testler statik: `:modes` listesi ile render dallarını eşleştiriyor,
+// "ölü düğme yok" diyebiliyor. Ama düğmeye BASILDIĞINDA ekranın gerçekten
+// değiştiğini yalnız tarayıcı gösterir — 13-FE'de kaçan eksiklerin üçte
+// ikisi tam olarak bu boşluktaydı.
+// ─────────────────────────────────────────────────────────────────────────
+
+/**
+ * Toggle düğmeleri sırayla: tablo · kart · pano · liste.
+ * `ViewModeToggle` düğmelere metin değil ikon koyuyor ve `aria-pressed`
+ * kullanmıyor — seçim sınıf adından gidiyor (`.view-mode-btn`).
+ */
+function modDugmesi(page, sira: number) {
+  return page.locator(".view-mode-toggle .view-mode-btn").nth(sira);
+}
+
+/**
+ * Kuyruğu BİLİNEN modda açar.
+ *
+ * Mod kalıcı (`lv-mode:logistics-pod-queue`) — bu ekranın özelliği, kusuru
+ * değil. Ama testler arasında sızıyor: panoyu bırakan bir test, tablodan
+ * başlamayı bekleyen bir sonrakini düşürüyordu. Her senaryo kendi
+ * başlangıcını kuruyor.
+ */
+async function kuyrugaGit(page, mod: "table" | "grid" | "kanban" | "list" = "table") {
+  // `addInitScript` HER navigasyonda koşuyor — koruma olmadan `reload()`
+  // sonrası da yazar ve "mod hatırlanıyor mu" testi kendi kurduğu değeri
+  // doğrular hâle gelirdi. `sessionStorage` reload'ı aştığı için ilk
+  // yüklemeden sonra script sessizce çekiliyor.
+  await page.addInitScript((m) => {
+    if (sessionStorage.getItem("__pod_mod_kuruldu")) return;
+    sessionStorage.setItem("__pod_mod_kuruldu", "1");
+    localStorage.setItem("lv-mode:logistics-pod-queue", m);
+  }, mod);
+  await page.goto(QUEUE);
+  await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
+}
+
+test("GÖRÜNÜM — kuyruk dört modu da sunuyor", async ({ page }) => {
+  await kuyrugaGit(page);
+  await expect(page.locator(".view-mode-toggle .view-mode-btn")).toHaveCount(4);
+});
+
+test("GÖRÜNÜM — pano dört kovayı SÜTUN olarak gösteriyor, süzgeç çekiliyor", async ({ page }) => {
+  await kuyrugaGit(page);
+  // Tabloda kova süzgeci VAR.
+  await expect(page.getByText(/Kanıt bekliyor/).first()).toBeVisible();
+
+  await modDugmesi(page, 2).click();
+
+  // Pano dört kovayı birden gösterdiği için süzgeç gizleniyor: ikisi yan
+  // yana dururken hangisinin geçerli olduğu okunmuyordu.
+  await expect(page.locator(".kanban-col")).toHaveCount(4);
+  await expect(page.locator("main").getByRole("button", { name: /^Tümü/ })).toHaveCount(0);
+});
+
+test("GÖRÜNÜM — pano SALT-OKUNUR: kart sürüklenemiyor, uyarı görünüyor", async ({ page }) => {
+  await kuyrugaGit(page, "kanban");
+  await expect(page.getByText(/salt-okunur/i)).toBeVisible();
+
+  // Kova sevkiyatın verisinden hesaplanıyor; sürükleme kanıt kaydetmez ve
+  // kart bir sonraki yüklemede eski kovasına dönerdi.
+  await expect(page.locator(".kanban-card[draggable='true']")).toHaveCount(0);
+});
+
+test("GÖRÜNÜM — pano kartından kanıt detayına giriliyor", async ({ page }) => {
+  await kuyrugaGit(page, "kanban");
+  await page.locator(".kanban-card").first().click();
+  await expect(page).toHaveURL(/\/lojistik\/sevkiyatlar\/SHP-[\d-]+\/teslim-kaniti/);
+});
+
+test("GÖRÜNÜM — kart modu aynı sevkiyatları gösteriyor, veri kaybolmuyor", async ({ page }) => {
+  await kuyrugaGit(page, "table");
+  // `count()` ANLIK — satırlar yanıt gelmeden sayılırsa 0 çıkar ve test
+  // "kart modu boş" der. Önce ilk satırın görünmesini bekliyoruz.
+  await expect(page.locator("main table tbody tr").first()).toBeVisible();
+  const tabloSatir = await page.locator("main table tbody tr").count();
+  await modDugmesi(page, 1).click();
+  await expect(page.locator(".list-grid-card")).toHaveCount(tabloSatir);
+});
+
+test("GÖRÜNÜM — seçilen mod sayfa yenilenince HATIRLANIYOR", async ({ page }) => {
+  // Kalıcılığı GERÇEKTEN sınamak için tablodan başlayıp panoya TIKLIYORUZ;
+  // hazır pano ile açılsaydı test kendi kurduğu değeri doğrulardı.
+  await kuyrugaGit(page, "table");
+  await modDugmesi(page, 2).click();
+  await expect(page.locator(".kanban-col")).toHaveCount(4);
+
+  await page.reload();
+  await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
+  // Masaüstü tercihi saklanıyor; telefonda ZORLANAN mod saklanmıyor.
+  await expect(page.locator(".kanban-col")).toHaveCount(4);
+});

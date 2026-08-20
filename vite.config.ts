@@ -74,7 +74,7 @@ function fontHeadPlugin(): Plugin {
             handler(html) {
                 if (html.includes('/fonts/inter-latin.woff2')) return html; // idempotent
                 // Eski Google Fonts satırları varsa temizle (kaynak HTML kalıntıları)
-                let out = html
+                const out = html
                     .replace(/[ \t]*<link[^>]*fonts\.googleapis\.com[^>]*>\s*\n?/gi, '')
                     .replace(/[ \t]*<link[^>]*fonts\.gstatic\.com[^>]*>\s*\n?/gi, '');
                 return injectAfterCharset(out, fontLinks);
