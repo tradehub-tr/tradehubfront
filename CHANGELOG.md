@@ -1,3 +1,51 @@
+## [v2.4.0-alpha.19] - 2026-08-20 ALPHA
+
+Bu surum alpha.istoc.com'da gelistirme asamasindadir.
+
+### Eklendi
+- feat(e2e): kontrast denetimi 20 ekran ve 8 sekmeyi kapsıyor (@aliiball)
+  - Denetim yalniz 4 ekrani olcuyordu; hazir 20 ekran ve sevkiyat detayinin 8 sekmesi eklendi
+  - Sekmelerin ayri rotasi yok, sekme cubugu uzerinden geziliyor
+  - Rapor uretimi icin kalici tarama araci eklendi; onceki surumu gecici klasordeydi ve kaybolmustu
+  - Test sureleri dosya icinde ayarlandi, genel varsayilan bozulmadi
+- feat(e2e): kontrast denetimi görünüm modlarını da ölçüyor (@aliiball)
+  - Tarama her ekrani yalniz varsayilan modunda aciyordu; kart, pano ve liste dallari hic olculmemisti
+  - Acilinca uc ihlal cikti, biri koyu temada 1:1 (metin zeminle ayni renk)
+  - Kapsam 879 metin ogesinden 1442'ye cikti
+- feat(e2e): kanıt kuyruğu görünüm modları için 6 senaryo eklendi (@aliiball)
+  - Birim testler statik: dugmeye BASILDIGINDA ekranin degistigini yalniz tarayici gosterir
+  - Mod kaliciligi sinaniyor; addInitScript her navigasyonda kostugu icin sessionStorage ile korundu
+
+### Duzeltildi
+- fix(e2e): koddan geri kalan dört test güncellendi (@aliiball)
+  - Route matrisi 66'da kalmisti; uretimde 72 sayfa var, 12-FE/15-FE ile gelen alti sayfa eklendi
+  - Urun detay duzeni degismis: 1024-1279 bandinda sag ray asagi inmiyor, 300px'e daraliyor; test bugunku davranisa gore yazildi ve 1280px
+  - Para birimi secici popover icine tasinmis, test onu dogrudan ariyordu
+  - Magaza profili sekmelerine role=tab eklenmis, test hala button ariyordu
+  - Mock suite 7 kirik -> 4 kirik
+- fix(e2e): bayat performans testleri gerçeğe uyarlandı (@aliiball)
+  - Ana sayfa ilk acilis butcesi 12'den 13'e alindi: butce 25 Temmuz'da konuldu, iki gun sonra SEO meta ucu eklendi ve guncellenmedi
+  - Kategori onbellek testi urunler sayfasiyla isitiyordu; lazy-mount sonrasi orada mega menu istegi hic atilmiyor, isitma ana sayfaya alindi
+  - listing-prefetch testi kaldirildi: prefetch 25 Temmuz'da BILINCLI silinmis ve ayni committe tersini savunan test eklenmis, yalnizca eski
+  - Storefront suite 7 kirikten 0'a indi
+
+### Degistirildi
+- refactor(e2e): kontrast ölçümü ortak modüllere ayrıldı (@aliiball)
+  - Ölçüm kodu template literal icindeydi; regex kaciglari JS tarafindan cozulup tarayiciya bozuk gidiyordu
+  - Tarama araci ayni blogu metin okudugu icin kaciglar orada korunuyordu, iki taraf ayni kodu farkli yorumluyordu
+  - Fonksiyon olarak paylasilinca tek kaynak gercekten tek oldu ve ESLint kodu denetleyebilir hale geldi
+- refactor(lint): E2E araçları için ortam tanımları eklendi (@aliiball)
+  - Playwright spec ve araclari Node'da kosuyor; process tanimsiz sayiliyordu
+  - Tarayicida kosan olcum modulu icin DOM globalleri ayrildi
+  - Sonuc: 85 problem (65 hata) -> 33 problem (23 hata)
+- refactor(lint): script ortamları tanımlandı ve 6 hata giderildi (@aliiball)
+  - CommonJS, URL ve tarayicida kosan olcum parcalari icin ortam tanimlari eklendi
+  - Yan etki icin kullanilan bes ternary if/else'e cevrildi
+  - Yeniden atanmayan let sabite alindi
+  - Script davranisi degismedi: cikti birebir ayni, hata dallari mutasyonla dogrulandi
+  - Sonuc: 23 hata -> 0
+
+---
 ## [v2.4.0-alpha.18] - 2026-08-20 ALPHA
 
 Bu surum alpha.istoc.com'da gelistirme asamasindadir.
