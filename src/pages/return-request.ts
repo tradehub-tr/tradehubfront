@@ -9,6 +9,8 @@
  * `?mock=1` modunda form örnek kalemlerle çiziliyor; gönderim denemesi
  * Alpine tarafında "bağlı değil" hatası veriyor, sessizce başarılı olmuyor.
  */
+// T-123: RUM montajı — MPA ortak boot (çift başlatmaya karşı korumalı).
+import "../lib/rum/boot";
 import "../style.css";
 import "../alpine/sidebar";
 import "../alpine/logisticsBuyer";

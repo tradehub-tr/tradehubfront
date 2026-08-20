@@ -6,6 +6,8 @@
  * Requires login. Reads seller_application from session or creates one.
  */
 
+// T-123: RUM montajı — MPA ortak boot (çift başlatmaya karşı korumalı).
+import "../lib/rum/boot";
 import '../style.css'
 import { getBaseUrl } from '../components/auth/AuthLayout'
 import { getSessionUser, becomeSeller, completeRegistrationApplication } from '../utils/auth'

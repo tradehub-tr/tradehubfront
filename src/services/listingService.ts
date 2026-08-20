@@ -7,6 +7,7 @@ import { api } from "../utils/api";
 import { t } from "../i18n";
 import { queryFetch, queryKeys, policies } from "../lib/query";
 import { getListingUrl } from "../utils/listingUrl";
+import { seedMediaManifest } from "../lib/media/manifest";
 import {
   convertPrice,
   formatPrice,
@@ -1231,7 +1232,17 @@ function derivePriceRange(
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-function mapListingCard(raw: any): ProductListingCard {
+export function mapListingCard(raw: any): ProductListingCard {
+  // W10 (rapor 101 §İş1) — backend YALNIZ İLK kartın (LCP adayı) görsel
+  // manifestini `get_listings` yanıtına gömüyor (`_kart_gorsel_manifesti`).
+  // Önbelleğe TOHUMLA ki kart SENKRON basılırken manifest sıcak olsun ve LCP
+  // adayı ilk boyamada türev (AVIF/WebP) ile çıksın — ayrı get_manifest_batch
+  // turunu beklemeden. Gömülü alan yoksa no-op → kart bugünkü ham `<img>`
+  // yolunda kalır. `seedMediaManifest` fırlatmaz ve ağ turunu ezmez.
+  if (raw.id && raw.manifest) {
+    seedMediaManifest(String(raw.id), raw.manifest);
+  }
+
   // Currency conversion for price display
   const baseCurrency = raw.baseCurrency || "USD";
 
@@ -1337,13 +1348,20 @@ export function mapListingDetail(raw: any): ProductDetail {
   // Sadece GERÇEK bir video URL'i varsa video slide ekle. Boş/whitespace
   // videoUrl (örn. " " veya "") truthy olup fantom "VIDEO" rozeti + açılmayan
   // boş video üretiyordu — trim ile boşları ele.
-  const promoVideo = typeof raw.videoUrl === "string" ? raw.videoUrl.trim() : "";
+  // W8 — kaynak tercihi: HLS master (varsa) > optimize mp4 türevi > ham URL.
+  // API türev basmadığında (dış YouTube/Vimeo adresi, bayrak kapalı, eski
+  // ilan) `videoUrl`a düşer — bugünkü davranış aynen sürer.
+  const trimStr = (v: unknown): string => (typeof v === "string" ? v.trim() : "");
+  const promoVideo = trimStr(raw.videoHlsSrc) || trimStr(raw.videoSrc) || trimStr(raw.videoUrl);
   if (promoVideo) {
     images.push({
       id: "video-main",
       src: promoVideo,
       alt: `${raw.title || ""} - Video`,
       isVideo: true,
+      // Manifest posteri (ya da elle yüklü kapak): video slaytı ilk karesini
+      // beklemeden kapakla açılır. Boş/whitespace poster hiç basılmaz.
+      poster: trimStr(raw.videoPoster) || undefined,
     });
   }
 
@@ -1556,6 +1574,24 @@ export function mapListingDetail(raw: any): ProductDetail {
     productFamilyName: raw.productFamilyName || undefined,
     attributeSetName: raw.attributeSetName || undefined,
     videoUrl: raw.videoUrl || undefined,
+    // Bugün API bu alanı henüz basmıyor; bastığı gün (elle yüklü kapak ya da
+    // manifest posteri) otomatik akar. Boş/whitespace değer poster sayılmaz.
+    videoPoster:
+      typeof raw.videoPoster === "string" && raw.videoPoster.trim()
+        ? raw.videoPoster.trim()
+        : undefined,
+    // W8 — manifest türev alanları (backend: media_manifest.video_bloklari →
+    // get_listing_detail). Aynı sözleşme: boş/whitespace değer alan sayılmaz.
+    videoHlsSrc:
+      typeof raw.videoHlsSrc === "string" && raw.videoHlsSrc.trim()
+        ? raw.videoHlsSrc.trim()
+        : undefined,
+    videoSrc:
+      typeof raw.videoSrc === "string" && raw.videoSrc.trim() ? raw.videoSrc.trim() : undefined,
+    videoPreviewSrc:
+      typeof raw.videoPreviewSrc === "string" && raw.videoPreviewSrc.trim()
+        ? raw.videoPreviewSrc.trim()
+        : undefined,
     outOfStock: !!raw.outOfStock,
     status: raw.status || undefined,
     inStock: raw.inStock !== undefined ? !!raw.inStock : undefined,

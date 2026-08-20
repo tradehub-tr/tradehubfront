@@ -82,12 +82,14 @@ test("Faz 0 — liste başlığı 'Mağaza Profilleri'", async ({ page }) => {
 
 test("Faz 1 — adres/vergi verisi dinamik dolu (SEL-00001)", async ({ page }) => {
   await page.goto("/panel/app/Admin%20Seller%20Profile/SEL-00001");
-  // Vue SPA (DocTypeFormView): sekmeler role="tab" değil, dtf-tabs içinde düz <button>
+  // Vue SPA (DocTypeFormView): sekmeler `role="tab"` taşıyor. ESKİDEN düz
+  // <button>'du ve bu test onu `getByRole("button")` ile arıyordu; erişilebilirlik
+  // için rol eklenince arama boş dönmeye başladı ve tıklama zaman aşımına uğradı.
   const tabs = page.locator('[data-tour="dtf-tabs"]');
   await tabs.waitFor();
   await dismissTour(page);
   // İletişim tab: şehir + adres dinamik dolu (city idx 34, address_line1 idx 32; tab_iletisim 27-38)
-  await tabs.getByRole("button", { name: /İletişim/i }).click();
+  await tabs.getByRole("tab", { name: /İletişim/i }).click();
   await expect(fieldControl(page, "şehir")).toHaveValue("Adana"); // city
   await expect(fieldControl(page, "Adres")).toHaveValue(/Bursa/); // address_line1
   // NOT: Vergi Dairesi (tax_office) "Şirket Profili" tab'ında (idx 18), İletişim'de değil.
@@ -98,7 +100,7 @@ test("Faz 5 — Performans: total_orders/score_grade var, health_score yok", asy
   const tabs = page.locator('[data-tour="dtf-tabs"]');
   await tabs.waitFor();
   await dismissTour(page);
-  await tabs.getByRole("button", { name: /Performans/i }).click();
+  await tabs.getByRole("tab", { name: /Performans/i }).click();
   // total_orders gerçek değer (SEL-00001 = 5), read-only alan
   await expect(fieldControl(page, "Toplam Sipariş")).toHaveValue("5");
   // Gizlenen alanların (Property Setter hidden=1) etiketleri DOM'da olmamalı:

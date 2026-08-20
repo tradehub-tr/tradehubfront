@@ -999,7 +999,8 @@ function VideosTab(): string {
                 <iframe :src="getEmbedUrl(activeVideo.video_url)" class="w-full h-full" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
               </template>
               <template x-if="!isYoutube(activeVideo.video_url) && !isVimeo(activeVideo.video_url)">
-                <video :src="activeVideo.video_url" class="w-full h-full" controls autoplay></video>
+                <!-- x-video-src: .m3u8 ise hls.js ile bağlar (src/alpine/videoSrc.ts), mp4 davranışı aynı. -->
+                <video x-video-src="activeVideo.video_url" class="w-full h-full" controls autoplay></video>
               </template>
             </div>
             <!-- Title -->

@@ -49,8 +49,8 @@ for (const file of noindexFiles) {
 	if (!existsSync(p)) { bad(`${file} dist'te yok`); continue; }
 	const html = readFileSync(p, "utf8");
 	const expected = file === "404.html" ? "noindex, follow" : "noindex, nofollow";
-	html.includes(`<meta name="robots" content="${expected}"`)
-		? ok(file) : bad(`${file} → robots "${expected}" yok`);
+	if (html.includes(`<meta name="robots" content="${expected}"`)) ok(file);
+	else bad(`${file} → robots "${expected}" yok`);
 }
 for (const { file, prettyPath } of indexableEntries) {
 	const p = join(DIST, file);
@@ -59,7 +59,8 @@ for (const { file, prettyPath } of indexableEntries) {
 	if (/name="robots"\s+content="noindex/i.test(html)) bad(`${file} → indexlenecek sayfada noindex!`);
 	else ok(file);
 	if (prettyPath) {
-		html.includes('rel="canonical"') ? ok(file) : bad(`${file} → canonical yok (prettyPath=${prettyPath})`);
+		if (html.includes('rel="canonical"')) ok(file);
+		else bad(`${file} → canonical yok (prettyPath=${prettyPath})`);
 	} else if (html.includes('rel="canonical"')) {
 		bad(`${file} → dinamik şablonda STATİK canonical olmamalı`);
 	}
@@ -70,8 +71,10 @@ for (const f of htmlFiles) {
 	const rel = relative(DIST, f);
 	const html = readFileSync(f, "utf8");
 	const titles = (html.match(/<title[^>]*>/gi) || []).length;
-	titles === 1 ? ok(rel) : bad(`${rel} → ${titles} adet <title>`);
-	/<html[^>]*lang="tr"/i.test(html) ? ok(rel) : bad(`${rel} → lang="tr" değil`);
+	if (titles === 1) ok(rel);
+	else bad(`${rel} → ${titles} adet <title>`);
+	if (/<html[^>]*lang="tr"/i.test(html)) ok(rel);
+	else bad(`${rel} → lang="tr" değil`);
 }
 
 // 4. TradeHub kalıntısı
@@ -82,7 +85,8 @@ for (const f of htmlFiles) {
 
 // 5. dist hijyeni
 for (const orphan of ["docs", "mockups", "style-test.html", "perf-reports"]) {
-	existsSync(join(DIST, orphan)) ? bad(`dist/${orphan} build'e sızmış`) : ok(orphan);
+	if (existsSync(join(DIST, orphan))) bad(`dist/${orphan} build'e sızmış`);
+	else ok(orphan);
 }
 
 console.log(`\nverify-seo-meta: ${pass} PASS / ${fail} FAIL  (noindex=${noindexFiles.length}, indexable=${indexableEntries.length})`);

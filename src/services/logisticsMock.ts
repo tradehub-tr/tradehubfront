@@ -28,7 +28,6 @@
  * bir kez ekler, tercih `localStorage`'da kalır. Geri açmak: `?mock=1`.
  */
 import notificationPreferenceJson from "../mocks/logistics/notification_preference.json";
-import podJson from "../mocks/logistics/proof_of_delivery.json";
 import returnRequestJson from "../mocks/logistics/return_request.json";
 import shipmentJson from "../mocks/logistics/shipment.json";
 import shippingMethodJson from "../mocks/logistics/shipping_method.json";
@@ -136,10 +135,6 @@ export function mockPackages() {
 
 export function mockShipmentItems() {
   return shipmentJson.detail.data.items;
-}
-
-export function mockProofOfDelivery() {
-  return podJson.default.data.items[0];
 }
 
 export function mockReturnList() {

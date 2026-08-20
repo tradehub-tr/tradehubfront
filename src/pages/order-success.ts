@@ -2,6 +2,8 @@
  * Order Success / Pending Page
  * Shows order confirmation with summary card.
  */
+// T-123: RUM montajı — MPA ortak boot (çift başlatmaya karşı korumalı).
+import "../lib/rum/boot";
 import '../style.css';
 import { t } from '../i18n';
 import { orderStore } from '../components/orders/state/OrderStore';

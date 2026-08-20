@@ -38,7 +38,14 @@ describe("validateNginxCspTemplate", () => {
   });
 
   it("requires the storefront anti-framing header", () => {
-    const mutated = template.replace(
+    // T-131 (2026-08-20): /private/files/ bloğu add_header mirası kesildiği
+    // için server-level DENY'i açıkça TEKRARLIYOR — şablonda artık iki özdeş
+    // satır var. `replace` yalnız ilkini değiştirdiğinden mutasyon doğrulayıcıyı
+    // uyandıramıyordu; niyet aynı kalarak replaceAll'a çevrildi: TÜM DENY'ler
+    // düşürülmeden ihlal doğmamalı, biri bile düşerse... hayır — hepsi
+    // düşürülünce doğmalı. Tek satır sağlam kaldıkça şablon hâlâ sözleşmeye
+    // uygundur; doğrulayıcının kuralı da tam bunu söylüyor.
+    const mutated = template.replaceAll(
       'add_header X-Frame-Options "DENY" always;',
       'add_header X-Frame-Options "SAMEORIGIN" always;'
     );

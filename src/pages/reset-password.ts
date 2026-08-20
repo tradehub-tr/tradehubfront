@@ -4,6 +4,8 @@
  * Reads ?key= from URL; if missing, shows error and redirects to forgot-password.
  */
 
+// T-123: RUM montajı — MPA ortak boot (çift başlatmaya karşı korumalı).
+import "../lib/rum/boot";
 import '../style.css'
 
 import { ResetPasswordPage } from '../components/auth/ResetPasswordPage'

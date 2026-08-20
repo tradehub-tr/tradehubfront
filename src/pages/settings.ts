@@ -3,6 +3,8 @@
  * Account settings with profile header and settings cards.
  */
 
+// T-123: RUM montajı — MPA ortak boot (çift başlatmaya karşı korumalı).
+import "../lib/rum/boot";
 import '../style.css'
 import { initFlowbite } from 'flowbite'
 import { t } from '../i18n'

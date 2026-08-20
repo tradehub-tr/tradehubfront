@@ -8,6 +8,8 @@
  * ile üretilmiş örnek taleplerle S12 kuyruk bileşeni çiziliyor — alıcı
  * görünümünde karar butonu olmadan.
  */
+// T-123: RUM montajı — MPA ortak boot (çift başlatmaya karşı korumalı).
+import "../lib/rum/boot";
 import "../style.css";
 import "../alpine/sidebar";
 import { startAlpine } from "../alpine";

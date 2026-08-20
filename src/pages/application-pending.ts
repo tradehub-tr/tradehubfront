@@ -3,6 +3,8 @@
  * Shows seller application status (Draft, Submitted, Under Review, Rejected).
  */
 
+// T-123: RUM montajı — MPA ortak boot (çift başlatmaya karşı korumalı).
+import "../lib/rum/boot";
 import '../style.css'
 
 import { ApplicationPendingPage } from '../components/seller/ApplicationPendingPage'

@@ -76,6 +76,11 @@ test("currency picker is rebuilt with backend currencies after async load", asyn
   // initCurrency resolve + rebuild listener fire is async — settle determinism.
   await page.waitForTimeout(800);
 
+  // Seçici artık DOĞRUDAN görünür değil: dil/para birimi popover'ının
+  // içinde yaşıyor (`TopBar.ts` → `popover-language-currency`). Test bunu
+  // bilmediği için `#currency-select` sayısını 0 buluyordu. Panel açılmadan
+  // seçici DOM'a girmiyor — önce tetikleyiciye basılıyor.
+  await page.locator('[data-popover-target="popover-language-currency"]').first().click();
   const select = page.locator("#currency-select");
   await expect(select).toHaveCount(1);
 

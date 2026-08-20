@@ -14,13 +14,14 @@
  * DocType bile yok. `?mock=1` ile bu ikisi örnek veriyle çiziliyor
  * (bkz. `services/logisticsMock.ts`).
  */
+// T-123: RUM montajı — MPA ortak boot (çift başlatmaya karşı korumalı).
+import "../lib/rum/boot";
 import "../style.css";
 import "../alpine/sidebar";
 // Randevu formu (S3) örnek veri modunda çiziliyor — Alpine kaydı gerekli.
 import "../alpine/logisticsBuyer";
 import { startAlpine } from "../alpine";
 import { DeliveryConfirm } from "../components/logistics/DeliveryConfirm";
-import { DeliverySummary } from "../components/logistics/DeliverySummary";
 import { NotWiredNotice } from "../components/logistics/NotWiredNotice";
 import { PickupAppointment } from "../components/logistics/PickupAppointment";
 import { ShipmentGroupList } from "../components/logistics/ShipmentGroupList";
@@ -29,7 +30,6 @@ import { t } from "../i18n";
 import {
   isMockMode,
   mockBannerHtml,
-  mockProofOfDelivery,
   mockShipmentDetail,
   mockShipmentList,
   mockTrackingEvents,
@@ -107,15 +107,22 @@ function render(shipment: ShipmentDetail): void {
 
   // ── S10 · teslim özeti  /  S4 · teslim onayı ──
   if (isDelivered) {
+    /**
+     * K-E (14-FE karar defteri): yarım POD gösterimi KALDIRILDI.
+     *
+     * Burada örnek veri modunda sahte bir teslim kanıtı çiziliyordu: imza,
+     * fotoğraf, teslim alan kişi. `Proof of Delivery` DocType'ı hiç yok ve
+     * gerçek modda blok zaten boş geliyordu — yani alıcı, var olmayan bir
+     * kaydın ayrıntısını görüyordu. Sahte işlevsellik, eksik işlevsellikten
+     * daha kötü: kullanıcı gördüğüne güveniyor.
+     *
+     * Alıcı teslim kanıtı ekranı 12-FE'de sıfırdan yazılacak; uç 14-BE'de.
+     */
     blocks.push(
       shellCard(
-        DeliverySummary({
-          shipmentName: shipment.name,
-          status: shipment.status,
-          carrier: shipment.carrier,
-          // Kanıt yalnız mock modda; gerçekte Proof of Delivery DocType'ı yok.
-          pod: mock ? mockProofOfDelivery() : null,
-          returnWindowOpen: mock,
+        NotWiredNotice({
+          title: t("shipment.page.proofNotWired"),
+          endpoint: "api.v1.logistics.get_proof_of_delivery",
         })
       )
     );

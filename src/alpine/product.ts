@@ -28,11 +28,11 @@ function prefersReducedMotion(): boolean {
   return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 }
 
-function renderInlineVideo(url: string): string {
+function renderInlineVideo(url: string, poster = ""): string {
   return `
     <div class="relative w-full h-full bg-black flex items-center justify-center" data-gallery-main-media="true">
       <div class="relative w-full h-full" style="max-height: 100%">
-        ${toVideoEmbedHtml(url, true)}
+        ${toVideoEmbedHtml(url, true, poster)}
       </div>
     </div>
   `;
@@ -429,7 +429,7 @@ Alpine.data("imageGallery", () => ({
     const first = newImages[0];
     if (mainImage && first) {
       if (first.isVideo) {
-        mainImage.innerHTML = renderInlineVideo(first.src);
+        mainImage.innerHTML = renderInlineVideo(first.src, first.poster || "");
       } else {
         mainImage.innerHTML = renderGalleryMedia(
           first.src,
@@ -541,7 +541,7 @@ Alpine.data("imageGallery", () => ({
     if (mainImage) {
       const image = currentProduct.images[index];
       if (image && image.isVideo) {
-        mainImage.innerHTML = renderInlineVideo(image.src);
+        mainImage.innerHTML = renderInlineVideo(image.src, image.poster || "");
       } else {
         mainImage.innerHTML = renderGalleryMedia(
           image?.src,
@@ -581,7 +581,7 @@ Alpine.data("imageGallery", () => ({
     if (lightboxImage) {
       const image = currentProduct.images[index];
       if (image && image.isVideo) {
-        lightboxImage.innerHTML = renderInlineVideo(image.src);
+        lightboxImage.innerHTML = renderInlineVideo(image.src, image.poster || "");
       } else {
         lightboxImage.innerHTML = renderGalleryMedia(
           image?.src,

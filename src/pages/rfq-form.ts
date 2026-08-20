@@ -4,6 +4,8 @@
  * consent checkboxes, "Post request" button. Right sidebar with "How to use RFQ".
  */
 
+// T-123: RUM montajı — MPA ortak boot (çift başlatmaya karşı korumalı).
+import "../lib/rum/boot";
 import '../style.css'
 import { t } from '../i18n'
 import { showToast } from '../utils/toast'

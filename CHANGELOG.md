@@ -1,3 +1,113 @@
+## [v2.4.0-alpha.19] - 2026-08-20 ALPHA
+
+Bu surum alpha.istoc.com'da gelistirme asamasindadir.
+
+### Eklendi
+- feat(e2e): kontrast denetimi 20 ekran ve 8 sekmeyi kapsıyor (@aliiball)
+  - Denetim yalniz 4 ekrani olcuyordu; hazir 20 ekran ve sevkiyat detayinin 8 sekmesi eklendi
+  - Sekmelerin ayri rotasi yok, sekme cubugu uzerinden geziliyor
+  - Rapor uretimi icin kalici tarama araci eklendi; onceki surumu gecici klasordeydi ve kaybolmustu
+  - Test sureleri dosya icinde ayarlandi, genel varsayilan bozulmadi
+- feat(e2e): kontrast denetimi görünüm modlarını da ölçüyor (@aliiball)
+  - Tarama her ekrani yalniz varsayilan modunda aciyordu; kart, pano ve liste dallari hic olculmemisti
+  - Acilinca uc ihlal cikti, biri koyu temada 1:1 (metin zeminle ayni renk)
+  - Kapsam 879 metin ogesinden 1442'ye cikti
+- feat(e2e): kanıt kuyruğu görünüm modları için 6 senaryo eklendi (@aliiball)
+  - Birim testler statik: dugmeye BASILDIGINDA ekranin degistigini yalniz tarayici gosterir
+  - Mod kaliciligi sinaniyor; addInitScript her navigasyonda kostugu icin sessionStorage ile korundu
+
+### Duzeltildi
+- fix(e2e): koddan geri kalan dört test güncellendi (@aliiball)
+  - Route matrisi 66'da kalmisti; uretimde 72 sayfa var, 12-FE/15-FE ile gelen alti sayfa eklendi
+  - Urun detay duzeni degismis: 1024-1279 bandinda sag ray asagi inmiyor, 300px'e daraliyor; test bugunku davranisa gore yazildi ve 1280px
+  - Para birimi secici popover icine tasinmis, test onu dogrudan ariyordu
+  - Magaza profili sekmelerine role=tab eklenmis, test hala button ariyordu
+  - Mock suite 7 kirik -> 4 kirik
+- fix(e2e): bayat performans testleri gerçeğe uyarlandı (@aliiball)
+  - Ana sayfa ilk acilis butcesi 12'den 13'e alindi: butce 25 Temmuz'da konuldu, iki gun sonra SEO meta ucu eklendi ve guncellenmedi
+  - Kategori onbellek testi urunler sayfasiyla isitiyordu; lazy-mount sonrasi orada mega menu istegi hic atilmiyor, isitma ana sayfaya alindi
+  - listing-prefetch testi kaldirildi: prefetch 25 Temmuz'da BILINCLI silinmis ve ayni committe tersini savunan test eklenmis, yalnizca eski
+  - Storefront suite 7 kirikten 0'a indi
+
+### Degistirildi
+- refactor(e2e): kontrast ölçümü ortak modüllere ayrıldı (@aliiball)
+  - Ölçüm kodu template literal icindeydi; regex kaciglari JS tarafindan cozulup tarayiciya bozuk gidiyordu
+  - Tarama araci ayni blogu metin okudugu icin kaciglar orada korunuyordu, iki taraf ayni kodu farkli yorumluyordu
+  - Fonksiyon olarak paylasilinca tek kaynak gercekten tek oldu ve ESLint kodu denetleyebilir hale geldi
+- refactor(lint): E2E araçları için ortam tanımları eklendi (@aliiball)
+  - Playwright spec ve araclari Node'da kosuyor; process tanimsiz sayiliyordu
+  - Tarayicida kosan olcum modulu icin DOM globalleri ayrildi
+  - Sonuc: 85 problem (65 hata) -> 33 problem (23 hata)
+- refactor(lint): script ortamları tanımlandı ve 6 hata giderildi (@aliiball)
+  - CommonJS, URL ve tarayicida kosan olcum parcalari icin ortam tanimlari eklendi
+  - Yan etki icin kullanilan bes ternary if/else'e cevrildi
+  - Yeniden atanmayan let sabite alindi
+  - Script davranisi degismedi: cikti birebir ayni, hata dallari mutasyonla dogrulandi
+  - Sonuc: 23 hata -> 0
+
+---
+## [v2.4.0-alpha.18] - 2026-08-20 ALPHA
+
+Bu surum alpha.istoc.com'da gelistirme asamasindadir.
+
+### Eklendi
+- feat(product-media): HLS video, LCP preload ve manifest tabanlı responsi (@TurksabYonetim)
+  - Ürün video oynatıcısını hls.js ile HLS-farkındalıklı hâle getir (poster, önizleme klibi, autoplay kademesi) çünkü backend artık HLS master/optimize mp4/önizleme türevleri sunuyor; hls.js yalnız gerçek .m3u8 oynatıldığında dinamik import ile iner.
+  - StoreHeader ve CompanyProfile video oynatıcılarını yeni `x-video-src` Alpine direktifine geçir ki aynı HLS bağlama mantığı tekrarlanmasın.
+  - Ürün galerisi ve ürün listeleme kartlarına manifest tabanlı `ResponsiveImage` (`<picture>`/`srcset`) ve LCP preload akışı ekle; soğuk önbellekte ilk boyama kısa bir tavan kadar manifesti bekler, yetişmezse ham `<img>` basılıp manifest gelince yerinde yükseltilir (rapor 91 §2.5, rapor 95).
+  - `categories.html` sayfasını Lighthouse ölçüm kapsamına al ve ürün detay URL'ine gerçek bir ilan kimliği ekle; ikisi de ölçülmeyen/yanlış ölçülen sayfa yüzünden LCP/CLS verisinin geçersiz çıktığı 2026-08-20 koşumunda tespit edildi (docs/reports/62).
+  - Kategori grid konteynerine `min-h-[75vh]` ekleyerek ölçülen 0,5396 CLS'in kaynağı olan geç yüklenen footer kaymasını önle.
+  - `/files/` ve `/private/files/` nginx bloklarına T-131 medya sertleştirmesi ekle: SVG'lerde koşullu CSP sandbox, HTML/JS uzantılarına Content-Disposition: attachment, nosniff'i edge'de sahiplenme, ve enumeration'ı yavaşlatmak için limit_req.
+  - RUM (Real User Monitoring) istemcisini `web-vitals` ile tüm MPA girişlerinden ortak `lib/rum/boot` üzerinden aç (T-123); backend ucu zaten kurulu.
+  - CSP sözleşme testini `replaceAll`e çevir çünkü T-131 sonrası şablonda iki özdeş DENY satırı oluştu ve tekli `replace` mutasyonu yakalayamıyordu.
+- feat(medya): manifest tabanlı responsive görsel/video teslimi ve RUM izl (@TurksabYonetim)
+  - Ürün medyası için HLS video, LCP preload ve manifest tabanlı responsive image/video boyutlandırma eklendi; amaç sayfa yükleme performansını ve Core Web Vitals'ı iyileştirmek
+  - Gerçek kullanıcı izleme (RUM) alt sistemi eklendi (collector, sampling, routePhysical, transport, sha256) — LCP ve medya teslim metriklerini üretimde ölçmek için
+  - ListingCard, ProductImageGallery, ProductVideoSection ve ProductListingGrid için ilgili unit ve e2e testleri eklendi
+  - Lighthouse CI çalıştırma sonuçları (.lighthouseci/) commit'e dahil edildi
+
+---
+## [v2.4.0-alpha.17] - 2026-08-19 ALPHA
+
+Bu surum alpha.istoc.com'da gelistirme asamasindadir.
+
+### Eklendi
+- feat(e2e): teslim kanıtı ekranları için 14 senaryo eklendi (@aliiball)
+  - Kanıt kaydedince kova değişimi, kısmi teslimde zorunlu tutarsızlık
+  - Ödeme bloklu kayıtta teslim düğmesinin hiç çizilmediği doğrulanıyor
+  - Teslim kodunun değerinin hiçbir ekranda görünmediği doğrulanıyor
+  - Satıcı menü beklentisi G0 rol matrisine göre güncellendi
+
+### Degistirildi
+- refactor(e2e): görünüm modu ve satıcı rolü testleri eklendi (@aliiball)
+- refactor(lojistik): storefront yarım teslim kanıtı gösterimi kaldırıldı (@aliiball)
+  - Alıcıya sahte imza, fotoğraf ve teslim alan bilgisi gösteriliyordu; kayıt hiç yoktu
+  - Yerine bağlanmamış uç bildirimi kondu, dört dile de çevirisi eklendi
+  - Teslim kanıtı ekranları için yedi kabul senaryosu daha eklendi
+  - Satıcı rolüyle kendi kayıtları, başkasına erişim reddi ve beyan damgası doğrulanıyor
+
+---
+## [v2.4.0-alpha.16] - 2026-08-18 ALPHA
+
+Bu surum alpha.istoc.com'da gelistirme asamasindadir.
+
+### Eklendi
+- feat(e2e): kontrast denetimi ve UI/UX regresyon testleri eklendi (@aliiball)
+  - Kontrast: 4 ekran x 2 tema x (duran + hover), efektif zemin harmanlanarak
+  - Renk ayrıştırıcı canvas tabanlı; rgb() regex'i Tailwind v4'ün oklch()'ini kaçırıyordu
+  - 9 yeni senaryo: menü, miktar kutusu, seçim çubuğu, filtre rozeti, taşma, barkod çözme
+
+---
+## [v2.4.0-alpha.15] - 2026-08-18 ALPHA
+
+Bu surum alpha.istoc.com'da gelistirme asamasindadir.
+
+### Eklendi
+- feat(e2e): paketleme ve etiket ekranları için 11 senaryo eklendi (@aliiball)
+  - Frappe cookie-login + docker; tur localStorage'dan kapatılıyor
+  - Gevşek regex komşu öğeye tıkladığı için locator'lar kapsayıcıya scope'lu
+
+---
 ## [v2.4.0-alpha.9] - 2026-08-14 ALPHA
 
 Bu surum alpha.istoc.com'da gelistirme asamasindadir.

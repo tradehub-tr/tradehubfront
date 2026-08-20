@@ -11,6 +11,9 @@ import { getSellerUrl } from "../../utils/sellerUrl";
 import { escapeHtml, sanitizeUrl } from "../../utils/sanitize";
 import verifiedTickUrl from "../../assets/images/verfied.png";
 import type { ProductListingCard } from "../../types/productListing";
+import { ResponsiveImage } from "../media/ResponsiveImage";
+import { getMediaImageManifest } from "../../lib/media/manifest";
+import { mediaSizesFor } from "../../lib/media/sizes";
 
 export interface ListingCardOptions {
   /** %N indirim rozeti + üstü çizili originalPrice gösterir. Varsayılan: false. */
@@ -43,6 +46,26 @@ export interface ListingCardOptions {
    */
   containImage?: boolean;
   /**
+   * `srcset` için kutu bölgesi — `lib/media/sizes.ts` anahtarı. Aynı kart
+   * listelemede 226px, ana sayfa vitrininde 152px, mağaza ızgarasında başka
+   * bir kutuya oturuyor; `sizes` bunu bilmezse tarayıcı yanlış basamağı
+   * indirir. Varsayılan `"listing/card_grid"`.
+   *
+   * Kullanılabilir değerler: `listing/card_grid`, `home/tailored_grid`,
+   * `home/top_deals`, `home/hero_showcase_grid`, `seller_shop/product_grid`,
+   * `product_detail/related_slider`.
+   */
+  sizesRegion?: string;
+  /**
+   * Bu kart sayfanın LCP ADAYI: ilk görsel `fetchpriority="high"` + eager
+   * (`loading` özniteliği hiç yazılmaz) basılır — manifest yolunda da ham
+   * yedek yolunda da. YALNIZ sayfa başına TEK karta verilmeli; ızgaradaki
+   * her karta vermek önceliği anlamsızlaştırır (`LcpPreload.MAX_LCP_PRELOADS`
+   * gerekçesiyle aynı). Kartın 2.+ slaytları etkilenmez. Varsayılan: false.
+   * Veren taraf: `ProductListingGrid.rerenderProductGrid` (ilk kart).
+   */
+  priorityImage?: boolean;
+  /**
    * Ana sayfaya özel tek-grid kartı. Liste/dense-mobile varyantlarını, kapalı
    * aksiyonları ve boş sosyal kanıt slotlarını hiç üretmez.
    */
@@ -59,7 +82,7 @@ export interface ListingCardOptions {
  */
 function renderImageSlider(
   card: ProductListingCard,
-  opts: { imgFit?: string; lazy?: boolean } = {}
+  opts: { imgFit?: string; lazy?: boolean; sizesRegion?: string; priority?: boolean } = {}
 ): string {
   // Görsel doldurma modu — varsayılan object-cover (liste/arama/mağaza). Ana sayfa
   // vitrini object-contain geçer: görsel KARE (1:1) kalır ama kırpılmaz/bozulmaz,
@@ -100,11 +123,44 @@ function renderImageSlider(
   let secondarySlidesTemplate = "";
 
   if (imageList.length > 0) {
-    const renderSlide = (src: string, i: number): string => `
+    // Kart ızgarasının `sizes`i — bölge anahtarı çağırandan gelir (listeleme,
+    // ana sayfa vitrini ve mağaza ızgarası aynı kartı FARKLI kutuda basıyor).
+    const sizes = mediaSizesFor(opts.sizesRegion || "listing/card_grid");
+
+    const renderSlide = (src: string, i: number): string => {
+      // Sayfanın LCP adayı işareti — YALNIZ ilk slayt ve yalnız lazy değilken.
+      // İşareti kart kendi kendine takmaz; sayfa (`rerenderProductGrid`)
+      // `priorityImage` ile TEK karta verir — 20 kartın hepsine `high` vermek
+      // önceliği anlamsızlaştırırdı.
+      const lcpAdayi = i === 0 && !opts.lazy && !!opts.priority;
+      // Bugünkü işaretleme — DEĞİŞTİRİLMEDİ, yalnız kapanışa alındı.
+      // Manifest yoksa (bayrak kapalı, önbellek soğuk, türev üretilmemiş)
+      // `ResponsiveImage` tam olarak bu dizgeyi döndürür; anlık görüntü
+      // testleri bunun kanıtıdır. LCP adayı ham yedekte de `fetchpriority`
+      // taşır — türev yokken bile tarayıcı doğru görsele bant ayırsın.
+      const fallback = (): string =>
+        `<img src="${escapeHtml(sanitizeUrl(src))}" alt="${escapeHtml(card.name)}${i > 0 ? ` - ${i + 1}` : ""}" class="w-full h-full ${imgFit}" width="400" height="400" decoding="async" ${lcpAdayi ? 'fetchpriority="high" ' : ""}${i > 0 || opts.lazy ? 'loading="lazy"' : ""} />`;
+      const img = ResponsiveImage({
+        manifest: getMediaImageManifest(card.id, src),
+        fallback,
+        sizes,
+        // İlk slayt bugün eager basılıyor (`loading` özniteliği yok); LCP
+        // adayı değilse `fetchpriority="high"`a YÜKSELTİLMEZ (gerekçe yukarıda).
+        eager: i === 0 && !opts.lazy,
+        priority: lcpAdayi,
+        alt: `${card.name}${i > 0 ? ` - ${i + 1}` : ""}`,
+        imgClass: `w-full h-full ${imgFit}`,
+        // Kart kutusu `aspect-square` + `object-*`; manifest ölçüsü yoksa
+        // bugünkü 400×400 yedeği kullanılır.
+        width: 400,
+        height: 400,
+      });
+      return `
       <div class="w-full h-full flex-shrink-0">
-        <img src="${escapeHtml(sanitizeUrl(src))}" alt="${escapeHtml(card.name)}${i > 0 ? ` - ${i + 1}` : ""}" class="w-full h-full ${imgFit}" width="400" height="400" decoding="async" ${i > 0 || opts.lazy ? 'loading="lazy"' : ""} />
+        ${img}
       </div>
     `;
+    };
     slidesHtml = imageList
       .slice(0, 1)
       .map(
@@ -223,6 +279,8 @@ export function renderListingCard(
   const sliderOpts = {
     ...(opts.containImage ? { imgFit: "object-contain" } : {}),
     ...(opts.lazy ? { lazy: true } : {}),
+    ...(opts.sizesRegion ? { sizesRegion: opts.sizesRegion } : {}),
+    ...(opts.priorityImage ? { priority: true } : {}),
   };
   // Sosyal kanıt şeridi — statik "selling point / promo" (ör. "Toptan özel fiyat")
   // KALDIRILDI; bu alan tamamen sosyal kanıt sistemine ait. Slotlar boş/gizli
@@ -576,6 +634,79 @@ export function renderListingCard(
       }
     </div>
   `.replace(/^[\t ]+$/gm, "").trimEnd();
+}
+
+/**
+ * Manifest RENDER'DAN SONRA geldiğinde basılı kart görsellerini yerinde terfi
+ * ettir — `ProductImageGallery.upgradeGalleryMedia`nın (F-2) kart karşılığı.
+ *
+ * Gerekçe: ızgara soğuk yüklemede manifesti tavana kadar bekler; tavan
+ * aşılırsa kartlar bugünkü ham `<img>` ile basılır ve manifest geldiğinde bu
+ * fonksiyon çağrılır (`ProductListingGrid.rerenderProductGrid`). Çağrılmasaydı
+ * manifest sessizce yutulur, `<picture>`/srcset ancak bir SONRAKİ render'da
+ * (filtre/sayfa değişimi) devreye girerdi — rapor 91 §2.5'teki ölçülmüş açık.
+ *
+ * CLS SÖZLEŞMESİ — terfi boyut DEĞİŞTİRMEZ:
+ *  - `imgClass` mevcut `<img>`in class'ından AYNEN alınır (`w-full h-full
+ *    object-*` kutu sınıfları korunur; kutu zaten `aspect-square` sarmalayıcı).
+ *  - `width`/`height` yedeği bugünkü 400×400; manifest gerçek ölçü taşısa bile
+ *    görsel kutuyu `w-full h-full` ile doldurduğundan yerleşim oynamaz.
+ *  - `loading` semantiği korunur: ham `<img>` lazy ise terfi de lazy kalır,
+ *    eager ise eager kalır. LCP adayı işareti de korunur: ham `<img>`
+ *    `fetchpriority="high"` taşıyorsa (sayfanın `priorityImage` verdiği tek
+ *    kart) terfi onu DÜŞÜRMEZ — terfi bir yükseltmedir, öncelik kaybettirmez.
+ *
+ * Yalnız GERÇEKTEN manifesti olan `<img>`e dokunulur; `<picture>` içindekiler
+ * (zaten manifestten üretilmiş) atlanır. Terfi eden düğüm bir daha eşleşmez —
+ * fonksiyon tekrar çağrılmaya dayanıklıdır.
+ *
+ * `<template data-slider-secondary>` içindeki 2.+ slaytlara BİLEREK dokunulmaz:
+ * onlar görünür alana girince `materializeSecondarySlides` ile basılır, hepsi
+ * `loading="lazy"` taşır ve o anda önbellek artık sıcaktır.
+ *
+ * @returns Terfi eden `<img>` sayısı.
+ */
+export function upgradeListingCardMedia(
+  root: ParentNode = document,
+  sizesRegion = "listing/card_grid"
+): number {
+  const sizes = mediaSizesFor(sizesRegion);
+  let sayac = 0;
+  for (const slider of Array.from(
+    root.querySelectorAll<HTMLElement>(".product-slider[data-slider-id]")
+  )) {
+    const listingId = slider.dataset.sliderId || "";
+    if (!listingId) continue;
+    for (const img of Array.from(slider.querySelectorAll<HTMLImageElement>("img"))) {
+      // `<picture>` içindeyse zaten manifestten üretilmiş.
+      if (img.closest("picture")) continue;
+      const src = img.getAttribute("src") || "";
+      if (!src) continue;
+      const manifest = getMediaImageManifest(listingId, src);
+      if (!manifest) continue;
+      const eski = img.outerHTML;
+      const isaretleme = ResponsiveImage({
+        manifest,
+        // Terfi üretilemezse (manifest ölçüsüz vb.) düğüm OLDUĞU GİBİ kalır.
+        fallback: () => eski,
+        sizes,
+        // Ham `<img>`in yükleme semantiği korunur (CLS/ağ sözleşmesi):
+        // lazy lazy kalır, eager eager kalır; LCP adayı işareti
+        // (`fetchpriority="high"`, `rerenderProductGrid`in ilk kartı) terfide
+        // DÜŞÜRÜLMEZ — düşseydi preload/priority sinyali yarı yolda kaybolurdu.
+        eager: !img.hasAttribute("loading"),
+        priority: img.getAttribute("fetchpriority") === "high",
+        alt: img.getAttribute("alt") ?? "",
+        imgClass: img.getAttribute("class") ?? "",
+        width: 400,
+        height: 400,
+      });
+      if (isaretleme === eski) continue;
+      img.outerHTML = isaretleme;
+      sayac += 1;
+    }
+  }
+  return sayac;
 }
 
 /**

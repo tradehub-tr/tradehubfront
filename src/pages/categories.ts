@@ -3,6 +3,8 @@
  * Assembles header, Amazon-style category grid, and footer.
  */
 
+// T-123: RUM montajı — MPA ortak boot (çift başlatmaya karşı korumalı).
+import "../lib/rum/boot";
 import '../style.css'
 import { initFlowbite } from 'flowbite'
 import { t } from '../i18n'
@@ -83,8 +85,16 @@ appEl.innerHTML = `
             <div class="w-56 shrink-0"><div class="sticky top-24"><div class="bg-white rounded-lg border border-gray-200 p-4 h-40 flex items-center justify-center text-gray-400 text-sm animate-pulse">${t('categoryPage.loading')}</div></div></div>
           </div>
 
-          <!-- Category Grid -->
-          <div id="cat-grid-container" class="flex-1 min-w-0">
+          <!-- Category Grid.
+               min-h-[75vh]: yükseklik rezervasyonu (T-004/W8). ÖLÇÜLDÜ
+               (Lighthouse desktop, 2026-08-20): bu sayfanın CLS'i 0,5396 ve
+               0,5394'ü tek başına <footer> düğümünden geliyor — footer, kısa
+               yükleme iskeletinin hemen altında İLK ekranda boyanıyor, grid
+               verisi gelince 3.590 px aşağı itiliyor. Rezervasyon footer'ı
+               ilk kadrajın dışında başlatır; hiç görünmeyen öğenin kayması
+               CLS'e yazılmaz. Grid yüklenince gerçek yükseklik zaten 75vh'den
+               büyük, rezervasyonun kalıcı görsel maliyeti yok. -->
+          <div id="cat-grid-container" class="flex-1 min-w-0 min-h-[75vh]">
             <div class="py-16 text-center text-gray-400 animate-pulse">${t('categoryPage.loadingCategories')}</div>
           </div>
         </div>

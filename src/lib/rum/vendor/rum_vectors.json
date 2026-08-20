@@ -1,0 +1,744 @@
+{
+ "$comment": "rum.py'den ÜRETİLDİ — ELLE DÜZENLEME. Yeniden üretim: bkz. contract.js başlığı.",
+ "source_file": "tradehub_core/tradehub_core/media/pipeline/delivery/rum.py",
+ "source_sha256": "b314d2b4701d2a543724b4225361d2324efba1736917437cfa9a8e3f0b11572b",
+ "generated_for": "Faz 12 / T-123",
+ "decide": [
+  {
+   "token": "0123456789abcdef",
+   "rate": 0.01,
+   "expected": false
+  },
+  {
+   "token": "0123456789abcdef",
+   "rate": 0.05,
+   "expected": false
+  },
+  {
+   "token": "0123456789abcdef",
+   "rate": 0.1,
+   "expected": false
+  },
+  {
+   "token": "0123456789abcdef",
+   "rate": 0.25,
+   "expected": false
+  },
+  {
+   "token": "0123456789abcdef",
+   "rate": 0.5,
+   "expected": false
+  },
+  {
+   "token": "0123456789abcdef",
+   "rate": 1.0,
+   "expected": true
+  },
+  {
+   "token": "0123456789abcdef",
+   "rate": 0.0,
+   "expected": false
+  },
+  {
+   "token": "deadbeefdeadbeefdeadbeef",
+   "rate": 0.01,
+   "expected": false
+  },
+  {
+   "token": "deadbeefdeadbeefdeadbeef",
+   "rate": 0.05,
+   "expected": false
+  },
+  {
+   "token": "deadbeefdeadbeefdeadbeef",
+   "rate": 0.1,
+   "expected": false
+  },
+  {
+   "token": "deadbeefdeadbeefdeadbeef",
+   "rate": 0.25,
+   "expected": false
+  },
+  {
+   "token": "deadbeefdeadbeefdeadbeef",
+   "rate": 0.5,
+   "expected": false
+  },
+  {
+   "token": "deadbeefdeadbeefdeadbeef",
+   "rate": 1.0,
+   "expected": true
+  },
+  {
+   "token": "deadbeefdeadbeefdeadbeef",
+   "rate": 0.0,
+   "expected": false
+  },
+  {
+   "token": "ffffffffffffffff",
+   "rate": 0.01,
+   "expected": false
+  },
+  {
+   "token": "ffffffffffffffff",
+   "rate": 0.05,
+   "expected": false
+  },
+  {
+   "token": "ffffffffffffffff",
+   "rate": 0.1,
+   "expected": false
+  },
+  {
+   "token": "ffffffffffffffff",
+   "rate": 0.25,
+   "expected": false
+  },
+  {
+   "token": "ffffffffffffffff",
+   "rate": 0.5,
+   "expected": true
+  },
+  {
+   "token": "ffffffffffffffff",
+   "rate": 1.0,
+   "expected": true
+  },
+  {
+   "token": "ffffffffffffffff",
+   "rate": 0.0,
+   "expected": false
+  },
+  {
+   "token": "0000000000000000",
+   "rate": 0.01,
+   "expected": false
+  },
+  {
+   "token": "0000000000000000",
+   "rate": 0.05,
+   "expected": false
+  },
+  {
+   "token": "0000000000000000",
+   "rate": 0.1,
+   "expected": false
+  },
+  {
+   "token": "0000000000000000",
+   "rate": 0.25,
+   "expected": false
+  },
+  {
+   "token": "0000000000000000",
+   "rate": 0.5,
+   "expected": false
+  },
+  {
+   "token": "0000000000000000",
+   "rate": 1.0,
+   "expected": true
+  },
+  {
+   "token": "0000000000000000",
+   "rate": 0.0,
+   "expected": false
+  },
+  {
+   "token": "a3f5c9e10b7d42568a1c",
+   "rate": 0.01,
+   "expected": false
+  },
+  {
+   "token": "a3f5c9e10b7d42568a1c",
+   "rate": 0.05,
+   "expected": false
+  },
+  {
+   "token": "a3f5c9e10b7d42568a1c",
+   "rate": 0.1,
+   "expected": false
+  },
+  {
+   "token": "a3f5c9e10b7d42568a1c",
+   "rate": 0.25,
+   "expected": false
+  },
+  {
+   "token": "a3f5c9e10b7d42568a1c",
+   "rate": 0.5,
+   "expected": true
+  },
+  {
+   "token": "a3f5c9e10b7d42568a1c",
+   "rate": 1.0,
+   "expected": true
+  },
+  {
+   "token": "a3f5c9e10b7d42568a1c",
+   "rate": 0.0,
+   "expected": false
+  },
+  {
+   "token": "9e107d9d372bb6826bd81d3542a419d6",
+   "rate": 0.01,
+   "expected": false
+  },
+  {
+   "token": "9e107d9d372bb6826bd81d3542a419d6",
+   "rate": 0.05,
+   "expected": false
+  },
+  {
+   "token": "9e107d9d372bb6826bd81d3542a419d6",
+   "rate": 0.1,
+   "expected": false
+  },
+  {
+   "token": "9e107d9d372bb6826bd81d3542a419d6",
+   "rate": 0.25,
+   "expected": false
+  },
+  {
+   "token": "9e107d9d372bb6826bd81d3542a419d6",
+   "rate": 0.5,
+   "expected": false
+  },
+  {
+   "token": "9e107d9d372bb6826bd81d3542a419d6",
+   "rate": 1.0,
+   "expected": true
+  },
+  {
+   "token": "9e107d9d372bb6826bd81d3542a419d6",
+   "rate": 0.0,
+   "expected": false
+  },
+  {
+   "token": "1111222233334444555566667777888899990000aaaabbbbccccddddeeeeffff",
+   "rate": 0.01,
+   "expected": false
+  },
+  {
+   "token": "1111222233334444555566667777888899990000aaaabbbbccccddddeeeeffff",
+   "rate": 0.05,
+   "expected": false
+  },
+  {
+   "token": "1111222233334444555566667777888899990000aaaabbbbccccddddeeeeffff",
+   "rate": 0.1,
+   "expected": false
+  },
+  {
+   "token": "1111222233334444555566667777888899990000aaaabbbbccccddddeeeeffff",
+   "rate": 0.25,
+   "expected": false
+  },
+  {
+   "token": "1111222233334444555566667777888899990000aaaabbbbccccddddeeeeffff",
+   "rate": 0.5,
+   "expected": false
+  },
+  {
+   "token": "1111222233334444555566667777888899990000aaaabbbbccccddddeeeeffff",
+   "rate": 1.0,
+   "expected": true
+  },
+  {
+   "token": "1111222233334444555566667777888899990000aaaabbbbccccddddeeeeffff",
+   "rate": 0.0,
+   "expected": false
+  }
+ ],
+ "route_template": [
+  {
+   "input": "/",
+   "expected": "/"
+  },
+  {
+   "input": "",
+   "expected": "other"
+  },
+  {
+   "input": "/urunler",
+   "expected": "/urunler"
+  },
+  {
+   "input": "/urunler/",
+   "expected": "/urunler"
+  },
+  {
+   "input": "/urun/bonny-kap?utm_source=x",
+   "expected": "/urun/:slug"
+  },
+  {
+   "input": "/urun/x#frag",
+   "expected": "/urun/:slug"
+  },
+  {
+   "input": "/magaza/ST-0001",
+   "expected": "/magaza/:code"
+  },
+  {
+   "input": "/kategori/mutfak",
+   "expected": "/kategori/:slug"
+  },
+  {
+   "input": "/marka/bonny",
+   "expected": "/marka/:slug"
+  },
+  {
+   "input": "/sepet",
+   "expected": "/sepet"
+  },
+  {
+   "input": "/hesabim/siparis/SO-00042",
+   "expected": "other"
+  },
+  {
+   "input": "urunler",
+   "expected": "/urunler"
+  },
+  {
+   "input": "/urun/a/b",
+   "expected": "other"
+  },
+  {
+   "input": "/dashboard",
+   "expected": "other"
+  },
+  {
+   "input": "/media-library",
+   "expected": "other"
+  },
+  {
+   "input": "/seo/redirects",
+   "expected": "other"
+  },
+  {
+   "input": "/panel/dashboard",
+   "expected": "other"
+  },
+  {
+   "input": "/urun/",
+   "expected": "other"
+  }
+ ],
+ "viewport_bucket": [
+  {
+   "width": 1,
+   "expected": 0
+  },
+  {
+   "width": 320,
+   "expected": 0
+  },
+  {
+   "width": 359,
+   "expected": 0
+  },
+  {
+   "width": 360,
+   "expected": 360
+  },
+  {
+   "width": 361,
+   "expected": 360
+  },
+  {
+   "width": 389,
+   "expected": 360
+  },
+  {
+   "width": 390,
+   "expected": 390
+  },
+  {
+   "width": 430,
+   "expected": 430
+  },
+  {
+   "width": 480,
+   "expected": 480
+  },
+  {
+   "width": 640,
+   "expected": 640
+  },
+  {
+   "width": 768,
+   "expected": 768
+  },
+  {
+   "width": 1024,
+   "expected": 1024
+  },
+  {
+   "width": 1279,
+   "expected": 1024
+  },
+  {
+   "width": 1280,
+   "expected": 1280
+  },
+  {
+   "width": 1440,
+   "expected": 1440
+  },
+  {
+   "width": 1536,
+   "expected": 1536
+  },
+  {
+   "width": 1920,
+   "expected": 1920
+  },
+  {
+   "width": 4096,
+   "expected": 1920
+  }
+ ],
+ "rating": [
+  {
+   "metric": "LCP",
+   "value": 0.0,
+   "expected": "good"
+  },
+  {
+   "metric": "LCP",
+   "value": 2500.0,
+   "expected": "good"
+  },
+  {
+   "metric": "LCP",
+   "value": 2500.0001,
+   "expected": "needs-improvement"
+  },
+  {
+   "metric": "LCP",
+   "value": 4000.0,
+   "expected": "needs-improvement"
+  },
+  {
+   "metric": "LCP",
+   "value": 4000.0001,
+   "expected": "poor"
+  },
+  {
+   "metric": "LCP",
+   "value": 12000.0,
+   "expected": "poor"
+  },
+  {
+   "metric": "CLS",
+   "value": 0.0,
+   "expected": "good"
+  },
+  {
+   "metric": "CLS",
+   "value": 0.1,
+   "expected": "good"
+  },
+  {
+   "metric": "CLS",
+   "value": 0.10010000000000001,
+   "expected": "needs-improvement"
+  },
+  {
+   "metric": "CLS",
+   "value": 0.25,
+   "expected": "needs-improvement"
+  },
+  {
+   "metric": "CLS",
+   "value": 0.2501,
+   "expected": "poor"
+  },
+  {
+   "metric": "CLS",
+   "value": 0.75,
+   "expected": "poor"
+  },
+  {
+   "metric": "INP",
+   "value": 0.0,
+   "expected": "good"
+  },
+  {
+   "metric": "INP",
+   "value": 200.0,
+   "expected": "good"
+  },
+  {
+   "metric": "INP",
+   "value": 200.0001,
+   "expected": "needs-improvement"
+  },
+  {
+   "metric": "INP",
+   "value": 500.0,
+   "expected": "needs-improvement"
+  },
+  {
+   "metric": "INP",
+   "value": 500.0001,
+   "expected": "poor"
+  },
+  {
+   "metric": "INP",
+   "value": 1500.0,
+   "expected": "poor"
+  },
+  {
+   "metric": "FCP",
+   "value": 0.0,
+   "expected": "good"
+  },
+  {
+   "metric": "FCP",
+   "value": 1800.0,
+   "expected": "good"
+  },
+  {
+   "metric": "FCP",
+   "value": 1800.0001,
+   "expected": "needs-improvement"
+  },
+  {
+   "metric": "FCP",
+   "value": 3000.0,
+   "expected": "needs-improvement"
+  },
+  {
+   "metric": "FCP",
+   "value": 3000.0001,
+   "expected": "poor"
+  },
+  {
+   "metric": "FCP",
+   "value": 9000.0,
+   "expected": "poor"
+  },
+  {
+   "metric": "TTFB",
+   "value": 0.0,
+   "expected": "good"
+  },
+  {
+   "metric": "TTFB",
+   "value": 800.0,
+   "expected": "good"
+  },
+  {
+   "metric": "TTFB",
+   "value": 800.0001,
+   "expected": "needs-improvement"
+  },
+  {
+   "metric": "TTFB",
+   "value": 1800.0,
+   "expected": "needs-improvement"
+  },
+  {
+   "metric": "TTFB",
+   "value": 1800.0001,
+   "expected": "poor"
+  },
+  {
+   "metric": "TTFB",
+   "value": 5400.0,
+   "expected": "poor"
+  }
+ ],
+ "token_hash": [
+  {
+   "token": "0123456789abcdef",
+   "salt": "",
+   "expected": "b26a84683a03"
+  },
+  {
+   "token": "0123456789abcdef",
+   "salt": "pepper",
+   "expected": "71a6cd88b385"
+  },
+  {
+   "token": "0123456789abcdef",
+   "salt": "tradehub",
+   "expected": "1703dcd68d83"
+  },
+  {
+   "token": "deadbeefdeadbeefdeadbeef",
+   "salt": "",
+   "expected": "98be35b2b7ca"
+  },
+  {
+   "token": "deadbeefdeadbeefdeadbeef",
+   "salt": "pepper",
+   "expected": "4672be90a715"
+  },
+  {
+   "token": "deadbeefdeadbeefdeadbeef",
+   "salt": "tradehub",
+   "expected": "04cf168520ed"
+  },
+  {
+   "token": "ffffffffffffffff",
+   "salt": "",
+   "expected": "d94fa28094d0"
+  },
+  {
+   "token": "ffffffffffffffff",
+   "salt": "pepper",
+   "expected": "481deb9cf9aa"
+  },
+  {
+   "token": "ffffffffffffffff",
+   "salt": "tradehub",
+   "expected": "497f8cb5013b"
+  },
+  {
+   "token": "0000000000000000",
+   "salt": "",
+   "expected": "7f45765a1a8b"
+  },
+  {
+   "token": "0000000000000000",
+   "salt": "pepper",
+   "expected": "c6b8f6ff4127"
+  },
+  {
+   "token": "0000000000000000",
+   "salt": "tradehub",
+   "expected": "37fbdd3c230d"
+  }
+ ],
+ "constants": {
+  "METRICS": [
+   "LCP",
+   "CLS",
+   "INP",
+   "FCP",
+   "TTFB"
+  ],
+  "UNITLESS": [
+   "CLS"
+  ],
+  "ROUTE_TEMPLATES": [
+   "/",
+   "/urunler",
+   "/urun/:slug",
+   "/magaza/:code",
+   "/kategori/:slug",
+   "/marka/:slug",
+   "/sepet",
+   "other"
+  ],
+  "DEVICE_CLASSES": [
+   "phone",
+   "tablet",
+   "desktop"
+  ],
+  "CONNECTION_TYPES": [
+   "slow-2g",
+   "2g",
+   "3g",
+   "4g",
+   "unknown"
+  ],
+  "VIEWPORT_BUCKETS": [
+   0,
+   360,
+   390,
+   430,
+   480,
+   640,
+   768,
+   1024,
+   1280,
+   1440,
+   1536,
+   1920
+  ],
+  "FORBIDDEN_FIELDS": [
+   "user",
+   "user_id",
+   "email",
+   "phone",
+   "ip",
+   "ip_address",
+   "remote_addr",
+   "session_id",
+   "cookie",
+   "cookies",
+   "user_agent",
+   "ua",
+   "referrer",
+   "url",
+   "href",
+   "query",
+   "search",
+   "customer",
+   "order",
+   "cart_id"
+  ],
+  "RATING_THRESHOLDS": {
+   "LCP": [
+    2500.0,
+    4000.0
+   ],
+   "CLS": [
+    0.1,
+    0.25
+   ],
+   "INP": [
+    200.0,
+    500.0
+   ],
+   "FCP": [
+    1800.0,
+    3000.0
+   ],
+   "TTFB": [
+    800.0,
+    1800.0
+   ]
+  },
+  "SCHEMA_PROPERTIES": [
+   "connection",
+   "device_class",
+   "dpr",
+   "engine_version",
+   "lcp_format",
+   "lcp_profile",
+   "lcp_region",
+   "metric",
+   "navigation_type",
+   "route",
+   "sample_rate",
+   "session_token",
+   "value",
+   "viewport_width"
+  ],
+  "SCHEMA_REQUIRED": [
+   "metric",
+   "value",
+   "route",
+   "device_class",
+   "viewport_width",
+   "sample_rate"
+  ],
+  "NAVIGATION_TYPES": [
+   "navigate",
+   "reload",
+   "back-forward",
+   "prerender"
+  ],
+  "LCP_REGION_PATTERN": "^[a-z0-9_]+/[a-z0-9_]+$",
+  "LCP_PROFILE_PATTERN": "^(w\\d{2,4}|original|unknown)$",
+  "SESSION_TOKEN_PATTERN": "^[0-9a-f]{16,64}$",
+  "METRIC_GROUP_BY": [
+   "route",
+   "device_class"
+  ]
+ }
+}
