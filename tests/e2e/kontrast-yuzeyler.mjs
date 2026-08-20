@@ -62,5 +62,34 @@ export const SEKMELER = [
   { key:"H4", ad:"istasyonlar",    sahip:"ali"  },
 ];
 
+/**
+ * GÖRÜNÜM MODU varyantları.
+ *
+ * NEDEN AYRI LİSTE — ölçülmüş kör nokta:
+ *   Tarama her ekranı yalnız VARSAYILAN modunda (tablo) açıyordu. Kart, pano
+ *   ve liste dalları hiç ölçülmemişti; A6'da POD kuyruğuna pano eklenince
+ *   `kanban-card-meta` sınıfının 2.74:1 (koyu temada 3.11:1) verdiği ortaya
+ *   çıktı — ve o sınıf paketleme panosunda AYLARDIR duruyordu.
+ *
+ * Mod `lv-mode:<anahtar>` altında saklanıyor; tarama onu önceden yazıp
+ * ekranı o modda açıyor. `table` burada yok — ekranlar zaten onunla açılıyor.
+ */
+export const MOD_YUZEYLERI = [
+  { key:"H0", ad:"kanıt kuyruğu",     url:"/panel/lojistik/teslim-kaniti",
+    anahtar:"logistics-pod-queue",     modlar:["grid","kanban","list"], sahip:"ali" },
+  { key:"G0", ad:"paketleme kuyruğu", url:"/panel/lojistik/paketleme",
+    anahtar:"logistics-packing-queue", modlar:["grid","kanban","list"], sahip:"ali" },
+  { key:"G2", ad:"etiket",            url:`/panel/lojistik/etiketler/${SHP}`,
+    anahtar:"logistics-labels",        modlar:["grid","list"],          sahip:"ali" },
+  { key:"D1", ad:"satıcı teslimatı",  url:"/panel/lojistik/satici-teslimati",
+    anahtar:"logistics-satici-teslimati",  modlar:["table","list"],     sahip:"ali" },
+  { key:"D2", ad:"alıcı teslim alma", url:"/panel/lojistik/alici-teslim-alma",
+    anahtar:"logistics-alici-teslim-alma", modlar:["table","list"],     sahip:"ali" },
+  { key:"A3", ad:"istisna kuyruğu",   url:"/panel/lojistik/istisnalar",
+    anahtar:"logistics-exceptions",    modlar:["kanban","list"],        sahip:"bora" },
+  { key:"A2", ad:"bekleyen işler",    url:"/panel/lojistik/bekleyen-isler",
+    anahtar:"logistics-pending-work",  modlar:["grid","list"],          sahip:"bora" },
+];
+
 /** Yerelde verisi olmayıp az öğe tarayan yüzeyler — alt sınır bunlar için gevşetilir. */
 export const AZ_VERILI = new Set(["F1", "B4", "B5"]);

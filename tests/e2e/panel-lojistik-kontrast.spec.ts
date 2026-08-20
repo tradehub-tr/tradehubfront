@@ -21,7 +21,7 @@
 import { test, expect, request } from "@playwright/test";
 // Yüzey listesi burada DEĞİL: `kontrast-tarama.mjs` aracı da aynı listeyi
 // okuyor. Kopyalasaydık kapı ile röntgen sessizce ayrışırdı.
-import { EKRANLAR, SEKMELER, SHP_CANLI, AZ_VERILI } from "./kontrast-yuzeyler.mjs";
+import { EKRANLAR, SEKMELER, SHP_CANLI, AZ_VERILI, MOD_YUZEYLERI } from "./kontrast-yuzeyler.mjs";
 // Ölçüm kodu da ayrı modülde ve FONKSİYON: template literal hâlindeyken
 // içindeki regex kaçışları bozuluyordu (ayrıntı `kontrast-olcum.mjs` başında).
 import { olcumYap } from "./kontrast-olcum.mjs";
@@ -98,6 +98,23 @@ for (const tema of ["light", "dark"] as const) {
       topla(`${e.key} ${e.ad}`, bulgular);
     }
 
+    // GÖRÜNÜM MODLARI: aynı ekran, farklı render dalı. Tarama uzun süre
+    // her ekranı yalnız VARSAYILAN modunda açıyordu; kart/pano/liste dalları
+    // hiç ölçülmedi. Açıldıklarında üç ayrı ihlal çıktı — biri koyu temada
+    // 1:1 (metin zeminle aynı renk, tamamen görünmez).
+    for (const y of MOD_YUZEYLERI) {
+      for (const mod of y.modlar) {
+        await page.addInitScript(({ a, m }) => localStorage.setItem(`lv-mode:${a}`, m),
+                                 { a: y.anahtar, m: mod });
+        await hazirOl(page, y.url);
+        const { bulgular, taranan } = (await page.evaluate(olcumYap)) as any;
+        expect(taranan, `${tema}/${y.key} [${mod}]: yalnız ${taranan} öğe tarandı — dal çizilmemiş olabilir`)
+          .toBeGreaterThan(15);
+        toplamTaranan += taranan;
+        topla(`${y.key} [${mod}] ${y.ad}`, bulgular);
+      }
+    }
+
     // SEKMELER: ayrı rotaları yok, detay ekranının içinde yaşıyorlar.
     // Sekme çubuğunun kendisi de ölçülüyor — pasif sekme etiketleri uzun
     // süre `text-gray-400` ile 2.6:1 veriyordu ve hiçbir ekran testi görmedi.
@@ -115,7 +132,7 @@ for (const tema of ["light", "dark"] as const) {
       topla(`${meta.key} [sekme] ${meta.ad}`, bulgular);
     }
 
-    console.log(`${tema}: ${toplamTaranan} metin öğesi ölçüldü (${EKRANLAR.length} ekran + ${sekmeAdedi} sekme)`);
+    console.log(`${tema}: ${toplamTaranan} metin öğesi ölçüldü (${EKRANLAR.length} ekran + ${sekmeAdedi} sekme + görünüm modları)`);
     expect(hepsi, `KONTRAST EKSİĞİ:\n  ${hepsi.join("\n  ")}`).toEqual([]);
   });
 

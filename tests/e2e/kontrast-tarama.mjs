@@ -23,7 +23,7 @@
  */
 import { chromium, request } from "@playwright/test";
 import fs from "node:fs";
-import { EKRANLAR, SEKMELER, SHP_CANLI } from "./kontrast-yuzeyler.mjs";
+import { EKRANLAR, SEKMELER, SHP_CANLI, MOD_YUZEYLERI } from "./kontrast-yuzeyler.mjs";
 import { olcumYap } from "./kontrast-olcum.mjs";
 
 const BASE = process.env.PANEL_BASE ?? "http://tradehub.localhost";
@@ -81,6 +81,25 @@ for (const tema of ["light", "dark"]) {
     } catch (err) {
       sonuc.push({ ...e, tip:"ekran", tema, hata:String(err).slice(0,160) });
       console.log(`${tema} · ${e.key} ${e.ad}: HATA — ${String(err).slice(0,90)}`);
+    }
+  }
+
+  // GÖRÜNÜM MODLARI: aynı ekran, farklı render dalı. Mod localStorage'a
+  // yazılıp ekran yeniden açılıyor — toggle'a tıklamak yerine bu yol, dalın
+  // ilk yüklemede de doğru çizildiğini sınıyor.
+  for (const y of MOD_YUZEYLERI) {
+    for (const mod of y.modlar) {
+      try {
+        await page.addInitScript(({ a, m }) => localStorage.setItem(`lv-mode:${a}`, m),
+                                 { a: y.anahtar, m: mod });
+        await hazirOl(page, y.url);
+        const { bulgular, taranan } = await page.evaluate(olcumYap);
+        sonuc.push({ ...y, tip:`mod:${mod}`, tema, taranan, bulgular });
+        console.log(`${tema} · ${y.key} [${mod}] ${y.ad}: ${bulgular.length} ihlal / ${taranan} öğe`);
+      } catch (err) {
+        sonuc.push({ ...y, tip:`mod:${mod}`, tema, hata:String(err).slice(0,160) });
+        console.log(`${tema} · ${y.key} [${mod}] ${y.ad}: HATA`);
+      }
     }
   }
 
