@@ -34,4 +34,39 @@ export default [
       "no-console": ["warn", { allow: ["warn", "error"] }],
     },
   },
+
+  // ── E2E araçları: Node ortamı ────────────────────────────────────────
+  // Playwright spec'leri ve yanlarındaki araçlar Node'da koşuyor; `process`
+  // ve `console` orada yasal. Bu blok olmadan her `process.env` okuması
+  // `no-undef` hatası veriyordu (kontrast tarama aracında 8 tane).
+  {
+    files: ["tests/e2e/**/*.{ts,mjs,js}", "*.config.{js,ts,mjs}", "scripts/**"],
+    languageOptions: {
+      globals: {
+        process: "readonly",
+        console: "readonly",
+        __dirname: "readonly",
+        Buffer: "readonly",
+      },
+    },
+    rules: {
+      // Bir CLI aracının çıktısı console'dur; uyarı gürültü olur.
+      "no-console": "off",
+    },
+  },
+
+  // ── Tarayıcı içinde çalıştırılan ölçüm ───────────────────────────────
+  // `page.evaluate()` ile sayfaya geçirilen fonksiyon; Node'da değil
+  // TARAYICIDA koşuyor, bu yüzden DOM globalleri yasal.
+  {
+    files: ["tests/e2e/kontrast-olcum.mjs"],
+    languageOptions: {
+      globals: {
+        document: "readonly",
+        getComputedStyle: "readonly",
+        innerHeight: "readonly",
+        innerWidth: "readonly",
+      },
+    },
+  },
 ];
