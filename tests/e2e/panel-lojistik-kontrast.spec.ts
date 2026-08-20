@@ -1,5 +1,5 @@
 /**
- * 13-FE · Lojistik ekranları — WCAG KONTRAST DENETİMİ.
+ * Lojistik ekranları — WCAG KONTRAST DENETİMİ (21 yüzey + 8 sekme).
  *
  * ÇALIŞTIRMA (kök'ten):
  *   PANEL_PASS='<administrator_parolasi>' ./e2e.sh --panel
@@ -19,134 +19,20 @@
  *   Salt-dekoratif ve devre dışı öğeler muaf (1.4.3 istisnası).
  */
 import { test, expect, request } from "@playwright/test";
+// Yüzey listesi burada DEĞİL: `kontrast-tarama.mjs` aracı da aynı listeyi
+// okuyor. Kopyalasaydık kapı ile röntgen sessizce ayrışırdı.
+import { EKRANLAR, SEKMELER, SHP_CANLI, AZ_VERILI } from "./kontrast-yuzeyler.mjs";
+// Ölçüm kodu da ayrı modülde ve FONKSİYON: template literal hâlindeyken
+// içindeki regex kaçışları bozuluyordu (ayrıntı `kontrast-olcum.mjs` başında).
+import { olcumYap } from "./kontrast-olcum.mjs";
 
 const BASE = process.env.PANEL_BASE ?? "http://tradehub.localhost";
 const USER = process.env.PANEL_USER ?? "Administrator";
 const PASS = process.env.PANEL_PASS ?? "";
 
-const SHP = "SHP-2026-00042";
-const EKRANLAR: Record<string, string> = {
-  "kuyruk": "/panel/lojistik/paketleme",
-  "çalışma alanı": `/panel/lojistik/paketleme/${SHP}`,
-  "palet planı": `/panel/lojistik/paketleme/${SHP}/palet`,
-  "etiket": `/panel/lojistik/etiketler/${SHP}`,
-};
-
 test.use({ baseURL: BASE, viewport: { width: 1600, height: 1000 } });
 test.describe.configure({ mode: "serial" });
 
-/** Sayfaya enjekte edilen ölçüm — tarayıcı içinde çalışır. */
-const OLCUM = `(() => {
-  /**
-   * CSS rengini {r,g,b,a}'ya çevirir.
-   *
-   * DÜZ REGEX YETMİYOR: Tailwind v4 palet renklerini oklch() olarak
-   * derliyor. İlk sürüm yalnız rgb() okuyordu ve oklch dönen her öğeyi
-   * atlıyordu — AÇIK TEMA neredeyse hiç ölçülmüyordu (kuyruk ekranında 29
-   * yerine 9 öğe tarandı). Tarayıcıya çizdirip pikseli okumak her CSS renk
-   * söz dizimini kapsıyor.
-   */
-  const tuval = document.createElement("canvas");
-  tuval.width = 1;
-  tuval.height = 1;
-  const ctx = tuval.getContext("2d", { willReadFrequently: true });
-
-  const ayristir = (renk) => {
-    if (!renk || renk === "transparent" || renk === "none") return { r: 0, g: 0, b: 0, a: 0 };
-    const m = renk.match(/^rgba?\(([^)]+)\)$/);
-    if (m) {
-      const p = m[1].split(/[,\s\/]+/).filter(Boolean).map((x) => parseFloat(x));
-      return { r: p[0], g: p[1], b: p[2], a: p.length > 3 ? p[3] : 1 };
-    }
-    ctx.fillStyle = "#000000";
-    ctx.fillStyle = renk;
-    ctx.clearRect(0, 0, 1, 1);
-    ctx.globalAlpha = 1;
-    ctx.fillRect(0, 0, 1, 1);
-    const d = ctx.getImageData(0, 0, 1, 1).data;
-    return { r: d[0], g: d[1], b: d[2], a: d[3] / 255 };
-  };
-
-  const uzerineKoy = (ust, alt) => ({
-    r: ust.r * ust.a + alt.r * (1 - ust.a),
-    g: ust.g * ust.a + alt.g * (1 - ust.a),
-    b: ust.b * ust.a + alt.b * (1 - ust.a),
-    a: 1,
-  });
-
-  const parlaklik = ({ r, g, b }) => {
-    const k = [r, g, b].map((v) => {
-      const s = v / 255;
-      return s <= 0.03928 ? s / 12.92 : Math.pow((s + 0.055) / 1.055, 2.4);
-    });
-    return 0.2126 * k[0] + 0.7152 * k[1] + 0.0722 * k[2];
-  };
-
-  const oran = (a, b) => {
-    const [x, y] = [parlaklik(a), parlaklik(b)].sort((p, q) => q - p);
-    return (x + 0.05) / (y + 0.05);
-  };
-
-  /** Şeffaf zeminleri ata katmanlarla harmanlayarak efektif zemini bulur. */
-  const efektifZemin = (el) => {
-    let katman = { r: 255, g: 255, b: 255, a: 1 };
-    const yigin = [];
-    for (let n = el; n && n !== document.documentElement.parentNode; n = n.parentElement) {
-      const bg = ayristir(getComputedStyle(n).backgroundColor);
-      if (bg && bg.a > 0) yigin.push(bg);
-    }
-    for (const bg of yigin.reverse()) katman = uzerineKoy(bg, katman);
-    return katman;
-  };
-
-  const gorunur = (el) => {
-    const cs = getComputedStyle(el);
-    const r = el.getBoundingClientRect();
-    return r.width > 0 && r.height > 0 && cs.visibility !== "hidden" && cs.display !== "none" && parseFloat(cs.opacity) > 0.15;
-  };
-
-  const bulgular = [];
-  let sayac = 0;
-  for (const el of document.querySelectorAll("main *")) {
-    // Yalnız DOĞRUDAN metin taşıyan öğeler — kapsayıcılar iki kez sayılmasın.
-    const metin = [...el.childNodes]
-      .filter((n) => n.nodeType === 3)
-      .map((n) => n.textContent.trim())
-      .join(" ")
-      .trim();
-    if (!metin || metin.length < 2) continue;
-    if (!gorunur(el)) continue;
-    // Devre dışı öğeler WCAG 1.4.3 kapsamı dışında.
-    if (el.closest("[disabled], [aria-disabled='true']")) continue;
-    if (el.getAttribute("aria-hidden") === "true") continue;
-
-    const cs = getComputedStyle(el);
-    const on = ayristir(cs.color);
-    if (!on) continue;
-    const zemin = efektifZemin(el);
-    const gercekOn = on.a < 1 ? uzerineKoy(on, zemin) : on;
-
-    sayac++;
-    const px = parseFloat(cs.fontSize);
-    const kalin = parseInt(cs.fontWeight, 10) >= 700;
-    const buyuk = px >= 24 || (px >= 18.66 && kalin);
-    const esik = buyuk ? 3 : 4.5;
-    const o = oran(gercekOn, zemin);
-
-    if (o < esik) {
-      bulgular.push({
-        metin: metin.slice(0, 44),
-        oran: Math.round(o * 100) / 100,
-        esik,
-        px,
-        renk: cs.color,
-        zemin: \`rgb(\${Math.round(zemin.r)}, \${Math.round(zemin.g)}, \${Math.round(zemin.b)})\`,
-        yol: el.tagName.toLowerCase() + "." + (el.className?.toString?.() ?? "").slice(0, 60),
-      });
-    }
-  }
-  return { bulgular, taranan: sayac };
-})()`;
 
 /** Ekran gerçekten dolana kadar bekler — sabit `waitForTimeout` yetmiyor. */
 async function hazirOl(page: any, url: string) {
@@ -171,8 +57,18 @@ test.beforeEach(async ({ context }) => {
   await oturumAc(context);
 });
 
+// Global timeout 30 sn (playwright.config) — bu dosya ona sığmaz ve sığmamalı:
+// kapsam 4 ekrandan 20 ekran + 8 sekmeye çıktı. Süreyi burada veriyoruz ki
+// config'teki makul varsayılan diğer specler için bozulmasın.
+const SURE_STATIK = 8 * 60_000;
+// Hover ~20 ekran × 40 tıklanabilir öğe geziyor ve her hover'dan sonra tüm
+// sayfayı yeniden ölçüyor. Pahalı ama vazgeçilmez: ⋯ menüsünün 1.03:1 hatası
+// YALNIZ hover'da görünüyordu, duran ekran ölçümü onu bulamazdı.
+const SURE_HOVER = 40 * 60_000;
+
 for (const tema of ["light", "dark"] as const) {
   test(`${tema} tema — lojistik ekranlarında WCAG AA kontrastı`, async ({ page, context }) => {
+    test.setTimeout(SURE_STATIK);
     await context.addInitScript((t) => {
       localStorage.setItem("th-lang", "tr");
       localStorage.setItem("th-theme", t);
@@ -184,21 +80,47 @@ for (const tema of ["light", "dark"] as const) {
 
     const hepsi: string[] = [];
     let toplamTaranan = 0;
-    for (const [ad, url] of Object.entries(EKRANLAR)) {
-      await hazirOl(page, url);
-      const { bulgular, taranan } = (await page.evaluate(OLCUM)) as any;
-      // Yarı yüklenmiş ekran "temiz" görünür — alt sınır bunu yakalıyor.
-      expect(taranan, `${tema}/${ad}: yalnız ${taranan} metin öğesi tarandı — ekran yüklenmemiş olabilir`).toBeGreaterThan(15);
-      toplamTaranan += taranan;
-      for (const b of bulgular as any[]) {
+    const topla = (ad: string, bulgular: any[]) => {
+      for (const b of bulgular)
         hepsi.push(`${ad}: "${b.metin}" ${b.oran}:1 (gereken ${b.esik}:1) · ${b.renk} / ${b.zemin} · ${b.yol}`);
-      }
+    };
+
+    for (const e of EKRANLAR) {
+      await hazirOl(page, e.url);
+      const { bulgular, taranan } = (await page.evaluate(olcumYap)) as any;
+      // Yarı yüklenmiş ekran "temiz" görünür — alt sınır bunu yakalıyor.
+      // `AZ_VERILI` ekranlar yerelde gerçekten boş (kayıt yok); onlarda sınır
+      // 3'e iner, yoksa test veri eksikliğini kontrast hatası sanar.
+      const altSinir = AZ_VERILI.has(e.key) ? 3 : 15;
+      expect(taranan, `${tema}/${e.key} ${e.ad}: yalnız ${taranan} metin öğesi tarandı — ekran yüklenmemiş olabilir`)
+        .toBeGreaterThan(altSinir);
+      toplamTaranan += taranan;
+      topla(`${e.key} ${e.ad}`, bulgular);
     }
-    console.log(`${tema}: ${toplamTaranan} metin öğesi ölçüldü`);
+
+    // SEKMELER: ayrı rotaları yok, detay ekranının içinde yaşıyorlar.
+    // Sekme çubuğunun kendisi de ölçülüyor — pasif sekme etiketleri uzun
+    // süre `text-gray-400` ile 2.6:1 veriyordu ve hiçbir ekran testi görmedi.
+    await hazirOl(page, `/panel/lojistik/sevkiyatlar/${SHP_CANLI}`);
+    const sekmeDugmeleri = page.locator('[role="tab"]');
+    const sekmeAdedi = await sekmeDugmeleri.count();
+    expect(sekmeAdedi, "sevkiyat detayı sekme çubuğu render edilmedi — detay yüklenememiş olabilir")
+      .toBe(SEKMELER.length);
+    for (let i = 0; i < sekmeAdedi; i++) {
+      const meta = SEKMELER[i];
+      await sekmeDugmeleri.nth(i).click();
+      await page.waitForTimeout(600);
+      const { bulgular, taranan } = (await page.evaluate(olcumYap)) as any;
+      toplamTaranan += taranan;
+      topla(`${meta.key} [sekme] ${meta.ad}`, bulgular);
+    }
+
+    console.log(`${tema}: ${toplamTaranan} metin öğesi ölçüldü (${EKRANLAR.length} ekran + ${sekmeAdedi} sekme)`);
     expect(hepsi, `KONTRAST EKSİĞİ:\n  ${hepsi.join("\n  ")}`).toEqual([]);
   });
 
   test(`${tema} tema — hover durumlarında WCAG AA kontrastı`, async ({ page, context }) => {
+    test.setTimeout(SURE_HOVER);
     // Hover ayrı test: ⋯ menüsü hatası YALNIZ hover'da ortaya çıkıyordu.
     // Duran ekranı ölçmek onu bulamazdı.
     await context.addInitScript((t) => {
@@ -211,8 +133,9 @@ for (const tema of ["light", "dark"] as const) {
     }, tema);
 
     const hepsi: string[] = [];
-    for (const [ad, url] of Object.entries(EKRANLAR)) {
-      await hazirOl(page, url);
+    for (const e of EKRANLAR) {
+      const ad = `${e.key} ${e.ad}`;
+      await hazirOl(page, e.url);
 
       // Açılır menüleri de kapsa: varsa aç.
       const menu = page.getByRole("button", { name: "Diğer koli işlemleri" }).first();
@@ -226,7 +149,7 @@ for (const tema of ["light", "dark"] as const) {
         const el = tiklanabilir.nth(i);
         if (!(await el.isVisible().catch(() => false))) continue;
         await el.hover({ timeout: 2000 }).catch(() => {});
-        const { bulgular } = (await page.evaluate(OLCUM)) as any;
+        const { bulgular } = (await page.evaluate(olcumYap)) as any;
         for (const b of bulgular as any[]) {
           const satir = `${ad}: "${b.metin}" ${b.oran}:1 (gereken ${b.esik}:1) · ${b.renk} / ${b.zemin} · ${b.yol}`;
           if (!hepsi.includes(satir)) hepsi.push(satir);
