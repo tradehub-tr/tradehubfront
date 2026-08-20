@@ -1,3 +1,24 @@
+## [v2.4.0-alpha.18] - 2026-08-20 ALPHA
+
+Bu surum alpha.istoc.com'da gelistirme asamasindadir.
+
+### Eklendi
+- feat(product-media): HLS video, LCP preload ve manifest tabanlı responsi (@TurksabYonetim)
+  - Ürün video oynatıcısını hls.js ile HLS-farkındalıklı hâle getir (poster, önizleme klibi, autoplay kademesi) çünkü backend artık HLS master/optimize mp4/önizleme türevleri sunuyor; hls.js yalnız gerçek .m3u8 oynatıldığında dinamik import ile iner.
+  - StoreHeader ve CompanyProfile video oynatıcılarını yeni `x-video-src` Alpine direktifine geçir ki aynı HLS bağlama mantığı tekrarlanmasın.
+  - Ürün galerisi ve ürün listeleme kartlarına manifest tabanlı `ResponsiveImage` (`<picture>`/`srcset`) ve LCP preload akışı ekle; soğuk önbellekte ilk boyama kısa bir tavan kadar manifesti bekler, yetişmezse ham `<img>` basılıp manifest gelince yerinde yükseltilir (rapor 91 §2.5, rapor 95).
+  - `categories.html` sayfasını Lighthouse ölçüm kapsamına al ve ürün detay URL'ine gerçek bir ilan kimliği ekle; ikisi de ölçülmeyen/yanlış ölçülen sayfa yüzünden LCP/CLS verisinin geçersiz çıktığı 2026-08-20 koşumunda tespit edildi (docs/reports/62).
+  - Kategori grid konteynerine `min-h-[75vh]` ekleyerek ölçülen 0,5396 CLS'in kaynağı olan geç yüklenen footer kaymasını önle.
+  - `/files/` ve `/private/files/` nginx bloklarına T-131 medya sertleştirmesi ekle: SVG'lerde koşullu CSP sandbox, HTML/JS uzantılarına Content-Disposition: attachment, nosniff'i edge'de sahiplenme, ve enumeration'ı yavaşlatmak için limit_req.
+  - RUM (Real User Monitoring) istemcisini `web-vitals` ile tüm MPA girişlerinden ortak `lib/rum/boot` üzerinden aç (T-123); backend ucu zaten kurulu.
+  - CSP sözleşme testini `replaceAll`e çevir çünkü T-131 sonrası şablonda iki özdeş DENY satırı oluştu ve tekli `replace` mutasyonu yakalayamıyordu.
+- feat(medya): manifest tabanlı responsive görsel/video teslimi ve RUM izl (@TurksabYonetim)
+  - Ürün medyası için HLS video, LCP preload ve manifest tabanlı responsive image/video boyutlandırma eklendi; amaç sayfa yükleme performansını ve Core Web Vitals'ı iyileştirmek
+  - Gerçek kullanıcı izleme (RUM) alt sistemi eklendi (collector, sampling, routePhysical, transport, sha256) — LCP ve medya teslim metriklerini üretimde ölçmek için
+  - ListingCard, ProductImageGallery, ProductVideoSection ve ProductListingGrid için ilgili unit ve e2e testleri eklendi
+  - Lighthouse CI çalıştırma sonuçları (.lighthouseci/) commit'e dahil edildi
+
+---
 ## [v2.4.0-alpha.17] - 2026-08-19 ALPHA
 
 Bu surum alpha.istoc.com'da gelistirme asamasindadir.
