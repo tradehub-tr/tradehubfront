@@ -40,18 +40,43 @@ export default [
   // ve `console` orada yasal. Bu blok olmadan her `process.env` okuması
   // `no-undef` hatası veriyordu (kontrast tarama aracında 8 tane).
   {
-    files: ["tests/e2e/**/*.{ts,mjs,js}", "*.config.{js,ts,mjs}", "scripts/**"],
+    files: [
+      "tests/e2e/**/*.{ts,mjs,js}",
+      "*.config.{js,ts,mjs}",
+      "*.cjs", // lighthouserc.cjs — CommonJS, `module.exports` kullanıyor
+      "scripts/**",
+    ],
     languageOptions: {
       globals: {
         process: "readonly",
         console: "readonly",
         __dirname: "readonly",
         Buffer: "readonly",
+        module: "writable",
+        require: "readonly",
+        // `URL` Node 10'dan beri global; script'ler yol çözmek için kullanıyor.
+        URL: "readonly",
+        URLSearchParams: "readonly",
       },
     },
     rules: {
       // Bir CLI aracının çıktısı console'dur; uyarı gürültü olur.
       "no-console": "off",
+    },
+  },
+
+  // ── Tarayıcı içinde çalıştırılan ölçüm parçaları ─────────────────────
+  // `measure-home-perf.mjs` Playwright ile sayfaya kod enjekte ediyor;
+  // o bloklar Node'da değil TARAYICIDA koşuyor. Dosyanın kendisi Node
+  // script'i olduğu için üstteki blok da geçerli — bu yalnız ek globaller.
+  {
+    files: ["scripts/measure-home-perf.mjs"],
+    languageOptions: {
+      globals: {
+        PerformanceObserver: "readonly",
+        performance: "readonly",
+        getComputedStyle: "readonly",
+      },
     },
   },
 
