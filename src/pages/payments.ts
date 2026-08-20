@@ -1,6 +1,8 @@
 /**
  * Güvenli ve Esnek Ödeme Yöntemleri — Ticari Güvence ödeme bilgilendirme sayfası
  */
+// T-123: RUM montajı — MPA ortak boot (çift başlatmaya karşı korumalı).
+import "../lib/rum/boot";
 import '../style.css'
 import { initFlowbite } from 'flowbite'
 import { TopBar, SubHeader, MegaMenu, initMegaMenu, initStickyHeaderSearch } from '../components/header'

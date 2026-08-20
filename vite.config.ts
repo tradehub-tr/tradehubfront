@@ -574,6 +574,10 @@ export default defineConfig({
                     if (id.includes('node_modules/browser-image-compression')) return 'vendor-image-compression';
                     // Vendor: mediabunny — video transcode, büyük; ayrı chunk (WP1).
                     if (id.includes('node_modules/mediabunny')) return 'vendor-mediabunny';
+                    // Vendor: hls.js — büyük; YALNIZ dinamik import ile referanslanıyor
+                    // (utils/hlsVideo.ts), bu yüzden chunk tembel kalır: .m3u8 kaynağı
+                    // gerçekten oynatılmayan sayfa bunu indirmez (W7).
+                    if (id.includes('node_modules/hls.js')) return 'vendor-hls';
                     // App: i18n locale dosyaları — manualChunk YOK: her dil dinamik
                     // import(`./locales/${lang}`) ile ayrı chunk'a bölünsün, yalnız aktif
                     // dil yüklensin (B-1 lazy-load). Tek 'locales' chunk'ı 4 dili birleştirirdi.

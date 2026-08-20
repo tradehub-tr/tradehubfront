@@ -9,6 +9,8 @@
  * bileşeni uç yokken "bağlı değil" hatası veriyor — sessizce başarılı
  * göstermiyor.
  */
+// T-123: RUM montajı — MPA ortak boot (çift başlatmaya karşı korumalı).
+import "../lib/rum/boot";
 import "../style.css";
 import "../alpine/sidebar";
 import { startAlpine } from "../alpine";

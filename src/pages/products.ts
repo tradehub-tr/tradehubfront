@@ -4,6 +4,8 @@
  * iSTOC-style product listing with left filter panel and responsive product grid.
  */
 
+// T-123: RUM montajı — MPA ortak boot (çift başlatmaya karşı korumalı).
+import "../lib/rum/boot";
 import '../style.css'
 import { initFlowbite } from 'flowbite'
 import { t } from '../i18n'
@@ -369,7 +371,12 @@ initCurrency().then(() => {
     baseParams,
     pageSize: 40,
     onUpdate: (products, total, page, totalPages, hasNext, hasPrev, categoryName, seo) => {
-      rerenderProductGrid(products);
+      // Izgara boyaması artık async: soğuk önbellekte manifesti kısa bir tavan
+      // kadar bekler ki LCP adayı İLK boyamada türev (AVIF/WebP) ile çıksın
+      // (rapor 91 §2.5). Izgara DOM'una dokunan init'ler aşağıda bu promise'i
+      // bekliyor; DOM'dan bağımsız güncellemeler (SEO, başlık, sayfalama)
+      // beklemeden koşar.
+      const izgaraHazir = rerenderProductGrid(products);
       applyServerSeo(seo);
       if (categoryName) apiCategoryName = categoryName;
       const resolvedKeyword = resolveKeyword() || undefined;
@@ -390,21 +397,29 @@ initCurrency().then(() => {
         ]);
       }
 
-      // Update pagination UI
-      const paginationEl = document.getElementById('pagination-controls');
-      if (paginationEl) {
-        paginationEl.innerHTML = renderPagination(page, totalPages, hasNext, hasPrev);
-      }
+      // Kart DOM'una dokunan init'ler ızgara GERÇEKTEN basıldıktan sonra
+      // koşmalı — yoksa yükleme iskeletini sorgulayıp boş dönerler.
+      // `rerenderProductGrid` asla reject etmez.
+      void izgaraHazir.then(() => {
+        // Update pagination UI — ızgarayla BİRLİKTE basılır. Izgaradan önce
+        // basılsaydı kısa iskeletin hemen altında (görünür alanda) belirir,
+        // ızgara boyanınca 3000+ px aşağı itilirdi — ölçülmüş CLS kaynağı
+        // (rapor 95: #pagination-controls kayması 0,0375).
+        const paginationEl = document.getElementById('pagination-controls');
+        if (paginationEl) {
+          paginationEl.innerHTML = renderPagination(page, totalPages, hasNext, hasPrev);
+        }
 
-      // Initialize listing cart drawer with current products
-      initListingCartDrawer(products);
-      initProductSliders();
+        // Initialize listing cart drawer with current products
+        initListingCartDrawer(products);
+        initProductSliders();
 
-      // Sosyal kanıt: sinyali olan kartların rozetini dinamik (dönen) etiketle değiştir
-      applyListingSocialProof(products);
+        // Sosyal kanıt: sinyali olan kartların rozetini dinamik (dönen) etiketle değiştir
+        applyListingSocialProof(products);
 
-      // Favori kalplerini ürün bazında boya (grid her render'da sıfırdan kurulur)
-      syncListingFavoriteHearts();
+        // Favori kalplerini ürün bazında boya (grid her render'da sıfırdan kurulur)
+        syncListingFavoriteHearts();
+      });
     },
     onLoading: showGridLoading,
     onError: (err) => {

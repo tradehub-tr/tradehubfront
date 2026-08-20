@@ -7,6 +7,8 @@
  * - Seller (veya pending application sahibi) ise normal KybLayout render.
  */
 
+// T-123: RUM montajı — MPA ortak boot (çift başlatmaya karşı korumalı).
+import "../lib/rum/boot";
 import "../style.css";
 import { initFlowbite } from "flowbite";
 import { t } from "../i18n";

@@ -4,6 +4,8 @@
  * VERİ DURUMU: `Return Request` DocType'ı yok, karar ucu da yok.
  * `?mock=1` ile kuyruk örnek taleplerle çiziliyor.
  */
+// T-123: RUM montajı — MPA ortak boot (çift başlatmaya karşı korumalı).
+import "../lib/rum/boot";
 import "../style.css";
 import "../alpine/sidebar";
 import { startAlpine } from "../alpine";

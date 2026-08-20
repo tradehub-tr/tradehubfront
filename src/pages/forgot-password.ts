@@ -3,6 +3,8 @@
  * 3-step password reset: find account → verify code → set new password.
  */
 
+// T-123: RUM montajı — MPA ortak boot (çift başlatmaya karşı korumalı).
+import "../lib/rum/boot";
 import '../style.css'
 
 import { ForgotPasswordPage } from '../components/auth'

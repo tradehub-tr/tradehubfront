@@ -3,6 +3,8 @@
  * Layout: koyu hero bandı + bandın üzerine binen sticky başvuru kartı (sol)
  * ve akan içerik (sağ); 880px altında tek kolona katlanır.
  */
+// T-123: RUM montajı — MPA ortak boot (çift başlatmaya karşı korumalı).
+import "../lib/rum/boot";
 import '../style.css'
 import { initFlowbite } from 'flowbite'
 import { TopBar, SubHeader, MegaMenu, initMegaMenu, initStickyHeaderSearch } from '../components/header'

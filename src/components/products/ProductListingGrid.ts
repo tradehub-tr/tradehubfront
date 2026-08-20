@@ -1,5 +1,6 @@
 import { t } from "../../i18n";
-import { renderListingCard } from "../shared/ListingCard";
+import { renderListingCard, upgradeListingCardMedia } from "../shared/ListingCard";
+import { getMediaManifest, primeMediaManifests } from "../../lib/media/manifest";
 /**
  * ProductListingGrid Component
  * iSTOC-style product listing grid for products page.
@@ -104,21 +105,92 @@ export function ProductListingGrid(products: ProductListingCard[] = []): string 
 }
 
 /**
+ * Soğuk önbellekte İLK boyamanın manifesti beklediği tavan (ms).
+ *
+ * Gerekçe (rapor 91 §2.5 → rapor 95): manifest isteği ilan listesi geldikten
+ * sonra atılabiliyor (kimlikler ancak o zaman belli) ve lokalde ~100 ms'te
+ * dönüyor. Bu kadarlık bekleme, LCP adayının 399 KB ham PNG yerine ~12 KB
+ * AVIF ile boyanmasını sağlıyor — 38 ham görsel / 7,2 MB'lık indirme hiç
+ * başlamıyor. Tavan aşılırsa (uç yavaş/ölü) ızgara BUGÜNKÜ ham `<img>` ile
+ * basılır ve manifest gelince `upgradeListingCardMedia` yerinde yükseltir;
+ * yani en kötü durumda davranış eskisiyle aynıdır, sayfa asla 500 ms'ten
+ * fazla bekletilmez.
+ */
+export const MANIFEST_FIRST_PAINT_WAIT_MS = 500;
+
+/**
+ * Render nöbet sayacı: bekleme sırasında yeni bir render başlarsa (hızlı filtre
+ * tıklamaları) eskisi hem boyamayı hem yükseltmeyi bırakır — bayat ürün seti
+ * asla taze setin üstüne yazılmaz.
+ */
+let _renderNobeti = 0;
+
+/**
  * Re-render the product grid in-place with a new set of products.
  * Called by the filter engine when filters/sort change.
+ *
+ * SOĞUK YÜKLEME SÖZLEŞMESİ (rapor 91 §2.5'in kapanışı):
+ *  - Önbellek sıcaksa (ya da bayrak kapalıysa) davranış eskisi gibi fiilen
+ *    senkrondur — `primeMediaManifests` çözülmüş promise döner, bekleme yok.
+ *  - Önbellek SOĞUKSA ilk boyama manifesti en çok `MANIFEST_FIRST_PAINT_WAIT_MS`
+ *    bekler; yetişirse kartlar İLK boyamada `<picture>`/srcset ile çıkar (LCP
+ *    adayı türev indirir), yetişmezse ham basılır ve manifest gelince
+ *    `upgradeListingCardMedia` yerinde terfi ettirir.
+ *
+ * @returns Izgara DOM'a basıldığında çözülen promise — çağıran, ızgara DOM'una
+ *   dokunan init'leri (slider, sosyal kanıt, favori) bundan SONRA koşmalı.
  */
-export function rerenderProductGrid(products: ProductListingCard[]): void {
+export async function rerenderProductGrid(products: ProductListingCard[]): Promise<void> {
   const grid = document.querySelector<HTMLElement>(".product-grid");
   if (!grid) return;
 
+  const nobet = ++_renderNobeti;
+
   // Preserve the current view mode
   const isListView = grid.dataset.listMode === "list";
+
+  const kimlikler = products.map((p) => p.id).filter(Boolean);
+  // `primeMediaManifests` asla fırlatmaz; sıcak önbellekte istek atmadan
+  // çözülmüş promise döner. W10 (rapor 101 §İş1): backend İLK kartın (LCP adayı)
+  // görsel manifestini `get_listings` yanıtına gömüyor ve `mapListingCard` onu
+  // önbelleğe tohumluyor; bu tur o kartı `_taze` görüp ATLAR — yani ağ turu
+  // "yalnız KALAN kartlar" için atılır. Böylece LCP adayının `<picture>`si bu
+  // tura BAĞLI değildir: tur zaman aşımına uğrasa (uç yavaş) bile ilk kart
+  // gömülü türevle (AVIF/WebP) basılır, yalnız kalan kartlar ham düşer.
+  const manifestHazir = primeMediaManifests(kimlikler);
+
+  // Soğuk mu? Önbellekte OLMAYAN en az bir ilan varsa soğuktur. "Önbellekte
+  // boş manifest" de bir bilgidir (türev yok / bayrak kapalı) ve sıcak sayılır.
+  // NOT: Bekleme KALDIRILMADI — kaldırılsaydı kalan görünür kartlar ham `<img>`
+  // ile eager basılıp rapor 95'in kapattığı 7 MB ham indirmeyi geri getirirdi
+  // (LCP adayı gömülü olsa bile). Tohum yalnız LCP adayını turdan çıkarır.
+  const soguk = kimlikler.some((kimlik) => !getMediaManifest(kimlik));
+
+  let yetisti = true;
+  if (soguk && products.length > 0) {
+    yetisti = await Promise.race([
+      manifestHazir.then(() => true),
+      new Promise<boolean>((resolve) =>
+        setTimeout(() => resolve(false), MANIFEST_FIRST_PAINT_WAIT_MS)
+      ),
+    ]);
+    // Bekleme sırasında yeni render başladıysa bu set bayat — hiç basma.
+    if (nobet !== _renderNobeti) return;
+  }
 
   if (products.length === 0) {
     grid.innerHTML = renderNoResults();
   } else {
     grid.innerHTML = products
-      .map((card) => `<div role="listitem" class="flex">${renderListingCard(card)}</div>`)
+      .map(
+        (card, i) =>
+          // İlk kart sayfanın LCP ADAYI: görseli `fetchpriority="high"` + eager
+          // basılır (W7-2/A2 deseni — `<link rel=preload>` yerine doğrudan img
+          // önceliği: ızgara işaretlemesi tek görevde kurulup basılıyor, ayrı
+          // preload bağlantısının kapatacağı bir keşif boşluğu yok). TEK kart:
+          // hepsine `high` vermek önceliği anlamsızlaştırır.
+          `<div role="listitem" class="flex">${renderListingCard(card, i === 0 ? { priorityImage: true } : {})}</div>`
+      )
       .join("");
   }
 
@@ -128,6 +200,15 @@ export function rerenderProductGrid(products: ProductListingCard[]): void {
   } else {
     // Ensure all grid classes are correct just in case
     setGridViewMode("grid");
+  }
+
+  // Tavan aşıldıysa ham basıldı; manifest NE ZAMAN gelirse gelsin basılı
+  // kartları yerinde terfi ettir (W7-2 hydration deseninin kart karşılığı).
+  if (!yetisti) {
+    void manifestHazir.then(() => {
+      if (nobet !== _renderNobeti) return;
+      upgradeListingCardMedia(grid);
+    });
   }
 }
 

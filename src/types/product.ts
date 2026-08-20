@@ -10,6 +10,8 @@ export interface ProductImage {
   src: string;
   alt: string;
   isVideo?: boolean;
+  /** Video slaytları için kapak (API `videoPoster` — manifest posteri). */
+  poster?: string;
 }
 
 export interface PriceTier {
@@ -258,8 +260,21 @@ export interface ProductDetail {
   productTypeName?: string;
   productFamilyName?: string;
   attributeSetName?: string;
-  /** Optional listing-level promo video URL (YouTube/Vimeo/MP4). */
+  /** Optional listing-level promo video URL (YouTube/Vimeo/MP4/HLS). */
   videoUrl?: string;
+  /** Optional poster image for the promo video (manually uploaded today; manifest-derived later). */
+  videoPoster?: string;
+  /**
+   * W8 — medya hattının manifest türev alanları (API `get_listing_detail`).
+   * Hepsi opsiyonel: türev yokken/bayrak kapalıyken API null basar ve vitrin
+   * ham `videoUrl` davranışında kalır.
+   */
+  /** HLS master playlist (`…/hls/master.m3u8`) — varsa mp4 yerine tercih edilir. */
+  videoHlsSrc?: string;
+  /** Optimize progresif mp4 (h264 türevi; passthrough'ta ham dosyanın kendisi). */
+  videoSrc?: string;
+  /** Sessiz 3-6 sn hareketli önizleme klibi (≤1 MB) — hover/galeri yüzeyleri için. */
+  videoPreviewSrc?: string;
   description: string;
   rating: number;
   reviewCount: number;

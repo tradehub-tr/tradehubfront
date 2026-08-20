@@ -12,6 +12,8 @@
  *
  * `?mock=1` üçünü de örnek veriyle çiziyor.
  */
+// T-123: RUM montajı — MPA ortak boot (çift başlatmaya karşı korumalı).
+import "../lib/rum/boot";
 import "../style.css";
 import "../alpine/sidebar";
 import "../alpine/logisticsSeller";

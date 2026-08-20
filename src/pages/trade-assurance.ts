@@ -2,6 +2,8 @@
  * Trade Assurance — Ana Landing Page
  * Varyant 1 "Marka Klasiği" (onaylanan mock) — koyu hero, sarı bant ritmi
  */
+// T-123: RUM montajı — MPA ortak boot (çift başlatmaya karşı korumalı).
+import "../lib/rum/boot";
 import '../style.css'
 import { t } from '../i18n'
 import { initFlowbite } from 'flowbite'

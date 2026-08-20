@@ -3,6 +3,8 @@
  * Buyer address book management (add/edit/delete/default).
  */
 
+// T-123: RUM montajı — MPA ortak boot (çift başlatmaya karşı korumalı).
+import "../lib/rum/boot";
 import '../style.css'
 import { initFlowbite } from 'flowbite'
 import { t } from '../i18n'

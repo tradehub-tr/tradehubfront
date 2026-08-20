@@ -14,6 +14,8 @@
  * DocType bile yok. `?mock=1` ile bu ikisi örnek veriyle çiziliyor
  * (bkz. `services/logisticsMock.ts`).
  */
+// T-123: RUM montajı — MPA ortak boot (çift başlatmaya karşı korumalı).
+import "../lib/rum/boot";
 import "../style.css";
 import "../alpine/sidebar";
 // Randevu formu (S3) örnek veri modunda çiziliyor — Alpine kaydı gerekli.

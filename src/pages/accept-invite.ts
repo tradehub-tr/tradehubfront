@@ -4,6 +4,8 @@
  * Reads ?token= from URL; if missing, shows error.
  */
 
+// T-123: RUM montajı — MPA ortak boot (çift başlatmaya karşı korumalı).
+import "../lib/rum/boot";
 import '../style.css'
 
 import { AcceptInvitePage } from '../components/auth/AcceptInvitePage'

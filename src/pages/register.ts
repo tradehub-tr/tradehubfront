@@ -3,6 +3,8 @@
  * Assembles AuthLayout with RegisterPage content for the registration flow.
  */
 
+// T-123: RUM montajı — MPA ortak boot (çift başlatmaya karşı korumalı).
+import "../lib/rum/boot";
 import '../style.css'
 import { initFlowbite } from 'flowbite'
 import { t } from '../i18n'

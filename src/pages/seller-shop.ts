@@ -4,6 +4,8 @@
  * Fixed: TopBar (header), StoreNav (navigation), Footer
  * Dynamic: All sections between nav and footer, order/visibility from API
  */
+// T-123: RUM montajı — MPA ortak boot (çift başlatmaya karşı korumalı).
+import "../lib/rum/boot";
 import '../style.css';
 import { initFlowbite } from 'flowbite';
 import 'swiper/swiper-bundle.css';
