@@ -149,8 +149,12 @@ test("GERÇEK ÇIKTI — etiket üretiliyor ve yazdırılabilir belge açılıyo
   // Etiketi olmayan koliyi seç ve üret.
   await page.locator('table tbody input[type="checkbox"]').last().check();
   // Üretme başlıkta değil, seçim yapılınca beliren eylem çubuğunda.
+  // `count()` BEKLEMEZ: eylem çubuğu seçimden sonra bir tik gecikmeyle
+  // beliriyor ve koşullu dal sessizce atlanıyordu — üretme hiç denenmemiş
+  // olurdu. Butonun görünmesini bekleyip TIKLA (ölçüldü 2026-08-21).
   const generate = page.getByRole("button", { name: "Etiket üret" });
-  if (await generate.count()) await generate.click();
+  await expect(generate).toBeVisible();
+  await generate.click();
 
   // Yan önizlemede barkod çizilmiş olmalı — "Barkod yok" yazısı değil.
   await expect(page.locator('img[alt*="barkod" i]').first()).toBeVisible({ timeout: 10_000 });
@@ -281,7 +285,14 @@ test("madde 6 — üretme butonu seçim yapılınca beliriyor", async ({ page })
 test("madde 11 — etiket durumu ikonla da ayrışıyor", async ({ page }) => {
   await page.goto(`/panel/lojistik/etiketler/${SHP}`);
   // Renk tek ayırt edici olamaz; rozette metin VE ikon bulunmalı.
-  const rozet = page.locator("tbody tr").first().locator("td").nth(5);
+  // "Koliler" adına bağlı: ekranda taşıyıcı seçenekleri tablosu da var (20-FE)
+  // ve DOM'da önce geliyor — çıplak `tbody tr` yanlış tablodan satır alıyordu.
+  const rozet = page
+    .getByRole("table", { name: "Koliler" })
+    .locator("tbody tr")
+    .first()
+    .locator("td")
+    .nth(5);
   await expect(rozet).toContainText(/Basıldı|Üretildi|Üretilmedi|İptal edildi|Geçersiz/);
   await expect(rozet).toContainText(/[✓◷✕⊘↻]/);
 });
@@ -502,8 +513,9 @@ test("GÖRÜNÜM — liste modu aynı sevkiyatları gösteriyor, veri kaybolmuyo
 test("GÖRÜNÜM — etiket ekranı kart modunda her koli için ÖNİZLEME çiziyor", async ({ page }) => {
   // Tabloda "hangi koliye ne bastım" görünmüyordu; kart modunun tek gerekçesi bu.
   await page.goto(`/panel/lojistik/etiketler/${SHP}`);
-  await expect(page.locator("table tbody tr").first()).toBeVisible();
-  const rows = await page.locator("table tbody tr").count();
+  const koliler = page.getByRole("table", { name: "Koliler" });
+  await expect(koliler.locator("tbody tr").first()).toBeVisible();
+  const rows = await koliler.locator("tbody tr").count();
 
   await page.getByRole("button", { name: "Kart Görünümü" }).click();
   await expect(page.locator(".list-grid-card")).toHaveCount(rows);
@@ -517,3 +529,4 @@ test("GÖRÜNÜM — etiket ekranında kanban YOK (durum akışı değil, bayrak
   await expect(page.getByRole("button", { name: "Tablo Görünümü" })).toBeVisible();
   await expect(page.getByRole("button", { name: "Kanban Görünümü" })).toHaveCount(0);
 });
+

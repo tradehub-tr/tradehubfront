@@ -22,6 +22,16 @@ export const POD_SHP = "SHP-2026-00033";  // POD kaydı + istasyon verisi olan t
 // SEKMELER HİÇ AÇILMAZ (detay yüklenmeden sekme çubuğu render edilmiyor).
 export const SHP_CANLI = "SHP-2026-00001";
 
+/**
+ * Kontrast taramasının açtığı fiyat kuralı (20-FE mock tohumu).
+ *
+ * Satıcının kendi Aras anlaşması SEÇİLDİ, platform kuralı değil: bu kayıt
+ * DÖRT kademe ve bir ek ücret taşıyor, yani kademe tablosunun ve ek ücret
+ * tablosunun tüm satır tipleri ölçülüyor. Tek kademeli bir kural seçilseydi
+ * tabloların çoğu yüzeyi hiç çizilmezdi.
+ */
+export const PRICING_RULE = "PR-ALI-ARAS-DOGU";
+
 /** Manifestteki 21 hazır ekran (`logisticsScreens.js` · `ready: true`). */
 export const EKRANLAR = [
   { key:"M1", ad:"kataloglar",          url:"/panel/lojistik/kataloglar",                sahip:"bora" },
@@ -44,6 +54,13 @@ export const EKRANLAR = [
   { key:"H1", ad:"istasyonlar",         url:`/panel/lojistik/sevkiyatlar/${POD_SHP}/istasyonlar`,   sahip:"ali" },
   { key:"D1", ad:"satıcı teslimatı",    url:"/panel/lojistik/satici-teslimati",          sahip:"ali"  },
   { key:"D2", ad:"alıcı teslim alma",   url:"/panel/lojistik/alici-teslim-alma",         sahip:"ali"  },
+  // 20-FE (2026-08-21). K4 kural FORMU parametreli: var olan bir kuralla
+  // açılıyor — "yeni" ile açılsa şablon seçim ekranı gelir ve formun kendi
+  // yüzeyleri (kademe tablosu, canlı hesap paneli) hiç ölçülmezdi.
+  { key:"K1", ad:"tarifeler",           url:"/panel/lojistik/tarifeler",                 sahip:"ali"  },
+  { key:"K2", ad:"fiyat kuralları",     url:"/panel/lojistik/fiyat-kurallari",           sahip:"ali"  },
+  { key:"K4", ad:"kural formu",         url:`/panel/lojistik/fiyat-kurallari/${PRICING_RULE}`, sahip:"ali" },
+  { key:"K3", ad:"fiyat simülasyonu",   url:"/panel/lojistik/fiyat-simulasyonu",         sahip:"ali"  },
 ];
 
 /**
