@@ -151,6 +151,8 @@ function toDrawerItem(
     moq,
     sellInMoqMultiples: !!product.sellInMoqMultiples,
     imageKind: "jewelry",
+    // Renk varyantı olmayan üründe sol önizleme galeriye düşer (video hariç).
+    galleryImages: product.images.filter((img) => !img.isVideo).map((img) => img.src),
     // Modal artık SEÇİLİ para biriminde gösterir (eskiden baseCurrency idi →
     // USD seçiliyken ₺ kalıyordu). Beslenen tüm fiyatlar (tier.price, sample,
     // varyant option.price, shipping) zaten seçili para birimine çevrili.

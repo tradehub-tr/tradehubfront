@@ -48,6 +48,8 @@ function toDrawerItem(product: ProductDetail): CartDrawerItemModel {
     moq: product.moq,
     sellInMoqMultiples: !!product.sellInMoqMultiples,
     imageKind: "jewelry",
+    // Renk varyantı olmayan üründe sol önizleme galeriye düşer (video hariç).
+    galleryImages: product.images.filter((img) => !img.isVideo).map((img) => img.src),
     // Modal SEÇİLİ para biriminde gösterir; beslenen fiyatlar çevrilmiş.
     currency: getSelectedCurrency(),
     samplePrice: product.samplePrice ?? product.baseSamplePrice,

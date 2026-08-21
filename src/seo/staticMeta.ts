@@ -204,11 +204,6 @@ export const INDEXABLE_META: Record<string, StaticPageMeta> = {
     description:
       "Ürünlerinizi binlerce B2B alıcısına satın. Başvuru ücretsiz: mağazanızı açın, toptan satışa bugün başlayın.",
   },
-  "pages/seller/sell-pricing.html": {
-    prettyPath: "/satici/fiyatlandirma",
-    description:
-      "Satıcı üyelik paketlerini, komisyon oranlarını ve fiyatlandırmayı karşılaştırın; işletmenize uygun planla satışa başlayın.",
-  },
   "pages/seller/seller-shop.html": {
     prettyPath: null,
     description:

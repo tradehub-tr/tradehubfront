@@ -34,13 +34,13 @@ export function renderDropzone(opts: RenderDropzoneOpts): string {
     `${opts.config.allowedFormatsDisplay} · maks. ${opts.config.maxFiles} · ${Math.round(opts.config.maxFileSizeBytes / 1024 / 1024)}MB`;
   const accept = opts.config.allowedExtensions.join(",");
   return `
-    <div id="${opts.id}" class="upload-dropzone group relative cursor-pointer border-2 border-dashed border-gray-300 hover:border-amber-400 hover:bg-amber-50/40 rounded-xl px-6 py-8 flex flex-col items-center gap-3 transition-all duration-150 text-center" role="button" tabindex="0">
-      <div class="upload-dz-icon w-12 h-12 rounded-full bg-amber-100 text-amber-600 flex items-center justify-center transition-all">
+    <div id="${opts.id}" class="upload-dropzone group relative cursor-pointer border-2 border-dashed border-gray-300 hover:border-[var(--color-primary-400,#fbbf24)] hover:bg-[var(--color-primary-50,#fffbeb)] rounded-xl px-6 py-8 flex flex-col items-center gap-3 transition-all duration-150 text-center" role="button" tabindex="0">
+      <div class="upload-dz-icon w-12 h-12 rounded-full bg-[var(--color-primary-100,#fef3c7)] text-[var(--color-primary-600,#d97706)] flex items-center justify-center transition-all">
         ${ICON_UPLOAD}
       </div>
       <div class="upload-dz-title text-sm font-bold text-gray-800">${opts.texts.title}</div>
       <div class="text-xs text-gray-400">${opts.texts.or}</div>
-      <button type="button" class="upload-dz-pick px-4 py-1.5 text-xs font-semibold rounded-md bg-amber-400 hover:bg-amber-500 text-gray-900 transition-colors">
+      <button type="button" class="upload-dz-pick px-4 py-1.5 text-xs font-semibold rounded-md bg-[var(--btn-bg,#f59e0b)] hover:bg-[var(--btn-hover-bg,#d97706)] text-[var(--btn-text,#ffffff)] transition-colors">
         ${opts.texts.pickBtn}
       </button>
       <div class="upload-dz-meta text-[11px] text-gray-400 mt-1">${meta}</div>
@@ -76,16 +76,16 @@ export function bindDropzone(opts: BindDropzoneOpts, handlers: DropzoneHandlers)
 
   function setDragOver(on: boolean) {
     if (on) {
-      root!.classList.add("border-amber-500", "bg-amber-50", "scale-[1.005]");
+      root!.classList.add("border-[var(--color-primary-500,#f59e0b)]", "bg-[var(--color-primary-50,#fffbeb)]", "scale-[1.005]");
       root!.classList.remove("border-gray-300");
-      iconWrap?.classList.add("bg-amber-500", "text-white");
-      iconWrap?.classList.remove("bg-amber-100", "text-amber-600");
+      iconWrap?.classList.add("bg-[var(--color-primary-500,#f59e0b)]", "text-white");
+      iconWrap?.classList.remove("bg-[var(--color-primary-100,#fef3c7)]", "text-[var(--color-primary-600,#d97706)]");
       if (titleEl) titleEl.textContent = opts.texts.dragRelease;
     } else {
-      root!.classList.remove("border-amber-500", "bg-amber-50", "scale-[1.005]");
+      root!.classList.remove("border-[var(--color-primary-500,#f59e0b)]", "bg-[var(--color-primary-50,#fffbeb)]", "scale-[1.005]");
       root!.classList.add("border-gray-300");
-      iconWrap?.classList.remove("bg-amber-500", "text-white");
-      iconWrap?.classList.add("bg-amber-100", "text-amber-600");
+      iconWrap?.classList.remove("bg-[var(--color-primary-500,#f59e0b)]", "text-white");
+      iconWrap?.classList.add("bg-[var(--color-primary-100,#fef3c7)]", "text-[var(--color-primary-600,#d97706)]");
       if (titleEl) titleEl.textContent = originalTitle;
     }
   }

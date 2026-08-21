@@ -11,6 +11,7 @@ import { apiCheckStock, apiAddToCart, fetchCart } from "../../../services/cartSe
 import { getCurrencySymbol as _getCurrencySymbolForCart } from "../../../utils/currency";
 import { showCartError } from "../page/CartPage";
 import { safeHexColor, escapeHtml, sanitizeUrl } from "../../../utils/sanitize";
+import { getPreviewEntries } from "./previewEntries";
 import { moneyFlowHtml, mountMoneyFlows, resetMoneyFlows } from "../../../utils/moneyFlow";
 
 export interface CartDrawerTierModel {
@@ -86,6 +87,8 @@ export interface CartDrawerItemModel {
   moq: number;
   sellInMoqMultiples?: boolean;
   imageKind: ProductImageKind;
+  /** Ürün galeri görselleri — renk varyantı yokken sol önizleme bunlara düşer. */
+  galleryImages?: string[];
   priceTiers: CartDrawerTierModel[];
   colors: CartDrawerColorModel[];
   colorAxisLabel?: string;
@@ -491,7 +494,9 @@ function applyDrawerTransform(open: boolean): void {
   const { overlay, drawer } = getDrawerElements();
   if (!overlay || !drawer) return;
 
-  const mobile = window.innerWidth < 1280;
+  // <768: alttan açılan tam sayfa sheet, önizleme yok. ≥768 (tablet/laptop):
+  // yandan drawer + küçülerek sığan sol önizleme paneli.
+  const mobile = window.innerWidth < 768;
   const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   // reduced-motion: konum hareketini kaldır, açık/kapalı yalnızca opacity ile
   const closedTransform = reduceMotion
@@ -527,6 +532,9 @@ function applyDrawerTransform(open: boolean): void {
 function setPreviewVisible(visible: boolean): void {
   const preview = document.getElementById("shared-cart-preview");
   if (!preview) return;
+  // Gösterilecek hiçbir görsel yoksa (renk varyantı da galeri de boş) panel
+  // boş beyaz kutu olarak durmasın — hiç açılmasın.
+  if (getPreviewEntries(state.item).length === 0) visible = false;
   if (visible) {
     preview.classList.remove("hidden");
     preview.classList.add("flex");
@@ -539,21 +547,38 @@ function setPreviewVisible(visible: boolean): void {
 function updatePreview(): void {
   const image = document.getElementById("shared-cart-preview-image");
   const label = document.getElementById("shared-cart-preview-label");
+  const prevBtn = document.getElementById("shared-cart-preview-prev");
+  const nextBtn = document.getElementById("shared-cart-preview-next");
   if (!image || !label || !state.item) return;
 
-  const color = state.item.colors[state.previewColorIndex];
-  if (!color) return;
+  const entries = getPreviewEntries(state.item);
+  if (entries.length === 0) {
+    setPreviewVisible(false);
+    return;
+  }
 
-  if (color.imageUrl) {
-    // imageUrl backend listing varyant verisinden geliyor; quote breakout +
+  if (state.previewColorIndex >= entries.length) state.previewColorIndex = 0;
+  const entry = entries[state.previewColorIndex];
+
+  // Tek görselde gezinme okları anlamsız — gizle.
+  prevBtn?.classList.toggle("hidden", entries.length < 2);
+  nextBtn?.classList.toggle("hidden", entries.length < 2);
+
+  const alt = entry.label ?? state.item.title;
+  if (entry.imageUrl) {
+    // imageUrl backend listing/galeri verisinden geliyor; quote breakout +
     // event handler injection riski. URL'i escape edip src'ye yaz.
-    image.innerHTML = `<img src="${escapeHtml(sanitizeUrl(color.imageUrl))}" alt="${escapeHtml(color.label)}" decoding="async" class="max-w-full max-h-full w-auto h-auto object-contain" />`;
+    image.innerHTML = `<img src="${escapeHtml(sanitizeUrl(entry.imageUrl))}" alt="${escapeHtml(alt)}" decoding="async" class="max-w-full max-h-full w-auto h-auto object-contain" />`;
   } else {
     // colorHex satıcı kontrollü; CSS context injection (";background:url(...)")
     // engellemek için hex pattern doğrulamasından geçir.
-    image.innerHTML = `<div class="w-full h-full rounded-md" style="background:${safeHexColor(color.colorHex)};"></div>`;
+    image.innerHTML = `<div class="w-full h-full rounded-md" style="background:${safeHexColor(entry.colorHex ?? "")};"></div>`;
   }
-  label.textContent = `color : ${color.label}`;
+
+  // Renk varyantı: "Renk: Asorti" (backend eksen adı varsa o). Galeri: "1 / 4".
+  label.textContent = entry.isColor
+    ? `${state.item.colorAxisLabel || t("cart.colorLabel")}: ${entry.label ?? ""}`
+    : `${state.previewColorIndex + 1} / ${entries.length}`;
 }
 
 function showSampleMaxToast(): void {
@@ -1931,16 +1956,22 @@ function bindShippingEvents(): void {
 export function SharedCartDrawer(): string {
   return `
     <div id="shared-cart-overlay" class="fixed inset-0 z-[110] bg-black/50 opacity-0 pointer-events-none transition-opacity duration-300 ease-out motion-reduce:transition-none">
-      <div id="shared-cart-preview" class="hidden fixed start-0 top-0 bottom-0 end-[600px] z-[120] items-center justify-center px-8 pointer-events-none">
-        <div class="relative w-full max-w-[760px] h-[78vh] rounded-md overflow-hidden pointer-events-auto shadow-xl bg-surface">
-          <button type="button" id="shared-cart-preview-prev" class="absolute start-5 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-white/90 hover:bg-white text-secondary-700 border border-border-default shadow-md z-20">‹</button>
-          <div id="shared-cart-preview-image" class="w-full h-full flex items-center justify-center px-20 pt-8 pb-16"></div>
-          <button type="button" id="shared-cart-preview-next" class="absolute end-5 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-white/90 hover:bg-white text-secondary-700 border border-border-default shadow-md z-20">›</button>
-          <div id="shared-cart-preview-label" class="absolute start-0 end-0 bottom-0 px-6 py-4 text-white text-xl font-medium bg-gradient-to-t from-black/60 to-transparent">color : -</div>
+      <!-- DİKKAT: Bu projede @theme breakpoint'leri özel — lg=768px, xl=1024px,
+           1280 için min-[1280px] gerekir. Drawer'ın JS mobil eşiği 768 (=lg)
+           ile hizalı: 768 altı tam ekran bottom-sheet, üstü yan drawer. -->
+      <div id="shared-cart-preview" class="hidden fixed start-0 top-0 bottom-0 end-[400px] xl:end-[480px] min-[1280px]:end-[600px] z-[120] items-center justify-center px-3 xl:px-6 min-[1280px]:px-8 pointer-events-none">
+        <!-- Kutu kare (ürün görselleri 1:1): genişlik kalan alanla küçülür,
+             yükseklik aspect'ten türer; kısa pencerede vh tavanı devreye girer.
+             Sabit vh yüksekliği dar alanda dikey şerit + ezik foto üretiyordu. -->
+        <div class="relative w-full max-w-[min(700px,80vh)] aspect-square rounded-md overflow-hidden pointer-events-auto shadow-xl bg-surface">
+          <button type="button" id="shared-cart-preview-prev" class="absolute start-2 xl:start-4 top-1/2 -translate-y-1/2 w-9 h-9 xl:w-11 xl:h-11 rounded-full bg-white/90 hover:bg-white text-secondary-700 border border-border-default shadow-md z-20">‹</button>
+          <div id="shared-cart-preview-image" class="w-full h-full flex items-center justify-center px-6 pt-4 pb-12 xl:px-10 xl:pt-6 xl:pb-14"></div>
+          <button type="button" id="shared-cart-preview-next" class="absolute end-2 xl:end-4 top-1/2 -translate-y-1/2 w-9 h-9 xl:w-11 xl:h-11 rounded-full bg-white/90 hover:bg-white text-secondary-700 border border-border-default shadow-md z-20">›</button>
+          <div id="shared-cart-preview-label" class="absolute start-0 end-0 bottom-0 px-4 py-3 text-base xl:px-5 xl:py-3.5 xl:text-lg text-white font-medium bg-gradient-to-t from-black/60 to-transparent"></div>
         </div>
       </div>
 
-      <aside id="shared-cart-drawer" class="fixed end-0 top-0 h-full w-full sm:w-[500px] lg:w-[600px] max-w-full bg-surface shadow-[-8px_0_30px_rgba(0,0,0,0.18)] xl:rounded-s-md xl:border-s xl:border-border-default flex flex-col transition-transform duration-300 ease-[cubic-bezier(0.32,0.72,0,1)] motion-reduce:transition-none">
+      <aside id="shared-cart-drawer" class="fixed end-0 top-0 h-full w-full lg:w-[400px] xl:w-[480px] min-[1280px]:w-[600px] max-w-full bg-surface shadow-[-8px_0_30px_rgba(0,0,0,0.18)] lg:rounded-s-md lg:border-s lg:border-border-default flex flex-col transition-transform duration-300 ease-[cubic-bezier(0.32,0.72,0,1)] motion-reduce:transition-none">
         <div class="flex items-center justify-between px-6 py-4 border-b border-border-default shrink-0 max-md:px-4 max-md:py-3">
           <h3 id="shared-cart-heading" class="text-[15px] sm:text-lg font-bold text-text-heading">${t("cart.selectVariation")}</h3>
           <button type="button" id="shared-cart-close" class="w-7 h-7 sm:w-8 sm:h-8 rounded-full text-secondary-400 hover:text-secondary-900 hover:bg-surface-raised transition-colors inline-flex items-center justify-center shrink-0" aria-label="${t("common.close")}">
@@ -2349,10 +2380,12 @@ export function initSharedCartDrawer(items: CartDrawerItemModel[]): void {
   // Satır modunda tek bir "seçili renk" yoktur; önizleme gezinmesi yalnız
   // görseli değiştirir, fiyat/sepet state'ine dokunmaz.
   const stepPreview = (delta: number): void => {
-    if (!state.item || state.item.colors.length === 0) return;
-    const count = state.item.colors.length;
-    state.previewColorIndex = (state.previewColorIndex + delta + count) % count;
-    if (!getSingleAxis()) {
+    const entries = getPreviewEntries(state.item);
+    if (!state.item || entries.length < 2) return;
+    state.previewColorIndex = (state.previewColorIndex + delta + entries.length) % entries.length;
+    // Galeri modunda (renk ekseni yok) gezinme yalnız görseldir; renk
+    // seçimi/sepet state'ine dokunmaz.
+    if (state.item.colors.length > 0 && !getSingleAxis()) {
       state.selectedColorId =
         state.item.colors[state.previewColorIndex]?.id ?? state.selectedColorId;
     }

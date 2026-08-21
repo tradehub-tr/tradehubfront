@@ -91,7 +91,7 @@ const footerColumnsI18n: FooterColumnI18n[] = [
     links: [
       { labelKey: "footer.startSelling", href: "/satici-ol" },
       { labelKey: "footer.sellerCentral", href: "/panel/" },
-      { labelKey: "footer.priceTable", href: "/pages/seller/sell-pricing.html" },
+      { labelKey: "footer.priceTable", href: "/satici-ol#paketler" },
     ],
   },
   {
