@@ -1,3 +1,15 @@
+## [v2.4.0-alpha.21] - 2026-08-21 ALPHA
+
+Bu surum alpha.istoc.com'da gelistirme asamasindadir.
+
+### Eklendi
+- feat(test): fiyatlandırma E2E senaryoları eklendi (@aliiball)
+  - Admin 17, satıcı 8 senaryo; kontrast yüzeyi 20'den 24 ekrana çıktı
+  - Hover kontrast taraması geçişleri kapatıyor: ara renk ölçüldüğü için aynı ihlal bir koşuda görünüp diğerinde kayboluyordu
+  - Etiket ekranındaki iki tablo erişilebilir adla ayrıştırıldı
+  - Şartlı atlama kaldırıldı: teklifler asenkron geldiği için count() ile atlayan senaryo K8'i hiç doğrulamıyordu
+
+---
 ## [v2.4.0-alpha.20] - 2026-08-21 ALPHA
 
 Bu surum alpha.istoc.com'da gelistirme asamasindadir.
