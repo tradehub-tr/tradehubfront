@@ -46,10 +46,10 @@ const processIconDelivery = `<svg width="20" height="20" viewBox="0 0 24 24" fil
 
 function HeroBanner(): string {
   return `
-    <section class="relative overflow-hidden" style="background:radial-gradient(60% 60% at 20% 15%, rgba(255,194,0,.16) 0%, rgba(255,194,0,0) 65%), linear-gradient(160deg, #0a0a0a 0%, #1f1f1f 100%)">
+    <section class="relative overflow-hidden" style="background:radial-gradient(60% 60% at 20% 15%, color-mix(in srgb, var(--color-primary-500,#FFC200) 16%, transparent) 0%, transparent 65%), linear-gradient(160deg, #0a0a0a 0%, #1f1f1f 100%)">
       <div class="relative z-10 container-boxed px-4 sm:px-6 lg:px-8 py-16 sm:py-20 lg:py-28">
         <div class="max-w-[720px]">
-          <span class="inline-flex items-center gap-2 rounded-full px-3.5 py-1.5 text-sm font-semibold mb-5" style="background:rgba(255,194,0,.14);border:1px solid rgba(255,194,0,.35);color:#FFC200">
+          <span class="inline-flex items-center gap-2 rounded-full px-3.5 py-1.5 text-sm font-semibold mb-5" style="background:color-mix(in srgb, var(--color-primary-500,#FFC200) 14%, transparent);border:1px solid color-mix(in srgb, var(--color-primary-500,#FFC200) 35%, transparent);color:var(--color-primary-400,#FFC200)">
             ${heroBadgeIcon}
             ${t("tradeAssurance.tradeAssuranceLabel")}
           </span>
@@ -70,7 +70,7 @@ function HeroBanner(): string {
         </div>
       </div>
       <!-- Yellow bottom bar -->
-      <div class="absolute bottom-0 start-0 end-0 h-2 bg-[#FFC200]"></div>
+      <div class="absolute bottom-0 start-0 end-0 h-2 bg-[var(--color-primary-500,#FFC200)]"></div>
     </section>
   `
 }
@@ -90,7 +90,7 @@ function stat(value: string, key: string): string {
 
 function StatsBandSection(): string {
   return `
-    <section class="bg-[#FFC200]">
+    <section class="bg-[var(--color-primary-300,#FFC200)]">
       <div class="container-boxed px-4 sm:px-6 lg:px-8 py-12 sm:py-14 lg:py-16">
         <div class="grid grid-cols-2 xl:grid-cols-4 gap-x-8 gap-y-8 sm:gap-x-10">
           ${stat('160M+', 'tradeAssurance.statOrders')}
@@ -134,7 +134,7 @@ function HowItWorks(): string {
     </section>
 
     <!-- Yellow part: Kapsamdakiler -->
-    <section id="coverage" class="py-14 sm:py-16 bg-[#FFC200]">
+    <section id="coverage" class="py-14 sm:py-16 bg-[var(--color-primary-300,#FFC200)]">
       <div class="max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-8">
         <h2 class="text-2xl sm:text-3xl font-bold text-gray-900 text-center mb-8">${t("tradeAssurance.whatsCovered")}</h2>
         <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
@@ -151,7 +151,7 @@ function HowItWorks(): string {
 function stepCard(num: string, title: string, desc: string): string {
   return `
     <div class="flex gap-5">
-      <div class="flex-shrink-0 w-12 h-12 rounded-full flex items-center justify-center text-base font-bold bg-[#FFF3C4] text-[#92400e]">
+      <div class="flex-shrink-0 w-12 h-12 rounded-full flex items-center justify-center text-base font-bold bg-[var(--color-primary-100,#FFF3C4)] text-[var(--color-primary-800,#92400e)]">
         ${num}
       </div>
       <div>
@@ -165,7 +165,7 @@ function stepCard(num: string, title: string, desc: string): string {
 function coverageCard(icon: string, title: string, href: string): string {
   return `
     <a href="${href}" class="bg-white rounded-md [@media(hover:hover)_and_(pointer:fine)]:hover:shadow-md transition-shadow duration-200 ease-out motion-reduce:transition-none group block" style="padding:26px 26px 38px">
-      <div class="w-12 h-12 sm:w-14 sm:h-14 rounded-full flex items-center justify-center mb-6 bg-[#FFF3C4] text-[#92400e]">
+      <div class="w-12 h-12 sm:w-14 sm:h-14 rounded-full flex items-center justify-center mb-6 bg-[var(--color-primary-100,#FFF3C4)] text-[var(--color-primary-800,#92400e)]">
         ${icon}
       </div>
       <h3 class="text-sm sm:text-base font-bold text-gray-900 group-hover:text-orange-600 transition-colors motion-reduce:transition-none leading-snug">${title}</h3>
@@ -289,7 +289,7 @@ function RefundPolicySection(): string {
 function processStep(icon: string, label: string): string {
   return `
     <div class="lg:flex-1 flex flex-col items-center text-center bg-[#f7f7f7] border border-gray-200 rounded-md px-4 py-6">
-      <div class="w-11 h-11 rounded-full flex items-center justify-center mb-3 bg-[#FFF3C4] text-[#92400e]">
+      <div class="w-11 h-11 rounded-full flex items-center justify-center mb-3 bg-[var(--color-primary-100,#FFF3C4)] text-[var(--color-primary-800,#92400e)]">
         ${icon}
       </div>
       <span class="text-sm font-bold text-gray-900">${label}</span>
@@ -396,7 +396,7 @@ function testimonialCard(quote: string, name: string, company: string): string {
     <div class="bg-white rounded-md p-7 flex flex-col gap-4">
       <p class="text-gray-900 text-sm leading-relaxed">${quote}</p>
       <div class="flex items-center gap-3">
-        <div class="flex-shrink-0 w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold bg-[#FFF3C4] text-[#92400e]">${initials}</div>
+        <div class="flex-shrink-0 w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold bg-[var(--color-primary-100,#FFF3C4)] text-[var(--color-primary-800,#92400e)]">${initials}</div>
         <div>
           <div class="text-sm font-bold text-gray-900">${name}</div>
           <div class="text-xs text-gray-600">${company}</div>
@@ -408,7 +408,7 @@ function testimonialCard(quote: string, name: string, company: string): string {
 
 function TestimonialsSection(): string {
   return `
-    <section class="py-16 sm:py-20 bg-[#FFC200]">
+    <section class="py-16 sm:py-20 bg-[var(--color-primary-300,#FFC200)]">
       <div class="container-boxed px-4 sm:px-6 lg:px-8">
         <h2 class="text-2xl sm:text-3xl font-bold text-gray-900 text-center mb-3">${t("tradeAssurance.testimonialsTitle")}</h2>
         <p class="text-gray-800 text-base text-center mb-12">

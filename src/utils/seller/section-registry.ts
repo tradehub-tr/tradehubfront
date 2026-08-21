@@ -436,7 +436,7 @@ const SECTION_RENDERERS: Record<string, SectionRenderer> = {
                     <template x-for="pg in visiblePages" :key="pg">
                       <button @click="goToPage(pg)"
                               :class="currentPage === pg ? 'text-white border-transparent' : 'bg-white text-gray-700 border-gray-200 hover:bg-gray-50'"
-                              :style="currentPage === pg ? 'background: var(--store-accent, #cc6b00)' : ''"
+                              :style="currentPage === pg ? 'background: var(--store-accent, var(--color-primary-500, #cc6b00))' : ''"
                               class="w-9 h-9 flex items-center justify-center rounded-md border text-[13px] font-medium transition-colors" x-text="pg"></button>
                     </template>
                     <button @click="goToPage(currentPage + 1)" :disabled="currentPage === totalPages" aria-label="${t("common.next")}"

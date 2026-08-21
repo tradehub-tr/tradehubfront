@@ -127,7 +127,7 @@ export class ImagePickerController {
           </div>
           ${recommended}
           <div class="flex gap-2 mt-1">
-            <button type="button" class="upload-image-pick px-3 py-1.5 text-xs font-semibold rounded-md bg-amber-400 hover:bg-amber-500 text-gray-900 transition" ${isUploading ? "disabled" : ""}>
+            <button type="button" class="upload-image-pick px-3 py-1.5 text-xs font-semibold rounded-md bg-[var(--btn-bg,#f59e0b)] hover:bg-[var(--btn-hover-bg,#d97706)] text-[var(--btn-text,#ffffff)] transition" ${isUploading ? "disabled" : ""}>
               ${escapeHtml(isUploading ? uploadingLabel : changeLabel)}
             </button>
             ${url ? `<button type="button" class="upload-image-remove px-3 py-1.5 text-xs font-semibold rounded-md border border-gray-300 hover:bg-gray-100 text-gray-700 transition" ${isUploading ? "disabled" : ""}>${escapeHtml(removeLabel)}</button>` : ""}

@@ -39,7 +39,7 @@ import "./socialProofBadge";
 // auth — page-specific (registerPage→register, forgotPasswordPage/authLangSwitcher→
 // forgot-password, resetPasswordPage/authLangSwitcher→reset-password, acceptInvitePage→
 // accept-invite). login sayfası auth modülü kullanmaz (LoginPage'de x-data yok). B-2:
-// core'dan çıkarıldı, ilgili 4 sayfada import ediliyor. vite'ta 'alpine'dan hariç.
+// core'dan çıkarıldı, ilgili 3 sayfada import ediliyor. vite'ta 'alpine'dan hariç.
 // settings — page-specific (yalnız settings sayfası). B-2: core'dan çıkarıldı,
 // pages/settings.ts'te import ediliyor. vite manualChunks'ta 'alpine'dan hariç.
 // payment — page-specific (yalnız payment sayfası, PaymentLayout). B-2: core'dan
@@ -63,10 +63,10 @@ import "./shared";
 // contactPage x-data olarak kullanılmıyor (ölü). Non-help sayfada HİÇ kullanılmıyor.
 // B-2: core'dan çıkarıldı (1490 satır), 6 help sayfasında import ediliyor.
 import "./legal";
-// seller — page-specific (sellPricing→sell-pricing, applicationPendingPage→
+// seller — page-specific (applicationPendingPage→
 // application-pending, sellerStorefront→seller-storefront, sellerDashboard→
 // seller-dashboard). sellPage x-data olarak kullanılmıyor (ölü). B-2: core'dan
-// çıkarıldı, ilgili 4 sayfada import ediliyor. vite'ta 'alpine'dan hariç.
+// çıkarıldı, ilgili 3 sayfada import ediliyor. vite'ta 'alpine'dan hariç.
 // sellerShop — page-specific (yalnız seller-shop sayfası). B-2: core'dan çıkarıldı,
 // pages/seller-shop.ts zaten import ediyor. vite manualChunks'ta 'alpine'dan hariç.
 // addresses — page-specific (yalnız addresses sayfası). B-2: core'dan çıkarıldı,
@@ -100,7 +100,7 @@ window.Alpine = Alpine;
 export function startAlpine(): void {
   initLinkRewriter();
   initMediaRewriter();
-  // x-collapse direktifi (StoreNav, PricingPageLayout akordeonları) için zorunlu.
+  // x-collapse direktifi (StoreNav akordeonları) için zorunlu.
   // Kurulu değilken Alpine "you can't use [x-collapse]..." uyarısı veriyordu.
   Alpine.plugin(collapse);
   Alpine.start();

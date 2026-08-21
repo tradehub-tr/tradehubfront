@@ -92,7 +92,7 @@ export class SlotDropzoneController {
       return `
         <div data-slot-id="${slot.id}" class="slot-card flex flex-col">
           <div class="text-xs font-semibold text-gray-700 mb-2">${slot.label}${slot.required ? ' <span class="text-red-500">*</span>' : ""}</div>
-          <div class="slot-zone cursor-pointer bg-white border-2 border-dashed border-gray-300 hover:border-amber-400 rounded-md h-40 max-sm:h-32 flex items-center justify-center text-center p-3 transition-all">
+          <div class="slot-zone cursor-pointer bg-white border-2 border-dashed border-gray-300 hover:border-[var(--color-primary-400,#fbbf24)] rounded-md h-40 max-sm:h-32 flex items-center justify-center text-center p-3 transition-all">
             <div class="text-xs text-gray-500">
               ${ICON_UPLOAD}
               ${t("commonSvc.clickOrDrag")}<br><span class="text-[10px] text-gray-400">${hint}</span>
@@ -164,7 +164,7 @@ export class SlotDropzoneController {
     ["dragenter", "dragover"].forEach((ev) => {
       zone.addEventListener(ev, (e) => {
         e.preventDefault();
-        zone.classList.add("border-amber-500", "bg-amber-50/40");
+        zone.classList.add("border-[var(--color-primary-500,#f59e0b)]", "bg-[var(--color-primary-50,#fffbeb)]");
       });
     });
     ["dragleave", "drop"].forEach((ev) => {
@@ -174,7 +174,7 @@ export class SlotDropzoneController {
           const f = (e as DragEvent).dataTransfer?.files?.[0];
           if (f) this.acceptFile(slot, f);
         }
-        zone.classList.remove("border-amber-500", "bg-amber-50/40");
+        zone.classList.remove("border-[var(--color-primary-500,#f59e0b)]", "bg-[var(--color-primary-50,#fffbeb)]");
       });
     });
   }

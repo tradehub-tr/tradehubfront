@@ -62,7 +62,6 @@ map $uri $resolved_page {
     /odeme/isleniyor                     /pages/order/payment-processing.html;
 
     /satici-ol                           /pages/seller/sell.html;
-    /satici/fiyatlandirma                /pages/seller/sell-pricing.html;
     /satici/dashboard                    /pages/seller/dashboard.html;
     /satici/basvuru-bekleyen             /pages/seller/application-pending.html;
     /satici/tedarikci-kurulum            /pages/seller/supplier-setup.html;
@@ -172,7 +171,6 @@ map $uri $seo_static_page_path {
 
     # Seller
     /satici-ol                           /satici-ol;
-    /satici/fiyatlandirma                /satici/fiyatlandirma;
     /satici/dashboard                    /satici/dashboard;
     /satici/basvuru-bekleyen             /satici/basvuru-bekleyen;
     /satici/tedarikci-kurulum            /satici/tedarikci-kurulum;
@@ -280,6 +278,16 @@ server {
     # (nginx map + backend static_pages_registry + FE listesi senkron).
     location = /markalar {
         return 301 /ureticiler;
+    }
+
+    # sell-pricing sayfası kaldırıldı: fiyat planları artık /satici-ol'da
+    # (#paketler bölümü). Eski pretty URL + ham HTML path kalıcı 301.
+    # (nginx map + backend static_pages_registry + FE listesi senkron).
+    location = /satici/fiyatlandirma {
+        return 301 /satici-ol;
+    }
+    location = /pages/seller/sell-pricing.html {
+        return 301 /satici-ol;
     }
 
     # ── robots.txt — ortama göre statik dosya (map $robots_file) ──

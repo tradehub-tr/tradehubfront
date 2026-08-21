@@ -38,7 +38,6 @@ const STATIC_PAGE_PATHS: Record<string, string> = {
   returns: "/iade-kosullari",
   terms: "/kullanim-kosullari",
   sell: "/satici-ol",
-  "sell-pricing": "/satici/fiyatlandirma",
   checkout: "/odeme",
   "top-deals": "/firsatlar",
   "top-ranking": "/cok-satanlar",
@@ -134,7 +133,6 @@ const STATIC_PAGE_HTML_MAP: Record<string, string> = {
 
   // Seller
   "/satici-ol": "/pages/seller/sell.html",
-  "/satici/fiyatlandirma": "/pages/seller/sell-pricing.html",
   "/satici/dashboard": "/pages/seller/dashboard.html",
   "/satici/basvuru-bekleyen": "/pages/seller/application-pending.html",
   "/satici/tedarikci-kurulum": "/pages/seller/supplier-setup.html",

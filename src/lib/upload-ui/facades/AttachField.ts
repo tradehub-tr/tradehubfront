@@ -92,7 +92,7 @@ export class AttachFieldController {
       this.progress?.status === "error"
         ? "bg-red-500"
         : isUploading
-          ? "bg-amber-500"
+          ? "bg-[var(--color-primary-500,#f59e0b)]"
           : "bg-emerald-500";
     const statusText = isUploading
       ? t("commonSvc.uploadingPct", { pct })

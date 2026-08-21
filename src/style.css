@@ -2037,25 +2037,25 @@ button.th-no-press:not(:disabled):active,
 /* FilterSidebar'daki küçük "›" Apply butonları (FİYAT/MİN. SİPARİŞ vb.) */
 button[data-filter-action="apply"],
 button[data-filter-action="apply-all"] {
-  background: #ff8600 !important;
-  color: #1a1a1a !important;
-  border: 1px solid #db7300 !important;
+  background: var(--btn-bg, #ff8600) !important;
+  color: var(--btn-text, #ffffff) !important;
+  border: 1px solid var(--btn-border-color, #db7300) !important;
   border-radius: 8px !important;
   /* Emil: glossy inset highlight kaldırıldı — yalnız ince alt keyline. */
-  box-shadow: 0 1px 0 #db7300 !important;
+  box-shadow: 0 1px 0 var(--btn-border-color, #db7300) !important;
   transition:
     background-color 0.15s ease,
     transform 0.16s cubic-bezier(0.23, 1, 0.32, 1);
 }
 button[data-filter-action="apply"]:hover,
 button[data-filter-action="apply-all"]:hover {
-  background: #e8ad00 !important;
-  border-color: #db7300 !important;
+  background: var(--btn-hover-bg, #db7300) !important;
+  border-color: var(--btn-border-color, #db7300) !important;
 }
 button[data-filter-action="apply"]:active,
 button[data-filter-action="apply-all"]:active {
-  background: #d8a000 !important;
-  border-color: #db7300 !important;
+  background: var(--btn-hover-bg, #db7300) !important;
+  border-color: var(--btn-border-color, #db7300) !important;
   transform: scale(0.97);
   transition-duration: 0.1s;
 }
