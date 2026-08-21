@@ -161,8 +161,12 @@ test("SATICI — mod tercihi sayfa yenilenince hatırlanıyor", async ({ page })
 
 test("SATICI — etiket ekranı üç mod sunuyor, kanban YOK", async ({ page }) => {
   await page.goto(`/panel/lojistik/etiketler/${SHP}`);
-  await expect(page.locator("table tbody tr").first()).toBeVisible();
-  const rows = await page.locator("table tbody tr").count();
+  // Ekranda İKİ tablo var (koliler + 20-FE taşıyıcı seçenekleri); çıplak
+  // `table tbody tr` ikisini toplayıp kart sayısıyla karşılaştırmayı bozuyor.
+  // Erişilebilir ada bağlanıyoruz — ekran okuyucunun ayırdığı yerden.
+  const koliler = page.getByRole("table", { name: "Koliler" });
+  await expect(koliler.locator("tbody tr").first()).toBeVisible();
+  const rows = await koliler.locator("tbody tr").count();
 
   await expect(page.locator(".view-mode-toggle button")).toHaveCount(3);
   await expect(page.getByRole("button", { name: "Kanban Görünümü" })).toHaveCount(0);
@@ -259,4 +263,165 @@ test("SATICI — teslimat akışında kendi kayıtları ve teslim düğmesi", as
 
   // Kendi aracıyla teslim satıcının fiziksel işi (K-M): ekran ona AÇIK.
   await expect(page.getByText(/Bu ekran satıcı menüsünde yok/i)).toHaveCount(0);
+});
+
+// ═══════════════════════════════════════════════════════════════════════
+//  FİYATLANDIRMA (20-FE) — satıcı rolü kabul senaryoları
+//
+//  Analiz raporu §5'teki S6, S7, S8, S9, S13. Admin tarafı ayrı dosyada
+//  (`panel-lojistik-fiyatlandirma.spec.ts`).
+//
+//  Bu blok NEDEN burada: 20-FE'nin en kritik kararı (K2 · iki yönlü maliyet
+//  maskeleme) yalnız satıcı oturumunda görülebiliyor. Admin oturumuyla koşan
+//  hiçbir test "satıcı kendi maliyetini görüyor mu" sorusunu soramaz.
+// ═══════════════════════════════════════════════════════════════════════
+
+const FIYATLARIM = "/panel/lojistik/tarifeler";
+const KURALLARIM = "/panel/lojistik/fiyat-kurallari";
+const HESAPLA = "/panel/lojistik/fiyat-simulasyonu";
+
+test("SATICI — S13: fiyatlandırma menüde VAR ve üç kalem açılıyor", async ({ page }) => {
+  await page.goto(FIYATLARIM);
+  // 13-FE'de tam bu unutulmuştu: ekran yazıldı, satıcı menüsüne eklenmedi.
+  await expect(page.getByRole("heading", { name: /Kargo fiyatlarım/i })).toBeVisible();
+
+  const links = await page.evaluate(() =>
+    [...document.querySelectorAll('a[href*="/lojistik/"]')].map((a) => a.getAttribute("href"))
+  );
+  for (const yol of [FIYATLARIM, KURALLARIM, HESAPLA]) {
+    expect(links, `satıcı menüsünde yok: ${yol}`).toContain(yol);
+  }
+});
+
+test("SATICI — S7: KENDİ maliyetini görüyor, PLATFORMUNKİNİ görmüyor", async ({ page }) => {
+  await page.goto(KURALLARIM);
+  await expect(page.getByRole("heading", { name: /Kargo kurallarım/i })).toBeVisible();
+
+  // Kendi kuralında alış tutarı GÖRÜNÜYOR (para birimi işaretiyle).
+  const kendi = page.locator("article").filter({ hasText: /Aras anlaşmam/i }).first();
+  await expect(kendi.getByText(/Alış:/)).toBeVisible();
+  await expect(kendi.getByText(/Alış:\s*₺|Alış:\s*[\d.,]+/)).toBeVisible();
+
+  // Platform kuralında alış MASKELİ — "—" ve gerekçeli ipucu.
+  const platform = page.locator("article").filter({ hasText: /İç Anadolu/i }).first();
+  const maskeli = platform.locator('[title*="satıcıya kapalı"]');
+  await expect(maskeli.first(), "platform maliyeti satıcıya AÇIK görünüyor").toBeVisible();
+});
+
+test("SATICI — S13b: platform kuralını DÜZENLEYEMİYOR", async ({ page }) => {
+  await page.goto(KURALLARIM);
+  const platform = page.locator("article").filter({ hasText: /İç Anadolu/i }).first();
+
+  // Yetkisize çalışmayacak düğme çizmek, ona backend hatası yedirmek demek.
+  await expect(platform.getByRole("button", { name: /^Sil$/i })).toHaveCount(0);
+  await expect(platform.getByText(/salt-okunur/i)).toBeVisible();
+});
+
+test("SATICI — S6: kendi kuralını tanımlayabiliyor", async ({ page }) => {
+  await page.goto(KURALLARIM);
+  await page.getByRole("button", { name: /Kendi kuralım/i }).click();
+  await expect(page.getByText(/Nasıl bir kural kuracaksın/i)).toBeVisible();
+
+  await page.getByText(/Kendi aracımla teslim/i).first().click();
+
+  // Sahip alanı KİLİTLİ: satıcı başka satıcı adına kural yazamaz.
+  const sahip = page.locator('input[disabled]').first();
+  await expect(sahip).toBeVisible();
+
+  // "Zorunlu" anahtarı satıcıda HİÇ YOK (kapı uçta, burada yalnız kolaylık).
+  await expect(page.getByText(/Zorunlu kural/i)).toHaveCount(0);
+
+  const ad = `E2E · kendi rotam ${Date.now()}`;
+  // Etikete bağlan: çıplak `input[type="text"]` panelin ÜST ÇUBUĞUNDAKİ genel
+  // arama kutusunu yakalıyor, ad hiç dolmuyordu (ölçüldü 2026-08-21).
+  await page.getByLabel(/Kural adı/).fill(ad);
+  await page.getByRole("button", { name: /^Kaydet$/i }).click();
+  await expect(page.getByText(ad)).toBeVisible({ timeout: 10_000 });
+});
+
+test("SATICI — S8: kendi yükü için fiyat hesaplatabiliyor ve GEREKÇEYİ görüyor", async ({ page }) => {
+  await page.goto(HESAPLA);
+  await expect(page.getByRole("heading", { name: /Fiyat hesapla/i })).toBeVisible();
+
+  // Satıcı SEÇİCİSİ satıcıda YOK — kendi yükünden başkasını hesaplayamaz.
+  await expect(page.getByLabel(/^Satıcı$/i)).toHaveCount(0);
+
+  await page.getByRole("button", { name: /Hesapla/i }).click();
+  await expect(page.getByText(/Neden bu fiyat çıktı/i)).toBeVisible({ timeout: 10_000 });
+
+  // Kendi taşıyıcı hesapları rozetle ayrışıyor.
+  await expect(page.getByText(/kendi anlaşmam/i).first()).toBeVisible();
+});
+
+test("SATICI — S3: zararına kural KAYDETMEDEN ÖNCE uyarı veriyor", async ({ page }) => {
+  // Kabul senaryosu S3'ün asıl yarısı. Admin tarafındaki eşi maskelemeyi
+  // doğruluyor (zararı GÖRMEMELİ); uyarının GÖRÜNDÜĞÜ yer sahibinin ekranı.
+  // Tohumda "İstanbul içi · kendi aracım" bilerek zararda: alış 80, satış 0.
+  await page.goto(KURALLARIM);
+  await page
+    .locator("article")
+    .filter({ hasText: /kendi aracım/i })
+    .first()
+    .getByRole("button", { name: /Düzenle|İncele/ })
+    .click();
+
+  await expect(page.getByText(/Bu kuralla ne olur/i)).toBeVisible({ timeout: 10_000 });
+
+  // Uyarı METİNLE duruyor — kırmızı marj tek başına yeterli değil.
+  const uyari = page.getByRole("alert").filter({ hasText: /zararda/i });
+  await expect(uyari).toBeVisible();
+  // Ve NE YAPILACAĞINI söylüyor, "hata var" demiyor.
+  await expect(uyari).toContainText(/taban ücreti|kademe fiyatını/i);
+});
+
+test("SATICI — S15: fiyatlandırma ekranlarında DEMO paneli GÖRÜNMÜYOR", async ({ page }) => {
+  // 13-FE'de ölçülen kusurun aynısı: panel bir GELİŞTİRİCİ aracı. Satıcı
+  // "Yetki hatası" senaryosunu seçip kendi ekranını kilitleyebiliyor ve
+  // nedenini anlayamıyor. Üç ekranın üçünde de kapalı olmalı — biri
+  // unutulursa kapı yine açık kalır, o yüzden üçü de tek tek geziliyor.
+  for (const yol of [FIYATLARIM, KURALLARIM, HESAPLA]) {
+    await page.goto(yol);
+    await expect(page.locator("h1").first()).toBeVisible();
+    await expect(
+      page.getByText(/Demo verisi ve hata senaryoları/i),
+      `DEMO paneli satıcıya açık: ${yol}`
+    ).toHaveCount(0);
+    // Hata tetikleyicisi de sızmamalı — panel gizlense bile düğme kalırsa
+    // satıcı yine kendi ekranını kilitleyebilir.
+    await expect(page.getByRole("button", { name: /Yetki hatası/i })).toHaveCount(0);
+  }
+});
+
+test("SATICI — S9: etiket akışında taşıyıcı seçimi VAR ve varsayılan İŞARETLİ", async ({ page }) => {
+  await page.goto(`/panel/lojistik/etiketler/${SHP}`);
+  await expect(page.getByRole("heading", { name: /Etiket/i }).first()).toBeVisible();
+
+  // ŞARTLI ATLAMA YOK: teklifler ASENKRON geliyor ve `count()` beklemiyor —
+  // "kural tanımlı değil" diye atlayan bir dal, aslında sadece yarışı
+  // kaybediyordu ve K8 hiç doğrulanmıyordu (ölçüldü 2026-08-21).
+  // SHP-2026-00042 tohum veride simüle edilebilir; teklif GELMEK ZORUNDA.
+  const tablo = page.getByRole("table", { name: "Taşıyıcı seçenekleri" });
+  await expect(tablo).toBeVisible({ timeout: 10_000 });
+
+  // K4 kararı: sistem en uygunu ÖNCEDEN işaretler — kabul ediliyorsa ek tık
+  // yok (CLAUDE.md §4.14). İşaretli radyo, "en uygun" rozetiyle aynı satırda.
+  const onerilen = tablo.locator("tbody tr").filter({ hasText: /en uygun/i });
+  await expect(onerilen).toHaveCount(1);
+  await expect(onerilen.locator('[role="radio"][aria-checked="true"]')).toHaveCount(1);
+
+  // Değiştirmek TEK TIK: başka bir kullanılabilir satıra tıklamak yeter.
+  const digeri = tablo
+    .locator("tbody tr")
+    .filter({ has: page.locator('[role="radio"]') })
+    .filter({ hasNotText: /en uygun/i })
+    .first();
+  // Tohum veride bu sevkiyat için en az iki KULLANILABİLİR hesap var; koşullu
+  // dal bırakmıyoruz, yoksa seçim değiştirme hiç denenmemiş olur.
+  await expect(digeri).toHaveCount(1);
+  await digeri.click();
+  await expect(digeri.locator('[role="radio"][aria-checked="true"]')).toHaveCount(1);
+  await expect(onerilen.locator('[role="radio"][aria-checked="true"]')).toHaveCount(0);
+
+  // Kendi anlaşması ile platformunki ayrışıyor — hangi hesaptan gittiği belli.
+  await expect(tablo.getByText(/kendi anlaşmam/i).first()).toBeVisible();
 });

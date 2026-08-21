@@ -149,6 +149,19 @@ for (const tema of ["light", "dark"] as const) {
       ]));
     }, tema);
 
+    // GEÇİŞLERİ KAPAT — yoksa ölçüm YANLIŞ. `hover` yapıp hemen ölçünce
+    // `transition: color .15s` ortasındaki ARA renk okunuyor: hem oran
+    // gerçek değerinden farklı çıkıyor, hem de aynı ihlal bir koşuda
+    // görünüp diğerinde kayboluyor (ölçüldü 2026-08-21: A3'teki
+    // `.status-pill:hover` bir koşuda 4.29:1 diye raporlandı, tek başına
+    // koşturulunca hiç görünmedi; DURAĞAN değeri 3.82:1).
+    await context.addInitScript(() => {
+      const stil = document.createElement("style");
+      stil.textContent =
+        "*,*::before,*::after{transition:none !important;animation:none !important}";
+      document.addEventListener("DOMContentLoaded", () => document.head.appendChild(stil));
+    });
+
     const hepsi: string[] = [];
     for (const e of EKRANLAR) {
       const ad = `${e.key} ${e.ad}`;
