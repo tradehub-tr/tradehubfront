@@ -1,3 +1,14 @@
+## [v2.4.0-alpha.20] - 2026-08-21 ALPHA
+
+Bu surum alpha.istoc.com'da gelistirme asamasindadir.
+
+### Degistirildi
+- refactor(sell,tema,cart): fiyatlandırma sayfasını birleştir, renk tokenl (@TurksabYonetim)
+  - /satici/fiyatlandirma ve sell-pricing sayfaları /satici-ol içine konsolide edildi; nginx, SEO registry, staticPageUrl ve alpine modülleri buna göre temizlendi, eski URL'ler 301 ile /satici-ol'a yönlendirildi
+  - Marka rengi (#ff8600) artık tüm bileşenlerde CSS değişkeni üzerinden uygulanıyor (hero, upload-ui, trade-assurance, seller pagination, filtre butonları) — tema paneli değişikliği yaptığında tutarlı görünsün diye hardcoded hex değerler kaldırıldı
+  - Paylaşılan sepet çekmecesine galeri önizlemesi eklendi (renk varyantı olmayan ürünlerde sol panelde ürün görselleri gösterilir), mobil eşik 1280px'ten 768px'e indirildi ve önizleme kutusu kare oranına sabitlendi
+
+---
 ## [v2.4.0-alpha.19] - 2026-08-20 ALPHA
 
 Bu surum alpha.istoc.com'da gelistirme asamasindadir.
