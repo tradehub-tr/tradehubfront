@@ -1,3 +1,11 @@
+## [v2.4.0-alpha.22] - 2026-08-22 ALPHA
+
+Bu surum alpha.istoc.com'da gelistirme asamasindadir.
+
+### Eklendi
+- feat(seo): expose product media metadata (@Metin Bektemur)
+
+---
 ## [v2.4.0-alpha.21] - 2026-08-21 ALPHA
 
 Bu surum alpha.istoc.com'da gelistirme asamasindadir.
