@@ -6,6 +6,7 @@
  * with data-attribute-driven JS initialization.
  */
 
+import type { ProductImage } from "../../types/product";
 import { getCurrentProduct } from "../../alpine/product";
 import { t } from "../../i18n";
 import { formatCurrency, getSelectedCurrency } from "../../services/currencyService";
@@ -140,8 +141,13 @@ export function MobileProductLayout(): string {
    * KENDİSİNDEN türetiliyor, elle ikinci kez yazılmıyor. Çıktı, çıkarılmadan
    * önceki hâliyle BAYT BAYT AYNI.
    */
-  const slaytGorseli = (img: { src: string; alt: string }, i: number): string =>
-    `<img class="w-full h-full object-contain select-none" src="${escapeHtml(sanitizeUrl(img.src))}" alt="${escapeHtml(img.alt)}" width="800" height="800" decoding="async" draggable="false" loading="${i === 0 ? "eager" : "lazy"}">`;
+  // `ProductImage` — künye alanları (ölçü, yükleme ipuçları) opsiyonel, eski
+  // çağıranlar etkilenmiyor.
+  const slaytGorseli = (img: ProductImage, i: number): string =>
+    // Gerçek ölçüler API'den (`imageMeta`) geliyorsa onlar basılır; yoksa
+    // eski sabit. Sabit ölçü sayfayı zıplatıyordu (CLS) — ölçülen bir üründe
+    // gerçek dosya 497×645 iken 800×800 yazılıyordu.
+    `<img class="w-full h-full object-contain select-none" src="${escapeHtml(sanitizeUrl(img.src))}" alt="${escapeHtml(img.alt)}" width="${img.width || 800}" height="${img.height || 800}" decoding="${img.decoding || "async"}" draggable="false" loading="${img.loading || (i === 0 ? "eager" : "lazy")}"${i === 0 && img.fetchpriority === "high" ? ' fetchpriority="high"' : ""}>`;
 
   // T-122 — mobilde LCP adayı İLK slayttır (tek `loading="eager"` olan o).
   // Preload düz `href`tir çünkü bu işaretlemede `srcset` YOK; adres `<img

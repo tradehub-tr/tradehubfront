@@ -67,12 +67,26 @@ function renderPlaceholder(visual: GalleryVisual, size: "large" | "thumb"): stri
  * görünür kılar. Fazladan bir çağrı yine de `lcp: true` geçse üst sınır
  * (`MAX_LCP_PRELOADS`) devreye girer ve ikinci bağlantı basılmaz.
  */
+/** `width`/`height` nitelikleri — gerçek ölçü varsa o, yoksa eski sabit.
+ *
+ *  Sabit 800×800 tarayıcıya YANLIŞ yer ayırttırıyordu: ölçülen bir üründe
+ *  gerçek dosya 497×645'ti, sayfa yüklenirken zıplıyordu (CLS cezası).
+ *  Doğru değerler artık API'den (`imageMeta`) geliyor. Ölçü YOKSA eski
+ *  davranış korunuyor — hiç nitelik basmamak da zıplamaya yol açar, ve
+ *  bugünkü kayıtların çoğunda ölçü henüz dolu değil.
+ */
+function intrinsicAttrs(size: "large" | "thumb", w?: number, h?: number): string {
+  if (size === "thumb") return 'width="70" height="70"';
+  if (w && h) return `width="${w}" height="${h}"`;
+  return 'width="800" height="800"';
+}
+
 export function renderGalleryMedia(
   src: string | undefined,
   alt: string,
   visual: GalleryVisual,
   size: "large" | "thumb",
-  opts: { lcp?: boolean } = {}
+  opts: { lcp?: boolean; width?: number; height?: number } = {}
 ): string {
   if (src) {
     const safeAlt = escapeHtmlAttr(alt);
@@ -88,7 +102,7 @@ export function renderGalleryMedia(
       <img
         src="${safeSrc}"
         alt="${safeAlt}"
-        width="${size === "thumb" ? "70" : "800"}" height="${size === "thumb" ? "70" : "800"}"
+        ${intrinsicAttrs(size, opts.width, opts.height)}
         data-gallery-main-media="true"
         class="${kutuSinifi}"
         loading="${size === "thumb" ? "lazy" : "eager"}"
@@ -351,7 +365,7 @@ export function ProductImageGallery(): string {
           @click="!isVideoSlide() && openLightbox(currentIndex)"
         >
           <!-- T-122: sayfanın LCP adayı BU görsel; lcp bayrağı yalnız burada. -->
-          ${renderGalleryMedia(firstImage?.src, firstImage?.alt ?? t("product.productImage"), defaultVisual, "large", { lcp: true })}
+          ${renderGalleryMedia(firstImage?.src, firstImage?.alt ?? t("product.productImage"), defaultVisual, "large", { lcp: true, width: firstImage?.width, height: firstImage?.height })}
         </div>
 
         <!-- Oklar — referans düzendeki ölçü: 32×32, düz beyaz zemin, koyu ok.
@@ -422,7 +436,7 @@ export function ProductImageGallery(): string {
         <div id="gallery-lightbox-stage" class="relative flex-1 min-h-0 w-full flex items-center justify-center">
           <div class="relative h-full aspect-square max-w-full mx-auto">
             <div id="gallery-lightbox-image" class="w-full h-full bg-white rounded-2xl overflow-hidden shadow-[0_22px_55px_rgba(0,0,0,0.5)] [&>.gallery-media-asset]:object-contain [&>[data-gallery-main-media=true]]:w-full [&>[data-gallery-main-media=true]]:h-full" x-ref="lightboxImage">
-              ${renderGalleryMedia(firstImage?.src, firstImage?.alt ?? t("product.productImage"), defaultVisual, "large")}
+              ${renderGalleryMedia(firstImage?.src, firstImage?.alt ?? t("product.productImage"), defaultVisual, "large", { width: firstImage?.width, height: firstImage?.height })}
             </div>
 
             <!-- Vitrin (Alt Kapsül): resme yakın, kartın sol/sağ kenarında yatay oklar -->
