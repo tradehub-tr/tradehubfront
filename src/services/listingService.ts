@@ -1326,6 +1326,15 @@ export function mapListingCard(raw: any): ProductListingCard {
   };
 }
 
+/** Backend alt metni vermediğinde kullanılan yedek metin.
+ *  Ham ürün başlığının kopyası hâlâ ideal değil (100 karakter, parantezli
+ *  gürültü) ama boş bırakmaktan iyidir; asıl çözüm backend'in kural zinciri
+ *  (TUR-135 §5.1) ve geri doldurmadır. */
+function fallbackAlt(title: string, index: number, total: number): string {
+  if (!title) return "";
+  return total > 1 && index > 0 ? `${title} (${index + 1}. görsel)` : title;
+}
+
 function isVideoFileUrl(url: string): boolean {
   if (!url) return false;
   // YouTube/Vimeo URLs are handled separately as embeds; mark them as video too
@@ -1336,12 +1345,28 @@ function isVideoFileUrl(url: string): boolean {
 export function mapListingDetail(raw: any): ProductDetail {
   // Map images — auto-detect video files by extension so uploaded .mp4/.webm
   // files in the gallery render as video slides, not broken <img> tags.
-  const images: ProductImage[] = (raw.images || []).map((src: string, i: number) => ({
-    id: `img-${i + 1}`,
-    src: src || "",
-    alt: `${raw.title || ""} - ${i + 1}`,
-    isVideo: isVideoFileUrl(src),
-  }));
+  // Görsel künyesi backend'den geliyorsa (API `imageMeta`, TUR-135 §6.2) alt
+  // metni, gerçek ölçüler ve yükleme ipuçları oradan okunur. Gelmiyorsa ya da
+  // alt metni henüz boşsa ESKİ davranışa düşülür — geçiş dönemi böyle yürüyor
+  // (ölçüm: bugün 3.123 dosyanın alt metni boş).
+  const meta: any[] = Array.isArray(raw.imageMeta) ? raw.imageMeta : [];
+  const images: ProductImage[] = (raw.images || []).map((src: string, i: number) => {
+    const m = meta[i] || {};
+    return {
+      id: `img-${i + 1}`,
+      src: src || "",
+      // Sıra numarası ARTIK "- 2" değil: ekran okuyucu onu "eksi iki" diye
+      // okuyordu. Tek görselli üründe hiç eklenmiyor.
+      alt: m.alt || fallbackAlt(raw.title || "", i, (raw.images || []).length),
+      caption: m.caption || undefined,
+      isVideo: isVideoFileUrl(src),
+      width: m.width || undefined,
+      height: m.height || undefined,
+      loading: m.loading || (i === 0 ? "eager" : "lazy"),
+      decoding: m.decoding || "async",
+      fetchpriority: m.fetchpriority || undefined,
+    };
+  });
 
   // Promo video is appended as a pseudo-image at the end of the gallery so
   // it becomes a regular slide (with a play-icon thumbnail + iframe in main area).

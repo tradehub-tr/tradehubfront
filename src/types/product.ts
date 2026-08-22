@@ -12,6 +12,19 @@ export interface ProductImage {
   isVideo?: boolean;
   /** Video slaytları için kapak (API `videoPoster` — manifest posteri). */
   poster?: string;
+  /** Gerçek intrinsic ölçüler (API `imageMeta`). Sabit 800×800 basmak
+   *  tarayıcıya yanlış yer ayırttırıyordu — sayfa yüklenirken zıplıyordu
+   *  (CLS). 0 ise nitelik BASILMAZ: yanlış ölçü, eksik ölçüden kötüdür. */
+  width?: number;
+  height?: number;
+  /** Yükleme ipuçları (API `imageMeta`). İlk görsel LCP adayı: eager + high;
+   *  gerisi lazy. Hepsine `high` vermek hiçbirine vermemekle aynı kapıya
+   *  çıkar. */
+  loading?: "eager" | "lazy";
+  decoding?: "async" | "sync" | "auto";
+  fetchpriority?: "high" | "low" | "auto" | "";
+  /** Sayfada görünen kısa açıklama (`<figcaption>`). */
+  caption?: string;
 }
 
 export interface PriceTier {

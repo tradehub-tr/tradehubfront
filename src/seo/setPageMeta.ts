@@ -31,6 +31,13 @@ export interface ServerSeoPayload {
   og_title?: string;
   og_description?: string;
   og_image?: string;
+  /** Paylaşım görselinin alt metni ve gerçek ölçüleri (TUR-135 §6).
+   *  Alt metni erişilebilirlik + SEO; ölçüler paylaşım kartının yer
+   *  ayırmasını sağlar (kart zıplaması). Backend `media/seo.fields_for`'dan
+   *  üretiyor; boşsa etiket hiç basılmaz. */
+  og_image_alt?: string;
+  og_image_width?: number;
+  og_image_height?: number;
   og_url?: string;
   site_name?: string;
   twitter_handle?: string;
@@ -190,7 +197,16 @@ export function applyServerSeo(seo: ServerSeoPayload | null | undefined): void {
   if (seo.og_type) upsertMetaTag("property", "og:type", seo.og_type);
   if (seo.og_title) upsertMetaTag("property", "og:title", seo.og_title);
   if (seo.og_description) upsertMetaTag("property", "og:description", seo.og_description);
-  if (seo.og_image) upsertMetaTag("property", "og:image", seo.og_image);
+  if (seo.og_image) {
+    upsertMetaTag("property", "og:image", seo.og_image);
+    if (seo.og_image_alt) upsertMetaTag("property", "og:image:alt", seo.og_image_alt);
+    if (seo.og_image_width) {
+      upsertMetaTag("property", "og:image:width", String(seo.og_image_width));
+    }
+    if (seo.og_image_height) {
+      upsertMetaTag("property", "og:image:height", String(seo.og_image_height));
+    }
+  }
   if (seo.og_url) upsertMetaTag("property", "og:url", toCurrentOrigin(seo.og_url));
 
   // Twitter

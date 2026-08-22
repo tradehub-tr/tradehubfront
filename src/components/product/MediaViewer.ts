@@ -100,7 +100,7 @@ function renderPhotosSlides(p: ProductDetail): string {
       <div class="${slideCls}">
         ${
           img.src
-            ? `<img class="max-w-full max-h-full object-contain select-none" src="${escapeHtml(sanitizeUrl(img.src))}" alt="${escapeHtml(img.alt)}" width="800" height="800" decoding="async" draggable="false">`
+            ? `<img class="max-w-full max-h-full object-contain select-none" src="${escapeHtml(sanitizeUrl(img.src))}" alt="${escapeHtml(img.alt)}" width="${img.width || 800}" height="${img.height || 800}" decoding="async" draggable="false">`
             : ""
         }
       </div>`
