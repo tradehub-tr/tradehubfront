@@ -1,3 +1,11 @@
+## [v2.4.0-alpha.23] - 2026-08-22 ALPHA
+
+Bu surum alpha.istoc.com'da gelistirme asamasindadir.
+
+### Eklendi
+- feat(media): add stable landing and responsive delivery (@Metin Bektemur)
+
+---
 ## [v2.4.0-alpha.22] - 2026-08-22 ALPHA
 
 Bu surum alpha.istoc.com'da gelistirme asamasindadir.
