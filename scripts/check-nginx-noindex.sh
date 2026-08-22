@@ -34,18 +34,18 @@ assert '$robots_file map default=/robots-noindex.txt' 0 $?
 grep -A3 'map "\${FRONTEND_DOMAIN}" \$robots_file' "$T" | grep -q '"istoc.com" /robots-prod.txt'
 assert '$robots_file map istoc.com=/robots-prod.txt' 0 $?
 
-# 3. add_header sayımı — server + /api/ + /assets/ + resim regex = 4
+# 3. add_header sayımı — server + /api/ + /assets/ + resim regex + stable media = 5
 #    (kendi add_header'ı olan location miras almaz; sayı değişirse tuzak)
 n=$(grep -c 'add_header X-Robots-Tag \$robots_tag always;' "$T")
-assert 'add_header X-Robots-Tag sayısı' 4 "$n"
+assert 'add_header X-Robots-Tag sayısı' 5 "$n"
 
-# 4. proxy_hide_header — backend'e giden TÜM bloklar (10 proxy + 2 sitemap)
+# 4. proxy_hide_header — backend'e giden TÜM bloklar (10 proxy + 2 sitemap + media)
 n=$(grep -c 'proxy_hide_header X-Robots-Tag;' "$T")
-assert 'proxy_hide_header X-Robots-Tag sayısı' 12 "$n"
+assert 'proxy_hide_header X-Robots-Tag sayısı' 13 "$n"
 
-# 5. X-Istoc-Storefront marker — 5 @seo_* + 2 sitemap = 7
+# 5. X-Istoc-Storefront marker — 5 @seo_* + 2 sitemap + media = 8
 n=$(grep -c 'X-Istoc-Storefront' "$T")
-assert 'X-Istoc-Storefront marker sayısı' 7 "$n"
+assert 'X-Istoc-Storefront marker sayısı' 8 "$n"
 
 # 6. robots.txt location + dosya seçimi
 grep -q 'location = /robots.txt' "$T" && grep -q 'try_files \$robots_file =404;' "$T"
