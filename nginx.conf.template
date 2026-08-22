@@ -322,6 +322,19 @@ server {
         proxy_read_timeout 120s;
     }
 
+    # Stable asset identity landing page. Dosya teslim URL'sinden ayrıdır;
+    # metadata/dosya adı değişse de Media Asset kimliği sabit kalır.
+    location ~ ^/media/([a-zA-Z0-9_-]+)$ {
+        proxy_hide_header X-Robots-Tag;
+        proxy_set_header X-Istoc-Storefront "1";
+        proxy_pass https://${BACKEND_DOMAIN}/api/method/tradehub_core.api.media_public.asset_landing?asset_id=$1;
+        proxy_ssl_server_name on;
+        proxy_set_header Host ${BACKEND_DOMAIN};
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+
     # Frappe API proxy
     location /api/ {
         # CORS — whitelist: GitHub Pages, *.istoc.com subdomain'leri, Capacitor WebView (iOS/Android).

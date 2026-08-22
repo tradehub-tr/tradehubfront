@@ -21,6 +21,25 @@ function rewriteImg(img: HTMLImageElement): void {
   }
 }
 
+function rewriteSrcset(el: HTMLImageElement | HTMLSourceElement): void {
+  const srcset = el.getAttribute("srcset");
+  if (!srcset) return;
+  const rewritten = srcset
+    .split(",")
+    .map((candidate) => {
+      const value = candidate.trim();
+      if (!value) return "";
+      const separator = value.search(/\s/);
+      const src = separator === -1 ? value : value.slice(0, separator);
+      const descriptor = separator === -1 ? "" : value.slice(separator).trim();
+      const safe = needsRewrite(src) ? sanitizeUrl(MEDIA_BASE + src) : sanitizeUrl(src);
+      return descriptor ? `${safe} ${descriptor}` : safe;
+    })
+    .filter(Boolean)
+    .join(", ");
+  if (rewritten !== srcset) el.setAttribute("srcset", rewritten);
+}
+
 function rewriteBgImages(el: HTMLElement): void {
   const style = el.getAttribute("style");
   if ((style && style.includes("url(/files/")) || style?.includes("url(/private/files/")) {
@@ -38,8 +57,12 @@ function rewriteBgImages(el: HTMLElement): void {
 
 function rewriteAll(root: HTMLElement): void {
   root.querySelectorAll<HTMLImageElement>("img").forEach(rewriteImg);
+  root
+    .querySelectorAll<HTMLImageElement | HTMLSourceElement>("img[srcset], source[srcset]")
+    .forEach(rewriteSrcset);
   root.querySelectorAll<HTMLElement>('[style*="/files/"]').forEach(rewriteBgImages);
   if (root instanceof HTMLImageElement) rewriteImg(root);
+  if (root instanceof HTMLImageElement || root instanceof HTMLSourceElement) rewriteSrcset(root);
   if (root.hasAttribute?.("style")) rewriteBgImages(root);
 }
 
@@ -61,6 +84,12 @@ export function initMediaRewriter(): void {
         if (m.attributeName === "src" && m.target instanceof HTMLImageElement) {
           rewriteImg(m.target);
         }
+        if (
+          m.attributeName === "srcset" &&
+          (m.target instanceof HTMLImageElement || m.target instanceof HTMLSourceElement)
+        ) {
+          rewriteSrcset(m.target);
+        }
         if (m.attributeName === "style") {
           rewriteBgImages(m.target);
         }
@@ -70,6 +99,6 @@ export function initMediaRewriter(): void {
     childList: true,
     subtree: true,
     attributes: true,
-    attributeFilter: ["src", "style"],
+    attributeFilter: ["src", "srcset", "style"],
   });
 }
