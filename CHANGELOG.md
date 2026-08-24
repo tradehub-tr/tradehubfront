@@ -1,3 +1,13 @@
+## [v2.4.0-alpha.25] - 2026-08-24 ALPHA
+
+Bu surum alpha.istoc.com'da gelistirme asamasindadir.
+
+### Duzeltildi
+- fix(e2e): silinmiş sayfa fixture'dan düşürüldü, serial zinciri açıldı (@aliiball)
+  - route-matrix: sell-pricing kaydı silindi, sayaç 72 -> 71
+  - panel-lojistik-pod: mock eksikliğinden düşen test test.fixme ile işaretlendi, serial modda kilitlediği 10 test yeniden koşuyor
+
+---
 ## [v2.4.0-alpha.24] - 2026-08-24 ALPHA
 
 Bu surum alpha.istoc.com'da gelistirme asamasindadir.
