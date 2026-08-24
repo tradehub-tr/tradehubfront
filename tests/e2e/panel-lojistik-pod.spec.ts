@@ -327,9 +327,12 @@ test("K9: 24 saati aşan bekleme AYIRT EDİLİYOR", async ({ page }) => {
  * listesini döndürüyor ve `MOCK_EVENTS`'in her olayı `location` taşıyor,
  * dolayısıyla "konum hiç taşınmıyor" durumu ÜRETİLEMİYOR.
  *
- * Kaldırma koşulu: `MOCK_EVENTS` sevkiyata göre dallandığında (`SHP-2026-00045`
- * için `location` alanı olmayan olaylar) ya da 11-BE geldiğinde `fixme`
- * silinir. Takip: `docs/lojistik/KALAN-ISLER.md` §B → Bora.
+ * KALDIRMA KOŞULU: `MOCK_EVENTS` sevkiyata göre dallandığında
+ * (`SHP-2026-00045` için `location` alanı OLMAYAN olaylar) ya da 11-BE
+ * (`Shipment Event.location` + `list_shipment_events`) geldiğinde `fixme`
+ * silinir ve test kendiliğinden yeşile döner. Bu iki iş `shipmentEvents.js`
+ * sahibinin (B6 olay akışı) takvimine bağlı — ayrı bir takip kaydı YOK,
+ * kaldırma koşulu burada duruyor.
  */
 test.fixme("K9: konum HİÇ taşınmıyorsa çizelge çizilmiyor, sebep yazıyor", async ({ page }) => {
   // Boş çizelge operasyona "hiç hareket yok" der — yalan olur.
