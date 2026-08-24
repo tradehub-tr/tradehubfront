@@ -36,7 +36,6 @@ const PAGES: PageDef[] = [
   { name: "settings", path: "/pages/dashboard/settings.html", xdata: "settingsLayout", gated: true },
   { name: "addresses", path: "/pages/dashboard/addresses.html", xdata: "addressesManager", gated: true },
   { name: "buyer-dashboard", path: "/pages/dashboard/buyer-dashboard.html", xdata: "buyerUserInfo", gated: true },
-  { name: "sell-pricing", path: "/pages/seller/sell-pricing.html", xdata: "sellPricing", gated: false },
   { name: "application-pending", path: "/pages/seller/application-pending.html", xdata: "applicationPendingPage", gated: true },
   { name: "seller-storefront", path: "/pages/seller/seller-storefront.html", xdata: "sellerStorefront", gated: false },
   { name: "seller-dashboard", path: "/pages/seller/dashboard.html", xdata: "sellerDashboard", gated: false },
