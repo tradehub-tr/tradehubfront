@@ -7,7 +7,10 @@ import imageCompression from "browser-image-compression";
 
 import type { PreparedMedia } from "./compress";
 
-const HEDEF_GENISLIK = 1920;
+// Ürün görseli politikası master'ın 2000 px altına düşmemesini ister.
+// Tarayıcı daha yükleme öncesinde 1920 px'e indirirse sunucu kaybolan pikseli
+// geri üretemez; 2400 px politika master tavanıyla aynı güvenli kaynak boyudur.
+const HEDEF_GENISLIK = 2400;
 const HEDEF_MAX_MB = 0.5;
 
 // WebP desteği tek seferlik feature-detect edilip modül seviyesinde cache'lenir.

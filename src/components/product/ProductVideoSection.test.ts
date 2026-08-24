@@ -71,6 +71,7 @@ describe("ProductVideoSection — poster bağlama", () => {
   beforeEach(() => {
     document.body.innerHTML = "";
   });
+  afterEach(() => vi.unstubAllGlobals());
 
   it("listing videosuna elle yüklü kapak bağlanır ve swap için saklanır", () => {
     currentProduct.value = {
@@ -86,6 +87,21 @@ describe("ProductVideoSection — poster bağlama", () => {
     currentProduct.value = { videoUrl: "/files/tanitim.mp4" };
     // ` poster="` — <video>'daki öznitelik; `data-listing-poster` boş da olsa durur.
     expect(ProductVideoSection()).not.toMatch(/ poster="/);
+  });
+
+  it("prefers-reduced-motion altında video/HLS yerine yalnız poster basar", () => {
+    vi.stubGlobal("matchMedia", vi.fn(() => ({ matches: true })));
+    currentProduct.value = {
+      videoHlsSrc: "/files/tanitim/master.m3u8",
+      videoPoster: "/files/tanitim-kapak.webp",
+      videoPreviewSrc: "/files/onizleme.mp4",
+    };
+    const html = ProductVideoSection();
+    expect(html).toContain("data-reduced-motion-poster");
+    expect(html).toContain('src="/files/tanitim-kapak.webp"');
+    expect(html).not.toContain("<video");
+    expect(html).not.toContain("data-hls-src");
+    expect(html).not.toContain("data-listing-preview-clip");
   });
 
   it("varyant videosunda listing kapağı KULLANILMAZ; listing'e dönünce geri gelir", () => {

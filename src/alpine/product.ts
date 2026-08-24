@@ -22,17 +22,21 @@ import {
   LIGHTBOX_THUMB_CLASS,
   LIGHTBOX_THUMB_VIDEO_CLASS,
 } from "../components/product/ProductImageGallery";
-import { toVideoEmbedHtml } from "../components/product/ProductVideoSection";
+import {
+  toPosterOnlyHtml,
+  toVideoEmbedHtml,
+} from "../components/product/ProductVideoSection";
 
 function prefersReducedMotion(): boolean {
   return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 }
 
 function renderInlineVideo(url: string, poster = ""): string {
+  const posterOnly = prefersReducedMotion() ? toPosterOnlyHtml(poster, t("prodUi.promoVideo")) : "";
   return `
     <div class="relative w-full h-full bg-black flex items-center justify-center" data-gallery-main-media="true">
       <div class="relative w-full h-full" style="max-height: 100%">
-        ${toVideoEmbedHtml(url, true, poster)}
+        ${posterOnly || toVideoEmbedHtml(url, true, poster)}
       </div>
     </div>
   `;

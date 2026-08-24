@@ -27,6 +27,13 @@ function posterAttr(poster: string): string {
   return safe ? ` poster="${safe}"` : "";
 }
 
+/** Reduced-motion teslimi: video kaynağı/HLS runtime'ı olmadan yalnız poster. */
+export function toPosterOnlyHtml(poster: string, label = ""): string {
+  const safe = poster ? escapeHtml(sanitizeUrl(poster, "")) : "";
+  if (!safe) return "";
+  return `<img data-reduced-motion-poster src="${safe}" alt="${escapeHtml(label)}" class="absolute inset-0 w-full h-full object-contain bg-black" decoding="async" />`;
+}
+
 /**
  * YouTube / Vimeo URL'lerini embed URL'ine çevirir, direkt video dosyası URL'lerini olduğu gibi bırakır.
  * `autoplay=true` ise video/iframe sayfa etkileşimi olmadan başlar — tarayıcı politikası gereği
@@ -117,13 +124,14 @@ function previewOverlay(previewSrc: string, videoUrl: string): string {
 
 function renderVideoPlayer(videoUrl: string, label: string, poster = "", previewSrc = ""): string {
   if (!videoUrl) return "";
+  const posterOnly = prefersReducedMotion() ? toPosterOnlyHtml(poster, label) : "";
   return `
     <div class="flex items-center justify-between mb-3">
       <h2 class="text-base md:text-lg font-bold text-gray-900">${label}</h2>
     </div>
     <div class="relative rounded-lg overflow-hidden shadow-sm bg-black" style="padding-top:56.25%" data-video-frame>
-      ${toVideoEmbedHtml(videoUrl, false, poster)}
-      ${previewOverlay(previewSrc, videoUrl)}
+      ${posterOnly || toVideoEmbedHtml(videoUrl, false, poster)}
+      ${posterOnly ? "" : previewOverlay(previewSrc, videoUrl)}
     </div>
   `;
 }
