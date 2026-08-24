@@ -5,3 +5,11 @@ pages
 *.html
 package-lock.json
 CHANGELOG.md
+
+# ÜRETİLMİŞ lojistik artefaktları — kaynak tradehub_core'daki
+# `scripts/gen_logistics_types.py`, biçimi de ondan geliyor (TAB). Prettier
+# dokunursa iki araç birbirini geri alır; admin-panel'de 2026-08-24'te tam
+# bu oldu (19 dosya, 1958+/2058- sahte diff). Burada henüz olmadı çünkü
+# `npm run format` bu dosyalara denk gelmemişti — kapı önden kapatılıyor.
+src/mocks/logistics
+src/types/logistics.d.ts
