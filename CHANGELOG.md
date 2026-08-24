@@ -1,3 +1,16 @@
+## [v2.4.0-alpha.26] - 2026-08-24 ALPHA
+
+Bu surum alpha.istoc.com'da gelistirme asamasindadir.
+
+### Duzeltildi
+- fix(lojistik): üretilmiş artefaktlar formatter'ın dışına alındı (@aliiball)
+  - src/mocks/logistics ve src/types/logistics.d.ts
+  - admin-panel'de yaşanan çakışma burada önden kapatıldı
+
+### Degistirildi
+- refactor(lojistik): silinen takip kaydına yapılan atıflar kaldırıldı (@aliiball)
+
+---
 ## [v2.4.0-alpha.25] - 2026-08-24 ALPHA
 
 Bu surum alpha.istoc.com'da gelistirme asamasindadir.
