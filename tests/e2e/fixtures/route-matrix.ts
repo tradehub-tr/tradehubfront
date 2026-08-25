@@ -303,7 +303,6 @@ export const STOREFRONT_ROUTE_MATRIX: StorefrontRouteCase[] = [
     "/satici/dashboard",
     "seller"
   ),
-  route("seller-pricing", "C09-seller", "pages/seller/sell-pricing.html", "/satici/fiyatlandirma"),
   route("seller-landing", "C09-seller", "pages/seller/sell.html", "/satici-ol"),
   route("seller-shop", "C03-detail", "pages/seller/seller-shop.html", null, "public", [
     { kind: "pretty", pathEnv: "PERF_SELLER_SHOP_PRETTY_PATH" },

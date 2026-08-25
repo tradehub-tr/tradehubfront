@@ -1,3 +1,38 @@
+## [v2.4.0-alpha.26] - 2026-08-24 ALPHA
+
+Bu surum alpha.istoc.com'da gelistirme asamasindadir.
+
+### Duzeltildi
+- fix(lojistik): üretilmiş artefaktlar formatter'ın dışına alındı (@aliiball)
+  - src/mocks/logistics ve src/types/logistics.d.ts
+  - admin-panel'de yaşanan çakışma burada önden kapatıldı
+
+### Degistirildi
+- refactor(lojistik): silinen takip kaydına yapılan atıflar kaldırıldı (@aliiball)
+
+---
+## [v2.4.0-alpha.25] - 2026-08-24 ALPHA
+
+Bu surum alpha.istoc.com'da gelistirme asamasindadir.
+
+### Duzeltildi
+- fix(e2e): silinmiş sayfa fixture'dan düşürüldü, serial zinciri açıldı (@aliiball)
+  - route-matrix: sell-pricing kaydı silindi, sayaç 72 -> 71
+  - panel-lojistik-pod: mock eksikliğinden düşen test test.fixme ile işaretlendi, serial modda kilitlediği 10 test yeniden koşuyor
+
+---
+## [v2.4.0-alpha.24] - 2026-08-24 ALPHA
+
+Bu surum alpha.istoc.com'da gelistirme asamasindadir.
+
+### Duzeltildi
+- fix(product-media): reduced-motion video/HLS önizlemesini durdur, LCP ka (@ahmeetseker)
+  - Video sekmesinde ve galeri inline oynatıcıda prefers-reduced-motion açıkken video/iframe/HLS yerine yalnız statik poster basılır; kullanıcı hareket azaltmayı seçtiğinde arka planda video runtime'ı (autoplay/HLS) hâlâ tetikleniyordu
+  - Ürün görseli sıkıştırma hedef genişliği 1920px'den 2400px'e çıkarıldı; master 2000px politika tavanının altına düşmemesi ve sunucu tarafında geri üretilemeyen piksel kaybını önlemek için
+  - lcpAsset.js kanonik `/files/<ad>.ext` kaynak dosyalarını `original` olarak etiketler, kanıtsız eski shard türevlerini (`/files/ab/<hash>.webp`) artık yanlışlıkla `original` saymaz; RUM metriklerinde kaynak/türev kohortlarının doğru ayrışması için
+  - lcpAsset.js için eksik TypeScript tip tanımları (.d.ts) ve profil ayrıştırma testleri eklendi
+
+---
 ## [v2.4.0-alpha.23] - 2026-08-22 ALPHA
 
 Bu surum alpha.istoc.com'da gelistirme asamasindadir.
