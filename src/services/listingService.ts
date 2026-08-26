@@ -1365,6 +1365,12 @@ export function mapListingDetail(raw: any): ProductDetail {
       loading: m.loading || (i === 0 ? "eager" : "lazy"),
       decoding: m.decoding || "async",
       fetchpriority: m.fetchpriority || undefined,
+      // Task 8 — video dosyaları için künye (Listing API `imageMeta[].poster
+      // /durationSec/captionsUrl`, TUR-135 Task 6). Görsel dosyalarda bu
+      // alanlar zaten boş geliyor, `undefined` kalır.
+      poster: m.poster || undefined,
+      captionsUrl: m.captionsUrl || undefined,
+      durationSec: m.durationSec || undefined,
     };
   });
 
@@ -1387,6 +1393,9 @@ export function mapListingDetail(raw: any): ProductDetail {
       // Manifest posteri (ya da elle yüklü kapak): video slaytı ilk karesini
       // beklemeden kapakla açılır. Boş/whitespace poster hiç basılmaz.
       poster: trimStr(raw.videoPoster) || undefined,
+      // Task 8 — promo altyazısı (`upload_video_captions` uç sözleşmesi).
+      // Boş/whitespace değer track öznitelikte hiç basılmaz.
+      captionsUrl: trimStr(raw.videoCaptionsUrl) || undefined,
     });
   }
 

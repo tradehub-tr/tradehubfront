@@ -25,6 +25,11 @@ export interface ProductImage {
   fetchpriority?: "high" | "low" | "auto" | "";
   /** Sayfada görünen kısa açıklama (`<figcaption>`). */
   caption?: string;
+  /** Video slaytları için altyazı adresi (API `imageMeta[].captionsUrl` /
+   *  promo için `videoCaptionsUrl`) — `<track kind="captions">` kaynağı. */
+  captionsUrl?: string;
+  /** Video süresi (saniye) — API `imageMeta[].durationSec`. */
+  durationSec?: number;
 }
 
 export interface PriceTier {

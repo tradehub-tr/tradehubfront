@@ -27,6 +27,14 @@ function posterAttr(poster: string): string {
   return safe ? ` poster="${safe}"` : "";
 }
 
+/** `<track kind="captions">` — altyazı adresi verilmemiş ya da sanitize'ı
+ *  geçememişse hiç basılmaz (Task 8, TUR-135 devamı). `default`: tarayıcı
+ *  altyazıyı otomatik açık göstersin — kullanıcı `controls`tan kapatabilir. */
+function trackTag(captionsUrl: string): string {
+  const safe = captionsUrl ? escapeHtml(sanitizeUrl(captionsUrl, "")) : "";
+  return safe ? `<track kind="captions" src="${safe}" default>` : "";
+}
+
 /** Reduced-motion teslimi: video kaynağı/HLS runtime'ı olmadan yalnız poster. */
 export function toPosterOnlyHtml(poster: string, label = ""): string {
   const safe = poster ? escapeHtml(sanitizeUrl(poster, "")) : "";
@@ -40,7 +48,12 @@ export function toPosterOnlyHtml(poster: string, label = ""): string {
  * sesli autoplay engellendiğinden bu durumda `muted` zorunlu (kullanıcı controls ile sesi açabilir).
  * `poster` yalnız `<video>` üreten dallarda anlamlıdır (embed iframe'lerde kapağı sağlayıcı basar).
  */
-export function toVideoEmbedHtml(rawUrl: string, autoplay = false, poster = ""): string {
+export function toVideoEmbedHtml(
+  rawUrl: string,
+  autoplay = false,
+  poster = "",
+  captionsUrl = ""
+): string {
   const url = (rawUrl || "").trim();
   if (!url) return "";
 
@@ -81,7 +94,7 @@ export function toVideoEmbedHtml(rawUrl: string, autoplay = false, poster = ""):
     if (!safeSrc) return "";
     const autoAttrs = autoplay ? " autoplay muted" : "";
     ensureHlsHydration();
-    return `<video data-hls-src="${safeSrc}"${posterAttr(poster)} class="absolute inset-0 w-full h-full object-contain bg-black" controls${autoAttrs} preload="metadata" playsinline></video>`;
+    return `<video data-hls-src="${safeSrc}"${posterAttr(poster)} class="absolute inset-0 w-full h-full object-contain bg-black" controls${autoAttrs} preload="metadata" playsinline>${trackTag(captionsUrl)}</video>`;
   }
 
   // MP4/WebM vb. direkt dosya
@@ -89,7 +102,7 @@ export function toVideoEmbedHtml(rawUrl: string, autoplay = false, poster = ""):
     const safeSrc = escapeHtml(sanitizeUrl(url));
     if (!safeSrc) return "";
     const autoAttrs = autoplay ? " autoplay muted" : "";
-    return `<video src="${safeSrc}"${posterAttr(poster)} class="absolute inset-0 w-full h-full object-contain bg-black" controls${autoAttrs} preload="metadata" playsinline></video>`;
+    return `<video src="${safeSrc}"${posterAttr(poster)} class="absolute inset-0 w-full h-full object-contain bg-black" controls${autoAttrs} preload="metadata" playsinline>${trackTag(captionsUrl)}</video>`;
   }
 
   // Tanınmayan formatta anchor fallback
