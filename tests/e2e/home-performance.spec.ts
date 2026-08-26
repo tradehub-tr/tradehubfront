@@ -4,6 +4,7 @@ import { mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { spawn } from "node:child_process";
+import { yalnizMasaustu } from "./fixtures/viewport";
 
 const pixel5Viewport = devices["Pixel 5"];
 const pixel5DeviceProfile = {
@@ -539,6 +540,8 @@ test("Lighthouse CI staging URL'ini static dist yerine kullanır", async () => {
 });
 
 test.describe("Task 2: kapalı ana sayfa menüleri talep üzerine mount edilir", () => {
+  yalnizMasaustu("ana sayfa mega menüsü masaüstünde açılıyor");
+
   test.describe.configure({ mode: "serial" });
   test.skip(
     process.env.PERF_FIXTURE_TEST === "1",
@@ -1599,7 +1602,9 @@ test.describe("Task 4: fold-altı ana sayfa bölümleri kademeli yüklenir", () 
 
     const initialDomNodes = await grid.evaluate((element) => element.querySelectorAll("*").length);
     const initialImages = await grid.locator("img").count();
-    const beforeHeight = await section.evaluate((element) => element.getBoundingClientRect().height);
+    const beforeHeight = await section.evaluate(
+      (element) => element.getBoundingClientRect().height
+    );
     await page.evaluate(() => {
       (
         window as typeof window & {

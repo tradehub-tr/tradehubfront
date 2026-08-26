@@ -1,4 +1,7 @@
 import { expect, test } from "@playwright/test";
+import { yalnizMasaustu } from "./fixtures/viewport";
+
+yalnizMasaustu("ödeme yönetimi sekme şeridi masaüstü düzeninde");
 
 const user = {
   email: "buyer@example.test",
@@ -15,7 +18,9 @@ const user = {
   seller_profile: null,
 };
 
-test("ödeme yönetimi iade verisini yalnız İadeler sekmesi ilk açıldığında yükler", async ({ page }) => {
+test("ödeme yönetimi iade verisini yalnız İadeler sekmesi ilk açıldığında yükler", async ({
+  page,
+}) => {
   let paymentRequests = 0;
   let refundRequests = 0;
 
@@ -27,12 +32,20 @@ test("ödeme yönetimi iade verisini yalnız İadeler sekmesi ilk açıldığın
     }
     if (url.includes("get_recent_payments")) {
       paymentRequests += 1;
-      await route.fulfill({ json: { message: { message: { success: true, payments: [], total: 0, page: 1, page_size: 10 } } } });
+      await route.fulfill({
+        json: {
+          message: { message: { success: true, payments: [], total: 0, page: 1, page_size: 10 } },
+        },
+      });
       return;
     }
     if (url.includes("get_recent_refunds")) {
       refundRequests += 1;
-      await route.fulfill({ json: { message: { message: { success: true, refunds: [], total: 0, page: 1, page_size: 10 } } } });
+      await route.fulfill({
+        json: {
+          message: { message: { success: true, refunds: [], total: 0, page: 1, page_size: 10 } },
+        },
+      });
       return;
     }
     await route.fulfill({ json: { message: {} } });

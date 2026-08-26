@@ -166,7 +166,12 @@ async function mockBackend(page: Page, product: Record<string, unknown>): Promis
     "**/api/method/tradehub_core.api.storefront_api.get_storefront_review_page*",
     (route) =>
       json(route, {
-        summary: { average_rating: 0, review_count: 0, rating_distribution: {}, aspect_averages: {} },
+        summary: {
+          average_rating: 0,
+          review_count: 0,
+          rating_distribution: {},
+          aspect_averages: {},
+        },
         reviews: [],
         total: 0,
         page: 1,
@@ -181,6 +186,22 @@ async function mockBackend(page: Page, product: Record<string, unknown>): Promis
 }
 
 test.describe("Ürün detay — varyant etkileşimi (karakterizasyon)", () => {
+  /**
+   * Varyant etkileşimi YALNIZ masaüstü düzeninde bu şekilde.
+   *
+   * `product-detail.ts:322` viewport'u 1024px'ten böler: masaüstünde
+   * `ProductBuyBox` (`#pd-variations-section`, `.variant-option`) mount
+   * edilir, mobilde `MobileLayout` varyantları bir ALT ÇEKMECEDE gösterir
+   * (`optionsSheetTitle`). İkisi aynı DOM'u paylaşmıyor.
+   *
+   * Bu testleri mobil yoluna çevirmek "testi düzeltmek" değil, mobil çekmece
+   * için SIFIRDAN test yazmak olurdu — ayrı bir iş, `KALAN-ISLER.md`'de.
+   */
+  test.skip(
+    ({ viewport }) => (viewport?.width ?? 0) < 1024,
+    "Varyant DOM'u ≥1024px'te; mobilde çekmece yapısı var (product-detail.ts:322)"
+  );
+
   test.beforeEach(async ({ page }) => {
     await mockBackend(page, PRODUCT);
     await page.goto("/pages/product-detail.html?id=LST-TEST-0003");
@@ -198,12 +219,8 @@ test.describe("Ürün detay — varyant etkileşimi (karakterizasyon)", () => {
     await expect(renkGroup.locator(".variant-option")).toHaveCount(2);
     await expect(bedenGroup.locator(".variant-option")).toHaveCount(2);
 
-    await expect(
-      renkGroup.locator('.variant-option[data-variant-label="Siyah"]')
-    ).toHaveCount(1);
-    await expect(
-      renkGroup.locator('.variant-option[data-variant-label="Beyaz"]')
-    ).toHaveCount(1);
+    await expect(renkGroup.locator('.variant-option[data-variant-label="Siyah"]')).toHaveCount(1);
+    await expect(renkGroup.locator('.variant-option[data-variant-label="Beyaz"]')).toHaveCount(1);
     await expect(bedenGroup.locator('.variant-option[data-variant-label="M"]')).toHaveCount(1);
     await expect(bedenGroup.locator('.variant-option[data-variant-label="L"]')).toHaveCount(1);
   });
@@ -270,6 +287,22 @@ test.describe("Ürün detay — varyant etkileşimi (karakterizasyon)", () => {
 });
 
 test.describe("Ürün detay — stok rozeti (listing-seviyesi outOfStock bayrağı)", () => {
+  /**
+   * Varyant etkileşimi YALNIZ masaüstü düzeninde bu şekilde.
+   *
+   * `product-detail.ts:322` viewport'u 1024px'ten böler: masaüstünde
+   * `ProductBuyBox` (`#pd-variations-section`, `.variant-option`) mount
+   * edilir, mobilde `MobileLayout` varyantları bir ALT ÇEKMECEDE gösterir
+   * (`optionsSheetTitle`). İkisi aynı DOM'u paylaşmıyor.
+   *
+   * Bu testleri mobil yoluna çevirmek "testi düzeltmek" değil, mobil çekmece
+   * için SIFIRDAN test yazmak olurdu — ayrı bir iş, `KALAN-ISLER.md`'de.
+   */
+  test.skip(
+    ({ viewport }) => (viewport?.width ?? 0) < 1024,
+    "Varyant DOM'u ≥1024px'te; mobilde çekmece yapısı var (product-detail.ts:322)"
+  );
+
   test("listing outOfStock:true olduğunda rozet stok-yok uyarısıyla belirir", async ({ page }) => {
     await mockBackend(page, PRODUCT_OUT_OF_STOCK);
     await page.goto("/pages/product-detail.html?id=LST-TEST-0004");

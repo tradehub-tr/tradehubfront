@@ -6,6 +6,7 @@
  * bağlamında (URL'de cat/q) render edildiği için `?cat=` ile açılır.
  */
 import { test, expect, type Route, type Page } from "@playwright/test";
+import { yalnizMasaustu } from "./fixtures/viewport";
 
 const FACETS_WIDE = {
   countries: [
@@ -66,6 +67,8 @@ async function mockBackend(page: Page): Promise<void> {
 }
 
 test.describe("Üreticiler — facet filtreleri (B1)", () => {
+  yalnizMasaustu("facet paneli masaüstünde aside, mobilde çekmece");
+
   test.beforeEach(async ({ page }) => {
     await page.addInitScript(() => {
       localStorage.setItem("istoc_cookie_prefs", '{"necessary":true}');
