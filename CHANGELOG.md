@@ -1,3 +1,66 @@
+## [v2.4.0-alpha.27] - 2026-08-26 ALPHA
+
+Bu surum alpha.istoc.com'da gelistirme asamasindadir.
+
+### Eklendi
+- feat(i18n): lojistik sözlüğü tamamlandı, ar/ru'ya çevrildi (@aliiball)
+  - 07-FE ve satıcı sevkiyat ekranı için 13 yeni anahtar, dört dilde
+  - shipment.* bloğunun tamamı Arapça ve Rusçaya çevrildi (229 anahtar)
+  - Kalan İngilizce metinler kasıtlı: marka adları, placeholder'lar, IBAN/MOQ
+  - TODO çeviri işaretleri kaldırıldı
+- feat(lojistik): alıcı teslim alma akışı eklendi (07-FE) (@aliiball)
+  - Randevu talebi ve teslim kodu blokları mock üzerinde uçtan uca çalışıyor
+  - Kod süresi sayacı ve süre dolumu ekranı eklendi; kilit ekranından ayrı
+  - Bloklar yalnız Buyer Pickup / Seller Delivery sevkiyatlarında çiziliyor
+  - Siparişler sayfasına Teslim al girişi eklendi
+  - Uç yokken form yerine bağlı değil kutusu çiziliyor, ölü düğme kalmadı
+  - Teslim onayı formu Alpine modülü import edilmediği için hiç çalışmıyordu
+  - Pickup uçları sözleşmedeki adlarla tanımlandı (api.v1.pickup.*)
+  - 29 birim, 13 E2E testi
+- feat(lojistik): storefront ekran kalite denetimi eklendi (@aliiball)
+  - 46 test: ham i18n anahtarı sızıntısı, boş durum, ölü buton, erişilebilirlik
+  - Ölü köprü denetimi: window.__th* arayan her modülün tanımı olmalı
+  - Bilinen eksikler it.fails ile sahibiyle kayıtlı; bağlandıkları gün uyarır
+  - ReturnRequest kapalı pencere uyarısı ekran okuyucuya duyuruluyor
+- feat(lojistik): satıcı sevkiyat akışı mock üzerinde kapatıldı (@aliiball)
+  - Sevkiyat oluşturma ve koli girişi köprüleri bağlandı
+  - Kanal, taşıyıcı ve paket tipi listeleri katalog fixture'larından besleniyor
+  - Kalan miktarı sıfır olan kalem formu sessizce kilitliyordu, filtrelendi
+  - Oluşturulan sevkiyat kendi ekranında görünüyor
+  - Kalemler varsayılan seçili geliyor
+  - Paketleme kilidi ekran okuyucuya duyuruluyor
+  - 13 birim, 4 E2E testi
+
+### Duzeltildi
+- fix(urun-detay): bayat kalan üç test dosyası düzeltildi (@aliiball)
+  - aa7ddfa fiyat kademelerini, varyantları ve kart sekmelerini ProductOrderPanel'den ProductBuyBox'a taşımış ama testler bf982cf tasarımını beklemeye devam etmişti
+  - Testler bugünkü davranışa göre karakterizasyona çevrildi
+  - messages testinin mock'unda BottomNav export'u eksikti
+  - Suite ilk kez tamamen yeşil: 423 passed
+
+### Degistirildi
+- refactor(ci): biçim, lint ve test kapıları eklendi (@aliiball)
+  - lint.yml: format:check + eslint + tsc
+  - test.yml: vitest + mock E2E (masaüstü ve mobil), izleri artifact'a yükler
+  - package.json script kapsamları tests/ ve kök dosyaları içeriyor
+  - İkisi de temizlik bittikten SONRA açıldı; bugün yeşil başlıyor
+- refactor(e2e): mobil viewport projesi eklendi (@aliiball)
+  - chromium-mobile (Pixel 5) projesi suite'e eklendi
+  - Düşen 19 testin hiçbiri uygulama hatası değildi; masaüstü DOM'u arıyorlardı
+  - yalnizMasaustu() yardımcısıyla gerekçelendirilip sınırlandılar
+  - Mobilde 69 test koşuyor, suite 180 passed
+- refactor(format): prettier borcu temizlendi (@aliiball)
+  - src/ altında 111, tests/ altında 25, kökte 3 dosya uyumsuzdu
+  - Kök neden: github-lint.sh elle çalıştırılıyordu ve tests/ dizinini kapsamıyordu; prettier cache dizini boştu
+  - Yalnız biçim değişikliği; davranış değişmedi
+- refactor(ci): kapılar arıza dayanıklı hale getirildi (@aliiball)
+  - concurrency: arka arkaya push'ta eski koşular iptal ediliyor
+  - timeout-minutes: varsayılan 360 dakika yerine 10/10/20
+  - Playwright tarayıcısı önbelleğe alındı, anahtar package-lock hash'i
+  - paths-ignore: belge değişikliği koşu açmıyor
+  - Artifact yolu düzeltildi; repo kökü zaten tradehubfront
+
+---
 ## [v2.4.0-alpha.26] - 2026-08-24 ALPHA
 
 Bu surum alpha.istoc.com'da gelistirme asamasindadir.
