@@ -15,7 +15,12 @@ import { t } from "../../i18n";
 import { formatCurrency, getSelectedCurrency } from "../../services/currencyService";
 import { moneyFlowHtml, resetMoneyFlows, updateMoneyFlow } from "../../utils/moneyFlow";
 import { tierQtyLabel } from "./variantPrice";
-import type { ProductDetail, ProductVariant, SkuMatrixEntry, VariantOption } from "../../types/product";
+import type {
+  ProductDetail,
+  ProductVariant,
+  SkuMatrixEntry,
+  VariantOption,
+} from "../../types/product";
 import { bottomSheet, closeSheet, syncPriceTiersPanel } from "./MobileLayout";
 import { openMediaViewer } from "./MediaViewer";
 import { chatTriggerAttrs } from "../chat-popup/chatTriggerAttrs";
@@ -278,7 +283,13 @@ function renderNoVariantRowHtml(): string {
   `;
 }
 
-function renderBreakdownHtml(model: SheetModel, p: ProductDetail, total: number, unitPrice: number, currency: string): string {
+function renderBreakdownHtml(
+  model: SheetModel,
+  p: ProductDetail,
+  total: number,
+  unitPrice: number,
+  currency: string
+): string {
   if (total === 0) {
     return `<div class="border-t border-dashed border-border-default pt-2 pb-1 mb-1.5 flex justify-between text-xs text-text-tertiary"><span>${t("product.noSelectionYet")}</span><span>—</span></div>`;
   }
@@ -454,9 +465,7 @@ function onOrderLoginSuccess(): void {
   // Kullanıcı login modalını sipariş vermeden kapatıp sonradan başka bir
   // yerden giriş yaparsa sürpriz sipariş oluşmasın: devam yalnızca kullanıcı
   // hâlâ Seçenekler sheet'indeyken geçerli.
-  const sheetStillOpen = document
-    .getElementById(SHEET_ID)
-    ?.classList.contains("pdm-sheet-visible");
+  const sheetStillOpen = document.getElementById(SHEET_ID)?.classList.contains("pdm-sheet-visible");
   if (sheetStillOpen) void submitOrderAndGoToCart();
 }
 

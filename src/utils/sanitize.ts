@@ -77,7 +77,9 @@ export function escapeAttr(value: unknown): string {
  * kapatıp "Unexpected identifier" ile TÜM x-data/expression'ı çökertir.
  */
 export function escapeJsString(value: unknown): string {
-  return String(value ?? "").replace(/\\/g, "\\\\").replace(/'/g, "\\'");
+  return String(value ?? "")
+    .replace(/\\/g, "\\\\")
+    .replace(/'/g, "\\'");
 }
 
 /** Validate CSS color hex (#abc / #abcdef / #abcdefab) — reject anything else. */

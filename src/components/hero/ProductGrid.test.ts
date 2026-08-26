@@ -91,9 +91,7 @@ describe("ProductGrid progressive ana sayfa kartları", () => {
       createMissingSlots: true,
     });
 
-    const trigger = observed.find((node) =>
-      node.hasAttribute("data-home-card-placeholder")
-    );
+    const trigger = observed.find((node) => node.hasAttribute("data-home-card-placeholder"));
     expect(trigger).toBeDefined();
     progressiveCallback?.(
       [{ isIntersecting: true, target: trigger } as IntersectionObserverEntry],
@@ -110,20 +108,23 @@ describe("ProductGrid progressive ana sayfa kartları", () => {
     });
   });
 
-  it.each([1, 8])("%i ürün yüklendiğinde yalnız yükleme iskeleti yüksekliğini bırakır", async (count) => {
-    const products = Array.from({ length: count }, (_, index) => ({
-      ...cardFixture,
-      id: `LST-HOME-${index + 1}`,
-    }));
-    searchListings.mockResolvedValue({ products });
+  it.each([1, 8])(
+    "%i ürün yüklendiğinde yalnız yükleme iskeleti yüksekliğini bırakır",
+    async (count) => {
+      const products = Array.from({ length: count }, (_, index) => ({
+        ...cardFixture,
+        id: `LST-HOME-${index + 1}`,
+      }));
+      searchListings.mockResolvedValue({ products });
 
-    await initProductGrid();
+      await initProductGrid();
 
-    const grid = document.getElementById("home-product-grid")!;
-    expect(grid.querySelectorAll("[data-home-card]")).toHaveLength(count);
-    expect(grid.querySelector("[data-home-section-skeleton]")).toBeNull();
-    expect(grid.className).not.toMatch(/min-h-\[/);
-  });
+      const grid = document.getElementById("home-product-grid")!;
+      expect(grid.querySelectorAll("[data-home-card]")).toHaveLength(count);
+      expect(grid.querySelector("[data-home-section-skeleton]")).toBeNull();
+      expect(grid.className).not.toMatch(/min-h-\[/);
+    }
+  );
 
   it("boş yanıt verildiğinde sabit skeleton yüksekliğini bırakır", async () => {
     searchListings.mockResolvedValue({ products: [] });

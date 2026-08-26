@@ -13,7 +13,10 @@ vi.hoisted(() => {
 });
 
 vi.mock("../utils/api", () => ({ callMethod: vi.fn() }));
-vi.mock("../utils/auth", () => ({ isLoggedIn: () => false, waitForAuth: () => Promise.resolve(null) }));
+vi.mock("../utils/auth", () => ({
+  isLoggedIn: () => false,
+  waitForAuth: () => Promise.resolve(null),
+}));
 
 import { normalizeFavoritesRemoteState } from "./favorites";
 

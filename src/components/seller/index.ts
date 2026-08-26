@@ -2,7 +2,11 @@
  * Seller Storefront — Component Barrel Exports
  */
 export { StoreHeader } from "./StoreHeader";
-export { VerificationBadge, VerificationBadgeTemplate, initVerificationHelpers } from "./VerificationBadge";
+export {
+  VerificationBadge,
+  VerificationBadgeTemplate,
+  initVerificationHelpers,
+} from "./VerificationBadge";
 export type { VerificationItem } from "./VerificationBadge";
 export { StoreNav } from "./StoreNav";
 export { HeroBanner } from "./HeroBanner";

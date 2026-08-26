@@ -70,8 +70,7 @@ export const TamamiSevkEdildi = {
 
 export const TekSevkiyat = {
   name: "Tek sevkiyat",
-  render: () =>
-    ShipmentGroupList({ orderName: shipmentDetail.order, shipments: [partial[0]] }),
+  render: () => ShipmentGroupList({ orderName: shipmentDetail.order, shipments: [partial[0]] }),
 };
 
 /** Satıcı görünümü — tek fark yönetim bağlantısı. */

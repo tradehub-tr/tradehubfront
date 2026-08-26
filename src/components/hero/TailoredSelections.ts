@@ -58,7 +58,9 @@ function renderTailoredSkeleton(): string {
 }
 
 function showTailoredEmptyState(): void {
-  document.querySelector("[data-home-section='tailored-selections'] [data-home-section-skeleton]")?.remove();
+  document
+    .querySelector("[data-home-section='tailored-selections'] [data-home-section-skeleton]")
+    ?.remove();
   const emptyState = document.getElementById("tailored-empty");
   if (emptyState) emptyState.style.display = "";
 }
@@ -208,7 +210,9 @@ export function initTailoredSelections(): Promise<void> {
       }
 
       // Hide empty state
-      document.querySelector("[data-home-section='tailored-selections'] [data-home-section-skeleton]")?.remove();
+      document
+        .querySelector("[data-home-section='tailored-selections'] [data-home-section-skeleton]")
+        ?.remove();
       const emptyState = document.getElementById("tailored-empty");
       if (emptyState) emptyState.style.display = "none";
 

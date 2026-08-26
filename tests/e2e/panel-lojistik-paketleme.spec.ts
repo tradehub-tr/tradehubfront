@@ -67,8 +67,18 @@ test.beforeEach(async ({ context }) => {
     localStorage.setItem(
       "panel_tour_seen_v5",
       JSON.stringify([
-        "dashboard", "catalog", "commerce", "logistics", "sellers", "crm",
-        "helpdesk", "system", "store", "products", "orders", "management",
+        "dashboard",
+        "catalog",
+        "commerce",
+        "logistics",
+        "sellers",
+        "crm",
+        "helpdesk",
+        "system",
+        "store",
+        "products",
+        "orders",
+        "management",
         "messaging",
       ])
     );
@@ -132,7 +142,10 @@ test("AKIŞ — koli oluştur, kalem ata, doğrulama temizlensin", async ({ page
 
 test("koli ağırlığı girilince desi ANINDA hesaplanıyor", async ({ page }) => {
   await page.goto(`/panel/lojistik/paketleme/${SHP}`);
-  await page.getByRole("button", { name: /^Düzenle$/ }).first().click();
+  await page
+    .getByRole("button", { name: /^Düzenle$/ })
+    .first()
+    .click();
 
   const weight = page.locator('label:has-text("Ağırlık") input').first();
   await weight.fill("22");
@@ -142,7 +155,10 @@ test("koli ağırlığı girilince desi ANINDA hesaplanıyor", async ({ page }) 
 
 // ── Kabul 4: etiket üretilip AÇILABİLİYOR ────────────────────────────
 
-test("GERÇEK ÇIKTI — etiket üretiliyor ve yazdırılabilir belge açılıyor", async ({ page, context }) => {
+test("GERÇEK ÇIKTI — etiket üretiliyor ve yazdırılabilir belge açılıyor", async ({
+  page,
+  context,
+}) => {
   await page.goto(`/panel/lojistik/etiketler/${SHP}`);
   await expect(page.getByRole("heading", { name: /Etiket ve belgeler/i })).toBeVisible();
 
@@ -161,7 +177,10 @@ test("GERÇEK ÇIKTI — etiket üretiliyor ve yazdırılabilir belge açılıyo
 
   // "Etiketi aç" gerçekten bir sekme açmalı (blob belgesi).
   const opened = context.waitForEvent("page", { timeout: 10_000 });
-  await page.getByRole("link", { name: /Etiketi aç/i }).first().click();
+  await page
+    .getByRole("link", { name: /Etiketi aç/i })
+    .first()
+    .click();
   const doc = await opened;
   await expect(doc.getByRole("button", { name: /Yazdır/i })).toBeVisible();
   await doc.close();
@@ -207,18 +226,26 @@ test("TETİKLENEBİLİR HATA — çakışma senaryosu ekranda görünüyor", asy
   await page.getByRole("button", { name: /Eşzamanlı değişiklik/i }).click();
 
   await page.goto(`/panel/lojistik/paketleme/${SHP}`);
-  await page.getByRole("button", { name: /^Yeni koli$|^\+ Yeni koli$/ }).first().click();
+  await page
+    .getByRole("button", { name: /^Yeni koli$|^\+ Yeni koli$/ })
+    .first()
+    .click();
   await page.getByRole("button", { name: /Taslağı kaydet/i }).click();
 
   // Sözleşmedeki CONFLICT ekranı: "başkası değiştirdi, yeniden yükle".
-  await expect(page.getByText(/başka bir kullanıcı|yeniden yükle/i).first()).toBeVisible({ timeout: 10_000 });
+  await expect(page.getByText(/başka bir kullanıcı|yeniden yükle/i).first()).toBeVisible({
+    timeout: 10_000,
+  });
 });
 
 // ── Kabul 7: kalıcılık ───────────────────────────────────────────────
 
 test("KALICILIK — kaydedilen koli sayfa yenilenince duruyor", async ({ page }) => {
   await page.goto(`/panel/lojistik/paketleme/${EMPTY_SHP}`);
-  await page.getByRole("button", { name: /^Yeni koliye$/ }).first().click();
+  await page
+    .getByRole("button", { name: /^Yeni koliye$/ })
+    .first()
+    .click();
   await page.getByRole("button", { name: /Taslağı kaydet/i }).click();
   await expect(page.getByText(/^Kaydedildi$/)).toBeVisible({ timeout: 10_000 });
 
@@ -235,7 +262,9 @@ test("KALICILIK — kaydedilen koli sayfa yenilenince duruyor", async ({ page })
 
 test("madde 7 — silme ⋯ menüsünden hâlâ yapılabiliyor", async ({ page }) => {
   await page.goto(`/panel/lojistik/paketleme/${SHP}`);
-  const kartlar = page.locator("article").filter({ has: page.getByRole("button", { name: "Düzenle" }) });
+  const kartlar = page
+    .locator("article")
+    .filter({ has: page.getByRole("button", { name: "Düzenle" }) });
   // `count()` BEKLEMEZ — yükleme bitmeden çağrılırsa 0 döner ve test
   // "koli yok" diye kırılır. Önce ilk kartın görünmesini bekle.
   await expect(kartlar.first()).toBeVisible();
@@ -329,20 +358,25 @@ test("madde 12 — basılan etiketteki barkod GERÇEK Code 128", async ({ page, 
   await page.goto(`/panel/lojistik/etiketler/${SHP}`);
 
   const opened = context.waitForEvent("page", { timeout: 10_000 });
-  await page.getByRole("link", { name: /Etiketi aç/i }).first().click();
+  await page
+    .getByRole("link", { name: /Etiketi aç/i })
+    .first()
+    .click();
   const doc = await opened;
 
   // Sembolü belgeden ölçüp geri çözüyoruz — okuyucunun yaptığı iş.
   // "Barkod çiziliyor" ile "barkod okunuyor" farklı iddialar.
   const cozulen = await doc.evaluate(() => {
-    const C128 = ("212222 222122 222221 121223 121322 131222 122213 122312 132212 221213 221312 231212 " +
+    const C128 = (
+      "212222 222122 222221 121223 121322 131222 122213 122312 132212 221213 221312 231212 " +
       "112232 122132 122231 113222 123122 123221 223211 221132 221231 213212 223112 312131 311222 321122 " +
       "321221 312212 322112 322211 212123 212321 232121 111323 131123 131321 112313 132113 132311 211313 " +
       "231113 231311 112133 112331 132131 113123 113321 133121 313121 211331 231131 213113 213311 213131 " +
       "311123 311321 331121 312113 312311 332111 314111 221411 431111 111224 111422 121124 121421 141122 " +
       "141221 112214 112412 122114 122411 142112 142211 241211 221114 413111 241112 134111 111242 121142 " +
       "121241 114212 124112 124211 411212 421112 421211 212141 214121 412121 111143 111341 131141 114113 " +
-      "114311 411113 411311 113141 114131 311141 411131 211412 211214 211232 2331112").split(/\s+/);
+      "114311 411113 411311 113141 114131 311141 411131 211412 211214 211232 2331112"
+    ).split(/\s+/);
 
     const svg = document.querySelector(".barcode svg");
     if (!svg) return { hata: "barkod svg yok" };
@@ -373,7 +407,10 @@ test("madde 12 — basılan etiketteki barkod GERÇEK Code 128", async ({ page, 
     for (let i = 1; i < values.length - 2; i++) sum += values[i] * i;
 
     return {
-      metin: values.slice(1, -2).map((v) => String.fromCharCode(v + 32)).join(""),
+      metin: values
+        .slice(1, -2)
+        .map((v) => String.fromCharCode(v + 32))
+        .join(""),
       basla: values[0],
       dur: values.at(-1),
       kontrolDogru: values.at(-2) === sum % 103,
@@ -396,20 +433,27 @@ test("madde 10 — filtre açılırı sayfayı YANA KAYDIRMIYOR", async ({ page 
   // yatay kaydırma çubuğu geliyordu. Regresyon bekçisi: taşma piksel olarak
   // ölçülüyor, göz kararı değil.
   await page.goto(QUEUE);
-  const once = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
+  const once = await page.evaluate(
+    () => document.documentElement.scrollWidth - document.documentElement.clientWidth
+  );
   expect(once, "açılır kapalıyken zaten taşma var").toBeLessThanOrEqual(0);
 
   await page.getByRole("button", { name: /^Filtreler( \d+)?$/ }).click();
   await expect(page.locator('input[type="date"]').first()).toBeVisible();
 
-  const sonra = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
+  const sonra = await page.evaluate(
+    () => document.documentElement.scrollWidth - document.documentElement.clientWidth
+  );
   expect(sonra, "filtre açılırı gövdeyi yana kaydırıyor").toBeLessThanOrEqual(0);
 
   // Panel görüntü alanının içinde durmalı.
-  const kutu = await page.locator('input[type="date"]').first().evaluate((el) => {
-    const p = el.closest("div[class*='absolute']")!.getBoundingClientRect();
-    return { sol: p.left, sag: p.right, genislik: window.innerWidth };
-  });
+  const kutu = await page
+    .locator('input[type="date"]')
+    .first()
+    .evaluate((el) => {
+      const p = el.closest("div[class*='absolute']")!.getBoundingClientRect();
+      return { sol: p.left, sag: p.right, genislik: window.innerWidth };
+    });
   expect(kutu.sag, "panel sağ kenarı taşıyor").toBeLessThanOrEqual(kutu.genislik);
   expect(kutu.sol, "panel sol kenarı taşıyor").toBeGreaterThanOrEqual(0);
 });
@@ -420,7 +464,9 @@ test("madde 10 — filtre açılırı sayfayı YANA KAYDIRMIYOR", async ({ page 
 // hangi biçimi seçtiği bir dahaki girişinde hatırlanmalı. Kanban BİLGİ
 // panosu — üzerinde iş yapılmıyor, işe oradan giriliyor.
 
-test("GÖRÜNÜM — kanban dört kovayı SÜTUN olarak gösteriyor, pill'ler çekiliyor", async ({ page }) => {
+test("GÖRÜNÜM — kanban dört kovayı SÜTUN olarak gösteriyor, pill'ler çekiliyor", async ({
+  page,
+}) => {
   await page.goto(QUEUE);
   // Başlangıç: tablo + kova pill'leri.
   await expect(page.getByRole("button", { name: /^Paketlenmedi/ })).toBeVisible();
@@ -445,7 +491,9 @@ test("GÖRÜNÜM — kanban dört kovayı SÜTUN olarak gösteriyor, pill'ler ç
   // dışına düşüyordu (ölçüldü 2026-08-19); sütunlar artık esniyor.
   const board = page.locator(".list-kanban");
   const tasma = await board.evaluate((el) => el.scrollWidth - el.clientWidth);
-  expect(tasma, "dördüncü kova pano dışına taşıyor — yatay kaydırma gerekiyor").toBeLessThanOrEqual(1);
+  expect(tasma, "dördüncü kova pano dışına taşıyor — yatay kaydırma gerekiyor").toBeLessThanOrEqual(
+    1
+  );
 
   // Sayfanın KENDİSİ yana kaymamalı; kaydırma panonun içinde kalır.
   const sayfaKaydi = await page.evaluate(
@@ -529,4 +577,3 @@ test("GÖRÜNÜM — etiket ekranında kanban YOK (durum akışı değil, bayrak
   await expect(page.getByRole("button", { name: "Tablo Görünümü" })).toBeVisible();
   await expect(page.getByRole("button", { name: "Kanban Görünümü" })).toHaveCount(0);
 });
-

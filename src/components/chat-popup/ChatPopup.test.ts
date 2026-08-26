@@ -21,7 +21,7 @@ const { listConversations, canChat, listSellerSlots } = vi.hoisted(() => ({
 
 vi.mock("../../i18n", () => ({ t: (key: string) => key }));
 vi.mock("../icons/lucideIcons", () => ({
-  getLucideIcon: () => "<svg aria-hidden=\"true\"></svg>",
+  getLucideIcon: () => '<svg aria-hidden="true"></svg>',
 }));
 vi.mock("../../services/chatService", () => ({
   listConversations,
@@ -106,7 +106,8 @@ describe("ChatPopup page ownership and lifecycle characterization", () => {
   });
 
   it("lazily opens from a delegated trigger, focuses the dialog, restores focus on Escape, and reopens one root", async () => {
-    document.body.innerHTML = '<button type="button" id="chat-trigger" data-chat-trigger>Chat</button>';
+    document.body.innerHTML =
+      '<button type="button" id="chat-trigger" data-chat-trigger>Chat</button>';
     const trigger = document.querySelector<HTMLButtonElement>("#chat-trigger")!;
     mountChatPopup();
     mountChatPopup();
@@ -148,9 +149,9 @@ describe("ChatPopup page ownership and lifecycle characterization", () => {
       expect(chatStore().isOpen).toBe(true);
       expect(document.querySelectorAll('[x-data="chatPopupRoot"]')).toHaveLength(1);
     });
-    expect(document.querySelector<HTMLElement>('[role="dialog"]')?.contains(document.activeElement)).toBe(
-      true
-    );
+    expect(
+      document.querySelector<HTMLElement>('[role="dialog"]')?.contains(document.activeElement)
+    ).toBe(true);
   });
 
   it.each([
@@ -188,14 +189,17 @@ describe("ChatPopup page ownership and lifecycle characterization", () => {
 
     await vi.waitFor(() => {
       expect(document.querySelectorAll("[data-reservation-modal]")).toHaveLength(1);
-      expect(Alpine.store("reservationModal")).toMatchObject({ isOpen: true, sellerId: "SELLER-1" });
+      expect(Alpine.store("reservationModal")).toMatchObject({
+        isOpen: true,
+        sellerId: "SELLER-1",
+      });
     });
     expect(chatStore().isOpen).toBe(false);
     expect(document.querySelector("#reservation-modal-mount")).toBeNull();
     expect(listSellerSlots).toHaveBeenCalledTimes(1);
-    expect(document.querySelector("[data-reservation-modal]")?.contains(document.activeElement)).toBe(
-      true
-    );
+    expect(
+      document.querySelector("[data-reservation-modal]")?.contains(document.activeElement)
+    ).toBe(true);
   });
 
   it("invalidates a pending gate when Escape closes the lazy overlay", async () => {

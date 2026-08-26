@@ -129,7 +129,11 @@ describe("chatPopup store — pinnedProduct konuşma bağlamı", () => {
         body: { type: "text", text: "Merhaba" },
         time: "14:00",
         read: true,
-        productRef: { id: "LST-9", url: "/pages/product-detail.html?id=LST-9", label: "Kışlık Bere" },
+        productRef: {
+          id: "LST-9",
+          url: "/pages/product-detail.html?id=LST-9",
+          label: "Kışlık Bere",
+        },
       },
     ]);
     await store.setActiveConversation("c2");

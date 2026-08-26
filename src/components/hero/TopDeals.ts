@@ -150,51 +150,53 @@ export function initTopDeals(): Promise<void> {
   if (!grid) return Promise.resolve();
   grid.removeAttribute("data-home-section-skeleton");
 
-  return initCurrency()
-    // verified_supplier: anasayfa KYB doğrulanmamış satıcı ürünü göstermez.
-    .then(() =>
-      searchListings({
-        is_deal: true,
-        page_size: FIXED_GRID_COUNT,
-        sort_by: "discount",
-        verified_supplier: true,
+  return (
+    initCurrency()
+      // verified_supplier: anasayfa KYB doğrulanmamış satıcı ürünü göstermez.
+      .then(() =>
+        searchListings({
+          is_deal: true,
+          page_size: FIXED_GRID_COUNT,
+          sort_by: "discount",
+          verified_supplier: true,
+        })
+      )
+      .then((result) => {
+        const empty = document.getElementById("top-deals-empty");
+        if (result.products.length === 0) {
+          grid.innerHTML = "";
+          grid.style.display = "none";
+          if (empty) empty.style.display = "";
+          return;
+        }
+        grid.style.display = "";
+        if (empty) empty.style.display = "none";
+
+        const cards: TopDealCard[] = result.products.slice(0, FIXED_GRID_COUNT).map((p) => ({
+          name: p.name,
+          href: getListingUrl({ id: p.id, href: p.href }),
+          price: p.price,
+          startingPrice: formatStartingPrice(p.price),
+          // p.originalPrice is already currency-formatted by mapListingCard
+          originalPrice: p.originalPrice || undefined,
+          discountPercent:
+            p.discountPercentage && p.discountPercentage > 0
+              ? Math.round(p.discountPercentage)
+              : undefined,
+          imageSrc: p.imageSrc || "",
+          moqCount: parseInt(p.moq) || 1,
+          moqUnitKey: "topDeals.pieces",
+        }));
+        grid.innerHTML = cards.map(renderDealCard).join("");
       })
-    )
-    .then((result) => {
-      const empty = document.getElementById("top-deals-empty");
-      if (result.products.length === 0) {
+      .catch((err) => {
+        console.warn("[TopDeals] API load failed:", err);
         grid.innerHTML = "";
         grid.style.display = "none";
+        const empty = document.getElementById("top-deals-empty");
         if (empty) empty.style.display = "";
-        return;
-      }
-      grid.style.display = "";
-      if (empty) empty.style.display = "none";
-
-      const cards: TopDealCard[] = result.products.slice(0, FIXED_GRID_COUNT).map((p) => ({
-        name: p.name,
-        href: getListingUrl({ id: p.id, href: p.href }),
-        price: p.price,
-        startingPrice: formatStartingPrice(p.price),
-        // p.originalPrice is already currency-formatted by mapListingCard
-        originalPrice: p.originalPrice || undefined,
-        discountPercent:
-          p.discountPercentage && p.discountPercentage > 0
-            ? Math.round(p.discountPercentage)
-            : undefined,
-        imageSrc: p.imageSrc || "",
-        moqCount: parseInt(p.moq) || 1,
-        moqUnitKey: "topDeals.pieces",
-      }));
-      grid.innerHTML = cards.map(renderDealCard).join("");
-    })
-    .catch((err) => {
-      console.warn("[TopDeals] API load failed:", err);
-      grid.innerHTML = "";
-      grid.style.display = "none";
-      const empty = document.getElementById("top-deals-empty");
-      if (empty) empty.style.display = "";
-    });
+      })
+  );
 }
 
 export function TopDeals(): string {

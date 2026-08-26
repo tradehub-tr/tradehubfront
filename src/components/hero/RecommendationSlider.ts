@@ -145,26 +145,28 @@ function initSwiper(): void {
 
 export function initRecommendationSlider(): Promise<void> {
   // Load products from API
-  return initCurrency()
-    // verified_supplier: anasayfa KYB doğrulanmamış satıcı ürünü göstermez.
-    .then(() => searchListings({ page_size: 9, verified_supplier: true }))
-    .then((result) => {
-      const container = document.getElementById("recommendation-slides");
-      if (!container) return;
+  return (
+    initCurrency()
+      // verified_supplier: anasayfa KYB doğrulanmamış satıcı ürünü göstermez.
+      .then(() => searchListings({ page_size: 9, verified_supplier: true }))
+      .then((result) => {
+        const container = document.getElementById("recommendation-slides");
+        if (!container) return;
 
-      if (result.products.length === 0) return;
+        if (result.products.length === 0) return;
 
-      const cards: RecommendationCard[] = result.products.map((p) => ({
-        title: p.name,
-        href: getListingUrl({ id: p.id, href: p.href }),
-        imageSrc: p.imageSrc || "",
-        price: p.price,
-      }));
+        const cards: RecommendationCard[] = result.products.map((p) => ({
+          title: p.name,
+          href: getListingUrl({ id: p.id, href: p.href }),
+          imageSrc: p.imageSrc || "",
+          price: p.price,
+        }));
 
-      container.innerHTML = cards.map((card) => renderCard(card)).join("");
-      initSwiper();
-    })
-    .catch((err) => {
-      console.warn("[RecommendationSlider] API load failed:", err);
-    });
+        container.innerHTML = cards.map((card) => renderCard(card)).join("");
+        initSwiper();
+      })
+      .catch((err) => {
+        console.warn("[RecommendationSlider] API load failed:", err);
+      })
+  );
 }

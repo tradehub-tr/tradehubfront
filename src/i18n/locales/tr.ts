@@ -28,7 +28,7 @@ const tr = {
       },
       notWired: {
         title: "Bu bölüm henüz sunucuya bağlı değil",
-        hint: "Ekran hazır, ama veriyi getiren servis henüz yazılmadı. Boş liste göstermek \"kayıt yok\" anlamına gelirdi.",
+        hint: 'Ekran hazır, ama veriyi getiren servis henüz yazılmadı. Boş liste göstermek "kayıt yok" anlamına gelirdi.',
       },
       appointment: {
         change: "Randevuyu değiştir",
@@ -37,11 +37,15 @@ const tr = {
         failed: "Randevu oluşturulamadı.",
         full: "dolu",
         incomplete: "Tarih ve saat aralığı seçin.",
+        location: "Teslim noktası",
         noSlots: "Uygun randevu kalmadı",
+        noSlotsHint: "Başka bir tarih seçin ya da satıcıyla iletişime geçin.",
         notAvailable: "Bu özellik henüz kullanıma açılmadı.",
         pastDate: "Geçmiş bir tarih seçilemez.",
         request: "Randevu talep et",
         slot: "Saat aralığı",
+        slotNotFound: "Seçilen saat aralığı bulunamadı.",
+        slotTaken: "Bu saat aralığı dolmuş, başka bir aralık seçin.",
         submitting: "Gönderiliyor…",
         subtitle: "Size uygun tarihi ve saat aralığını seçin.",
         title: "Teslimat randevusu",
@@ -66,11 +70,15 @@ const tr = {
         action: "Teslim aldım",
         appointment: "Randevu",
         attemptsLeft: "{{count}} deneme hakkınız kaldı",
+        codeExpired: "Kodun süresi doldu",
+        codeExpiredHint: "Yeni kod isteyip tekrar deneyebilirsiniz. Kalan deneme hakkınız korunur.",
         codeHint: "Kuryenin size ilettiği kodu girin.",
+        codeInvalid: "Kod doğrulanamadı.",
         codeLabel: "Teslim kodu",
         codeTooShort: "Kod eksik görünüyor.",
         done: "Teslimat tamamlandı",
-        doneHint: "Teslim kanıtını aşağıdan görebilirsiniz.",
+        doneHint: "Teslim bilgileriniz aşağıda görünüyor.",
+        expiresIn: "Kodun süresi {{time}} içinde doluyor.",
         failed: "Onaylanamadı, lütfen tekrar deneyin.",
         goToPayment: "Ödemeye git",
         location: "Teslim noktası",
@@ -79,7 +87,11 @@ const tr = {
         noCodeHint: "Bu gönderi için teslim kodu gerekmiyor. Ürünü teslim aldıysanız onaylayın.",
         notAvailable: "Bu özellik henüz kullanıma açılmadı.",
         paymentBlocked: "Ödeme tamamlanmadan teslim alınamaz",
-        paymentBlockedHint: "Bu gönderi ödeme şartlı. Ödemeyi tamamladıktan sonra bu sayfaya dönün.",
+        paymentBlockedHint:
+          "Bu gönderi ödeme şartlı. Ödemeyi tamamladıktan sonra bu sayfaya dönün.",
+        resendCode: "Yeni kod iste",
+        resendFailed: "Yeni kod gönderilemedi.",
+        resending: "Gönderiliyor…",
         submitting: "Gönderiliyor…",
         title: "Teslim onayı",
       },
@@ -1262,7 +1274,8 @@ const tr = {
       factorySize: "Fabrika Büyüklüğü (m²)",
       taxId: "Vergi No / TC No",
       taxOffice: "Vergi Dairesi",
-      lockedHint: "Bu bilgi kayıt/doğrulama ile yönetilir; değiştirmek için destek ile iletişime geçin.",
+      lockedHint:
+        "Bu bilgi kayıt/doğrulama ile yönetilir; değiştirmek için destek ile iletişime geçin.",
       mainMarkets: "Ana Pazarlar",
       mainMarketsPlaceholder: "Global, Avrupa, Orta Doğu, ABD...",
       contactInfo: "İletişim Bilgileri",
@@ -2393,7 +2406,8 @@ const tr = {
       questionDefaultMessage: "Merhaba, bu ürün hakkında bilgi almak istiyorum.",
       questionQuantitySummary: "Ürün miktarı ve özellikleri",
       attachFilePrompt: "Dosya ekleyin",
-      leaveFormConfirm: "Bu sayfadan ayrılmak istediğinizden emin misiniz? Girilen tüm bilgiler kaybolacaktır.",
+      leaveFormConfirm:
+        "Bu sayfadan ayrılmak istediğinizden emin misiniz? Girilen tüm bilgiler kaybolacaktır.",
       quantity: "Miktar",
       color: "Renk",
       size: "Beden",
@@ -2875,6 +2889,7 @@ const tr = {
     // ============================================================
     orders: {
       loadingOrders: "Sipariş detaylarınız yükleniyor...",
+      pickUp: "Teslim al",
       productionMonitoring: "Üretim İzleme",
       waitingPayment: "Ödeme bekleniyor",
       confirming: "Onaylanıyor",
@@ -3009,12 +3024,14 @@ const tr = {
       writeReview: "Değerlendir",
       reviewStatusPublished: "Yayında",
       reviewStatusRejected: "Yayınlanmadı",
-      pendingReviewsEmptyDesc: "Teslim edilen siparişlerinizdeki ürünler, değerlendirmeniz için burada listelenir.",
+      pendingReviewsEmptyDesc:
+        "Teslim edilen siparişlerinizdeki ürünler, değerlendirmeniz için burada listelenir.",
       reviewsDoneEmptyTitle: "Henüz değerlendirme yapmadınız",
       reviewsDoneEmptyDesc: "Yaptığınız değerlendirmeler ve durumları burada görünür.",
       refundRequests: "talep",
       refundsEmptyTitle: "İade talebiniz yok",
-      refundsEmptyDesc: "Bir siparişinizde sorun yaşarsanız, iade talebinizi buradan oluşturup takip edebilirsiniz.",
+      refundsEmptyDesc:
+        "Bir siparişinizde sorun yaşarsanız, iade talebinizi buradan oluşturup takip edebilirsiniz.",
       refundStatusApproved: "Onaylandı",
       refundStatusRejected: "Reddedildi",
       records: "Kayıtlar",
@@ -8506,8 +8523,7 @@ const tr = {
 
     // Status uyarıları
     draftTitle: "Taslak — Henüz Gönderilmedi",
-    draftHint:
-      "Belgelerinizi yükleyip 'Gönder'e basın. Gönderilince başvurunuz incelemeye alınır.",
+    draftHint: "Belgelerinizi yükleyip 'Gönder'e basın. Gönderilince başvurunuz incelemeye alınır.",
     rejectedTitle: "Başvurunuz Reddedildi",
     rejectionReason: "Gerekçe",
     rejectedHint:

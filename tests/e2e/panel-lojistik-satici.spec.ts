@@ -53,8 +53,18 @@ test.beforeEach(async ({ context }) => {
     localStorage.setItem(
       "panel_tour_seen_v5",
       JSON.stringify([
-        "dashboard", "catalog", "commerce", "logistics", "sellers", "crm",
-        "helpdesk", "system", "store", "products", "orders", "management",
+        "dashboard",
+        "catalog",
+        "commerce",
+        "logistics",
+        "sellers",
+        "crm",
+        "helpdesk",
+        "system",
+        "store",
+        "products",
+        "orders",
+        "management",
         "messaging",
       ])
     );
@@ -221,17 +231,27 @@ test("SATICI — K4: BAŞKASININ sevkiyatına erişemiyor", async ({ page }) => 
   // Tohumda "Yıldız Nalbur"a ait sevkiyat var; satıcı onu URL'den açmaya
   // çalışınca yetki hatası görmeli — boş ekran değil.
   await page.goto("/panel/lojistik/sevkiyatlar/SHP-2026-00047/teslim-kaniti");
-  await expect(page.getByText(/yetkiniz yok|size ait değil|erişim/i).first()).toBeVisible({ timeout: 10_000 });
+  await expect(page.getByText(/yetkiniz yok|size ait değil|erişim/i).first()).toBeVisible({
+    timeout: 10_000,
+  });
 });
 
-test("SATICI — K5: kendi kanıtını kaydediyor, kayıt SATICI BEYANI damgası taşıyor", async ({ page }) => {
+test("SATICI — K5: kendi kanıtını kaydediyor, kayıt SATICI BEYANI damgası taşıyor", async ({
+  page,
+}) => {
   await page.goto(POD_QUEUE);
   await expect(page.locator("table tbody tr").first()).toBeVisible();
 
   // Kanıt bekleyen kendi sevkiyatını aç.
-  await page.getByRole("button", { name: /Kanıt bekliyor/i }).first().click();
+  await page
+    .getByRole("button", { name: /Kanıt bekliyor/i })
+    .first()
+    .click();
   await expect(page.locator("table tbody tr").first()).toBeVisible();
-  await page.getByRole("link", { name: /Kanıtı aç/i }).first().click();
+  await page
+    .getByRole("link", { name: /Kanıtı aç/i })
+    .first()
+    .click();
 
   await page.getByRole("button", { name: /Teslim kanıtı kaydet/i }).click();
   await page.locator("#pod-delivered-at").fill("2026-08-19T11:00");
@@ -298,19 +318,28 @@ test("SATICI — S7: KENDİ maliyetini görüyor, PLATFORMUNKİNİ görmüyor", 
   await expect(page.getByRole("heading", { name: /Kargo kurallarım/i })).toBeVisible();
 
   // Kendi kuralında alış tutarı GÖRÜNÜYOR (para birimi işaretiyle).
-  const kendi = page.locator("article").filter({ hasText: /Aras anlaşmam/i }).first();
+  const kendi = page
+    .locator("article")
+    .filter({ hasText: /Aras anlaşmam/i })
+    .first();
   await expect(kendi.getByText(/Alış:/)).toBeVisible();
   await expect(kendi.getByText(/Alış:\s*₺|Alış:\s*[\d.,]+/)).toBeVisible();
 
   // Platform kuralında alış MASKELİ — "—" ve gerekçeli ipucu.
-  const platform = page.locator("article").filter({ hasText: /İç Anadolu/i }).first();
+  const platform = page
+    .locator("article")
+    .filter({ hasText: /İç Anadolu/i })
+    .first();
   const maskeli = platform.locator('[title*="satıcıya kapalı"]');
   await expect(maskeli.first(), "platform maliyeti satıcıya AÇIK görünüyor").toBeVisible();
 });
 
 test("SATICI — S13b: platform kuralını DÜZENLEYEMİYOR", async ({ page }) => {
   await page.goto(KURALLARIM);
-  const platform = page.locator("article").filter({ hasText: /İç Anadolu/i }).first();
+  const platform = page
+    .locator("article")
+    .filter({ hasText: /İç Anadolu/i })
+    .first();
 
   // Yetkisize çalışmayacak düğme çizmek, ona backend hatası yedirmek demek.
   await expect(platform.getByRole("button", { name: /^Sil$/i })).toHaveCount(0);
@@ -322,10 +351,13 @@ test("SATICI — S6: kendi kuralını tanımlayabiliyor", async ({ page }) => {
   await page.getByRole("button", { name: /Kendi kuralım/i }).click();
   await expect(page.getByText(/Nasıl bir kural kuracaksın/i)).toBeVisible();
 
-  await page.getByText(/Kendi aracımla teslim/i).first().click();
+  await page
+    .getByText(/Kendi aracımla teslim/i)
+    .first()
+    .click();
 
   // Sahip alanı KİLİTLİ: satıcı başka satıcı adına kural yazamaz.
-  const sahip = page.locator('input[disabled]').first();
+  const sahip = page.locator("input[disabled]").first();
   await expect(sahip).toBeVisible();
 
   // "Zorunlu" anahtarı satıcıda HİÇ YOK (kapı uçta, burada yalnız kolaylık).
@@ -339,7 +371,9 @@ test("SATICI — S6: kendi kuralını tanımlayabiliyor", async ({ page }) => {
   await expect(page.getByText(ad)).toBeVisible({ timeout: 10_000 });
 });
 
-test("SATICI — S8: kendi yükü için fiyat hesaplatabiliyor ve GEREKÇEYİ görüyor", async ({ page }) => {
+test("SATICI — S8: kendi yükü için fiyat hesaplatabiliyor ve GEREKÇEYİ görüyor", async ({
+  page,
+}) => {
   await page.goto(HESAPLA);
   await expect(page.getByRole("heading", { name: /Fiyat hesapla/i })).toBeVisible();
 
@@ -392,7 +426,9 @@ test("SATICI — S15: fiyatlandırma ekranlarında DEMO paneli GÖRÜNMÜYOR", a
   }
 });
 
-test("SATICI — S9: etiket akışında taşıyıcı seçimi VAR ve varsayılan İŞARETLİ", async ({ page }) => {
+test("SATICI — S9: etiket akışında taşıyıcı seçimi VAR ve varsayılan İŞARETLİ", async ({
+  page,
+}) => {
   await page.goto(`/panel/lojistik/etiketler/${SHP}`);
   await expect(page.getByRole("heading", { name: /Etiket/i }).first()).toBeVisible();
 

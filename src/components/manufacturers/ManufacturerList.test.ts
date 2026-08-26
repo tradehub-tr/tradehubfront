@@ -25,14 +25,14 @@ describe("ManufacturerList", () => {
     expect(html).toContain(":href=\"'/magaza/' + seller.seller_code\"");
     expect(html).toContain(":href=\"'/urun/' + encodeURIComponent(p.slug || p.name)\"");
     expect(html).toContain("data-seller-favorite-btn");
-    expect(html).toContain(":aria-pressed=\"isFav(seller.seller_code)\"");
+    expect(html).toContain(':aria-pressed="isFav(seller.seller_code)"');
   });
 
   it("defers non-critical seller media and reserves image dimensions", () => {
     const html = ManufacturerList();
 
-    expect(html).toContain(":src=\"seller.logo\"");
-    expect(html).toContain(":src=\"p.image\"");
+    expect(html).toContain(':src="seller.logo"');
+    expect(html).toContain(':src="p.image"');
     expect(html).toContain('loading="lazy"');
     expect(html).toContain('decoding="async"');
     expect(html).toContain('width="200" height="200"');

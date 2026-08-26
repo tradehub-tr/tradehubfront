@@ -33,7 +33,11 @@ function buyer() {
 
 async function mockBackend(page: Page): Promise<void> {
   await page.route("**/api/method/**", (route: Route) =>
-    route.fulfill({ status: 200, contentType: "application/json", body: JSON.stringify({ message: { data: [] } }) })
+    route.fulfill({
+      status: 200,
+      contentType: "application/json",
+      body: JSON.stringify({ message: { data: [] } }),
+    })
   );
   await page.route("**/api/method/tradehub_core.api.v1.auth.get_session_user*", (route: Route) =>
     route.fulfill({
@@ -42,27 +46,35 @@ async function mockBackend(page: Page): Promise<void> {
       body: JSON.stringify({ message: { logged_in: true, csrf_token: "test", user: buyer() } }),
     })
   );
-  await page.route("**/api/method/tradehub_core.api.currency.get_currency_settings*", (route: Route) =>
+  await page.route(
+    "**/api/method/tradehub_core.api.currency.get_currency_settings*",
+    (route: Route) =>
+      route.fulfill({
+        status: 200,
+        contentType: "application/json",
+        body: JSON.stringify({
+          message: {
+            currencies: [{ code: "TRY", symbol: "₺", name: "L", nameTr: "L", decimalPlaces: 2 }],
+            rates: { TRY: { TRY: 1 } },
+            defaultCurrency: "TRY",
+            detectedCountry: "TR",
+            baseCurrency: "TRY",
+          },
+        }),
+      })
+  );
+  await page.route("**/api/method/tradehub_core.api.cart.get_cart*", (route: Route) =>
     route.fulfill({
       status: 200,
       contentType: "application/json",
-      body: JSON.stringify({
-        message: {
-          currencies: [{ code: "TRY", symbol: "₺", name: "L", nameTr: "L", decimalPlaces: 2 }],
-          rates: { TRY: { TRY: 1 } },
-          defaultCurrency: "TRY",
-          detectedCountry: "TR",
-          baseCurrency: "TRY",
-        },
-      }),
+      body: JSON.stringify({ message: { suppliers: [], summary: {} } }),
     })
-  );
-  await page.route("**/api/method/tradehub_core.api.cart.get_cart*", (route: Route) =>
-    route.fulfill({ status: 200, contentType: "application/json", body: JSON.stringify({ message: { suppliers: [], summary: {} } }) })
   );
 }
 
-test("alıcı formu doldurup gönderince create_rfq POST edilir ve başarıda yönlenir", async ({ page }) => {
+test("alıcı formu doldurup gönderince create_rfq POST edilir ve başarıda yönlenir", async ({
+  page,
+}) => {
   await mockBackend(page);
 
   let createCalled = false;
@@ -99,5 +111,10 @@ test("alıcı formu doldurup gönderince create_rfq POST edilir ve başarıda y�
 
   await page.waitForURL("**/pages/dashboard/rfq-success.html", { timeout: 10000 });
   expect(createCalled).toBe(true);
-  expect(sentBody).toMatchObject({ product_name: "sanda", quantity: 1, unit: "Adet", category: "cat-123" });
+  expect(sentBody).toMatchObject({
+    product_name: "sanda",
+    quantity: 1,
+    unit: "Adet",
+    category: "cat-123",
+  });
 });

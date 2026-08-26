@@ -26,7 +26,9 @@ describe("chatService — ürün marker'ı", () => {
   beforeEach(() => callMethod.mockReset());
 
   it("sendTextMessage pinnedProduct'ı content başına marker olarak gömer", async () => {
-    callMethod.mockResolvedValue({ message: { id: 1, content: MARKER + "Toplu alım indirimi var mı?" } });
+    callMethod.mockResolvedValue({
+      message: { id: 1, content: MARKER + "Toplu alım indirimi var mı?" },
+    });
     const msg = await sendTextMessage("7", "Toplu alım indirimi var mı?", pinned);
 
     const params = callMethod.mock.calls[0][1] as { content: string };

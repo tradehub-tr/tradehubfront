@@ -166,7 +166,9 @@ const chatStore: ChatStore = {
             };
             if (opts.onReservationRequired) opts.onReservationRequired(reservation);
             else {
-              window.dispatchEvent(new CustomEvent("reservation-modal:open", { detail: reservation }));
+              window.dispatchEvent(
+                new CustomEvent("reservation-modal:open", { detail: reservation })
+              );
             }
             return "reservation-required";
           }

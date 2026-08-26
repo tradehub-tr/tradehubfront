@@ -6,267 +6,276 @@ const ar = {
     // ar/ru ÇEVİRİSİ BEKLİYOR — metinler şimdilik İngilizce; ham anahtar
     // göstermek yerine okunabilir yer tutucu. Satırlar TODO işaretli.
     shipment: {
-      // TODO çeviri — İngilizce yer tutucu
       page: {
-        sellerPanel: "Seller Panel",
-        createNotWired: "Creating shipments is not connected yet",
-        labelNotWired: "Label data is not defined in the schema",
-        missingShipment: "No shipment was specified for this return.",
-        notifyFeedNotWired: "Notification feed is not connected yet",
-        notifyPrefNotWired: "Notification preferences are not connected yet",
-        returnFormNotWired: "Creating return requests is not connected yet",
-        returnQueueNotWired: "Return queue is not connected yet",
-        returns: "My return requests",
-        returnsNotWired: "Return requests are not connected yet",
-        sellerShipment: "Shipment management",
-        backToOrders: "Back to my orders",
-        loadFailed: "Could not load the shipment.",
-        loading: "Loading…",
-        missingName: "No shipment was specified.",
-        podNotWired: "Proof of delivery is not connected yet",
-        timelineNotWired: "Tracking history is not connected yet",
-        proofNotWired: "Delivery evidence is not connected yet",
-        tracking: "Shipment tracking",
-        trackingTitle: "Shipment activity",
+        sellerPanel: "لوحة البائع",
+        createNotWired: "إنشاء الشحنات غير متصل بعد",
+        labelNotWired: "بيانات الملصق غير معرَّفة في المخطط",
+        missingShipment: "لم يتم تحديد شحنة لهذا الإرجاع.",
+        notifyFeedNotWired: "سجل الإشعارات غير متصل بعد",
+        notifyPrefNotWired: "تفضيلات الإشعارات غير متصلة بعد",
+        returnFormNotWired: "إنشاء طلبات الإرجاع غير متصل بعد",
+        returnQueueNotWired: "قائمة الإرجاع غير متصلة بعد",
+        returns: "طلبات الإرجاع الخاصة بي",
+        returnsNotWired: "طلبات الإرجاع غير متصلة بعد",
+        sellerShipment: "إدارة الشحنات",
+        backToOrders: "العودة إلى طلباتي",
+        loadFailed: "تعذّر تحميل الشحنة.",
+        loading: "جارٍ التحميل…",
+        missingName: "لم يتم تحديد شحنة.",
+        podNotWired: "إثبات التسليم غير متصل بعد",
+        timelineNotWired: "سجل التتبع غير متصل بعد",
+        proofNotWired: "أدلة التسليم غير متصلة بعد",
+        tracking: "تتبع الشحنة",
+        trackingTitle: "حركة الشحنة",
       },
-      // TODO çeviri — İngilizce yer tutucu
       notWired: {
-        title: "This section is not connected yet",
-        hint: "The screen is ready, but the service that fetches the data has not been written yet.",
+        title: "هذا القسم غير متصل بعد",
+        hint: 'الشاشة جاهزة، لكن الخدمة التي تجلب البيانات لم تُكتب بعد. عرض قائمة فارغة كان سيعني "لا توجد سجلات".',
       },
       appointment: {
-        change: "Change appointment",  // TODO çeviri
-        current: "Your current appointment",  // TODO çeviri
-        date: "Date",  // TODO çeviri
-        failed: "Could not create the appointment.",  // TODO çeviri
-        full: "full",  // TODO çeviri
-        incomplete: "Select a date and a time window.",  // TODO çeviri
-        noSlots: "No slots available",  // TODO çeviri
-        notAvailable: "This feature is not available yet.",  // TODO çeviri
-        pastDate: "A past date cannot be selected.",  // TODO çeviri
-        request: "Request appointment",  // TODO çeviri
-        slot: "Time window",  // TODO çeviri
-        submitting: "Submitting…",  // TODO çeviri
-        subtitle: "Pick a date and time window that suits you.",  // TODO çeviri
-        title: "Delivery appointment",  // TODO çeviri
+        change: "تغيير الموعد",
+        current: "موعدك الحالي",
+        date: "التاريخ",
+        failed: "تعذّر إنشاء الموعد.",
+        full: "ممتلئ",
+        incomplete: "اختر التاريخ والفترة الزمنية.",
+        location: "نقطة الاستلام",
+        noSlots: "لا توجد مواعيد متاحة",
+        noSlotsHint: "اختر تاريخًا آخر أو تواصل مع البائع.",
+        notAvailable: "هذه الميزة غير متاحة بعد.",
+        pastDate: "لا يمكن اختيار تاريخ في الماضي.",
+        request: "طلب موعد",
+        slot: "الفترة الزمنية",
+        slotNotFound: "لم يتم العثور على الفترة الزمنية المحددة.",
+        slotTaken: "هذه الفترة ممتلئة — اختر فترة أخرى.",
+        submitting: "جارٍ الإرسال…",
+        subtitle: "اختر التاريخ والفترة الزمنية المناسبة لك.",
+        title: "موعد التسليم",
       },
       channel: {
-        BUYER_PICKUP: "Store pickup",  // TODO çeviri
-        CARGO: "Courier",  // TODO çeviri
-        COURIER: "Express",  // TODO çeviri
-        SELLER_VEHICLE: "Seller vehicle",  // TODO çeviri
-        WAREHOUSE: "Freight",  // TODO çeviri
+        BUYER_PICKUP: "الاستلام من المتجر",
+        CARGO: "شحن",
+        COURIER: "مندوب توصيل",
+        SELLER_VEHICLE: "مركبة البائع",
+        WAREHOUSE: "مستودع",
       },
       checkout: {
-        eta: "{{min}}-{{max}} business days",  // TODO çeviri
-        free: "Free",  // TODO çeviri
-        freeShippingHint: "Add {{amount}} more for free shipping.",  // TODO çeviri
-        noOptions: "No shipping option for this address",  // TODO çeviri
-        noOptionsHint: "You can try a different delivery address.",  // TODO çeviri
-        taxNote: "Prices include VAT.",  // TODO çeviri
-        title: "Shipping options",  // TODO çeviri
+        eta: "{{min}}-{{max}} أيام عمل",
+        free: "مجاني",
+        freeShippingHint: "أضف {{amount}} للحصول على شحن مجاني.",
+        noOptions: "لا يوجد خيار شحن لهذا العنوان",
+        noOptionsHint: "يمكنك تجربة عنوان تسليم مختلف.",
+        taxNote: "الأسعار شاملة ضريبة القيمة المضافة.",
+        title: "خيارات الشحن",
       },
       confirm: {
-        action: "I received it",  // TODO çeviri
-        appointment: "Appointment",  // TODO çeviri
-        attemptsLeft: "{{count}} attempts left",  // TODO çeviri
-        codeHint: "Enter the code the courier gave you.",  // TODO çeviri
-        codeLabel: "Delivery code",  // TODO çeviri
-        codeTooShort: "The code looks incomplete.",  // TODO çeviri
-        done: "Delivery completed",  // TODO çeviri
-        doneHint: "You can view the proof of delivery below.",  // TODO çeviri
-        failed: "Could not confirm, please try again.",  // TODO çeviri
-        goToPayment: "Go to payment",  // TODO çeviri
-        location: "Pickup location",  // TODO çeviri
-        lockedOut: "No attempts left",  // TODO çeviri
-        lockedOutHint: "Please contact the seller.",  // TODO çeviri
-        noCodeHint: "No delivery code is needed for this parcel. Confirm if you have received it.",  // TODO çeviri
-        notAvailable: "This feature is not available yet.",  // TODO çeviri
-        paymentBlocked: "Cannot be collected before payment",  // TODO çeviri
-        paymentBlockedHint: "This parcel requires payment first. Return here once you have paid.",  // TODO çeviri
-        submitting: "Submitting…",  // TODO çeviri
-        title: "Confirm delivery",  // TODO çeviri
+        action: "لقد استلمتها",
+        appointment: "الموعد",
+        attemptsLeft: "متبقٍ {{count}} محاولات",
+        codeExpired: "انتهت صلاحية رمز التسليم",
+        codeExpiredHint: "يمكنك طلب رمز جديد والمحاولة مرة أخرى. تبقى محاولاتك المتبقية كما هي.",
+        codeHint: "أدخل الرمز الذي زوّدك به المندوب.",
+        codeInvalid: "تعذّر التحقق من الرمز.",
+        codeLabel: "رمز التسليم",
+        codeTooShort: "يبدو أن الرمز غير مكتمل.",
+        done: "اكتمل التسليم",
+        doneHint: "تفاصيل التسليم معروضة أدناه.",
+        expiresIn: "تنتهي صلاحية الرمز خلال {{time}}.",
+        failed: "تعذّر التأكيد، يرجى المحاولة مرة أخرى.",
+        goToPayment: "الانتقال إلى الدفع",
+        location: "مكان الاستلام",
+        lockedOut: "لم تتبقَ محاولات",
+        lockedOutHint: "يرجى التواصل مع البائع.",
+        noCodeHint: "لا يلزم رمز تسليم لهذه الشحنة. أكّد الاستلام إذا كنت قد تسلّمتها.",
+        notAvailable: "هذه الميزة غير متاحة بعد.",
+        paymentBlocked: "لا يمكن الاستلام قبل الدفع",
+        paymentBlockedHint: "تتطلب هذه الشحنة الدفع أولًا. عد إلى هنا بعد إتمام الدفع.",
+        resendCode: "طلب رمز جديد",
+        resendFailed: "تعذّر إرسال الرمز الجديد.",
+        resending: "جارٍ الإرسال…",
+        submitting: "جارٍ الإرسال…",
+        title: "تأكيد التسليم",
       },
       exception: {
-        ADDR_NOT_FOUND: "Address not found",  // TODO çeviri
-        CUSTOMS_HOLD: "Held at customs",  // TODO çeviri
-        DAMAGED: "Package damaged",  // TODO çeviri
-        RECIPIENT_ABSENT: "Nobody at the address",  // TODO çeviri
-        REFUSED: "Delivery refused",  // TODO çeviri
-        SIZE_EXCEED: "Size limit exceeded",  // TODO çeviri
-        WEATHER: "Delayed due to weather",  // TODO çeviri
-        WRONG_ADDRESS: "Wrong address",  // TODO çeviri
+        ADDR_NOT_FOUND: "لم يتم العثور على العنوان",
+        CUSTOMS_HOLD: "محتجزة في الجمارك",
+        DAMAGED: "الطرد تالف",
+        RECIPIENT_ABSENT: "لا أحد في العنوان",
+        REFUSED: "تم رفض الاستلام",
+        SIZE_EXCEED: "تم تجاوز حد الحجم",
+        WEATHER: "تأخير بسبب الأحوال الجوية",
+        WRONG_ADDRESS: "عنوان خاطئ",
       },
       group: {
-        allShipped: "Your entire order has been dispatched.",  // TODO çeviri
-        carrier: "Carrier",  // TODO çeviri
-        empty: "No shipments for this order",  // TODO çeviri
-        emptyHint: "They will appear here once the seller prepares the parcel.",  // TODO çeviri
-        eta: "Estimated delivery",  // TODO çeviri
-        itemProgress: "Item progress",  // TODO çeviri
-        manage: "Manage",  // TODO çeviri
-        noCarrier: "Not set",  // TODO çeviri
-        noTracking: "Not yet",  // TODO çeviri
-        parcelOf: "Parcel {{index}} of {{total}}",  // TODO çeviri
-        remaining: "{{count}} {{uom}} not yet shipped",  // TODO çeviri
-        subtitle: "Your order is being sent in {{count}} parcels.",  // TODO çeviri
-        title: "Shipments for {{order}}",  // TODO çeviri
-        track: "Track",  // TODO çeviri
-        tracking: "Tracking number",  // TODO çeviri
+        allShipped: "تم إرسال طلبك بالكامل.",
+        carrier: "شركة الشحن",
+        empty: "لا توجد شحنات لهذا الطلب",
+        emptyHint: "ستظهر هنا بمجرد أن يجهّز البائع الطرد.",
+        eta: "التسليم المتوقع",
+        itemProgress: "حالة المنتجات",
+        manage: "إدارة",
+        noCarrier: "غير محدد",
+        noTracking: "ليس بعد",
+        parcelOf: "الطرد {{index}} من {{total}}",
+        remaining: "{{count}} {{uom}} لم تُشحن بعد",
+        subtitle: "يتم إرسال طلبك في {{count}} طرود.",
+        title: "شحنات الطلب {{order}}",
+        track: "تتبع",
+        tracking: "رقم التتبع",
       },
       label: {
-        barcodeAlt: "Barcode for {{code}}",  // TODO çeviri
-        barcodeUnavailable: "Barcode could not be loaded",  // TODO çeviri
-        download: "Download label",  // TODO çeviri
-        empty: "No packages found",  // TODO çeviri
-        emptyHint: "Complete the packing step first.",  // TODO çeviri
-        missingWarning: "{{count}} packages have no label — they cannot be handed to the carrier.",  // TODO çeviri
-        noBarcode: "No barcode",  // TODO çeviri
-        notReady: "Label is not ready yet",  // TODO çeviri
-        printedAt: "Created",  // TODO çeviri
-        subtitle: "Labels for the packages of {{shipment}}.",  // TODO çeviri
-        title: "Shipping labels",  // TODO çeviri
+        barcodeAlt: "الباركود الخاص بـ {{code}}",
+        barcodeUnavailable: "تعذّر تحميل الباركود",
+        download: "تنزيل الملصق",
+        empty: "لا توجد طرود",
+        emptyHint: "أكمل خطوة التغليف أولًا.",
+        missingWarning: "{{count}} طرود بلا ملصق — لا يمكن تسليمها لشركة الشحن.",
+        noBarcode: "لا يوجد باركود",
+        notReady: "الملصق غير جاهز بعد",
+        printedAt: "أُنشئ في",
+        subtitle: "ملصقات طرود الشحنة {{shipment}}.",
+        title: "ملصقات الشحن",
       },
       notify: {
-        empty: "No notifications",  // TODO çeviri
-        emptyHint: "Shipment updates will appear here.",  // TODO çeviri
-        preferences: "Preferences",  // TODO çeviri
-        title: "Notifications",  // TODO çeviri
+        empty: "لا توجد إشعارات",
+        emptyHint: "ستظهر هنا تحديثات الشحنات.",
+        preferences: "التفضيلات",
+        title: "الإشعارات",
       },
       notifyEvent: {
-        shipment_delivered: "Shipment delivered",  // TODO çeviri
-        shipment_exception: "Shipment issue",  // TODO çeviri
-        shipment_shipped: "Shipment dispatched",  // TODO çeviri
+        shipment_delivered: "تم تسليم الشحنة",
+        shipment_exception: "مشكلة في الشحنة",
+        shipment_shipped: "تم إرسال الشحنة",
       },
       notifyPref: {
-        empty: "No preferences found",  // TODO çeviri
-        failed: "Could not save the preference.",  // TODO çeviri
-        lockedDefault: "Mandatory notification — cannot be turned off.",  // TODO çeviri
-        mandatoryNote: "{{count}} notifications are mandatory and cannot be turned off.",  // TODO çeviri
-        notAvailable: "This feature is not available yet.",  // TODO çeviri
-        subtitle: "Choose which notifications you want to receive.",  // TODO çeviri
-        title: "Notification preferences",  // TODO çeviri
+        empty: "لا توجد تفضيلات",
+        failed: "تعذّر حفظ التفضيل.",
+        lockedDefault: "إشعار إلزامي — لا يمكن إيقافه.",
+        mandatoryNote: "{{count}} إشعارات إلزامية ولا يمكن إيقافها.",
+        notAvailable: "هذه الميزة غير متاحة بعد.",
+        subtitle: "اختر الإشعارات التي تريد تلقيها.",
+        title: "تفضيلات الإشعارات",
       },
       packing: {
-        add: "Add",  // TODO çeviri
-        addTitle: "Add package",  // TODO çeviri
-        desi: "Desi",  // TODO çeviri
-        desiExceeds: "Desi exceeds weight — pricing will use desi.",  // TODO çeviri
-        desiHint: "Desi is calculated automatically from the dimensions.",  // TODO çeviri
-        empty: "No packages yet",  // TODO çeviri
-        failed: "Could not add the package.",  // TODO çeviri
-        height: "Height (cm)",  // TODO çeviri
-        length: "Length (cm)",  // TODO çeviri
-        locked: "This shipment has left; packing cannot be changed.",  // TODO çeviri
-        notAvailable: "This feature is not available yet.",  // TODO çeviri
-        subtitle: "Define the parcels for this shipment.",  // TODO çeviri
-        title: "Packing",  // TODO çeviri
-        type: "Package type",  // TODO çeviri
-        weight: "Weight (kg)",  // TODO çeviri
-        width: "Width (cm)",  // TODO çeviri
+        add: "إضافة",
+        addTitle: "إضافة طرد",
+        desi: "الوزن الحجمي",
+        desiExceeds: "الوزن الحجمي يتجاوز الوزن الفعلي — سيُحتسب السعر بالوزن الحجمي.",
+        desiHint: "يُحتسب الوزن الحجمي تلقائيًا من الأبعاد.",
+        empty: "لا توجد طرود بعد",
+        failed: "تعذّرت إضافة الطرد.",
+        height: "الارتفاع (سم)",
+        length: "الطول (سم)",
+        locked: "غادرت هذه الشحنة؛ لا يمكن تغيير التغليف.",
+        notAvailable: "هذه الميزة غير متاحة بعد.",
+        subtitle: "حدّد طرود هذه الشحنة.",
+        title: "التغليف",
+        type: "نوع الطرد",
+        weight: "الوزن (كجم)",
+        width: "العرض (سم)",
       },
       return: {
-        allReturned: "The items in this parcel have already been returned.",  // TODO çeviri
-        failed: "Could not create the return request.",  // TODO çeviri
-        items: "Items",  // TODO çeviri
-        noItemSelected: "Select at least one item.",  // TODO çeviri
-        notAvailable: "This feature is not available yet.",  // TODO çeviri
-        note: "Description",  // TODO çeviri
-        noteHint: "At least {{min}} characters.",  // TODO çeviri
-        notePlaceholder: "Briefly describe the issue; the seller decides based on this.",  // TODO çeviri
-        noteTooShort: "The description must be at least {{min}} characters.",  // TODO çeviri
-        reason: "Reason",  // TODO çeviri
-        submit: "Submit return request",  // TODO çeviri
-        submitting: "Submitting…",  // TODO çeviri
-        subtitle: "Select the items you want to return.",  // TODO çeviri
-        title: "Return request",  // TODO çeviri
-        windowClosed: "The return window has closed ({{days}} days)",  // TODO çeviri
-        windowClosedHint: "If there is still a problem, you can contact our support team.",  // TODO çeviri
+        allReturned: "تم إرجاع منتجات هذا الطرد بالفعل.",
+        failed: "تعذّر إنشاء طلب الإرجاع.",
+        items: "المنتجات",
+        noItemSelected: "اختر منتجًا واحدًا على الأقل.",
+        notAvailable: "هذه الميزة غير متاحة بعد.",
+        note: "الوصف",
+        noteHint: "{{min}} حرفًا على الأقل.",
+        notePlaceholder: "صف المشكلة باختصار؛ يقرر البائع بناءً على ذلك.",
+        noteTooShort: "يجب ألا يقل الوصف عن {{min}} حرفًا.",
+        reason: "السبب",
+        submit: "إرسال طلب الإرجاع",
+        submitting: "جارٍ الإرسال…",
+        subtitle: "اختر المنتجات التي تريد إرجاعها.",
+        title: "طلب إرجاع",
+        windowClosed: "انتهت مهلة الإرجاع ({{days}} يومًا)",
+        windowClosedHint: "إذا كانت المشكلة قائمة، يمكنك التواصل مع فريق الدعم.",
       },
       returnReason: {
-        damaged: "Damaged item",  // TODO çeviri
-        missing_parts: "Missing parts",  // TODO çeviri
-        not_as_described: "Not as described",  // TODO çeviri
-        other: "Other",  // TODO çeviri
-        wrong_item: "Wrong item",  // TODO çeviri
+        damaged: "منتج تالف",
+        missing_parts: "أجزاء ناقصة",
+        not_as_described: "لا يطابق الوصف",
+        other: "أخرى",
+        wrong_item: "منتج خاطئ",
       },
       returnStatus: {
-        approved: "Approved",  // TODO çeviri
-        closed: "Closed",  // TODO çeviri
-        in_transit: "In transit",  // TODO çeviri
-        inspecting: "Inspecting",  // TODO çeviri
-        rejected: "Rejected",  // TODO çeviri
-        requested: "Requested",  // TODO çeviri
+        approved: "مقبول",
+        closed: "مغلق",
+        in_transit: "في الطريق",
+        inspecting: "قيد الفحص",
+        rejected: "مرفوض",
+        requested: "تم الطلب",
       },
       sellerForm: {
-        allShipped: "This order is fully shipped",  // TODO çeviri
-        allShippedHint: "No items left to ship.",  // TODO çeviri
-        carrier: "Carrier",  // TODO çeviri
-        carrierRequired: "Select a carrier.",  // TODO çeviri
-        channel: "Shipping channel",  // TODO çeviri
-        driver: "Driver",  // TODO çeviri
-        failed: "Could not create the shipment.",  // TODO çeviri
-        items: "Items to ship",  // TODO çeviri
-        itemsHint: "Partial shipment is allowed; the rest stays for a later parcel.",  // TODO çeviri
-        noItemSelected: "Select at least one item.",  // TODO çeviri
-        notAvailable: "This feature is not available yet.",  // TODO çeviri
-        plate: "Vehicle plate",  // TODO çeviri
-        submit: "Create shipment",  // TODO çeviri
-        submitting: "Creating…",  // TODO çeviri
-        subtitle: "Prepare a parcel for order {{order}}.",  // TODO çeviri
-        title: "Create shipment",  // TODO çeviri
-        tracking: "Tracking number",  // TODO çeviri
+        allShipped: "تم شحن هذا الطلب بالكامل",
+        allShippedHint: "لم تتبقَ منتجات للشحن.",
+        carrier: "شركة الشحن",
+        carrierRequired: "اختر شركة شحن.",
+        channel: "طريقة الإرسال",
+        driver: "السائق",
+        failed: "تعذّر إنشاء الشحنة.",
+        items: "المنتجات المراد شحنها",
+        itemsHint: "الشحن الجزئي مسموح؛ يبقى الباقي لطرد لاحق.",
+        noItemSelected: "اختر منتجًا واحدًا على الأقل.",
+        notAvailable: "هذه الميزة غير متاحة بعد.",
+        plate: "لوحة المركبة",
+        submit: "إنشاء الشحنة",
+        submitting: "جارٍ الإنشاء…",
+        subtitle: "جهّز طردًا للطلب {{order}}.",
+        title: "إنشاء شحنة",
+        tracking: "رقم التتبع",
       },
       sellerReturn: {
-        awaiting: "Awaiting decision",  // TODO çeviri
-        closed: "Closed",  // TODO çeviri
-        closureNote: "Refunds and closure are handled by the platform.",  // TODO çeviri
-        days: "waiting {{count}} d",  // TODO çeviri
-        decide: "Decide",  // TODO çeviri
-        decidedAt: "Decided: {{at}}",  // TODO çeviri
-        empty: "No return requests",  // TODO çeviri
-        emptyHint: "Requests from buyers will appear here.",  // TODO çeviri
-        hours: "waiting {{count}} h",  // TODO çeviri
-        refund: "Refund amount",  // TODO çeviri
-        subtitle: "Requests awaiting a decision come first.",  // TODO çeviri
-        title: "Return requests",  // TODO çeviri
+        awaiting: "بانتظار القرار",
+        closed: "مغلق",
+        closureNote: "تتولى المنصة عمليات رد المبالغ والإغلاق.",
+        days: "بانتظار {{count}} يوم",
+        decide: "اتخاذ قرار",
+        decidedAt: "تاريخ القرار: {{at}}",
+        empty: "لا توجد طلبات إرجاع",
+        emptyHint: "ستظهر هنا طلبات المشترين.",
+        hours: "بانتظار {{count}} ساعة",
+        refund: "مبلغ الاسترداد",
+        subtitle: "الطلبات التي تنتظر قرارًا تظهر أولًا.",
+        title: "طلبات الإرجاع",
       },
       status: {
-        "At Warehouse": "At warehouse",  // TODO çeviri
-        Cancelled: "Cancelled",  // TODO çeviri
-        Delivered: "Delivered",  // TODO çeviri
-        Draft: "Draft",  // TODO çeviri
-        Failed: "Failed",  // TODO çeviri
-        "In Transit": "In transit",  // TODO çeviri
-        "Out for Delivery": "Out for delivery",  // TODO çeviri
-        Pending: "Pending",  // TODO çeviri
-        "Picked Up": "Picked up",  // TODO çeviri
-        "Ready for Pickup": "Ready for pickup",  // TODO çeviri
-        Returned: "Returned",  // TODO çeviri
-        not_required: "Not required",  // TODO çeviri
-        verified: "Verified",  // TODO çeviri
+        "At Warehouse": "في المستودع",
+        Cancelled: "ملغى",
+        Delivered: "تم التسليم",
+        Draft: "مسودة",
+        Failed: "فشل",
+        "In Transit": "في الطريق",
+        "Out for Delivery": "خرجت للتسليم",
+        Pending: "قيد الانتظار",
+        "Picked Up": "تم الاستلام",
+        "Ready for Pickup": "جاهزة للاستلام",
+        Returned: "مُرجَع",
+        not_required: "غير مطلوب",
+        verified: "تم التحقق",
       },
       summary: {
-        codeNotUsed: "Not used",  // TODO çeviri
-        codeUsed: "Delivery code",  // TODO çeviri
-        codeVerified: "Verified",  // TODO çeviri
-        document: "Document",  // TODO çeviri
-        empty: "No proof of delivery",  // TODO çeviri
-        emptyHint: "Proof appears here once the parcel is delivered.",  // TODO çeviri
-        mediaUnavailable: "Media could not be loaded",  // TODO çeviri
-        notProvided: "Not provided",  // TODO çeviri
-        openDocument: "Open document",  // TODO çeviri
-        photo: "Delivery photo",  // TODO çeviri
-        proof: "Proof of delivery",  // TODO çeviri
-        receivedBy: "Received by",  // TODO çeviri
-        returnHint: "Something wrong with the item? You can request a return.",  // TODO çeviri
-        signature: "Signature",  // TODO çeviri
-        startReturn: "Request a return",  // TODO çeviri
+        codeNotUsed: "غير مستخدم",
+        codeUsed: "رمز التسليم",
+        codeVerified: "تم التحقق",
+        document: "مستند",
+        empty: "لا يوجد إثبات تسليم",
+        emptyHint: "يظهر الإثبات هنا بمجرد تسليم الطرد.",
+        mediaUnavailable: "تعذّر تحميل الوسائط",
+        notProvided: "غير متوفر",
+        openDocument: "فتح المستند",
+        photo: "صورة التسليم",
+        proof: "إثبات التسليم",
+        receivedBy: "استلمها",
+        returnHint: "هل هناك مشكلة في المنتج؟ يمكنك طلب إرجاع.",
+        signature: "التوقيع",
+        startReturn: "طلب إرجاع",
       },
       tracking: {
-        empty: "No tracking updates yet",  // TODO çeviri
-        emptyHint: "Movements appear here once the carrier collects the parcel.",  // TODO çeviri
-        exceptionGeneric: "There was a delivery issue; we are on it.",  // TODO çeviri
+        empty: "لا توجد تحديثات تتبع بعد",
+        emptyHint: "تظهر الحركات هنا بمجرد استلام شركة الشحن للطرد.",
+        exceptionGeneric: "حدثت مشكلة في التسليم؛ نحن نعمل على حلها.",
       },
     },
     pageTitle: {
@@ -2446,8 +2455,7 @@ const ar = {
       sampleCustomization: "تخصيص حسب العينة",
       fullCustomization: "تخصيص كامل (OEM/ODM)",
       shippingLabel: "الشحن",
-      shippingContactSeller:
-        "يرجى التواصل مع المورد لتحديد تكلفة الشحن وتاريخ التسليم.",
+      shippingContactSeller: "يرجى التواصل مع المورد لتحديد تكلفة الشحن وتاريخ التسليم.",
       shippingCost: "الشحن: {{cost}} · {{days}}",
       changeLabel: "تغيير",
       orderProtectionTitle: "حماية الطلب من iStoc",
@@ -2846,6 +2854,7 @@ const ar = {
     // ============================================================
     orders: {
       loadingOrders: "جارٍ تحميل تفاصيل طلبك...",
+      pickUp: "استلام",
       waitingPayment: "في انتظار الدفع",
       confirming: "قيد التأكيد",
       preparingShipment: "قيد التجهيز للشحن",

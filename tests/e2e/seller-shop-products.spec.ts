@@ -36,7 +36,9 @@ async function mockSellerShop(page: Page, productRequests: URL[]): Promise<void>
       const category = url.searchParams.get("category");
       await route.fulfill({
         contentType: "application/json",
-        body: JSON.stringify({ message: { products: productsFor(pageNumber, category), total: 36 } }),
+        body: JSON.stringify({
+          message: { products: productsFor(pageNumber, category), total: 36 },
+        }),
       });
       return;
     }
@@ -44,7 +46,10 @@ async function mockSellerShop(page: Page, productRequests: URL[]): Promise<void>
     const message = method.endsWith("get_seller")
       ? SELLER
       : method.endsWith("get_storefront_layout")
-        ? { sections: [{ type: "category_listing", order: 1, enabled: true, settings: {} }], theme: {} }
+        ? {
+            sections: [{ type: "category_listing", order: 1, enabled: true, settings: {} }],
+            theme: {},
+          }
         : method.endsWith("get_seller_categories")
           ? { categories: [{ name: "platform-cat", category_name: "Platform", type: "platform" }] }
           : method.endsWith("get_session_user")
@@ -55,7 +60,9 @@ async function mockSellerShop(page: Page, productRequests: URL[]): Promise<void>
 }
 
 test.describe("Seller shop — server pagination", () => {
-  test("dolu mağazada ilk açılış yalnız page=1 ister; sayfa 2 kullanıcı niyetiyle gelir", async ({ page }) => {
+  test("dolu mağazada ilk açılış yalnız page=1 ister; sayfa 2 kullanıcı niyetiyle gelir", async ({
+    page,
+  }) => {
     const productRequests: URL[] = [];
     await mockSellerShop(page, productRequests);
     await page.goto("/pages/seller/seller-shop.html?seller=DEMO-001#products");

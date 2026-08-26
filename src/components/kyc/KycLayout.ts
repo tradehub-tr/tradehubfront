@@ -567,7 +567,9 @@ function applyKycMock(form: HTMLFormElement, status: string): void {
     billing_address: "Terazidere Mah. Vatan Cad. No: 12, Bayrampaşa / İstanbul",
     identity_document: "/files/kimlik-belgesi-on-yuz.pdf",
     rejection_reason:
-      status === "Rejected" ? "Kimlik belgesi okunaklı değil — lütfen yüksek çözünürlüklü tarama yükleyin." : undefined,
+      status === "Rejected"
+        ? "Kimlik belgesi okunaklı değil — lütfen yüksek çözünürlüklü tarama yükleyin."
+        : undefined,
   });
 }
 

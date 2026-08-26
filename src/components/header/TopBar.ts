@@ -1717,8 +1717,7 @@ function initMobileSearchOverlay(): void {
     host,
     closeOnMediaQuery: "(min-width: 1280px)",
     mount: mobileSearchElement,
-    initialFocus: (overlay) =>
-      overlay.querySelector<HTMLInputElement>("#mobile-search-input"),
+    initialFocus: (overlay) => overlay.querySelector<HTMLInputElement>("#mobile-search-input"),
     onMount: (overlay) => {
       const back = overlay.querySelector<HTMLButtonElement>("#mobile-search-back");
       const input = overlay.querySelector<HTMLInputElement>("#mobile-search-input");

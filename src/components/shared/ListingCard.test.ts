@@ -177,9 +177,7 @@ describe("renderListingCard homeCompact modu", () => {
 
     expect(host.querySelectorAll(".fy26-product-card-wrapper")).toHaveLength(40);
     expect(host.querySelectorAll(".product-slider img")).toHaveLength(40);
-    const templates = host.querySelectorAll<HTMLTemplateElement>(
-      "template[data-slider-secondary]"
-    );
+    const templates = host.querySelectorAll<HTMLTemplateElement>("template[data-slider-secondary]");
     expect(templates).toHaveLength(40);
     expect(
       Array.from(templates).reduce(

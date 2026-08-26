@@ -15,7 +15,9 @@ test("yardım merkezi mobil menüsünü açılana kadar DOM'a eklemez", async ({
   await expect(trigger).toHaveAttribute("aria-expanded", "true");
 });
 
-test("SSS cevabını yalnız ilgili akordeon açıldığında DOM'a ekler ve ARIA durumunu korur", async ({ page }) => {
+test("SSS cevabını yalnız ilgili akordeon açıldığında DOM'a ekler ve ARIA durumunu korur", async ({
+  page,
+}) => {
   await page.goto("/pages/help/faq-detail.html?cat=account&sub=accountLogin");
   await page.waitForSelector("#faq-detail-root");
 

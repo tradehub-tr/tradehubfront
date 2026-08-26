@@ -160,8 +160,7 @@ function paint(): void {
   const stage = document.getElementById("ts-hero-stage");
   const strip = document.getElementById("ts-hero-strip");
   if (!stage || !strip) return;
-  const active =
-    heroCategories.find((c) => slugOf(c) === heroActiveSlug) || heroCategories[0];
+  const active = heroCategories.find((c) => slugOf(c) === heroActiveSlug) || heroCategories[0];
   if (!active) return;
   stage.innerHTML = renderStage(active);
   strip.innerHTML = heroCategories

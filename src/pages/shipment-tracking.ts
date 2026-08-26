@@ -20,6 +20,16 @@ import "../style.css";
 import "../alpine/sidebar";
 // Randevu formu (S3) örnek veri modunda çiziliyor — Alpine kaydı gerekli.
 import "../alpine/logisticsBuyer";
+/**
+ * Teslim onayı davranışı (`deliveryConfirm`) ayrı modülde ve BU SATIR EKSİKTİ.
+ *
+ * Ölçüldü (2026-08-26, E2E): `DeliveryConfirm` bileşeni sayfada çiziliyordu
+ * ama `x-data="deliveryConfirm(...)"` kayıtlı olmadığı için form hiç
+ * çalışmıyordu — kod girilebiliyor, düğmeye basılabiliyor, hiçbir şey
+ * olmuyordu. Build, tip denetimi ve birim testleri bunu görmüyordu; ancak
+ * tarayıcıda ortaya çıktı.
+ */
+import "../alpine/logisticsDelivery";
 import { startAlpine } from "../alpine";
 import { DeliveryConfirm } from "../components/logistics/DeliveryConfirm";
 import { NotWiredNotice } from "../components/logistics/NotWiredNotice";
@@ -34,7 +44,19 @@ import {
   mockShipmentList,
   mockTrackingEvents,
 } from "../services/logisticsMock";
+import {
+  MOCK as PICKUP_MOCK,
+  installPickupMock,
+  listAppointmentSlots,
+  pickupMockBarHtml,
+  readState,
+  type PickupState,
+} from "../services/logisticsPickupMock";
+// Kanal koşulunun tek tanımı orada — sipariş listesindeki giriş düğmesi de
+// aynı kuralı kullanıyor, iki yerde ayrı liste tutmak ikisini sürüklerdi.
+import { TESLIM_ALMA_TIPLERI } from "../services/pickupEntry";
 import { getShipment, type ShipmentDetail } from "../services/shipmentService";
+import type { ShipmentDetail as SozlesmeShipmentDetail } from "../types/logistics";
 import { requireAuth } from "../utils/auth-guard";
 import { escapeHtml } from "../utils/sanitize";
 
@@ -43,6 +65,14 @@ import { mountDashboardShell, shellCard } from "./dashboardShell";
 await requireAuth();
 
 const mock = isMockMode();
+
+/**
+ * Randevu ve teslim onayı düğmeleri `window.__thRequestAppointment` /
+ * `__thConfirmDelivery` fonksiyonlarını arıyor. 07-BE'nin uçları yazılana
+ * kadar onları bu mock sağlıyor; kurulmazsa ekran açılıyor ama hiçbir düğme
+ * iş yapmıyor — "ekran render oluyor, iş akışı kapanmıyor" durumu.
+ */
+if (mock) installPickupMock();
 const shipmentName = new URLSearchParams(window.location.search).get("name") ?? "";
 
 const root = mountDashboardShell({
@@ -59,11 +89,88 @@ const root = mountDashboardShell({
 
 const DELIVERED = "Delivered";
 
+
+/**
+ * Randevu formunun `min` değeri.
+ *
+ * Bileşen `new Date()` çağırmıyor ki Storybook her gün aynı ekranı göstersin;
+ * "bugün"ü veren taraf sayfa. Eskiden burada `"2026-08-13"` sabiti yazıyordu
+ * ve zamanla geçmiş bir tarihe dönüşmüştü.
+ */
+function bugununTarihi(): string {
+  const d = new Date();
+  const p = (n: number) => String(n).padStart(2, "0");
+  return `${d.getFullYear()}-${p(d.getMonth() + 1)}-${p(d.getDate())}`;
+}
+
+/**
+ * Ekranın okuduğu teslim alma alanları.
+ *
+ * Gerçek modda **sözleşmeden üretilmiş** tipten (`types/logistics.d.ts`)
+ * geliyor; `shipmentService.ts`'in kendi dar arayüzü bu alanları taşımıyor ve
+ * oraya elle eklemek ikinci bir kaynak yaratırdı. Alanlar 07-BE'de gelene
+ * kadar `undefined` — o zaman bloklar hiç çizilmiyor, doğru davranış bu.
+ *
+ * Örnek veri modunda mock'un tek doğruluk kaynağından okunuyor.
+ */
+function teslimAlmaAlanlari(
+  shipment: ShipmentDetail
+): Partial<PickupState> & { shipment_type?: string } {
+  if (mock) return readState();
+  const s = shipment as unknown as Partial<SozlesmeShipmentDetail>;
+  return {
+    shipment_type: s.shipment_type,
+    status: shipment.status,
+    pickup_location: s.pickup_location ?? null,
+    appointment_at: s.appointment_at ?? null,
+    appointment_window: s.appointment_window ?? null,
+    delivery_code_required: (s.delivery_code_required ?? 0) as 0 | 1,
+    delivery_code_status:
+      (s.delivery_code_status as PickupState["delivery_code_status"]) ?? "not_required",
+    delivery_code_attempts: s.delivery_code_attempts ?? 0,
+    // B1/B2 — sözleşmede yok; gelmedikleri sürece süre bölümleri çizilmiyor.
+    delivery_code_expires_at: null,
+    max_delivery_attempts: undefined,
+    payment_required_before_delivery: (s.payment_required_before_delivery ?? 0) as 0 | 1,
+    payment_status: (s.payment_status as PickupState["payment_status"]) ?? "paid",
+  };
+}
+
 function render(shipment: ShipmentDetail): void {
   const isDelivered = shipment.status === DELIVERED;
   const blocks: string[] = [];
 
   if (mock) blocks.push(mockBannerHtml());
+
+  const pickup = teslimAlmaAlanlari(shipment);
+  const teslimAlmaKanali = TESLIM_ALMA_TIPLERI.includes(pickup.shipment_type ?? "");
+
+  /**
+   * Uçlar bağlı mı?
+   *
+   * Örnek veri modunda mock köprüsü sağlıyor. Gerçek modda ancak `MOCK`
+   * bayrağı kapalıysa — yani 07-BE ucu yazıp bayrağı `false` yaptıysa — bağlı.
+   * Bağlı değilken bileşenler form yerine "henüz bağlı değil" çiziyor;
+   * eskiden ölü bir "Teslim aldım" düğmesi ve yanlış bir "uygun randevu
+   * kalmadı" cümlesi çıkıyordu.
+   */
+  const randevuBagli = mock || !PICKUP_MOCK.appointment;
+  const onayBagli = mock || !PICKUP_MOCK.confirm;
+
+  /**
+   * İş kapandı mı?
+   *
+   * `Buyer Pickup` akışı `Delivered`'a hiç geçmiyor (sözleşme §1.3 · B3),
+   * o yüzden tek güvenilir işaret kodun doğrulanmış olması.
+   */
+  const teslimAlindi =
+    pickup.delivery_code_status === "verified" ||
+    (pickup.status ?? shipment.status) === DELIVERED;
+
+  // Sıfırlama şeridi yalnız teslim alma akışında — mock'un kalıcı durumu
+  // (randevu, deneme sayacı) yalnız burada üretiliyor. Kargo sevkiyatında
+  // göstermek, sıfırlanacak bir şey yokken düğme çizmek olurdu.
+  if (mock && teslimAlmaKanali) blocks.push(shellCard(pickupMockBarHtml()));
 
   /**
    * ── S1 · Siparişin sevkiyatları ── (yalnız örnek veri modunda)
@@ -126,46 +233,57 @@ function render(shipment: ShipmentDetail): void {
         })
       )
     );
-  } else {
-    blocks.push(
-      shellCard(
-        DeliveryConfirm({
-          shipmentName: shipment.name,
-          status: shipment.status,
-          deliveryCodeStatus: mock ? "pending" : "not_required",
-        })
-      )
-    );
-
+  } else if (teslimAlmaKanali) {
     /**
-     * ── S3 · Randevu talebi ── (yalnız örnek veri modunda)
+     * ── S3 · Randevu talebi ──
      *
-     * Gerçekte yalnız teslim alma / satıcı teslimatı kanallarında
-     * gösterilmeli — ama `channel` alanı `Shipment` şemasında YOK, yani
-     * hangi sevkiyatta gösterileceği bugün belirlenemiyor. Alan eklenince
-     * koşula bağlanacak.
-     *
-     * `today` sabit veriliyor: bileşen `new Date()` çağırmıyor ki inceleme
-     * her gün aynı ekranı göstersin.
+     * Yalnız teslim alma / satıcı teslimatı kanallarında; kargo sevkiyatında
+     * randevu diye bir şey yok (K-D). Eskiden bu blok `mock` bayrağına
+     * bakıyordu ve saat aralıkları, adres, "bugün" değeri sayfaya elle
+     * yazılmıştı — yani örnek veri modundaki HER sevkiyatta aynı randevu
+     * görünüyordu. Şimdi tek doğruluk kaynağından geliyor.
      */
-    if (mock) {
+    /**
+     * İş bittiyse randevu bloğu ÇİZİLMİYOR.
+     *
+     * Teslim alınmış bir sevkiyatın randevusu değiştirilemez; "Randevuyu
+     * değiştir" düğmesi tıklanabilir duruyordu ve tıklayınca geçmiş bir işi
+     * düzenlemeye çalışıyordu (2026-08-26 kapanış denetimi).
+     */
+    if (!teslimAlindi) {
       blocks.push(
         shellCard(
           PickupAppointment({
-            shipmentName: shipment.name,
-            appointmentAt: "2026-08-14 10:30:00",
-            appointmentWindow: "09:00 – 12:00",
-            pickupLocation: "İkitelli OSB, Bağcılar Cad. No:12 — Depo girişi",
-            slots: [
-              { value: "09-12", label: "09:00 – 12:00", available: true },
-              { value: "12-15", label: "12:00 – 15:00", available: false },
-              { value: "15-18", label: "15:00 – 18:00", available: true },
-            ],
-            today: "2026-08-13",
+          shipmentName: shipment.name,
+          appointmentAt: pickup.appointment_at ?? null,
+          appointmentWindow: pickup.appointment_window ?? null,
+          pickupLocation: pickup.pickup_location ?? null,
+          slots: mock ? listAppointmentSlots(bugununTarihi()) : [],
+          today: bugununTarihi(),
+            wired: randevuBagli,
           })
         )
       );
     }
+
+    // ── S4 · Teslim onayı ──
+    blocks.push(
+      shellCard(
+        DeliveryConfirm({
+          shipmentName: shipment.name,
+          status: pickup.status ?? shipment.status,
+          deliveryCodeStatus: pickup.delivery_code_status ?? "not_required",
+          deliveryCodeAttempts: pickup.delivery_code_attempts ?? 0,
+          maxAttempts: pickup.max_delivery_attempts,
+          expiresAt: pickup.delivery_code_expires_at ?? null,
+          paymentRequired: pickup.payment_required_before_delivery === 1,
+          paymentStatus: pickup.payment_status ?? "paid",
+          appointmentAt: pickup.appointment_at ?? null,
+          pickupLocation: pickup.pickup_location ?? null,
+          wired: onayBagli,
+        })
+      )
+    );
   }
 
   root.innerHTML = blocks.join("");

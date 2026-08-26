@@ -114,9 +114,7 @@ function renderImageSlider(
   const additionalImages = (card.images ?? [])
     .filter(isImageSource)
     .filter((src) => src !== primaryImage);
-  const imageList = primaryImage
-    ? [primaryImage, ...additionalImages]
-    : additionalImages;
+  const imageList = primaryImage ? [primaryImage, ...additionalImages] : additionalImages;
   const hasMultiple = imageList.length > 1;
 
   let slidesHtml: string;
@@ -163,9 +161,7 @@ function renderImageSlider(
     };
     slidesHtml = imageList
       .slice(0, 1)
-      .map(
-        (src, i) => renderSlide(src, i)
-      )
+      .map((src, i) => renderSlide(src, i))
       .join("");
     if (imageList.length > 1) {
       secondarySlidesTemplate = `<template data-slider-secondary="${escapeHtml(card.id)}">${imageList
@@ -266,10 +262,7 @@ function starIcon(): string {
 /**
  * Render a single product card (fy26 snapshot-matched design)
  */
-export function renderListingCard(
-  card: ProductListingCard,
-  opts: ListingCardOptions = {}
-): string {
+export function renderListingCard(card: ProductListingCard, opts: ListingCardOptions = {}): string {
   // Ana sayfa vitrini butonsuz kart kullanır (opts.showActions === false).
   // Varsayılan true → liste/arama/mağaza sayfaları etkilenmez.
   const showActions = opts.showActions !== false;
@@ -442,7 +435,9 @@ export function renderListingCard(
           </div>
         </div>
       </div>
-    `.replace(/^[\t ]+$/gm, "").trimEnd();
+    `
+      .replace(/^[\t ]+$/gm, "")
+      .trimEnd();
   }
   // data-seller-id olmazsa chat popup satıcıyı çözemez ve inbox'taki İLK
   // konuşmaya düşer (yanlış satıcı!) — supplierSlug = Admin Seller Profile
@@ -633,7 +628,9 @@ export function renderListingCard(
           : ""
       }
     </div>
-  `.replace(/^[\t ]+$/gm, "").trimEnd();
+  `
+    .replace(/^[\t ]+$/gm, "")
+    .trimEnd();
 }
 
 /**
@@ -726,9 +723,7 @@ function materializeSecondarySlides(slider: HTMLElement): void {
 }
 
 function navigateSlider(sliderId: string, direction: number): void {
-  const slider = document.querySelector<HTMLElement>(
-    `[data-slider-id="${CSS.escape(sliderId)}"]`
-  );
+  const slider = document.querySelector<HTMLElement>(`[data-slider-id="${CSS.escape(sliderId)}"]`);
   if (!slider) return;
   materializeSecondarySlides(slider);
 
@@ -762,9 +757,7 @@ function navigateSlider(sliderId: string, direction: number): void {
  * Navigate a product slider to a specific index (for dot clicks).
  */
 function navigateSliderTo(sliderId: string, targetIndex: number): void {
-  const slider = document.querySelector<HTMLElement>(
-    `[data-slider-id="${CSS.escape(sliderId)}"]`
-  );
+  const slider = document.querySelector<HTMLElement>(`[data-slider-id="${CSS.escape(sliderId)}"]`);
   if (!slider) return;
   materializeSecondarySlides(slider);
 

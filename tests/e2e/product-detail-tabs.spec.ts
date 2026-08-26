@@ -91,6 +91,23 @@ async function mockBackend(page: Page): Promise<void> {
 }
 
 test.describe("Ürün detay — anchor sekmeler", () => {
+  /**
+   * Anchor sekmeler YALNIZ masaüstünde mount ediliyor.
+   *
+   * `product-detail.ts:322` viewport'u 1024px'ten böler ve `initProductTabs`
+   * yalnız `desktop` dalında çağrılır; mobilde `renderMobileLayout()` bambaşka
+   * bir yapı çiziyor ve `#product-tabs-section` hiç yok. Bu blok mobilde
+   * çalıştırılırsa var olmayan bir özelliği arar.
+   *
+   * Mobil düzenin kendisi bu dosyanın sonundaki "yalnız etkin viewport
+   * bileşimini mount eder" testiyle kapsanıyor — o test iki viewport'ta da
+   * koşuyor.
+   */
+  test.skip(
+    ({ viewport }) => (viewport?.width ?? 0) < 1024,
+    "Anchor sekmeler ≥1024px'te mount ediliyor (product-detail.ts:322)"
+  );
+
   test.beforeEach(async ({ page }) => {
     await mockBackend(page);
     await page.goto("/pages/product-detail.html?id=LST-TEST-0001");
@@ -148,7 +165,9 @@ test.describe("Ürün detay — anchor sekmeler", () => {
   });
 });
 
-test("ürün detay yalnız etkin viewport bileşimini mount eder ve breakpoint değişiminde erişilebilir yüzeyi korur", async ({ page }) => {
+test("ürün detay yalnız etkin viewport bileşimini mount eder ve breakpoint değişiminde erişilebilir yüzeyi korur", async ({
+  page,
+}) => {
   await page.setViewportSize({ width: 1440, height: 900 });
   await mockBackend(page);
   await page.goto("/pages/product-detail.html?id=LST-TEST-0001");
@@ -175,11 +194,17 @@ test("ürün detay yalnız etkin viewport bileşimini mount eder ve breakpoint d
   await expect(page.locator("#product-tabs-section")).toBeVisible();
 });
 
-test("tekrarlanan viewport geçişleri eski ürün layout document listenerlarını bırakmaz", async ({ page }) => {
+test("tekrarlanan viewport geçişleri eski ürün layout document listenerlarını bırakmaz", async ({
+  page,
+}) => {
   await page.addInitScript(() => {
     const originalAdd = document.addEventListener.bind(document);
     (window as Window & { __pdReviewListenerCalls?: number }).__pdReviewListenerCalls = 0;
-    document.addEventListener = ((type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions) => {
+    document.addEventListener = ((
+      type: string,
+      listener: EventListenerOrEventListenerObject,
+      options?: boolean | AddEventListenerOptions
+    ) => {
       if (type !== "product-reviews-loaded") {
         originalAdd(type, listener, options);
         return;
@@ -199,14 +224,18 @@ test("tekrarlanan viewport geçişleri eski ürün layout document listenerları
 
   for (const width of [390, 1440, 390, 1440]) {
     await page.setViewportSize({ width, height: 844 });
-    await expect(page.locator(width >= 1024 ? "#pd-desktop-layout" : "#pd-mobile-layout")).toHaveCount(1);
+    await expect(
+      page.locator(width >= 1024 ? "#pd-desktop-layout" : "#pd-mobile-layout")
+    ).toHaveCount(1);
   }
 
   const listenerCalls = await page.evaluate(() => {
     window.__pdReviewListenerCalls = 0;
-    document.dispatchEvent(new CustomEvent("product-reviews-loaded", {
-      detail: { reviews: [], summary: { review_count: 0 }, total: 0 },
-    }));
+    document.dispatchEvent(
+      new CustomEvent("product-reviews-loaded", {
+        detail: { reviews: [], summary: { review_count: 0 }, total: 0 },
+      })
+    );
     return window.__pdReviewListenerCalls;
   });
 

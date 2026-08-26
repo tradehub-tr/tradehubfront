@@ -1495,11 +1495,8 @@ export function mapListingDetail(raw: any): ProductDetail {
         reviewCount: raw.supplier.reviewCount || 0,
         // Backend `mainProducts` adıyla da gönderir (deprecated, aslında main_markets).
         mainMarkets: raw.supplier.mainMarkets || raw.supplier.mainProducts || [],
-        reorderRate:
-          typeof raw.supplier.reorderRate === "number" ? raw.supplier.reorderRate : null,
-        verifications: Array.isArray(raw.supplier.verifications)
-          ? raw.supplier.verifications
-          : [],
+        reorderRate: typeof raw.supplier.reorderRate === "number" ? raw.supplier.reorderRate : null,
+        verifications: Array.isArray(raw.supplier.verifications) ? raw.supplier.verifications : [],
       }
     : {
         id: "",

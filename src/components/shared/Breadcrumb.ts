@@ -22,10 +22,7 @@ export function Breadcrumb(items: BreadcrumbItem[]): string {
   const allItems: BreadcrumbItem[] = [{ label: t("shared.home"), href: "/" }, ...items];
   // Referans ölçüler: kırıntılar 12px/regular/#222222, hover yalnız renk
   // koyulaşması (layout shift yok); ayraç sprite'taki lucide chevron-right.
-  const separatorIcon = getLucideIcon(
-    "chevron-right",
-    "h-3.5 w-3.5 flex-shrink-0 text-gray-400"
-  );
+  const separatorIcon = getLucideIcon("chevron-right", "h-3.5 w-3.5 flex-shrink-0 text-gray-400");
   const LINK_CLS =
     "text-[12px] leading-[16px] text-[#222] transition-colors hover:text-black hover:underline whitespace-nowrap truncate max-w-[60px] xs:max-w-[80px] sm:max-w-none";
 

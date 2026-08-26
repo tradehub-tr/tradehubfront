@@ -16,7 +16,8 @@
  *   YOK   iade talepleri          (Return Request DocType'ı yok)
  *   YOK   bildirim tercihleri     (uç yok)
  *   YOK   koli kaydetme / etiket  (uç yok)
- *   YOK   randevu talebi          (uç yok)
+ *   YOK   randevu talebi          (07-BE · api.v1.pickup)
+ *   YOK   teslim kodu doğrulama   (07-BE · api.v1.pickup)
  *
  * Olmayan uçlar için `NotWiredError` fırlatılıyor. Sayfa bunu yakalayıp
  * "bu bölüm henüz bağlı değil" diyor. Sessizce boş dizi döndürmek YANLIŞ
@@ -135,6 +136,38 @@ export async function saveShipmentPackage(_payload: Record<string, unknown>): Pr
   throw new NotWiredError("api.v1.logistics.save_shipment_packages");
 }
 
-export async function requestPickupAppointment(_payload: Record<string, unknown>): Promise<never> {
-  throw new NotWiredError("api.v1.logistics.request_pickup_appointment");
+/**
+ * ── Teslim alma uçları (07-BE · `api/v1/pickup.py`) ──
+ *
+ * Dördü de henüz yazılmadı. Adlar `07-FE-VERI-SOZLESMESI.md` §2'den birebir;
+ * `LOGISTICS-TASK-SPLIT.md` 07-BE satırı bu modülü **yeni** olarak planlıyor.
+ *
+ * Eskiden burada `api.v1.logistics.request_pickup_appointment` adıyla tek bir
+ * ölü fonksiyon duruyordu — hiç çağrılmıyordu ve sözleşmedeki adla
+ * uyuşmuyordu. İki ad, 07-BE'ye iki farklı sipariş demekti.
+ */
+export async function listAppointmentSlots(_payload: {
+  shipment: string;
+  date: string;
+}): Promise<never> {
+  throw new NotWiredError("api.v1.pickup.list_appointment_slots");
+}
+
+export async function requestAppointment(_payload: {
+  shipment: string;
+  date: string;
+  slot: string;
+}): Promise<never> {
+  throw new NotWiredError("api.v1.pickup.request_appointment");
+}
+
+export async function confirmDelivery(_payload: {
+  shipment: string;
+  code: string;
+}): Promise<never> {
+  throw new NotWiredError("api.v1.pickup.confirm_delivery");
+}
+
+export async function resendDeliveryCode(_payload: { shipment: string }): Promise<never> {
+  throw new NotWiredError("api.v1.pickup.resend_delivery_code");
 }

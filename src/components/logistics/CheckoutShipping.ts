@@ -40,13 +40,7 @@ export interface CheckoutShippingProps {
 }
 
 export function CheckoutShipping(props: CheckoutShippingProps): string {
-  const {
-    options,
-    selected,
-    freeShippingThreshold,
-    cartTotal,
-    currency = "TRY",
-  } = props;
+  const { options, selected, freeShippingThreshold, cartTotal, currency = "TRY" } = props;
 
   if (!options.length) {
     return `

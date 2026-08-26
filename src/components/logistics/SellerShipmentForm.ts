@@ -36,7 +36,16 @@ export interface SellerShipmentFormProps {
 export function SellerShipmentForm(props: SellerShipmentFormProps): string {
   const { orderName, remainingItems, channels, carriers, initialChannel = "CARGO" } = props;
 
-  if (!remainingItems.length) {
+  /**
+   * Kalan miktarı olmayan kalem HİÇ çizilmiyor.
+   *
+   * Çağıran taraf filtrelemeyi unutursa miktar alanı `0` ile çizilir,
+   * `min="1"` yüzünden form sessizce gönderilemez hâle gelir. Savunma
+   * burada: bileşen kendi sözleşmesini kendisi koruyor.
+   */
+  const gonderilebilir = remainingItems.filter((r) => Number(r.remaining_qty) > 0);
+
+  if (!gonderilebilir.length) {
     return `
       <div class="rounded-md border border-emerald-200 bg-emerald-50 p-4">
         <p class="text-sm font-medium text-emerald-800">
@@ -48,12 +57,12 @@ export function SellerShipmentForm(props: SellerShipmentFormProps): string {
       </div>`;
   }
 
-  const itemRows = remainingItems
+  const itemRows = gonderilebilir
     .map(
       (row) => `
       <li class="flex flex-wrap items-center gap-3 py-2">
         <label class="flex flex-1 items-center gap-2">
-          <input type="checkbox" checked
+          <input type="checkbox" checked data-testid="seller-item"
                  x-model="selected"
                  value="${escapeHtml(row.item)}" />
           <span class="text-sm text-gray-800">${escapeHtml(row.item_name)}</span>
@@ -77,7 +86,9 @@ export function SellerShipmentForm(props: SellerShipmentFormProps): string {
     .join("");
 
   return `
-    <form class="space-y-5" x-data="sellerShipmentForm({ channel: '${escapeHtml(initialChannel)}' })"
+    <form class="space-y-5" x-data="sellerShipmentForm({ channel: '${escapeHtml(initialChannel)}', items: ${JSON.stringify(
+      gonderilebilir.map((r) => r.item)
+    ).replace(/"/g, "&quot;")} })"
           @submit.prevent="submit()">
       <header>
         <h2 class="text-base font-semibold text-gray-900">
@@ -106,7 +117,8 @@ export function SellerShipmentForm(props: SellerShipmentFormProps): string {
           <span class="mb-1 block text-sm font-medium text-gray-800">
             ${escapeHtml(t("shipment.sellerForm.channel"))} *
           </span>
-          <select class="w-full rounded-md border border-gray-300 px-3 py-2 text-sm" x-model="channel">
+          <select class="w-full rounded-md border border-gray-300 px-3 py-2 text-sm"
+                  data-testid="seller-channel" x-model="channel">
             ${channelOptions}
           </select>
         </label>
@@ -155,10 +167,11 @@ export function SellerShipmentForm(props: SellerShipmentFormProps): string {
       </section>
 
       <div class="flex items-center gap-3">
-        <button type="submit" class="th-btn" :disabled="submitting || !selected.length">
+        <button type="submit" class="th-btn" data-testid="seller-submit"
+                :disabled="submitting || !selected.length">
           <span x-text="submitting ? '${escapeHtml(t("shipment.sellerForm.submitting"))}' : '${escapeHtml(t("shipment.sellerForm.submit"))}'"></span>
         </button>
-        <p class="text-xs text-red-600" x-show="error" x-text="error" x-cloak></p>
+        <p class="text-xs text-red-600" role="alert" x-show="error" x-text="error" x-cloak></p>
       </div>
     </form>`;
 }

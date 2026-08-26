@@ -53,7 +53,10 @@ async function dismissTour(page: import("@playwright/test").Page): Promise<void>
   for (let i = 0; i < 4; i++) {
     if (!(await overlay.count())) return;
     await page.keyboard.press("Escape");
-    await overlay.first().waitFor({ state: "detached", timeout: 1500 }).catch(() => {});
+    await overlay
+      .first()
+      .waitFor({ state: "detached", timeout: 1500 })
+      .catch(() => {});
   }
 }
 

@@ -35,7 +35,7 @@ interface SellerShipmentFormState {
   submit(): Promise<void>;
 }
 
-Alpine.data("sellerShipmentForm", (options: { channel?: string }) => ({
+Alpine.data("sellerShipmentForm", (options: { channel?: string; items?: string[] }) => ({
   carrierLess: CARRIER_LESS_CHANNELS,
   // Açılış kanalı şablondan geliyor; burada sabitlemek satıcının varsayılan
   // kanalını her seferinde elle düzeltmesi demekti.
@@ -44,7 +44,17 @@ Alpine.data("sellerShipmentForm", (options: { channel?: string }) => ({
   tracking: "",
   plate: "",
   driver: "",
-  selected: [] as string[],
+  /**
+   * Kalemler VARSAYILAN SEÇİLİ geliyor.
+   *
+   * Şablonda `checked` yazılıydı ama `x-model` bir diziye bağlı ve dizi boş
+   * olduğu için Alpine ilk render'da hepsini temizliyordu: satıcı formu
+   * açıyor, hiçbir kalem işaretli değil ve "Sevkiyatı oluştur" düğmesi pasif
+   * duruyordu (ölçüldü 2026-08-26). Tam gönderi kural, kısmi gönderi
+   * istisnadır — kuralı elle işaretletmek her seferinde fazladan tıklama
+   * demek (kök `CLAUDE.md` §4.14b: boş formdan başlatma).
+   */
+  selected: (options.items ?? []) as string[],
   submitting: false,
   error: "",
 

@@ -298,9 +298,7 @@ interface BuyerCentralColumn {
 const buyerCentralColumns: BuyerCentralColumn[] = [
   {
     titleKey: "mega.whyIstoc",
-    links: [
-      { labelKey: "mega.howSourcingWorks", href: "/how-sourcing-works" },
-    ],
+    links: [{ labelKey: "mega.howSourcingWorks", href: "/how-sourcing-works" }],
   },
   {
     titleKey: "mega.tradeServices",
@@ -601,9 +599,7 @@ export function initMegaMenu(): Promise<void> {
   }
 
   function mountView(viewName: MegaViewName): HTMLElement {
-    const existing = megaMenu!.querySelector<HTMLElement>(
-      `[data-mega-view="${viewName}"]`
-    );
+    const existing = megaMenu!.querySelector<HTMLElement>(`[data-mega-view="${viewName}"]`);
     if (existing) return existing;
 
     viewHost!.insertAdjacentHTML("beforeend", MEGA_VIEW_RENDERERS[viewName]());
@@ -901,56 +897,56 @@ export function initMegaMenu(): Promise<void> {
 
   // ──── Render dynamic categories only after the categories view is mounted ────
   function populateCategoriesView(cats: ApiCategory[]): void {
-      if (!cats.length || !mountedViews.has("categories")) return;
+    if (!cats.length || !mountedViews.has("categories")) return;
 
-      const sidebarUl = megaMenu!.querySelector<HTMLElement>("#mega-sidebar ul");
-      const megaContent = megaMenu!.querySelector<HTMLElement>("#mega-content");
-      if (!sidebarUl || !megaContent) return;
+    const sidebarUl = megaMenu!.querySelector<HTMLElement>("#mega-sidebar ul");
+    const megaContent = megaMenu!.querySelector<HTMLElement>("#mega-content");
+    if (!sidebarUl || !megaContent) return;
 
-      const viewAllSvg = `<svg class="w-6 h-6 sm:w-8 sm:h-8 lg:w-10 lg:h-10 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3.75 6A2.25 2.25 0 0 1 6 3.75h2.25A2.25 2.25 0 0 1 10.5 6v2.25a2.25 2.25 0 0 1-2.25 2.25H6a2.25 2.25 0 0 1-2.25-2.25V6ZM3.75 15.75A2.25 2.25 0 0 1 6 13.5h2.25a2.25 2.25 0 0 1 2.25 2.25V18a2.25 2.25 0 0 1-2.25 2.25H6A2.25 2.25 0 0 1 3.75 18v-2.25ZM13.5 6a2.25 2.25 0 0 1 2.25-2.25H18A2.25 2.25 0 0 1 20.25 6v2.25A2.25 2.25 0 0 1 18 10.5h-2.25a2.25 2.25 0 0 1-2.25-2.25V6ZM13.5 15.75a2.25 2.25 0 0 1 2.25-2.25H18a2.25 2.25 0 0 1 2.25 2.25V18A2.25 2.25 0 0 1 18 20.25h-2.25A2.25 2.25 0 0 1 13.5 18v-2.25Z"/></svg>`;
+    const viewAllSvg = `<svg class="w-6 h-6 sm:w-8 sm:h-8 lg:w-10 lg:h-10 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3.75 6A2.25 2.25 0 0 1 6 3.75h2.25A2.25 2.25 0 0 1 10.5 6v2.25a2.25 2.25 0 0 1-2.25 2.25H6a2.25 2.25 0 0 1-2.25-2.25V6ZM3.75 15.75A2.25 2.25 0 0 1 6 13.5h2.25a2.25 2.25 0 0 1 2.25 2.25V18a2.25 2.25 0 0 1-2.25 2.25H6A2.25 2.25 0 0 1 3.75 18v-2.25ZM13.5 6a2.25 2.25 0 0 1 2.25-2.25H18A2.25 2.25 0 0 1 20.25 6v2.25A2.25 2.25 0 0 1 18 10.5h-2.25a2.25 2.25 0 0 1-2.25-2.25V6ZM13.5 15.75a2.25 2.25 0 0 1 2.25-2.25H18a2.25 2.25 0 0 1 2.25 2.25V18A2.25 2.25 0 0 1 18 20.25h-2.25A2.25 2.25 0 0 1 13.5 18v-2.25Z"/></svg>`;
 
-      function renderDynCatCard(
-        name: string,
-        slug: string,
-        image?: string,
-        isViewAll = false
-      ): string {
-        const iconFallback = `<span class="text-gray-500 dark:text-gray-300 [&>svg]:w-8 [&>svg]:h-8 sm:[&>svg]:w-10 sm:[&>svg]:h-10 lg:[&>svg]:w-12 lg:[&>svg]:h-12">${getIconByName(name)}</span>`;
-        const inner = isViewAll
-          ? viewAllSvg
-          : image
-            ? `<img src="${escapeHtml(sanitizeUrl(image))}" alt="${escapeHtml(name)}" width="80" height="80" class="w-full h-full object-cover" loading="lazy" decoding="async" onerror="this.outerHTML=this.dataset.fallback" data-fallback='${iconFallback.replace(/'/g, "&apos;")}' />`
-            : iconFallback;
-        const borderStyle = isViewAll ? "border:2px dashed #e5e7eb;" : "";
-        const href = isViewAll
-          ? `/pages/categories.html?cat=${encodeURIComponent(slug)}`
-          : `/pages/products.html?cat=${encodeURIComponent(slug)}`;
-        return `
+    function renderDynCatCard(
+      name: string,
+      slug: string,
+      image?: string,
+      isViewAll = false
+    ): string {
+      const iconFallback = `<span class="text-gray-500 dark:text-gray-300 [&>svg]:w-8 [&>svg]:h-8 sm:[&>svg]:w-10 sm:[&>svg]:h-10 lg:[&>svg]:w-12 lg:[&>svg]:h-12">${getIconByName(name)}</span>`;
+      const inner = isViewAll
+        ? viewAllSvg
+        : image
+          ? `<img src="${escapeHtml(sanitizeUrl(image))}" alt="${escapeHtml(name)}" width="80" height="80" class="w-full h-full object-cover" loading="lazy" decoding="async" onerror="this.outerHTML=this.dataset.fallback" data-fallback='${iconFallback.replace(/'/g, "&apos;")}' />`
+          : iconFallback;
+      const borderStyle = isViewAll ? "border:2px dashed #e5e7eb;" : "";
+      const href = isViewAll
+        ? `/pages/categories.html?cat=${encodeURIComponent(slug)}`
+        : `/pages/products.html?cat=${encodeURIComponent(slug)}`;
+      return `
           <a href="${href}" class="flex flex-col items-center gap-1.5 sm:gap-2 group/product min-h-[44px]">
             <div class="relative w-14 h-14 sm:w-20 sm:h-20 lg:w-24 lg:h-24 rounded-full flex items-center justify-center overflow-hidden group-hover/product:ring-2 transition-[box-shadow]" style="background:var(--product-card-bg, var(--card-bg));--tw-ring-color:var(--nav-hover-color);${borderStyle}">
               ${inner}
             </div>
             <span class="th-nav-link max-w-[4rem] text-center text-[13px] leading-tight transition-colors sm:max-w-[5rem] lg:max-w-[6rem]">${escapeHtml(name)}</span>
           </a>`;
-      }
+    }
 
-      const leafGridCls =
-        "grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-7 gap-y-4 gap-x-2 sm:gap-y-5 sm:gap-x-4 lg:gap-y-8 lg:gap-x-6";
-      const grpArrowSvg = `<svg class="w-3.5 h-3.5 text-gray-400 transition-transform group-hover/grp:translate-x-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m9 5 7 7-7 7"/></svg>`;
+    const leafGridCls =
+      "grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-7 gap-y-4 gap-x-2 sm:gap-y-5 sm:gap-x-4 lg:gap-y-8 lg:gap-x-6";
+    const grpArrowSvg = `<svg class="w-3.5 h-3.5 text-gray-400 transition-transform group-hover/grp:translate-x-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m9 5 7 7-7 7"/></svg>`;
 
-      /**
-       * Bir sektörün gövdesini render eder.
-       * - Yaprağı olan gruplar (3 seviye): her grup bir alt-başlık + yaprak kartları.
-       * - Yaprağı olmayan gruplar (2 seviyeli veri): eski davranış — tek grid'de kart.
-       */
-      function renderSectorBody(cat: ApiCategory): string {
-        const groups = cat.children ?? [];
-        const withLeaves = groups.filter((g) => (g.children?.length ?? 0) > 0);
-        const childless = groups.filter((g) => (g.children?.length ?? 0) === 0);
+    /**
+     * Bir sektörün gövdesini render eder.
+     * - Yaprağı olan gruplar (3 seviye): her grup bir alt-başlık + yaprak kartları.
+     * - Yaprağı olmayan gruplar (2 seviyeli veri): eski davranış — tek grid'de kart.
+     */
+    function renderSectorBody(cat: ApiCategory): string {
+      const groups = cat.children ?? [];
+      const withLeaves = groups.filter((g) => (g.children?.length ?? 0) > 0);
+      const childless = groups.filter((g) => (g.children?.length ?? 0) === 0);
 
-        let html = withLeaves
-          .map(
-            (group) => `
+      let html = withLeaves
+        .map(
+          (group) => `
         <div class="mb-6 last:mb-0">
           <a href="/pages/products.html?cat=${encodeURIComponent(group.slug)}" class="group/grp mb-3 inline-flex items-center gap-1.5 text-sm font-semibold text-gray-800 transition-colors hover:text-primary-600 dark:text-gray-200">
             <span>${escapeHtml(group.name)}</span>
@@ -960,27 +956,27 @@ export function initMegaMenu(): Promise<void> {
             ${(group.children ?? []).map((leaf) => renderDynCatCard(leaf.name, leaf.slug, leaf.image)).join("")}
           </div>
         </div>`
-          )
-          .join("");
+        )
+        .join("");
 
-        if (childless.length > 0) {
-          html += `
+      if (childless.length > 0) {
+        html += `
         <div class="${leafGridCls}">
           ${childless.map((g) => renderDynCatCard(g.name, g.slug, g.image)).join("")}
           ${renderDynCatCard(t("commonNav.viewAll"), cat.slug, undefined, true)}
         </div>`;
-        }
-
-        if (groups.length === 0) {
-          html += `<div class="${leafGridCls}">${renderDynCatCard(t("commonNav.viewAll"), cat.slug, undefined, true)}</div>`;
-        }
-
-        return html;
       }
 
-      sidebarUl.innerHTML = cats
-        .map(
-          (cat, index) => `
+      if (groups.length === 0) {
+        html += `<div class="${leafGridCls}">${renderDynCatCard(t("commonNav.viewAll"), cat.slug, undefined, true)}</div>`;
+      }
+
+      return html;
+    }
+
+    sidebarUl.innerHTML = cats
+      .map(
+        (cat, index) => `
         <li>
           <a
             href="/pages/products.html?cat=${encodeURIComponent(cat.slug)}"
@@ -993,12 +989,12 @@ export function initMegaMenu(): Promise<void> {
           </a>
         </li>
       `
-        )
-        .join("");
+      )
+      .join("");
 
-      megaContent.innerHTML = cats
-        .map(
-          (cat) => `
+    megaContent.innerHTML = cats
+      .map(
+        (cat) => `
         <div class="mega-cat-section mb-8" id="mega-section-${cat.id}">
           <div class="flex items-center gap-4 mb-5 lg:mb-6">
             <h3 class="text-base font-bold text-gray-900 lg:text-lg dark:text-white">${escapeHtml(cat.name)}</h3>
@@ -1007,10 +1003,10 @@ export function initMegaMenu(): Promise<void> {
           ${renderSectorBody(cat)}
         </div>
       `
-        )
-        .join("");
+      )
+      .join("");
 
-      bindCategoryInteractions();
+    bindCategoryInteractions();
   }
 
   // Veriyi diğer sayfalardaki mevcut initMegaMenu sözleşmesini korumak için

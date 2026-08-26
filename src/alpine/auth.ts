@@ -510,8 +510,7 @@ Alpine.data("acceptInvitePage", () => ({
   },
 
   async submitAccept() {
-    const fullName =
-      (this.$refs as Record<string, HTMLInputElement>).fullName?.value?.trim() || "";
+    const fullName = (this.$refs as Record<string, HTMLInputElement>).fullName?.value?.trim() || "";
     const pw = (this.$refs as Record<string, HTMLInputElement>).newPassword?.value || "";
 
     if (!fullName) {

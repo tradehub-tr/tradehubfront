@@ -7,11 +7,7 @@
 import favEmptySvg from "../../assets/images/O1CN01Bny3KU1Swwfj3Ntma_!!6000000002312-55-tps-222-221.svg";
 import { t } from "../../i18n";
 import { localizePriceString } from "../../utils/currency";
-import {
-  getSelectedCurrency,
-  convertPrice,
-  formatCurrency,
-} from "../../services/currencyService";
+import { getSelectedCurrency, convertPrice, formatCurrency } from "../../services/currencyService";
 import { showToast } from "../../utils/toast";
 import { getBrowsingHistory } from "../../services/browsingHistoryService";
 import {
@@ -67,7 +63,10 @@ function getEnrichment(listingId: string): FavEnrichment | undefined {
     sellerKybVerified: summary.supplier?.verified,
     priceDisplay:
       typeof summary.current_price === "number"
-        ? formatCurrency(convertPrice(summary.current_price, summary.currency), getSelectedCurrency())
+        ? formatCurrency(
+            convertPrice(summary.current_price, summary.currency),
+            getSelectedCurrency()
+          )
         : undefined,
   };
 }
@@ -1165,9 +1164,11 @@ function initFilterMenu(): void {
     menu?.classList.toggle("hidden");
   });
 
-  wrap.querySelector<HTMLButtonElement>("[data-fav-filter-close]")?.addEventListener("click", () => {
-    menu?.classList.add("hidden");
-  });
+  wrap
+    .querySelector<HTMLButtonElement>("[data-fav-filter-close]")
+    ?.addEventListener("click", () => {
+      menu?.classList.add("hidden");
+    });
 
   wrap.querySelectorAll<HTMLInputElement>("[data-fav-filter-group]").forEach((cb) => {
     cb.addEventListener("change", () => {

@@ -90,9 +90,7 @@ describe("ProductOrderPanel — KYB kapısı", () => {
   });
 
   it("satıcı KYB doğrulanmamışsa fiyat kademelerini ve numuneyi basmaz", () => {
-    getCurrentProduct.mockReturnValue(
-      makeProduct({ sellerKybVerified: false, samplePrice: 12 })
-    );
+    getCurrentProduct.mockReturnValue(makeProduct({ sellerKybVerified: false, samplePrice: 12 }));
     const doc = parse(ProductOrderPanel());
 
     expect(doc.querySelector("#pd-price-tiers")).toBeNull();
@@ -100,63 +98,69 @@ describe("ProductOrderPanel — KYB kapısı", () => {
     expect(doc.querySelector("#pd-sample-price")).toBeNull();
     expect(doc.querySelector("[data-order-sample]")).toBeNull();
 
-    const banner = doc.querySelector('[role="alert"]');
-    expect(banner?.classList.contains("pd-kyb-banner-large")).toBe(true);
+    // KYB kapısı artık BANNER değil, CTA'nın kendisi: buton disabled ve
+    // altında tek satırlık ipucu duruyor (`ProductOrderPanel.ts:73,102`).
+    // Büyük banner `aa7ddfa` yeniden tasarımında orta sütuna taşındı.
+    const cta = doc.querySelector("#pd-add-to-cart");
+    expect(cta?.hasAttribute("disabled")).toBe(true);
+    expect(doc.querySelector(".pd-kyb-hint")).not.toBeNull();
   });
 
-  it("satıcı KYB doğrulanmışsa fiyat kademeleri basılır, banner basılmaz", () => {
-    getCurrentProduct.mockReturnValue(
-      makeProduct({
-        sellerKybVerified: true,
-        priceTiers: [
-          { minQty: 1, maxQty: 9, price: 10, currency: "USD" },
-          { minQty: 10, maxQty: null, price: 8, currency: "USD" },
-        ],
-      })
-    );
+  it("satıcı KYB doğrulanmışsa CTA etkin ve ipucu basılmaz", () => {
+    getCurrentProduct.mockReturnValue(makeProduct({ sellerKybVerified: true }));
     const doc = parse(ProductOrderPanel());
 
-    expect(doc.querySelector("#pd-price-tiers")).not.toBeNull();
-    expect(doc.querySelectorAll("[data-tier-index]").length).toBe(2);
-    expect(doc.querySelector(".pd-kyb-banner-large")).toBeNull();
+    expect(doc.querySelector("#pd-add-to-cart")?.hasAttribute("disabled")).toBe(false);
+    expect(doc.querySelector(".pd-kyb-hint")).toBeNull();
   });
 });
 
-describe("ProductOrderPanel — satın alma bloğu sağ panelde toplanır", () => {
+/**
+ * ── SORUMLULUK DEVRİ (2026-08-26'da fark edildi) ──
+ *
+ * Bu blok eskiden "satın alma bloğu sağ panelde toplanır" diyordu ve fiyat
+ * kademelerini, varyant eksenlerini, indirim rozetini burada arıyordu
+ * (`bf982cf` tasarımı).
+ *
+ * `aa7ddfa` (*"Alibaba referansına göre yeniden düzenlendi"*) o üçünü
+ * `ProductBuyBox`'a taşıdı; testler güncellenmedi ve o günden beri kırmızıydı
+ * (CI'da test kapısı olmadığı için kimse görmedi). Taşınan davranışın testi
+ * artık `ProductBuyBox.test.ts`'te.
+ *
+ * Sağ panelde KALAN sorumluluk: kargo kartı ve satın alma eylemleri.
+ */
+describe("ProductOrderPanel — sağ panelde kalan sorumluluk", () => {
   beforeEach(() => vi.clearAllMocks());
 
-  it("sekme şeridini ve varyant eksenlerini basar", () => {
+  it("kargo kartını ve satın alma eylemlerini basar", () => {
+    getCurrentProduct.mockReturnValue(makeProduct({ sellerKybVerified: true }));
+    const doc = parse(ProductOrderPanel());
+
+    expect(doc.querySelector("#pd-shipping-card")).not.toBeNull();
+    expect(doc.querySelector("#pd-add-to-cart")).not.toBeNull();
+    expect(doc.querySelector("#pd-chat-with-seller")).not.toBeNull();
+  });
+
+  it("fiyat kademelerini ve varyantları artık BASMAZ — onlar orta sütunda", () => {
     getCurrentProduct.mockReturnValue(
       makeProduct({
+        sellerKybVerified: true,
+        priceTiers: [{ minQty: 1, maxQty: null, price: 10, currency: "USD" }],
         variants: [
           {
             type: "color",
             label: "Renk",
-            options: [{ id: "V1", label: "Kırmızı", value: "#f00", available: true, isDefault: true }],
+            options: [
+              { id: "V1", label: "Kırmızı", value: "#f00", available: true, isDefault: true },
+            ],
           },
         ],
       })
     );
     const doc = parse(ProductOrderPanel());
 
-    expect(doc.querySelector("#pd-card-tabs")).not.toBeNull();
-    expect(doc.querySelector("#pd-variations-section")).not.toBeNull();
-    expect(doc.querySelectorAll(".variant-group").length).toBe(1);
-    // Seçim bağlantısı yalnız ilk eksende basılır.
-    expect(doc.querySelectorAll("[data-open-selection]").length).toBe(1);
-  });
-
-  it("kampanya varken indirim rozetini basar, kampanya yokken basmaz", () => {
-    getCurrentProduct.mockReturnValue(
-      makeProduct({
-        priceTiers: [{ minQty: 1, maxQty: null, price: 90, originalPrice: 100, currency: "USD" }],
-      })
-    );
-    expect(parse(ProductOrderPanel()).querySelector(".pd-discount-badge")?.textContent).toContain(
-      "10%"
-    );
-
-    getCurrentProduct.mockReturnValue(makeProduct());
-    expect(parse(ProductOrderPanel()).querySelector(".pd-discount-badge")).toBeNull();
+    expect(doc.querySelector("#pd-price-tiers")).toBeNull();
+    expect(doc.querySelector("#pd-variations-section")).toBeNull();
+    expect(doc.querySelector("#pd-card-tabs")).toBeNull();
   });
 });

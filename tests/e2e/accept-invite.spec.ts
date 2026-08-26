@@ -18,16 +18,14 @@ async function mockBackend(page: Page): Promise<void> {
     })
   );
   // Guest session + CSRF token (api() POST öncesi çekilir).
-  await page.route(
-    "**/api/method/tradehub_core.api.v1.auth.get_session_user*",
-    (route: Route) =>
-      route.fulfill({
-        status: 200,
-        contentType: "application/json",
-        body: JSON.stringify({
-          message: { logged_in: false, user: "Guest", csrf_token: "test" },
-        }),
-      })
+  await page.route("**/api/method/tradehub_core.api.v1.auth.get_session_user*", (route: Route) =>
+    route.fulfill({
+      status: 200,
+      contentType: "application/json",
+      body: JSON.stringify({
+        message: { logged_in: false, user: "Guest", csrf_token: "test" },
+      }),
+    })
   );
 }
 

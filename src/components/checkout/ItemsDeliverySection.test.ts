@@ -22,7 +22,17 @@ const orders: CheckoutDeliveryOrderGroup[] = [
     sellerId: "SELLER-1",
     sellerName: "Birinci Tedarikçi",
     methods: [{ id: "standard", etaLabel: "Standart", shippingFee: 10, isDefault: true }],
-    products: [{ id: "P-1", title: "Birinci ürün", moqLabel: "1 adet", image: "/one.jpg", skuLines: [{ id: "SKU-1", image: "/one.jpg", variantText: "Mavi", unitPrice: 20, quantity: 1 }] }],
+    products: [
+      {
+        id: "P-1",
+        title: "Birinci ürün",
+        moqLabel: "1 adet",
+        image: "/one.jpg",
+        skuLines: [
+          { id: "SKU-1", image: "/one.jpg", variantText: "Mavi", unitPrice: 20, quantity: 1 },
+        ],
+      },
+    ],
   },
   {
     orderId: "ORDER-2",
@@ -30,7 +40,17 @@ const orders: CheckoutDeliveryOrderGroup[] = [
     sellerId: "SELLER-2",
     sellerName: "İkinci Tedarikçi",
     methods: [{ id: "express", etaLabel: "Ekspres", shippingFee: 20, isDefault: true }],
-    products: [{ id: "P-2", title: "İkinci ürün", moqLabel: "1 adet", image: "/two.jpg", skuLines: [{ id: "SKU-2", image: "/two.jpg", variantText: "Kırmızı", unitPrice: 30, quantity: 1 }] }],
+    products: [
+      {
+        id: "P-2",
+        title: "İkinci ürün",
+        moqLabel: "1 adet",
+        image: "/two.jpg",
+        skuLines: [
+          { id: "SKU-2", image: "/two.jpg", variantText: "Kırmızı", unitPrice: 30, quantity: 1 },
+        ],
+      },
+    ],
   },
 ];
 

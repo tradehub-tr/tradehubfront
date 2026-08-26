@@ -1,5 +1,9 @@
 import { t } from "../../i18n";
-import { CategoryNavBar, initCategoryNavBar, type CategoryNavController } from "../shared/CategoryNavBar";
+import {
+  CategoryNavBar,
+  initCategoryNavBar,
+  type CategoryNavController,
+} from "../shared/CategoryNavBar";
 
 function getSubTabFilters(): string[] {
   return [
@@ -26,9 +30,11 @@ function desktopSubTabSlot(): string {
   const SUB_TAB_MORE_FILTERS = getSubTabMoreFilters();
   return `
     <ul class="flex items-center h-[48px] px-5 list-none m-0 p-0 overflow-x-auto" data-factory-sub-tab>
-      ${SUB_TAB_FILTERS.map((filter) => `
+      ${SUB_TAB_FILTERS.map(
+        (filter) => `
         <li class="flex-shrink-0 flex items-center h-8 me-3 mt-0 px-4 border border-[#767676] rounded-full text-xs text-[#222] text-center cursor-pointer whitespace-nowrap hover:border-[#222] hover:font-medium transition-colors">${filter}</li>
-      `).join("")}
+      `
+      ).join("")}
       <li id="sub-tab-more-btn" class="ms-auto flex-shrink-0 flex items-center gap-1 h-8 px-4 border border-[#d8d8d8] rounded-full text-xs text-[#222] text-center cursor-pointer whitespace-nowrap hover:border-[#999] transition-colors">
         ${t("mfr.viewMore")}
         <svg class="w-3 h-3 transition-transform duration-200" id="sub-tab-more-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
@@ -36,9 +42,11 @@ function desktopSubTabSlot(): string {
     </ul>
     <div id="sub-tab-dropdown" class="hidden absolute start-0 end-0 top-[110px] z-50 bg-white rounded-b-lg py-6 px-5" style="box-shadow: rgba(0,0,0,0.12) 0 8px 20px 0">
       <ul class="flex flex-wrap list-none m-0 p-0">
-        ${SUB_TAB_MORE_FILTERS.map((filter) => `
+        ${SUB_TAB_MORE_FILTERS.map(
+          (filter) => `
           <li class="w-1/4 mb-3 pe-4 text-sm text-[#222] cursor-pointer hover:text-primary-600 transition-colors">${filter}</li>
-        `).join("")}
+        `
+        ).join("")}
       </ul>
     </div>
   `;

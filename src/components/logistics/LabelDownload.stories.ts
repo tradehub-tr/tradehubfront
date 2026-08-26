@@ -20,8 +20,7 @@ export default {
 
 export const HepsiHazir = {
   name: "Tüm etiketler hazır",
-  render: () =>
-    LabelDownload({ shipmentName: shipmentDetail.name, packages: shipmentPackages }),
+  render: () => LabelDownload({ shipmentName: shipmentDetail.name, packages: shipmentPackages }),
 };
 
 export const EtiketEksik = {
