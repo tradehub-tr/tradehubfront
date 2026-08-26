@@ -7,19 +7,19 @@
 // chunk'ını, yalnız video yükleyen bir akış da browser-image-compression
 // worker'ını hiç indirmesin (vite.config.ts'te ayrı vendor-* chunk'ları var).
 export type PreparedMedia = {
-	blob: Blob;
-	name: string;
-	converted: "webp" | "jpeg" | "webm" | "mp4" | "none";
+  blob: Blob;
+  name: string;
+  converted: "webp" | "jpeg" | "webm" | "mp4" | "none";
 };
 
 export async function prepareMedia(file: File): Promise<PreparedMedia> {
-	if (file.type.startsWith("image/")) {
-		const { prepareImage } = await import("./compress.image");
-		return prepareImage(file);
-	}
-	if (file.type.startsWith("video/")) {
-		const { prepareVideo } = await import("./compress.video");
-		return prepareVideo(file);
-	}
-	return { blob: file, name: file.name, converted: "none" };
+  if (file.type.startsWith("image/")) {
+    const { prepareImage } = await import("./compress.image");
+    return prepareImage(file);
+  }
+  if (file.type.startsWith("video/")) {
+    const { prepareVideo } = await import("./compress.video");
+    return prepareVideo(file);
+  }
+  return { blob: file, name: file.name, converted: "none" };
 }

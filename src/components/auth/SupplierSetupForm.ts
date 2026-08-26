@@ -55,8 +55,14 @@ export function validateSupplierSetupStep(step: number, fields: SupplierSetupFie
   if (step === 2) {
     const taxId = fields.tax_id.trim();
     const isTR = fields.country === "Turkey";
-    return !!fields.tax_id_type && (isTR ? /^\d{10,11}$/.test(taxId.replace(/\D/g, "")) : !!taxId) &&
-      !!fields.tax_office.trim() && !!fields.address_line_1.trim() && !!fields.city.trim() && !!fields.country.trim();
+    return (
+      !!fields.tax_id_type &&
+      (isTR ? /^\d{10,11}$/.test(taxId.replace(/\D/g, "")) : !!taxId) &&
+      !!fields.tax_office.trim() &&
+      !!fields.address_line_1.trim() &&
+      !!fields.city.trim() &&
+      !!fields.country.trim()
+    );
   }
   if (step === 3) {
     const iban = fields.iban.replace(/\s/g, "");
@@ -64,8 +70,15 @@ export function validateSupplierSetupStep(step: number, fields: SupplierSetupFie
     return !!result.valid && !!fields.bank_name.trim() && !!fields.account_holder_name.trim();
   }
   if (step === 4) {
-    return !!fields.identity_document_number.trim() && validateTCKN(fields.identity_document_number.replace(/\s/g, "")) &&
-      fields.terms_accepted && fields.privacy_accepted && fields.kvkk_accepted && fields.commission_accepted && fields.return_policy_accepted;
+    return (
+      !!fields.identity_document_number.trim() &&
+      validateTCKN(fields.identity_document_number.replace(/\s/g, "")) &&
+      fields.terms_accepted &&
+      fields.privacy_accepted &&
+      fields.kvkk_accepted &&
+      fields.commission_accepted &&
+      fields.return_policy_accepted
+    );
   }
   return false;
 }
@@ -445,12 +458,27 @@ export function initSupplierSetupForm(options: SupplierSetupFormOptions = {}): v
   let cityListeners: AbortController | null = null;
   const prefill = pendingSupplierPrefill.get(form) ?? {};
   const fields: SupplierSetupFieldState = {
-    seller_type: "Business", business_name: "", contact_phone: "", tax_id_type: "TCKN",
-    tax_id: "", tax_office: "", address_line_1: "", city: "",
-    country: form.dataset.supplierCountry ?? "Turkey", bank_name: "", iban: "", account_holder_name: "",
-    identity_document_type: "", identity_document_number: "", identity_document_expiry: "", identity_document: "",
-    terms_accepted: false, privacy_accepted: false, kvkk_accepted: false,
-    commission_accepted: false, return_policy_accepted: false,
+    seller_type: "Business",
+    business_name: "",
+    contact_phone: "",
+    tax_id_type: "TCKN",
+    tax_id: "",
+    tax_office: "",
+    address_line_1: "",
+    city: "",
+    country: form.dataset.supplierCountry ?? "Turkey",
+    bank_name: "",
+    iban: "",
+    account_holder_name: "",
+    identity_document_type: "",
+    identity_document_number: "",
+    identity_document_expiry: "",
+    identity_document: "",
+    terms_accepted: false,
+    privacy_accepted: false,
+    kvkk_accepted: false,
+    commission_accepted: false,
+    return_policy_accepted: false,
     ...prefill,
   };
 
@@ -491,10 +519,13 @@ export function initSupplierSetupForm(options: SupplierSetupFormOptions = {}): v
       fields.business_name = businessName.value.trim();
       fields.contact_phone = contactPhone.value.trim();
     } else if (step === 2) {
-      fields.tax_id_type = form.querySelector<HTMLInputElement>("#ss-tax-id-type")?.value ?? fields.tax_id_type;
+      fields.tax_id_type =
+        form.querySelector<HTMLInputElement>("#ss-tax-id-type")?.value ?? fields.tax_id_type;
       fields.tax_id = taxId?.value.trim() ?? fields.tax_id;
-      fields.tax_office = form.querySelector<HTMLInputElement>("#ss-tax-office")?.value.trim() ?? fields.tax_office;
-      fields.address_line_1 = form.querySelector<HTMLInputElement>("#ss-address")?.value.trim() ?? fields.address_line_1;
+      fields.tax_office =
+        form.querySelector<HTMLInputElement>("#ss-tax-office")?.value.trim() ?? fields.tax_office;
+      fields.address_line_1 =
+        form.querySelector<HTMLInputElement>("#ss-address")?.value.trim() ?? fields.address_line_1;
       fields.city = form.querySelector<HTMLInputElement>("#ss-city")?.value.trim() ?? fields.city;
     } else if (step === 3) {
       fields.iban = iban?.value.trim() ?? fields.iban;
@@ -514,8 +545,14 @@ export function initSupplierSetupForm(options: SupplierSetupFormOptions = {}): v
     const root = form.querySelector<HTMLElement>(`[data-supplier-step="${step}"]`);
     if (!root) return;
     root.querySelectorAll<HTMLInputElement | HTMLSelectElement>("input, select").forEach((el) => {
-      el.addEventListener("input", () => { syncMountedStep(step); validateCurrentStep(); });
-      el.addEventListener("change", () => { syncMountedStep(step); validateCurrentStep(); });
+      el.addEventListener("input", () => {
+        syncMountedStep(step);
+        validateCurrentStep();
+      });
+      el.addEventListener("change", () => {
+        syncMountedStep(step);
+        validateCurrentStep();
+      });
     });
   }
 
@@ -544,7 +581,11 @@ export function initSupplierSetupForm(options: SupplierSetupFormOptions = {}): v
       const display = form.querySelector<HTMLElement>("#ss-city-display");
       if (display && fields.city) display.textContent = fields.city;
       bindCurrentStepInputs(2);
-      if (form.dataset.supplierCountryIso && getSubdivisionsForCountry(form.dataset.supplierCountryIso)) initCityDropdown(getSubdivisionsForCountry(form.dataset.supplierCountryIso)!);
+      if (
+        form.dataset.supplierCountryIso &&
+        getSubdivisionsForCountry(form.dataset.supplierCountryIso)
+      )
+        initCityDropdown(getSubdivisionsForCountry(form.dataset.supplierCountryIso)!);
     } else {
       iban = form.querySelector<HTMLInputElement>("#ss-iban");
       bankName = form.querySelector<HTMLInputElement>("#ss-bank-name");
@@ -556,7 +597,8 @@ export function initSupplierSetupForm(options: SupplierSetupFormOptions = {}): v
       iban?.addEventListener("paste", (event) => {
         event.preventDefault();
         iban!.value = (event.clipboardData?.getData("text") || "").replace(/\s/g, "").toUpperCase();
-        syncMountedStep(3); validateCurrentStep();
+        syncMountedStep(3);
+        validateCurrentStep();
       });
       bindCurrentStepInputs(3);
     }
@@ -576,8 +618,10 @@ export function initSupplierSetupForm(options: SupplierSetupFormOptions = {}): v
     commissionCheck = form.querySelector<HTMLInputElement>("#ss-commission");
     returnCheck = form.querySelector<HTMLInputElement>("#ss-return");
     hydrateInput("ss-id-number", fields.identity_document_number);
-    hydrateInput("ss-terms", fields.terms_accepted); hydrateInput("ss-privacy", fields.privacy_accepted);
-    hydrateInput("ss-kvkk", fields.kvkk_accepted); hydrateInput("ss-commission", fields.commission_accepted);
+    hydrateInput("ss-terms", fields.terms_accepted);
+    hydrateInput("ss-privacy", fields.privacy_accepted);
+    hydrateInput("ss-kvkk", fields.kvkk_accepted);
+    hydrateInput("ss-commission", fields.commission_accepted);
     hydrateInput("ss-return", fields.return_policy_accepted);
     bindCurrentStepInputs(4);
   }
@@ -622,7 +666,9 @@ export function initSupplierSetupForm(options: SupplierSetupFormOptions = {}): v
     el.classList.toggle("hidden", !msg);
   }
 
-  function getCurrentFieldState(): SupplierSetupFieldState { return { ...fields }; }
+  function getCurrentFieldState(): SupplierSetupFieldState {
+    return { ...fields };
+  }
 
   function validateCurrentStep(): boolean {
     switch (currentStep) {
@@ -679,7 +725,15 @@ export function initSupplierSetupForm(options: SupplierSetupFormOptions = {}): v
         break;
       }
       case 4: {
-        if (!idNumber || !termsCheck || !privacyCheck || !kvkkCheck || !commissionCheck || !returnCheck) break;
+        if (
+          !idNumber ||
+          !termsCheck ||
+          !privacyCheck ||
+          !kvkkCheck ||
+          !commissionCheck ||
+          !returnCheck
+        )
+          break;
         const tcknVal = idNumber.value.replace(/\s/g, "");
         const tcknOk = !tcknVal || validateTCKN(tcknVal);
         showFieldError(tcknError, tcknVal && !tcknOk ? t("auth.supplierSetup.invalidTCKN") : "");
@@ -796,86 +850,106 @@ export function initSupplierSetupForm(options: SupplierSetupFormOptions = {}): v
       validateCurrentStep();
     }
 
-    cityBtn.addEventListener("click", () => {
-      if (cityDropdown.classList.contains("hidden")) open();
-      else close();
-    }, { signal });
+    cityBtn.addEventListener(
+      "click",
+      () => {
+        if (cityDropdown.classList.contains("hidden")) open();
+        else close();
+      },
+      { signal }
+    );
 
-    cityListEl.addEventListener("click", (e) => {
-      const item = (e.target as HTMLElement).closest<HTMLElement>("[data-city]");
-      if (item) select(item.getAttribute("data-city") || "");
-    }, { signal });
+    cityListEl.addEventListener(
+      "click",
+      (e) => {
+        const item = (e.target as HTMLElement).closest<HTMLElement>("[data-city]");
+        if (item) select(item.getAttribute("data-city") || "");
+      },
+      { signal }
+    );
 
-    cityListEl.addEventListener("mousemove", (e) => {
-      const item = (e.target as HTMLElement).closest<HTMLElement>("[data-index]");
-      if (item) {
-        const idx = parseInt(item.getAttribute("data-index") || "-1", 10);
-        if (idx >= 0 && idx !== activeIndex) {
-          activeIndex = idx;
-          renderList();
+    cityListEl.addEventListener(
+      "mousemove",
+      (e) => {
+        const item = (e.target as HTMLElement).closest<HTMLElement>("[data-index]");
+        if (item) {
+          const idx = parseInt(item.getAttribute("data-index") || "-1", 10);
+          if (idx >= 0 && idx !== activeIndex) {
+            activeIndex = idx;
+            renderList();
+          }
         }
-      }
-    }, { signal });
+      },
+      { signal }
+    );
 
     citySearch.addEventListener("input", () => applyFilter(citySearch.value), { signal });
 
-    citySearch.addEventListener("keydown", (e) => {
-      switch (e.key) {
-        case "ArrowDown":
-          e.preventDefault();
-          if (filtered.length > 0) {
-            activeIndex = Math.min(activeIndex + 1, filtered.length - 1);
-            renderList();
-            scrollActiveIntoView();
-          }
-          break;
-        case "ArrowUp":
-          e.preventDefault();
-          if (filtered.length > 0) {
-            activeIndex = Math.max(activeIndex - 1, 0);
-            renderList();
-            scrollActiveIntoView();
-          }
-          break;
-        case "Home":
-          if (filtered.length > 0) {
+    citySearch.addEventListener(
+      "keydown",
+      (e) => {
+        switch (e.key) {
+          case "ArrowDown":
             e.preventDefault();
-            activeIndex = 0;
-            renderList();
-            scrollActiveIntoView();
-          }
-          break;
-        case "End":
-          if (filtered.length > 0) {
+            if (filtered.length > 0) {
+              activeIndex = Math.min(activeIndex + 1, filtered.length - 1);
+              renderList();
+              scrollActiveIntoView();
+            }
+            break;
+          case "ArrowUp":
             e.preventDefault();
-            activeIndex = filtered.length - 1;
-            renderList();
-            scrollActiveIntoView();
-          }
-          break;
-        case "Enter":
-          e.preventDefault();
-          if (activeIndex >= 0 && filtered[activeIndex]) {
-            select(filtered[activeIndex]);
-          }
-          break;
-        case "Escape":
-          e.preventDefault();
-          close();
-          cityBtn!.focus();
-          break;
-        case "Tab":
-          close();
-          break;
-      }
-    }, { signal });
+            if (filtered.length > 0) {
+              activeIndex = Math.max(activeIndex - 1, 0);
+              renderList();
+              scrollActiveIntoView();
+            }
+            break;
+          case "Home":
+            if (filtered.length > 0) {
+              e.preventDefault();
+              activeIndex = 0;
+              renderList();
+              scrollActiveIntoView();
+            }
+            break;
+          case "End":
+            if (filtered.length > 0) {
+              e.preventDefault();
+              activeIndex = filtered.length - 1;
+              renderList();
+              scrollActiveIntoView();
+            }
+            break;
+          case "Enter":
+            e.preventDefault();
+            if (activeIndex >= 0 && filtered[activeIndex]) {
+              select(filtered[activeIndex]);
+            }
+            break;
+          case "Escape":
+            e.preventDefault();
+            close();
+            cityBtn!.focus();
+            break;
+          case "Tab":
+            close();
+            break;
+        }
+      },
+      { signal }
+    );
 
-    document.addEventListener("click", (e) => {
-      const target = e.target as HTMLElement;
-      if (!cityBtn!.contains(target) && !cityDropdown!.contains(target)) {
-        close();
-      }
-    }, { signal });
+    document.addEventListener(
+      "click",
+      (e) => {
+        const target = e.target as HTMLElement;
+        if (!cityBtn!.contains(target) && !cityDropdown!.contains(target)) {
+          close();
+        }
+      },
+      { signal }
+    );
   }
 
   // ── Event listeners ──

@@ -149,7 +149,11 @@ Alpine.data("notificationPreferences", () => ({
   saving: false,
   error: "",
 
-  async toggle(this: NotificationPreferencesState, template: string, enabled: boolean): Promise<void> {
+  async toggle(
+    this: NotificationPreferencesState,
+    template: string,
+    enabled: boolean
+  ): Promise<void> {
     if (this.saving) return;
     this.saving = true;
     this.error = "";

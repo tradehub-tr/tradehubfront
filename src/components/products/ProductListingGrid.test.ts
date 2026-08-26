@@ -88,11 +88,14 @@ describe("rerenderProductGrid — soğuk yükleme manifest sözleşmesi", () => 
   it("(b) manifest tavandan önce gelirse İLK boyama `<picture>` üretir", async () => {
     vi.stubGlobal(
       "fetch",
-      vi.fn(async () => ({
-        ok: true,
-        status: 200,
-        json: async () => manifestGovdesi(),
-      }) as unknown as Response)
+      vi.fn(
+        async () =>
+          ({
+            ok: true,
+            status: 200,
+            json: async () => manifestGovdesi(),
+          }) as unknown as Response
+      )
     );
 
     await rerenderProductGrid([KART]);
@@ -143,11 +146,14 @@ describe("rerenderProductGrid — soğuk yükleme manifest sözleşmesi", () => 
   });
 
   it("sıcak önbellekte beklemez: ikinci render tek istekle anında `<picture>` basar", async () => {
-    const sahte = vi.fn(async () => ({
-      ok: true,
-      status: 200,
-      json: async () => manifestGovdesi(),
-    }) as unknown as Response);
+    const sahte = vi.fn(
+      async () =>
+        ({
+          ok: true,
+          status: 200,
+          json: async () => manifestGovdesi(),
+        }) as unknown as Response
+    );
     vi.stubGlobal("fetch", sahte);
 
     await rerenderProductGrid([KART]);

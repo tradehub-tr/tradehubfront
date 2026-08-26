@@ -1,6 +1,8 @@
 import { expect, test } from "@playwright/test";
 
-test("fırsatlar mobil sticky başlığını yalnız hero görünümden çıktıktan sonra mount eder ve gradient id'leri benzersizdir", async ({ page }) => {
+test("fırsatlar mobil sticky başlığını yalnız hero görünümden çıktıktan sonra mount eder ve gradient id'leri benzersizdir", async ({
+  page,
+}) => {
   await page.setViewportSize({ width: 390, height: 844 });
   const dealRequests: string[] = [];
   page.on("request", (request) => {
@@ -26,7 +28,9 @@ test("fırsatlar mobil sticky başlığını yalnız hero görünümden çıktı
   expect(dealRequests.some((url) => url.includes("page_size=24"))).toBe(true);
 });
 
-test("çok satanlar girişleri mobil sticky header DOM'unu scroll öncesi üretmez", async ({ page }) => {
+test("çok satanlar girişleri mobil sticky header DOM'unu scroll öncesi üretmez", async ({
+  page,
+}) => {
   await page.setViewportSize({ width: 390, height: 844 });
 
   await page.goto("/pages/top-ranking.html");

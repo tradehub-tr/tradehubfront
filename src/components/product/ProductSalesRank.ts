@@ -30,9 +30,7 @@ export function SalesRankCards(ranks: CategoryRank[]): string {
         ? "bg-[#fffdf5] border-[#efe3bd] hover:border-[#e0b93c]"
         : "bg-[var(--pd-spec-header-bg,#fafafa)] border-[var(--pd-spec-border,#e5e5e5)] hover:border-[#a3a3a3]";
       const wreathCls = isTop ? "text-[#c9a227]" : "text-neutral-400";
-      const rankCls = isTop
-        ? "text-[19px] text-amber-700"
-        : "text-[15px] text-neutral-600";
+      const rankCls = isTop ? "text-[19px] text-amber-700" : "text-[15px] text-neutral-600";
       return `
         <a href="/pages/products.html?cat=${encodeURIComponent(r.slug)}"
            class="flex min-w-[128px] flex-none flex-col items-center gap-1.5 rounded-md border px-5 pb-3 pt-3.5 no-underline appearance-none focus:outline-none transition-colors duration-150 ${cardCls}">

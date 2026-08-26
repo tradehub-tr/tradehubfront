@@ -63,8 +63,19 @@ test.beforeEach(async ({ context }) => {
     localStorage.setItem(
       "panel_tour_seen_v5",
       JSON.stringify([
-        "dashboard", "catalog", "commerce", "logistics", "sellers", "crm",
-        "helpdesk", "system", "store", "products", "orders", "management", "messaging",
+        "dashboard",
+        "catalog",
+        "commerce",
+        "logistics",
+        "sellers",
+        "crm",
+        "helpdesk",
+        "system",
+        "store",
+        "products",
+        "orders",
+        "management",
+        "messaging",
       ])
     );
   });
@@ -90,13 +101,18 @@ test("lojistik menüsünde FİYATLANDIRMA grubu ve üç kalem var", async ({ pag
 
 // ── S1 · Kural oluşturma ve KALICILIK ────────────────────────────────
 
-test("S1 · fiyat yöneticisi yeni tarife tanımlayıp kaydedebiliyor; kayıt YENİLEMEDE duruyor", async ({ page }) => {
+test("S1 · fiyat yöneticisi yeni tarife tanımlayıp kaydedebiliyor; kayıt YENİLEMEDE duruyor", async ({
+  page,
+}) => {
   await page.goto(KURALLAR);
   await page.getByRole("button", { name: /Yeni kural/i }).click();
 
   // Boş formdan başlatma YOK — önce şablon (CLAUDE.md §4.14b).
   await expect(page.getByText(/Nasıl bir kural kuracaksın/i)).toBeVisible();
-  await page.getByText(/Desi tarifesi/i).first().click();
+  await page
+    .getByText(/Desi tarifesi/i)
+    .first()
+    .click();
 
   // `input[type=text]` KULLANILAMAZ: panelin global arama kutusu da öyle ve
   // ilk sırada duruyor (ölçüldü — kural adı hiç dolmuyor, kayıt adsız gidiyordu).
@@ -191,7 +207,11 @@ test("S2c · öncelik SÜRÜKLEYEREK değişiyor ve yenilemede duruyor", async (
 
 test("S2b · üç KATMAN ayrı başlıklarla çiziliyor", async ({ page }) => {
   await page.goto(KURALLAR);
-  for (const baslik of [/Zorunlu platform kuralları/i, /Satıcı kuralları/i, /Platform kuralları/i]) {
+  for (const baslik of [
+    /Zorunlu platform kuralları/i,
+    /Satıcı kuralları/i,
+    /Platform kuralları/i,
+  ]) {
     await expect(page.getByText(baslik).first()).toBeVisible();
   }
   // Katman sırası ANLAMLI — zorunlu en üstte olmalı.
@@ -242,13 +262,18 @@ test("S5 · kural formu kaydetmeden fiyatı hesaplıyor", async ({ page }) => {
   await expect(page.getByText(/Bu kuralla ne olur/i)).toBeVisible({ timeout: 10_000 });
   // Canlı panel: alıcının ödeyeceği tutar KAYDETMEDEN görünüyor.
   await expect(page.getByText(/Alıcı öder/i)).toBeVisible();
-  const tutar = await page.getByText(/Alıcı öder/i).locator("xpath=following::*[1]").innerText();
+  const tutar = await page
+    .getByText(/Alıcı öder/i)
+    .locator("xpath=following::*[1]")
+    .innerText();
   expect(tutar, "canlı hesap tutar üretmiyor").toMatch(/\d/);
 });
 
 // ── S4 · ZORUNLU kural satıcı kuralını EZİYOR ────────────────────────
 
-test("S4 · zorunlu platform kuralı simülasyonda satıcı kuralını eziyor ve iz bunu SÖYLÜYOR", async ({ page }) => {
+test("S4 · zorunlu platform kuralı simülasyonda satıcı kuralını eziyor ve iz bunu SÖYLÜYOR", async ({
+  page,
+}) => {
   await page.goto(SIMULASYON);
   await expect(page.getByRole("heading", { name: /Fiyat simülasyonu/i })).toBeVisible();
 
@@ -278,7 +303,10 @@ test("S10 · destek gerçek siparişi seçince değerler OTOMATİK doluyor", asy
   const kodlar = await page.evaluate(() =>
     [...document.querySelectorAll("code")].map((c) => c.textContent?.trim()).filter(Boolean)
   );
-  expect(kodlar.some((k) => /^[A-Z_]+$/.test(k ?? "")), "gerekçe KODU hiç yok").toBeTruthy();
+  expect(
+    kodlar.some((k) => /^[A-Z_]+$/.test(k ?? "")),
+    "gerekçe KODU hiç yok"
+  ).toBeTruthy();
 });
 
 // ── Taşıyıcı karşılaştırma ───────────────────────────────────────────
@@ -358,8 +386,6 @@ test("S14 · simülasyon sonucu CSV olarak İNİYOR ve içi dolu", async ({ page
   expect(icerik).toMatch(/Kargo|Yurtiçi|MNG|Aras|PTT/);
 });
 
-
-
 // ── Görsel regresyon bekçileri ───────────────────────────────────────
 //
 // Üçü de kullanıcı tarafından ekranda görülüp bildirildi (21 Ağustos 2026).
@@ -392,7 +418,8 @@ test("R2 · arama ikonu kutunun İÇİNDE duruyor", async ({ page }) => {
     const inp = document.querySelector('input[type="search"]')!;
     const sarmal = inp.parentElement!;
     return {
-      bosluk: sarmal.querySelector("svg")!.getBoundingClientRect().x - sarmal.getBoundingClientRect().x,
+      bosluk:
+        sarmal.querySelector("svg")!.getBoundingClientRect().x - sarmal.getBoundingClientRect().x,
       ps: parseFloat(getComputedStyle(inp).paddingInlineStart),
     };
   });

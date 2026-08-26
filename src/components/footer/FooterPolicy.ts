@@ -15,11 +15,27 @@ interface SocialLink {
 }
 
 const socialLinks: SocialLink[] = [
-  { platform: "instagram", href: "https://www.instagram.com/istoc_com", ariaLabel: "Follow us on Instagram" },
-  { platform: "facebook", href: "https://www.facebook.com/istoccom", ariaLabel: "Follow us on Facebook" },
+  {
+    platform: "instagram",
+    href: "https://www.instagram.com/istoc_com",
+    ariaLabel: "Follow us on Instagram",
+  },
+  {
+    platform: "facebook",
+    href: "https://www.facebook.com/istoccom",
+    ariaLabel: "Follow us on Facebook",
+  },
   { platform: "twitter", href: "https://x.com/istoc_com", ariaLabel: "Follow us on X (Twitter)" },
-  { platform: "linkedin", href: "https://www.linkedin.com/company/istoc-com", ariaLabel: "Connect with us on LinkedIn" },
-  { platform: "youtube", href: "https://youtube.com/@istoccom", ariaLabel: "Subscribe to our YouTube channel" },
+  {
+    platform: "linkedin",
+    href: "https://www.linkedin.com/company/istoc-com",
+    ariaLabel: "Connect with us on LinkedIn",
+  },
+  {
+    platform: "youtube",
+    href: "https://youtube.com/@istoccom",
+    ariaLabel: "Subscribe to our YouTube channel",
+  },
 ];
 
 function getSocialIcon(platform: string): string {

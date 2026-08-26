@@ -22,10 +22,7 @@ import {
   LIGHTBOX_THUMB_CLASS,
   LIGHTBOX_THUMB_VIDEO_CLASS,
 } from "../components/product/ProductImageGallery";
-import {
-  toPosterOnlyHtml,
-  toVideoEmbedHtml,
-} from "../components/product/ProductVideoSection";
+import { toPosterOnlyHtml, toVideoEmbedHtml } from "../components/product/ProductVideoSection";
 
 function prefersReducedMotion(): boolean {
   return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -368,9 +365,7 @@ Alpine.data("imageGallery", () => ({
     // Re-render thumbnail strips + main image
     const thumbList = (this.$refs as Record<string, HTMLElement>).thumbList;
     if (thumbList) {
-      thumbList
-        .querySelectorAll<HTMLElement>(".gallery-thumb")
-        .forEach((el) => el.remove());
+      thumbList.querySelectorAll<HTMLElement>(".gallery-thumb").forEach((el) => el.remove());
       newImages.forEach((img, i) => {
         const thumb = document.createElement("div");
         // Sınıf listesi şablonla TEK KAYNAKTAN gelir; burada elle "gallery-thumb"

@@ -131,48 +131,50 @@ export function initHeroSidePanel(): Promise<void> {
   const dotsWrap = document.getElementById("hero-deals-dots");
   if (!card || !stage || !dotsWrap) return Promise.resolve();
 
-  return initCurrency()
-    // verified_supplier: anasayfa KYB doğrulanmamış satıcı ürünü göstermez.
-    .then(() =>
-      searchListings({
-        is_deal: true,
-        page_size: DEAL_COUNT,
-        sort_by: "discount",
-        verified_supplier: true,
+  return (
+    initCurrency()
+      // verified_supplier: anasayfa KYB doğrulanmamış satıcı ürünü göstermez.
+      .then(() =>
+        searchListings({
+          is_deal: true,
+          page_size: DEAL_COUNT,
+          sort_by: "discount",
+          verified_supplier: true,
+        })
+      )
+      .then((result) => {
+        if (result.products.length === 0) {
+          card.style.display = "none";
+          return;
+        }
+        const deals: SideDeal[] = result.products.slice(0, DEAL_COUNT).map((p) => ({
+          name: p.name,
+          href: getListingUrl({ id: p.id, href: p.href }),
+          price: formatStartingPrice(p.price) || p.price,
+          originalPrice: p.originalPrice || undefined,
+          discountPercent:
+            p.discountPercentage && p.discountPercentage > 0
+              ? Math.round(p.discountPercentage)
+              : undefined,
+          imageSrc: p.imageSrc || "",
+          moqCount: parseInt(p.moq) || 1,
+        }));
+
+        stage.innerHTML = deals.map(renderDealSlide).join("");
+        dotsWrap.innerHTML = deals
+          .map(
+            (_, i) =>
+              `<button type="button" class="th-no-press h-1.5 w-1.5 cursor-pointer rounded-full bg-white/25 transition-colors data-[state=on]:bg-[var(--color-primary-500,#ff8600)]" data-state="${i === 0 ? "on" : "off"}" aria-label="${t("heroSide.bestDeals")} ${i + 1}"></button>`
+          )
+          .join("");
+
+        const slides = Array.from(stage.querySelectorAll<HTMLElement>(".hero-deal-slide"));
+        const dots = Array.from(dotsWrap.querySelectorAll<HTMLElement>("button"));
+        startRotation(card, slides, dots);
       })
-    )
-    .then((result) => {
-      if (result.products.length === 0) {
+      .catch((err) => {
+        console.warn("[HeroSidePanel] fırsatlar yüklenemedi:", err);
         card.style.display = "none";
-        return;
-      }
-      const deals: SideDeal[] = result.products.slice(0, DEAL_COUNT).map((p) => ({
-        name: p.name,
-        href: getListingUrl({ id: p.id, href: p.href }),
-        price: formatStartingPrice(p.price) || p.price,
-        originalPrice: p.originalPrice || undefined,
-        discountPercent:
-          p.discountPercentage && p.discountPercentage > 0
-            ? Math.round(p.discountPercentage)
-            : undefined,
-        imageSrc: p.imageSrc || "",
-        moqCount: parseInt(p.moq) || 1,
-      }));
-
-      stage.innerHTML = deals.map(renderDealSlide).join("");
-      dotsWrap.innerHTML = deals
-        .map(
-          (_, i) =>
-            `<button type="button" class="th-no-press h-1.5 w-1.5 cursor-pointer rounded-full bg-white/25 transition-colors data-[state=on]:bg-[var(--color-primary-500,#ff8600)]" data-state="${i === 0 ? "on" : "off"}" aria-label="${t("heroSide.bestDeals")} ${i + 1}"></button>`
-        )
-        .join("");
-
-      const slides = Array.from(stage.querySelectorAll<HTMLElement>(".hero-deal-slide"));
-      const dots = Array.from(dotsWrap.querySelectorAll<HTMLElement>("button"));
-      startRotation(card, slides, dots);
-    })
-    .catch((err) => {
-      console.warn("[HeroSidePanel] fırsatlar yüklenemedi:", err);
-      card.style.display = "none";
-    });
+      })
+  );
 }

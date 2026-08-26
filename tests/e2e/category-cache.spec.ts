@@ -24,9 +24,7 @@ const CATEGORIES = [
     id: "sektor-mutfak",
     name: "Mutfak",
     slug: "mutfak",
-    children: [
-      { id: "grup-pisirme", name: "Pişirme", slug: "pisirme", children: [] },
-    ],
+    children: [{ id: "grup-pisirme", name: "Pişirme", slug: "pisirme", children: [] }],
   },
   {
     id: "sektor-tekstil",
@@ -57,17 +55,14 @@ test("categories fetched once across two page loads (IndexedDB persist)", async 
   await mockBackend(page);
 
   let categoryRequests = 0;
-  await page.route(
-    "**/api/method/tradehub_core.api.category.get_mega_menu*",
-    (route: Route) => {
-      categoryRequests++;
-      return route.fulfill({
-        status: 200,
-        contentType: "application/json",
-        body: JSON.stringify({ message: CATEGORIES }),
-      });
-    }
-  );
+  await page.route("**/api/method/tradehub_core.api.category.get_mega_menu*", (route: Route) => {
+    categoryRequests++;
+    return route.fulfill({
+      status: 200,
+      contentType: "application/json",
+      body: JSON.stringify({ message: CATEGORIES }),
+    });
+  });
 
   await page.goto("/pages/products.html?cat=test");
   await page.waitForLoadState("networkidle");

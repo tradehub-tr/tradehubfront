@@ -178,7 +178,9 @@ export function upgradeGalleryMedia(root: ParentNode = document): number {
   if (!listing) return 0;
 
   let sayac = 0;
-  for (const img of Array.from(root.querySelectorAll<HTMLImageElement>("img.gallery-media-asset"))) {
+  for (const img of Array.from(
+    root.querySelectorAll<HTMLImageElement>("img.gallery-media-asset")
+  )) {
     // `<picture>` içindeyse zaten manifestten üretilmiş.
     if (img.parentElement?.tagName === "PICTURE") continue;
     const src = img.getAttribute("src") || "";

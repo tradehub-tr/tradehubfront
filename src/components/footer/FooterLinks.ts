@@ -176,7 +176,9 @@ function renderTrustColumn(): string {
           </select>
           <label class="block text-[12px] font-semibold text-gray-900 dark:text-white mb-1.5" data-i18n="header.currency">${t("header.currency")}</label>
           <select id="footer-currency-select" class="th-input th-input-md cursor-pointer mb-4">
-            ${getFooterCurrencyCodes().map((c) => `<option value="${c}">${c}</option>`).join("")}
+            ${getFooterCurrencyCodes()
+              .map((c) => `<option value="${c}">${c}</option>`)
+              .join("")}
           </select>
           <button id="footer-region-apply" type="button" class="th-btn w-full px-4 py-2 text-sm font-medium transition-colors">
             <span data-i18n="common.save">${t("common.save")}</span>
@@ -262,9 +264,7 @@ export function initFooterRegionSwitcher(): void {
       const willOpen = menu.classList.contains("hidden");
       if (willOpen) populateFooterRegion();
       menu.classList.toggle("hidden");
-      document
-        .getElementById("footer-region-btn")
-        ?.setAttribute("aria-expanded", String(willOpen));
+      document.getElementById("footer-region-btn")?.setAttribute("aria-expanded", String(willOpen));
       return;
     }
 

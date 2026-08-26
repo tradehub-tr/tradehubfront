@@ -65,7 +65,7 @@ async function initNativePush(): Promise<void> {
         // Foreground'da gelen bildirim — native banner otomatik gösterilmiyor,
         // burada gerekirse in-app toast/badge tetiklenebilir.
         console.warn("[push] foreground notification received", notification);
-      },
+      }
     );
 
     PushNotifications.addListener("pushNotificationActionPerformed", (action: ActionPerformed) => {
@@ -101,7 +101,7 @@ async function initWebPush(): Promise<void> {
     let subscription = await registration.pushManager.getSubscription();
     if (!subscription) {
       const { public_key, enabled } = await callMethod<{ public_key: string; enabled: boolean }>(
-        "tradehub_core.api.push.get_public_key",
+        "tradehub_core.api.push.get_public_key"
       );
       if (!enabled || !public_key) return;
 

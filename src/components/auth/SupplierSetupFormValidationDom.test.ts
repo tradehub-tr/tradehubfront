@@ -103,7 +103,9 @@ describe("SupplierSetupForm imperative Step 3 validation", () => {
     expect(document.querySelector('[data-supplier-step="2"]')).toBeNull();
     expect((document.getElementById("ss-iban") as HTMLInputElement).value).toBe(validIban);
     expect((document.getElementById("ss-bank-name") as HTMLInputElement).value).toBe("Draft Bank");
-    expect((document.getElementById("ss-account-holder") as HTMLInputElement).value).toBe("Draft Holder");
+    expect((document.getElementById("ss-account-holder") as HTMLInputElement).value).toBe(
+      "Draft Holder"
+    );
   });
 
   it("shows an error for an invalid 5-character IBAN, disables Next, and leaves focus in place", () => {

@@ -164,7 +164,10 @@ export class SlotDropzoneController {
     ["dragenter", "dragover"].forEach((ev) => {
       zone.addEventListener(ev, (e) => {
         e.preventDefault();
-        zone.classList.add("border-[var(--color-primary-500,#f59e0b)]", "bg-[var(--color-primary-50,#fffbeb)]");
+        zone.classList.add(
+          "border-[var(--color-primary-500,#f59e0b)]",
+          "bg-[var(--color-primary-50,#fffbeb)]"
+        );
       });
     });
     ["dragleave", "drop"].forEach((ev) => {
@@ -174,7 +177,10 @@ export class SlotDropzoneController {
           const f = (e as DragEvent).dataTransfer?.files?.[0];
           if (f) this.acceptFile(slot, f);
         }
-        zone.classList.remove("border-[var(--color-primary-500,#f59e0b)]", "bg-[var(--color-primary-50,#fffbeb)]");
+        zone.classList.remove(
+          "border-[var(--color-primary-500,#f59e0b)]",
+          "bg-[var(--color-primary-50,#fffbeb)]"
+        );
       });
     });
   }

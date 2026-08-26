@@ -90,7 +90,10 @@ describe("ProductVideoSection — poster bağlama", () => {
   });
 
   it("prefers-reduced-motion altında video/HLS yerine yalnız poster basar", () => {
-    vi.stubGlobal("matchMedia", vi.fn(() => ({ matches: true })));
+    vi.stubGlobal(
+      "matchMedia",
+      vi.fn(() => ({ matches: true }))
+    );
     currentProduct.value = {
       videoHlsSrc: "/files/tanitim/master.m3u8",
       videoPoster: "/files/tanitim-kapak.webp",

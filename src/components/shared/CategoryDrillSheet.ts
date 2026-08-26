@@ -97,13 +97,15 @@ export function initCategoryDrillSheet(
     listUl
       .querySelectorAll<HTMLElement>("[data-cat-slug]")
       .forEach((el) =>
-        el.querySelector("[data-check]")?.classList.toggle("hidden", (el.dataset.catSlug || "") !== cur)
+        el
+          .querySelector("[data-check]")
+          ?.classList.toggle("hidden", (el.dataset.catSlug || "") !== cur)
       );
   };
 
   const renderSheet = (): void => {
     const current = navStack[navStack.length - 1] ?? null;
-    levelCats = current ? current.children ?? [] : cfg.categories;
+    levelCats = current ? (current.children ?? []) : cfg.categories;
     sheet?.setTitle(current ? current.name : cfg.rootLabel);
     sheet?.showBack(navStack.length > 0);
 
@@ -121,7 +123,12 @@ export function initCategoryDrillSheet(
     listUl.classList.remove("transition", "duration-200", "ease-out");
     listUl.classList.add("opacity-0");
     requestAnimationFrame(() => {
-      listUl.classList.add("transition", "duration-200", "ease-out", "motion-reduce:transition-none");
+      listUl.classList.add(
+        "transition",
+        "duration-200",
+        "ease-out",
+        "motion-reduce:transition-none"
+      );
       listUl.classList.remove("opacity-0");
     });
   };

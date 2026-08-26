@@ -126,15 +126,34 @@ export class OrderStore {
   private page = 1;
   private pageSize = 24;
   private statusCounts: Record<string, number> = {};
-  private cache = new Map<string, { orders: Order[]; total: number; statusCounts: Record<string, number> }>();
+  private cache = new Map<
+    string,
+    { orders: Order[]; total: number; statusCounts: Record<string, number> }
+  >();
   private requestId = 0;
   private error = "";
 
-  async load(query: { status?: string; search?: string; dateFrom?: string; dateTo?: string; page?: number } = {}): Promise<void> {
+  async load(
+    query: {
+      status?: string;
+      search?: string;
+      dateFrom?: string;
+      dateTo?: string;
+      page?: number;
+    } = {}
+  ): Promise<void> {
     await this.fetchFromApi(query);
   }
 
-  async fetchFromApi(query: { status?: string; search?: string; dateFrom?: string; dateTo?: string; page?: number } = {}): Promise<void> {
+  async fetchFromApi(
+    query: {
+      status?: string;
+      search?: string;
+      dateFrom?: string;
+      dateTo?: string;
+      page?: number;
+    } = {}
+  ): Promise<void> {
     const requestId = ++this.requestId;
     const page = Math.max(1, query.page || 1);
     const status = query.status && query.status !== "all" ? query.status : "";
@@ -178,7 +197,11 @@ export class OrderStore {
         this.total = Number(result.total || 0);
         this.statusCounts = result.status_counts || {};
         this.page = page;
-        this.cache.set(cacheKey, { orders: this.orders, total: this.total, statusCounts: this.statusCounts });
+        this.cache.set(cacheKey, {
+          orders: this.orders,
+          total: this.total,
+          statusCounts: this.statusCounts,
+        });
         this.loaded = true;
       }
     } catch (err) {
@@ -201,12 +224,24 @@ export class OrderStore {
     return this.orders;
   }
 
-  getTotal(): number { return this.total; }
-  getPage(): number { return this.page; }
-  getPageSize(): number { return this.pageSize; }
-  getStatusCounts(): Record<string, number> { return this.statusCounts; }
-  getError(): string { return this.error; }
-  clearCache(): void { this.cache.clear(); }
+  getTotal(): number {
+    return this.total;
+  }
+  getPage(): number {
+    return this.page;
+  }
+  getPageSize(): number {
+    return this.pageSize;
+  }
+  getStatusCounts(): Record<string, number> {
+    return this.statusCounts;
+  }
+  getError(): string {
+    return this.error;
+  }
+  clearCache(): void {
+    this.cache.clear();
+  }
 
   getOrderByNumber(orderNumber: string): Order | undefined {
     return this.orders.find((o) => o.orderNumber === orderNumber);

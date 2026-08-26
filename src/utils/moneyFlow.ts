@@ -62,7 +62,7 @@ export function moneyFlowHtml(
   key: string,
   value: number,
   currency: string,
-  className = "",
+  className = ""
 ): string {
   return `<span
     data-money-flow="${escapeAttr(key)}"
@@ -109,11 +109,7 @@ export function mountMoneyFlows(root: ParentNode): void {
  * `textContent` yazmak `<number-flow>` elemanını silerdi; bunun yerine
  * elemanın kendi `update()`'i çağrılıyor.
  */
-export function updateMoneyFlow(
-  slot: HTMLElement | null,
-  value: number,
-  currency?: string,
-): void {
+export function updateMoneyFlow(slot: HTMLElement | null, value: number, currency?: string): void {
   if (!slot) return;
   slot.dataset.moneyValue = String(value);
   if (currency) slot.dataset.moneyCurrency = currency;

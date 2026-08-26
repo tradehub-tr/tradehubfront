@@ -130,9 +130,10 @@ export function initProductOrderPanel(options: { signal?: AbortSignal } = {}): v
     const placeWholesaleBlocks = (sticky: boolean) => {
       const blocks = document.getElementById("pd-wholesale-blocks");
       if (!blocks) return;
-      const target = sticky && wideQuery.matches
-        ? document.getElementById("pd-panel-wholesale-slot")
-        : document.getElementById("pd-wholesale-home");
+      const target =
+        sticky && wideQuery.matches
+          ? document.getElementById("pd-panel-wholesale-slot")
+          : document.getElementById("pd-wholesale-home");
       if (target && blocks.parentElement !== target) target.appendChild(blocks);
     };
 
@@ -150,28 +151,36 @@ export function initProductOrderPanel(options: { signal?: AbortSignal } = {}): v
 
   const pdShipChangeBtn = document.getElementById("pd-ship-card-change");
   if (pdShipChangeBtn) {
-    pdShipChangeBtn.addEventListener("click", (e) => {
-      e.preventDefault();
-      openShippingModal();
-    }, options);
+    pdShipChangeBtn.addEventListener(
+      "click",
+      (e) => {
+        e.preventDefault();
+        openShippingModal();
+      },
+      options
+    );
   }
 
   // Listen for shipping changes from shared modal — update both desktop and mobile layouts
-  document.addEventListener("shipping-change", ((e: CustomEvent) => {
-    const { method, costStr, estimatedDays } = e.detail;
-    const methodEl = document.getElementById("pd-ship-card-method");
-    if (methodEl) methodEl.textContent = method;
-    const detailEl = document.querySelector("#pd-shipping-card .pd-shipping-card-detail");
-    if (detailEl)
-      detailEl.textContent = `${t("product.shippingCost", { cost: costStr, days: estimatedDays })}`;
+  document.addEventListener(
+    "shipping-change",
+    ((e: CustomEvent) => {
+      const { method, costStr, estimatedDays } = e.detail;
+      const methodEl = document.getElementById("pd-ship-card-method");
+      if (methodEl) methodEl.textContent = method;
+      const detailEl = document.querySelector("#pd-shipping-card .pd-shipping-card-detail");
+      if (detailEl)
+        detailEl.textContent = `${t("product.shippingCost", { cost: costStr, days: estimatedDays })}`;
 
-    const mobileMethodEl = document.querySelector("#pdm-ship-preview .pdm-ship-method");
-    if (mobileMethodEl) mobileMethodEl.textContent = method;
-    const mobileDetailEl = document.querySelector("#pdm-ship-preview .pdm-ship-detail");
-    if (mobileDetailEl) {
-      mobileDetailEl.innerHTML =
-        `<span class="text-text-muted">${t("product.estimatedCost")}: <strong>${costStr}</strong></span>` +
-        `<span class="text-text-muted">${t("product.duration")}: <strong>${estimatedDays}</strong></span>`;
-    }
-  }) as EventListener, options);
+      const mobileMethodEl = document.querySelector("#pdm-ship-preview .pdm-ship-method");
+      if (mobileMethodEl) mobileMethodEl.textContent = method;
+      const mobileDetailEl = document.querySelector("#pdm-ship-preview .pdm-ship-detail");
+      if (mobileDetailEl) {
+        mobileDetailEl.innerHTML =
+          `<span class="text-text-muted">${t("product.estimatedCost")}: <strong>${costStr}</strong></span>` +
+          `<span class="text-text-muted">${t("product.duration")}: <strong>${estimatedDays}</strong></span>`;
+      }
+    }) as EventListener,
+    options
+  );
 }

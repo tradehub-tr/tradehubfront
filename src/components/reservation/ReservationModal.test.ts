@@ -2,7 +2,7 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 
 vi.mock("../../i18n", () => ({ t: (key: string) => key }));
 vi.mock("../icons/lucideIcons", () => ({
-  getLucideIcon: () => "<svg aria-hidden=\"true\"></svg>",
+  getLucideIcon: () => '<svg aria-hidden="true"></svg>',
 }));
 
 import { mountChatPopup } from "../chat-popup/mountChatPopup";

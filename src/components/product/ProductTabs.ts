@@ -124,9 +124,7 @@ export function initProductTabs(options: { signal?: AbortSignal } = {}): void {
   const headerHeight = header ? header.offsetHeight : 0;
   const offset = headerHeight + 8;
 
-  const buttons = Array.from(
-    tabNav.querySelectorAll<HTMLButtonElement>(".product-tab-btn")
-  );
+  const buttons = Array.from(tabNav.querySelectorAll<HTMLButtonElement>(".product-tab-btn"));
 
   const setActive = (targetId: string): void => {
     buttons.forEach((b) => {
@@ -136,9 +134,7 @@ export function initProductTabs(options: { signal?: AbortSignal } = {}): void {
 
   // ── Anchor scroll: sekmeye tıkla → ilgili bölüme yumuşak kaydır ──
   tabNav.addEventListener("click", (e) => {
-    const btn = (e.target as HTMLElement).closest<HTMLButtonElement>(
-      ".product-tab-btn"
-    );
+    const btn = (e.target as HTMLElement).closest<HTMLButtonElement>(".product-tab-btn");
     const targetId = btn?.dataset.tabTarget;
     if (!targetId) return;
     const panel = document.getElementById(targetId);
@@ -146,8 +142,7 @@ export function initProductTabs(options: { signal?: AbortSignal } = {}): void {
 
     // Sticky nav yapıştığında bölüm başlığı onun altında kalmasın diye ekstra pay
     const navHeight = tabNav.offsetHeight;
-    const top =
-      panel.getBoundingClientRect().top + window.scrollY - offset - navHeight - 8;
+    const top = panel.getBoundingClientRect().top + window.scrollY - offset - navHeight - 8;
     const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     window.scrollTo({ top, behavior: reduce ? "auto" : "smooth" });
     setActive(targetId);

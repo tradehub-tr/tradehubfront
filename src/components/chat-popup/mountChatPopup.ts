@@ -83,10 +83,12 @@ function openChatStore(
 ): Promise<ChatOpenOutcome> {
   const chat = Alpine.store("chatPopup") as
     | {
-        open?: (options: Omit<ChatOpenDetail, "trigger"> & {
-          onReservationRequired?: (detail: ReservationOpenDetail) => void;
-          isCurrentAttempt?: () => boolean;
-        }) => Promise<ChatOpenOutcome>;
+        open?: (
+          options: Omit<ChatOpenDetail, "trigger"> & {
+            onReservationRequired?: (detail: ReservationOpenDetail) => void;
+            isCurrentAttempt?: () => boolean;
+          }
+        ) => Promise<ChatOpenOutcome>;
       }
     | undefined;
   if (!chat?.open) return Promise.resolve("blocked");
@@ -120,10 +122,7 @@ async function ensureMounted(state: ChatOverlayState, trigger: HTMLElement): Pro
   if (state.controller?.mounted) return;
   if (state.mounting) return state.mounting;
 
-  state.mounting = Promise.all([
-    import("./ChatPopup"),
-    import("../reservation/ReservationModal"),
-  ])
+  state.mounting = Promise.all([import("./ChatPopup"), import("../reservation/ReservationModal")])
     .then(([{ ChatPopup }]) => {
       const controller = createLazyMount({
         trigger,
@@ -238,7 +237,8 @@ export function mountChatPopup(): void {
     state.controller?.close();
   };
   state.onReservationOpen = (event) => {
-    const detail = ((event as CustomEvent<ReservationOpenDetail>).detail ?? {}) as ReservationOpenDetail;
+    const detail = ((event as CustomEvent<ReservationOpenDetail>).detail ??
+      {}) as ReservationOpenDetail;
     event.stopImmediatePropagation();
     openForReservation(state, detail);
   };

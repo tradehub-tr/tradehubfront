@@ -53,7 +53,8 @@ function safeBackgroundCss(value: unknown, fallback: string): string {
 }
 
 // Sarı İmza: iSTOC sarısı degrade (doku katmanı renderSlide'da ayrıca eklenir)
-const FALLBACK_BG = "linear-gradient(115deg, var(--color-primary-300,#ffc41f) 0%, var(--color-primary-500,#ff8600) 55%, var(--color-primary-600,#e6a800) 100%)";
+const FALLBACK_BG =
+  "linear-gradient(115deg, var(--color-primary-300,#ffc41f) 0%, var(--color-primary-500,#ff8600) 55%, var(--color-primary-600,#e6a800) 100%)";
 
 // Slide dokularının döngüsü: halftone nokta → diyagonal çizgi → ışık patlaması.
 // Admin degradesinin ÜZERİNE düşük opaklıkta binen dekoratif katman; slide
@@ -89,7 +90,8 @@ function defaultSlides(): ResolvedSlide[] {
       descKey: "heroBanner.privateLabelText",
       ctaKey: "heroBanner.startRequest",
       href: "/pages/dashboard/rfq-form.html",
-      backgroundCss: "linear-gradient(115deg, var(--color-primary-300,#ffcd3d) 0%, var(--color-primary-500,#ff8600) 70%)",
+      backgroundCss:
+        "linear-gradient(115deg, var(--color-primary-300,#ffcd3d) 0%, var(--color-primary-500,#ff8600) 70%)",
     },
   ];
   return base.map((b) => ({

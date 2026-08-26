@@ -148,7 +148,9 @@ export function loadCategories(): Promise<ApiCategory[]> {
       queryFetch(
         queryKeys.categories(version),
         async () => {
-          const data = await callMethod<MegaMenuResponse>("tradehub_core.api.category.get_mega_menu");
+          const data = await callMethod<MegaMenuResponse>(
+            "tradehub_core.api.category.get_mega_menu"
+          );
           const env = normalizeMegaMenu(data);
           return { ...env, categories: filterSpam(env.categories) };
         },

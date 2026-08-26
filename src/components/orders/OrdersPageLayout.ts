@@ -1836,7 +1836,8 @@ function productThumb(expr: string, sizeCls: string): string {
     </template>`;
 }
 
-const STAR_POINTS = "12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26";
+const STAR_POINTS =
+  "12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26";
 
 function renderReviews(): string {
   const tabBtn = (id: string, longLabel: string, shortLabel: string, countExpr: string) => `
@@ -2029,7 +2030,8 @@ export function initOrdersPageLayout(): void {
       link.classList.toggle("text-gray-500", !isActive);
       link.classList.toggle("border-transparent", !isActive);
       // Dar ekranda seçili sekme scroll dışında kalabiliyor — görünür alana getir
-      if (isActive) link.scrollIntoView({ inline: "center", block: "nearest", behavior: "instant" });
+      if (isActive)
+        link.scrollIntoView({ inline: "center", block: "nearest", behavior: "instant" });
     });
 
     initTaxModals();

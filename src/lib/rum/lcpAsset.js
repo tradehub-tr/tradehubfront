@@ -50,7 +50,8 @@ const WIDTH_IN_PATH = /[-_/]w(\d{2,4})(?=[-_./]|$)/i;
  * etiketlenmez; onların kökenini URL'den kanıtlamak mümkün değildir.
  */
 const ORIGINAL_FILE = /(?:^|\/)files\/(?!media\/)[^/?#]+\.(?:avif|webp|jpe?g|png|gif)$/i;
-const LEGACY_SHARD_RENDITION = /(?:^|\/)files\/[0-9a-f]{2}\/[0-9a-f]{32}\.(?:avif|webp|jpe?g|png)$/i;
+const LEGACY_SHARD_RENDITION =
+  /(?:^|\/)files\/[0-9a-f]{2}\/[0-9a-f]{32}\.(?:avif|webp|jpe?g|png)$/i;
 
 /** Uzantı — sorgu ve fragment atıldıktan sonraki son nokta. */
 const EXTENSION = /\.([a-z0-9]{2,8})$/i;

@@ -71,9 +71,7 @@ export const KullanilamazSecenek = {
   render: () =>
     CheckoutShipping({
       options: options.map((o, i) =>
-        i === 1
-          ? { ...o, available: false, unavailable_reason: "Bu adrese hizmet verilmiyor" }
-          : o
+        i === 1 ? { ...o, available: false, unavailable_reason: "Bu adrese hizmet verilmiyor" } : o
       ),
       selected: options[0]?.name,
     }),

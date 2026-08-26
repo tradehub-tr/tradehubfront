@@ -87,7 +87,8 @@ export function initSelectMenus(): void {
   // ayrıca kontrol edilmeli, yoksa panel içindeki her tık paneli kapatır.
   document.addEventListener("click", (e) => {
     const target = e.target as HTMLElement;
-    if (target.closest("[data-select-menu-wrap]") || target.closest("[data-select-menu-panel]")) return;
+    if (target.closest("[data-select-menu-wrap]") || target.closest("[data-select-menu-panel]"))
+      return;
     closeOpenPanel?.();
   });
   document.addEventListener("keydown", (e) => {
@@ -144,7 +145,8 @@ function selectedLabel(select: HTMLSelectElement): string {
 // hesaplanır. Sadece layout/boyut sınıflarını wrap'a taşıyoruz; padding/border/bg
 // gibi görsel sınıfları TAŞIMIYORUZ — aksi halde trigger'ın kendi padding'iyle
 // çift padding oluşur (TicketForm gibi h-* yerine py-* ile boyutlanan select'ler).
-const LAYOUT_CLASS_RE = /^(?:[a-z0-9-]+:)*(?:w-|min-w-|max-w-|flex-|grow|shrink|basis-|self-|order-)/;
+const LAYOUT_CLASS_RE =
+  /^(?:[a-z0-9-]+:)*(?:w-|min-w-|max-w-|flex-|grow|shrink|basis-|self-|order-)/;
 
 function extractLayoutClasses(classList: string): string {
   return classList
@@ -209,7 +211,12 @@ function enhanceSelect(select: HTMLSelectElement): void {
   new MutationObserver(() => {
     syncLabel();
     syncDisabled();
-  }).observe(select, { childList: true, subtree: true, attributes: true, attributeFilter: ["disabled"] });
+  }).observe(select, {
+    childList: true,
+    subtree: true,
+    attributes: true,
+    attributeFilter: ["disabled"],
+  });
 
   // rAF-throttled reposition — scroll/resize sırasında her event'te layout
   // okumaya gerek yok, tek bir frame'de son değer uygulanır.
