@@ -125,6 +125,21 @@ export function OrderListItem(): string {
             class="th-btn-outline h-8 px-4 max-[380px]:flex-1 text-xs font-semibold whitespace-nowrap max-sm:rounded-full">
             ${t("orders.viewDetails")}
           </button>
+          <!--
+            Teslim alma girişi (07-FE).
+
+            Metin "Takip et" değil "Teslim al": alıcının yapması gereken bir
+            iş var ve düğme onu söylüyor. Yalnız teslim alınmayı bekleyen bir
+            sevkiyat eşleştiğinde çiziliyor — koşulsuz düğme, tıklanınca
+            hiçbir şey bulunmayan bir ekrana götürürdü.
+          -->
+          <template x-if="canPickup(order)">
+            <a :href="pickupUrl(order)"
+              class="th-btn h-8 px-4 max-[380px]:flex-1 text-xs font-semibold whitespace-nowrap max-sm:rounded-full inline-flex items-center"
+              data-testid="order-pickup-link">
+              ${t("orders.pickUp")}
+            </a>
+          </template>
           <template x-if="canPay(order)">
             <button type="button"
               @click="openRemittanceModal(order.orderNumber, order.total, order.currency, order.paymentMethod)"
