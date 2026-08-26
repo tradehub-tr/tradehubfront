@@ -1,0 +1,65 @@
+# Test kapısı — birim ve uçtan uca.
+#
+# NEDEN VAR: 2026-08-26'da altı birim testi kırık bulundu. `ProductBuyBox` ve
+# `ProductOrderPanel` testleri `aa7ddfa` yeniden tasarımında bayatlamış,
+# `messages` testinin mock'u eksik kalmıştı. Hiçbiri fark edilmemişti çünkü
+# testleri koşan bir kapı yoktu — `npm test` yalnız elle çalıştırılıyordu.
+#
+# Kapı, altı test düzeltildikten SONRA açıldı; bugün yeşil başlıyor
+# (423 passed, 2 expected fail). Tersini yapmak her PR'ı kırmızıya boyardı —
+# aynı sıra `lint.yml`'de de izlendi.
+#
+# NE DEĞİL: panel/satıcı E2E'leri burada koşmuyor. Onlar docker + Frappe
+# cookie-login istiyor (`e2e.sh --panel`); CI'da o yığın yok.
+name: Test
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  birim:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+      - run: npm ci
+      - name: Birim testleri (vitest)
+        run: npx vitest run
+
+  e2e:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+      - run: npm ci
+
+      # Yalnız chromium: suite iki projede de (masaüstü + mobil) onu kullanıyor.
+      - name: Tarayıcı kurulumu
+        run: npx playwright install --with-deps chromium
+
+      # Mock-tabanlı spec'ler — backend gerekmiyor, Vite dev server
+      # `playwright.config.ts`'teki `webServer` ile kendiliğinden kalkıyor.
+      # Panel/satıcı spec'leri hariç (docker + PANEL_PASS ister).
+      - name: E2E (mock suite, masaüstü + mobil)
+        run: |
+          npx playwright test $(ls tests/e2e/*.spec.ts \
+            | grep -vE "^tests/e2e/panel-|seller-dashboard-profil|_smoke")
+
+      - name: Başarısızlıkta iz kaydını yükle
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-izleri
+          path: tradehubfront/test-results/
+          retention-days: 7
