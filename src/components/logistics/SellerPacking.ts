@@ -53,11 +53,7 @@ export function SellerPacking(props: SellerPackingProps): string {
           }
           <span class="ms-auto text-xs tabular-nums text-gray-600">
             ${pkg.weight_kg ?? "—"} kg
-            ${
-              pkg.desi != null
-                ? ` · ${escapeHtml(t("shipment.packing.desi"))} ${pkg.desi}`
-                : ""
-            }
+            ${pkg.desi != null ? ` · ${escapeHtml(t("shipment.packing.desi"))} ${pkg.desi}` : ""}
           </span>
         </div>
         <p class="mt-1 text-xs text-gray-500">
@@ -79,7 +75,7 @@ export function SellerPacking(props: SellerPackingProps): string {
     return `
       <section class="space-y-4">
         <h2 class="text-base font-semibold text-gray-900">${escapeHtml(t("shipment.packing.title"))}</h2>
-        <div class="rounded-md border border-gray-300 bg-gray-50 p-4">
+        <div class="rounded-md border border-gray-300 bg-gray-50 p-4" role="status">
           <p class="text-sm text-gray-700">${escapeHtml(t("shipment.packing.locked"))}</p>
         </div>
         ${packages.length ? `<ul class="space-y-2">${rows}</ul>` : ""}
@@ -107,33 +103,34 @@ export function SellerPacking(props: SellerPackingProps): string {
         <div class="grid gap-3 sm:grid-cols-4">
           <label class="block sm:col-span-2">
             <span class="mb-1 block text-xs text-gray-500">${escapeHtml(t("shipment.packing.type"))}</span>
-            <select class="w-full rounded-md border border-gray-300 px-3 py-2 text-sm" x-model="draft.package_type">
+            <select class="w-full rounded-md border border-gray-300 px-3 py-2 text-sm"
+                    data-testid="packing-type" x-model="draft.package_type">
               ${typeOptions}
             </select>
           </label>
           <label class="block">
             <span class="mb-1 block text-xs text-gray-500">${escapeHtml(t("shipment.packing.weight"))}</span>
-            <input type="number" min="0" step="0.1" x-model.number="draft.weight_kg"
+            <input type="number" min="0" step="0.1" data-testid="packing-weight_kg" x-model.number="draft.weight_kg"
                    class="w-full rounded-md border border-gray-300 px-3 py-2 text-sm" />
           </label>
           <div></div>
           <label class="block">
             <span class="mb-1 block text-xs text-gray-500">${escapeHtml(t("shipment.packing.length"))}</span>
-            <input type="number" min="0" x-model.number="draft.length_cm"
+            <input type="number" min="0" data-testid="packing-length_cm" x-model.number="draft.length_cm"
                    class="w-full rounded-md border border-gray-300 px-3 py-2 text-sm" />
           </label>
           <label class="block">
             <span class="mb-1 block text-xs text-gray-500">${escapeHtml(t("shipment.packing.width"))}</span>
-            <input type="number" min="0" x-model.number="draft.width_cm"
+            <input type="number" min="0" data-testid="packing-width_cm" x-model.number="draft.width_cm"
                    class="w-full rounded-md border border-gray-300 px-3 py-2 text-sm" />
           </label>
           <label class="block">
             <span class="mb-1 block text-xs text-gray-500">${escapeHtml(t("shipment.packing.height"))}</span>
-            <input type="number" min="0" x-model.number="draft.height_cm"
+            <input type="number" min="0" data-testid="packing-height_cm" x-model.number="draft.height_cm"
                    class="w-full rounded-md border border-gray-300 px-3 py-2 text-sm" />
           </label>
           <div class="flex items-end">
-            <button type="button" class="th-btn-outline th-no-press w-full" @click="addPackage()"
+            <button type="button" data-testid="packing-add" class="th-btn-outline th-no-press w-full" @click="addPackage()"
                     :disabled="!isValid">
               ${escapeHtml(t("shipment.packing.add"))}
             </button>
