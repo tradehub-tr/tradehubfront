@@ -17,6 +17,18 @@ on:
   pull_request:
   push:
     branches: [main]
+    # Belge değişikliği kodu sınamıyor; koşu açmak kuyruğu boşuna şişiriyor.
+    paths-ignore:
+      - "**.md"
+      - "docs/**"
+      - ".worklog/**"
+
+# Aynı dala arka arkaya push gelirse eski koşu iptal edilir. 2026-08-26'daki
+# Actions arızasında koşular saatlerce kuyrukta birikti; iptal olmadan her
+# yeni push sırayı bir kat daha uzatıyor.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 permissions:
   contents: read
@@ -24,6 +36,8 @@ permissions:
 jobs:
   hijyen:
     runs-on: ubuntu-latest
+    # Varsayılan 360 dakika; takılan bir job yarım gün kaynak tutuyor.
+    timeout-minutes: 10
     steps:
       - uses: actions/checkout@v4
 

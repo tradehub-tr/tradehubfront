@@ -17,6 +17,18 @@ on:
   pull_request:
   push:
     branches: [main]
+    # Belge değişikliği kodu sınamıyor; koşu açmak kuyruğu boşuna şişiriyor.
+    paths-ignore:
+      - "**.md"
+      - "docs/**"
+      - ".worklog/**"
+
+# Aynı dala arka arkaya push gelirse eski koşu iptal edilir. 2026-08-26'daki
+# Actions arızasında koşular saatlerce kuyrukta birikti; iptal olmadan her
+# yeni push sırayı bir kat daha uzatıyor.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 permissions:
   contents: read
@@ -24,6 +36,7 @@ permissions:
 jobs:
   birim:
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -36,6 +49,7 @@ jobs:
 
   e2e:
     runs-on: ubuntu-latest
+    timeout-minutes: 20
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -44,9 +58,25 @@ jobs:
           cache: npm
       - run: npm ci
 
+      # Tarayıcı her koşuda yeniden inmesin — indirme tek başına ~1 dakika.
+      # Anahtar package-lock'a bağlı: Playwright sürümü değişince önbellek
+      # kendiliğinden tazeleniyor.
+      - name: Tarayıcı önbelleği
+        id: pw-cache
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
+
       # Yalnız chromium: suite iki projede de (masaüstü + mobil) onu kullanıyor.
+      # Önbellek tuttuysa yalnız sistem bağımlılıkları kuruluyor.
       - name: Tarayıcı kurulumu
-        run: npx playwright install --with-deps chromium
+        run: |
+          if [ "${{ steps.pw-cache.outputs.cache-hit }}" = "true" ]; then
+            npx playwright install-deps chromium
+          else
+            npx playwright install --with-deps chromium
+          fi
 
       # Mock-tabanlı spec'ler — backend gerekmiyor, Vite dev server
       # `playwright.config.ts`'teki `webServer` ile kendiliğinden kalkıyor.
@@ -61,5 +91,5 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: playwright-izleri
-          path: tradehubfront/test-results/
+          path: test-results/
           retention-days: 7
