@@ -35,16 +35,14 @@ export function ReturnRequest(props: ReturnRequestProps): string {
     return `
       <section class="space-y-3">
         <h2 class="text-base font-semibold text-gray-900">${escapeHtml(t("shipment.return.title"))}</h2>
-        <div class="rounded-md border border-gray-300 bg-gray-50 p-4">
+        <div class="rounded-md border border-gray-300 bg-gray-50 p-4" role="status">
           <p class="text-sm text-gray-700">${escapeHtml(t("shipment.return.windowClosed", { days: windowDays }))}</p>
           <p class="mt-1 text-xs text-gray-500">${escapeHtml(t("shipment.return.windowClosedHint"))}</p>
         </div>
       </section>`;
   }
 
-  const returnable = items.filter(
-    (i) => i.delivered_qty - (i.already_returned_qty ?? 0) > 0
-  );
+  const returnable = items.filter((i) => i.delivered_qty - (i.already_returned_qty ?? 0) > 0);
 
   if (!returnable.length) {
     return `
