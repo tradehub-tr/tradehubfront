@@ -29,7 +29,7 @@
  */
 import { t } from "../i18n";
 
-import { mockShipmentDetail } from "./logisticsMock";
+import { isMockMode, mockShipmentDetail } from "./logisticsMock";
 import * as pickupApi from "./shipmentService";
 
 /**
@@ -356,6 +356,15 @@ function bugun(): string {
  * 07-FE'nin işi değil; **kurmak** işi.
  */
 export function installPickupMock(): void {
+  /**
+   * Ortam kapısı — koruma ÇAĞRI YERİNDE değil, burada.
+   *
+   * Sayfa bu fonksiyonu `if (mock)` ile çağırıyor ve bugün doğru çalışıyor.
+   * Ama çağrı yerinde hatırlanması gereken koruma bir gün unutulur: 12-FE'de
+   * tam bu oldu ve mock veri canlıya sızacaktı (2026-08-28 denetimi). Köprü
+   * artık örnek veri ortamı dışında hiç kurulmuyor.
+   */
+  if (!isMockMode()) return;
   const w = window as unknown as Record<string, unknown>;
   if (MOCK.appointment) w.__thRequestAppointment = requestAppointment;
   if (MOCK.confirm) w.__thConfirmDelivery = confirmDelivery;

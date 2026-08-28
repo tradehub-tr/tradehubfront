@@ -18,6 +18,8 @@
  *   §2.2 durum geçişleri → oluşturulan sevkiyat listede görünür
  *   §2.4 tetiklenebilir  → `?senaryo=` anahtarları
  */
+import { barkodUrl, etiketUrl } from "./barcodeSeed";
+import { isMockMode } from "./logisticsMock";
 import packageTypeJson from "../mocks/logistics/package_type.json";
 import providerJson from "../mocks/logistics/logistics_provider.json";
 import channelJson from "../mocks/logistics/shipping_channel.json";
@@ -169,11 +171,26 @@ export async function savePackage(payload: Record<string, unknown>): Promise<voi
       ...s.koliler,
       [sevkiyat]: [
         ...mevcut,
-        {
-          package_code: `${sevkiyat}-K${String(sira).padStart(2, "0")}`,
-          sequence_label: `${sira}`,
-          ...payload,
-        },
+        (() => {
+          const kod = `${sevkiyat}-K${String(sira).padStart(2, "0")}`;
+          return {
+            package_code: kod,
+            sequence_label: `${sira}`,
+            /**
+             * Barkod ve etiket koli kaydedilirken üretiliyor.
+             *
+             * Gerçekte ayrı bir adım (13-BE `create_label`), ama mock bunları
+             * üretmezse `LabelDownload` ekranında HİÇBİR koli etiket
+             * göstermiyor ve satıcı akışı kapatamıyor — `FE-MOCK-DISIPLINI`
+             * §2.3 "etiket yazdırılabilir açılır" şartı karşılanmıyordu
+             * (28 Ağustos görsel denetimi).
+             */
+            barcode_url: barkodUrl(kod),
+            label_url: etiketUrl(kod, sevkiyat),
+            label_printed_at: yerelZaman(),
+            ...payload,
+          };
+        })(),
       ],
     },
   });
@@ -217,6 +234,15 @@ function yerelZaman(): string {
 // ── Alpine köprüleri ────────────────────────────────────────────────────
 
 export function installSellerMock(): void {
+  /**
+   * Ortam kapısı — koruma ÇAĞRI YERİNDE değil, burada.
+   *
+   * Sayfa bu fonksiyonu `if (mock)` ile çağırıyor ve bugün doğru çalışıyor.
+   * Ama çağrı yerinde hatırlanması gereken koruma bir gün unutulur: 12-FE'de
+   * tam bu oldu ve mock veri canlıya sızacaktı (2026-08-28 denetimi). Köprü
+   * artık örnek veri ortamı dışında hiç kurulmuyor.
+   */
+  if (!isMockMode()) return;
   const w = window as unknown as Record<string, unknown>;
   if (MOCK.create) w.__thCreateShipment = createShipment;
   if (MOCK.packages) w.__thSavePackage = savePackage;
