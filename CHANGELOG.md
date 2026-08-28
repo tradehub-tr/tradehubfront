@@ -1,3 +1,52 @@
+## [v2.4.0-alpha.29] - 2026-08-28 ALPHA
+
+Bu surum alpha.istoc.com'da gelistirme asamasindadir.
+
+### Eklendi
+- feat(lojistik): alıcı bildirim ve teslim kanıtı mock'u eklendi (@aliiball)
+  - Yedi senaryo anahtarı, localStorage kalıcılığı, rol süzgeci
+  - __thSetNotificationPref köprüsü bağlandı: ekran 13 Ağustos'tan beri çiziliyordu ama anahtar hiçbir modda kaydetmiyordu
+  - Ortam kapısı (isMockMode): mock veri canlıya sızmıyor
+  - POD'un sözleşmede olmayan alanları override tablosunda (K-F) — varlık 14-BE'ye ait, sözleşme genişletilmedi
+  - listNotifications ve markNotificationRead stub'ları (sözleşme §2.3, §2.4)
+  - Sözleşme: docs/lojistik/12-FE-VERI-SOZLESMESI.md
+- feat(lojistik): bildirim tercihleri ve teslim kanıtı ekranları (@aliiball)
+  - ProofOfDelivery: kanıt yok / medya yetkisi yok / eksik teslim üç ayrı hâl; iç operasyon damgaları (source, recorded_by) alıcıya gösterilmiyor
+  - Tercih anahtarı iyimser güncelleniyor, hata gelirse eski değere dönüyor
+  - Kanal etiketi shipment.notifyChannel.* ad alanından: eskiden sevkiyat kanalı bloğundan çağrılıyordu ve ekranda ham 'email' yazıyordu
+  - Okunmuşluk read_at'ten türetiliyor; okunmamış bildirime tıklamak onu okundu işaretliyor
+  - Mock modda ?name= artık dikkate alınıyor — sevkiyat bağlantıları ölüydü
+  - Dört dile 38 i18n anahtarı (notifyChannel, pod blokları)
+- feat(test): 12-FE birim ve E2E testleri (@aliiball)
+  - ProofOfDelivery: üç hâlin birbirine karışmadığını kilitliyor
+  - E2E: K1…K13 kabul senaryoları, masaüstü ve mobil
+  - Gerçek mod testi: ?mock=0 ile sahte veri görünmüyor
+- feat(test): mock disiplini denetimleri ve kırık kaynak taraması (@aliiball)
+  - ekranKalitesi: her mock modülü ortam kapısı taşıyor mu, var olmayan dosyaya işaret ediyor mu, tanımlı köprü çağrılıyor mu
+  - Denetim yazıldığı gün iki kusur buldu: pickup ve seller mock'ları ortam kapısı taşımıyordu, koruma sayfa katmanındaydı
+  - barcodeSeed: koli kodundan deterministik data: URI barkod ve etiket — 13-FE etiket ekranında üç barkod da kırıktı (A11'in etiket karşılığı)
+  - storybook-kirik-tarama: 404 dönen statik varlıkları tarar; kasıtlı kırıklar BEKLENEN listesinde gerekçesiyle
+  - Sözleşme: GOREV-TAMAMLAMA-SOZLESMESI.md §2.4, §6
+
+### Duzeltildi
+- fix(e2e): route ölçüm testinde CI ortamı sabitlendi (@aliiball)
+  - process.env mirası Actions'ın CI=true değerini CLI alt sürecine sızdırıyordu; measure-home-perf.mjs strict moda geçip fixture'ın kasıtlı duplicate ID'sini bütçe ihlali sayıyordu — lokalde yeşil, CI'da kırmızı
+  - Kardeş home-performance.spec.ts bu sabitlemeyi zaten yapıyordu
+  - CI'ın route modunda strict kapı olduğunu kilitleyen regresyon testi eklendi
+- fix(e2e): mega menü niyet penceresi tarayıcı içinde ölçülüyor (@aliiball)
+  - dispatch'in CDP gidiş-dönüşü 100 ms'lik pencereye dahil oluyor, yük altında eşik aşılınca test düşüyordu
+  - Dispatch ve 50 ms'lik ölçüm tek evaluate çağrısına alındı; mount sabit beklemeyle değil Playwright'ın bekleyişiyle doğrulanıyor
+  - Aynı düzeltme dosyanın iptal-niyet bloğunda zaten vardı
+
+### Degistirildi
+- refactor(lojistik): notification_log fixture ve tipi senkronlandı (@aliiball)
+  - gen_logistics_types.py --sync çıktısı; elle düzenlenmez
+  - Kaynak: tradehub_core contract.py
+- refactor(lojistik): ölü mockNotificationFeed kaldırıldı (@aliiball)
+  - Fonksiyon hiçbir yerde çağrılmıyordu; kendi yorumu 'varlık sözleşmeye eklenince buradan silinip fixture'a taşınmalı' diyordu
+  - notification_log varlığı eklendi ve fixtures.ts ondan besleniyor
+
+---
 ## [v2.4.0-alpha.28] - 2026-08-28 ALPHA
 
 Bu surum alpha.istoc.com'da gelistirme asamasindadir.
