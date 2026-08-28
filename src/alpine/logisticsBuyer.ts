@@ -133,6 +133,36 @@ Alpine.data("pickupAppointment", (options: { shipment: string; today: string }) 
 }));
 
 /**
+ * S6 bildirim akışı — okundu işareti.
+ *
+ * Okunmamış satıra tıklandığında kayıt okundu işaretleniyor. Köprü yoksa
+ * SESSİZCE hiçbir şey yapmıyor: bu ikincil bir kolaylık, akışın kendisi
+ * (bildirimi görmek, sevkiyata gitmek) köprüsüz de çalışıyor.
+ */
+interface NotificationFeedState {
+  okundu(name: string, el: HTMLElement): Promise<void>;
+}
+
+Alpine.data("notificationFeed", () => ({
+  async okundu(this: NotificationFeedState, name: string, el: HTMLElement): Promise<void> {
+    const fn = (window as unknown as Record<string, unknown>).__thMarkNotificationRead as
+      | ((name: string) => Promise<unknown>)
+      | undefined;
+    if (!fn) return;
+    try {
+      await fn(name);
+      // Rozet anında sönüyor; liste yeniden çekilmiyor çünkü kullanıcı
+      // okuduğu satırın yerinden oynamasını beklemiyor.
+      el.dataset.read = "1";
+      el.classList.remove("border-indigo-200", "bg-indigo-50/40");
+      el.classList.add("border-gray-200", "opacity-70");
+    } catch {
+      // Okundu işareti başarısızsa kullanıcıyı rahatsız etmeye değmez.
+    }
+  },
+}));
+
+/**
  * S7 bildirim tercihleri.
  *
  * Zorunlu bildirimler buraya HİÇ gelmiyor — şablonda `disabled` olduğu için
@@ -140,36 +170,48 @@ Alpine.data("pickupAppointment", (options: { shipment: string; today: string }) 
  * sunucuya gönderilmeden önce burada da durur.
  */
 interface NotificationPreferencesState {
-  saving: boolean;
+  /** Kaydedilmekte olan şablonun adı; boş dize = boşta. */
+  saving: string;
   error: string;
-  toggle(template: string, enabled: boolean): Promise<void>;
+  toggle(template: string, enabled: boolean, el?: HTMLInputElement): Promise<void>;
 }
 
 Alpine.data("notificationPreferences", () => ({
-  saving: false,
+  saving: "",
   error: "",
 
+  /**
+   * İyimser güncelleme + GERİ ALMA.
+   *
+   * Anahtar tıklandığı anda dönüyor (tarayıcı öyle yapıyor); istek
+   * başarısızsa eski hâline döndürülüyor. Bunu yapmazsak kullanıcı kapattığını
+   * sandığı bildirimi almaya devam eder — sessiz başarısızlık, görünür
+   * başarısızlıktan kötüdür (12-FE sözleşmesi §4.3).
+   */
   async toggle(
     this: NotificationPreferencesState,
     template: string,
-    enabled: boolean
+    enabled: boolean,
+    el?: HTMLInputElement
   ): Promise<void> {
     if (this.saving) return;
-    this.saving = true;
+    this.saving = template;
     this.error = "";
     try {
       const fn = (window as unknown as Record<string, unknown>).__thSetNotificationPref as
-        | ((payload: { template: string; enabled: boolean }) => Promise<void>)
+        | ((payload: { template: string; enabled: boolean }) => Promise<unknown>)
         | undefined;
       if (!fn) {
         this.error = t("shipment.notifyPref.notAvailable");
+        if (el) el.checked = !enabled;
         return;
       }
       await fn({ template, enabled });
     } catch (e) {
       this.error = (e as Error)?.message || t("shipment.notifyPref.failed");
+      if (el) el.checked = !enabled;
     } finally {
-      this.saving = false;
+      this.saving = "";
     }
   },
 }));

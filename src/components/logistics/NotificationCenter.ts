@@ -4,6 +4,19 @@
  * İkisi aynı dosyada çünkü aynı veri modelini paylaşıyorlar ve kullanıcı
  * ikisi arasında gidip geliyor.
  *
+ * ── 12-FE (2026-08-28) ──
+ * · Kanal etiketi `shipment.notifyChannel.*`'tan geliyor. Eskiden
+ *   `shipment.channel.*` çağrılıyordu ama o blok SEVKİYAT kanalları için
+ *   (`CARGO`, `COURIER`…); `email`/`in_app`/`sms` karşılığı yoktu ve ekranda
+ *   çevrilmemiş ham `email` yazıyordu.
+ * · Okunmuşluk `read_at`'ten türetiliyor (sözleşme §4.1).
+ * · Okunmamış bildirime tıklamak onu okundu işaretliyor (`notificationFeed`).
+ *   Köprü tanımlanıp ekranda hiç çağrılmazsa okunmamış rozeti asla sönmez ve
+ *   ekran yanlış bilgi verir — 28 Ağustos denetiminde bu ölü köprü bulundu.
+ * · Anahtar iyimser güncelleniyor; hata gelirse `toggle` eski değere döndürür
+ *   (`alpine/logisticsBuyer.ts`) — sessizce başarılı görünmek, kullanıcının
+ *   aldığını sandığı bildirimi almaması demek.
+ *
  * S7'nin kritik kuralı: **zorunlu operasyon bildirimleri kapatılamaz.**
  * Anahtar devre dışı ve daima açık; `enabled` değeri gönderilmiyor bile.
  * Bu bir arayüz nezaketi değil, TUR-113 kabul kriteri — backend de aynı
@@ -19,8 +32,13 @@ interface NotificationRow {
   event: string;
   title: string;
   body?: string | null;
-  created_at: string;
-  read?: number | null;
+  /** Gönderim zamanı — kuyruğa girme değil (sözleşme §1.2). */
+  sent_at: string;
+  /**
+   * `null` = okunmadı. Ayrı bir `read` bayrağı YOK: iki alan tutmak ikinci
+   * bir doğruluk kaynağı olurdu ve "ne zaman okundu" zaten gerekiyor.
+   */
+  read_at?: string | null;
   shipment?: string | null;
 }
 
@@ -43,10 +61,13 @@ export function NotificationCenter(props: { rows: NotificationRow[] }): string {
   const items = rows
     .map(
       (row) => `
-      <li class="rounded-md border p-3 ${row.read ? "border-gray-200 opacity-70" : "border-indigo-200 bg-indigo-50/40"}">
+      <li class="rounded-md border p-3 ${row.read_at ? "border-gray-200 opacity-70" : "border-indigo-200 bg-indigo-50/40"}"
+          data-testid="notification-row" data-read="${row.read_at ? "1" : "0"}"
+          data-name="${escapeHtml(row.name)}"
+          ${row.read_at ? "" : `@click="okundu('${escapeHtml(row.name)}', $el)"`}>
         <div class="flex flex-wrap items-baseline gap-2">
           <span class="text-sm font-medium text-gray-900">${escapeHtml(row.title)}</span>
-          <span class="ms-auto text-xs text-gray-500">${formatDateTime(row.created_at)}</span>
+          <span class="ms-auto text-xs text-gray-500">${formatDateTime(row.sent_at)}</span>
         </div>
         ${row.body ? `<p class="mt-1 text-sm text-gray-700">${escapeHtml(row.body)}</p>` : ""}
         ${
@@ -62,7 +83,7 @@ export function NotificationCenter(props: { rows: NotificationRow[] }): string {
     .join("");
 
   return `
-    <section class="space-y-4">
+    <section class="space-y-4" x-data="notificationFeed()">
       <header class="flex flex-wrap items-center gap-3">
         <h2 class="text-base font-semibold text-gray-900">${escapeHtml(t("shipment.notify.title"))}</h2>
         <a href="/pages/dashboard/notification-preferences.html"
@@ -93,7 +114,7 @@ export function NotificationPreferences(props: { rows: PreferenceRow[] }): strin
               ${escapeHtml(t(`shipment.notifyEvent.${row.event}`, { defaultValue: row.event }))}
             </p>
             <p class="text-xs text-gray-500">
-              ${escapeHtml(t(`shipment.channel.${row.channel}`, { defaultValue: row.channel }))}
+              ${escapeHtml(t(`shipment.notifyChannel.${row.channel}`, { defaultValue: row.channel }))}
             </p>
             ${
               locked
@@ -103,11 +124,16 @@ export function NotificationPreferences(props: { rows: PreferenceRow[] }): strin
                 : ""
             }
           </div>
+          <span class="text-xs text-gray-500" x-show="saving === '${escapeHtml(row.template)}'" x-cloak>
+            ${escapeHtml(t("shipment.notifyPref.saving"))}
+          </span>
           <label class="inline-flex items-center">
             <input type="checkbox" class="peer sr-only"
+                   data-testid="pref-toggle" data-template="${escapeHtml(row.template)}"
                    ${locked || row.enabled ? "checked" : ""}
                    ${locked ? "disabled" : ""}
-                   @change="toggle('${escapeHtml(row.template)}', $event.target.checked)" />
+                   ${locked ? "" : `:disabled="saving !== ''"`}
+                   @change="toggle('${escapeHtml(row.template)}', $event.target.checked, $event.target)" />
             <span class="h-6 w-11 rounded-full bg-gray-300 transition-colors
                          peer-checked:bg-emerald-500 peer-disabled:opacity-50
                          after:absolute after:mt-0.5 after:ms-0.5 after:h-5 after:w-5
@@ -134,6 +160,7 @@ export function NotificationPreferences(props: { rows: PreferenceRow[] }): strin
       }
 
       <ul class="divide-y divide-gray-100 rounded-md border border-gray-200 px-3">${items}</ul>
-      <p class="text-xs text-red-600" x-show="error" x-text="error" x-cloak></p>
+      <p class="rounded-md border border-red-200 bg-red-50 p-3 text-xs text-red-700"
+         role="alert" x-show="error" x-text="error" x-cloak></p>
     </section>`;
 }

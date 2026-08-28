@@ -34,6 +34,10 @@ import { startAlpine } from "../alpine";
 import { DeliveryConfirm } from "../components/logistics/DeliveryConfirm";
 import { NotWiredNotice } from "../components/logistics/NotWiredNotice";
 import { PickupAppointment } from "../components/logistics/PickupAppointment";
+import {
+  ProofOfDelivery,
+  type ProofOfDeliveryRow,
+} from "../components/logistics/ProofOfDelivery";
 import { ShipmentGroupList } from "../components/logistics/ShipmentGroupList";
 import { TrackingTimeline } from "../components/logistics/TrackingTimeline";
 import { t } from "../i18n";
@@ -45,6 +49,10 @@ import {
   mockTrackingEvents,
 } from "../services/logisticsMock";
 import {
+  getProofOfDelivery,
+  installNotificationMock,
+} from "../services/logisticsNotificationMock";
+import {
   MOCK as PICKUP_MOCK,
   installPickupMock,
   listAppointmentSlots,
@@ -55,7 +63,7 @@ import {
 // Kanal koşulunun tek tanımı orada — sipariş listesindeki giriş düğmesi de
 // aynı kuralı kullanıyor, iki yerde ayrı liste tutmak ikisini sürüklerdi.
 import { TESLIM_ALMA_TIPLERI } from "../services/pickupEntry";
-import { getShipment, type ShipmentDetail } from "../services/shipmentService";
+import { getShipment, listShipments, type ShipmentDetail } from "../services/shipmentService";
 import type { ShipmentDetail as SozlesmeShipmentDetail } from "../types/logistics";
 import { requireAuth } from "../utils/auth-guard";
 import { escapeHtml } from "../utils/sanitize";
@@ -72,7 +80,11 @@ const mock = isMockMode();
  * kadar onları bu mock sağlıyor; kurulmazsa ekran açılıyor ama hiçbir düğme
  * iş yapmıyor — "ekran render oluyor, iş akışı kapanmıyor" durumu.
  */
-if (mock) installPickupMock();
+if (mock) {
+  installPickupMock();
+  // POD kartı da köprü üzerinden besleniyor (12-FE).
+  installNotificationMock();
+}
 const shipmentName = new URLSearchParams(window.location.search).get("name") ?? "";
 
 const root = mountDashboardShell({
@@ -136,7 +148,14 @@ function teslimAlmaAlanlari(
   };
 }
 
-function render(shipment: ShipmentDetail): void {
+interface EkVeri {
+  /** `null` = kanıt yok (uç `null` döndürdü). `undefined` = hiç sorulmadı. */
+  pod?: ProofOfDeliveryRow | null;
+  /** Siparişin diğer sevkiyatları — gerçek uçtan da gelebiliyor (S1). */
+  kardesler?: { name: string; status: string }[];
+}
+
+function render(shipment: ShipmentDetail, ek: EkVeri = {}): void {
   const isDelivered = shipment.status === DELIVERED;
   const blocks: string[] = [];
 
@@ -180,12 +199,15 @@ function render(shipment: ShipmentDetail): void {
    * Sipariş detayı açılınca buradan oraya taşınacak; şimdilik alıcının
    * "siparişimin ne kadarı yolda" sorusunu sorduğu tek yer burası.
    */
-  if (mock) {
+  const kardesler = mock ? mockShipmentList() : (ek.kardesler ?? []);
+  if (kardesler.length) {
     blocks.push(
       shellCard(
         ShipmentGroupList({
-          orderName: mockShipmentDetail().order,
-          shipments: mockShipmentList(),
+          orderName: mock
+            ? mockShipmentDetail().order
+            : ((shipment as unknown as { order?: string }).order ?? ""),
+          shipments: kardesler as never,
         })
       )
     );
@@ -215,22 +237,22 @@ function render(shipment: ShipmentDetail): void {
   // ── S10 · teslim özeti  /  S4 · teslim onayı ──
   if (isDelivered) {
     /**
-     * K-E (14-FE karar defteri): yarım POD gösterimi KALDIRILDI.
+     * ── S10 · Teslim kanıtı ── (12-FE, 2026-08-28)
      *
-     * Burada örnek veri modunda sahte bir teslim kanıtı çiziliyordu: imza,
-     * fotoğraf, teslim alan kişi. `Proof of Delivery` DocType'ı hiç yok ve
-     * gerçek modda blok zaten boş geliyordu — yani alıcı, var olmayan bir
-     * kaydın ayrıntısını görüyordu. Sahte işlevsellik, eksik işlevsellikten
-     * daha kötü: kullanıcı gördüğüne güveniyor.
-     *
-     * Alıcı teslim kanıtı ekranı 12-FE'de sıfırdan yazılacak; uç 14-BE'de.
+     * 14-FE karar defteri K-E burada sahte POD gösterimini kaldırmıştı; yerini
+     * `ProofOfDelivery` bileşeni aldı. Üç hâl AYRI ekran:
+     *   · `pod === null`     → "kanıt yok" (uç `null` döndü, hata değil)
+     *   · medya alanı yok    → görme yetkisi yok
+     *   · `undefined`        → uç hiç bağlı değil (14-BE)
      */
     blocks.push(
       shellCard(
-        NotWiredNotice({
-          title: t("shipment.page.proofNotWired"),
-          endpoint: "api.v1.logistics.get_proof_of_delivery",
-        })
+        ek.pod === undefined
+          ? NotWiredNotice({
+              title: t("shipment.page.proofNotWired"),
+              endpoint: "api.v1.logistics.get_proof_of_delivery",
+            })
+          : ProofOfDelivery({ pod: ek.pod })
       )
     );
   } else if (teslimAlmaKanali) {
@@ -299,17 +321,77 @@ function renderError(message: string): void {
   `);
 }
 
-if (mock && !shipmentName) {
-  // Mock modda sevkiyat adı şart değil — örnek kayıt zaten var.
-  render(mockShipmentDetail() as unknown as ShipmentDetail);
+/**
+ * POD ve kardeş sevkiyatlar — ikisi de ekranı ENGELLEMEZ.
+ *
+ * Sevkiyat detayı geldiyse sayfa çizilir; bu iki blok gelirse eklenir,
+ * gelmezse kendi "bağlı değil" / boş hâlini gösterir. Tek bir `await`
+ * zincirinde toplamak, POD ucu düştüğünde takip çizelgesini de karartırdı.
+ */
+async function ekVeriTopla(shipment: ShipmentDetail): Promise<EkVeri> {
+  const ek: EkVeri = {};
+
+  // Teslim kanıtı yalnız teslim edilmiş sevkiyatta sorulur.
+  if (shipment.status === DELIVERED) {
+    try {
+      ek.pod = await getProofOfDelivery(shipment.name);
+    } catch {
+      // Uç bağlı değil → `undefined` kalır → ekran "bağlı değil" çizer.
+      // `null` ile karıştırılmamalı: `null` "kanıt yok" demek.
+    }
+  }
+
+  // S1 gerçek modda da çizilebiliyor: `list_shipments` var olan bir uç.
+  if (!mock) {
+    const order = (shipment as unknown as { order?: string }).order;
+    if (order) {
+      try {
+        const { items } = await listShipments({ order });
+        ek.kardesler = items as unknown as EkVeri["kardesler"];
+      } catch {
+        // Liste alınamazsa blok hiç çizilmiyor — boş bir kart göstermek,
+        // "siparişinizin başka sevkiyatı yok" demek olurdu ki bilmiyoruz.
+      }
+    }
+  }
+
+  return ek;
+}
+
+async function ac(shipment: ShipmentDetail): Promise<void> {
+  render(shipment, await ekVeriTopla(shipment));
+}
+
+/**
+ * Örnek veri modunda istenen sevkiyatı bulur.
+ *
+ * Eskiden mock modda `?name=` YOK SAYILIYORDU: hangi sevkiyata tıklanırsa
+ * tıklansın aynı kayıt (`SHP-2026-00042`, "Yolda") açılıyordu. Yani S1'deki
+ * "Takip et" bağlantıları ölü bağlantıydı ve teslim edilmiş bir sevkiyatın
+ * kanıtı hiç görülemiyordu.
+ *
+ * Liste satırı detay kadar zengin değil (alt tablolar yok); detayın ÜZERİNE
+ * yazılıyor ki ekran eksik alanla patlamasın.
+ */
+function mockSevkiyat(name: string): ShipmentDetail {
+  const detay = mockShipmentDetail();
+  if (!name || name === detay.name) return detay as unknown as ShipmentDetail;
+
+  const satir = mockShipmentList().find((s) => s.name === name);
+  return (satir ? { ...detay, ...satir } : detay) as unknown as ShipmentDetail;
+}
+
+if (mock) {
+  // Mock modda sevkiyat adı şart değil — adsız giriş örnek kayda düşer.
+  await ac(mockSevkiyat(shipmentName));
 } else if (!shipmentName) {
   renderError(t("shipment.page.missingName"));
 } else {
   try {
-    render(await getShipment(shipmentName));
+    await ac(await getShipment(shipmentName));
   } catch (e) {
     // Mock modda gerçek uç hata verirse örnek kayda düş — inceleme durmasın.
-    if (mock) render(mockShipmentDetail() as unknown as ShipmentDetail);
+    if (mock) await ac(mockSevkiyat(shipmentName));
     else renderError((e as Error)?.message || t("shipment.page.loadFailed"));
   }
 }

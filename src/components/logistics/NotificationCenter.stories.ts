@@ -4,9 +4,8 @@
  * S7'nin `ZorunluKilitli` story'si kabul kriterinin kendisi: zorunlu
  * operasyon bildirimi kapatılamıyor, anahtar devre dışı ve açık.
  *
- * S6'nın verisi fixture'dan GELMİYOR — sözleşmede "gönderilmiş bildirim
- * kaydı" varlığı yok (`Notification Template` ve `Notification Preference`
- * var, ikisi de tanım tarafı). Ayrıntı `fixtures.ts` → `notificationFeed`.
+ * S6'nın verisi 28 Ağustos 2026'dan beri fixture'dan geliyor: 12-FE
+ * `notification_log` varlığını sözleşmeye ekledi. Öncesinde elle yazılıydı.
  */
 import { notificationFeed, notificationPreferences } from "./fixtures";
 import { NotificationCenter, NotificationPreferences } from "./NotificationCenter";
@@ -24,7 +23,10 @@ export const BildirimListesi = {
 
 export const HepsiOkundu = {
   name: "S6 · Hepsi okundu",
-  render: () => NotificationCenter({ rows: notificationFeed.map((r) => ({ ...r, read: 1 })) }),
+  render: () =>
+    NotificationCenter({
+      rows: notificationFeed.map((r) => ({ ...r, read_at: "2026-08-12 10:00:00" })),
+    }),
 };
 
 /** Sevkiyata bağlı olmayan bildirimde takip bağlantısı çıkmıyor. */

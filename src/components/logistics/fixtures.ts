@@ -11,6 +11,7 @@
  * boşluğu, tasarım tercihi değil.
  */
 import packageTypeJson from "../../mocks/logistics/package_type.json";
+import notificationLogJson from "../../mocks/logistics/notification_log.json";
 import notificationPreferenceJson from "../../mocks/logistics/notification_preference.json";
 import podJson from "../../mocks/logistics/proof_of_delivery.json";
 import returnRequestJson from "../../mocks/logistics/return_request.json";
@@ -72,49 +73,12 @@ export const returnReasonOptions = [
 ];
 
 /**
- * S6 bildirim akışı — **sözleşmede karşılığı YOK.**
+ * S6 bildirim akışı — **artık sözleşmeden geliyor.**
  *
- * `Notification Template` ve `Notification Preference` DocType'ları var, ama
- * "kullanıcıya gönderilmiş bildirim kaydı" diye bir varlık yok. Yani S6'nın
- * beslendiği uç henüz tanımsız. Buradaki satırlar bu yüzden elle yazıldı ve
- * alan adları `Notification Template.event` ile hizalandı; sözleşmeye varlık
- * eklenince bu blok fixture'a taşınmalı.
+ * 28 Ağustos 2026'ya kadar buradaki satırlar ELLE yazılıydı: sözleşmede
+ * "kullanıcıya gönderilmiş bildirim kaydı" diye bir varlık yoktu. 12-FE o
+ * varlığı (`notification_log`) `contract.py`'ye ekledi ve fixture üreteçten
+ * akmaya başladı — yani bu blok artık bir sözleşme boşluğunu değil, gerçek
+ * bir varlığı temsil ediyor.
  */
-export const notificationFeed = [
-  {
-    name: "NTF-2026-00311",
-    event: "shipment_shipped",
-    title: "Siparişiniz yola çıktı",
-    body: "SHP-2026-00042 numaralı sevkiyat Yurtiçi Kargo'ya teslim edildi.",
-    created_at: "2026-08-10 09:10:00",
-    read: 0,
-    shipment: "SHP-2026-00042",
-  },
-  {
-    name: "NTF-2026-00298",
-    event: "shipment_out_for_delivery",
-    title: "Kurye dağıtıma çıktı",
-    body: "Gönderiniz bugün teslim edilecek.",
-    created_at: "2026-08-12 07:40:00",
-    read: 0,
-    shipment: "SHP-2026-00042",
-  },
-  {
-    name: "NTF-2026-00255",
-    event: "shipment_delivered",
-    title: "Sevkiyat teslim edildi",
-    body: "SHP-2026-00041 teslim alındı. Teslim özetini görüntüleyebilirsiniz.",
-    created_at: "2026-08-08 14:35:00",
-    read: 1,
-    shipment: "SHP-2026-00041",
-  },
-  {
-    name: "NTF-2026-00240",
-    event: "return_decided",
-    title: "İade talebiniz onaylandı",
-    body: "RET-2026-00007 için iade kargosu oluşturuldu.",
-    created_at: "2026-08-09 15:22:00",
-    read: 1,
-    shipment: null,
-  },
-];
+export const notificationFeed = notificationLogJson.default.data.items;
