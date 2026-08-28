@@ -59,3 +59,69 @@ describe("mapListingDetail — video görsel künyesi (Task 8)", () => {
     expect(promo?.captionsUrl).toBeUndefined();
   });
 });
+
+describe("mapListingDetail — videoWatchUrl eşlemesi (Task 4, medya-watch-page)", () => {
+  it("raw.videoWatchUrl doluysa detail.videoWatchUrl'a taşınır", () => {
+    const detail = mapListingDetail({
+      title: "X",
+      images: [],
+      videoUrl: "/files/promo.mp4",
+      videoWatchUrl: "/medya/v/yeni-urun-tanitimi",
+    });
+
+    expect(detail.videoWatchUrl).toBe("/medya/v/yeni-urun-tanitimi");
+  });
+
+  it("raw.videoWatchUrl yoksa/boşsa detail.videoWatchUrl undefined kalır (yanlış link basmaktansa hiç basmamak)", () => {
+    const detail = mapListingDetail({
+      title: "X",
+      images: [],
+      videoUrl: "/files/promo.mp4",
+    });
+    expect(detail.videoWatchUrl).toBeUndefined();
+
+    const detailBos = mapListingDetail({
+      title: "X",
+      images: [],
+      videoUrl: "/files/promo.mp4",
+      videoWatchUrl: "   ",
+    });
+    expect(detailBos.videoWatchUrl).toBeUndefined();
+  });
+});
+
+describe("mapListingDetail — documents eşlemesi (Task 5, dosya-yöneticisi-seo)", () => {
+  it("raw.documents doluysa url/title/docType/language/sizeBytes birebir taşınır", () => {
+    const detail = mapListingDetail({
+      title: "X",
+      images: [],
+      documents: [
+        { url: "/files/katalog.pdf", title: "Ürün Kataloğu", docType: "Katalog", language: "tr", sizeBytes: 204800 },
+      ],
+    });
+
+    expect(detail.documents).toEqual([
+      { url: "/files/katalog.pdf", title: "Ürün Kataloğu", docType: "Katalog", language: "tr", sizeBytes: 204800 },
+    ]);
+  });
+
+  it("raw.documents yoksa/dizi değilse detail.documents boş dizi kalır (anahtar hiç basılmıyor)", () => {
+    const detail = mapListingDetail({ title: "X", images: [] });
+    expect(detail.documents).toEqual([]);
+
+    const detailYanlisTip = mapListingDetail({ title: "X", images: [], documents: "not-an-array" });
+    expect(detailYanlisTip.documents).toEqual([]);
+  });
+
+  it("url'siz/boş-url'li satır elenir, diğer alanlar eksikse boş dizgeye düşer", () => {
+    const detail = mapListingDetail({
+      title: "X",
+      images: [],
+      documents: [{ title: "Adressiz belge" }, { url: "  " }, { url: "/files/gecerli.docx" }],
+    });
+
+    expect(detail.documents).toEqual([
+      { url: "/files/gecerli.docx", title: "", docType: "", language: "", sizeBytes: 0 },
+    ]);
+  });
+});

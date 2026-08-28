@@ -343,6 +343,24 @@ server {
         proxy_set_header X-Forwarded-Proto $scheme;
     }
 
+    # Medya izleme sayfası (Task 4, 2026-08-26 medya-watch-page). Yukarıdaki
+    # /media/<id> bloğuyla BİREBİR desen — bot/insan ayrımı YOK (diğer
+    # /urun,/kategori,/marka,/magaza SEO bloklarından farklı): eski slug'ların
+    # 301 köprüsü ve bilinmeyen slug'ın 404'e düşmesi gerçek kullanıcılar için de
+    # geçerli olmalı, bu yüzden TÜM istekler resolver'a gider (page_resolver.
+    # render_media_watch dist'teki pages/media-watch.html'i okuyup <head>'e SEO
+    # enjekte eder, gövde/script olduğu gibi döner — sayfa yine client'ta çizilir).
+    location ~ ^/medya/v/([a-z0-9-]+)$ {
+        proxy_hide_header X-Robots-Tag;
+        proxy_set_header X-Istoc-Storefront "1";
+        proxy_pass https://${BACKEND_DOMAIN}/api/method/tradehub_core.seo.page_resolver.render_media_watch?slug=$1;
+        proxy_ssl_server_name on;
+        proxy_set_header Host ${BACKEND_DOMAIN};
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+
     # Frappe API proxy
     location /api/ {
         # CORS — whitelist: GitHub Pages, *.istoc.com subdomain'leri, Capacitor WebView (iOS/Android).

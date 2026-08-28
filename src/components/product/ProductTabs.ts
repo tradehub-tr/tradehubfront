@@ -7,6 +7,7 @@
 
 import { AttributesTabContent } from "./AttributesTabContent";
 import { ProductCertificates } from "./ProductCertificates";
+import { ProductDocuments } from "./ProductDocuments";
 import { ProductReviews } from "./ProductReviews";
 import { CompanyProfile } from "./CompanyProfile";
 import { ProductDescription } from "./ProductDescription";
@@ -32,8 +33,9 @@ const tabs: TabConfig[] = [
     label: t("product.attributes"),
     i18nKey: "product.attributes",
     // Sertifikalar referans düzendeki gibi özellik içeriğinin altında,
-    // yorumlar bölümünün hemen üstünde durur.
-    content: () => AttributesTabContent() + ProductCertificates(),
+    // yorumlar bölümünün hemen üstünde durur. Dokümanlar (Task 5) sertifikaların
+    // hemen ardına eklendi — ikisi de "" dönerek kendi kendine gizlenir.
+    content: () => AttributesTabContent() + ProductCertificates() + ProductDocuments(),
   },
   {
     id: "reviews",

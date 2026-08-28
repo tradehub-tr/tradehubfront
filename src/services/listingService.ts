@@ -1571,6 +1571,21 @@ export function mapListingDetail(raw: any): ProductDetail {
           description: String(c.description || ""),
         }))
       : [],
+    // Task 5 — `documents`: liste boşsa/alan hiç gelmediyse `[]`, blok kendi
+    // kendine gizlenir (ProductDocuments.ts). Boş/whitespace `url` olan satır
+    // tutulmuyor — indirme linki olmayan bir "doküman" gösterilecek bir şey
+    // değil.
+    documents: Array.isArray(raw.documents)
+      ? raw.documents
+          .map((d: any) => ({
+            url: String(d.url || "").trim(),
+            title: String(d.title || ""),
+            docType: String(d.docType || ""),
+            language: String(d.language || ""),
+            sizeBytes: Number(d.sizeBytes) || 0,
+          }))
+          .filter((d: { url: string }) => d.url)
+      : [],
     description: raw.description || "",
     rating: raw.rating || 0,
     reviewCount: raw.reviewCount || 0,
@@ -1625,6 +1640,12 @@ export function mapListingDetail(raw: any): ProductDetail {
     videoPreviewSrc:
       typeof raw.videoPreviewSrc === "string" && raw.videoPreviewSrc.trim()
         ? raw.videoPreviewSrc.trim()
+        : undefined,
+    // Task 4 — `/medya/v/<slug>` izleme sayfası linki. Backend yalnız yerel
+    // video + slug varsa basar; boş/whitespace değer alan sayılmaz.
+    videoWatchUrl:
+      typeof raw.videoWatchUrl === "string" && raw.videoWatchUrl.trim()
+        ? raw.videoWatchUrl.trim()
         : undefined,
     outOfStock: !!raw.outOfStock,
     status: raw.status || undefined,

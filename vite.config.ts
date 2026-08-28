@@ -152,6 +152,9 @@ function prettyUrlRewritePlugin(): Plugin {
         { re: /^\/(?:en\/)?urun\/[^/]+/, html: '/pages/product-detail.html' },
         { re: /^\/(?:en\/)?kategori\/.+/, html: '/pages/categories.html' },
         { re: /^\/(?:en\/)?marka\/.+/, html: '/pages/brand.html' },
+        // Task 4 (2026-08-26 medya-watch-page) — sayfa tek dilli (koordinatör
+        // ruling'i); `/en/` öneki yalnız dev-rewrite'ta kabul edilir, slug aynı okunur.
+        { re: /^\/(?:en\/)?medya\/v\/[^/]+/, html: '/pages/media-watch.html' },
         { re: /^\/(?:en\/)?magaza\/[^/]+\/dukkan$/, html: '/pages/seller/seller-shop.html' },
         { re: /^\/(?:en\/)?magaza\/.+/, html: '/pages/seller/seller-storefront.html' },
     ];
