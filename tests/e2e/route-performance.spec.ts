@@ -20,6 +20,7 @@ function runMeasurementCli(
     authFixture?: string;
     args?: string[];
     budgetMode?: "strict";
+    ci?: boolean;
     baselineOutput?: string;
   }
 ): Promise<{ status: number | null; stderr: string }> {
@@ -40,6 +41,12 @@ function runMeasurementCli(
           PERF_REPORT_DIR: reportDir,
           PERF_READY_SELECTOR: "[data-perf-ready='true']",
           PERF_SETTLE_MS: "50",
+          // CLI, `PERF_BUDGET_MODE` verilmese de `CI=true` görünce strict'e
+          // geçer (`measure-home-perf.mjs:457`). `process.env` miras alındığı
+          // sürece aynı spec lokalde warn, GitHub Actions'ta strict koşuyordu
+          // — ölçüldü, 2026-08-26'da `main` kapısını kırmızıya boyayan buydu.
+          // `home-performance.spec.ts` bunu zaten sabitliyor; burası atlanmış.
+          CI: options.ci ? "1" : "0",
           ...(options.authFixture ? { PERF_AUTH_FIXTURE: options.authFixture } : {}),
           ...(options.budgetMode ? { PERF_BUDGET_MODE: options.budgetMode } : {}),
           ...(options.baselineOutput ? { PERF_BASELINE_OUTPUT: options.baselineOutput } : {}),
@@ -219,6 +226,26 @@ test("route-parametreli CLI viewport, auth ve genişletilmiş DOM/ağ metrikleri
       value: 2,
       passed: true,
     });
+  } finally {
+    await rm(reportDir, { recursive: true, force: true });
+  }
+});
+
+test("CI rota ölçümü tekrarlı DOM ID'sini strict kapı olarak uygular", async () => {
+  const reportDir = await mkdtemp(join(tmpdir(), "istoc-route-perf-ci-"));
+
+  try {
+    const result = await runMeasurementCli(reportDir, {
+      route: "/pretty-fixture",
+      routeId: "fixture-products",
+      routeVariant: "pretty",
+      viewport: "1440x1000",
+      ci: true,
+    });
+
+    expect(result.status).toBe(1);
+    expect(result.stderr).toContain("duplicateIds=1 (limit 0)");
+    expect(result.stderr).toContain("strict modda başarısız");
   } finally {
     await rm(reportDir, { recursive: true, force: true });
   }

@@ -571,10 +571,18 @@ test.describe("Task 2: kapalı ana sayfa menüleri talep üzerine mount edilir",
     await page.waitForTimeout(130);
     await expect(panel.locator("[data-mega-view]")).toHaveCount(0);
 
-    await trigger.dispatchEvent("mouseenter");
-    await page.waitForTimeout(50);
-    await expect(panel.locator("[data-mega-view]")).toHaveCount(0);
-    await page.waitForTimeout(70);
+    // Aynı tuzağın ikinci yarısı: niyet penceresi dışarıdan ölçülünce
+    // dispatch'in CDP gidiş-dönüşü de 100 ms'e dahil oluyordu; yük altında
+    // eşik aşılınca panel çoktan mount olmuş oluyor ve iddia düşüyordu
+    // (ölçüldü, 2026-08-28). Dispatch ve 50 ms'lik ölçüm aynı tarayıcı
+    // görevine alındı; mount'un ardından gelmesi ise sabit beklemeyle değil
+    // Playwright'ın kendi bekleyişiyle doğrulanıyor.
+    const viewsAt50ms = await trigger.evaluate(async (element) => {
+      element.dispatchEvent(new MouseEvent("mouseenter"));
+      await new Promise((resolve) => setTimeout(resolve, 50));
+      return document.querySelectorAll("#istoc-mega-panel [data-mega-view]").length;
+    });
+    expect(viewsAt50ms).toBe(0);
 
     await expect(panel.locator('[data-mega-view="featured"]')).toBeVisible();
     await expect(trigger).toHaveAttribute("aria-expanded", "true");

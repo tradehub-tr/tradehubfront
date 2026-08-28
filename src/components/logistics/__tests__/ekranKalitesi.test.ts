@@ -21,6 +21,7 @@ import { DeliveryConfirm } from "../DeliveryConfirm";
 import { LabelDownload } from "../LabelDownload";
 import { NotificationCenter } from "../NotificationCenter";
 import { PickupAppointment } from "../PickupAppointment";
+import { ProofOfDelivery } from "../ProofOfDelivery";
 import { ReturnRequest } from "../ReturnRequest";
 import { SellerPacking } from "../SellerPacking";
 import { SellerReturnQueue } from "../SellerReturnQueue";
@@ -57,7 +58,7 @@ describe("i18n bütünlüğü", () => {
     return [...m[2].matchAll(/^\s*(\w+):/gm)].map((x) => x[1]).sort();
   }
 
-  it.each(["appointment", "confirm"])(
+  it.each(["appointment", "confirm", "notifyPref", "pod"])(
     "`shipment.%s` bloğu DÖRT dilde aynı anahtarları taşır",
     (blok) => {
       const temel = anahtarlar("tr", blok);
@@ -65,6 +66,38 @@ describe("i18n bütünlüğü", () => {
       for (const dil of diller) expect(anahtarlar(dil, blok)).toEqual(temel);
     }
   );
+
+  /**
+   * Küçük sözlükler — eşik ayrı çünkü ikisi de beşten az anahtar taşıyor.
+   *
+   * `notifyChannel` 12-FE'de AÇILDI: bildirim kanalı (`email`/`in_app`/`sms`)
+   * eskiden `shipment.channel.*`'tan çevriliyordu ama o blok SEVKİYAT
+   * kanalları için (`CARGO`, `COURIER`…). Karşılık bulunamadığı için ekranda
+   * çevrilmemiş ham `email` yazıyordu.
+   */
+  it.each(["notifyChannel", "notifyEvent"])(
+    "`shipment.%s` bloğu DÖRT dilde aynı anahtarları taşır",
+    (blok) => {
+      const temel = anahtarlar("tr", blok);
+      expect(temel.length).toBeGreaterThan(2);
+      for (const dil of diller) expect(anahtarlar(dil, blok)).toEqual(temel);
+    }
+  );
+
+  /**
+   * Bildirim kanalı ile sevkiyat kanalı AYRI ad alanlarında kalmalı.
+   *
+   * İkisi aynı bloğa sıkıştırılırsa biri diğerinin anahtarlarını gölgeler ve
+   * ekran sessizce ham değer basar — 28 Ağustos 2026'da ölçülen kusur buydu.
+   */
+  it("bildirim kanalı sevkiyat kanalı bloğuna sızmamış", () => {
+    const sevkiyatKanali = anahtarlar("tr", "channel");
+    expect(sevkiyatKanali).not.toContain("email");
+    expect(sevkiyatKanali).not.toContain("in_app");
+    expect(sevkiyatKanali).not.toContain("sms");
+    // Ve bildirim kanalı kendi bloğunda gerçekten var.
+    expect(anahtarlar("tr", "notifyChannel")).toEqual(["email", "in_app", "sms"]);
+  });
 
   it("bileşen çıktısında ham anahtar sızmaz", () => {
     const ciktilar = [
@@ -231,12 +264,33 @@ describe("ölü köprü yok", () => {
   //: (`services/logisticsSellerMock.ts`) ve bu listeden düştüler — test o gün
   //: "beklenen başarısızlık gerçekleşmedi" diyerek uyardı. Mekanizmanın
   //: çalıştığının kanıtı.
+  //:
+  //: `__thSetNotificationPref` 2026-08-28'de bağlandı
+  //: (`services/logisticsNotificationMock.ts`, 12-FE) ve aynı şekilde düştü —
+  //: mekanizma ikinci kez kanıtlandı. Bildirim tercihleri ekranı 13 Ağustos'tan
+  //: beri çiziliyordu ama anahtar hiçbir modda kaydetmiyordu.
   const BILINEN_EKSIKLER: Record<string, string> = {
     __thCreateReturn: "15-FE — storefront iade talebi akışı (MOGEM-543)",
-    __thSetNotificationPref: "12-FE — bildirim tercihleri (MOGEM-561)",
   };
 
   const koprular = [...aranan.keys()].sort();
+
+  /**
+   * TERS YÖN: tanımlı ama HİÇ ÇAĞRILMAYAN köprü.
+   *
+   * Yukarıdaki denetim "aranan köprü tanımlı mı" diye soruyor; bu boşluk
+   * 28 Ağustos 2026'da ölçüldü. `__thMarkNotificationRead` kurulmuştu ama
+   * ekranda hiç çağrılmıyordu — bildirimler asla okundu işaretlenmiyor,
+   * okunmamış rozeti hiç sönmüyordu. Kod çalışıyor görünüyor, iş akışı
+   * kapanmıyor.
+   *
+   * `*Bound` ile bitenler dahili tekrar-bağlama bayrağı, köprü değil.
+   */
+  it("tanımlı her köprü ekranda gerçekten çağrılıyor", () => {
+    const bayrak = (k: string) => k.endsWith("Bound");
+    const oluKoprular = [...tanimli].filter((k) => !bayrak(k) && !aranan.has(k));
+    expect(oluKoprular).toEqual([]);
+  });
 
   it("taranan köprü sayısı beklenenin altına düşmedi", () => {
     // Alt sınır: regex bozulup 0 köprü bulursa test sessizce yeşil kalırdı.
@@ -257,12 +311,68 @@ describe("ölü köprü yok", () => {
   }
 });
 
+// ── 7.5 FE MOCK DİSİPLİNİ — otomatik denetimler ─────────────────────────
+//
+// NEDEN VAR: 12-FE kapanışında yapılan öz-denetim yedi kusur buldu ve DÖRDÜ
+// otomatik teste dönüşebiliyordu. En ciddisi canlıya sızmaydı: mock modülü
+// ortamı hiç sormuyordu, `MOCK` bayrağı üretimde de `true`. Bu blok o
+// kusurların genel hâlini TÜM mock yüzeyinde arıyor — yalnız 12-FE'de değil,
+// geçmiş görevlerde de.
+
+describe("FE mock disiplini", () => {
+  /** `src/services` altındaki mock modülleri. */
+  const moduller = readdirSync(join(SRC, "services"))
+    .filter((f) => /Mock\.ts$/.test(f))
+    .map((f) => ({ ad: f, icerik: readFileSync(join(SRC, "services", f), "utf8") }));
+
+  it("taranan mock modülü sayısı beklenenin altına düşmedi", () => {
+    // Regex bozulup 0 modül bulursa aşağıdaki testler sessizce yeşil kalırdı.
+    expect(moduller.length).toBeGreaterThanOrEqual(3);
+  });
+
+  /**
+   * Mock CANLIYA sızmamalı.
+   *
+   * Ölçüldü (2026-08-28): `logisticsNotificationMock` yalnız `MOCK` bayrağına
+   * bakıyordu ve o bayrak üretimde de `true`; canlıda bir alıcı sahte teslim
+   * kanıtını kendi kanıtı sanacaktı. Koruma sayfa katmanında aranırsa her yeni
+   * çağrıda hatırlanması gerekir — bir kez unutuldu, yine unutulur.
+   */
+  it.each(moduller.map((m) => [m.ad, m] as const))(
+    "%s ortam kapısı taşıyor (isMockMode)",
+    (_ad, m) => {
+      expect(/isMockMode|isPreviewHost/.test(m.icerik)).toBe(true);
+    }
+  );
+
+  /**
+   * Mock'un ürettiği medya GERÇEKTEN açılabilmeli (`FE-MOCK-DISIPLINI` §2.3).
+   *
+   * Ölçüldü: POD imza ve fotoğrafı `/files/pod/imza-41.png` yollarını
+   * taşıyordu; backend olmadığı için ekranda kırık kutu çıkıyordu. Hiçbir test
+   * yakalamamıştı çünkü hepsi "alan dolu mu" diye bakıyordu.
+   */
+  it.each(moduller.map((m) => [m.ad, m] as const))(
+    "%s var olmayan yerel dosyaya işaret etmiyor",
+    (_ad, m) => {
+      const supheli = [...m.icerik.matchAll(/"(\/files\/[^"]*)"/g)].map((x) => x[1]);
+      expect(supheli).toEqual([]);
+    }
+  );
+
+  /** Ölü bağlantı yasak — `#yer-tutucu` da bir yer tutucudur. */
+  it.each(moduller.map((m) => [m.ad, m] as const))("%s yer tutucu bağlantı üretmiyor", (_ad, m) => {
+    expect(/href="#/.test(m.icerik)).toBe(false);
+  });
+});
+
 // ── 8. Sabit dilde metin yok (lojistik modülleri) ───────────────────────
 
 describe("lojistik modülleri sabit dilde metin taşımaz", () => {
   const TURKCE = /[çğıöşüÇĞİÖŞÜ]/;
   const MODULLER = [
     "services/logisticsPickupMock.ts",
+    "services/logisticsNotificationMock.ts",
     "services/pickupEntry.ts",
     "alpine/logisticsBuyer.ts",
     "alpine/logisticsDelivery.ts",
@@ -397,6 +507,25 @@ const BILESENLER: { ad: string; dolu: () => string; bos?: () => string }[] = [
         events: [{ event_time: "2026-08-20 10:00:00", status: "In Transit" } as never],
       }),
     bos: () => TrackingTimeline({ shipmentName: "SHP-1", events: [] }),
+  },
+  {
+    ad: "ProofOfDelivery",
+    dolu: () =>
+      ProofOfDelivery({
+        pod: {
+          delivered_at: "2026-08-15 09:14:00",
+          received_by: "Mehmet Yıldız",
+          received_by_title: "Depo sorumlusu",
+          delivery_code_used: 1,
+          signature_url: "/files/pod/imza.png",
+          delivered_package_count: 8,
+          total_package_count: 8,
+          waybill_number: "MNG-2210554",
+          delivery_point: "MNG-35004",
+        },
+      }),
+    // POD'un boş hâli "kanıt yok" — hata değil, eksik veri.
+    bos: () => ProofOfDelivery({ pod: null }),
   },
 ];
 
