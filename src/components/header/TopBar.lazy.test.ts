@@ -61,12 +61,8 @@ describe("TopBar lazy mobile search", () => {
 
     expect(root.querySelector("#popover-deliver-to")).not.toBeNull();
     expect(root.querySelector("#popover-language-currency")).not.toBeNull();
-    expect(
-      root.querySelector("[data-lazy-popover-content='country']")?.childElementCount
-    ).toBe(0);
-    expect(
-      root.querySelector("[data-lazy-popover-content='locale']")?.childElementCount
-    ).toBe(0);
+    expect(root.querySelector("[data-lazy-popover-content='country']")?.childElementCount).toBe(0);
+    expect(root.querySelector("[data-lazy-popover-content='locale']")?.childElementCount).toBe(0);
     expect(root.querySelector("#lang-select")).toBeNull();
     expect(root.querySelector("#currency-select")).toBeNull();
   });

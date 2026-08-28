@@ -68,8 +68,19 @@ test.beforeEach(async ({ context }) => {
     localStorage.setItem(
       "panel_tour_seen_v5",
       JSON.stringify([
-        "dashboard", "catalog", "commerce", "logistics", "sellers", "crm",
-        "helpdesk", "system", "store", "products", "orders", "management", "messaging",
+        "dashboard",
+        "catalog",
+        "commerce",
+        "logistics",
+        "sellers",
+        "crm",
+        "helpdesk",
+        "system",
+        "store",
+        "products",
+        "orders",
+        "management",
+        "messaging",
       ])
     );
   });
@@ -121,7 +132,10 @@ test("kova filtresi listeyi süzüyor, sayaçları KAYDIRMIYOR", async ({ page }
   await expect(page.locator("table tbody tr").first()).toBeVisible();
 
   const sayacOnce = await page.locator("table tbody tr").count();
-  await page.getByRole("button", { name: /Kanıt bekliyor/i }).first().click();
+  await page
+    .getByRole("button", { name: /Kanıt bekliyor/i })
+    .first()
+    .click();
   await expect(page.locator("table tbody tr").first()).toBeVisible();
 
   const sayacSonra = await page.locator("table tbody tr").count();
@@ -141,7 +155,10 @@ test("kanıtsız sevkiyat SORUN olarak gösteriliyor ve çıkış yolu veriyor",
 test("kanıt kaydediliyor ve sevkiyat KOVA DEĞİŞTİRİYOR", async ({ page }) => {
   // Önce kuyruktaki "kanıt bekliyor" sayısını al.
   await page.goto(QUEUE);
-  await page.getByRole("button", { name: /Kanıt bekliyor/i }).first().click();
+  await page
+    .getByRole("button", { name: /Kanıt bekliyor/i })
+    .first()
+    .click();
   await expect(page.locator("table tbody tr").first()).toBeVisible();
   const bekleyenOnce = await page.locator("table tbody tr").count();
 
@@ -162,7 +179,10 @@ test("kanıt kaydediliyor ve sevkiyat KOVA DEĞİŞTİRİYOR", async ({ page }) 
 
   // KOVA DEĞİŞTİ: aynı sevkiyat artık "kanıt bekliyor"da değil.
   await page.goto(QUEUE);
-  await page.getByRole("button", { name: /Kanıt bekliyor/i }).first().click();
+  await page
+    .getByRole("button", { name: /Kanıt bekliyor/i })
+    .first()
+    .click();
   await expect(page.locator("table tbody tr").first()).toBeVisible();
   const bekleyenSonra = await page.locator("table tbody tr").count();
   expect(bekleyenSonra, "kayıt sonrası kova değişmedi").toBe(bekleyenOnce - 1);
@@ -235,7 +255,9 @@ test("ÖDEME KAPISI: ödenmemiş kayıtta teslim düğmesi HİÇ ÇİZİLMİYOR"
 
   // Ödeme uyarısı taşıyan kartta "Teslim et" düğmesi bulunmamalı — devre dışı
   // değil, HİÇ YOK. Uyarıya rağmen tıklanabilen buton günün sonunda tıklanır.
-  const blokluKart = page.locator("article").filter({ hasText: /Ödeme alınmadan teslim edilemez/i });
+  const blokluKart = page
+    .locator("article")
+    .filter({ hasText: /Ödeme alınmadan teslim edilemez/i });
   if (await blokluKart.count()) {
     await expect(
       blokluKart.first().getByRole("button", { name: /^Teslim et$/i }),
@@ -352,7 +374,10 @@ test("K11: teslim noktası ekranı TERK ETMEDEN görünüyor", async ({ page }) 
   // "Buton yoksa sessizce geç" dalı KALDIRILDI: test hiç çalışmadan yeşil
   // görünüyordu (ölçüldü 2026-08-19). Tohumda teslim noktası taşıyan kayıt
   // VAR; yoksa bu bir eksiktir ve testin bunu söylemesi gerekir.
-  const noktaBtn = page.locator("article button").filter({ hasText: /^[A-Z]+-[A-Z0-9]+$/ }).first();
+  const noktaBtn = page
+    .locator("article button")
+    .filter({ hasText: /^[A-Z]+-[A-Z0-9]+$/ })
+    .first();
   await expect(noktaBtn, "teslim noktası bağlantısı hiçbir kartta yok").toBeVisible();
   await noktaBtn.click();
 
@@ -366,7 +391,10 @@ test("K11: teslim noktası ekranı TERK ETMEDEN görünüyor", async ({ page }) 
 
 // ── K13 · Hata durumu ────────────────────────────────────────────────
 
-test("K13: hata durumunda GEREKÇE gösteriliyor, sessizce boş kalmıyor", async ({ page, context }) => {
+test("K13: hata durumunda GEREKÇE gösteriliyor, sessizce boş kalmıyor", async ({
+  page,
+  context,
+}) => {
   // Mock'un geliştirici anahtarı: sözleşmedeki her hata kodu denenebilmeli
   // (FE-MOCK-DISIPLINI §2.4). Hata ekranları yalnız hata gerçekleşince
   // görülebiliyor; tetiklenemezse gözden geçirilemez.

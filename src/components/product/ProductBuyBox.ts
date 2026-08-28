@@ -435,12 +435,20 @@ export function initProductBuyBox(options: { signal?: AbortSignal } = {}): void 
   // basılır. Başlık/rating sabit kalır; alt içerik panelleri değişir.
   const cardTabs = document.querySelectorAll<HTMLButtonElement>(".pd-card-tab");
   cardTabs.forEach((tab) => {
-    tab.addEventListener("click", () => {
-      cardTabs.forEach((other) => other.classList.toggle("active", other === tab));
-      const key = tab.dataset.pdTab;
-      document.getElementById("pd-tab-panel-wholesale")?.classList.toggle("hidden", key !== "wholesale");
-      document.getElementById("pd-tab-panel-custom")?.classList.toggle("hidden", key !== "custom");
-    }, options);
+    tab.addEventListener(
+      "click",
+      () => {
+        cardTabs.forEach((other) => other.classList.toggle("active", other === tab));
+        const key = tab.dataset.pdTab;
+        document
+          .getElementById("pd-tab-panel-wholesale")
+          ?.classList.toggle("hidden", key !== "wholesale");
+        document
+          .getElementById("pd-tab-panel-custom")
+          ?.classList.toggle("hidden", key !== "custom");
+      },
+      options
+    );
   });
 
   const getSelectedVariantLabels = (): { color: string; size: string } => {
@@ -461,11 +469,15 @@ export function initProductBuyBox(options: { signal?: AbortSignal } = {}): void 
     "#pd-variations-section [data-open-selection]"
   );
   if (makeSelectionBtn) {
-    makeSelectionBtn.addEventListener("click", (e) => {
-      e.preventDefault();
-      const { color, size } = getSelectedVariantLabels();
-      openCartDrawer(color, size);
-    }, options);
+    makeSelectionBtn.addEventListener(
+      "click",
+      (e) => {
+        e.preventDefault();
+        const { color, size } = getSelectedVariantLabels();
+        openCartDrawer(color, size);
+      },
+      options
+    );
   }
 
   // Variant selection — event delegation so dynamically re-enabled buttons also work
@@ -473,76 +485,80 @@ export function initProductBuyBox(options: { signal?: AbortSignal } = {}): void 
   variantGroups.forEach((group) => {
     const labelEl = group.querySelector<HTMLElement>(".variant-selected-label");
 
-    group.addEventListener("click", (e) => {
-      const btn = (e.target as HTMLElement).closest<HTMLButtonElement>(".variant-option");
-      if (!btn || btn.disabled) return;
+    group.addEventListener(
+      "click",
+      (e) => {
+        const btn = (e.target as HTMLElement).closest<HTMLButtonElement>(".variant-option");
+        if (!btn || btn.disabled) return;
 
-      // Update active state — clear all siblings, activate clicked
-      group
-        .querySelectorAll<HTMLButtonElement>(".variant-option")
-        .forEach((b) => b.classList.remove("active"));
-      btn.classList.add("active");
+        // Update active state — clear all siblings, activate clicked
+        group
+          .querySelectorAll<HTMLButtonElement>(".variant-option")
+          .forEach((b) => b.classList.remove("active"));
+        btn.classList.add("active");
 
-      // Update label text (çevrili gösterim) — eşleşme kaynak data-variant-label ile.
-      const variantDisplay =
-        btn.getAttribute("data-variant-display") || btn.getAttribute("data-variant-label");
-      if (labelEl && variantDisplay) {
-        labelEl.textContent = variantDisplay;
-      }
+        // Update label text (çevrili gösterim) — eşleşme kaynak data-variant-label ile.
+        const variantDisplay =
+          btn.getAttribute("data-variant-display") || btn.getAttribute("data-variant-label");
+        if (labelEl && variantDisplay) {
+          labelEl.textContent = variantDisplay;
+        }
 
-      // Aktif kademe fiyatını seçilen varyantın fiyatına güncelle (O2 — eskiden
-      // masaüstü varyant seçilince fiyat güncellenmiyordu; mobil ile aynı davranış).
-      applyVariantPrice(btn, "#pd-price-tiers .pd-price-tier.active .pd-price-tier-price");
+        // Aktif kademe fiyatını seçilen varyantın fiyatına güncelle (O2 — eskiden
+        // masaüstü varyant seçilince fiyat güncellenmiyordu; mobil ile aynı davranış).
+        applyVariantPrice(btn, "#pd-price-tiers .pd-price-tier.active .pd-price-tier-price");
 
-      // Read all variant-specific data from the clicked button
-      const variantId = btn.getAttribute("data-variant-id") || "";
-      const variantVideo = btn.getAttribute("data-variant-video") || "";
-      const isDefaultVariant = btn.getAttribute("data-is-default") === "1";
-      let variantImages: string[] = [];
-      try {
-        const raw = decodeURIComponent(btn.getAttribute("data-variant-images") || "[]");
-        const parsed = JSON.parse(raw);
-        if (Array.isArray(parsed)) variantImages = parsed.filter(Boolean);
-      } catch (_) {
-        /* noop */
-      }
-      const variantTitle = decodeURIComponent(btn.getAttribute("data-variant-title") || "");
+        // Read all variant-specific data from the clicked button
+        const variantId = btn.getAttribute("data-variant-id") || "";
+        const variantVideo = btn.getAttribute("data-variant-video") || "";
+        const isDefaultVariant = btn.getAttribute("data-is-default") === "1";
+        let variantImages: string[] = [];
+        try {
+          const raw = decodeURIComponent(btn.getAttribute("data-variant-images") || "[]");
+          const parsed = JSON.parse(raw);
+          if (Array.isArray(parsed)) variantImages = parsed.filter(Boolean);
+        } catch (_) {
+          /* noop */
+        }
+        const variantTitle = decodeURIComponent(btn.getAttribute("data-variant-title") || "");
 
-      // Dispatch a single event that the gallery + video + title listeners consume
-      document.dispatchEvent(
-        new CustomEvent("product-variant-change", {
-          detail: {
-            variantId,
-            videoUrl: variantVideo,
-            images: variantImages,
-            title: variantTitle,
-            isDefault: isDefaultVariant,
-          },
-        })
-      );
+        // Dispatch a single event that the gallery + video + title listeners consume
+        document.dispatchEvent(
+          new CustomEvent("product-variant-change", {
+            detail: {
+              variantId,
+              videoUrl: variantVideo,
+              images: variantImages,
+              title: variantTitle,
+              isDefault: isDefaultVariant,
+            },
+          })
+        );
 
-      // Cross-disable: update other axis buttons based on skuMatrix availability
-      crossDisableVariants(
-        group.getAttribute("data-variant-label") || "",
-        btn.getAttribute("data-variant-label") || ""
-      );
+        // Cross-disable: update other axis buttons based on skuMatrix availability
+        crossDisableVariants(
+          group.getAttribute("data-variant-label") || "",
+          btn.getAttribute("data-variant-label") || ""
+        );
 
-      // Update URL so the selected variant is shareable / persistent on reload
-      if (variantId) {
-        const url = new URL(window.location.href);
-        url.searchParams.set("variant", variantId);
-        window.history.replaceState(null, "", url.toString());
-      }
+        // Update URL so the selected variant is shareable / persistent on reload
+        if (variantId) {
+          const url = new URL(window.location.href);
+          url.searchParams.set("variant", variantId);
+          window.history.replaceState(null, "", url.toString());
+        }
 
-      // Open drawer only for NON-photo variant groups (size, material, etc.)
-      // AND only on real user clicks (not auto-selection on page load).
-      const hasVariantPhoto = !!btn.getAttribute("data-variant-image");
-      const isAutoSelect = btn.hasAttribute("data-auto-select");
-      if (!hasVariantPhoto && !isAutoSelect) {
-        const { color, size } = getSelectedVariantLabels();
-        openCartDrawer(color, size);
-      }
-    }, options);
+        // Open drawer only for NON-photo variant groups (size, material, etc.)
+        // AND only on real user clicks (not auto-selection on page load).
+        const hasVariantPhoto = !!btn.getAttribute("data-variant-image");
+        const isAutoSelect = btn.hasAttribute("data-auto-select");
+        if (!hasVariantPhoto && !isAutoSelect) {
+          const { color, size } = getSelectedVariantLabels();
+          openCartDrawer(color, size);
+        }
+      },
+      options
+    );
   });
 
   // Apply cross-disable for the initially active color (without relying on auto-click)
@@ -570,10 +586,14 @@ export function initProductBuyBox(options: { signal?: AbortSignal } = {}): void 
 
   // "X yorum" butonuna tek bir delegated click listener — innerHTML yenilense
   // bile event delegation ile çalışmaya devam eder.
-  document.addEventListener("click", (e) => {
-    const target = e.target as HTMLElement | null;
-    if (target && target.closest("#pd-review-count-link")) {
-      scrollToReviewsTab();
-    }
-  }, options);
+  document.addEventListener(
+    "click",
+    (e) => {
+      const target = e.target as HTMLElement | null;
+      if (target && target.closest("#pd-review-count-link")) {
+        scrollToReviewsTab();
+      }
+    },
+    options
+  );
 }

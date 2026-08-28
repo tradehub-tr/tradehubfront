@@ -89,7 +89,9 @@ i18next.use(LanguageDetector).init({
   const titleKey = titleEl?.getAttribute("data-i18n");
   if (titleKey) document.title = i18next.t(titleKey) as string;
 
-  import("../seo/loadStaticPageSeo").then(({ loadStaticPageSeo }) => loadStaticPageSeo(initialLang));
+  import("../seo/loadStaticPageSeo").then(({ loadStaticPageSeo }) =>
+    loadStaticPageSeo(initialLang)
+  );
 
   // FE-4: server hreflang payload'ı yoksa `/` ↔ `/en/` alternates fallback'i.
   // Her sayfada i18n init koştuğu için MPA genelinde tek çağrı noktası burası.

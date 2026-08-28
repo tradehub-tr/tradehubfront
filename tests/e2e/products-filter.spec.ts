@@ -7,6 +7,7 @@
  * korur.
  */
 import { test, expect, type Route, type Page } from "@playwright/test";
+import { yalnizMasaustu } from "./fixtures/viewport";
 
 const FACETS_BASE: Record<string, unknown> = {
   countries: [
@@ -106,6 +107,8 @@ async function mockBackend(page: Page): Promise<void> {
 }
 
 test.describe("Products page — multi-select filter chips", () => {
+  yalnizMasaustu("filtre paneli masaüstünde yan sütun, mobilde çekmece");
+
   test.beforeEach(async ({ page }) => {
     await mockBackend(page);
   });
@@ -200,9 +203,7 @@ test.describe("Products page — multi-select filter chips", () => {
     await expect(turkeyChips).toHaveCount(1);
   });
 
-  test("Country chip'i ham kod değil lokalize edilmiş adı göstermeli (BUG 2)", async ({
-    page,
-  }) => {
+  test("Country chip'i ham kod değil lokalize edilmiş adı göstermeli (BUG 2)", async ({ page }) => {
     await page.goto("/pages/products.html");
 
     const desktopTr = page.locator(
@@ -238,9 +239,7 @@ test.describe("Products page — multi-select filter chips", () => {
     await page.goto("/pages/products.html");
 
     // Dinamik attribute sayfaya geç yüklenir — beklemek için checkbox toBeAttached
-    const colorCb = page.locator(
-      '[data-filter-section="attr-color"][data-filter-value="Kırmızı"]'
-    );
+    const colorCb = page.locator('[data-filter-section="attr-color"][data-filter-value="Kırmızı"]');
     await expect(colorCb.first()).toBeAttached({ timeout: 10_000 });
 
     // 1) Renk: Kırmızı seç
@@ -391,9 +390,7 @@ test.describe("Products page — multi-select filter chips", () => {
     await expect(isoChip).toHaveCount(1);
   });
 
-  test("Sertifika chip'i × ile kaldırılınca checkbox uncheck olmalı (BUG 7)", async ({
-    page,
-  }) => {
+  test("Sertifika chip'i × ile kaldırılınca checkbox uncheck olmalı (BUG 7)", async ({ page }) => {
     await page.goto("/pages/products.html");
 
     const isoCheckbox = page.locator(
@@ -489,7 +486,10 @@ test.describe("Products page — multi-select filter chips", () => {
 
     // MarmaraT count'u 5'e düşmeli (debounced fetch ~300ms + facet promise)
     await expect(marmaraLabel.locator("span.ms-auto")).toHaveText("(5)", { timeout: 5_000 });
-    expect(facetCall, "Facet endpoint en az 2 kez çağrılmalı (init + filter sonrası)").toBeGreaterThanOrEqual(2);
+    expect(
+      facetCall,
+      "Facet endpoint en az 2 kez çağrılmalı (init + filter sonrası)"
+    ).toBeGreaterThanOrEqual(2);
   });
 
   test("Onaylanmış Satıcı facet'i sayaç göstermeli ve başka filtre seçilince güncellenmeli (İş 1)", async ({
@@ -584,9 +584,7 @@ test.describe("Products page — multi-select filter chips", () => {
   }) => {
     await page.goto("/pages/products.html");
 
-    const priceFilter = page.locator(
-      '[data-filter-prefix-root="desktop"] [data-price-filter]'
-    );
+    const priceFilter = page.locator('[data-filter-prefix-root="desktop"] [data-price-filter]');
     // Histogram: bucket sayısı kadar bar render edilmeli.
     const bars = priceFilter.locator("[data-price-histogram] > div");
     await expect(bars).toHaveCount(4, { timeout: 10_000 });

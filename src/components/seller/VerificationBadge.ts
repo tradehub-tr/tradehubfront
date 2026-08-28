@@ -30,8 +30,7 @@ export function resolveVerifications(
   kybVerified: boolean
 ): VerificationItem[] {
   if (verifications?.length) return verifications;
-  if (kybVerified)
-    return [{ source_name: "iStoc", description: t("verification.kybDescription") }];
+  if (kybVerified) return [{ source_name: "iStoc", description: t("verification.kybDescription") }];
   return [];
 }
 
@@ -129,9 +128,7 @@ export function VerificationBadge(verifications: VerificationItem[]): string {
   const badgeInfoLabel = t("verification.badgeInfo");
   const labelSuffix = extra > 0 ? ` +${extra}` : "";
   // KYB→iStoc sanal kaynağında icon boş; kaynak adı yerine mini logo göster.
-  const firstLogo = isIstocSource(first.source_name)
-    ? istocLogoUrl
-    : sanitizeUrl(first.icon ?? "");
+  const firstLogo = isIstocSource(first.source_name) ? istocLogoUrl : sanitizeUrl(first.icon ?? "");
 
   // Sanitize before serializing; x-text handles display (no innerHTML risk)
   const safeItems: Array<{

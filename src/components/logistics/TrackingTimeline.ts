@@ -79,9 +79,11 @@ export function TrackingTimeline(props: TrackingTimelineProps): string {
             ${
               event.exception_code
                 ? `<p class="mt-1 rounded bg-amber-50 px-2 py-1 text-xs text-amber-800">
-                     ${escapeHtml(t(`shipment.exception.${event.exception_code}`, {
-                       defaultValue: t("shipment.tracking.exceptionGeneric"),
-                     }))}
+                     ${escapeHtml(
+                       t(`shipment.exception.${event.exception_code}`, {
+                         defaultValue: t("shipment.tracking.exceptionGeneric"),
+                       })
+                     )}
                    </p>`
                 : ""
             }
@@ -104,11 +106,7 @@ export function TrackingTimeline(props: TrackingTimelineProps): string {
         <p class="mt-2 text-xs text-gray-600">
           <code class="font-mono">${escapeHtml(shipmentName)}</code>
           ${carrier ? ` · ${escapeHtml(carrier)}` : ""}
-          ${
-            trackingNumber
-              ? ` · <span class="font-mono">${escapeHtml(trackingNumber)}</span>`
-              : ""
-          }
+          ${trackingNumber ? ` · <span class="font-mono">${escapeHtml(trackingNumber)}</span>` : ""}
         </p>
       </header>
 

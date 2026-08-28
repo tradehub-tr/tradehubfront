@@ -137,8 +137,7 @@ export async function initCategoryNavBar(
     const headerDataSlug = escapeHtml(headerSlug);
     const headerHref = escapeHtml(
       sanitizeUrl(
-        window.location.pathname +
-          (headerSlug ? `?cat=${encodeURIComponent(headerSlug)}` : "")
+        window.location.pathname + (headerSlug ? `?cat=${encodeURIComponent(headerSlug)}` : "")
       )
     );
     return [
@@ -149,8 +148,7 @@ export async function initCategoryNavBar(
         const slug = escapeHtml(it.slug);
         const href = escapeHtml(
           sanitizeUrl(
-            window.location.pathname +
-              (it.slug ? `?cat=${encodeURIComponent(it.slug)}` : "")
+            window.location.pathname + (it.slug ? `?cat=${encodeURIComponent(it.slug)}` : "")
           )
         );
         return `

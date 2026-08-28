@@ -252,7 +252,13 @@ interface SellerProductsPage {
 
 async function fetchSellerProducts(
   sellerCode: string,
-  options: { page: number; pageSize: number; category?: string; categoryType?: string; sort?: string }
+  options: {
+    page: number;
+    pageSize: number;
+    category?: string;
+    categoryType?: string;
+    sort?: string;
+  }
 ): Promise<SellerProductsPage> {
   const query = new URLSearchParams({
     seller_code: sellerCode,
@@ -565,5 +571,4 @@ Alpine.data("sellerShop", () => ({
       void navigator.clipboard.writeText(window.location.href);
     }
   },
-
 }));

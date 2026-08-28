@@ -88,11 +88,7 @@ function mountRoll(slot: HTMLElement, sig: Signal): void {
   slot.innerHTML = `<div class="sp-roll flex h-full flex-col will-change-transform">${rowHtml(sig, slot)}</div>`;
 }
 
-function slotsFor(
-  root: ParentNode,
-  id: string,
-  createMissingSlots: boolean
-): HTMLElement[] {
+function slotsFor(root: ParentNode, id: string, createMissingSlots: boolean): HTMLElement[] {
   const selector = `[data-sp-slot="${CSS.escape(id)}"]`;
   const existing = Array.from(root.querySelectorAll<HTMLElement>(selector));
   if (existing.length || !createMissingSlots) return existing;

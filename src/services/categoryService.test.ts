@@ -19,9 +19,7 @@ describe("onCategoriesLoaded", () => {
   it("returns a completion promise after the initial consumer callback renders", async () => {
     callMethod.mockImplementation((method: string) => {
       if (method.endsWith("get_category_version")) return Promise.resolve("v1");
-      return Promise.resolve([
-        { id: "office", name: "Ofis", slug: "ofis", children: [] },
-      ]);
+      return Promise.resolve([{ id: "office", name: "Ofis", slug: "ofis", children: [] }]);
     });
     const rendered = vi.fn();
 

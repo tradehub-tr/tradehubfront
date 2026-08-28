@@ -19,13 +19,22 @@
  * matches it first.
  */
 import { test, expect, type Route, type Page } from "@playwright/test";
+import { yalnizMasaustu } from "./fixtures/viewport";
+
+yalnizMasaustu("dil/para birimi seçici header popover'ı; mobil karşılığı mobile-currency.spec.ts");
 
 const CURRENCY_SETTINGS = {
   currencies: [
     { code: "TRY", symbol: "₺", name: "Turkish Lira", nameTr: "Türk Lirası", decimalPlaces: 2 },
     { code: "USD", symbol: "$", name: "US Dollar", nameTr: "Amerikan Doları", decimalPlaces: 2 },
     { code: "EUR", symbol: "€", name: "Euro", nameTr: "Euro", decimalPlaces: 2 },
-    { code: "GBP", symbol: "£", name: "British Pound", nameTr: "İngiliz Sterlini", decimalPlaces: 2 },
+    {
+      code: "GBP",
+      symbol: "£",
+      name: "British Pound",
+      nameTr: "İngiliz Sterlini",
+      decimalPlaces: 2,
+    },
     { code: "CNY", symbol: "¥", name: "Chinese Yuan", nameTr: "Çin Yuanı", decimalPlaces: 2 },
   ],
   rates: {

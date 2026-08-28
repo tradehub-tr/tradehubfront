@@ -47,7 +47,10 @@ function renderBottomSheet(): string {
       ).join("")}
     </ul>
   `;
-  return BottomSheet({ id: "mcb-sheet", titleKey: "categoryBrowse.title", hiddenAt: "xl:hidden" }, skeleton);
+  return BottomSheet(
+    { id: "mcb-sheet", titleKey: "categoryBrowse.title", hiddenAt: "xl:hidden" },
+    skeleton
+  );
 }
 
 /* ──── HTML ──── */

@@ -1,0 +1,61 @@
+# Kod hijyeni kapısı — biçim, lint ve tip denetimi.
+#
+# NEDEN VAR: 2026-08-26'da ölçüldü — `src/` altında 111, `tests/` altında 25
+# dosya prettier-uyumsuzdu. `github-lint.sh` doğru yazılmıştı ama ELLE
+# çalıştırılıyordu ve kimse çalıştırmıyordu (prettier cache dizini boştu).
+# Borç sessizce birikiyordu; bir görev sırasında dosyaya dokunan herkes
+# "benim getirdiğim mi, önceden mi vardı" sorusuyla vakit kaybediyordu.
+#
+# Kapı, temizlik yapıldıktan SONRA açıldı — o yüzden bugün yeşil başlıyor.
+# Tersini yapmak (önce kapı) her PR'ı kırmızıya boyardı.
+#
+# NE DEĞİL: test kapısı değil. Birim/E2E testleri burada koşmuyor; onlar
+# ayrı bir iş (bkz. KALAN-ISLER.md → DevOps).
+name: Lint
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+    # Belge değişikliği kodu sınamıyor; koşu açmak kuyruğu boşuna şişiriyor.
+    paths-ignore:
+      - "**.md"
+      - "docs/**"
+      - ".worklog/**"
+
+# Aynı dala arka arkaya push gelirse eski koşu iptal edilir. 2026-08-26'daki
+# Actions arızasında koşular saatlerce kuyrukta birikti; iptal olmadan her
+# yeni push sırayı bir kat daha uzatıyor.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  hijyen:
+    runs-on: ubuntu-latest
+    # Varsayılan 360 dakika; takılan bir job yarım gün kaynak tutuyor.
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+
+      # `npm ci` — package-lock.json'a birebir uyar; CI'da `npm install`
+      # kilidi güncelleyip sessiz sürüm kaymasına yol açabilir.
+      - run: npm ci
+
+      # Biçim ÖNCE: en ucuz ve en sık kırılan denetim, hızlı geri bildirim.
+      - name: Biçim (prettier)
+        run: npm run format:check
+
+      - name: Lint (eslint)
+        run: npm run lint
+
+      - name: Tip denetimi (tsc)
+        run: npx tsc --noEmit -p tsconfig.json

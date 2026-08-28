@@ -13,9 +13,7 @@ describe("legal secondary DOM", () => {
       pageTitle: "Kullanım Koşulları",
       lastUpdated: "2026-07-25",
       breadcrumbLabel: "Kullanım Koşulları",
-      sections: [
-        { id: "genel", title: "Genel", content: "Görünür yasal metin" },
-      ],
+      sections: [{ id: "genel", title: "Genel", content: "Görünür yasal metin" }],
     });
 
     expect(html).toContain('x-data="legalToc()"');

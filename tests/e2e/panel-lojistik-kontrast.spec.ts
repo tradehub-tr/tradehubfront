@@ -33,14 +33,17 @@ const PASS = process.env.PANEL_PASS ?? "";
 test.use({ baseURL: BASE, viewport: { width: 1600, height: 1000 } });
 test.describe.configure({ mode: "serial" });
 
-
 /** Ekran gerçekten dolana kadar bekler — sabit `waitForTimeout` yetmiyor. */
 async function hazirOl(page: any, url: string) {
   await page.goto(url);
   await page.waitForLoadState("networkidle").catch(() => {});
   await page.locator("main h1").first().waitFor({ state: "visible", timeout: 15_000 });
   // İskelet (`aria-busy`) kalkana kadar: yükleniyor durumunda metin yok.
-  await page.locator('main [aria-busy="true"]').first().waitFor({ state: "detached", timeout: 15_000 }).catch(() => {});
+  await page
+    .locator('main [aria-busy="true"]')
+    .first()
+    .waitFor({ state: "detached", timeout: 15_000 })
+    .catch(() => {});
   await page.waitForTimeout(400);
 }
 
@@ -72,17 +75,33 @@ for (const tema of ["light", "dark"] as const) {
     await context.addInitScript((t) => {
       localStorage.setItem("th-lang", "tr");
       localStorage.setItem("th-theme", t);
-      localStorage.setItem("panel_tour_seen_v5", JSON.stringify([
-        "dashboard", "catalog", "commerce", "logistics", "sellers", "crm",
-        "helpdesk", "system", "store", "products", "orders", "management", "messaging",
-      ]));
+      localStorage.setItem(
+        "panel_tour_seen_v5",
+        JSON.stringify([
+          "dashboard",
+          "catalog",
+          "commerce",
+          "logistics",
+          "sellers",
+          "crm",
+          "helpdesk",
+          "system",
+          "store",
+          "products",
+          "orders",
+          "management",
+          "messaging",
+        ])
+      );
     }, tema);
 
     const hepsi: string[] = [];
     let toplamTaranan = 0;
     const topla = (ad: string, bulgular: any[]) => {
       for (const b of bulgular)
-        hepsi.push(`${ad}: "${b.metin}" ${b.oran}:1 (gereken ${b.esik}:1) · ${b.renk} / ${b.zemin} · ${b.yol}`);
+        hepsi.push(
+          `${ad}: "${b.metin}" ${b.oran}:1 (gereken ${b.esik}:1) · ${b.renk} / ${b.zemin} · ${b.yol}`
+        );
     };
 
     for (const e of EKRANLAR) {
@@ -92,8 +111,10 @@ for (const tema of ["light", "dark"] as const) {
       // `AZ_VERILI` ekranlar yerelde gerçekten boş (kayıt yok); onlarda sınır
       // 3'e iner, yoksa test veri eksikliğini kontrast hatası sanar.
       const altSinir = AZ_VERILI.has(e.key) ? 3 : 15;
-      expect(taranan, `${tema}/${e.key} ${e.ad}: yalnız ${taranan} metin öğesi tarandı — ekran yüklenmemiş olabilir`)
-        .toBeGreaterThan(altSinir);
+      expect(
+        taranan,
+        `${tema}/${e.key} ${e.ad}: yalnız ${taranan} metin öğesi tarandı — ekran yüklenmemiş olabilir`
+      ).toBeGreaterThan(altSinir);
       toplamTaranan += taranan;
       topla(`${e.key} ${e.ad}`, bulgular);
     }
@@ -104,12 +125,16 @@ for (const tema of ["light", "dark"] as const) {
     // 1:1 (metin zeminle aynı renk, tamamen görünmez).
     for (const y of MOD_YUZEYLERI) {
       for (const mod of y.modlar) {
-        await page.addInitScript(({ a, m }) => localStorage.setItem(`lv-mode:${a}`, m),
-                                 { a: y.anahtar, m: mod });
+        await page.addInitScript(({ a, m }) => localStorage.setItem(`lv-mode:${a}`, m), {
+          a: y.anahtar,
+          m: mod,
+        });
         await hazirOl(page, y.url);
         const { bulgular, taranan } = (await page.evaluate(olcumYap)) as any;
-        expect(taranan, `${tema}/${y.key} [${mod}]: yalnız ${taranan} öğe tarandı — dal çizilmemiş olabilir`)
-          .toBeGreaterThan(15);
+        expect(
+          taranan,
+          `${tema}/${y.key} [${mod}]: yalnız ${taranan} öğe tarandı — dal çizilmemiş olabilir`
+        ).toBeGreaterThan(15);
         toplamTaranan += taranan;
         topla(`${y.key} [${mod}] ${y.ad}`, bulgular);
       }
@@ -121,8 +146,10 @@ for (const tema of ["light", "dark"] as const) {
     await hazirOl(page, `/panel/lojistik/sevkiyatlar/${SHP_CANLI}`);
     const sekmeDugmeleri = page.locator('[role="tab"]');
     const sekmeAdedi = await sekmeDugmeleri.count();
-    expect(sekmeAdedi, "sevkiyat detayı sekme çubuğu render edilmedi — detay yüklenememiş olabilir")
-      .toBe(SEKMELER.length);
+    expect(
+      sekmeAdedi,
+      "sevkiyat detayı sekme çubuğu render edilmedi — detay yüklenememiş olabilir"
+    ).toBe(SEKMELER.length);
     for (let i = 0; i < sekmeAdedi; i++) {
       const meta = SEKMELER[i];
       await sekmeDugmeleri.nth(i).click();
@@ -132,7 +159,9 @@ for (const tema of ["light", "dark"] as const) {
       topla(`${meta.key} [sekme] ${meta.ad}`, bulgular);
     }
 
-    console.log(`${tema}: ${toplamTaranan} metin öğesi ölçüldü (${EKRANLAR.length} ekran + ${sekmeAdedi} sekme + görünüm modları)`);
+    console.log(
+      `${tema}: ${toplamTaranan} metin öğesi ölçüldü (${EKRANLAR.length} ekran + ${sekmeAdedi} sekme + görünüm modları)`
+    );
     expect(hepsi, `KONTRAST EKSİĞİ:\n  ${hepsi.join("\n  ")}`).toEqual([]);
   });
 
@@ -143,10 +172,24 @@ for (const tema of ["light", "dark"] as const) {
     await context.addInitScript((t) => {
       localStorage.setItem("th-lang", "tr");
       localStorage.setItem("th-theme", t);
-      localStorage.setItem("panel_tour_seen_v5", JSON.stringify([
-        "dashboard", "catalog", "commerce", "logistics", "sellers", "crm",
-        "helpdesk", "system", "store", "products", "orders", "management", "messaging",
-      ]));
+      localStorage.setItem(
+        "panel_tour_seen_v5",
+        JSON.stringify([
+          "dashboard",
+          "catalog",
+          "commerce",
+          "logistics",
+          "sellers",
+          "crm",
+          "helpdesk",
+          "system",
+          "store",
+          "products",
+          "orders",
+          "management",
+          "messaging",
+        ])
+      );
     }, tema);
 
     // GEÇİŞLERİ KAPAT — yoksa ölçüm YANLIŞ. `hover` yapıp hemen ölçünce
@@ -173,7 +216,9 @@ for (const tema of ["light", "dark"] as const) {
       const filtre = page.getByRole("button", { name: /^Filtreler( \d+)?$/ });
       if (await filtre.count()) await filtre.click();
 
-      const tiklanabilir = page.locator("main button:not([disabled]), main a[href], main [role='menuitem']");
+      const tiklanabilir = page.locator(
+        "main button:not([disabled]), main a[href], main [role='menuitem']"
+      );
       const n = Math.min(await tiklanabilir.count(), 40);
       for (let i = 0; i < n; i++) {
         const el = tiklanabilir.nth(i);

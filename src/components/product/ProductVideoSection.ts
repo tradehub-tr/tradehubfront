@@ -79,7 +79,9 @@ export function toVideoEmbedHtml(
 
   // Direkt embed URL
   if (url.includes("/embed/") || url.includes("player.vimeo.com")) {
-    const safeSrc = escapeHtml(sanitizeUrl(autoplay ? withAutoplayParams(url, "autoplay=1&muted=1") : url));
+    const safeSrc = escapeHtml(
+      sanitizeUrl(autoplay ? withAutoplayParams(url, "autoplay=1&muted=1") : url)
+    );
     if (!safeSrc) return "";
     return `<iframe src="${safeSrc}" class="absolute inset-0 w-full h-full" frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe>`;
   }

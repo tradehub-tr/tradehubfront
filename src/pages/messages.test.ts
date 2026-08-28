@@ -21,8 +21,15 @@ vi.mock("../components/header", () => ({
 }));
 vi.mock("../components/header/TopBar", () => ({ initLanguageSelector: vi.fn() }));
 vi.mock("../components/chat-popup", () => ({ mountChatPopup, initChatTriggers }));
+// `components/floating` dört şey dışa açıyor; mock yalnız `FloatingPanel`'i
+// taşıyordu. Sayfaya `BottomNav` eklendiğinde mock güncellenmedi ve test
+// "No BottomNav export is defined on the mock" ile düştü — davranış hatası
+// değil, mock borcu.
 vi.mock("../components/floating", () => ({
   FloatingPanel: () => '<aside data-test="floating-panel"></aside>',
+  initFloatingPanel: vi.fn(),
+  BottomNav: () => '<nav data-test="bottom-nav"></nav>',
+  initBottomNav: vi.fn(),
 }));
 vi.mock("../alpine", () => ({ startAlpine }));
 vi.mock("../components/sidebar", () => ({

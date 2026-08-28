@@ -25,8 +25,7 @@ import type { HlsLoader } from "./hlsVideo";
 function makeVideo(native = false): HTMLVideoElement {
   const video = document.createElement("video");
   Object.defineProperty(video, "canPlayType", {
-    value: (type: string) =>
-      native && type === "application/vnd.apple.mpegurl" ? "maybe" : "",
+    value: (type: string) => (native && type === "application/vnd.apple.mpegurl" ? "maybe" : ""),
   });
   return video;
 }

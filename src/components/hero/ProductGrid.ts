@@ -105,9 +105,11 @@ function initProgressiveHomeCards(
   }
 
   // Eski WebView fallback'i: ana thread boşaldığında ikinci batch'i tamamla.
-  const requestIdle = (window as unknown as {
-    requestIdleCallback?: (callback: () => void) => number;
-  }).requestIdleCallback;
+  const requestIdle = (
+    window as unknown as {
+      requestIdleCallback?: (callback: () => void) => number;
+    }
+  ).requestIdleCallback;
   if (typeof requestIdle === "function") {
     requestIdle(mount);
   } else {
@@ -125,46 +127,48 @@ export function initProductGrid(): Promise<void> {
   initProductSliders();
   initListingFavoriteTriggers();
 
-  return initCurrency()
-    // 14 = büyük ekran gridinin (2xl: 7 kolon) tam 2 satırı — alt satırda boşluk kalmasın.
-    // verified_supplier: anasayfa vitrini KYB doğrulanmamış satıcı ürünü göstermez.
-    .then(() => searchListings({ page_size: 14, verified_supplier: true }))
-    .then((result) => {
-      if (result.products.length === 0) {
+  return (
+    initCurrency()
+      // 14 = büyük ekran gridinin (2xl: 7 kolon) tam 2 satırı — alt satırda boşluk kalmasın.
+      // verified_supplier: anasayfa vitrini KYB doğrulanmamış satıcı ürünü göstermez.
+      .then(() => searchListings({ page_size: 14, verified_supplier: true }))
+      .then((result) => {
+        if (result.products.length === 0) {
+          showProductGridEmptyState(grid);
+          return;
+        }
+
+        // Hide empty state
+        const emptyState = document.getElementById("product-grid-empty");
+        if (emptyState) emptyState.style.display = "none";
+
+        const eagerProducts = result.products.slice(0, HOME_EAGER_CARD_COUNT);
+        const progressiveProducts = result.products.slice(HOME_EAGER_CARD_COUNT);
+
+        // İlk satırı/viewport bütçesini gerçek kartlarla, kalan sabit alanı hafif
+        // placeholder'larla kur. Böylece 14 zengin kartın DOM'u ilk anda oluşmaz.
+        releaseProductGridSkeletonHeight(grid);
+        grid.innerHTML = eagerProducts
+          .map((card) => renderHomeCard(card, false))
+          .concat(progressiveProducts.map((card) => renderHomeCardPlaceholder(card.id)))
+          .join("");
+
+        // Kartlar DOM'a girdi → favori kalplerini mevcut favori durumuna göre doldur.
+        initProductSliders();
+        syncListingFavoriteHearts(grid);
+        // Sosyal kanıt: sinyali olan kartların ad↔fiyat arası slotunu dinamik
+        // (dönen) etiketle doldur — grid innerHTML yazıldıktan SONRA çağrılır.
+        void applyListingSocialProof(eagerProducts, {
+          root: grid,
+          createMissingSlots: true,
+        });
+        initProgressiveHomeCards(grid, progressiveProducts);
+      })
+      .catch((err) => {
+        console.warn("[ProductGrid] API load failed:", err);
         showProductGridEmptyState(grid);
-        return;
-      }
-
-      // Hide empty state
-      const emptyState = document.getElementById("product-grid-empty");
-      if (emptyState) emptyState.style.display = "none";
-
-      const eagerProducts = result.products.slice(0, HOME_EAGER_CARD_COUNT);
-      const progressiveProducts = result.products.slice(HOME_EAGER_CARD_COUNT);
-
-      // İlk satırı/viewport bütçesini gerçek kartlarla, kalan sabit alanı hafif
-      // placeholder'larla kur. Böylece 14 zengin kartın DOM'u ilk anda oluşmaz.
-      releaseProductGridSkeletonHeight(grid);
-      grid.innerHTML = eagerProducts
-        .map((card) => renderHomeCard(card, false))
-        .concat(progressiveProducts.map((card) => renderHomeCardPlaceholder(card.id)))
-        .join("");
-
-      // Kartlar DOM'a girdi → favori kalplerini mevcut favori durumuna göre doldur.
-      initProductSliders();
-      syncListingFavoriteHearts(grid);
-      // Sosyal kanıt: sinyali olan kartların ad↔fiyat arası slotunu dinamik
-      // (dönen) etiketle doldur — grid innerHTML yazıldıktan SONRA çağrılır.
-      void applyListingSocialProof(eagerProducts, {
-        root: grid,
-        createMissingSlots: true,
-      });
-      initProgressiveHomeCards(grid, progressiveProducts);
-    })
-    .catch((err) => {
-      console.warn("[ProductGrid] API load failed:", err);
-      showProductGridEmptyState(grid);
-    });
+      })
+  );
 }
 
 export function ProductGrid(): string {

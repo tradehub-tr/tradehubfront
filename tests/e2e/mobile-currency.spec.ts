@@ -26,12 +26,14 @@ async function mockBackend(page: Page): Promise<void> {
       body: JSON.stringify({ message: { data: [] } }),
     })
   );
-  await page.route("**/api/method/tradehub_core.api.currency.get_currency_settings*", (route: Route) =>
-    route.fulfill({
-      status: 200,
-      contentType: "application/json",
-      body: JSON.stringify({ message: CURRENCY_SETTINGS }),
-    })
+  await page.route(
+    "**/api/method/tradehub_core.api.currency.get_currency_settings*",
+    (route: Route) =>
+      route.fulfill({
+        status: 200,
+        contentType: "application/json",
+        body: JSON.stringify({ message: CURRENCY_SETTINGS }),
+      })
   );
   await page.route("**/api/method/tradehub_core.api.v1.auth.get_session_user*", (route: Route) =>
     route.fulfill({
@@ -47,7 +49,10 @@ test.describe("Mobil — para birimi seçici (A1)", () => {
     await page.setViewportSize({ width: 390, height: 844 });
     // Cookie banner mobilde bottom-nav'ın üstüne binip tıklamayı yutar — consent'i baştan ver.
     await page.addInitScript(() => {
-      localStorage.setItem("istoc_cookie_prefs", '{"necessary":true,"analytics":false,"marketing":false}');
+      localStorage.setItem(
+        "istoc_cookie_prefs",
+        '{"necessary":true,"analytics":false,"marketing":false}'
+      );
       const s = document.createElement("style");
       s.textContent = '[x-data="cookieBanner"]{display:none !important}';
       (document.head || document.documentElement).appendChild(s);

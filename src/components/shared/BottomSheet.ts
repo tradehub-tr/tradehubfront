@@ -24,7 +24,10 @@ export interface BottomSheetProps {
   hiddenAt?: string;
 }
 
-export function BottomSheet({ id, titleKey, hiddenAt = "lg:hidden" }: BottomSheetProps, body: string): string {
+export function BottomSheet(
+  { id, titleKey, hiddenAt = "lg:hidden" }: BottomSheetProps,
+  body: string
+): string {
   return `
     <!-- Overlay -->
     <div id="${id}-overlay" data-bs-overlay class="fixed inset-0 z-(--z-backdrop) bg-black/50 opacity-0 pointer-events-none transition-opacity duration-300 ${hiddenAt}"></div>

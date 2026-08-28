@@ -11,12 +11,7 @@
 import { getCurrentProduct } from "../../alpine/product";
 import { t } from "../../i18n";
 import { escapeHtml } from "../../utils/sanitize";
-import {
-  renderReviewCard,
-  CHIP_CLASS,
-  MENU_ITEM_CLASS,
-  MENU_PANEL_CLASS,
-} from "./ProductReviews";
+import { renderReviewCard, CHIP_CLASS, MENU_ITEM_CLASS, MENU_PANEL_CLASS } from "./ProductReviews";
 
 /* ── Modal HTML ──────────────────────────────────────── */
 

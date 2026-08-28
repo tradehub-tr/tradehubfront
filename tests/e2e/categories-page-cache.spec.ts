@@ -18,9 +18,7 @@ const CATEGORIES = [
     name: "Mutfak",
     slug: "mutfak",
     icon_class: "",
-    children: [
-      { id: "grup-pisirme", name: "Pişirme", slug: "pisirme", image: "" },
-    ],
+    children: [{ id: "grup-pisirme", name: "Pişirme", slug: "pisirme", image: "" }],
   },
   {
     id: "sektor-tekstil",
@@ -40,88 +38,77 @@ async function mockBackend(page: Page): Promise<void> {
       body: JSON.stringify({ message: { data: [] } }),
     })
   );
-  await page.route(
-    "**/api/method/tradehub_core.api.v1.auth.get_session_user*",
-    (route: Route) =>
-      route.fulfill({
-        status: 200,
-        contentType: "application/json",
-        body: JSON.stringify({ message: { user: "Guest", csrf_token: "test" } }),
-      })
+  await page.route("**/api/method/tradehub_core.api.v1.auth.get_session_user*", (route: Route) =>
+    route.fulfill({
+      status: 200,
+      contentType: "application/json",
+      body: JSON.stringify({ message: { user: "Guest", csrf_token: "test" } }),
+    })
   );
 }
 
-test(
-  "categories.html does not fire its own get_mega_menu when cache is warm",
-  async ({ page }) => {
-    await mockBackend(page);
+test("categories.html does not fire its own get_mega_menu when cache is warm", async ({ page }) => {
+  await mockBackend(page);
 
-    let categoryRequests = 0;
-    // Specific route registered after catch-all — Playwright matches most-recently
-    // registered route first, so this takes precedence over the catch-all above.
-    await page.route(
-      "**/api/method/tradehub_core.api.category.get_mega_menu*",
-      (route: Route) => {
-        categoryRequests++;
-        return route.fulfill({
-          status: 200,
-          contentType: "application/json",
-          body: JSON.stringify({ message: CATEGORIES }),
-        });
-      }
-    );
+  let categoryRequests = 0;
+  // Specific route registered after catch-all — Playwright matches most-recently
+  // registered route first, so this takes precedence over the catch-all above.
+  await page.route("**/api/method/tradehub_core.api.category.get_mega_menu*", (route: Route) => {
+    categoryRequests++;
+    return route.fulfill({
+      status: 200,
+      contentType: "application/json",
+      body: JSON.stringify({ message: CATEGORIES }),
+    });
+  });
 
-    // Step 1: warm the cache via the HOME page (header MegaMenu → loadCategories)
-    //
-    // ESKİDEN `products.html` ile ısıtıyordu ve test bu yüzden düşüyordu:
-    // 25 Temmuz'daki lazy-mount değişikliğinden sonra mega menü ürünler
-    // sayfasında AÇILIŞTA yüklenmiyor, `get_mega_menu` hiç çağrılmıyor —
-    // ısıtma adımı 0 istekle bitiyor, testin geri kalanı anlamsızlaşıyordu.
-    // Ana sayfa menüyü hâlâ açılışta yüklüyor (ilk-açılış bütçe listesinde
-    // `get_mega_menu` görünüyor), ısıtma için doğru yer orası.
-    await page.goto("/");
-    await page.waitForLoadState("networkidle");
-    // Wait for IndexedDB persister to write the cached result
-    await page.waitForTimeout(1500);
-    const afterFirst = categoryRequests;
+  // Step 1: warm the cache via the HOME page (header MegaMenu → loadCategories)
+  //
+  // ESKİDEN `products.html` ile ısıtıyordu ve test bu yüzden düşüyordu:
+  // 25 Temmuz'daki lazy-mount değişikliğinden sonra mega menü ürünler
+  // sayfasında AÇILIŞTA yüklenmiyor, `get_mega_menu` hiç çağrılmıyor —
+  // ısıtma adımı 0 istekle bitiyor, testin geri kalanı anlamsızlaşıyordu.
+  // Ana sayfa menüyü hâlâ açılışta yüklüyor (ilk-açılış bütçe listesinde
+  // `get_mega_menu` görünüyor), ısıtma için doğru yer orası.
+  await page.goto("/");
+  await page.waitForLoadState("networkidle");
+  // Wait for IndexedDB persister to write the cached result
+  await page.waitForTimeout(1500);
+  const afterFirst = categoryRequests;
 
-    // Step 2: navigate to categories.html — should serve from cache, no new request
-    await page.goto("/pages/categories.html");
-    await page.waitForLoadState("networkidle");
-    await page.waitForTimeout(1000);
+  // Step 2: navigate to categories.html — should serve from cache, no new request
+  await page.goto("/pages/categories.html");
+  await page.waitForLoadState("networkidle");
+  await page.waitForTimeout(1000);
 
-    expect(afterFirst).toBeGreaterThanOrEqual(1);
-    // categories.html must NOT add a new get_mega_menu request
-    expect(categoryRequests).toBe(afterFirst);
-  }
-);
+  expect(afterFirst).toBeGreaterThanOrEqual(1);
+  // categories.html must NOT add a new get_mega_menu request
+  expect(categoryRequests).toBe(afterFirst);
+});
 
-test(
-  "categories.html shows error UI (not a blank grid) when category load fails",
-  async ({ page }) => {
-    // Fresh context → cold IndexedDB cache. loadCategories() swallows backend
-    // failures and resolves with [], so the page must detect the empty result and
-    // render the error state instead of a silently empty grid.
-    // Hata metni artık i18n'den geliyor (eski hardcoded Türkçe kaldırıldı); Türkçe
-    // assertion için dili TR'ye sabitle.
-    await page.addInitScript(() => localStorage.setItem("i18nextLng", "tr"));
-    await mockBackend(page);
-    await page.route(
-      "**/api/method/tradehub_core.api.category.get_mega_menu*",
-      (route: Route) =>
-        route.fulfill({
-          status: 200,
-          contentType: "application/json",
-          body: JSON.stringify({ message: [] }), // boş → "yüklenemedi" sayılır
-        })
-    );
+test("categories.html shows error UI (not a blank grid) when category load fails", async ({
+  page,
+}) => {
+  // Fresh context → cold IndexedDB cache. loadCategories() swallows backend
+  // failures and resolves with [], so the page must detect the empty result and
+  // render the error state instead of a silently empty grid.
+  // Hata metni artık i18n'den geliyor (eski hardcoded Türkçe kaldırıldı); Türkçe
+  // assertion için dili TR'ye sabitle.
+  await page.addInitScript(() => localStorage.setItem("i18nextLng", "tr"));
+  await mockBackend(page);
+  await page.route("**/api/method/tradehub_core.api.category.get_mega_menu*", (route: Route) =>
+    route.fulfill({
+      status: 200,
+      contentType: "application/json",
+      body: JSON.stringify({ message: [] }), // boş → "yüklenemedi" sayılır
+    })
+  );
 
-    await page.goto("/pages/categories.html");
-    await page.waitForLoadState("networkidle");
-    await page.waitForTimeout(800);
+  await page.goto("/pages/categories.html");
+  await page.waitForLoadState("networkidle");
+  await page.waitForTimeout(800);
 
-    await expect(
-      page.locator("#cat-grid-container", { hasText: "Kategoriler yüklenemedi" })
-    ).toBeVisible();
-  }
-);
+  await expect(
+    page.locator("#cat-grid-container", { hasText: "Kategoriler yüklenemedi" })
+  ).toBeVisible();
+});

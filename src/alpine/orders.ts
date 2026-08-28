@@ -3,6 +3,7 @@ import { t } from "../i18n";
 import { callMethod } from "../utils/api";
 import { orderStore } from "../components/orders/state/OrderStore";
 import { getOrderTabs, getOrderFilters } from "../components/buyer-dashboard/ordersData";
+import { loadPickupEntries, pickupHref, type PickupEntryMap } from "../services/pickupEntry";
 import type { Order, OrderProduct } from "../types/order";
 
 // Backend get_payment_records API response satırları (snake_case alanlar)
@@ -98,6 +99,15 @@ Alpine.data("ordersListComponent", () => ({
   // Order detail panel — Tab state (Kargo/Ödeme/Tedarikçi)
   activeDetailTab: "shipping" as "shipping" | "payment" | "supplier",
 
+  /**
+   * Teslim alınmayı bekleyen sevkiyatlar — sipariş numarası → sevkiyat adı.
+   *
+   * Sipariş modeli sevkiyat adını taşımıyor (`types/order.ts`), o yüzden
+   * ayrı eşleniyor. Boş kalırsa hiçbir kartta düğme çıkmıyor: ölü düğme
+   * çizmektense hiç çizmemek doğru.
+   */
+  pickupEntries: {} as PickupEntryMap,
+
   async init() {
     orderStore.subscribe(() => {
       this.orders = orderStore.getOrders();
@@ -113,6 +123,12 @@ Alpine.data("ordersListComponent", () => ({
     await this.loadPage();
     this.orders = orderStore.getOrders();
     this.loading = false;
+
+    // Teslim alma girişleri — sipariş listesini BEKLETMİYOR: eşleme gelince
+    // düğmeler beliriyor, gelmezse liste yine de çalışıyor (07-FE · K-B).
+    loadPickupEntries().then((map) => {
+      this.pickupEntries = map;
+    });
 
     // selectedOrder değişince detay panel state'ini sıfırla
     this.$watch("selectedOrder", () => {
@@ -140,15 +156,27 @@ Alpine.data("ordersListComponent", () => ({
     return this.orders;
   },
 
-  get totalPages() { return Math.max(1, Math.ceil(this.totalOrders / this.pageSize)); },
-  get canPreviousPage() { return this.currentPage > 1; },
-  get canNextPage() { return this.currentPage < this.totalPages; },
+  get totalPages() {
+    return Math.max(1, Math.ceil(this.totalOrders / this.pageSize));
+  },
+  get canPreviousPage() {
+    return this.currentPage > 1;
+  },
+  get canNextPage() {
+    return this.currentPage < this.totalPages;
+  },
 
   async loadPage(page?: number) {
     const targetPage = page || this.currentPage;
     const range = this.getDateRange();
     const status = this.activeTab === "completed-review" ? "completed" : this.activeTab;
-    await orderStore.load({ status, search: this.searchQuery, dateFrom: range.from, dateTo: range.to, page: targetPage });
+    await orderStore.load({
+      status,
+      search: this.searchQuery,
+      dateFrom: range.from,
+      dateTo: range.to,
+      page: targetPage,
+    });
     this.orders = orderStore.getOrders();
     this.loading = orderStore.isLoading();
   },
@@ -170,7 +198,14 @@ Alpine.data("ordersListComponent", () => ({
 
   getDateRange(): { from: string; to: string } {
     if (this.dateFilter === "custom") return { from: this.dateFrom, to: this.dateTo };
-    const days = this.dateFilter === "7d" ? 7 : this.dateFilter === "30d" ? 30 : this.dateFilter === "90d" ? 90 : 0;
+    const days =
+      this.dateFilter === "7d"
+        ? 7
+        : this.dateFilter === "30d"
+          ? 30
+          : this.dateFilter === "90d"
+            ? 90
+            : 0;
     if (!days) return { from: "", to: "" };
     const from = new Date();
     from.setDate(from.getDate() - days);
@@ -232,7 +267,8 @@ Alpine.data("ordersListComponent", () => ({
 
   tabCount(tabId: string) {
     const allowedStatuses = ORDER_STATUS_MAP[tabId];
-    if (!allowedStatuses || allowedStatuses.length === 0) return Object.values(this.statusCounts).reduce((sum, count) => sum + count, 0);
+    if (!allowedStatuses || allowedStatuses.length === 0)
+      return Object.values(this.statusCounts).reduce((sum, count) => sum + count, 0);
     return allowedStatuses.reduce((sum, status) => sum + (this.statusCounts[status] || 0), 0);
   },
 
@@ -436,6 +472,17 @@ Alpine.data("ordersListComponent", () => ({
     if (order.status === "Delivering") return 3;
     if (order.status === "Completed") return 4;
     return 0;
+  },
+
+  /** Bu siparişin teslim alınmayı bekleyen bir sevkiyatı var mı? */
+  canPickup(order: Order | null): boolean {
+    return Boolean(order?.orderNumber && this.pickupEntries[order.orderNumber]);
+  },
+
+  /** Teslim alma ekranının adresi — düğme yalnız `canPickup` ise çiziliyor. */
+  pickupUrl(order: Order | null): string {
+    const name = order?.orderNumber ? this.pickupEntries[order.orderNumber] : "";
+    return name ? pickupHref(name) : "#";
   },
 
   getStatusLabel(order: Order | null): string {
@@ -721,11 +768,57 @@ function mockImg(bg: string, label: string): string {
 }
 
 const MOCK_REFUNDS: RefundSummary[] = [
-  { order_number: "SO-2026-01842", refund_status: "Pending", refund_status_label: "İnceleniyor", refund_reason: "Ürünlerin bir kısmı taşıma sırasında hasar görmüş, koliler ezik ulaştı ve 12 adet ürün kullanılamaz durumda.", refund_amount: 12450.5, currency: "₺", refund_requested_at: "2026-07-06", seller_name: "Özgen Plastik Sanayi ve Dış Ticaret A.Ş." },
-  { order_number: "SO-2026-01787", refund_status: "Pending", refund_status_label: "İnceleniyor", refund_reason: "Yanlış renk gönderildi", refund_amount: 3280, currency: "₺", refund_requested_at: "2026-07-02", seller_name: "Demir Hırdavat" },
-  { order_number: "SO-2026-01623", refund_status: "Approved", refund_status_label: "Onaylandı", refund_reason: "Eksik ürün — 48 adet sipariş edildi, 36 adet teslim edildi", refund_amount: 1248750, currency: "₺", refund_requested_at: "2026-06-24", seller_name: "Anadolu Tekstil Toptan Satış ve Pazarlama Ltd. Şti." },
-  { order_number: "SO-2026-01518", refund_status: "Approved", refund_status_label: "Onaylandı", refund_reason: "Ürün açıklamayla uyumsuz", refund_amount: 8640, currency: "₺", refund_requested_at: "2026-06-15", seller_name: "Yıldız Ambalaj" },
-  { order_number: "SO-2026-01402", refund_status: "Rejected", refund_status_label: "Reddedildi", refund_reason: "İade süresi dolduktan sonra başvuruldu", refund_amount: 970.25, currency: "₺", refund_requested_at: "2026-06-03", seller_name: "Ege Kırtasiye" },
+  {
+    order_number: "SO-2026-01842",
+    refund_status: "Pending",
+    refund_status_label: "İnceleniyor",
+    refund_reason:
+      "Ürünlerin bir kısmı taşıma sırasında hasar görmüş, koliler ezik ulaştı ve 12 adet ürün kullanılamaz durumda.",
+    refund_amount: 12450.5,
+    currency: "₺",
+    refund_requested_at: "2026-07-06",
+    seller_name: "Özgen Plastik Sanayi ve Dış Ticaret A.Ş.",
+  },
+  {
+    order_number: "SO-2026-01787",
+    refund_status: "Pending",
+    refund_status_label: "İnceleniyor",
+    refund_reason: "Yanlış renk gönderildi",
+    refund_amount: 3280,
+    currency: "₺",
+    refund_requested_at: "2026-07-02",
+    seller_name: "Demir Hırdavat",
+  },
+  {
+    order_number: "SO-2026-01623",
+    refund_status: "Approved",
+    refund_status_label: "Onaylandı",
+    refund_reason: "Eksik ürün — 48 adet sipariş edildi, 36 adet teslim edildi",
+    refund_amount: 1248750,
+    currency: "₺",
+    refund_requested_at: "2026-06-24",
+    seller_name: "Anadolu Tekstil Toptan Satış ve Pazarlama Ltd. Şti.",
+  },
+  {
+    order_number: "SO-2026-01518",
+    refund_status: "Approved",
+    refund_status_label: "Onaylandı",
+    refund_reason: "Ürün açıklamayla uyumsuz",
+    refund_amount: 8640,
+    currency: "₺",
+    refund_requested_at: "2026-06-15",
+    seller_name: "Yıldız Ambalaj",
+  },
+  {
+    order_number: "SO-2026-01402",
+    refund_status: "Rejected",
+    refund_status_label: "Reddedildi",
+    refund_reason: "İade süresi dolduktan sonra başvuruldu",
+    refund_amount: 970.25,
+    currency: "₺",
+    refund_requested_at: "2026-06-03",
+    seller_name: "Ege Kırtasiye",
+  },
 ];
 
 Alpine.data("refundsComponent", () => ({
@@ -813,15 +906,68 @@ interface MyReviewRow {
 }
 
 const MOCK_PENDING_REVIEWS: PendingReviewItem[] = [
-  { order_item: "OI-1", listing: "LST-MOCK-1", order_number: "SO-2026-01901", product_name: "Endüstriyel Kablo Makarası 3x2.5mm² TTR 100 Metre — Siyah, Alev Geciktirmeli Dış Kılıf", image: mockImg("#64748b", "KM"), quantity: 10, order_date: "2026-07-08" },
-  { order_item: "OI-2", listing: "LST-MOCK-2", order_number: "SO-2026-01856", product_name: "Paslanmaz Çelik Kelepçe Seti 8-12mm (500 Adet)", image: mockImg("#78716c", "KS"), quantity: 4, order_date: "2026-07-04" },
-  { order_item: "OI-3", listing: "LST-MOCK-3", order_number: "SO-2026-01799", product_name: "Kraft Koli 40x30x30 cm Çift Oluklu (100'lü Paket)", image: "", quantity: 2, order_date: "2026-06-30" },
+  {
+    order_item: "OI-1",
+    listing: "LST-MOCK-1",
+    order_number: "SO-2026-01901",
+    product_name:
+      "Endüstriyel Kablo Makarası 3x2.5mm² TTR 100 Metre — Siyah, Alev Geciktirmeli Dış Kılıf",
+    image: mockImg("#64748b", "KM"),
+    quantity: 10,
+    order_date: "2026-07-08",
+  },
+  {
+    order_item: "OI-2",
+    listing: "LST-MOCK-2",
+    order_number: "SO-2026-01856",
+    product_name: "Paslanmaz Çelik Kelepçe Seti 8-12mm (500 Adet)",
+    image: mockImg("#78716c", "KS"),
+    quantity: 4,
+    order_date: "2026-07-04",
+  },
+  {
+    order_item: "OI-3",
+    listing: "LST-MOCK-3",
+    order_number: "SO-2026-01799",
+    product_name: "Kraft Koli 40x30x30 cm Çift Oluklu (100'lü Paket)",
+    image: "",
+    quantity: 2,
+    order_date: "2026-06-30",
+  },
 ];
 
 const MOCK_DONE_REVIEWS: MyReviewRow[] = [
-  { name: "REV-1", rating: 5, title: "Tam aradığımız kalite", body: "İkinci toplu siparişimizdi, ürünler açıklamayla birebir uyumlu geldi. Paketleme özenliydi, teslimat söz verilen tarihten bir gün önce yapıldı. Depo ekibimiz sayım sırasında tek fire bile çıkarmadı.", status: "Published", submitted_at: "2026-06-28", product_name: "Endüstriyel Eldiven Nitril Kaplama (12'li Paket)", image: mockImg("#0f766e", "EL"), helpful_count: 14 },
-  { name: "REV-2", rating: 3, title: "Ürün iyi, teslimat gecikti", body: "Ürün kalitesinde sorun yok ancak sevkiyat iki hafta gecikti ve süreçte bilgilendirme yapılmadı.", status: "Published", submitted_at: "2026-06-12", product_name: "LED Panel Armatür 60x60 40W (20 Adet)", image: mockImg("#7c3aed", "LP"), helpful_count: 3 },
-  { name: "REV-3", rating: 4, body: "Numuneyle aynı kalitede, fiyat/performans başarılı. Tekrar sipariş vereceğiz.", status: "Pending", submitted_at: "2026-07-07", product_name: "Mikrofiber Temizlik Bezi 40x40 (Koli — 300 Adet)", image: mockImg("#b45309", "MB") },
+  {
+    name: "REV-1",
+    rating: 5,
+    title: "Tam aradığımız kalite",
+    body: "İkinci toplu siparişimizdi, ürünler açıklamayla birebir uyumlu geldi. Paketleme özenliydi, teslimat söz verilen tarihten bir gün önce yapıldı. Depo ekibimiz sayım sırasında tek fire bile çıkarmadı.",
+    status: "Published",
+    submitted_at: "2026-06-28",
+    product_name: "Endüstriyel Eldiven Nitril Kaplama (12'li Paket)",
+    image: mockImg("#0f766e", "EL"),
+    helpful_count: 14,
+  },
+  {
+    name: "REV-2",
+    rating: 3,
+    title: "Ürün iyi, teslimat gecikti",
+    body: "Ürün kalitesinde sorun yok ancak sevkiyat iki hafta gecikti ve süreçte bilgilendirme yapılmadı.",
+    status: "Published",
+    submitted_at: "2026-06-12",
+    product_name: "LED Panel Armatür 60x60 40W (20 Adet)",
+    image: mockImg("#7c3aed", "LP"),
+    helpful_count: 3,
+  },
+  {
+    name: "REV-3",
+    rating: 4,
+    body: "Numuneyle aynı kalitede, fiyat/performans başarılı. Tekrar sipariş vereceğiz.",
+    status: "Pending",
+    submitted_at: "2026-07-07",
+    product_name: "Mikrofiber Temizlik Bezi 40x40 (Koli — 300 Adet)",
+    image: mockImg("#b45309", "MB"),
+  },
 ];
 
 Alpine.data("reviewsSectionComponent", () => ({
@@ -850,10 +996,10 @@ Alpine.data("reviewsSectionComponent", () => ({
           "tradehub_core.api.storefront_api.get_my_pending_reviews",
           { page: 1, page_size: 50 }
         ),
-        callMethod<{ reviews: MyReviewRow[] }>(
-          "tradehub_core.api.storefront_api.get_my_reviews",
-          { page: 1, page_size: 50 }
-        ),
+        callMethod<{ reviews: MyReviewRow[] }>("tradehub_core.api.storefront_api.get_my_reviews", {
+          page: 1,
+          page_size: 50,
+        }),
       ]);
       this.pending = pendingRes?.items || [];
       this.done = doneRes?.reviews || [];
@@ -908,9 +1054,18 @@ Alpine.data("reviewsSectionComponent", () => ({
 
   reviewStatusChip(status: string): { label: string; cls: string } {
     if (status === "Approved" || status === "Published")
-      return { label: t("orders.reviewStatusPublished"), cls: "bg-green-50 text-green-700 border border-green-200" };
+      return {
+        label: t("orders.reviewStatusPublished"),
+        cls: "bg-green-50 text-green-700 border border-green-200",
+      };
     if (status === "Rejected")
-      return { label: t("orders.reviewStatusRejected"), cls: "bg-red-50 text-red-700 border border-red-200" };
-    return { label: t("ordersUi.underReview"), cls: "bg-amber-50 text-amber-700 border border-amber-200" };
+      return {
+        label: t("orders.reviewStatusRejected"),
+        cls: "bg-red-50 text-red-700 border border-red-200",
+      };
+    return {
+      label: t("ordersUi.underReview"),
+      cls: "bg-amber-50 text-amber-700 border border-amber-200",
+    };
   },
 }));

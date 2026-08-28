@@ -46,7 +46,10 @@ export function FavoritesSection(items: FavoriteItem[] = []): string {
       // yerine kayıt-anı değerini olduğu gibi göster.
       const hasNative = typeof item.price === "number" && item.price > 0 && !!item.currency;
       const converted = hasNative
-        ? formatCurrency(convertPrice(item.price as number, item.currency as string), getSelectedCurrency())
+        ? formatCurrency(
+            convertPrice(item.price as number, item.currency as string),
+            getSelectedCurrency()
+          )
         : "";
       return ProductCard({
         image: escapeHtml(sanitizeUrl(item.image)),

@@ -6,267 +6,277 @@ const ru = {
     // ar/ru ÇEVİRİSİ BEKLİYOR — metinler şimdilik İngilizce; ham anahtar
     // göstermek yerine okunabilir yer tutucu. Satırlar TODO işaretli.
     shipment: {
-      // TODO çeviri — İngilizce yer tutucu
       page: {
-        sellerPanel: "Seller Panel",
-        createNotWired: "Creating shipments is not connected yet",
-        labelNotWired: "Label data is not defined in the schema",
-        missingShipment: "No shipment was specified for this return.",
-        notifyFeedNotWired: "Notification feed is not connected yet",
-        notifyPrefNotWired: "Notification preferences are not connected yet",
-        returnFormNotWired: "Creating return requests is not connected yet",
-        returnQueueNotWired: "Return queue is not connected yet",
-        returns: "My return requests",
-        returnsNotWired: "Return requests are not connected yet",
-        sellerShipment: "Shipment management",
-        backToOrders: "Back to my orders",
-        loadFailed: "Could not load the shipment.",
-        loading: "Loading…",
-        missingName: "No shipment was specified.",
-        podNotWired: "Proof of delivery is not connected yet",
-        timelineNotWired: "Tracking history is not connected yet",
-        proofNotWired: "Подтверждение доставки пока не подключено",
-        tracking: "Shipment tracking",
-        trackingTitle: "Shipment activity",
+        sellerPanel: "Панель продавца",
+        createNotWired: "Создание отправлений ещё не подключено",
+        labelNotWired: "Данные этикетки не определены в схеме",
+        missingShipment: "Для этого возврата отправление не указано.",
+        notifyFeedNotWired: "Лента уведомлений ещё не подключена",
+        notifyPrefNotWired: "Настройки уведомлений ещё не подключены",
+        returnFormNotWired: "Создание заявок на возврат ещё не подключено",
+        returnQueueNotWired: "Очередь возвратов ещё не подключена",
+        returns: "Мои заявки на возврат",
+        returnsNotWired: "Заявки на возврат ещё не подключены",
+        sellerShipment: "Управление отправлениями",
+        backToOrders: "Вернуться к моим заказам",
+        loadFailed: "Не удалось загрузить отправление.",
+        loading: "Загрузка…",
+        missingName: "Отправление не указано.",
+        podNotWired: "Подтверждение доставки ещё не подключено",
+        timelineNotWired: "История отслеживания ещё не подключена",
+        proofNotWired: "Доказательства доставки ещё не подключены",
+        tracking: "Отслеживание отправления",
+        trackingTitle: "Движение отправления",
       },
-      // TODO çeviri — İngilizce yer tutucu
       notWired: {
-        title: "This section is not connected yet",
-        hint: "The screen is ready, but the service that fetches the data has not been written yet.",
+        title: "Этот раздел ещё не подключён",
+        hint: 'Экран готов, но сервис, который получает данные, ещё не написан. Пустой список означал бы "записей нет".',
       },
       appointment: {
-        change: "Change appointment",  // TODO çeviri
-        current: "Your current appointment",  // TODO çeviri
-        date: "Date",  // TODO çeviri
-        failed: "Could not create the appointment.",  // TODO çeviri
-        full: "full",  // TODO çeviri
-        incomplete: "Select a date and a time window.",  // TODO çeviri
-        noSlots: "No slots available",  // TODO çeviri
-        notAvailable: "This feature is not available yet.",  // TODO çeviri
-        pastDate: "A past date cannot be selected.",  // TODO çeviri
-        request: "Request appointment",  // TODO çeviri
-        slot: "Time window",  // TODO çeviri
-        submitting: "Submitting…",  // TODO çeviri
-        subtitle: "Pick a date and time window that suits you.",  // TODO çeviri
-        title: "Delivery appointment",  // TODO çeviri
+        change: "Изменить запись",
+        current: "Ваша текущая запись",
+        date: "Дата",
+        failed: "Не удалось создать запись.",
+        full: "занято",
+        incomplete: "Выберите дату и временной интервал.",
+        location: "Пункт выдачи",
+        noSlots: "Свободных интервалов нет",
+        noSlotsHint: "Выберите другую дату или свяжитесь с продавцом.",
+        notAvailable: "Эта функция пока недоступна.",
+        pastDate: "Нельзя выбрать прошедшую дату.",
+        request: "Записаться",
+        slot: "Временной интервал",
+        slotNotFound: "Выбранный интервал не найден.",
+        slotTaken: "Этот интервал занят — выберите другой.",
+        submitting: "Отправка…",
+        subtitle: "Выберите удобные для вас дату и интервал.",
+        title: "Запись на доставку",
       },
       channel: {
-        BUYER_PICKUP: "Store pickup",  // TODO çeviri
-        CARGO: "Courier",  // TODO çeviri
-        COURIER: "Express",  // TODO çeviri
-        SELLER_VEHICLE: "Seller vehicle",  // TODO çeviri
-        WAREHOUSE: "Freight",  // TODO çeviri
+        BUYER_PICKUP: "Самовывоз",
+        CARGO: "Карго",
+        COURIER: "Курьер",
+        SELLER_VEHICLE: "Транспорт продавца",
+        WAREHOUSE: "Склад",
       },
       checkout: {
-        eta: "{{min}}-{{max}} business days",  // TODO çeviri
-        free: "Free",  // TODO çeviri
-        freeShippingHint: "Add {{amount}} more for free shipping.",  // TODO çeviri
-        noOptions: "No shipping option for this address",  // TODO çeviri
-        noOptionsHint: "You can try a different delivery address.",  // TODO çeviri
-        taxNote: "Prices include VAT.",  // TODO çeviri
-        title: "Shipping options",  // TODO çeviri
+        eta: "{{min}}-{{max}} рабочих дней",
+        free: "Бесплатно",
+        freeShippingHint: "Добавьте ещё {{amount}} для бесплатной доставки.",
+        noOptions: "Для этого адреса нет вариантов доставки",
+        noOptionsHint: "Попробуйте другой адрес доставки.",
+        taxNote: "Цены указаны с НДС.",
+        title: "Варианты доставки",
       },
       confirm: {
-        action: "I received it",  // TODO çeviri
-        appointment: "Appointment",  // TODO çeviri
-        attemptsLeft: "{{count}} attempts left",  // TODO çeviri
-        codeHint: "Enter the code the courier gave you.",  // TODO çeviri
-        codeLabel: "Delivery code",  // TODO çeviri
-        codeTooShort: "The code looks incomplete.",  // TODO çeviri
-        done: "Delivery completed",  // TODO çeviri
-        doneHint: "You can view the proof of delivery below.",  // TODO çeviri
-        failed: "Could not confirm, please try again.",  // TODO çeviri
-        goToPayment: "Go to payment",  // TODO çeviri
-        location: "Pickup location",  // TODO çeviri
-        lockedOut: "No attempts left",  // TODO çeviri
-        lockedOutHint: "Please contact the seller.",  // TODO çeviri
-        noCodeHint: "No delivery code is needed for this parcel. Confirm if you have received it.",  // TODO çeviri
-        notAvailable: "This feature is not available yet.",  // TODO çeviri
-        paymentBlocked: "Cannot be collected before payment",  // TODO çeviri
-        paymentBlockedHint: "This parcel requires payment first. Return here once you have paid.",  // TODO çeviri
-        submitting: "Submitting…",  // TODO çeviri
-        title: "Confirm delivery",  // TODO çeviri
+        action: "Я получил",
+        appointment: "Запись",
+        attemptsLeft: "Осталось попыток: {{count}}",
+        codeExpired: "Срок действия кода истёк",
+        codeExpiredHint:
+          "Вы можете запросить новый код и попробовать снова. Оставшиеся попытки сохраняются.",
+        codeHint: "Введите код, который вам дал курьер.",
+        codeInvalid: "Не удалось проверить код.",
+        codeLabel: "Код получения",
+        codeTooShort: "Код выглядит неполным.",
+        done: "Доставка завершена",
+        doneHint: "Детали доставки показаны ниже.",
+        expiresIn: "Код истекает через {{time}}.",
+        failed: "Не удалось подтвердить, попробуйте ещё раз.",
+        goToPayment: "Перейти к оплате",
+        location: "Место получения",
+        lockedOut: "Попытки исчерпаны",
+        lockedOutHint: "Пожалуйста, свяжитесь с продавцом.",
+        noCodeHint: "Для этой посылки код не нужен. Подтвердите, если вы её получили.",
+        notAvailable: "Эта функция пока недоступна.",
+        paymentBlocked: "Получение невозможно до оплаты",
+        paymentBlockedHint: "Эта посылка требует предоплаты. Вернитесь сюда после оплаты.",
+        resendCode: "Запросить новый код",
+        resendFailed: "Не удалось отправить новый код.",
+        resending: "Отправка…",
+        submitting: "Отправка…",
+        title: "Подтверждение получения",
       },
       exception: {
-        ADDR_NOT_FOUND: "Address not found",  // TODO çeviri
-        CUSTOMS_HOLD: "Held at customs",  // TODO çeviri
-        DAMAGED: "Package damaged",  // TODO çeviri
-        RECIPIENT_ABSENT: "Nobody at the address",  // TODO çeviri
-        REFUSED: "Delivery refused",  // TODO çeviri
-        SIZE_EXCEED: "Size limit exceeded",  // TODO çeviri
-        WEATHER: "Delayed due to weather",  // TODO çeviri
-        WRONG_ADDRESS: "Wrong address",  // TODO çeviri
+        ADDR_NOT_FOUND: "Адрес не найден",
+        CUSTOMS_HOLD: "Задержано на таможне",
+        DAMAGED: "Посылка повреждена",
+        RECIPIENT_ABSENT: "По адресу никого нет",
+        REFUSED: "Получатель отказался",
+        SIZE_EXCEED: "Превышен предел размера",
+        WEATHER: "Задержка из-за погоды",
+        WRONG_ADDRESS: "Неверный адрес",
       },
       group: {
-        allShipped: "Your entire order has been dispatched.",  // TODO çeviri
-        carrier: "Carrier",  // TODO çeviri
-        empty: "No shipments for this order",  // TODO çeviri
-        emptyHint: "They will appear here once the seller prepares the parcel.",  // TODO çeviri
-        eta: "Estimated delivery",  // TODO çeviri
-        itemProgress: "Item progress",  // TODO çeviri
-        manage: "Manage",  // TODO çeviri
-        noCarrier: "Not set",  // TODO çeviri
-        noTracking: "Not yet",  // TODO çeviri
-        parcelOf: "Parcel {{index}} of {{total}}",  // TODO çeviri
-        remaining: "{{count}} {{uom}} not yet shipped",  // TODO çeviri
-        subtitle: "Your order is being sent in {{count}} parcels.",  // TODO çeviri
-        title: "Shipments for {{order}}",  // TODO çeviri
-        track: "Track",  // TODO çeviri
-        tracking: "Tracking number",  // TODO çeviri
+        allShipped: "Весь ваш заказ отправлен.",
+        carrier: "Перевозчик",
+        empty: "По этому заказу отправлений нет",
+        emptyHint: "Они появятся здесь, как только продавец подготовит посылку.",
+        eta: "Ожидаемая доставка",
+        itemProgress: "Статус товаров",
+        manage: "Управлять",
+        noCarrier: "Не указан",
+        noTracking: "Пока нет",
+        parcelOf: "Посылка {{index}} из {{total}}",
+        remaining: "{{count}} {{uom}} ещё не отправлено",
+        subtitle: "Ваш заказ отправляется в {{count}} посылках.",
+        title: "Отправления по заказу {{order}}",
+        track: "Отследить",
+        tracking: "Трек-номер",
       },
       label: {
-        barcodeAlt: "Barcode for {{code}}",  // TODO çeviri
-        barcodeUnavailable: "Barcode could not be loaded",  // TODO çeviri
-        download: "Download label",  // TODO çeviri
-        empty: "No packages found",  // TODO çeviri
-        emptyHint: "Complete the packing step first.",  // TODO çeviri
-        missingWarning: "{{count}} packages have no label — they cannot be handed to the carrier.",  // TODO çeviri
-        noBarcode: "No barcode",  // TODO çeviri
-        notReady: "Label is not ready yet",  // TODO çeviri
-        printedAt: "Created",  // TODO çeviri
-        subtitle: "Labels for the packages of {{shipment}}.",  // TODO çeviri
-        title: "Shipping labels",  // TODO çeviri
+        barcodeAlt: "Штрих-код для {{code}}",
+        barcodeUnavailable: "Не удалось загрузить штрих-код",
+        download: "Скачать этикетку",
+        empty: "Посылок не найдено",
+        emptyHint: "Сначала завершите упаковку.",
+        missingWarning: "У {{count}} посылок нет этикетки — их нельзя передать перевозчику.",
+        noBarcode: "Штрих-кода нет",
+        notReady: "Этикетка ещё не готова",
+        printedAt: "Создана",
+        subtitle: "Этикетки для посылок отправления {{shipment}}.",
+        title: "Транспортные этикетки",
       },
       notify: {
-        empty: "No notifications",  // TODO çeviri
-        emptyHint: "Shipment updates will appear here.",  // TODO çeviri
-        preferences: "Preferences",  // TODO çeviri
-        title: "Notifications",  // TODO çeviri
+        empty: "Уведомлений нет",
+        emptyHint: "Здесь появятся обновления по отправлениям.",
+        preferences: "Настройки",
+        title: "Уведомления",
       },
       notifyEvent: {
-        shipment_delivered: "Shipment delivered",  // TODO çeviri
-        shipment_exception: "Shipment issue",  // TODO çeviri
-        shipment_shipped: "Shipment dispatched",  // TODO çeviri
+        shipment_delivered: "Отправление доставлено",
+        shipment_exception: "Проблема с отправлением",
+        shipment_shipped: "Отправление отгружено",
       },
       notifyPref: {
-        empty: "No preferences found",  // TODO çeviri
-        failed: "Could not save the preference.",  // TODO çeviri
-        lockedDefault: "Mandatory notification — cannot be turned off.",  // TODO çeviri
-        mandatoryNote: "{{count}} notifications are mandatory and cannot be turned off.",  // TODO çeviri
-        notAvailable: "This feature is not available yet.",  // TODO çeviri
-        subtitle: "Choose which notifications you want to receive.",  // TODO çeviri
-        title: "Notification preferences",  // TODO çeviri
+        empty: "Настроек не найдено",
+        failed: "Не удалось сохранить настройку.",
+        lockedDefault: "Обязательное уведомление — отключить нельзя.",
+        mandatoryNote: "{{count}} уведомлений обязательны и не могут быть отключены.",
+        notAvailable: "Эта функция пока недоступна.",
+        subtitle: "Выберите, какие уведомления вы хотите получать.",
+        title: "Настройки уведомлений",
       },
       packing: {
-        add: "Add",  // TODO çeviri
-        addTitle: "Add package",  // TODO çeviri
-        desi: "Desi",  // TODO çeviri
-        desiExceeds: "Desi exceeds weight — pricing will use desi.",  // TODO çeviri
-        desiHint: "Desi is calculated automatically from the dimensions.",  // TODO çeviri
-        empty: "No packages yet",  // TODO çeviri
-        failed: "Could not add the package.",  // TODO çeviri
-        height: "Height (cm)",  // TODO çeviri
-        length: "Length (cm)",  // TODO çeviri
-        locked: "This shipment has left; packing cannot be changed.",  // TODO çeviri
-        notAvailable: "This feature is not available yet.",  // TODO çeviri
-        subtitle: "Define the parcels for this shipment.",  // TODO çeviri
-        title: "Packing",  // TODO çeviri
-        type: "Package type",  // TODO çeviri
-        weight: "Weight (kg)",  // TODO çeviri
-        width: "Width (cm)",  // TODO çeviri
+        add: "Добавить",
+        addTitle: "Добавить посылку",
+        desi: "Объёмный вес",
+        desiExceeds: "Объёмный вес больше фактического — расчёт пойдёт по объёмному.",
+        desiHint: "Объёмный вес считается автоматически по габаритам.",
+        empty: "Посылок пока нет",
+        failed: "Не удалось добавить посылку.",
+        height: "Высота (см)",
+        length: "Длина (см)",
+        locked: "Отправление уже уехало; упаковку изменить нельзя.",
+        notAvailable: "Эта функция пока недоступна.",
+        subtitle: "Определите посылки для этого отправления.",
+        title: "Упаковка",
+        type: "Тип посылки",
+        weight: "Вес (кг)",
+        width: "Ширина (см)",
       },
       return: {
-        allReturned: "The items in this parcel have already been returned.",  // TODO çeviri
-        failed: "Could not create the return request.",  // TODO çeviri
-        items: "Items",  // TODO çeviri
-        noItemSelected: "Select at least one item.",  // TODO çeviri
-        notAvailable: "This feature is not available yet.",  // TODO çeviri
-        note: "Description",  // TODO çeviri
-        noteHint: "At least {{min}} characters.",  // TODO çeviri
-        notePlaceholder: "Briefly describe the issue; the seller decides based on this.",  // TODO çeviri
-        noteTooShort: "The description must be at least {{min}} characters.",  // TODO çeviri
-        reason: "Reason",  // TODO çeviri
-        submit: "Submit return request",  // TODO çeviri
-        submitting: "Submitting…",  // TODO çeviri
-        subtitle: "Select the items you want to return.",  // TODO çeviri
-        title: "Return request",  // TODO çeviri
-        windowClosed: "The return window has closed ({{days}} days)",  // TODO çeviri
-        windowClosedHint: "If there is still a problem, you can contact our support team.",  // TODO çeviri
+        allReturned: "Товары из этой посылки уже возвращены.",
+        failed: "Не удалось создать заявку на возврат.",
+        items: "Товары",
+        noItemSelected: "Выберите хотя бы один товар.",
+        notAvailable: "Эта функция пока недоступна.",
+        note: "Описание",
+        noteHint: "Минимум {{min}} символов.",
+        notePlaceholder: "Кратко опишите проблему; продавец решает на основании этого.",
+        noteTooShort: "Описание должно содержать не менее {{min}} символов.",
+        reason: "Причина",
+        submit: "Отправить заявку на возврат",
+        submitting: "Отправка…",
+        subtitle: "Выберите товары, которые хотите вернуть.",
+        title: "Заявка на возврат",
+        windowClosed: "Срок возврата истёк ({{days}} дн.)",
+        windowClosedHint: "Если проблема осталась, обратитесь в службу поддержки.",
       },
       returnReason: {
-        damaged: "Damaged item",  // TODO çeviri
-        missing_parts: "Missing parts",  // TODO çeviri
-        not_as_described: "Not as described",  // TODO çeviri
-        other: "Other",  // TODO çeviri
-        wrong_item: "Wrong item",  // TODO çeviri
+        damaged: "Повреждённый товар",
+        missing_parts: "Не хватает деталей",
+        not_as_described: "Не соответствует описанию",
+        other: "Другое",
+        wrong_item: "Не тот товар",
       },
       returnStatus: {
-        approved: "Approved",  // TODO çeviri
-        closed: "Closed",  // TODO çeviri
-        in_transit: "In transit",  // TODO çeviri
-        inspecting: "Inspecting",  // TODO çeviri
-        rejected: "Rejected",  // TODO çeviri
-        requested: "Requested",  // TODO çeviri
+        approved: "Одобрено",
+        closed: "Закрыто",
+        in_transit: "В пути",
+        inspecting: "На проверке",
+        rejected: "Отклонено",
+        requested: "Запрошено",
       },
       sellerForm: {
-        allShipped: "This order is fully shipped",  // TODO çeviri
-        allShippedHint: "No items left to ship.",  // TODO çeviri
-        carrier: "Carrier",  // TODO çeviri
-        carrierRequired: "Select a carrier.",  // TODO çeviri
-        channel: "Shipping channel",  // TODO çeviri
-        driver: "Driver",  // TODO çeviri
-        failed: "Could not create the shipment.",  // TODO çeviri
-        items: "Items to ship",  // TODO çeviri
-        itemsHint: "Partial shipment is allowed; the rest stays for a later parcel.",  // TODO çeviri
-        noItemSelected: "Select at least one item.",  // TODO çeviri
-        notAvailable: "This feature is not available yet.",  // TODO çeviri
-        plate: "Vehicle plate",  // TODO çeviri
-        submit: "Create shipment",  // TODO çeviri
-        submitting: "Creating…",  // TODO çeviri
-        subtitle: "Prepare a parcel for order {{order}}.",  // TODO çeviri
-        title: "Create shipment",  // TODO çeviri
-        tracking: "Tracking number",  // TODO çeviri
+        allShipped: "Этот заказ отправлен полностью",
+        allShippedHint: "Товаров для отправки не осталось.",
+        carrier: "Перевозчик",
+        carrierRequired: "Выберите перевозчика.",
+        channel: "Способ отправки",
+        driver: "Водитель",
+        failed: "Не удалось создать отправление.",
+        items: "Товары к отправке",
+        itemsHint: "Частичная отправка допускается; остаток уйдёт следующей посылкой.",
+        noItemSelected: "Выберите хотя бы один товар.",
+        notAvailable: "Эта функция пока недоступна.",
+        plate: "Номер автомобиля",
+        submit: "Создать отправление",
+        submitting: "Создание…",
+        subtitle: "Подготовьте посылку для заказа {{order}}.",
+        title: "Создать отправление",
+        tracking: "Трек-номер",
       },
       sellerReturn: {
-        awaiting: "Awaiting decision",  // TODO çeviri
-        closed: "Closed",  // TODO çeviri
-        closureNote: "Refunds and closure are handled by the platform.",  // TODO çeviri
-        days: "waiting {{count}} d",  // TODO çeviri
-        decide: "Decide",  // TODO çeviri
-        decidedAt: "Decided: {{at}}",  // TODO çeviri
-        empty: "No return requests",  // TODO çeviri
-        emptyHint: "Requests from buyers will appear here.",  // TODO çeviri
-        hours: "waiting {{count}} h",  // TODO çeviri
-        refund: "Refund amount",  // TODO çeviri
-        subtitle: "Requests awaiting a decision come first.",  // TODO çeviri
-        title: "Return requests",  // TODO çeviri
+        awaiting: "Ожидает решения",
+        closed: "Закрыто",
+        closureNote: "Возврат средств и закрытие выполняет платформа.",
+        days: "ожидает {{count}} дн.",
+        decide: "Принять решение",
+        decidedAt: "Решение: {{at}}",
+        empty: "Заявок на возврат нет",
+        emptyHint: "Здесь появятся заявки от покупателей.",
+        hours: "ожидает {{count}} ч.",
+        refund: "Сумма возврата",
+        subtitle: "Заявки, ожидающие решения, показаны первыми.",
+        title: "Заявки на возврат",
       },
       status: {
-        "At Warehouse": "At warehouse",  // TODO çeviri
-        Cancelled: "Cancelled",  // TODO çeviri
-        Delivered: "Delivered",  // TODO çeviri
-        Draft: "Draft",  // TODO çeviri
-        Failed: "Failed",  // TODO çeviri
-        "In Transit": "In transit",  // TODO çeviri
-        "Out for Delivery": "Out for delivery",  // TODO çeviri
-        Pending: "Pending",  // TODO çeviri
-        "Picked Up": "Picked up",  // TODO çeviri
-        "Ready for Pickup": "Ready for pickup",  // TODO çeviri
-        Returned: "Returned",  // TODO çeviri
-        not_required: "Not required",  // TODO çeviri
-        verified: "Verified",  // TODO çeviri
+        "At Warehouse": "На складе",
+        Cancelled: "Отменено",
+        Delivered: "Доставлено",
+        Draft: "Черновик",
+        Failed: "Не удалось",
+        "In Transit": "В пути",
+        "Out for Delivery": "Курьер в пути",
+        Pending: "Ожидает",
+        "Picked Up": "Забрано",
+        "Ready for Pickup": "Готово к выдаче",
+        Returned: "Возвращено",
+        not_required: "Не требуется",
+        verified: "Проверен",
       },
       summary: {
-        codeNotUsed: "Not used",  // TODO çeviri
-        codeUsed: "Delivery code",  // TODO çeviri
-        codeVerified: "Verified",  // TODO çeviri
-        document: "Document",  // TODO çeviri
-        empty: "No proof of delivery",  // TODO çeviri
-        emptyHint: "Proof appears here once the parcel is delivered.",  // TODO çeviri
-        mediaUnavailable: "Media could not be loaded",  // TODO çeviri
-        notProvided: "Not provided",  // TODO çeviri
-        openDocument: "Open document",  // TODO çeviri
-        photo: "Delivery photo",  // TODO çeviri
-        proof: "Proof of delivery",  // TODO çeviri
-        receivedBy: "Received by",  // TODO çeviri
-        returnHint: "Something wrong with the item? You can request a return.",  // TODO çeviri
-        signature: "Signature",  // TODO çeviri
-        startReturn: "Request a return",  // TODO çeviri
+        codeNotUsed: "Не использован",
+        codeUsed: "Код получения",
+        codeVerified: "Проверен",
+        document: "Документ",
+        empty: "Подтверждения доставки нет",
+        emptyHint: "Подтверждение появится здесь после доставки посылки.",
+        mediaUnavailable: "Не удалось загрузить медиафайл",
+        notProvided: "Не указано",
+        openDocument: "Открыть документ",
+        photo: "Фото доставки",
+        proof: "Подтверждение доставки",
+        receivedBy: "Получил",
+        returnHint: "Что-то не так с товаром? Вы можете оформить возврат.",
+        signature: "Подпись",
+        startReturn: "Оформить возврат",
       },
       tracking: {
-        empty: "No tracking updates yet",  // TODO çeviri
-        emptyHint: "Movements appear here once the carrier collects the parcel.",  // TODO çeviri
-        exceptionGeneric: "There was a delivery issue; we are on it.",  // TODO çeviri
+        empty: "Обновлений отслеживания пока нет",
+        emptyHint: "Движения появятся здесь, как только перевозчик заберёт посылку.",
+        exceptionGeneric: "Возникла проблема с доставкой; мы уже занимаемся этим.",
       },
     },
     pageTitle: {
@@ -2444,7 +2454,8 @@ const ru = {
       questionDefaultMessage: "Здравствуйте, хотел бы узнать больше об этом товаре.",
       questionQuantitySummary: "Количество и характеристики товара",
       attachFilePrompt: "Прикрепить файл",
-      leaveFormConfirm: "Вы уверены, что хотите покинуть эту страницу? Все введённые данные будут потеряны.",
+      leaveFormConfirm:
+        "Вы уверены, что хотите покинуть эту страницу? Все введённые данные будут потеряны.",
       quantity: "Количество",
       color: "Цвет",
       size: "Размер",
@@ -2906,6 +2917,7 @@ const ru = {
     // ============================================================
     orders: {
       loadingOrders: "Загрузка деталей заказа...",
+      pickUp: "Забрать",
       waitingPayment: "Ожидание оплаты",
       confirming: "Подтверждение",
       preparingShipment: "Подготовка к отправке",
@@ -3052,7 +3064,8 @@ const ru = {
       reviewsDoneEmptyDesc: "Ваши отзывы и их статусы будут отображаться здесь.",
       refundRequests: "запросов",
       refundsEmptyTitle: "Нет запросов на возврат",
-      refundsEmptyDesc: "Если с заказом возникла проблема, здесь можно создать запрос на возврат и отслеживать его.",
+      refundsEmptyDesc:
+        "Если с заказом возникла проблема, здесь можно создать запрос на возврат и отслеживать его.",
       refundStatusApproved: "Одобрен",
       refundStatusRejected: "Отклонён",
       records: "Записи",

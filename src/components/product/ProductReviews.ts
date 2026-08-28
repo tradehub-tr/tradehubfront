@@ -531,7 +531,10 @@ export function ProductReviews(): string {
         ${langToggleHtml()}
 
         <!-- Review Cards (sayfada ilk ${INLINE_REVIEW_LIMIT}; tamamı modalda) -->
-        ${p.reviews.slice(0, INLINE_REVIEW_LIMIT).map((r) => renderReviewCard(r, false)).join("")}
+        ${p.reviews
+          .slice(0, INLINE_REVIEW_LIMIT)
+          .map((r) => renderReviewCard(r, false))
+          .join("")}
 
         ${showAllButtonHtml("product", p.reviews.length)}
       </div>
@@ -571,7 +574,10 @@ export function ProductReviews(): string {
         ${langToggleHtml()}
 
         <!-- Review Cards (with product thumbnails; sayfada ilk ${INLINE_REVIEW_LIMIT}) -->
-        ${p.reviews.slice(0, INLINE_REVIEW_LIMIT).map((r) => renderReviewCard(r, true)).join("")}
+        ${p.reviews
+          .slice(0, INLINE_REVIEW_LIMIT)
+          .map((r) => renderReviewCard(r, true))
+          .join("")}
 
         ${showAllButtonHtml("store", p.reviews.length)}
       </div>
@@ -804,9 +810,7 @@ export function bindHelpfulButtons(container: HTMLElement): void {
       const card = btn.closest(".rv-card") as HTMLElement | null;
       const commentEl = card?.querySelector(".rv-card-comment");
       const oldBody = commentEl?.textContent?.trim() || "";
-      const images = Array.from(
-        card?.querySelectorAll<HTMLElement>(".rv-image-thumb") ?? []
-      )
+      const images = Array.from(card?.querySelectorAll<HTMLElement>(".rv-image-thumb") ?? [])
         .map((el) => el.dataset.imageUrl || "")
         .filter(Boolean);
       openEditReviewModal({ reviewId, body: oldBody, images });
@@ -1040,15 +1044,19 @@ export function initReviews(options: { signal?: AbortSignal } = {}): void {
   // ── "Tümünü göster" → modal köprüsü ────────────────
   // Delegasyon: listeler canlı veriyle yeniden kurulsa da dinleyici kalır.
   // mode, modal başlığını ve kart tipini belirler (ürün | mağaza).
-  document.addEventListener("click", (e) => {
-    const btn = (e.target as HTMLElement).closest<HTMLElement>(".rv-show-all-btn");
-    if (!btn) return;
-    window.dispatchEvent(
-      new CustomEvent("reviews-modal-show", {
-        detail: { mode: btn.dataset.rvModalMode === "product" ? "product" : "store" },
-      })
-    );
-  }, options);
+  document.addEventListener(
+    "click",
+    (e) => {
+      const btn = (e.target as HTMLElement).closest<HTMLElement>(".rv-show-all-btn");
+      if (!btn) return;
+      window.dispatchEvent(
+        new CustomEvent("reviews-modal-show", {
+          detail: { mode: btn.dataset.rvModalMode === "product" ? "product" : "store" },
+        })
+      );
+    },
+    options
+  );
 
   // ── Init scoped panels ─────────────────────────────
   initScopedReviewPanel(productPanel, "rv-product", "rv", false);
@@ -1072,66 +1080,88 @@ export function initReviews(options: { signal?: AbortSignal } = {}): void {
     // Kullanıcı modal'dan giriş yaptığında "Yorum Yaz" butonu disabled
     // kalıyordu — sayfa refresh gerekiyordu. Event ile eligibility'yi
     // yeniden çek ve butonu güncelle.
-    window.addEventListener("login-success", () => {
-      void loadEligibilityAndEnableBtn(listingId);
-      // Storefront listesi de yeniden yüklensin — kullanıcının kendi
-      // Pending yorumu varsa şimdi görünsün.
-      void reloadReviewsAndRerender(listingId);
-    }, options);
+    window.addEventListener(
+      "login-success",
+      () => {
+        void loadEligibilityAndEnableBtn(listingId);
+        // Storefront listesi de yeniden yüklensin — kullanıcının kendi
+        // Pending yorumu varsa şimdi görünsün.
+        void reloadReviewsAndRerender(listingId);
+      },
+      options
+    );
 
     // Yorum gönderildiğinde listeyi yenile
-    window.addEventListener("review-submitted", () => {
-      void reloadReviewsAndRerender(listingId);
-    }, options);
+    window.addEventListener(
+      "review-submitted",
+      () => {
+        void reloadReviewsAndRerender(listingId);
+      },
+      options
+    );
 
     // İlk render sırasında reviews boş array ile basıldı; loadProductReviews()
     // backend'den verileri çekince bu event fire eder — panel'leri burada
     // rebuild ediyoruz (gereksiz ikinci API çağrısı yapmadan).
-    document.addEventListener("product-reviews-loaded", (e: Event) => {
-      const ce = e as CustomEvent<{
-        reviews: ProductReview[];
-        summary: { review_count: number; weighted_rating?: number; average_rating?: number };
-        total: number;
-      }>;
-      if (!ce.detail) return;
-      // Yorum sayısı: backend summary'den (Approved-only).
-      // Ortalama puan: backend rating Int olduğu için 3.5 → 4 yuvarlanır;
-      // gerçek değeri Approved yorumların aspect ortalamasından hesapla.
-      const reviews = ce.detail.reviews || [];
-      const approvedReviews = reviews.filter((r) => r.status === "Approved");
-      const ratings = approvedReviews.map((r) => displayRating(r)).filter((v) => v > 0);
-      const computedAvg = ratings.length ? ratings.reduce((s, v) => s + v, 0) / ratings.length : 0;
-      applyReviewsToPanels({
-        reviews,
-        reviewCount: ce.detail.summary?.review_count ?? 0,
-        storeReviewCount: ce.detail.total ?? 0,
-        rating:
-          computedAvg ||
-          ce.detail.summary?.weighted_rating ||
-          ce.detail.summary?.average_rating ||
-          0,
-      });
-    }, options);
+    document.addEventListener(
+      "product-reviews-loaded",
+      (e: Event) => {
+        const ce = e as CustomEvent<{
+          reviews: ProductReview[];
+          summary: { review_count: number; weighted_rating?: number; average_rating?: number };
+          total: number;
+        }>;
+        if (!ce.detail) return;
+        // Yorum sayısı: backend summary'den (Approved-only).
+        // Ortalama puan: backend rating Int olduğu için 3.5 → 4 yuvarlanır;
+        // gerçek değeri Approved yorumların aspect ortalamasından hesapla.
+        const reviews = ce.detail.reviews || [];
+        const approvedReviews = reviews.filter((r) => r.status === "Approved");
+        const ratings = approvedReviews.map((r) => displayRating(r)).filter((v) => v > 0);
+        const computedAvg = ratings.length
+          ? ratings.reduce((s, v) => s + v, 0) / ratings.length
+          : 0;
+        applyReviewsToPanels({
+          reviews,
+          reviewCount: ce.detail.summary?.review_count ?? 0,
+          storeReviewCount: ce.detail.total ?? 0,
+          rating:
+            computedAvg ||
+            ce.detail.summary?.weighted_rating ||
+            ce.detail.summary?.average_rating ||
+            0,
+        });
+      },
+      options
+    );
     // Abuse report sonrası ek bir aksiyon yok (sessizce kaydedildi toast'ı gösteriliyor)
   }
 
   // ── Q&A count update ────────────────────────────────
   if (listingId) {
     void updateQACount(listingId);
-    window.addEventListener("qa-submitted", () => {
-      void updateQACount(listingId);
-    }, options);
+    window.addEventListener(
+      "qa-submitted",
+      () => {
+        void updateQACount(listingId);
+      },
+      options
+    );
   }
 
   // ── Click-outside to close all dropdowns ───────────
-  document.addEventListener("click", () => {
-    document
-      .querySelectorAll(".rv-rating-dropdown.open")
-      .forEach((el) => el.classList.remove("open"));
-    document
-      .querySelectorAll(".rv-sort-dropdown.open")
-      .forEach((el) => el.classList.remove("open"));
-  }, options);
+  document.addEventListener(
+    "click",
+    () => {
+      document
+        .querySelectorAll(".rv-rating-dropdown.open")
+        .forEach((el) => el.classList.remove("open"));
+      document
+        .querySelectorAll(".rv-sort-dropdown.open")
+        .forEach((el) => el.classList.remove("open"));
+    },
+    options
+  );
 }
 
 async function mountQAPanel(panel: HTMLElement, _listingId: string): Promise<void> {
@@ -1211,7 +1241,10 @@ function applyReviewsToPanels(payload: {
     const list = productPanel.querySelector<HTMLElement>("#rv-product-reviews-list");
     if (list) {
       list.innerHTML = payload.reviews.length
-        ? payload.reviews.slice(0, INLINE_REVIEW_LIMIT).map((r) => renderReviewCard(r, false)).join("")
+        ? payload.reviews
+            .slice(0, INLINE_REVIEW_LIMIT)
+            .map((r) => renderReviewCard(r, false))
+            .join("")
         : emptyListHtml(t("product.noReviewsForFilter"));
       bindHelpfulButtons(list);
     }
@@ -1220,7 +1253,10 @@ function applyReviewsToPanels(payload: {
     const list = storePanel.querySelector<HTMLElement>("#rv-store-reviews-list");
     if (list) {
       list.innerHTML = payload.reviews.length
-        ? payload.reviews.slice(0, INLINE_REVIEW_LIMIT).map((r) => renderReviewCard(r, true)).join("")
+        ? payload.reviews
+            .slice(0, INLINE_REVIEW_LIMIT)
+            .map((r) => renderReviewCard(r, true))
+            .join("")
         : emptyListHtml(t("product.noReviewsForFilter"));
       bindHelpfulButtons(list);
     }

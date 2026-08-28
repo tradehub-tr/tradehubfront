@@ -65,3 +65,22 @@ export const TekAralikAcik = {
       today: TODAY,
     }),
 };
+
+/**
+ * Uç bağlı değil — boş slot listesiyle KARIŞTIRILMAMALI.
+ *
+ * "Uygun randevu kalmadı" sistemin baktığını ve bulamadığını söyler; uç
+ * yokken sistem hiç bakmamıştır. İkisi aynı ekrana düşerse alıcı yanlış
+ * bilgilenir.
+ */
+export const UcBagliDegil = {
+  name: "Uç bağlı değil",
+  render: () =>
+    PickupAppointment({
+      shipmentName: "SHP-2026-00035",
+      slots: [],
+      today: TODAY,
+      pickupLocation: "Ostim Sanayi Sitesi 100. Sokak No:4",
+      wired: false,
+    }),
+};

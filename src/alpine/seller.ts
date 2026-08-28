@@ -547,7 +547,10 @@ Alpine.data("sellerDashboard", () => ({
     const res = await fetch(`/api/method/${method}`, {
       method: "POST",
       credentials: "include",
-      headers: { "Content-Type": "application/json", "X-Frappe-CSRF-Token": (await fetchCsrfToken()) ?? "None" },
+      headers: {
+        "Content-Type": "application/json",
+        "X-Frappe-CSRF-Token": (await fetchCsrfToken()) ?? "None",
+      },
       body: JSON.stringify(body),
     });
     const data = (await res.json()) as { message: unknown; exc?: string };

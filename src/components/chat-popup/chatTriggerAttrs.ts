@@ -14,9 +14,7 @@ import type { PinnedProduct } from "../../types/chat";
  *  (chatTriggerAttrs, click-delegation) hem de doğrudan event dispatch eden
  *  bileşenler (QuestionFormSheet) AYNI kaynaktan üretir. */
 export function buildPinnedProduct(p: ProductDetail): PinnedProduct {
-  const price = p.priceTiers[0]
-    ? formatCurrency(p.priceTiers[0].price, getSelectedCurrency())
-    : "";
+  const price = p.priceTiers[0] ? formatCurrency(p.priceTiers[0].price, getSelectedCurrency()) : "";
   return {
     id: p.id,
     title: p.title || "",

@@ -25,17 +25,18 @@ async function mockBackend(page: Page, requests: string[]): Promise<void> {
     const method = (url.pathname.split("/").pop() || "").split(".").pop() || "";
     requests.push(method);
 
-    const message = method === "get_seller"
-      ? SELLER
-      : method === "get_seller_categories"
-        ? { categories: [] }
-        : method === "get_seller_products"
-          ? PRODUCTS
-          : method === "get_reviews"
-            ? { reviews: [], total: 0 }
-            : method === "get_session_user"
-              ? { logged_in: false, csrf_token: "test" }
-              : {};
+    const message =
+      method === "get_seller"
+        ? SELLER
+        : method === "get_seller_categories"
+          ? { categories: [] }
+          : method === "get_seller_products"
+            ? PRODUCTS
+            : method === "get_reviews"
+              ? { reviews: [], total: 0 }
+              : method === "get_session_user"
+                ? { logged_in: false, csrf_token: "test" }
+                : {};
 
     await route.fulfill({
       status: 200,
@@ -46,13 +47,17 @@ async function mockBackend(page: Page, requests: string[]): Promise<void> {
 }
 
 test.describe("Seller storefront — lazy profile tabs", () => {
-  test("gizli paneller başlangıçta mount/fetch edilmez; ilk açılıştan sonra state korunur", async ({ page }) => {
+  test("gizli paneller başlangıçta mount/fetch edilmez; ilk açılıştan sonra state korunur", async ({
+    page,
+  }) => {
     const requests: string[] = [];
     await mockBackend(page, requests);
     await page.goto("/pages/seller/seller-storefront.html?seller=DEMO-001");
 
     await expect(page.locator("#tab-overview")).toBeAttached();
-    await expect(page.locator("#tab-reviews, #tab-products, #tab-videos, #tab-contact")).toHaveCount(0);
+    await expect(
+      page.locator("#tab-reviews, #tab-products, #tab-videos, #tab-contact")
+    ).toHaveCount(0);
     expect(requests).not.toContain("get_reviews");
 
     const reviewsTab = page.locator("#store-tab-reviews");
@@ -65,7 +70,9 @@ test.describe("Seller storefront — lazy profile tabs", () => {
     expect(requests.filter((method) => method === "get_reviews")).toHaveLength(1);
   });
 
-  test("sekme rolleri ve ok tuşu navigasyonu seçili paneli ilk niyette mount eder", async ({ page }) => {
+  test("sekme rolleri ve ok tuşu navigasyonu seçili paneli ilk niyette mount eder", async ({
+    page,
+  }) => {
     const requests: string[] = [];
     await mockBackend(page, requests);
     await page.goto("/pages/seller/seller-storefront.html?seller=DEMO-001");
@@ -83,13 +90,17 @@ test.describe("Seller storefront — lazy profile tabs", () => {
     await expect(page.locator("#tab-reviews")).toBeVisible();
   });
 
-  test("doğrudan contact URL'si sadece contact panelini başlangıçta mount eder", async ({ page }) => {
+  test("doğrudan contact URL'si sadece contact panelini başlangıçta mount eder", async ({
+    page,
+  }) => {
     const requests: string[] = [];
     await mockBackend(page, requests);
     await page.goto("/pages/seller/seller-storefront.html?seller=DEMO-001&tab=contact");
 
     await expect(page.locator("#tab-contact")).toBeAttached();
-    await expect(page.locator("#tab-overview, #tab-reviews, #tab-products, #tab-videos")).toHaveCount(0);
+    await expect(
+      page.locator("#tab-overview, #tab-reviews, #tab-products, #tab-videos")
+    ).toHaveCount(0);
     expect(requests).not.toContain("get_reviews");
   });
 });

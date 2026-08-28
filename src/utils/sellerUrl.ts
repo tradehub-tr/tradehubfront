@@ -19,7 +19,8 @@ export function getSellerUrl(
 ): string {
   if (!seller) return "#";
   if (seller.href && !isNativeBundleContext()) return seller.href;
-  if (isNativeBundleContext() && seller.id) return `/pages/seller/seller-shop.html?seller=${encodeURIComponent(seller.id)}`;
+  if (isNativeBundleContext() && seller.id)
+    return `/pages/seller/seller-shop.html?seller=${encodeURIComponent(seller.id)}`;
   const prefix = lang === "en" ? "/en" : "";
   if (seller.slug) return `${prefix}/magaza/${seller.slug}`;
   if (seller.id) return `/pages/seller/seller-shop.html?seller=${encodeURIComponent(seller.id)}`;

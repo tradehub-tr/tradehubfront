@@ -36,6 +36,7 @@
  * SÜRE/PERFORMANS İDDİASI YOK: LCP/saniye ölçülmüyor; bayt, VMAF, DOM yapısı.
  */
 import { execFileSync } from "node:child_process";
+import { yalnizMasaustu } from "./fixtures/viewport";
 
 import { expect, test, type Page, type Route } from "@playwright/test";
 
@@ -74,8 +75,13 @@ function benchExecute(fn: string, timeoutMs: number): Record<string, unknown> {
 }
 
 test.describe("T-141 S7/S8 — backend ölçümü (bench-yardımcılı, gerçek ffmpeg+libvmaf)", () => {
+  yalnizMasaustu("vitrin galerisi masaüstü düzeninde");
+
   test("S7 — verimli MP4 dokunulmaz: PASSTHROUGH, dosya baytı aynı", () => {
-    test.skip(!benchErisilebilir(), `docker/${BACKEND_CONTAINER} erişilemedi — backend ölçümü koşamaz`);
+    test.skip(
+      !benchErisilebilir(),
+      `docker/${BACKEND_CONTAINER} erişilemedi — backend ölçümü koşamaz`
+    );
     test.setTimeout(180_000);
 
     const o = benchExecute("s7_verimli_video_dokunulmaz", 150_000);
@@ -95,7 +101,10 @@ test.describe("T-141 S7/S8 — backend ölçümü (bench-yardımcılı, gerçek 
   });
 
   test("S8 — şişik bitrate: kapı SONUCU tutarlı (küçülme + VMAF ≥ eşik, ya da türev teslim edilmedi)", () => {
-    test.skip(!benchErisilebilir(), `docker/${BACKEND_CONTAINER} erişilemedi — backend ölçümü koşamaz`);
+    test.skip(
+      !benchErisilebilir(),
+      `docker/${BACKEND_CONTAINER} erişilemedi — backend ölçümü koşamaz`
+    );
     test.setTimeout(600_000);
 
     const o = benchExecute("s8_sisik_video_kapi_sonucu", 540_000);
@@ -219,6 +228,8 @@ async function videoSlaydiniAc(page: Page) {
 }
 
 test.describe("T-141 S7/S8 — vitrin yarısı (manifest alanları DOM'a taşınıyor)", () => {
+  yalnizMasaustu("vitrin galerisi masaüstü düzeninde");
+
   test("S7 vitrin — türev bildirilmediğinde ham MP4 progressive basılır (data-hls-src YOK)", async ({
     page,
   }) => {

@@ -108,8 +108,6 @@ describe("structured data ownership", () => {
     const script = document.querySelector('script[type="application/ld+json"]');
     expect(script).not.toBeNull();
     expect(script?.textContent).not.toContain("</script>");
-    expect(JSON.parse(script?.textContent || "{}").name).toBe(
-      "</script><script>alert(1)</script>"
-    );
+    expect(JSON.parse(script?.textContent || "{}").name).toBe("</script><script>alert(1)</script>");
   });
 });

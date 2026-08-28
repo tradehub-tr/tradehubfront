@@ -24,9 +24,7 @@ declare global {
     __getRecentCategorySlugs?: () => string[];
 
     /** Merkezi kategori yükleyici köprüsü — Alpine inline init() için (manufacturers.ts) */
-    __loadCategories?: () => Promise<
-      import("../services/categoryService").ApiCategory[]
-    >;
+    __loadCategories?: () => Promise<import("../services/categoryService").ApiCategory[]>;
 
     /** Manufacturer filter sidebar init flag */
     __mfrFiltersInited?: boolean;

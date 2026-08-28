@@ -60,17 +60,60 @@ function parse(html: string): Document {
 describe("ProductBuyBox — bilgi sütunu sınırı", () => {
   beforeEach(() => vi.clearAllMocks());
 
-  it("satın alma öğelerinin hiçbirini basmaz", () => {
-    // KYB durumundan bağımsız: fiyat/numune/varyant/CTA sağ panele ait.
+  /**
+   * ── SÖZLEŞME TERSİNE DÖNDÜ (2026-08-26'da fark edildi) ──
+   *
+   * Bu test eskiden "satın alma öğelerinin HİÇBİRİNİ basmaz" diyordu:
+   * `bf982cf` (*"satın alma bloğunu sabit sağ panelde topla"*) fiyat, numune,
+   * varyant ve CTA'yı `ProductOrderPanel`'e taşımıştı.
+   *
+   * Sonra `aa7ddfa` (*"ürün detay sayfası Alibaba referansına göre yeniden
+   * düzenlendi"*) fiyat kademelerini, varyant bölümünü ve kart sekmelerini
+   * **geri BuyBox'a aldı** — ama iki test dosyası da güncellenmedi ve o
+   * günden beri kırmızıydı. Kimse fark etmedi çünkü CI'da test kapısı yoktu.
+   *
+   * Aşağısı bugünkü davranışı KİLİTLİYOR (karakterizasyon). Rol dağılımının
+   * doğruluğu ayrı bir tasarım sorusu — bu test onu yanıtlamıyor, yalnız
+   * bir daha sessizce kaymasını engelliyor.
+   */
+  it("fiyat kademelerini basar", () => {
+    getCurrentProduct.mockReturnValue(makeProduct({ sellerKybVerified: true }));
+    expect(parse(ProductBuyBox()).querySelector("#pd-price-tiers")).not.toBeNull();
+  });
+
+  it("kart sekmelerini YALNIZ özelleştirme seçeneği varken basar", () => {
+    // Koşullu (ProductBuyBox.ts:358) — varsayılan fixture'da seçenek yok.
+    getCurrentProduct.mockReturnValue(makeProduct({ sellerKybVerified: true }));
+    expect(parse(ProductBuyBox()).querySelector("#pd-card-tabs")).toBeNull();
+
+    getCurrentProduct.mockReturnValue(
+      makeProduct({
+        sellerKybVerified: true,
+        customizationOptions: [{ label: "Logo baskı", value: "logo" }],
+      })
+    );
+    expect(parse(ProductBuyBox()).querySelector("#pd-card-tabs")).not.toBeNull();
+  });
+
+  it("varyant bölümünü YALNIZ varyant varken basar", () => {
+    // Varsayılan fixture'da `variants: []` — bölüm koşullu (ProductBuyBox.ts:346).
+    getCurrentProduct.mockReturnValue(makeProduct({ sellerKybVerified: true }));
+    expect(parse(ProductBuyBox()).querySelector("#pd-variations-section")).toBeNull();
+
+    getCurrentProduct.mockReturnValue(
+      makeProduct({
+        sellerKybVerified: true,
+        variants: [{ name: "Renk", options: [{ label: "Siyah", value: "siyah" }] }],
+      })
+    );
+    expect(parse(ProductBuyBox()).querySelector("#pd-variations-section")).not.toBeNull();
+  });
+
+  it("sepete ekleme CTA'sını basMAZ — o hâlâ sağ panelde", () => {
+    // Rol ayrımının KALAN yarısı: satın alma EYLEMİ `ProductOrderPanel`'de.
     getCurrentProduct.mockReturnValue(makeProduct({ sellerKybVerified: true }));
     const doc = parse(ProductBuyBox());
 
-    expect(doc.querySelector("#pd-price-tiers")).toBeNull();
-    expect(doc.querySelectorAll("[data-tier-index]").length).toBe(0);
-    expect(doc.querySelector("#pd-sample-price")).toBeNull();
-    expect(doc.querySelector("[data-order-sample]")).toBeNull();
-    expect(doc.querySelector("#pd-variations-section")).toBeNull();
-    expect(doc.querySelector("#pd-card-tabs")).toBeNull();
     expect(doc.querySelector("#pd-add-to-cart")).toBeNull();
   });
 

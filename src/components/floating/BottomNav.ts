@@ -533,7 +533,7 @@ function initAccountOverlay(overlay: HTMLElement): () => void {
             setSelectedCurrency(code);
             window.location.reload();
           });
-      });
+        });
     };
     updateCurrencyValue();
     currencyBtn.addEventListener("click", () => {
@@ -629,8 +629,7 @@ export function initCategoryFullscreen(): Promise<void> {
     host,
     closeOnMediaQuery: "(min-width: 1280px)",
     mount: () => htmlToElement(renderCategoryOverlay()),
-    initialFocus: (overlay) =>
-      overlay.querySelector<HTMLButtonElement>("#cat-fullscreen-back"),
+    initialFocus: (overlay) => overlay.querySelector<HTMLButtonElement>("#cat-fullscreen-back"),
     onMount: (overlay) => {
       const back = overlay.querySelector<HTMLButtonElement>("#cat-fullscreen-back");
       const close = (): void => controller.close();
@@ -658,8 +657,7 @@ function initAccountFullscreen(): void {
     host,
     closeOnMediaQuery: "(min-width: 1280px)",
     mount: () => htmlToElement(renderAccountOverlay()),
-    initialFocus: (overlay) =>
-      overlay.querySelector<HTMLButtonElement>("#account-fullscreen-back"),
+    initialFocus: (overlay) => overlay.querySelector<HTMLButtonElement>("#account-fullscreen-back"),
     onMount: (overlay) => {
       const back = overlay.querySelector<HTMLButtonElement>("#account-fullscreen-back");
       const close = (): void => controller.close();

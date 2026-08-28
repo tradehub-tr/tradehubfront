@@ -610,17 +610,17 @@ export function initFilterSidebar(query?: string, category?: string): void {
   // isteğini ve sonucu paylaşır; mobil paneli açmak ikinci bir ağ isteği yapmaz.
   void loadInitialFacets(query, category)
     .then((facets) => {
-          // Update category sections
-          document
-            .querySelectorAll<HTMLElement>('[data-filter-dynamic="categories"]')
-            .forEach((container) => {
-              if (facets.categories.length === 0) {
-                container.innerHTML = `<p class="text-xs" style="color:#9ca3af">${t("products.noResults")}</p>`;
-                return;
-              }
-              container.innerHTML = facets.categories
-                .map(
-                  (cat) => `
+      // Update category sections
+      document
+        .querySelectorAll<HTMLElement>('[data-filter-dynamic="categories"]')
+        .forEach((container) => {
+          if (facets.categories.length === 0) {
+            container.innerHTML = `<p class="text-xs" style="color:#9ca3af">${t("products.noResults")}</p>`;
+            return;
+          }
+          container.innerHTML = facets.categories
+            .map(
+              (cat) => `
           <button
             type="button"
             class="th-no-press flex items-center justify-between w-full py-1.5 text-[13px] hover:text-primary-600 transition-colors cursor-pointer"
@@ -631,31 +631,29 @@ export function initFilterSidebar(query?: string, category?: string): void {
             <span class="text-[11px] ms-2 flex-shrink-0" style="color:#9ca3af">(${cat.count})</span>
           </button>
         `
-                )
-                .join("");
-            });
+            )
+            .join("");
+        });
 
-          // Update country sections
-          toggleSearchForSection("supplier-country", facets.countries.length);
-          document
-            .querySelectorAll<HTMLElement>('[data-filter-dynamic="countries"]')
-            .forEach((container) => {
-              if (facets.countries.length === 0) {
-                container.innerHTML = "";
-                return;
-              }
-              const idPrefix =
-                container.closest("[data-filter-prefix]")?.getAttribute("data-filter-prefix") || "";
-              container.innerHTML = facets.countries
-                .map((c) => {
-                  // Country facet item: backend `code` alanı varsa onu, yoksa value'yu i18n key olarak kullan
-                  const code = c.code || c.value;
-                  const translatedName =
-                    t(`countries.${code}`) !== `countries.${code}`
-                      ? t(`countries.${code}`)
-                      : c.label;
-                  const checkboxId = `filter-${idPrefix ? idPrefix + "-" : ""}supplier-country-country-${c.value.toLowerCase()}`;
-                  return `
+      // Update country sections
+      toggleSearchForSection("supplier-country", facets.countries.length);
+      document
+        .querySelectorAll<HTMLElement>('[data-filter-dynamic="countries"]')
+        .forEach((container) => {
+          if (facets.countries.length === 0) {
+            container.innerHTML = "";
+            return;
+          }
+          const idPrefix =
+            container.closest("[data-filter-prefix]")?.getAttribute("data-filter-prefix") || "";
+          container.innerHTML = facets.countries
+            .map((c) => {
+              // Country facet item: backend `code` alanı varsa onu, yoksa value'yu i18n key olarak kullan
+              const code = c.code || c.value;
+              const translatedName =
+                t(`countries.${code}`) !== `countries.${code}` ? t(`countries.${code}`) : c.label;
+              const checkboxId = `filter-${idPrefix ? idPrefix + "-" : ""}supplier-country-country-${c.value.toLowerCase()}`;
+              return `
             <label for="${escapeHtml(checkboxId)}" class="flex items-center gap-2 cursor-pointer group py-1 filter-searchable-item">
               <div class="relative flex items-center justify-center w-4 h-4">
                 <input type="checkbox" id="${escapeHtml(checkboxId)}" name="supplier-country" value="${escapeHtml(c.value)}"
@@ -673,31 +671,31 @@ export function initFilterSidebar(query?: string, category?: string): void {
               <span class="text-[11px] ms-auto" style="color: var(--filter-count-color, #9ca3af);">(${c.count})</span>
             </label>
           `;
-                })
-                .join("");
-            });
+            })
+            .join("");
+        });
 
-          // Update brand sections
-          // FilterFacets.brands zaten BrandFacet[] — `as any` gerekmiyor
-          const brandsForToggle = facets.brands || [];
-          toggleSearchForSection("brands", brandsForToggle.length);
-          document
-            .querySelectorAll<HTMLElement>('[data-filter-dynamic="brands"]')
-            .forEach((container) => {
-              const brands = brandsForToggle;
-              if (brands.length === 0) {
-                container.innerHTML = `<p class="text-xs" style="color:#9ca3af">${t("products.noResults")}</p>`;
-                return;
-              }
-              const idPrefix =
-                container.closest("[data-filter-prefix]")?.getAttribute("data-filter-prefix") || "";
-              container.innerHTML = brands
-                .map((b) => {
-                  const checkboxId = `filter-${idPrefix ? idPrefix + "-" : ""}brands-brand-${String(b.value).toLowerCase().replace(/\s+/g, "-")}`;
-                  const logoHtml = b.logo
-                    ? `<img src="${escapeHtml(sanitizeUrl(b.logo))}" alt="${escapeHtml(b.label)}" width="16" height="16" decoding="async" class="w-4 h-4 object-contain me-1" />`
-                    : "";
-                  return `
+      // Update brand sections
+      // FilterFacets.brands zaten BrandFacet[] — `as any` gerekmiyor
+      const brandsForToggle = facets.brands || [];
+      toggleSearchForSection("brands", brandsForToggle.length);
+      document
+        .querySelectorAll<HTMLElement>('[data-filter-dynamic="brands"]')
+        .forEach((container) => {
+          const brands = brandsForToggle;
+          if (brands.length === 0) {
+            container.innerHTML = `<p class="text-xs" style="color:#9ca3af">${t("products.noResults")}</p>`;
+            return;
+          }
+          const idPrefix =
+            container.closest("[data-filter-prefix]")?.getAttribute("data-filter-prefix") || "";
+          container.innerHTML = brands
+            .map((b) => {
+              const checkboxId = `filter-${idPrefix ? idPrefix + "-" : ""}brands-brand-${String(b.value).toLowerCase().replace(/\s+/g, "-")}`;
+              const logoHtml = b.logo
+                ? `<img src="${escapeHtml(sanitizeUrl(b.logo))}" alt="${escapeHtml(b.label)}" width="16" height="16" decoding="async" class="w-4 h-4 object-contain me-1" />`
+                : "";
+              return `
             <label for="${escapeHtml(checkboxId)}" class="flex items-center gap-2 cursor-pointer group py-1 filter-searchable-item">
               <div class="relative flex items-center justify-center w-4 h-4">
                 <input type="checkbox" id="${escapeHtml(checkboxId)}" name="brands" value="${escapeHtml(b.value)}"
@@ -716,37 +714,35 @@ export function initFilterSidebar(query?: string, category?: string): void {
               <span class="text-[11px] ms-auto" style="color: var(--filter-count-color, #9ca3af);">(${b.count})</span>
             </label>
           `;
-                })
-                .join("");
-            });
+            })
+            .join("");
+        });
 
-          // Render dynamic attribute facets (Renk, Beden, Malzeme, ...)
-          // FilterFacets.attributes zaten AttributeFacet[] — `as any` gerekmiyor
-          const attributes = facets.attributes || [];
-          if (attributes.length > 0) {
-            document
-              .querySelectorAll<HTMLElement>("[data-filter-sections-container]")
-              .forEach((container) => {
-                // Remove any previously-injected attribute facets to avoid dupes on re-render
-                container
-                  .querySelectorAll("[data-dynamic-attr-section]")
-                  .forEach((el) => el.remove());
-                const root = container.closest<HTMLElement>("[data-filter-prefix-root]");
-                const idPrefix =
-                  root && root.getAttribute("data-filter-prefix-root") !== "desktop"
-                    ? root.getAttribute("data-filter-prefix-root") || ""
-                    : "";
+      // Render dynamic attribute facets (Renk, Beden, Malzeme, ...)
+      // FilterFacets.attributes zaten AttributeFacet[] — `as any` gerekmiyor
+      const attributes = facets.attributes || [];
+      if (attributes.length > 0) {
+        document
+          .querySelectorAll<HTMLElement>("[data-filter-sections-container]")
+          .forEach((container) => {
+            // Remove any previously-injected attribute facets to avoid dupes on re-render
+            container.querySelectorAll("[data-dynamic-attr-section]").forEach((el) => el.remove());
+            const root = container.closest<HTMLElement>("[data-filter-prefix-root]");
+            const idPrefix =
+              root && root.getAttribute("data-filter-prefix-root") !== "desktop"
+                ? root.getAttribute("data-filter-prefix-root") || ""
+                : "";
 
-                const sectionsHtml = attributes
-                  .map((attr) => {
-                    const sectionId = `attr-${attr.code.toLowerCase()}`;
-                    const optionsHtml = (attr.options || [])
-                      .map((opt) => {
-                        const checkboxId = `filter-${idPrefix ? idPrefix + "-" : ""}${sectionId}-${String(opt.value).toLowerCase().replace(/\s+/g, "-")}`;
-                        const colorSwatch = opt.color
-                          ? `<span class="inline-block w-3.5 h-3.5 rounded-full border border-gray-300 flex-shrink-0" style="background:${safeHexColor(opt.color)};"></span>`
-                          : "";
-                        return `
+            const sectionsHtml = attributes
+              .map((attr) => {
+                const sectionId = `attr-${attr.code.toLowerCase()}`;
+                const optionsHtml = (attr.options || [])
+                  .map((opt) => {
+                    const checkboxId = `filter-${idPrefix ? idPrefix + "-" : ""}${sectionId}-${String(opt.value).toLowerCase().replace(/\s+/g, "-")}`;
+                    const colorSwatch = opt.color
+                      ? `<span class="inline-block w-3.5 h-3.5 rounded-full border border-gray-300 flex-shrink-0" style="background:${safeHexColor(opt.color)};"></span>`
+                      : "";
+                    return `
                 <label for="${escapeHtml(checkboxId)}" class="flex items-center gap-2 cursor-pointer group py-1 filter-searchable-item">
                   <div class="relative flex items-center justify-center w-4 h-4 flex-shrink-0">
                     <input type="checkbox" id="${escapeHtml(checkboxId)}" name="${escapeHtml(sectionId)}" value="${escapeHtml(opt.value)}"
@@ -766,9 +762,9 @@ export function initFilterSidebar(query?: string, category?: string): void {
                   <span class="text-[11px] ms-auto flex-shrink-0" style="color: var(--filter-count-color, #9ca3af);">(${opt.count})</span>
                 </label>
               `;
-                      })
-                      .join("");
-                    return `
+                  })
+                  .join("");
+                return `
               <div class="py-3 border-t" data-dynamic-attr-section="${escapeHtml(attr.code)}"
                 style="border-color: var(--filter-divider-color, #e5e7eb);">
                 <button type="button"
@@ -784,35 +780,34 @@ export function initFilterSidebar(query?: string, category?: string): void {
                 </div>
               </div>
             `;
-                  })
-                  .join("");
+              })
+              .join("");
 
-                // Insert attribute sections at end of filter sections container
-                container.insertAdjacentHTML("beforeend", sectionsHtml);
-              });
-          }
+            // Insert attribute sections at end of filter sections container
+            container.insertAdjacentHTML("beforeend", sectionsHtml);
+          });
+      }
 
-          // Update certification sections (management + product)
-          const certSections = [
-            { key: "mgmt-certifications", data: facets.managementCertifications || [] },
-            { key: "product-certifications", data: facets.productCertifications || [] },
-          ];
-          for (const { key, data } of certSections) {
-            toggleSearchForSection(key, data.length);
-            document
-              .querySelectorAll<HTMLElement>(`[data-filter-dynamic="${key}"]`)
-              .forEach((container) => {
-                if (data.length === 0) {
-                  container.innerHTML = "";
-                  return;
-                }
-                const idPrefix =
-                  container.closest("[data-filter-prefix]")?.getAttribute("data-filter-prefix") ||
-                  "";
-                container.innerHTML = data
-                  .map((c) => {
-                    const checkboxId = `filter-${idPrefix ? idPrefix + "-" : ""}${key}-cert-${c.value.toLowerCase().replace(/\s+/g, "-")}`;
-                    return `
+      // Update certification sections (management + product)
+      const certSections = [
+        { key: "mgmt-certifications", data: facets.managementCertifications || [] },
+        { key: "product-certifications", data: facets.productCertifications || [] },
+      ];
+      for (const { key, data } of certSections) {
+        toggleSearchForSection(key, data.length);
+        document
+          .querySelectorAll<HTMLElement>(`[data-filter-dynamic="${key}"]`)
+          .forEach((container) => {
+            if (data.length === 0) {
+              container.innerHTML = "";
+              return;
+            }
+            const idPrefix =
+              container.closest("[data-filter-prefix]")?.getAttribute("data-filter-prefix") || "";
+            container.innerHTML = data
+              .map((c) => {
+                const checkboxId = `filter-${idPrefix ? idPrefix + "-" : ""}${key}-cert-${c.value.toLowerCase().replace(/\s+/g, "-")}`;
+                return `
               <label for="${escapeHtml(checkboxId)}" class="flex items-center gap-2 cursor-pointer group py-1 filter-searchable-item">
                 <div class="relative flex items-center justify-center w-4 h-4">
                   <input type="checkbox" id="${escapeHtml(checkboxId)}" name="${escapeHtml(key)}" value="${escapeHtml(c.value)}"
@@ -830,18 +825,18 @@ export function initFilterSidebar(query?: string, category?: string): void {
                 <span class="text-[11px] ms-auto" style="color: var(--filter-count-color, #9ca3af);">(${c.count})</span>
               </label>
             `;
-                  })
-                  .join("");
-              });
-          }
+              })
+              .join("");
+          });
+      }
 
-          // Statik section'ların (verified-supplier) count'u dinamik render'dan geçmez;
-          // ilk yüklemede de doğru sayıyı basmak için map'ten güncelle.
-          updateFacetCounts(latestFacetCounts ?? facets);
+      // Statik section'ların (verified-supplier) count'u dinamik render'dan geçmez;
+      // ilk yüklemede de doğru sayıyı basmak için map'ten güncelle.
+      updateFacetCounts(latestFacetCounts ?? facets);
 
-          // Tüm dinamik facet input'ları DOM'a girdi → filter engine restore'u tetikleyebilir.
-          // Eskiden setTimeout(1500ms) hack'i ile yapılıyordu; artık deterministik event.
-          document.dispatchEvent(new CustomEvent("filter-facets-loaded"));
+      // Tüm dinamik facet input'ları DOM'a girdi → filter engine restore'u tetikleyebilir.
+      // Eskiden setTimeout(1500ms) hack'i ile yapılıyordu; artık deterministik event.
+      document.dispatchEvent(new CustomEvent("filter-facets-loaded"));
     })
     .catch((err) => {
       console.warn("[FilterSidebar] getFilterFacets failed:", err);

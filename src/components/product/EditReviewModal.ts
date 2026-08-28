@@ -114,7 +114,10 @@ export function registerEditReviewModal(): void {
           },
           onValidationError: (kind, file) => {
             if (kind === "unsupported" && file)
-              showToast({ message: t("p2g3.unsupportedFormat", { name: file.name }), type: "error" });
+              showToast({
+                message: t("p2g3.unsupportedFormat", { name: file.name }),
+                type: "error",
+              });
             else if (kind === "tooLarge" && file)
               showToast({ message: t("p2g3.fileTooLarge", { name: file.name }), type: "warning" });
             else if (kind === "maxFiles")

@@ -29,8 +29,16 @@
  * mevcut deseni: bkz. `listing-cache.spec.ts`, `product-detail-layout.spec.ts`).
  */
 import { expect, test, type Page, type Route } from "@playwright/test";
+import { yalnizMasaustu } from "./fixtures/viewport";
 
-import { galeriKaydi, gorselManifesti, kapaliYanit, manifestYaniti } from "./fixtures/media-manifest";
+yalnizMasaustu("vitrin galerisi #gallery-main-image masaüstü düzeninde");
+
+import {
+  galeriKaydi,
+  gorselManifesti,
+  kapaliYanit,
+  manifestYaniti,
+} from "./fixtures/media-manifest";
 
 const ILAN = "LST-MEDIA-0001";
 const ANA = "/files/urun-ana.jpg";
@@ -191,13 +199,13 @@ test("[FR-123] S3 vitrin yarısı — piksel tavanı uygulanmış türev bildiri
   expect(enBuyukW(srcset)).toBeLessThanOrEqual(2400);
 
   // AVIF → WebP → JPEG sırası korunur; son biçim `<img srcset>`te taşınır.
-  const tipler = await anaPicture(page).locator("source").evaluateAll((n) =>
-    n.map((s) => s.getAttribute("type"))
-  );
+  const tipler = await anaPicture(page)
+    .locator("source")
+    .evaluateAll((n) => n.map((s) => s.getAttribute("type")));
   expect(tipler).toEqual(["image/avif", "image/webp"]);
-  for (const t of await anaPicture(page).locator("source").evaluateAll((n) =>
-    n.map((s) => s.getAttribute("srcset") || "")
-  )) {
+  for (const t of await anaPicture(page)
+    .locator("source")
+    .evaluateAll((n) => n.map((s) => s.getAttribute("srcset") || ""))) {
     expect(enBuyukW(t)).toBeLessThanOrEqual(2400);
   }
 });

@@ -29,6 +29,17 @@ export default defineConfig({
       name: "chromium-desktop",
       use: { ...devices["Desktop Chrome"], viewport: { width: 1280, height: 800 } },
     },
+    /**
+     * Mobil — 2026-08-26'da eklendi.
+     *
+     * Storefront alıcıya ait ve alıcılar telefondan bakıyor, ama suite'in
+     * tamamı yalnız 1280×800'de koşuyordu. İlk denemede 19 test düştü;
+     * hiçbiri gerçek bir uygulama hatası değildi — hepsi masaüstü viewport
+     * varsayımıyla yazılmış testlerdi (mobilde farklı bileşen mount ediliyor,
+     * filtre paneli çekmeceye giriyor, çerez bandı alt düğmeleri yutuyor).
+     * On dokuzu da mobil yoluna uyarlandı, sonra bu proje kalıcı oldu.
+     */
+    { name: "chromium-mobile", use: { ...devices["Pixel 5"] } },
   ],
   webServer: startViteServer
     ? {

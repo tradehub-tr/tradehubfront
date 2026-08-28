@@ -18,7 +18,13 @@ const iconMessage = `<svg class="w-6 h-6" fill="none" stroke="currentColor" stro
    HELPERS
    ════════════════════════════════════════════════════ */
 
-function featureCard(icon: string, titleKey: string, descKey: string, linkHref: string, linkKey: string): string {
+function featureCard(
+  icon: string,
+  titleKey: string,
+  descKey: string,
+  linkHref: string,
+  linkKey: string
+): string {
   return `
     <div class="bg-white border border-[#ECEAE6] rounded-md p-6 flex flex-col gap-3.5 shadow-[0_18px_44px_-24px_rgba(28,12,5,0.35)]">
       <div class="size-12 rounded-full bg-[#FFE285] flex items-center justify-center shrink-0">${icon}</div>

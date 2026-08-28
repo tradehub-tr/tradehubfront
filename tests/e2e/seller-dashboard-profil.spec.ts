@@ -63,7 +63,10 @@ test("get_my_profile yükleniyor — Vergi No dolu (SEL-00001)", async ({ page }
 test("Vergi No + Vergi Dairesi READ-ONLY (satıcı düzenleyemez)", async ({ page }) => {
   await gotoDashboard(page);
   await openTab(page, "Şirket Profili");
-  await expect(page.locator('input[x-model="form.company.tax_id"]')).toHaveAttribute("readonly", "");
+  await expect(page.locator('input[x-model="form.company.tax_id"]')).toHaveAttribute(
+    "readonly",
+    ""
+  );
   await expect(page.locator('input[x-model="form.company.tax_office"]')).toHaveAttribute(
     "readonly",
     ""

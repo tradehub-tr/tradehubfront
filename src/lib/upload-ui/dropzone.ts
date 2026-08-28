@@ -76,16 +76,30 @@ export function bindDropzone(opts: BindDropzoneOpts, handlers: DropzoneHandlers)
 
   function setDragOver(on: boolean) {
     if (on) {
-      root!.classList.add("border-[var(--color-primary-500,#f59e0b)]", "bg-[var(--color-primary-50,#fffbeb)]", "scale-[1.005]");
+      root!.classList.add(
+        "border-[var(--color-primary-500,#f59e0b)]",
+        "bg-[var(--color-primary-50,#fffbeb)]",
+        "scale-[1.005]"
+      );
       root!.classList.remove("border-gray-300");
       iconWrap?.classList.add("bg-[var(--color-primary-500,#f59e0b)]", "text-white");
-      iconWrap?.classList.remove("bg-[var(--color-primary-100,#fef3c7)]", "text-[var(--color-primary-600,#d97706)]");
+      iconWrap?.classList.remove(
+        "bg-[var(--color-primary-100,#fef3c7)]",
+        "text-[var(--color-primary-600,#d97706)]"
+      );
       if (titleEl) titleEl.textContent = opts.texts.dragRelease;
     } else {
-      root!.classList.remove("border-[var(--color-primary-500,#f59e0b)]", "bg-[var(--color-primary-50,#fffbeb)]", "scale-[1.005]");
+      root!.classList.remove(
+        "border-[var(--color-primary-500,#f59e0b)]",
+        "bg-[var(--color-primary-50,#fffbeb)]",
+        "scale-[1.005]"
+      );
       root!.classList.add("border-gray-300");
       iconWrap?.classList.remove("bg-[var(--color-primary-500,#f59e0b)]", "text-white");
-      iconWrap?.classList.add("bg-[var(--color-primary-100,#fef3c7)]", "text-[var(--color-primary-600,#d97706)]");
+      iconWrap?.classList.add(
+        "bg-[var(--color-primary-100,#fef3c7)]",
+        "text-[var(--color-primary-600,#d97706)]"
+      );
       if (titleEl) titleEl.textContent = originalTitle;
     }
   }

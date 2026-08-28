@@ -126,9 +126,7 @@ function initDeferredHomeSections(sections: readonly DeferredHomeSection[]): voi
   );
 
   for (const definition of sections) {
-    const section = document.querySelector<HTMLElement>(
-      `[data-home-section="${definition.name}"]`
-    );
+    const section = document.querySelector<HTMLElement>(`[data-home-section="${definition.name}"]`);
     if (section) observer.observe(section);
   }
 }

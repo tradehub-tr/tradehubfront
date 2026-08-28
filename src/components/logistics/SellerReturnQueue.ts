@@ -84,7 +84,9 @@ export function SellerReturnQueue(props: SellerReturnQueueProps): string {
             <span class="ms-auto text-xs ${overdue ? "font-medium text-amber-700" : "text-gray-500"}">
               ${
                 row.decided_at
-                  ? escapeHtml(t("shipment.sellerReturn.decidedAt", { at: formatDateTime(row.decided_at) }))
+                  ? escapeHtml(
+                      t("shipment.sellerReturn.decidedAt", { at: formatDateTime(row.decided_at) })
+                    )
                   : hours === null
                     ? escapeHtml(t("shipment.sellerReturn.awaiting"))
                     : escapeHtml(

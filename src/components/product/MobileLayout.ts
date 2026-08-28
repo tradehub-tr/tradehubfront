@@ -332,10 +332,7 @@ export function MobileProductLayout(): string {
   // ── "Seçenekler" özet satırı (madde 8) — eski varyant pill bölümlerinin
   // yerine geçer; dokununca aynı OptionsSheet'i açar (data-pdm-sheet). ──
   const variantSummary = p.variants
-    .map(
-      (v) =>
-        `${escapeHtml(v.displayLabel || v.label)} (${v.options.length})`
-    )
+    .map((v) => `${escapeHtml(v.displayLabel || v.label)} (${v.options.length})`)
     .join(" &middot; ");
 
   const optionsSummarySection =
@@ -657,7 +654,9 @@ function initShareButton(): void {
 
 function initSupplierRowScroll(): void {
   document.querySelector("[data-pdm-scroll-supplier]")?.addEventListener("click", () => {
-    document.getElementById("pdm-supplier-card")?.scrollIntoView({ behavior: "smooth", block: "start" });
+    document
+      .getElementById("pdm-supplier-card")
+      ?.scrollIntoView({ behavior: "smooth", block: "start" });
   });
 }
 
@@ -805,13 +804,21 @@ function initSheetTriggers(options: { signal?: AbortSignal }): void {
   });
 
   // Escape key closes active sheet
-  document.addEventListener("keydown", (e) => {
-    if (e.key === "Escape" && activeSheetId) closeSheet(activeSheetId);
-  }, options);
+  document.addEventListener(
+    "keydown",
+    (e) => {
+      if (e.key === "Escape" && activeSheetId) closeSheet(activeSheetId);
+    },
+    options
+  );
 
-  options.signal?.addEventListener("abort", () => {
-    activeSheetId = null;
-  }, { once: true });
+  options.signal?.addEventListener(
+    "abort",
+    () => {
+      activeSheetId = null;
+    },
+    { once: true }
+  );
 
   // Drag-to-dismiss gesture on each bottom sheet (pointer events — works for both mouse & touch)
   document.querySelectorAll<HTMLElement>(".pdm-bottom-sheet").forEach((sheet) => {
@@ -871,12 +878,16 @@ function initReviewsRow(options: { signal?: AbortSignal }): void {
 
   // Reviews backend'den (loadProductReviews) geç geldiğinde puan satırı ve
   // inline yorum gövdesi TEK noktadan yenilenir.
-  document.addEventListener("product-reviews-loaded", () => {
-    const row = document.getElementById("pdm-rating-row");
-    if (row) row.innerHTML = mobileRatingRowHtml();
-    const body = document.getElementById("pdm-inline-reviews-body");
-    if (body) body.innerHTML = inlineReviewsBodyHtml();
-  }, options);
+  document.addEventListener(
+    "product-reviews-loaded",
+    () => {
+      const row = document.getElementById("pdm-rating-row");
+      if (row) row.innerHTML = mobileRatingRowHtml();
+      const body = document.getElementById("pdm-inline-reviews-body");
+      if (body) body.innerHTML = inlineReviewsBodyHtml();
+    },
+    options
+  );
 }
 
 /* ── Sticky section tabs — scroll-to + active tracking ── */
