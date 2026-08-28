@@ -132,6 +132,24 @@ export async function setNotificationPreference(_payload: {
   throw new NotWiredError("api.v1.logistics.set_notification_preference");
 }
 
+/**
+ * ── Bildirim akışı uçları (12-BE · sözleşme §2.3, §2.4) ──
+ *
+ * Varlık (`notification_log`) 2026-08-28'de sözleşmeye eklendi; uçlar 12-BE'de.
+ * Adlar `12-FE-VERI-SOZLESMESI.md` §2 ile birebir — 07-FE'de iki ayrı ad
+ * kullanılıp backend'e iki farklı sipariş verilmesi burada tekrarlanmasın.
+ */
+export async function listNotifications(_payload?: {
+  page?: number;
+  page_size?: number;
+}): Promise<never> {
+  throw new NotWiredError("api.v1.logistics.list_notifications");
+}
+
+export async function markNotificationRead(_name: string): Promise<never> {
+  throw new NotWiredError("api.v1.logistics.mark_notification_read");
+}
+
 export async function saveShipmentPackage(_payload: Record<string, unknown>): Promise<never> {
   throw new NotWiredError("api.v1.logistics.save_shipment_packages");
 }
