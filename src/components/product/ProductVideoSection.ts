@@ -27,6 +27,14 @@ function posterAttr(poster: string): string {
   return safe ? ` poster="${safe}"` : "";
 }
 
+/** `<track kind="captions">` — altyazı adresi verilmemiş ya da sanitize'ı
+ *  geçememişse hiç basılmaz (Task 8, TUR-135 devamı). `default`: tarayıcı
+ *  altyazıyı otomatik açık göstersin — kullanıcı `controls`tan kapatabilir. */
+function trackTag(captionsUrl: string): string {
+  const safe = captionsUrl ? escapeHtml(sanitizeUrl(captionsUrl, "")) : "";
+  return safe ? `<track kind="captions" src="${safe}" default>` : "";
+}
+
 /** Reduced-motion teslimi: video kaynağı/HLS runtime'ı olmadan yalnız poster. */
 export function toPosterOnlyHtml(poster: string, label = ""): string {
   const safe = poster ? escapeHtml(sanitizeUrl(poster, "")) : "";
@@ -40,7 +48,12 @@ export function toPosterOnlyHtml(poster: string, label = ""): string {
  * sesli autoplay engellendiğinden bu durumda `muted` zorunlu (kullanıcı controls ile sesi açabilir).
  * `poster` yalnız `<video>` üreten dallarda anlamlıdır (embed iframe'lerde kapağı sağlayıcı basar).
  */
-export function toVideoEmbedHtml(rawUrl: string, autoplay = false, poster = ""): string {
+export function toVideoEmbedHtml(
+  rawUrl: string,
+  autoplay = false,
+  poster = "",
+  captionsUrl = ""
+): string {
   const url = (rawUrl || "").trim();
   if (!url) return "";
 
@@ -83,7 +96,7 @@ export function toVideoEmbedHtml(rawUrl: string, autoplay = false, poster = ""):
     if (!safeSrc) return "";
     const autoAttrs = autoplay ? " autoplay muted" : "";
     ensureHlsHydration();
-    return `<video data-hls-src="${safeSrc}"${posterAttr(poster)} class="absolute inset-0 w-full h-full object-contain bg-black" controls${autoAttrs} preload="metadata" playsinline></video>`;
+    return `<video data-hls-src="${safeSrc}"${posterAttr(poster)} class="absolute inset-0 w-full h-full object-contain bg-black" controls${autoAttrs} preload="metadata" playsinline>${trackTag(captionsUrl)}</video>`;
   }
 
   // MP4/WebM vb. direkt dosya
@@ -91,7 +104,7 @@ export function toVideoEmbedHtml(rawUrl: string, autoplay = false, poster = ""):
     const safeSrc = escapeHtml(sanitizeUrl(url));
     if (!safeSrc) return "";
     const autoAttrs = autoplay ? " autoplay muted" : "";
-    return `<video src="${safeSrc}"${posterAttr(poster)} class="absolute inset-0 w-full h-full object-contain bg-black" controls${autoAttrs} preload="metadata" playsinline></video>`;
+    return `<video src="${safeSrc}"${posterAttr(poster)} class="absolute inset-0 w-full h-full object-contain bg-black" controls${autoAttrs} preload="metadata" playsinline>${trackTag(captionsUrl)}</video>`;
   }
 
   // Tanınmayan formatta anchor fallback
@@ -124,14 +137,27 @@ function previewOverlay(previewSrc: string, videoUrl: string): string {
   return `<video data-listing-preview-clip src="${safe}" class="absolute inset-0 w-full h-full object-contain opacity-0 pointer-events-none transition-opacity duration-300 motion-reduce:hidden" muted loop playsinline preload="none" aria-hidden="true" tabindex="-1"></video>`;
 }
 
-function renderVideoPlayer(videoUrl: string, label: string, poster = "", previewSrc = ""): string {
+/** `watchUrl` doluysa (yalnız listing promo videosu — varyant videosunda basılmaz)
+ *  başlığın yanına "sayfasında izle" linki eklenir (Task 4, TUR-135 devamı). */
+function renderVideoPlayer(
+  videoUrl: string,
+  label: string,
+  poster = "",
+  previewSrc = "",
+  watchUrl = ""
+): string {
   if (!videoUrl) return "";
   const posterOnly = prefersReducedMotion() ? toPosterOnlyHtml(poster, label) : "";
+  const safeWatchHref = watchUrl ? escapeHtml(sanitizeUrl(watchUrl, "")) : "";
+  const watchLink = safeWatchHref
+    ? `<a href="${safeWatchHref}" class="text-xs font-medium text-primary-600 hover:underline">${t("prodUi.watchOnPage")}</a>`
+    : "";
   return `
     <div class="flex items-center justify-between mb-3">
       <h2 class="text-base md:text-lg font-bold text-gray-900">${label}</h2>
+      ${watchLink}
     </div>
-    <div class="relative rounded-lg overflow-hidden shadow-sm bg-black" style="padding-top:56.25%" data-video-frame>
+    <div class="relative rounded-md overflow-hidden shadow-sm bg-black" style="padding-top:56.25%" data-video-frame>
       ${posterOnly || toVideoEmbedHtml(videoUrl, false, poster)}
       ${posterOnly ? "" : previewOverlay(previewSrc, videoUrl)}
     </div>
@@ -149,6 +175,10 @@ export function ProductVideoSection(): string {
   // W8 — hareketli önizleme klibi (kısa/sessiz mp4 türevi). Yoksa boş kalır ve
   // önizleme katmanı hiç basılmaz (bugünkü poster→tam video davranışı sürer).
   const listingPreview = p.videoPreviewSrc || "";
+  // Task 4 — `/medya/v/<slug>` izleme sayfası linki. Yalnız listing promo
+  // videosuna ait (backend `get_listing_detail` yerel dosya + slug varsa
+  // basar); varyant videosunda hiç gösterilmez (`setProductVideo` boşa düşürür).
+  const listingWatchUrl = p.videoWatchUrl || "";
   // Varyant videoları ileride geldiğinde data-attribute'lara yerleşir; şimdilik sadece listing.
   const initialVideo = listingVideo;
   const hidden = !initialVideo;
@@ -158,8 +188,9 @@ export function ProductVideoSection(): string {
       data-listing-video="${escapeHtml(listingVideo)}"
       data-listing-poster="${escapeHtml(listingPoster)}"
       data-listing-preview="${escapeHtml(listingPreview)}"
-      class="${hidden ? "hidden " : ""}mt-4 p-4 rounded-lg border border-gray-200 bg-white">
-      ${renderVideoPlayer(initialVideo, t("prodUi.promoVideo"), listingPoster, listingPreview)}
+      data-listing-watch-url="${escapeHtml(listingWatchUrl)}"
+      class="${hidden ? "hidden " : ""}mt-4 p-4 rounded-md border border-gray-200 bg-white">
+      ${renderVideoPlayer(initialVideo, t("prodUi.promoVideo"), listingPoster, listingPreview, listingWatchUrl)}
     </section>
   `;
 }
@@ -253,16 +284,18 @@ export function setProductVideo(variantVideoUrl: string): void {
     el.innerHTML = "";
     return;
   }
-  // Kapak ve önizleme yalnız listing videosuna ait — varyant videosunda yanlış
-  // kapak/klip göstermektense hiç göstermemek doğru.
+  // Kapak, önizleme ve izleme sayfası linki yalnız listing videosuna ait —
+  // varyant videosunda yanlış kapak/klip/link göstermektense hiç göstermemek doğru.
   const listingPoster = el.getAttribute("data-listing-poster") || "";
   const listingPreview = el.getAttribute("data-listing-preview") || "";
+  const listingWatchUrl = el.getAttribute("data-listing-watch-url") || "";
   el.classList.remove("hidden");
   el.innerHTML = renderVideoPlayer(
     nextUrl,
     variantVideoUrl ? t("prodUi.variantVideo") : t("prodUi.promoVideo"),
     variantVideoUrl ? "" : listingPoster,
-    variantVideoUrl ? "" : listingPreview
+    variantVideoUrl ? "" : listingPreview,
+    variantVideoUrl ? "" : listingWatchUrl
   );
   // Gözlemci zaten yakalar; elle çağrı swap → oynatma gecikmesini kısaltır
   // (data-hls-bound işareti çift bağlanmayı önlüyor).

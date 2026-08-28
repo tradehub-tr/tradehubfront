@@ -13,9 +13,14 @@ export default defineConfig({
   expect: { timeout: 5_000 },
   fullyParallel: true,
   reporter: [["list"]],
+  // T-141 kapanış kanıtı: başarılı kritik vitrin yollarında da yalnız log
+  // değil, incelenebilir ekran ve video artefaktı bırak.
+  outputDir: "playwright/evidence",
   use: {
     baseURL: "http://localhost:5173",
     trace: "retain-on-failure",
+    screenshot: "on",
+    video: "on",
     headless: true,
     viewport: { width: 1280, height: 800 },
   },

@@ -1365,6 +1365,12 @@ export function mapListingDetail(raw: any): ProductDetail {
       loading: m.loading || (i === 0 ? "eager" : "lazy"),
       decoding: m.decoding || "async",
       fetchpriority: m.fetchpriority || undefined,
+      // Task 8 — video dosyaları için künye (Listing API `imageMeta[].poster
+      // /durationSec/captionsUrl`, TUR-135 Task 6). Görsel dosyalarda bu
+      // alanlar zaten boş geliyor, `undefined` kalır.
+      poster: m.poster || undefined,
+      captionsUrl: m.captionsUrl || undefined,
+      durationSec: m.durationSec || undefined,
     };
   });
 
@@ -1387,6 +1393,9 @@ export function mapListingDetail(raw: any): ProductDetail {
       // Manifest posteri (ya da elle yüklü kapak): video slaytı ilk karesini
       // beklemeden kapakla açılır. Boş/whitespace poster hiç basılmaz.
       poster: trimStr(raw.videoPoster) || undefined,
+      // Task 8 — promo altyazısı (`upload_video_captions` uç sözleşmesi).
+      // Boş/whitespace değer track öznitelikte hiç basılmaz.
+      captionsUrl: trimStr(raw.videoCaptionsUrl) || undefined,
     });
   }
 
@@ -1559,6 +1568,21 @@ export function mapListingDetail(raw: any): ProductDetail {
           description: String(c.description || ""),
         }))
       : [],
+    // Task 5 — `documents`: liste boşsa/alan hiç gelmediyse `[]`, blok kendi
+    // kendine gizlenir (ProductDocuments.ts). Boş/whitespace `url` olan satır
+    // tutulmuyor — indirme linki olmayan bir "doküman" gösterilecek bir şey
+    // değil.
+    documents: Array.isArray(raw.documents)
+      ? raw.documents
+          .map((d: any) => ({
+            url: String(d.url || "").trim(),
+            title: String(d.title || ""),
+            docType: String(d.docType || ""),
+            language: String(d.language || ""),
+            sizeBytes: Number(d.sizeBytes) || 0,
+          }))
+          .filter((d: { url: string }) => d.url)
+      : [],
     description: raw.description || "",
     rating: raw.rating || 0,
     reviewCount: raw.reviewCount || 0,
@@ -1613,6 +1637,12 @@ export function mapListingDetail(raw: any): ProductDetail {
     videoPreviewSrc:
       typeof raw.videoPreviewSrc === "string" && raw.videoPreviewSrc.trim()
         ? raw.videoPreviewSrc.trim()
+        : undefined,
+    // Task 4 — `/medya/v/<slug>` izleme sayfası linki. Backend yalnız yerel
+    // video + slug varsa basar; boş/whitespace değer alan sayılmaz.
+    videoWatchUrl:
+      typeof raw.videoWatchUrl === "string" && raw.videoWatchUrl.trim()
+        ? raw.videoWatchUrl.trim()
         : undefined,
     outOfStock: !!raw.outOfStock,
     status: raw.status || undefined,

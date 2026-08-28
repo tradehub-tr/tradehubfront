@@ -25,6 +25,11 @@ export interface ProductImage {
   fetchpriority?: "high" | "low" | "auto" | "";
   /** Sayfada görünen kısa açıklama (`<figcaption>`). */
   caption?: string;
+  /** Video slaytları için altyazı adresi (API `imageMeta[].captionsUrl` /
+   *  promo için `videoCaptionsUrl`) — `<track kind="captions">` kaynağı. */
+  captionsUrl?: string;
+  /** Video süresi (saniye) — API `imageMeta[].durationSec`. */
+  durationSec?: number;
 }
 
 export interface PriceTier {
@@ -269,6 +274,19 @@ export interface ProductDetail {
    * supplier.certifications'tan AYRI kavramdır — ikisini birleştirme.
    */
   productCertifications?: Array<{ name: string; description: string }>;
+  /**
+   * Task 5 (2026-08-27 dosya-yöneticisi-seo) — ilana eklenmiş dokümanlar
+   * (katalog/sertifika/kılavuz/teknik föy). API `get_listing_detail.documents`
+   * — liste boşsa/alan yoksa `[]` (backend anahtarı hiç basmıyor). `sizeBytes`
+   * 0 ise boyut UI'da gösterilmez (bilinmiyor demek, "0 bayt" değil).
+   */
+  documents?: Array<{
+    url: string;
+    title: string;
+    docType: string;
+    language: string;
+    sizeBytes: number;
+  }>;
   brandInfo?: BrandInfo | null;
   productTypeName?: string;
   productFamilyName?: string;
@@ -288,6 +306,12 @@ export interface ProductDetail {
   videoSrc?: string;
   /** Sessiz 3-6 sn hareketli önizleme klibi (≤1 MB) — hover/galeri yüzeyleri için. */
   videoPreviewSrc?: string;
+  /**
+   * Task 4 (2026-08-26 medya-watch-page) — promo videonun `/medya/v/<slug>`
+   * izleme sayfası linki. Yalnız video yerel (`/files/`) VE slug'ı varsa
+   * basılır; aksi hâlde API alanı hiç döndürmez (`undefined` kalır).
+   */
+  videoWatchUrl?: string;
   description: string;
   rating: number;
   reviewCount: number;

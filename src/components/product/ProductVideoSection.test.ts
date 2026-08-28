@@ -65,6 +65,25 @@ describe("toVideoEmbedHtml — HLS dalı", () => {
     const html = toVideoEmbedHtml("/files/v.mp4", false, "javascript" + ":alert(1)");
     expect(html).not.toContain("poster=");
   });
+
+  // Task 8 (2026-08-26 medya-video-seo) — `<track kind="captions">`.
+  it("captionsUrl verilirse <video> dallarında <track kind=\"captions\"> basılır", () => {
+    expect(toVideoEmbedHtml("/files/v.mp4", false, "", "/files/v.vtt")).toContain(
+      '<track kind="captions" src="/files/v.vtt" default>'
+    );
+    expect(toVideoEmbedHtml("/files/v.m3u8", false, "", "/files/v.vtt")).toContain(
+      '<track kind="captions" src="/files/v.vtt" default>'
+    );
+  });
+
+  it("captionsUrl verilmezse <track> hiç basılmaz", () => {
+    expect(toVideoEmbedHtml("/files/v.mp4")).not.toContain("<track");
+  });
+
+  it("güvensiz captionsUrl track'i tamamen düşürür", () => {
+    const html = toVideoEmbedHtml("/files/v.mp4", false, "", "javascript" + ":alert(1)");
+    expect(html).not.toContain("<track");
+  });
 });
 
 describe("ProductVideoSection — poster bağlama", () => {

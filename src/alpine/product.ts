@@ -28,12 +28,12 @@ function prefersReducedMotion(): boolean {
   return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 }
 
-function renderInlineVideo(url: string, poster = ""): string {
+function renderInlineVideo(url: string, poster = "", captionsUrl = ""): string {
   const posterOnly = prefersReducedMotion() ? toPosterOnlyHtml(poster, t("prodUi.promoVideo")) : "";
   return `
     <div class="relative w-full h-full bg-black flex items-center justify-center" data-gallery-main-media="true">
       <div class="relative w-full h-full" style="max-height: 100%">
-        ${posterOnly || toVideoEmbedHtml(url, true, poster)}
+        ${posterOnly || toVideoEmbedHtml(url, true, poster, captionsUrl)}
       </div>
     </div>
   `;
@@ -428,7 +428,7 @@ Alpine.data("imageGallery", () => ({
     const first = newImages[0];
     if (mainImage && first) {
       if (first.isVideo) {
-        mainImage.innerHTML = renderInlineVideo(first.src, first.poster || "");
+        mainImage.innerHTML = renderInlineVideo(first.src, first.poster || "", first.captionsUrl || "");
       } else {
         mainImage.innerHTML = renderGalleryMedia(
           first.src,
@@ -540,7 +540,7 @@ Alpine.data("imageGallery", () => ({
     if (mainImage) {
       const image = currentProduct.images[index];
       if (image && image.isVideo) {
-        mainImage.innerHTML = renderInlineVideo(image.src, image.poster || "");
+        mainImage.innerHTML = renderInlineVideo(image.src, image.poster || "", image.captionsUrl || "");
       } else {
         mainImage.innerHTML = renderGalleryMedia(
           image?.src,
@@ -580,7 +580,7 @@ Alpine.data("imageGallery", () => ({
     if (lightboxImage) {
       const image = currentProduct.images[index];
       if (image && image.isVideo) {
-        lightboxImage.innerHTML = renderInlineVideo(image.src, image.poster || "");
+        lightboxImage.innerHTML = renderInlineVideo(image.src, image.poster || "", image.captionsUrl || "");
       } else {
         lightboxImage.innerHTML = renderGalleryMedia(
           image?.src,

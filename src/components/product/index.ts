@@ -17,6 +17,7 @@ export { RelatedProducts, initRelatedProducts } from "./RelatedProducts";
 export { ProductAttributes } from "./ProductAttributes";
 export { AttributesTabContent, initAttributesTab } from "./AttributesTabContent";
 export { ProductCertificates } from "./ProductCertificates";
+export { ProductDocuments } from "./ProductDocuments";
 export {
   ProductVideoSection,
   initProductVideoSection,
