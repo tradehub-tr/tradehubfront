@@ -153,47 +153,6 @@ export function mockShippingMethods() {
   return shippingMethodJson.default.data.items;
 }
 
-/**
- * Bildirim akışı — fixture'ı YOK.
- *
- * Sözleşmede "gönderilmiş bildirim kaydı" diye bir varlık bulunmuyor
- * (`Notification Template` ve `Notification Preference` tanım tarafı).
- * Bu yüzden bu liste elle yazıldı ve alan adları `Notification Template`
- * ile hizalandı. Varlık sözleşmeye eklenince buradan silinip fixture'a
- * taşınmalı.
- */
-export function mockNotificationFeed() {
-  return [
-    {
-      name: "NTF-2026-00311",
-      event: "shipment_shipped",
-      title: "Siparişiniz yola çıktı",
-      body: "SHP-2026-00042 numaralı sevkiyat Yurtiçi Kargo'ya teslim edildi.",
-      created_at: "2026-08-10 09:10:00",
-      read: 0,
-      shipment: "SHP-2026-00042",
-    },
-    {
-      name: "NTF-2026-00298",
-      event: "shipment_out_for_delivery",
-      title: "Kurye dağıtıma çıktı",
-      body: "Gönderiniz bugün teslim edilecek.",
-      created_at: "2026-08-12 07:40:00",
-      read: 0,
-      shipment: "SHP-2026-00042",
-    },
-    {
-      name: "NTF-2026-00255",
-      event: "shipment_delivered",
-      title: "Sevkiyat teslim edildi",
-      body: "SHP-2026-00041 teslim alındı. Teslim özetini görüntüleyebilirsiniz.",
-      created_at: "2026-08-08 14:35:00",
-      read: 1,
-      shipment: "SHP-2026-00041",
-    },
-  ];
-}
-
 /** İade nedenleri — `Return Request.reason` seçim listesi. */
 export function mockReturnReasons() {
   return [
