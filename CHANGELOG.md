@@ -1,3 +1,17 @@
+## [v2.4.0-alpha.28] - 2026-08-28 ALPHA
+
+Bu surum alpha.istoc.com'da gelistirme asamasindadir.
+
+### Eklendi
+- feat(product): video slaytlarına poster ve altyazı track'i (@ahmeetseker)
+- feat(product): medya izleme sayfası ve ürün dokümanları bloğu ekle (@ahmeetseker)
+  - `/medya/v/<slug>` izleme sayfası eklendi (Task 4): backend `get_watch_page` tek veri kaynağı, video player + transkript + lisans bilgisi + ilişkili ürünler basıyor; nginx `/medya/v/…` isteklerini SEO enjeksiyonu için `page_resolver.render_media_watch`'a proxy'liyor
+  - Ürün detay sayfasına "Dokümanlar" sekmesi eklendi (Task 5): katalog/ sertifika/kılavuz/teknik föy dosyaları `ProductCertificates` ile aynı desende (liste boşsa blok hiç render edilmez), tüm alanlar `escapeHtml`/ `sanitizeUrl`'den geçiyor
+  - Promo videoya "sayfasında izle" linki eklendi (varyant videosunda basılmaz)
+  - `listingService`e `videoWatchUrl` ve `documents` alan eşlemeleri eklendi, boş/güvensiz URL'li satırlar filtreleniyor
+  - 4 dilde (tr/en/ru/ar) yeni i18n anahtarları eklendi
+
+---
 ## [v2.4.0-alpha.27] - 2026-08-26 ALPHA
 
 Bu surum alpha.istoc.com'da gelistirme asamasindadir.
