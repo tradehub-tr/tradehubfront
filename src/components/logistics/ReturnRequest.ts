@@ -54,19 +54,27 @@ export function ReturnRequest(props: ReturnRequestProps): string {
       </section>`;
   }
 
+  // 🔴 15-FE'de düzeltilen kusur: miktar kutusunun `x-model`'i YOKTU.
+  // `clampQty` yalnız sınırı düzeltiyor, değeri hiçbir yere yazmıyordu ve
+  // gönderim `items: selected` ile SADECE kimlikleri taşıyordu. Sözleşme
+  // `requested_qty`'yi zorunlu istiyor (§2.4) — alıcı "6 topun 2'sini iade
+  // ediyorum" diyemiyordu, kalemin tamamı iade edilmiş sayılıyordu.
   const itemRows = returnable
     .map((row) => {
       const max = row.delivered_qty - (row.already_returned_qty ?? 0);
       return `
         <li class="flex flex-wrap items-center gap-3 py-2">
           <label class="flex flex-1 items-center gap-2">
-            <input type="checkbox" x-model="selected" value="${escapeHtml(row.item)}" />
+            <input type="checkbox" x-model="selected" value="${escapeHtml(row.item)}"
+                   @change="dokunuldu = true" />
             <span class="text-sm text-gray-800">${escapeHtml(row.item_name)}</span>
           </label>
           <div class="flex items-center gap-2">
-            <input type="number" min="1" max="${max}" value="${max}"
-                   class="w-20 rounded-md border border-gray-300 px-2 py-1 text-right text-sm tabular-nums"
-                   @input="clampQty($event, ${max})" />
+            <input type="number" min="1" max="${max}"
+                   x-model.number="qty['${escapeHtml(row.item)}']"
+                   :disabled="!selected.includes('${escapeHtml(row.item)}')"
+                   class="w-20 rounded-md border border-gray-300 px-2 py-1 text-right text-sm tabular-nums disabled:opacity-50"
+                   @input="clampQty('${escapeHtml(row.item)}', ${max})" />
             <span class="text-xs text-gray-500">/ ${max} ${escapeHtml(row.uom ?? "")}</span>
           </div>
         </li>`;
@@ -78,7 +86,13 @@ export function ReturnRequest(props: ReturnRequestProps): string {
     .join("");
 
   return `
-    <form class="space-y-5" x-data="returnRequest({ shipment: '${escapeHtml(shipmentName)}' })"
+    <form class="space-y-5" x-data="returnRequest({ shipment: '${escapeHtml(shipmentName)}', max: ${escapeHtml(
+      JSON.stringify(
+        Object.fromEntries(
+          returnable.map((r) => [r.item, r.delivered_qty - (r.already_returned_qty ?? 0)])
+        )
+      )
+    )} })"
           @submit.prevent="submit()">
       <header>
         <h2 class="text-base font-semibold text-gray-900">${escapeHtml(t("shipment.return.title"))}</h2>
@@ -88,7 +102,12 @@ export function ReturnRequest(props: ReturnRequestProps): string {
       <section class="rounded-md border border-gray-200 p-4">
         <h3 class="mb-2 text-sm font-semibold text-gray-800">${escapeHtml(t("shipment.return.items"))}</h3>
         <ul class="divide-y divide-gray-100">${itemRows}</ul>
-        <p class="mt-2 text-xs text-red-600" x-show="!selected.length" x-cloak>
+        <!-- Uyarı kullanıcı BİR ŞEY YAPTIKTAN sonra çıkıyor. Form açılır
+             açılmaz kırmızı hata göstermek, henüz hata yapmamış kullanıcıyı
+             suçlamak demek (görsel tur bulgusu, 31 Ağu). dokunuldu bayrağı ilk
+             seçim/kaldırma hareketinde işaretleniyor. -->
+        <p class="mt-2 text-xs text-red-600" x-show="dokunuldu && !selected.length" x-cloak
+           role="alert">
           ${escapeHtml(t("shipment.return.noItemSelected"))}
         </p>
       </section>

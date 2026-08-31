@@ -4,6 +4,7 @@ import { callMethod } from "../utils/api";
 import { orderStore } from "../components/orders/state/OrderStore";
 import { getOrderTabs, getOrderFilters } from "../components/buyer-dashboard/ordersData";
 import { loadPickupEntries, pickupHref, type PickupEntryMap } from "../services/pickupEntry";
+import { loadReturnEntries, returnHref, type ReturnEntryMap } from "../services/returnEntry";
 import type { Order, OrderProduct } from "../types/order";
 
 // Backend get_payment_records API response satırları (snake_case alanlar)
@@ -108,6 +109,14 @@ Alpine.data("ordersListComponent", () => ({
    */
   pickupEntries: {} as PickupEntryMap,
 
+  /**
+   * Sipariş no → teslim EDİLMİŞ sevkiyat adı (15-FE).
+   *
+   * `pickupEntries` ile aynı gerekçe ve aynı kaynak (`list_shipments`), farklı
+   * durum süzgeci: teslim alma "Ready for Pickup", iade "Delivered" bekliyor.
+   */
+  returnEntries: {} as ReturnEntryMap,
+
   async init() {
     orderStore.subscribe(() => {
       this.orders = orderStore.getOrders();
@@ -128,6 +137,12 @@ Alpine.data("ordersListComponent", () => ({
     // düğmeler beliriyor, gelmezse liste yine de çalışıyor (07-FE · K-B).
     loadPickupEntries().then((map) => {
       this.pickupEntries = map;
+    });
+
+    // İade girişleri — aynı gerekçe: liste beklemiyor, eşleme gelince düğme
+    // beliriyor. İade formuna 31 Ağustos'a kadar hiçbir yerden gidilemiyordu.
+    loadReturnEntries().then((map) => {
+      this.returnEntries = map;
     });
 
     // selectedOrder değişince detay panel state'ini sıfırla
@@ -483,6 +498,17 @@ Alpine.data("ordersListComponent", () => ({
   pickupUrl(order: Order | null): string {
     const name = order?.orderNumber ? this.pickupEntries[order.orderNumber] : "";
     return name ? pickupHref(name) : "#";
+  },
+
+  /** Bu siparişin iade açılabilecek (teslim edilmiş) bir sevkiyatı var mı? */
+  canReturn(order: Order | null): boolean {
+    return Boolean(order?.orderNumber && this.returnEntries[order.orderNumber]);
+  },
+
+  /** İade formunun adresi — düğme yalnız `canReturn` ise çiziliyor. */
+  returnUrl(order: Order | null): string {
+    const name = order?.orderNumber ? this.returnEntries[order.orderNumber] : "";
+    return name ? returnHref(name) : "#";
   },
 
   getStatusLabel(order: Order | null): string {
