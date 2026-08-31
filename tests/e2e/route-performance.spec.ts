@@ -134,14 +134,17 @@ test.afterAll(async () => {
   );
 });
 
-test("üretim storefront matrisi 71 HTML girişini eksiksiz ve benzersiz kapsar", async () => {
+test("üretim storefront matrisi 70 HTML girişini eksiksiz ve benzersiz kapsar", async () => {
   const productionEntries = await fg(["*.html", "pages/**/*.html"], {
     ignore: ["style-test.html"],
   });
   const matrixEntries = STOREFRONT_ROUTE_MATRIX.map((route) => route.entry);
 
-  expect(matrixEntries).toHaveLength(71);
-  expect(new Set(matrixEntries).size).toBe(71);
+  // 71 → 70 (15-FE, 31 Ağu): `pages/seller/return-decision.html` SİLİNDİ.
+  // Sayfada karar formu yoktu, düğmesi kendi sayfasına dönüyordu ve
+  // storefront'ta satıcı menüsü hiç yok — karar admin panele taşındı (K-3).
+  expect(matrixEntries).toHaveLength(70);
+  expect(new Set(matrixEntries).size).toBe(70);
   expect([...matrixEntries].sort()).toEqual([...productionEntries].sort());
   expect(STOREFRONT_VIEWPORTS).toEqual({
     desktop: { width: 1440, height: 1000 },
