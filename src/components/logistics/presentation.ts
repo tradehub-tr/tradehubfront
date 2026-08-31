@@ -9,7 +9,7 @@
  * (`tradehub_core/logistics/constants.py` → ShipmentStatus). Burada YALNIZ
  * görsel karşılıkları var — durum eklemek/çıkarmak bu dosyanın işi değil.
  */
-import { t } from "../../i18n";
+import { getCurrentLang, t } from "../../i18n";
 import { escapeHtml } from "../../utils/sanitize";
 
 export type Tone = "neutral" | "info" | "progress" | "success" | "warning" | "danger";
@@ -74,16 +74,29 @@ export function returnStatusBadge(status: string): string {
 }
 
 /**
- * Tarih/saat biçimi tarayıcı yereline bırakılıyor.
+ * Biçimlendirme yereli — ARAYÜZ dilinden, tarayıcı dilinden DEĞİL.
  *
- * Sabit bir biçim yazmak Arapça ve Rusça arayüzde yanlış görünürdü —
- * storefront dört dil destekliyor.
+ * 🔴 Ölçüldü (15-FE görsel turu, 31 Ağu): `toLocaleString(undefined, …)`
+ * tarayıcının dilini kullanıyordu. Arayüzü Türkçe seçmiş ama tarayıcısı
+ * İngilizce olan bir alıcı, Türkçe ekranda **"Aug 09, 2026, 10:00 AM"** ve
+ * **"TRY 2,480.00"** görüyordu. Kusur tüm lojistik yüzeyini etkiliyordu
+ * (07/12/13/14-FE ekranları dahil) ve hiçbir test yakalamamıştı — hepsi
+ * "değer basıldı mı" diye bakıyordu, "hangi dilde" diye değil.
+ *
+ * Sabit bir biçim yazmak da yanlış olurdu: storefront dört dil destekliyor
+ * ve tarih düzeni dile göre gerçekten değişiyor. Doğrusu yereli ARAYÜZ
+ * dilinden almak.
  */
+function bicimYereli(): string {
+  return getCurrentLang();
+}
+
+/** Tarih/saat — biçim arayüz diline göre (bkz. `bicimYereli`). */
 export function formatDateTime(value: unknown, withTime = true): string {
   if (!value) return "—";
   const parsed = new Date(String(value).replace(" ", "T"));
   if (Number.isNaN(parsed.getTime())) return escapeHtml(value);
-  return parsed.toLocaleString(undefined, {
+  return parsed.toLocaleString(bicimYereli(), {
     day: "2-digit",
     month: "short",
     year: "numeric",
@@ -94,14 +107,21 @@ export function formatDateTime(value: unknown, withTime = true): string {
 /** Para birimi — değer yoksa "—", sıfır DEĞİL. */
 export function money(value: unknown, currency = "TRY"): string {
   if (value === null || value === undefined) return "—";
-  return Number(value).toLocaleString(undefined, { style: "currency", currency });
+  return Number(value).toLocaleString(bicimYereli(), { style: "currency", currency });
 }
 
 /** Boş durum kutusu — dört ekranda tekrar ediyor. */
-export function emptyState(message: string, hint?: string): string {
+/**
+ * @param actionHtml Sonraki adıma götüren düğme — **çağıranın ürettiği**
+ *   güvenilir işaretleme, kullanıcı içeriği DEĞİL (bu yüzden kaçırılmıyor).
+ *   Boş durum yalnız "kayıt yok" demekle kalmayıp ne yapılacağını da
+ *   söylemeli (`GOREV-TAMAMLAMA-SOZLESMESI` §2).
+ */
+export function emptyState(message: string, hint?: string, actionHtml?: string): string {
   return `
     <div class="rounded-md border border-dashed border-gray-300 py-10 text-center">
       <p class="text-sm font-medium text-gray-700">${escapeHtml(message)}</p>
       ${hint ? `<p class="mt-1 text-xs text-gray-500">${escapeHtml(hint)}</p>` : ""}
+      ${actionHtml ?? ""}
     </div>`;
 }
