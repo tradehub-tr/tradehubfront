@@ -280,13 +280,6 @@ export const STOREFRONT_ROUTE_MATRIX: StorefrontRouteCase[] = [
   ]),
   route("products", "C02-catalog", "pages/products.html", "/urunler"),
 
-  route(
-    "seller-return-decision",
-    "C09-seller",
-    "pages/seller/return-decision.html",
-    null,
-    "seller"
-  ),
   route("seller-shipment", "C09-seller", "pages/seller/shipment.html", null, "seller"),
 
   route(

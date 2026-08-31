@@ -13,7 +13,8 @@
  *   VAR   logistics.track_shipment_public → takip no ile genel sorgu
  *
  *   YOK   teslim kanıtı           (Proof of Delivery DocType'ı bile yok)
- *   YOK   iade talepleri          (Return Request DocType'ı yok)
+ *   YOK   iade talepleri          (Return Request DocType'ı yok · 15-BE
+ *                                  → api.v1.returns, karar K-1)
  *   YOK   bildirim tercihleri     (uç yok)
  *   YOK   koli kaydetme / etiket  (uç yok)
  *   YOK   randevu talebi          (07-BE · api.v1.pickup)
@@ -109,16 +110,45 @@ export async function getProofOfDelivery(_shipment: string): Promise<never> {
   throw new NotWiredError("api.v1.logistics.get_proof_of_delivery");
 }
 
-export async function listReturnRequests(): Promise<never> {
-  throw new NotWiredError("api.v1.logistics.list_return_requests");
+/**
+ * ── İade uçları (15-BE · sözleşme §2) ──
+ *
+ * Modül **`api.v1.returns`** — `api.v1.logistics` DEĞİL (karar K-1, 31 Ağu).
+ * O modül misafire açık (`allow_guest=True`) ve kendi docstring'i
+ * *"satıcı/alıcı verisine dokunan her şey başka yerde"* diyor; iade uçları
+ * oraya yazılırsa 20 Ağustos denetiminde POD/OPS/PRICING için düzeltilen
+ * yanlışlıkla-guest riski tekrarlanır.
+ *
+ * Adlar `15-FE-VERI-SOZLESMESI.md` §2 ile birebir — 07-FE'de iki ayrı ad
+ * kullanılıp backend'e iki farklı sipariş verilmesi burada tekrarlanmasın.
+ */
+export async function getReturnEligibility(_shipment: string): Promise<never> {
+  throw new NotWiredError("api.v1.returns.get_return_eligibility");
 }
 
-export async function createReturnRequest(_payload: Record<string, unknown>): Promise<never> {
-  throw new NotWiredError("api.v1.logistics.create_return_request");
+export async function listReturnRequests(_params?: {
+  status?: string;
+  page?: number;
+  page_size?: number;
+}): Promise<never> {
+  throw new NotWiredError("api.v1.returns.list_return_requests");
+}
+
+export async function getReturnRequest(_name: string): Promise<never> {
+  throw new NotWiredError("api.v1.returns.get_return_request");
+}
+
+export async function createReturnRequest(_payload: {
+  shipment: string;
+  reason: string;
+  note: string;
+  items: { item: string; qty: number }[];
+}): Promise<never> {
+  throw new NotWiredError("api.v1.returns.create_return_request");
 }
 
 export async function decideReturnRequest(_payload: Record<string, unknown>): Promise<never> {
-  throw new NotWiredError("api.v1.logistics.decide_return_request");
+  throw new NotWiredError("api.v1.returns.decide_return_request");
 }
 
 export async function listNotificationPreferences(): Promise<never> {

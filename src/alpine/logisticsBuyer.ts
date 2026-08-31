@@ -13,32 +13,58 @@ const MIN_NOTE = 10;
 interface ReturnRequestState {
   shipment: string;
   selected: string[];
+  /** Kullanıcı kalem seçimine dokundu mu — erken hata mesajını engelliyor. */
+  dokunuldu: boolean;
+  /** Kalem kimliği → iade edilecek miktar. Gönderilen yükün parçası. */
+  qty: Record<string, number>;
+  max: Record<string, number>;
   reason: string;
   note: string;
   submitting: boolean;
   error: string;
   readonly canSubmit: boolean;
-  clampQty(event: Event, max: number): void;
+  clampQty(item: string, max: number): void;
   submit(): Promise<void>;
 }
 
-Alpine.data("returnRequest", (options: { shipment: string }) => ({
+Alpine.data("returnRequest", (options: { shipment: string; max: Record<string, number> }) => ({
   shipment: options.shipment,
   selected: [] as string[],
+  dokunuldu: false,
+  /**
+   * Başlangıçta her kalem TAMAMI kadar — alıcıların çoğu kalemin tamamını
+   * iade ediyor ve boş kutu doldurtmak gereksiz bir adım (kök CLAUDE.md
+   * §4.14b: boş formdan başlatma).
+   */
+  qty: { ...options.max } as Record<string, number>,
+  max: options.max ?? {},
   reason: "damaged",
   note: "",
   submitting: false,
   error: "",
 
   get canSubmit(): boolean {
-    return this.selected.length > 0 && this.note.trim().length >= MIN_NOTE;
+    return (
+      this.selected.length > 0 &&
+      this.note.trim().length >= MIN_NOTE &&
+      // Seçili her kalemin geçerli bir miktarı olmalı: sunucu `qty` olmadan
+      // reddediyor (sözleşme §2.4) ve sessizce "tamamı" varsaymıyor.
+      this.selected.every((item) => Number(this.qty[item]) >= 1)
+    );
   },
 
-  clampQty(this: ReturnRequestState, event: Event, max: number): void {
-    const input = event.target as HTMLInputElement;
-    const value = Number(input.value);
-    if (Number.isNaN(value) || value < 1) input.value = "1";
-    else if (value > max) input.value = String(max);
+  /**
+   * Sınırı düzeltir VE değeri state'e yazar.
+   *
+   * 🔴 Eski hâli yalnız `input.value`'yu düzeltiyordu; `x-model` olmadığı için
+   * girilen miktar hiçbir yere gitmiyordu ve gönderim yalnız kimlik listesi
+   * taşıyordu. Kusur 13 Ağustos'tan 31 Ağustos'a kadar yaşadı — build, tsc
+   * ve birim testleri görmedi çünkü hepsi "alan var mı" diye bakıyordu.
+   */
+  clampQty(this: ReturnRequestState, item: string, max: number): void {
+    const value = Number(this.qty[item]);
+    if (Number.isNaN(value) || value < 1) this.qty[item] = 1;
+    else if (value > max) this.qty[item] = max;
   },
 
   async submit(this: ReturnRequestState): Promise<void> {
@@ -61,8 +87,13 @@ Alpine.data("returnRequest", (options: { shipment: string }) => ({
         shipment: this.shipment,
         reason: this.reason,
         note: this.note.trim(),
-        items: this.selected,
+        // Sözleşme §2.4: her kalem `{item, qty}`. Yalnız kimlik göndermek
+        // kısmi iadeyi sessizce tam iadeye çeviriyordu.
+        items: this.selected.map((item) => ({ item, qty: Number(this.qty[item]) })),
       });
+      // Yeni talebin KENDİ takip sayfasına gidiliyor. Adres eskiden de bunu
+      // gösteriyordu ama sayfa `name` parametresini hiç okumuyordu; alıcı
+      // az önce açtığı talebi listede arıyordu (analiz §3.10).
       window.location.href = `/pages/dashboard/returns.html?name=${encodeURIComponent(created.name)}`;
     } catch (e) {
       this.error = (e as Error)?.message || t("shipment.return.failed");
