@@ -24,7 +24,7 @@ import { PickupAppointment } from "../PickupAppointment";
 import { ProofOfDelivery } from "../ProofOfDelivery";
 import { ReturnRequest } from "../ReturnRequest";
 import { SellerPacking } from "../SellerPacking";
-import { SellerReturnQueue } from "../SellerReturnQueue";
+import { BuyerReturnTracking } from "../BuyerReturnTracking";
 import { SellerShipmentForm } from "../SellerShipmentForm";
 import { ShipmentGroupList } from "../ShipmentGroupList";
 import { TrackingTimeline } from "../TrackingTimeline";
@@ -269,9 +269,18 @@ describe("ölü köprü yok", () => {
   //: (`services/logisticsNotificationMock.ts`, 12-FE) ve aynı şekilde düştü —
   //: mekanizma ikinci kez kanıtlandı. Bildirim tercihleri ekranı 13 Ağustos'tan
   //: beri çiziliyordu ama anahtar hiçbir modda kaydetmiyordu.
-  const BILINEN_EKSIKLER: Record<string, string> = {
-    __thCreateReturn: "15-FE — storefront iade talebi akışı (MOGEM-543)",
-  };
+  /**
+   * Bağlanmamış köprüler ve sahipleri.
+   *
+   * BOŞ — üç maddenin üçü de kapandı ve mekanizma her seferinde uyardı:
+   * `__thCreateShipment` (26 Ağu), `__thSetNotificationPref` (28 Ağu),
+   * `__thCreateReturn` (31 Ağu, 15-FE → `logisticsReturnMock.ts`).
+   *
+   * Yeni bir köprü ekranda aranıp da tanımlanmadıysa buraya sahibiyle
+   * yazılır; bağlandığı gün test "beklenen başarısızlık gerçekleşmedi"
+   * diyerek uyarır ve madde silinir.
+   */
+  const BILINEN_EKSIKLER: Record<string, string> = {};
 
   const koprular = [...aranan.keys()].sort();
 
@@ -458,21 +467,26 @@ const BILESENLER: { ad: string; dolu: () => string; bos?: () => string }[] = [
       }),
   },
   {
-    ad: "SellerReturnQueue",
+    // 15-FE: `SellerReturnQueue` SİLİNDİ (karar K-3). Satıcı kararını admin
+    // panelde veriyor; storefront'taki kuyruk hiçbir menüden erişilemiyordu
+    // ve alıcı sayfasına sızıp ona satıcı düğmeleri gösteriyordu.
+    ad: "BuyerReturnTracking",
     dolu: () =>
-      SellerReturnQueue({
-        rows: [
-          {
-            name: "RET-1",
-            order: "ORD-1",
-            status: "requested",
-            reason: "damaged",
-            requested_at: "2026-08-20 10:00:00",
-          } as never,
+      BuyerReturnTracking({
+        name: "RET-1",
+        order: "ORD-1",
+        shipment: "SHP-1",
+        status: "inspecting",
+        reason: "damaged",
+        requested_at: "2026-08-20 10:00:00",
+        decided_at: "2026-08-20 15:00:00",
+        decision_note: "Onaylandı.",
+        return_label_url: "data:image/svg+xml;base64,PHN2Zy8+",
+        refund_amount: 620,
+        items: [
+          { item_name: "Ürün", requested_qty: 2, received_qty: 2, accepted_qty: 1, uom: "Top" },
         ],
-        now: "2026-08-21 10:00:00",
       }),
-    bos: () => SellerReturnQueue({ rows: [] }),
   },
   {
     ad: "NotificationCenter",
