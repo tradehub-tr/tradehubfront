@@ -200,11 +200,13 @@ map "${FRONTEND_DOMAIN}" $robots_file {
 }
 
 # İçerik-hash'li adlandırma URL tahminini zorlaştırır ama tek başına yetmez:
-# toplu tarama/enumeration denemeleri hız sınırlansın (limit_req). 10r/s +
-# burst 20 normal ürün görseli yüklemesini etkilemez, otomatik taramayı
-# yavaşlatır. (2026-08-20: yerel üretilmiş şablondan buraya taşındı — kalıcı
+# toplu tarama/enumeration denemeleri hız sınırlansın (limit_req).
+# ÖLÇÜLDÜ (2026-08-31): eski 10r/s+burst20, medya panelinin sayfa başına
+# ~50 eşzamanlı küçük resim isteğinde 48'in 27'sini 503'lüyordu — ekranda
+# "kırık görsel" olarak görünüyordu. 30r/s+burst120 bir sayfalık görsel
+# patlamasını geçirir; sürekli tarama yine sınırlı kalır. (2026-08-20: yerel üretilmiş şablondan buraya taşındı — kalıcı
 # ev burası; gen-local-nginx.sh her koşuda yerel kopyayı bundan türetir.)
-limit_req_zone $binary_remote_addr zone=files_zone:10m rate=10r/s;
+limit_req_zone $binary_remote_addr zone=files_zone:10m rate=30r/s;
 
 # ── T-131 · Medya servis sertleştirmesi — başlık haritaları ─────────────────
 # GERİ ALMA: bu map bloğunu ve /files/ + /private/files/ içindeki "T-131"
@@ -450,7 +452,7 @@ server {
         # içerik-hash'li olsa da URL indexlenmesin; enumeration yavaşlasın.
         # burst=20 nodelay sayfadaki paralel görsel isteklerini engellemez.
         add_header X-Robots-Tag "noindex" always;
-        limit_req zone=files_zone burst=20 nodelay;
+        limit_req zone=files_zone burst=120 nodelay;
 
         # ── T-131 · Medya servis sertleştirmesi (tek blok — geri almak için sil)
         # nosniff'i bugüne dek yalnız upstream basıyordu; edge sahiplensin:
