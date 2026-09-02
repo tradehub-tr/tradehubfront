@@ -1,3 +1,13 @@
+## [v2.4.0-alpha.32] - 2026-09-02 ALPHA
+
+Bu surum alpha.istoc.com'da gelistirme asamasindadir.
+
+### Duzeltildi
+- fix(nginx): medya istekleri için rate limit eşiğini artır (@ahmeetseker)
+  - Küçük resim patlamalarında kırık görsel oluşturan 503 yanıtlarını azaltmak için files_zone hız sınırı 30r/s yapıldı
+  - Sayfa başına eşzamanlı medya yüklemelerini karşılamak için burst 120'ye çıkarıldı
+
+---
 ## [v2.4.0-alpha.31] - 2026-08-31 ALPHA
 
 Bu surum alpha.istoc.com'da gelistirme asamasindadir.
