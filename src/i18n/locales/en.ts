@@ -577,6 +577,7 @@ const en = {
       downloadExtension: "Download Extension",
       scrollToTop: "Back to top",
       viewAll: "View All",
+      allProducts: "All Products",
       featuredCampaigns: "Featured campaigns",
       countryTurkey: "Türkiye",
       countryGermany: "Germany",

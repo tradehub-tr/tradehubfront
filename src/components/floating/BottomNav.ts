@@ -6,10 +6,11 @@
 
 import { t } from "../../i18n";
 import { subscribeCategories } from "../../services/categoryService";
-import type { ApiCategory } from "../../services/categoryService";
+import type { ApiCategory, ApiCategoryChild } from "../../services/categoryService";
+import { COLUMN_ROWS, SIDEBAR_LIMIT, getIconByName } from "../header/MegaMenu";
 import { waitForAuth } from "../../utils/auth";
 import { createLazyMount, type LazyMountController } from "../../utils/lazyMount";
-import { escapeHtml, sanitizeUrl } from "../../utils/sanitize";
+import { escapeHtml } from "../../utils/sanitize";
 import {
   getSelectedCurrency,
   getSelectedCurrencyInfo,
@@ -34,32 +35,54 @@ function renderCategoryOverlay(): string {
 
       <!-- Body: sidebar + content -->
       <div class="flex flex-1 min-h-0">
-        <!-- Left sidebar -->
-        <div id="cat-fullscreen-sidebar" class="w-[90px] min-[400px]:w-[110px] sm:w-[130px] shrink-0 border-e border-gray-100 dark:border-gray-700 overflow-y-auto bg-gray-50 dark:bg-gray-800">
+        <!-- Sol şerit: en fazla SIDEBAR_LIMIT ana kategori (sabit küçük satırlar) + dibe sabit "Tüm Ürünler" -->
+        <div class="flex w-[90px] min-[400px]:w-[110px] sm:w-[130px] shrink-0 flex-col border-e border-gray-100 dark:border-gray-700 bg-gray-50 dark:bg-gray-800">
+          <div id="cat-fullscreen-sidebar" class="flex min-h-0 flex-1 flex-col overflow-y-auto"></div>
+          <a href="/pages/products.html" id="cat-fullscreen-all" class="flex shrink-0 items-center justify-center border-t border-gray-200 dark:border-gray-700 border-s-2 border-s-transparent px-2 py-3 text-[11px] min-[400px]:text-[12px] leading-4 font-semibold whitespace-nowrap text-primary-600 dark:text-primary-400">${t("commonNav.allProducts")}</a>
         </div>
 
-        <!-- Right content -->
-        <div id="cat-fullscreen-content" class="flex-1 overflow-y-auto px-2 min-[400px]:px-3 py-3 min-[400px]:py-4">
+        <!-- Sağ içerik: gruplar alt alta -->
+        <div id="cat-fullscreen-content" class="flex-1 overflow-y-auto px-3 min-[400px]:px-4 py-1">
         </div>
       </div>
     </div>
   `;
 }
 
-function renderSubcatItem(name: string, slug: string, image?: string): string {
-  const placeholder = `<svg class="w-8 h-8 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="m2.25 15.75 5.159-5.159a2.25 2.25 0 0 1 3.182 0l5.159 5.159m-1.5-1.5 1.409-1.409a2.25 2.25 0 0 1 3.182 0l2.909 2.909M18 3.75H6A2.25 2.25 0 0 0 3.75 6v12A2.25 2.25 0 0 0 6 20.25h12A2.25 2.25 0 0 0 20.25 18V6A2.25 2.25 0 0 0 18 3.75Z"/></svg>`;
-  const imgHtml = image
-    ? `<img src="${escapeHtml(sanitizeUrl(image))}" alt="${escapeHtml(name)}" width="40" height="40" decoding="async" class="w-full h-full object-cover rounded-full" loading="lazy" />`
-    : placeholder;
+const CHEVRON_SVG = `<svg class="w-4 h-4 shrink-0 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m9 5 7 7-7 7"/></svg>`;
+
+/**
+ * Bir grup (2. seviye): ikonlu kalın başlık + en fazla COLUMN_ROWS yaprak + gerekirse "Tümünü Gör".
+ * Masaüstü mega menüdeki sütunla aynı kural; mobilde sütunlar alt alta dizilir.
+ */
+function renderMobileGroup(group: ApiCategoryChild): string {
+  const leaves = group.children ?? [];
+  const groupHref = `/pages/products.html?cat=${encodeURIComponent(group.slug)}`;
+  const rows = leaves
+    .slice(0, COLUMN_ROWS)
+    .map(
+      (leaf) =>
+        `<a href="/pages/products.html?cat=${encodeURIComponent(leaf.slug)}" class="block truncate py-1.5 text-[13px] leading-[18px] text-gray-700 dark:text-gray-300">${escapeHtml(leaf.name)}</a>`
+    )
+    .join("");
+  const more =
+    leaves.length > COLUMN_ROWS
+      ? `<a href="${groupHref}" class="inline-flex items-center gap-1 self-start py-1.5 text-[13px] leading-[18px] font-medium text-primary-600 dark:text-primary-400">${t("commonNav.viewAll")}<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m9 5 7 7-7 7"/></svg></a>`
+      : "";
   return `
-    <a href="/pages/products.html?cat=${escapeHtml(slug)}" class="flex flex-col items-center gap-1">
-      <div class="w-12 h-12 min-[400px]:w-14 min-[400px]:h-14 sm:w-16 sm:h-16 rounded-full bg-gray-100 dark:bg-gray-700 flex items-center justify-center overflow-hidden">
-        ${imgHtml}
-      </div>
-      <span class="text-[10px] min-[400px]:text-[11px] text-gray-700 dark:text-gray-300 text-center leading-tight line-clamp-2 w-[56px] min-[400px]:w-[64px] sm:w-[72px]">${escapeHtml(name)}</span>
-    </a>
+    <div class="py-3">
+      <a href="${groupHref}" class="flex items-center gap-2 pb-1 text-[14px] leading-5 font-bold text-gray-900 dark:text-white">
+        <span class="inline-flex shrink-0 items-center justify-center text-gray-500 dark:text-gray-400 [&>svg]:w-[18px] [&>svg]:h-[18px]">${getIconByName(group.name)}</span>
+        <span class="min-w-0 flex-1 truncate">${escapeHtml(group.name)}</span>
+        ${CHEVRON_SVG}
+      </a>
+      <div class="flex flex-col ps-[26px]">${rows}${more}</div>
+    </div>
   `;
 }
+
+const SIDEBAR_ACTIVE = ["bg-white", "dark:bg-gray-900", "font-bold", "text-gray-900", "dark:text-white", "border-s-primary-500"];
+const SIDEBAR_INACTIVE = ["text-gray-700", "dark:text-gray-300", "border-s-transparent"];
 
 function populateCategoryOverlay(overlay: HTMLElement): () => void {
   const sidebar = overlay.querySelector<HTMLElement>("#cat-fullscreen-sidebar");
@@ -68,50 +91,37 @@ function populateCategoryOverlay(overlay: HTMLElement): () => void {
   const sidebarElement: HTMLElement = sidebar;
   const contentElement: HTMLElement = content;
 
-  const subscription = subscribeCategories((cats: ApiCategory[]) => {
+  const subscription = subscribeCategories((allCats: ApiCategory[]) => {
     if (!overlay.isConnected) return;
-    if (!cats.length) return;
+    if (!allCats.length) return;
+    const cats = allCats.slice(0, SIDEBAR_LIMIT);
 
     function selectCategory(catId: string): void {
       sidebarElement.querySelectorAll<HTMLButtonElement>(".cat-fs-item").forEach((btn) => {
         const isActive = btn.dataset.catId === catId;
-        btn.classList.toggle("bg-white", isActive);
-        btn.classList.toggle("dark:bg-gray-900", isActive);
-        btn.classList.toggle("font-bold", isActive);
-        btn.classList.toggle("border-s-2", isActive);
-        btn.classList.toggle("border-s-primary-500", isActive);
-        btn.classList.toggle("font-normal", !isActive);
-        btn.classList.toggle("border-s-0", !isActive);
+        btn.classList.remove(...(isActive ? SIDEBAR_INACTIVE : SIDEBAR_ACTIVE));
+        btn.classList.add(...(isActive ? SIDEBAR_ACTIVE : SIDEBAR_INACTIVE));
+        btn.setAttribute("aria-current", isActive ? "true" : "false");
       });
 
       const cat = cats.find((c) => c.id === catId);
       if (!cat) return;
 
-      const viewAllItem = `
-        <a href="/pages/products.html?cat=${escapeHtml(cat.slug)}" class="flex flex-col items-center gap-1">
-          <div class="w-12 h-12 min-[400px]:w-14 min-[400px]:h-14 sm:w-16 sm:h-16 rounded-full border-2 border-dashed border-gray-300 dark:border-gray-600 flex items-center justify-center">
-            <svg class="w-6 h-6 sm:w-6 sm:h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6A2.25 2.25 0 0 1 6 3.75h2.25A2.25 2.25 0 0 1 10.5 6v2.25a2.25 2.25 0 0 1-2.25 2.25H6a2.25 2.25 0 0 1-2.25-2.25V6ZM3.75 15.75A2.25 2.25 0 0 1 6 13.5h2.25a2.25 2.25 0 0 1 2.25 2.25V18a2.25 2.25 0 0 1-2.25 2.25H6A2.25 2.25 0 0 1 3.75 18v-2.25ZM13.5 6a2.25 2.25 0 0 1 2.25-2.25H18A2.25 2.25 0 0 1 20.25 6v2.25A2.25 2.25 0 0 1 18 10.5h-2.25a2.25 2.25 0 0 1-2.25-2.25V6ZM13.5 15.75a2.25 2.25 0 0 1 2.25-2.25H18a2.25 2.25 0 0 1 2.25 2.25V18A2.25 2.25 0 0 1 18 20.25h-2.25A2.25 2.25 0 0 1 13.5 18v-2.25Z"/>
-            </svg>
-          </div>
-          <span class="text-[10px] min-[400px]:text-[11px] text-gray-500 text-center leading-tight">${t("categoryBrowse.viewAll")}</span>
-        </a>
-      `;
-
       contentElement.innerHTML = `
-        <div class="grid grid-cols-3 gap-x-2 min-[400px]:gap-x-3 gap-y-3 min-[400px]:gap-y-4">
-          ${cat.children.map((ch) => renderSubcatItem(ch.name, ch.slug, ch.image)).join("")}
-          ${viewAllItem}
+        <div class="flex flex-col divide-y divide-gray-100 dark:divide-gray-800">
+          ${cat.children.map(renderMobileGroup).join("")}
         </div>
       `;
+      contentElement.scrollTop = 0;
     }
 
     sidebar.innerHTML = cats
       .map(
         (cat, i) => `
         <button type="button"
-          class="cat-fs-item th-no-press w-full text-start px-2 min-[400px]:px-3 py-2.5 min-[400px]:py-3 text-[11px] min-[400px]:text-[12px] sm:text-[13px] text-gray-700 dark:text-gray-300 transition-colors ${i === 0 ? "bg-white dark:bg-gray-900 font-bold border-s-2 border-s-primary-500" : "font-normal border-s-0"}"
+          class="cat-fs-item th-no-press w-full shrink-0 text-start px-2 min-[400px]:px-3 py-2.5 min-[400px]:py-3 border-s-2 text-[11px] min-[400px]:text-[12px] sm:text-[13px] leading-4 break-words transition-colors ${(i === 0 ? SIDEBAR_ACTIVE : SIDEBAR_INACTIVE).join(" ")}"
           data-cat-id="${escapeHtml(cat.id)}"
+          aria-current="${i === 0 ? "true" : "false"}"
         >${escapeHtml(cat.name)}</button>
       `
       )

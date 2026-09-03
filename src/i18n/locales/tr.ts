@@ -575,6 +575,7 @@ const tr = {
       downloadExtension: "Uzantıyı İndir",
       scrollToTop: "En üste çık",
       viewAll: "Tümünü Gör",
+      allProducts: "Tüm Ürünler",
       featuredCampaigns: "Öne çıkan kampanyalar",
       countryTurkey: "Türkiye",
       countryGermany: "Almanya",
