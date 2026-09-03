@@ -1,3 +1,14 @@
+## [v2.4.0-alpha.33] - 2026-09-03 ALPHA
+
+Bu surum alpha.istoc.com'da gelistirme asamasindadir.
+
+### Duzeltildi
+- fix(kategori): kategori menülerinde güncel hiyerarşiyi göster (@ahmeetseker)
+  - Mega menü ve mobil kategori paneli, ana kategori sayısını sınırlandırıp sabit Tüm Ürünler bağlantısı gösterecek şekilde düzenlendi
+  - Alt kategoriler ikonlu grup başlıkları ve sınırlı yaprak satırlarıyla listelendi; fazla öğeler için Tümünü Gör bağlantısı eklendi
+  - Kategori sürümü IndexedDB önbelleği dışında alınarak admin değişikliklerinin 7 gün beklemeden menülere yansıması sağlandı
+
+---
 ## [v2.4.0-alpha.32] - 2026-09-02 ALPHA
 
 Bu surum alpha.istoc.com'da gelistirme asamasindadir.
