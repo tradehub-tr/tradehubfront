@@ -102,6 +102,14 @@ test("SATICI — Paketleme menüde var ve menü admin'in ALT KÜMESİ", async ({
     "/panel/lojistik/teslim-kaniti",
     "/panel/lojistik/satici-teslimati",
     "/panel/lojistik/alici-teslim-alma",
+    // 15-FE NOTU (31 Ağu): "/panel/lojistik/iadeler" BU LİSTEDE DEĞİL.
+    // Satıcı sidebar'ı tamamen DB-driven; frontend `sellerPanelSections`
+    // fail-secure gereği devreye girmiyor ve ekran route olarak var olsa
+    // bile `module_navigation_spec` kaydı olmadan menüde HİÇ görünmüyor.
+    // Bora o dosyada zaten yazmış: "I1 hâlâ bekliyor: matriste satıcıya
+    // işaretli ama ekranı 15-FE'de açılacak." Ekran artık açık; kayıt
+    // 15-BE'nin (MOGEM-538) işi. Aşağıdaki test o güne kadar rotayı
+    // koruyor ve kayıt gelince menü iddiası buraya taşınacak.
   ]) {
     expect(links, `satıcı menüsünde olmalı: ${gorunmeli}`).toContain(gorunmeli);
   }
@@ -460,4 +468,68 @@ test("SATICI — S9: etiket akışında taşıyıcı seçimi VAR ve varsayılan 
 
   // Kendi anlaşması ile platformunki ayrışıyor — hangi hesaptan gittiği belli.
   await expect(tablo.getByText(/kendi anlaşmam/i).first()).toBeVisible();
+});
+
+/**
+ * K10 · Satıcı depo kontrolüne ve kapanışa ERİŞEMEZ.
+ *
+ * NEDEN AYRI TEST: 15-FE öz denetiminde ölçüldü (31 Ağu) — 17 kabul
+ * senaryosundan yalnız bu üçünün testi yoktu ve "satıcı rolüyle bakmadım"
+ * ilk sürüm raporunda yazıyordu. Kapı iki katmanlı: router
+ * `logisticsPlatformOnly` ile engelliyor (manifestte I3/I4 sellerVisible /
+ * sellerRoute taşımıyor), ekran da `can.write` ile. İkisi de sunucudaki asıl
+ * kapının yerine geçmiyor (sözleşme §6.2) ama satıcıya ölü ekran vermemeli.
+ */
+test("K10 · SATICI depo kontrolü ve kapanış ekranlarına giremiyor", async ({ page }) => {
+  for (const yasak of [
+    "/panel/lojistik/iadeler/RET-2026-00007/kontrol",
+    "/panel/lojistik/iadeler/RET-2026-00007/kapanis",
+  ]) {
+    await page.goto(yasak);
+    // Guard ya başka rotaya atıyor ya da ekranı hiç çizmiyor; ikisi de kabul.
+    // Ölçülen şey: satıcı O EKRANIN başlığını GÖRMÜYOR.
+    await expect(
+      page.getByRole("heading", { name: /Depo kontrolü|İade kapanışı/i }),
+      `satıcı platform ekranını gördü: ${yasak}`
+    ).toHaveCount(0);
+  }
+});
+
+/**
+ * BEKLEYEN: iade kuyruğu satıcı MENÜSÜNDE görünmüyor.
+ *
+ * FE tarafı tam — manifest `sellerVisible: true`, menü grup haritasında
+ * kayıtlı, rota satıcıya açık (aşağıdaki test kanıtlıyor). Eksik olan
+ * `tradehub_core/setup/module_navigation_spec.py` kaydı; o dosya Bora'nın
+ * ve 15-FE'nin çakışma sınırı dışında.
+ *
+ * `it.fails` yerine düz kontrol: kayıt eklendiği gün bu test kırmızıya
+ * döner ve yukarıdaki listeye taşınması gerektiğini söyler — muafiyet
+ * kalıcı borç hâline gelemez (12-FE `I18N_KEYS_PENDING` deseni).
+ */
+test("BEKLEYEN · iade menü kaydı 15-BE'de — geldiği gün bu test uyarır", async ({ page }) => {
+  await page.goto("/panel/lojistik/iadeler");
+  const links = await page.evaluate(() =>
+    [...document.querySelectorAll('a[href*="/lojistik/"]')].map((a) => a.getAttribute("href"))
+  );
+  expect(
+    links,
+    "iade menü kaydı gelmiş — yukarıdaki 'görünmeli' listesine taşı ve bu testi sil"
+  ).not.toContain("/panel/lojistik/iadeler");
+});
+
+test("K10 · SATICI kendi iade kuyruğunu görüyor ama karar dışına çıkamıyor", async ({ page }) => {
+  await page.goto("/panel/lojistik/iadeler");
+  await expect(page.getByRole("heading", { name: /İade kuyruğu/i }).first()).toBeVisible();
+
+  // Kuyrukta kapanış/kontrol bağlantısı YOK — satıcının işi karar vermek.
+  const links = await page.evaluate(() =>
+    [...document.querySelectorAll('a[href*="/lojistik/iadeler/"]')].map((a) =>
+      a.getAttribute("href")
+    )
+  );
+  expect(
+    links.filter((h) => /\/(kontrol|kapanis)$/.test(h ?? "")),
+    "satıcı kuyruğunda platform ekranına bağlantı var"
+  ).toEqual([]);
 });

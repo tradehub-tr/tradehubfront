@@ -65,6 +65,17 @@ docs
 # Playwright test artifacts
 test-results/
 playwright-report/
+# Playwright kanıt çıktısı: her koşuda yeniden üretiliyor (443 dosya / 49 MB
+# ölçüldü 31 Ağu). `evidence/*` biçimi bilinçli — `evidence/` yazsaydık git
+# dizine hiç inmez ve aşağıdaki muafiyet çalışmazdı.
+playwright/evidence/*
+# İSTİSNA: medya görevlerinin BİLİNÇLİ commit'lediği görsel regresyon kanıtı
+# (aca725f "kritik vitrin yollarına ekran ve video kanıtı ekle"). İzlenen tek
+# kanıt kümesi bu; konvansiyon admin-panel'de de aynı.
+!playwright/evidence/media-*/
+# Görsel denetim çıktısı (GOREV-TAMAMLAMA-SOZLESMESI §2.5) — kaynak değil,
+# teslim öncesi bakılıp atılan tur çıktısı.
+tests/tools/gorseller/
 
 # Tasarım mockup HTML'leri (lokal deneme dosyaları, repo'ya girmez)
 public/mockups/

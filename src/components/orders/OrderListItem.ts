@@ -140,6 +140,24 @@ export function OrderListItem(): string {
               ${t("orders.pickUp")}
             </a>
           </template>
+          <!--
+            İade girişi (15-FE).
+
+            Yalnız TESLİM EDİLMİŞ bir sevkiyat eşleştiğinde çiziliyor. İade
+            formuna 31 Ağustos'a kadar kod tabanında hiçbir bağlantı yoktu;
+            alıcı adresi elle yazmadan iade açamıyordu (analiz §3.1).
+
+            Çerçeveli düğme (th-btn-outline): iade ikincil bir eylem —
+            "Teslim al" ve "Ödeme yap" birincil, iade onların yanında dolu
+            düğmeyle yarışmamalı.
+          -->
+          <template x-if="canReturn(order)">
+            <a :href="returnUrl(order)"
+              class="th-btn-outline h-8 px-4 max-[380px]:flex-1 text-xs font-semibold whitespace-nowrap max-sm:rounded-full inline-flex items-center"
+              data-testid="order-return-link">
+              ${t("orders.createReturn")}
+            </a>
+          </template>
           <template x-if="canPay(order)">
             <button type="button"
               @click="openRemittanceModal(order.orderNumber, order.total, order.currency, order.paymentMethod)"

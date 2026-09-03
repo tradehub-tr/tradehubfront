@@ -1,3 +1,50 @@
+## [v2.4.0-alpha.32] - 2026-09-02 ALPHA
+
+Bu surum alpha.istoc.com'da gelistirme asamasindadir.
+
+### Duzeltildi
+- fix(nginx): medya istekleri için rate limit eşiğini artır (@ahmeetseker)
+  - Küçük resim patlamalarında kırık görsel oluşturan 503 yanıtlarını azaltmak için files_zone hız sınırı 30r/s yapıldı
+  - Sayfa başına eşzamanlı medya yüklemelerini karşılamak için burst 120'ye çıkarıldı
+
+---
+## [v2.4.0-alpha.31] - 2026-08-31 ALPHA
+
+Bu surum alpha.istoc.com'da gelistirme asamasindadir.
+
+### Eklendi
+- feat(lojistik): storefront iade talebi akışı ve takip ekranı eklendi (@aliiball)
+  - sipariş kartına iade başlatma düğmesi: forma kod tabanında hiçbir bağlantı yoktu, ekran yalnız adres elle yazılarak açılıyordu
+  - girilen miktar artık gönderiliyor; x-model yoktu ve kısmi iade sessizce tam iadeye dönüyordu
+  - iade takibi ekranı sıfırdan: zaman çizgisi, iade etiketi, kalem kırılımı
+  - pencere ve nedenler sunucudan (get_return_eligibility); windowOpen sabiti kaldırıldı
+  - alıcı artık kendi kaydını görüyor, satıcı karar bağlantısı çizilmiyor
+  - kontrol başlamadan ulaşan/kabul edilen miktar gösterilmiyor
+  - __thCreateReturn köprüsü bağlandı, mock uç bazında bayraklı
+
+### Degistirildi
+- refactor(lojistik): tarih ve para birimi arayüz diline bağlandı (@aliiball)
+  - toLocaleString tarayıcı dilini kullanıyordu; arayüzü Türkçe seçen alıcı Türkçe ekranda 'Aug 09, 2026, 10:00 AM' ve 'TRY 2,480.00' görüyordu
+  - yerel artık getCurrentLang()'den; dört dilde doğrulandı
+  - tüm lojistik yüzeyini etkiliyordu (07/12/13/14-FE ekranları dahil)
+- refactor(lojistik): iade uçları api.v1.returns modülüne taşındı (@aliiball)
+  - api.v1.logistics misafire açık (allow_guest); yetkili uç oraya yazılmaz
+  - aynı düzeltme 20 Ağustos denetiminde POD/OPS/PRICING için yapılmıştı
+  - create_return_request yükü artık items:[{item,qty}] tipinde
+- refactor(lojistik): storefront satıcı iade karar sayfası kaldırıldı (@aliiball)
+  - sayfada karar formu yoktu, düğmesi kendi sayfasına dönüyordu
+  - storefront'ta satıcı menüsü yok; sayfaya yalnız alıcı ekranındaki rol sızıntısından ulaşılıyordu
+  - karar admin panele taşındı (G0 rol matrisi, I2)
+  - SellerReturnQueue ölü kod kaldı, story'siyle birlikte silindi
+  - rota matrisi 71 - 70
+- refactor(test): iade akışı testleri ve otomatik denetimler eklendi (@aliiball)
+  - iade mock birim testleri ve E2E: K1-K15 kabul senaryoları
+  - sekiz yeni denetim: form alanı gönderime bağlı, rol sızıntısı, guest modül adı, liste/DETAIL ayrımı, biçim yereli, şablon literali, kontrol öncesi veri, mock yüzeyi i18n
+  - katalog degerlerinin dört dilde çevirisi denetleniyor
+  - BILINEN_EKSIKLER boşaldı: __thCreateReturn bağlandı
+  - playwright kanıt çıktısı ve görsel tur çıktısı yok sayılıyor
+
+---
 ## [v2.4.0-alpha.29] - 2026-08-28 ALPHA
 
 Bu surum alpha.istoc.com'da gelistirme asamasindadir.

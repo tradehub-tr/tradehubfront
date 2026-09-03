@@ -141,6 +141,80 @@
     "src/services/currencyService.ts",
     "src/utils/currency.ts"
   ],
+  "MOCK": [
+    "src/services/logisticsNotificationMock.ts",
+    "src/services/logisticsPickupMock.ts",
+    "src/services/logisticsReturnMock.ts",
+    "src/services/logisticsSellerMock.ts"
+  ],
+  "aktifSenaryo": [
+    "src/services/logisticsNotificationMock.ts",
+    "src/services/logisticsPickupMock.ts",
+    "src/services/logisticsReturnMock.ts",
+    "src/services/logisticsSellerMock.ts"
+  ],
+  "readState": [
+    "src/services/logisticsNotificationMock.ts",
+    "src/services/logisticsPickupMock.ts",
+    "src/services/logisticsReturnMock.ts",
+    "src/services/logisticsSellerMock.ts"
+  ],
+  "listNotificationPreferences": [
+    "src/services/logisticsNotificationMock.ts",
+    "src/services/shipmentService.ts"
+  ],
+  "setNotificationPreference": [
+    "src/services/logisticsNotificationMock.ts",
+    "src/services/shipmentService.ts"
+  ],
+  "listNotifications": [
+    "src/services/logisticsNotificationMock.ts",
+    "src/services/shipmentService.ts"
+  ],
+  "markNotificationRead": [
+    "src/services/logisticsNotificationMock.ts",
+    "src/services/shipmentService.ts"
+  ],
+  "getProofOfDelivery": [
+    "src/services/logisticsNotificationMock.ts",
+    "src/services/shipmentService.ts"
+  ],
+  "listAppointmentSlots": [
+    "src/services/logisticsPickupMock.ts",
+    "src/services/shipmentService.ts"
+  ],
+  "requestAppointment": [
+    "src/services/logisticsPickupMock.ts",
+    "src/services/shipmentService.ts"
+  ],
+  "confirmDelivery": [
+    "src/services/logisticsPickupMock.ts",
+    "src/services/shipmentService.ts"
+  ],
+  "resendDeliveryCode": [
+    "src/services/logisticsPickupMock.ts",
+    "src/services/shipmentService.ts"
+  ],
+  "getReturnEligibility": [
+    "src/services/logisticsReturnMock.ts",
+    "src/services/shipmentService.ts"
+  ],
+  "listReturnRequests": [
+    "src/services/logisticsReturnMock.ts",
+    "src/services/shipmentService.ts"
+  ],
+  "getReturnRequest": [
+    "src/services/logisticsReturnMock.ts",
+    "src/services/shipmentService.ts"
+  ],
+  "createReturnRequest": [
+    "src/services/logisticsReturnMock.ts",
+    "src/services/shipmentService.ts"
+  ],
+  "esle": [
+    "src/services/pickupEntry.ts",
+    "src/services/returnEntry.ts"
+  ],
   "RecentCategory": [
     "src/services/recentHistoryService.ts",
     "src/utils/recentCategories.ts"
