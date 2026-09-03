@@ -120,12 +120,20 @@ function filterSpam(cats: ApiCategory[]): ApiCategory[] {
  * değer değişir ve mega menü yeniden çekilir. Hata durumunda sabit "v0" döner —
  * o yükleme için cache-busting devre dışı kalır, menü yine yüklenir.
  */
+let _versionPromise: Promise<string> | null = null;
+
 function fetchCategoryVersion(): Promise<string> {
-  return queryFetch(
-    queryKeys.categoryVersion(),
-    () => callMethod<string>("tradehub_core.api.category.get_category_version"),
-    policies.categoryVersion
-  ).catch(() => "v0");
+  // Bilerek queryFetch/persister DIŞINDA: parmak izi IndexedDB'ye yazılınca her sayfa
+  // yüklemesinde önce oradaki ESKİ değer dönüyor, taze değer arka planda geliyordu.
+  // Ağaç anahtarı böylece hiç değişmiyor, admin'deki kategori değişikliği 7 gün
+  // görünmüyordu (2026-09-03, 12 ana kategori geçişinde yaşandı). Sayfa başına tek
+  // hafif istek; aynı yüklemedeki paralel çağrılar bu promise ile dedup edilir.
+  if (_versionPromise === null) {
+    _versionPromise = callMethod<string>(
+      "tradehub_core.api.category.get_category_version"
+    ).catch(() => "v0");
+  }
+  return _versionPromise;
 }
 
 /** get_mega_menu bugün düz dizi döndürür; BE-LD sonrası `{categories, seo}` zarfı
@@ -175,6 +183,7 @@ export function loadCategories(): Promise<ApiCategory[]> {
 if (typeof window !== "undefined") {
   window.addEventListener("languageChanged", () => {
     _cache = null;
+    _versionPromise = null;
     loadCategories();
   });
 }

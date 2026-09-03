@@ -607,6 +607,7 @@ const ar = {
       downloadExtension: "تنزيل الإضافة",
       scrollToTop: "العودة إلى الأعلى",
       viewAll: "عرض الكل",
+      allProducts: "جميع المنتجات",
       featuredCampaigns: "الحملات المميزة",
       countryTurkey: "تركيا",
       countryGermany: "ألمانيا",

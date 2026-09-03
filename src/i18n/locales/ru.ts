@@ -611,6 +611,7 @@ const ru = {
       downloadExtension: "Скачать расширение",
       scrollToTop: "Наверх",
       viewAll: "Смотреть все",
+      allProducts: "Все товары",
       featuredCampaigns: "Избранные кампании",
       countryTurkey: "Турция",
       countryGermany: "Германия",

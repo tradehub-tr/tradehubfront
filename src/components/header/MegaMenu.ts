@@ -11,14 +11,21 @@
 
 import { t, getCurrentLang } from "../../i18n";
 import { loadCategories } from "../../services/categoryService";
-import type { ApiCategory } from "../../services/categoryService";
+import type { ApiCategory, ApiCategoryChild } from "../../services/categoryService";
 import { searchListings } from "../../services/listingService";
 import { getLucideIcon, getLucideIconByCategoryName } from "../icons/lucideIcons";
-import { escapeHtml, sanitizeUrl } from "../../utils/sanitize";
+import { escapeHtml } from "../../utils/sanitize";
 
 /* ════════════════════════════════════════════════════
    DATA
    ════════════════════════════════════════════════════ */
+
+/** Kenar çubuğunda gösterilecek en fazla ana kategori; gerisi "Tüm Ürünler" ile. Masaüstü + mobil ortak. */
+export const SIDEBAR_LIMIT = 12;
+/** Her grupta gösterilen en fazla yaprak satırı; fazlası "Tümünü Gör" ile. Masaüstü + mobil ortak. */
+export const COLUMN_ROWS = 4;
+/** Satır 20px (leading-5) + satır arası 14px (gap-3.5) → masaüstü sütun gövdesi min yüksekliği. */
+const COLUMN_BODY_MIN_H = COLUMN_ROWS * 20 + (COLUMN_ROWS - 1) * 14;
 
 /**
  * @deprecated Kullanmayın — categoryService.ts kullanın.
@@ -158,15 +165,22 @@ function renderCategoriesView(): string {
     <div data-mega-view="categories" class="hidden">
       <div class="flex flex-col lg:flex-row">
         <!-- Sidebar -->
-        <div class="w-full overflow-y-auto overflow-x-hidden border-b border-gray-200 bg-gray-50 lg:w-72 lg:flex-shrink-0 lg:border-b-0 lg:border-e xl:w-80 dark:border-gray-700 dark:bg-gray-900" style="max-height:min(520px, 60vh);-webkit-overflow-scrolling:touch" id="mega-sidebar">
-          <ul class="py-1">
+        <!-- Kenar çubuğu: en fazla SIDEBAR_LIMIT sektör kayan liste, "Tüm Ürünler" dibe sabit -->
+        <div class="flex w-full flex-col border-b border-gray-200 bg-gray-50 lg:w-72 lg:flex-shrink-0 lg:border-b-0 lg:border-e xl:w-80 dark:border-gray-700 dark:bg-gray-900" style="max-height:min(560px, 60vh)" id="mega-sidebar">
+          <ul class="min-h-0 flex-1 overflow-y-auto overflow-x-hidden py-1" style="-webkit-overflow-scrolling:touch">
             <li class="px-4 py-6 text-center" id="mega-sidebar-loading">
               <svg class="w-5 h-5 animate-spin text-gray-300 mx-auto" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"></path></svg>
             </li>
           </ul>
+          <!-- Sabit alt satır: filtresiz tüm ürün listesi -->
+          <a href="/pages/products.html" id="mega-sidebar-all" class="flex shrink-0 items-center gap-2 sm:gap-3 border-t border-gray-200 border-s-2 border-s-transparent px-3 sm:px-4 py-3 text-sm font-semibold text-primary-600 transition-colors hover:bg-white hover:text-primary-700 dark:border-gray-700 dark:hover:bg-gray-800/60">
+            <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M4 4h6v6H4zM14 4h6v6h-6zM4 14h6v6H4zM14 14h6v6h-6z"/></svg>
+            <span class="flex-1 truncate">${t("commonNav.allProducts")}</span>
+            <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m9 5 7 7-7 7"/></svg>
+          </a>
         </div>
         <!-- Content -->
-        <div class="flex-1 overflow-y-auto px-3 sm:px-4 lg:px-8 py-3 sm:py-4 lg:py-6" style="max-height:min(520px, 60vh);-webkit-overflow-scrolling:touch" id="mega-content">
+        <div class="flex-1 overflow-y-auto px-3 sm:px-4 lg:px-8 py-3 sm:py-4 lg:py-6" style="max-height:min(560px, 60vh);-webkit-overflow-scrolling:touch" id="mega-content">
         </div>
       </div>
     </div>
@@ -896,82 +910,59 @@ export function initMegaMenu(): Promise<void> {
   bindCategoryInteractions();
 
   // ──── Render dynamic categories only after the categories view is mounted ────
-  function populateCategoriesView(cats: ApiCategory[]): void {
-    if (!cats.length || !mountedViews.has("categories")) return;
+  function populateCategoriesView(allCats: ApiCategory[]): void {
+    if (!allCats.length || !mountedViews.has("categories")) return;
 
     const sidebarUl = megaMenu!.querySelector<HTMLElement>("#mega-sidebar ul");
     const megaContent = megaMenu!.querySelector<HTMLElement>("#mega-content");
     if (!sidebarUl || !megaContent) return;
 
-    const viewAllSvg = `<svg class="w-6 h-6 sm:w-8 sm:h-8 lg:w-10 lg:h-10 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3.75 6A2.25 2.25 0 0 1 6 3.75h2.25A2.25 2.25 0 0 1 10.5 6v2.25a2.25 2.25 0 0 1-2.25 2.25H6a2.25 2.25 0 0 1-2.25-2.25V6ZM3.75 15.75A2.25 2.25 0 0 1 6 13.5h2.25a2.25 2.25 0 0 1 2.25 2.25V18a2.25 2.25 0 0 1-2.25 2.25H6A2.25 2.25 0 0 1 3.75 18v-2.25ZM13.5 6a2.25 2.25 0 0 1 2.25-2.25H18A2.25 2.25 0 0 1 20.25 6v2.25A2.25 2.25 0 0 1 18 10.5h-2.25a2.25 2.25 0 0 1-2.25-2.25V6ZM13.5 15.75a2.25 2.25 0 0 1 2.25-2.25H18a2.25 2.25 0 0 1 2.25 2.25V18A2.25 2.25 0 0 1 18 20.25h-2.25A2.25 2.25 0 0 1 13.5 18v-2.25Z"/></svg>`;
+    const cats = allCats.slice(0, SIDEBAR_LIMIT);
 
-    function renderDynCatCard(
-      name: string,
-      slug: string,
-      image?: string,
-      isViewAll = false
-    ): string {
-      const iconFallback = `<span class="text-gray-500 dark:text-gray-300 [&>svg]:w-8 [&>svg]:h-8 sm:[&>svg]:w-10 sm:[&>svg]:h-10 lg:[&>svg]:w-12 lg:[&>svg]:h-12">${getIconByName(name)}</span>`;
-      const inner = isViewAll
-        ? viewAllSvg
-        : image
-          ? `<img src="${escapeHtml(sanitizeUrl(image))}" alt="${escapeHtml(name)}" width="80" height="80" class="w-full h-full object-cover" loading="lazy" decoding="async" onerror="this.outerHTML=this.dataset.fallback" data-fallback='${iconFallback.replace(/'/g, "&apos;")}' />`
-          : iconFallback;
-      const borderStyle = isViewAll ? "border:2px dashed #e5e7eb;" : "";
-      const href = isViewAll
-        ? `/pages/categories.html?cat=${encodeURIComponent(slug)}`
-        : `/pages/products.html?cat=${encodeURIComponent(slug)}`;
-      return `
-          <a href="${href}" class="flex flex-col items-center gap-1.5 sm:gap-2 group/product min-h-[44px]">
-            <div class="relative w-14 h-14 sm:w-20 sm:h-20 lg:w-24 lg:h-24 rounded-full flex items-center justify-center overflow-hidden group-hover/product:ring-2 transition-[box-shadow]" style="background:var(--product-card-bg, var(--card-bg));--tw-ring-color:var(--nav-hover-color);${borderStyle}">
-              ${inner}
-            </div>
-            <span class="th-nav-link max-w-[4rem] text-center text-[13px] leading-tight transition-colors sm:max-w-[5rem] lg:max-w-[6rem]">${escapeHtml(name)}</span>
-          </a>`;
-    }
-
-    const leafGridCls =
-      "grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-7 gap-y-4 gap-x-2 sm:gap-y-5 sm:gap-x-4 lg:gap-y-8 lg:gap-x-6";
-    const grpArrowSvg = `<svg class="w-3.5 h-3.5 text-gray-400 transition-transform group-hover/grp:translate-x-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m9 5 7 7-7 7"/></svg>`;
+    const grpArrowSvg = `<svg class="w-3.5 h-3.5 shrink-0 transition-transform group-hover/grp:translate-x-0.5 motion-reduce:transition-none motion-reduce:group-hover/grp:translate-x-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m9 5 7 7-7 7"/></svg>`;
+    const leafCls =
+      "block truncate text-sm leading-5 text-gray-700 transition-colors hover:text-primary-600 dark:text-gray-300 dark:hover:text-primary-400";
 
     /**
-     * Bir sektörün gövdesini render eder.
-     * - Yaprağı olan gruplar (3 seviye): her grup bir alt-başlık + yaprak kartları.
-     * - Yaprağı olmayan gruplar (2 seviyeli veri): eski davranış — tek grid'de kart.
+     * Bir grubu (2. seviye) tek sütun olarak render eder:
+     * ikonlu kalın başlık + sabit COLUMN_ROWS yaprak satırı + 5. satır "Tümünü Gör" yuvası.
+     * Yuva yalnızca COLUMN_ROWS'tan fazla yaprak varsa dolar; aksi halde boş kalır ki
+     * komşu sütunlarla hiza bozulmasın. Yaprağı olmayan grupta satırlar boş kalır.
      */
-    function renderSectorBody(cat: ApiCategory): string {
-      const groups = cat.children ?? [];
-      const withLeaves = groups.filter((g) => (g.children?.length ?? 0) > 0);
-      const childless = groups.filter((g) => (g.children?.length ?? 0) === 0);
-
-      let html = withLeaves
+    function renderGroupColumn(group: ApiCategoryChild): string {
+      const leaves = group.children ?? [];
+      const groupHref = `/pages/products.html?cat=${encodeURIComponent(group.slug)}`;
+      const icon = getIconByName(group.name);
+      const rows = leaves
+        .slice(0, COLUMN_ROWS)
         .map(
-          (group) => `
-        <div class="mb-6 last:mb-0">
-          <a href="/pages/products.html?cat=${encodeURIComponent(group.slug)}" class="group/grp mb-3 inline-flex items-center gap-1.5 text-sm font-semibold text-gray-800 transition-colors hover:text-primary-600 dark:text-gray-200">
-            <span>${escapeHtml(group.name)}</span>
-            ${grpArrowSvg}
-          </a>
-          <div class="${leafGridCls}">
-            ${(group.children ?? []).map((leaf) => renderDynCatCard(leaf.name, leaf.slug, leaf.image)).join("")}
-          </div>
-        </div>`
+          (leaf) =>
+            `<a href="/pages/products.html?cat=${encodeURIComponent(leaf.slug)}" class="${leafCls}">${escapeHtml(leaf.name)}</a>`
         )
         .join("");
-
-      if (childless.length > 0) {
-        html += `
-        <div class="${leafGridCls}">
-          ${childless.map((g) => renderDynCatCard(g.name, g.slug, g.image)).join("")}
-          ${renderDynCatCard(t("commonNav.viewAll"), cat.slug, undefined, true)}
+      const moreSlot =
+        leaves.length > COLUMN_ROWS
+          ? `<a href="${groupHref}" class="group/grp mt-0.5 inline-flex items-center gap-1 self-start text-sm leading-5 font-medium text-primary-600 transition-colors hover:text-primary-700">${t("commonNav.viewAll")}${grpArrowSvg}</a>`
+          : `<span class="mt-0.5 h-5" aria-hidden="true"></span>`;
+      return `
+        <div class="flex min-w-0 flex-col gap-3.5">
+          <a href="${groupHref}" class="group/grp mb-0.5 flex items-center gap-2.5 text-base leading-6 font-bold text-gray-900 transition-colors hover:text-primary-600 dark:text-white">
+            <span class="inline-flex shrink-0 items-center justify-center text-gray-500 [&>svg]:w-5 [&>svg]:h-5 dark:text-gray-400">${icon}</span>
+            <span class="min-w-0">${escapeHtml(group.name)}</span>
+          </a>
+          <div class="flex flex-col gap-3.5" style="min-height:${COLUMN_BODY_MIN_H}px">${rows}</div>
+          ${moreSlot}
         </div>`;
-      }
+    }
 
-      if (groups.length === 0) {
-        html += `<div class="${leafGridCls}">${renderDynCatCard(t("commonNav.viewAll"), cat.slug, undefined, true)}</div>`;
-      }
-
-      return html;
+    /** Sektör gövdesi: gruplar 5'e kadar sütun, fazlası alt satıra sarar. */
+    function renderSectorBody(cat: ApiCategory): string {
+      const groups = cat.children ?? [];
+      if (groups.length === 0) return "";
+      return `
+        <div class="grid grid-cols-2 gap-x-6 gap-y-6 sm:grid-cols-3 lg:grid-cols-4 lg:gap-x-8 xl:grid-cols-5">
+          ${groups.map(renderGroupColumn).join("")}
+        </div>`;
     }
 
     sidebarUl.innerHTML = cats
