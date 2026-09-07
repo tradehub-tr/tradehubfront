@@ -14,6 +14,7 @@ import { FooterLinks } from '../components/footer'
 import { FloatingPanel } from '../components/floating'
 import { startAlpine } from '../alpine'
 import { TradeAssuranceFooterCards } from '../components/shared/TradeAssuranceFooterCards'
+import { TradeAssuranceBadge } from '../components/shared/TradeAssuranceBadge'
 
 import tradeAssuranceBg from '../assets/images/Trade Assurance.avif'
 import taLogoUrl from '../assets/images/ta-logo.svg'
@@ -31,6 +32,8 @@ function HeroSection(): string {
       <div class="absolute inset-0 bg-gradient-to-r from-black/70 via-black/50 to-transparent"></div>
       <div class="relative z-10 container-boxed px-4 sm:px-6 lg:px-8 flex items-center" style="min-height:440px">
         <div class="max-w-[640px]">
+          <!-- Diğer bilgi sayfalarıyla (payments, refund-policy…) aynı TAS rozeti -->
+          ${TradeAssuranceBadge({ className: 'mb-4' })}
           <h1 class="text-3xl sm:text-4xl lg:text-[48px] font-bold text-white leading-tight mb-6">
             ${t("tradeAssurance.detailHeroTitle")}
           </h1>

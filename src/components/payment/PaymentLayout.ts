@@ -502,7 +502,7 @@ export function PaymentLayout(): string {
   return `
     <div class="pay-layout flex bg-surface rounded-lg min-h-[calc(100vh-80px)] overflow-hidden max-md:flex-col">
       <aside class="pay-nav w-[220px] shrink-0 border-e border-[#f0f0f0] py-6 sticky top-0 self-start max-h-[calc(100vh-80px)] overflow-y-auto max-md:w-full max-md:static max-md:max-h-none max-md:border-e-0 max-md:border-b max-md:border-[#f0f0f0] max-md:py-4 max-md:flex max-md:flex-wrap max-md:items-center max-md:overflow-x-auto">
-        <h2 class="text-base font-bold text-text-primary px-5 pb-4 max-md:w-full max-md:px-4 max-md:pb-2">${t("payment.paymentTitle")}</h2>
+        <p class="text-base font-bold text-text-primary px-5 pb-4 max-md:w-full max-md:px-4 max-md:pb-2">${t("payment.paymentTitle")}</p>
         ${renderNav(activeId)}
       </aside>
       <div class="pay-content flex-1 min-w-0 py-6 px-7 max-md:py-4 max-md:px-5 max-sm:py-3 max-sm:px-3" id="pay-content">

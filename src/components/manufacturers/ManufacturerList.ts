@@ -260,7 +260,7 @@ export function ManufacturerList(opts: { mobileFilter?: boolean } = {}): string 
                         <span>· <span x-text="seller.city"></span></span>
                       </template>
                       <template x-if="seller.country">
-                        <span class="text-gray-400">· <span x-text="seller.country"></span></span>
+                        <span class="text-gray-400">· <span x-text="$countryName(seller.country)"></span></span>
                       </template>
                     </div>
                     <template x-if="!isLargeLayout && window.__sellerStatsParts && window.__sellerStatsParts(seller).length">
@@ -305,7 +305,7 @@ export function ManufacturerList(opts: { mobileFilter?: boolean } = {}): string 
 
                 <!-- Seller summary -->
                 <div class="w-full lg:w-[200px] xl:w-[244px] shrink-0 lg:pe-3">
-                  <h4 class="text-[13px] lg:text-[14px] font-normal text-[#222] mb-1">${t("mfr.list.rankingsAndReviews")}</h4>
+                  <h3 class="text-[13px] lg:text-[14px] font-normal text-[#222] mb-1">${t("mfr.list.rankingsAndReviews")}</h3>
                   <div class="mb-2 lg:mb-4 text-[13px] lg:text-[14px]">
                     <strong class="text-[#222]" x-text="seller.rating ? seller.rating.toFixed(1) : '—'"></strong>
                     <span class="text-[#222]">/5</span>

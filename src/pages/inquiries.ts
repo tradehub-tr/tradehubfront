@@ -17,6 +17,7 @@ import { startAlpine } from '../alpine'
 import '../alpine/sidebar'
 import { renderSidebarColumn, initSidebar } from '../components/sidebar'
 import { InquiriesLayout, initInquiriesLayout } from '../components/inquiries'
+import { t } from '../i18n'
 import { requireAuth } from '../utils/auth-guard'
 
 await requireAuth();
@@ -24,7 +25,7 @@ await requireAuth();
 const appEl = document.querySelector<HTMLDivElement>('#app')!;
 appEl.classList.add('relative');
 appEl.innerHTML = `
-  <h1 class="sr-only">Ürün Sorularım</h1>
+  <h1 class="sr-only" data-i18n="pageHeading.dashboard_inquiries">${t("pageHeading.dashboard_inquiries")}</h1>
   <!-- Compact Dashboard Header -->
   <div id="sticky-header" class="sticky top-0 z-(--z-header) bg-white">
     ${TopBar({ compact: true })}

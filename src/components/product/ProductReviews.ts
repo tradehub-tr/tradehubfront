@@ -4,6 +4,7 @@
  * filter/mention pills, review cards with badges & supplier replies.
  */
 
+import { getCountryDisplayName } from "../../utils/country";
 import { getCurrentProduct } from "../../alpine/product";
 import { t, getCurrentLang } from "../../i18n";
 import type { ProductReview } from "../../types/product";
@@ -196,7 +197,7 @@ function photoStripSection(reviews: ProductReview[]): string {
 export function renderReviewCard(review: ProductReview, showProductThumb = false): string {
   // Sol kolonda alt alta dizilen kimlik satırları (referans düzen).
   const sideRows: string[] = [];
-  const countryLabel = review.countryName || review.country;
+  const countryLabel = getCountryDisplayName(review.countryName || review.country);
   if (countryLabel) {
     sideRows.push(
       `<span class="flex max-w-full items-center gap-[6px]">${getFlagSvg(review.country)}<span class="min-w-0 truncate text-[12px] leading-[16px] text-[#222]">${escapeHtml(countryLabel)}</span></span>`

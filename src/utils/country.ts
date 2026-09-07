@@ -8,6 +8,8 @@
  * Project genelinde flag emoji standart (TopBar, AccountSetupForm vb. aynı pattern).
  */
 
+import { t } from "../i18n";
+
 interface CountryEntry {
   code: string; // ISO-2
   flag: string; // Emoji
@@ -59,4 +61,19 @@ export function getCountryFlag(country: string | null | undefined): string {
     }
   }
   return "";
+}
+
+/**
+ * Arayüzde gösterilecek ülke adı: backend'in ham değeri ("Turkey", "TR") sözlükteki
+ * `countries.<KOD>` karşılığına çevrilir (TR → "Türkiye" — resmî ad; İngilizce
+ * sözlükte de "Türkiye"). Sözlükte karşılığı olmayan ad olduğu gibi döner.
+ * Backend'e GİDEN değerler bu yardımcıdan geçmez (Country master adı "Turkey" kalır).
+ */
+export function getCountryDisplayName(country: string | null | undefined): string {
+  if (!country) return "";
+  const code = getCountryCode(country);
+  if (!code) return country;
+  const key = `countries.${code}`;
+  const translated = t(key);
+  return translated && translated !== key ? translated : country;
 }

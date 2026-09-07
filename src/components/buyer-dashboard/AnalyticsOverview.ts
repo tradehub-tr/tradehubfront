@@ -82,7 +82,7 @@ export function AnalyticsOverview(): string {
       <!-- Harcama Trendi -->
       <div class="${cardBase} lg:col-span-2">
         <div class="flex flex-wrap items-center justify-between gap-x-3 gap-y-1.5 px-5 py-4 max-sm:px-4 border-b border-gray-100">
-          <h3 class="text-[15px] font-bold text-gray-900">${t("buyerUi.spendingTrend")}</h3>
+          <h2 class="text-[15px] font-bold text-gray-900">${t("buyerUi.spendingTrend")}</h2>
           <div class="flex items-center gap-3 text-xs whitespace-nowrap">
             <span class="inline-flex items-center gap-1.5 text-gray-500"><span class="w-2 h-2 rounded-full bg-primary-500"></span>${t("buyerUi.spend")}</span>
             <span class="inline-flex items-center gap-1.5 text-gray-500"><span class="w-2 h-2 rounded-full bg-gray-400"></span>${t("buyerUi.orderCount")}</span>
@@ -96,7 +96,7 @@ export function AnalyticsOverview(): string {
       <!-- Kategori Dağılımı -->
       <div class="${cardBase}">
         <div class="flex items-center justify-between px-5 py-4 max-sm:px-4 border-b border-gray-100">
-          <h3 class="text-[15px] font-bold text-gray-900">${t("buyerUi.categoryDistribution")}</h3>
+          <h2 class="text-[15px] font-bold text-gray-900">${t("buyerUi.categoryDistribution")}</h2>
         </div>
         <div class="p-5 max-sm:p-4">
           <div id="bd-cat-chart" class="w-full h-[200px]"></div>

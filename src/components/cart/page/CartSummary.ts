@@ -9,35 +9,11 @@ import { PriceDisplay } from "../atoms/PriceDisplay";
 import { t } from "../../../i18n";
 import { getSelectedCurrency } from "../../../services/currencyService";
 import { cartStore } from "../state/CartStore";
-import { escapeHtml, sanitizeUrl } from "../../../utils/sanitize";
+import { renderItemThumbnailStrip } from "../../checkout/ItemThumbnailStrip";
 
 function renderThumbnailGrid(items: CartSummaryData["items"]): string {
-  if (items.length === 0) return "";
-
-  const thumbnails = items
-    .map(
-      (item) => `
-      <div class="checkout-item-card relative w-14 h-14 min-w-[56px] max-[380px]:w-12 max-[380px]:h-12 max-[380px]:min-w-[48px] sm:w-16 sm:h-16 sm:min-w-[64px] rounded overflow-hidden border border-[#e5e5e5] flex-shrink-0">
-        <div class="block w-full h-full">
-          <img class="w-full h-full object-cover" src="${escapeHtml(sanitizeUrl(item.image))}" alt="" width="64" height="64" decoding="async" />
-        </div>
-        <span class="absolute bottom-0 end-0 bg-black/60 text-white rounded-ss text-[11px] font-bold leading-4 px-1 py-px">${item.quantity}</span>
-      </div>`
-    )
-    .join("");
-
-  const arrowCls =
-    "checkout-items-arrow absolute top-1/2 -translate-y-1/2 w-7 h-7 rounded-full border border-[#e5e5e5] bg-white flex items-center justify-center cursor-pointer z-[2] opacity-0 group-hover:opacity-100 transition-opacity duration-200 shadow-sm hover:bg-[#f5f5f5]";
-
-  const arrowLeft = `<button type="button" class="${arrowCls} -start-1.5" data-dir="left" aria-label="${t("cart.scrollLeft")}">
-    <svg class="w-3.5 h-3.5 stroke-[#222] fill-none" viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
-  </button>`;
-
-  const arrowRight = `<button type="button" class="${arrowCls} -end-1.5" data-dir="right" aria-label="${t("cart.scrollRight")}">
-    <svg class="w-3.5 h-3.5 stroke-[#222] fill-none" viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 6 15 12 9 18"/></svg>
-  </button>`;
-
-  return `<div class="checkout-items-wrapper group relative mb-4">${arrowLeft}<div class="checkout-items-images flex gap-2 overflow-x-auto scroll-smooth scrollbar-hide">${thumbnails}</div>${arrowRight}</div>`;
+  // Ödeme adımıyla ortak şerit (components/checkout/ItemThumbnailStrip)
+  return renderItemThumbnailStrip(items.map((i) => ({ image: i.image, quantity: i.quantity })));
 }
 
 export function CartSummary(data: CartSummaryData): string {

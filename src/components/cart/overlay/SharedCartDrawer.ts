@@ -1300,7 +1300,9 @@ function syncToCartStore(item: CartDrawerItemModel, unitPrice: number): void {
 
   const productId = item.id;
   const selectedColor = item.colors.find((c) => c.id === state.selectedColorId);
-  const skuImage = selectedColor?.imageUrl || "https://placehold.co/120x120/f5f5f5/999?text=SKU";
+  // Varyant görseli yoksa ürünün ana görseli; o da yoksa boş — sepet satırı
+  // görsel kutusunu hiç açmaz ("SKU" yer tutucusu kalktı, 2026-09-07).
+  const skuImage = selectedColor?.imageUrl || item.galleryImages?.find(Boolean) || "";
 
   if (hasSizeGroups()) {
     // One SKU per size option that has qty > 0
@@ -1525,7 +1527,8 @@ export async function submitCartLines(
     }
     cartStore.addSku(item.id, {
       id: skuId,
-      skuImage: line.imageUrl || "https://placehold.co/120x120/f5f5f5/999?text=SKU",
+      // Çağıran (OptionsSheet) ana görsel yedeğini satıra koyar; hiç görsel yoksa boş.
+      skuImage: line.imageUrl || "",
       variantText: line.variantLabel || "",
       unitPrice: persisted.price,
       currency: getCurrencySymbol(),

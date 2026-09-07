@@ -35,10 +35,10 @@ export function ProductItem({ product }: ProductItemProps): string {
   const hiddenCount = hiddenSkus.length;
 
   const visibleSkusHtml = visibleSkus
-    .map((sku) => SkuRow({ sku, productHref: product.href }))
+    .map((sku) => SkuRow({ sku, productHref: product.href, productTitle: product.title }))
     .join("");
   const hiddenSkusHtml = hiddenSkus
-    .map((sku) => SkuRow({ sku, productHref: product.href }))
+    .map((sku) => SkuRow({ sku, productHref: product.href, productTitle: product.title }))
     .join("");
 
   const selectedSkuCount = product.skus.filter((s) => s.selected).length;

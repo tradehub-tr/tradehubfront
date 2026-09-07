@@ -100,3 +100,35 @@ describe("ItemsDeliverySection supplier bodies", () => {
     expect(checkoutState.supplierNotesByOrderId).toEqual({ "ORDER-1": "Kapıya bırakın" });
   });
 });
+
+describe("ItemsDeliverySection — görselsiz satırlar", () => {
+  it("ürün ya da varyant görseli boşsa img basmaz (kırık resim yok)", () => {
+    const html = ItemsDeliverySection({
+      orders: [
+        {
+          orderId: "ORDER-9",
+          orderLabel: "9",
+          sellerId: "SELLER-9",
+          sellerName: "Görselsiz Tedarikçi",
+          methods: [{ id: "standard", etaLabel: "Standart", shippingFee: 0, isDefault: true }],
+          products: [
+            {
+              id: "P-9",
+              title: "Görselsiz ürün",
+              moqLabel: "1 adet",
+              image: "",
+              skuLines: [
+                { id: "SKU-9", image: "", variantText: "Renk: Buzlu", unitPrice: 5, quantity: 1 },
+              ],
+            },
+          ],
+        },
+      ],
+    });
+    // Ürün kartları <template x-if> içinde — DOM'a değil ham HTML'e bak.
+    // sanitizeUrl("") "#" döndürür: boş görsel img'e girseydi src="#" olurdu.
+    expect(html).not.toContain('src="#"');
+    expect(html).toContain("Görselsiz ürün");
+    expect(html).toContain("Renk: Buzlu");
+  });
+});

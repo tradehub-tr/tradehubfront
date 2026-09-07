@@ -36,7 +36,7 @@ export function CookieBanner(): string {
                 </svg>
               </div>
               <div class="min-w-0">
-                <h3 class="text-sm font-semibold text-gray-900" data-i18n="cookieBanner.title">${t("cookieBanner.title")}</h3>
+                <h2 class="text-sm font-semibold text-gray-900" data-i18n="cookieBanner.title">${t("cookieBanner.title")}</h2>
                 <p class="text-sm text-gray-600 mt-1" data-i18n-html="cookieBanner.description">${t("cookieBanner.description")}</p>
               </div>
             </div>

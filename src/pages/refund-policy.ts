@@ -38,7 +38,7 @@ function timelineStep(stepNum: string, title: string, description: string, isLas
         ${stepNum}
       </div>
       <div class="flex-1 min-w-0 pt-1.5">
-        <h4 class="text-base font-bold text-gray-900 mb-1.5">${title}</h4>
+        <h3 class="text-base font-bold text-gray-900 mb-1.5">${title}</h3>
         <p class="text-gray-600 text-sm leading-relaxed max-w-[58ch]">${description}</p>
       </div>
     </div>

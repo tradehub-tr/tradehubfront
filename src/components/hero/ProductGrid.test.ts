@@ -27,6 +27,8 @@ vi.mock("../products/initListingFavorites", () => ({
   initListingFavoriteTriggers,
 }));
 vi.mock("../products/initListingSocialProof", () => ({ applyListingSocialProof }));
+const { initListingCartDrawer } = vi.hoisted(() => ({ initListingCartDrawer: vi.fn() }));
+vi.mock("../products/ListingCartDrawer", () => ({ initListingCartDrawer }));
 
 import { initProductGrid, ProductGrid } from "./ProductGrid";
 
@@ -146,5 +148,44 @@ describe("ProductGrid progressive ana sayfa kartları", () => {
     expect(document.getElementById("product-grid-empty")?.style.display).toBe("");
     expect(grid.querySelector("[data-home-section-skeleton]")).toBeNull();
     expect(grid.className).not.toMatch(/min-h-\[/);
+  });
+});
+
+describe("ProductGrid kart aksiyonları — listeleme sayfasıyla aynı", () => {
+  beforeEach(() => {
+    document.body.innerHTML = ProductGrid();
+    vi.clearAllMocks();
+    initCurrency.mockResolvedValue(undefined);
+    vi.stubGlobal(
+      "IntersectionObserver",
+      class {
+        observe() {}
+        unobserve() {}
+        disconnect() {}
+        takeRecords() {
+          return [];
+        }
+        root = null;
+        rootMargin = "0px";
+        thresholds = [0];
+      }
+    );
+  });
+
+  it("kartlarda 'Sepete ekle' ve 'Sohbet et' bulunur, sepet çekmecesi ürünlerle kurulur", async () => {
+    const products = [cardFixture, { ...cardFixture, id: "LST-HOME-2" }];
+    searchListings.mockResolvedValue({ products });
+
+    await initProductGrid();
+
+    const grid = document.getElementById("home-product-grid")!;
+    const cards = grid.querySelectorAll("[data-home-card]");
+    expect(cards).toHaveLength(2);
+    cards.forEach((card) => {
+      expect(card.querySelector("[data-add-to-cart]")).not.toBeNull();
+      expect(card.querySelector("[data-chat-trigger]")).not.toBeNull();
+    });
+    expect(initListingCartDrawer).toHaveBeenCalledTimes(1);
+    expect(initListingCartDrawer).toHaveBeenCalledWith(products);
   });
 });

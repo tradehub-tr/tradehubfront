@@ -1,3 +1,4 @@
+import { getCountryDisplayName } from "../utils/country";
 import Alpine from "alpinejs";
 import collapse from "@alpinejs/collapse";
 import { initLinkRewriter } from "../utils/url";
@@ -10,6 +11,11 @@ import { initSelectMenus } from "../components/shared/SelectMenu";
 // `x-html` bindings whenever the source is user-controlled (review body,
 // seller description, ticket body etc.). Never bind `x-html` to a raw value.
 Alpine.magic("safeHtml", () => (value: unknown) => sanitizeHtml(String(value ?? "")));
+// Ülke adı: backend "Turkey" → arayüzde "Türkiye" (utils/country.getCountryDisplayName)
+Alpine.magic(
+  "countryName",
+  () => (value: unknown) => getCountryDisplayName(value ? String(value) : "")
+);
 
 // x-video-src — HLS-farkındalıklı :src (StoreHeader, CompanyProfile video
 // modalı). Direktifin kendisi birkaç satır; hls.js YALNIZ .m3u8 kaynak

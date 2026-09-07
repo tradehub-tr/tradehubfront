@@ -11,7 +11,15 @@ import { initLinkRewriter } from '../utils/url';
 import { initTracking } from '../utils/trackingManager';
 import { escapeHtml } from '../utils/sanitize';
 
-document.addEventListener('DOMContentLoaded', () => {
+// i18n modülü top-level await ile yükleniyor; bu noktaya gelindiğinde
+// DOMContentLoaded çoğu zaman ÇOKTAN ateşlenmiş oluyor — dinleyici asla
+// çalışmaz, sayfa boş kalır. Hazırsa hemen çalıştır.
+function onReady(fn: () => void): void {
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', fn);
+  else fn();
+}
+
+onReady(() => {
   const params = new URLSearchParams(window.location.search);
   const status = params.get('status') || 'pending';
   // URL params are reflected into innerHTML below → sanitize at the source.

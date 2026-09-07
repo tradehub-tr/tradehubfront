@@ -132,7 +132,7 @@ export function FAQPageLayout(): string {
                 <!-- Category header -->
                 <div class="flex items-center gap-2.5 pb-2.5 mb-1 border-b border-gray-100">
                   <span class="w-[30px] h-[30px] rounded-md bg-primary-50 text-primary-700 flex items-center justify-center shrink-0" x-html="catIcon(cat.id)"></span>
-                  <h3 class="flex-1 min-w-0 text-[13.5px] font-bold text-gray-800 truncate" x-html="highlight(cat.label)"></h3>
+                  <h2 class="flex-1 min-w-0 text-[13.5px] font-bold text-gray-800 truncate" x-html="highlight(cat.label)"></h2>
                   <span class="text-[11px] text-gray-300 tabular-nums shrink-0" x-text="cat.subs.length"></span>
                 </div>
                 <!-- Sub-links — row per sub -->

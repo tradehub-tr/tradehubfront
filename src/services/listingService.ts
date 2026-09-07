@@ -3,6 +3,7 @@
  * Maps Frappe API responses to frontend TypeScript interfaces.
  */
 
+import type { CategoryFacetItem } from "../components/products/buildCategoryFacetTree";
 import { api } from "../utils/api";
 import { t } from "../i18n";
 import { queryFetch, queryKeys, policies } from "../lib/query";
@@ -36,6 +37,10 @@ interface FrappeResponse<T> {
     page_size?: number;
     total_pages?: number;
     category_name?: string | null;
+    /** Az sonuç dolgusu: bu sayfada dolgunun başladığı kart indeksi (yoksa null). */
+    fill_from?: number | null;
+    /** Dolgu hariç gerçek toplam. */
+    primary_total?: number;
     has_next?: boolean;
     has_prev?: boolean;
     seo?: ServerSeoPayload;
@@ -47,6 +52,10 @@ interface FrappeResponse<T> {
 export interface ListingSearchParams {
   query?: string;
   category?: string;
+  /** Az sonuç dolgusu (yalnız ürün listeleme sayfası): asıl sonuç 50 altındaysa arkasına tüm ürünler eklenir. */
+  fill_sparse?: boolean;
+  /** Yalnız get_filter_facets: sonuç boşsa kategori ağacı tüm ürünlerden kurulur, seçili kategori 0 ile işaretli kalır. */
+  fallback_categories?: boolean;
   min_price?: number;
   max_price?: number;
   min_order?: number;
@@ -85,6 +94,10 @@ export interface ListingSearchResult {
   categoryName?: string;
   /** Mevcut görünür sonuç sayfasından backend'in ürettiği ItemList payload'u. */
   seo?: ServerSeoPayload;
+  /** Az sonuç dolgusu: bu sayfadaki kartlardan dolgunun başladığı indeks; dolgu yoksa null. */
+  fillFrom: number | null;
+  /** Filtreye gerçekten uyan (dolgu hariç) toplam ürün sayısı. */
+  primaryTotal: number;
 }
 
 // ── API Endpoints ──
@@ -136,6 +149,7 @@ export async function searchListings(params: ListingSearchParams): Promise<Listi
         queryParams.set("product_certifications", params.product_certifications);
       if (params.brands) queryParams.set("brands", params.brands);
       if (params.attrs) queryParams.set("attrs", params.attrs);
+      if (params.fill_sparse) queryParams.set("fill_sparse", "1");
 
       const qs = queryParams.toString();
       const url = `/method/tradehub_core.api.listing.get_listings${qs ? "?" + qs : ""}`;
@@ -168,6 +182,8 @@ export async function searchListings(params: ListingSearchParams): Promise<Listi
         hasPrev: msg.has_prev || false,
         categoryName: msg.category_name || undefined,
         seo: msg.seo,
+        fillFrom: typeof msg.fill_from === "number" ? msg.fill_from : null,
+        primaryTotal: typeof msg.primary_total === "number" ? msg.primary_total : msg.total || 0,
       };
     },
     policies.listings
@@ -1093,7 +1109,8 @@ export interface PriceRangeFacet {
 
 export interface FilterFacets {
   countries: { value: string; label: string; code?: string; count: number }[];
-  categories: { id: string; name: string; slug: string; count: number }[];
+  /** Yaprak sayımı + kökten ebeveyne ata zinciri (sidebar kategori ağacı `path`ten kurulur). */
+  categories: CategoryFacetItem[];
   managementCertifications: { label: string; value: string; count: number }[];
   productCertifications: { label: string; value: string; count: number }[];
   brands: BrandFacet[];
@@ -1132,6 +1149,7 @@ export async function getFilterFacets(
   if (opts.product_certifications) p.set("product_certifications", opts.product_certifications);
   if (opts.brands) p.set("brands", opts.brands);
   if (opts.attrs) p.set("attrs", opts.attrs);
+  if (opts.fallback_categories) p.set("fallback_categories", "1");
   // Fiyat filtresi görüntüleme biriminde gelir; backend TRY baza çevirebilsin diye
   // seçili para birimini gönder (get_listings ile tutarlı — yoksa fiyat facet count'ları sapar).
   p.set("filter_currency", getSelectedCurrencyInfo().code);

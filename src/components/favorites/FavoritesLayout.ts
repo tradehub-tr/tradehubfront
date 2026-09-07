@@ -6,6 +6,7 @@
 
 import favEmptySvg from "../../assets/images/O1CN01Bny3KU1Swwfj3Ntma_!!6000000002312-55-tps-222-221.svg";
 import { t } from "../../i18n";
+import { getCountryDisplayName } from "../../utils/country";
 import { localizePriceString } from "../../utils/currency";
 import { getSelectedCurrency, convertPrice, formatCurrency } from "../../services/currencyService";
 import { showToast } from "../../utils/toast";
@@ -224,7 +225,7 @@ function renderEmptyState(kind: "products" | "suppliers" = "products"): string {
   return `
     <div class="flex flex-col items-center text-center py-15 px-5">
       <div class="mb-5">${FAVORITES_EMPTY_SVG}</div>
-      <h3 class="text-base font-bold text-text-primary mb-2.5">${t(title)}</h3>
+      <h2 class="text-base font-bold text-text-primary mb-2.5">${t(title)}</h2>
       <p class="text-sm text-text-tertiary leading-relaxed max-w-[380px]">${t(desc)}</p>
     </div>
   `;
@@ -339,7 +340,7 @@ function renderSupplierCards(items: FavoriteSellerItem[]): string {
         .toUpperCase();
       const ratingTxt = s.rating ? s.rating.toFixed(1) : "—";
       const reviews = s.reviewCount ?? 0;
-      const location = [s.city, s.country].filter(Boolean).join(", ");
+      const location = [s.city, getCountryDisplayName(s.country)].filter(Boolean).join(", ");
       const verifiedTick = s.verified
         ? `<span class="inline-flex align-[-2px] ms-1.5 text-green-700" title="${t("seller.sf.verifiedSupplier")}"><svg class="w-3.5 h-3.5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg></span>`
         : "";
@@ -636,7 +637,7 @@ function renderProductCardGrid(p: FavoriteItem): string {
       <div class="flex flex-1 flex-col p-2 max-sm:p-1.5">
         ${renderSupplierLine(enrichment)}
         <a href="${escapeHtml(sanitizeUrl(detailHref))}" class="no-underline text-inherit">
-          <h4 class="text-[11.5px] leading-[1.3] text-text-primary font-normal line-clamp-2 m-0 min-h-[30px] group-hover:text-[var(--color-cta-primary,#FF8600)] transition-colors">${escapeHtml(p.title)}</h4>
+          <h3 class="text-[11.5px] leading-[1.3] text-text-primary font-normal line-clamp-2 m-0 min-h-[30px] group-hover:text-[var(--color-cta-primary,#FF8600)] transition-colors">${escapeHtml(p.title)}</h3>
         </a>
         <div class="text-[13px] font-bold text-text-primary leading-none tracking-[-0.01em] tabular-nums mt-1">${enrichment?.priceDisplay ?? localizePriceString(p.priceRange)}</div>
         <p class="text-[10.5px] text-text-tertiary m-0 leading-[13px] mt-0.5 truncate">${escapeHtml(p.minOrder)}</p>
@@ -691,7 +692,7 @@ function renderProductRowList(p: FavoriteItem): string {
       </a>
       <div class="flex-1 min-w-0 flex flex-col gap-1">
         <a href="${escapeHtml(sanitizeUrl(detailHref))}" class="no-underline text-inherit">
-          <h4 class="text-[12.5px] leading-[1.4] text-text-primary font-medium line-clamp-2 m-0 group-hover:text-[var(--color-cta-primary,#FF8600)] transition-colors">${escapeHtml(p.title)}</h4>
+          <h3 class="text-[12.5px] leading-[1.4] text-text-primary font-medium line-clamp-2 m-0 group-hover:text-[var(--color-cta-primary,#FF8600)] transition-colors">${escapeHtml(p.title)}</h3>
         </a>
         <p class="text-[11px] text-text-tertiary m-0">${escapeHtml(p.minOrder)}</p>
         ${tagChips ? `<div class="flex flex-wrap gap-1">${tagChips}</div>` : ""}
@@ -834,7 +835,7 @@ function renderProductCards(items: FavoriteItem[]): string {
         ${
           searchQuery
             ? `<div class="flex flex-col items-center text-center py-15 px-5">
-              <h3 class="text-base font-bold text-text-primary mb-2.5">${t("favorites.noSearchResults", { defaultValue: "Sonuç bulunamadı" })}</h3>
+              <h2 class="text-base font-bold text-text-primary mb-2.5">${t("favorites.noSearchResults", { defaultValue: "Sonuç bulunamadı" })}</h2>
               <p class="text-sm text-text-tertiary max-w-[380px]">${t("favorites.noSearchResultsDesc", { defaultValue: "Aramayı temizleyip tekrar deneyebilirsin." })}</p>
             </div>`
             : renderEmptyState()
@@ -883,7 +884,7 @@ function renderFavorites(): string {
 
   const sidebarHeader = `
     <div class="flex items-center justify-between px-2 mb-2">
-      <h3 class="text-[11px] uppercase tracking-[0.1em] font-semibold text-text-tertiary m-0">${t("favorites.myList")}</h3>
+      <h2 class="text-[11px] uppercase tracking-[0.1em] font-semibold text-text-tertiary m-0">${t("favorites.myList")}</h2>
       <button type="button" data-action="create-list"
               class="inline-flex items-center gap-1 px-2.5 py-1 text-[11.5px] font-semibold rounded-full border border-dashed border-border-strong text-text-secondary hover:border-[var(--color-cta-primary,#FF8600)] hover:text-[var(--color-cta-primary,#FF8600)] hover:bg-surface-raised transition-colors appearance-none focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-cta-primary,#FF8600)] cursor-pointer">
         <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>
@@ -975,7 +976,7 @@ function renderBrowsingHistory(): string {
       </div>
       <div class="flex flex-col items-center text-center py-15 px-5">
         <div class="mb-5">${FAVORITES_EMPTY_SVG}</div>
-        <h3 class="text-base font-bold text-text-primary mb-2.5">${t("favorites.browsingHistoryTitle")}</h3>
+        <h2 class="text-base font-bold text-text-primary mb-2.5">${t("favorites.browsingHistoryTitle")}</h2>
         <p class="text-sm text-text-tertiary leading-relaxed max-w-[380px]">${t("favorites.browsingHistoryDesc")}</p>
       </div>
     `;
@@ -988,7 +989,7 @@ function renderBrowsingHistory(): string {
       <div class="w-full aspect-square rounded-lg overflow-hidden border border-[#f0f0f0] mb-2.5">
         <img src="${escapeHtml(sanitizeUrl(p.image))}" alt="${escapeHtml(p.title)}" width="400" height="400" decoding="async" class="w-full h-full object-cover transition-transform duration-300 [@media(hover:hover)_and_(pointer:fine)]:group-hover:scale-[1.04] motion-reduce:transition-none" loading="lazy" />
       </div>
-      <h4 class="text-[13px] text-text-secondary leading-[1.4] line-clamp-2 mb-1.5" title="${escapeHtml(p.title)}">${escapeHtml(p.title)}</h4>
+      <h3 class="text-[13px] text-text-secondary leading-[1.4] line-clamp-2 mb-1.5" title="${escapeHtml(p.title)}">${escapeHtml(p.title)}</h3>
       ${typeof p.price === "number" ? `<p class="text-sm font-bold text-text-primary mb-0.5">${formatCurrency(convertPrice(p.price, p.currency || getSelectedCurrency()), getSelectedCurrency())}</p>` : p.priceRange ? `<p class="text-sm font-bold text-text-primary mb-0.5">${localizePriceString(p.priceRange)}</p>` : ""}
       ${p.minOrder ? `<p class="text-xs text-text-tertiary">${escapeHtml(p.minOrder)}</p>` : ""}
     </a>

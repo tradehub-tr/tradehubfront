@@ -109,10 +109,10 @@ appEl.innerHTML = `
             <!-- Right: sidebar with its own inner bordered card -->
             <div class="w-[300px] max-sm:hidden max-lg:w-full shrink-0 max-lg:shrink">
               <div class="border border-gray-100 rounded-lg bg-[#f5f5f5] px-7 py-6">
-                <h3 class="flex items-center gap-2 text-base font-bold text-gray-800 mb-5">
+                <h2 class="flex items-center gap-2 text-base font-bold text-gray-800 mb-5">
                   <span class="inline-flex items-center justify-center w-6 h-6 rounded bg-(--btn-bg,#ff8600) text-(--btn-text,#1a1a1a) text-[10px] font-bold">RFQ</span>
                   ${t('rfq.howToUseRfq')}
-                </h3>
+                </h2>
                 <div class="space-y-5">
                   <div class="flex gap-3"><span class="flex items-center justify-center w-7 h-7 rounded-full bg-(--btn-bg,#ff8600) text-(--btn-text,#1a1a1a) text-sm font-bold shrink-0">1</span><div><p class="text-sm font-semibold text-gray-800">${t('rfq.step1Title')}</p><p class="text-xs text-gray-500 mt-0.5">${t('rfq.step1Desc')}</p></div></div>
                   <div class="flex gap-3"><span class="flex items-center justify-center w-7 h-7 rounded-full bg-(--btn-bg,#ff8600) text-(--btn-text,#1a1a1a) text-sm font-bold shrink-0">2</span><div><p class="text-sm font-semibold text-gray-800">${t('rfq.step2Title')}</p><p class="text-xs text-gray-500 mt-0.5">${t('rfq.step2Desc')}</p></div></div>

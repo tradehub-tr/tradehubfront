@@ -43,7 +43,11 @@ export function OrderReviewModal(): string {
       >
         <!-- Header -->
         <div class="flex items-center justify-between px-4 sm:px-6 py-3 sm:py-4 border-b border-[#e5e5e5] sticky top-0 bg-white z-10 rounded-t-md">
-          <h2 id="review-modal-title" class="text-[16px] sm:text-[20px] font-bold text-[#222222]">${t("checkout.reviewOrderTitle")}</h2>
+          <div class="min-w-0">
+            <!-- Tek satıcıya ödeme: "Özgen Plastik sipariş onayı" + doğrudan ödeme notu (reviewModalCopy.ts) -->
+            <h2 id="review-modal-title" class="text-[16px] sm:text-[20px] font-bold text-[#222222] truncate" x-text="title">${t("checkout.reviewOrderTitle")}</h2>
+            <p class="text-[12px] sm:text-[13px] text-[#6b7280] mt-0.5" x-show="directPayNote" x-text="directPayNote" x-cloak></p>
+          </div>
           <button
             type="button"
             @click="open = false"
@@ -139,7 +143,7 @@ export function OrderReviewModal(): string {
             class="w-full flex items-center justify-center th-btn-dark h-10 sm:h-auto text-[13px] sm:text-[14px]"
           >
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" class="me-1.5 sm:me-2 shrink-0 w-4 h-4 sm:w-[18px] sm:h-[18px]"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M9 12l2 2 4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            ${t("checkout.confirmOrderBtn")}
+            <span x-text="confirmLabel">${t("checkout.confirmOrderBtn")}</span>
           </button>
           <button
             type="button"

@@ -34,7 +34,7 @@ export const countries: Country[] = [
   { code: "RU", name: "Russia", flag: "🇷🇺", phonePrefix: "+7" },
   { code: "SA", name: "Saudi Arabia", flag: "🇸🇦", phonePrefix: "+966" },
   { code: "AE", name: "UAE", flag: "🇦🇪", phonePrefix: "+971" },
-  { code: "TR", name: "Turkey/Turkiye", flag: "🇹🇷", phonePrefix: "+90" },
+  { code: "TR", name: "Türkiye", flag: "🇹🇷", phonePrefix: "+90" },
   { code: "PL", name: "Poland", flag: "🇵🇱", phonePrefix: "+48" },
   { code: "SE", name: "Sweden", flag: "🇸🇪", phonePrefix: "+46" },
   { code: "CH", name: "Switzerland", flag: "🇨🇭", phonePrefix: "+41" },
@@ -1187,9 +1187,9 @@ export const paymentIcons: PaymentIcon[] = [
 // 7. Saved Address (1 entry for autocomplete popup)
 export const savedAddress: SavedAddress = {
   label: "Home Address",
-  fullAddress: "Gulbahar Mah. Cemal Sururi Sk. No:12, Sisli, İstanbul 34394, Turkey",
+  fullAddress: "Gulbahar Mah. Cemal Sururi Sk. No:12, Sisli, İstanbul 34394, Türkiye",
   country: "TR",
-  countryName: "Turkey/Turkiye",
+  countryName: "Türkiye",
   firstName: "Ali",
   lastName: "BAL",
   phone: "5551234567",

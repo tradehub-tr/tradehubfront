@@ -1,5 +1,6 @@
 import Alpine from "alpinejs";
 import { t, t as tI18n } from "../i18n";
+import { getCountryDisplayName } from "../utils/country";
 import { getBaseUrl } from "../components/auth/AuthLayout";
 import { callMethod, fetchCsrfToken } from "../utils/api";
 import { applyServerSeo, type ServerSeoPayload } from "../seo/setPageMeta";
@@ -254,7 +255,8 @@ Alpine.data("sellerStorefront", () => ({
   },
 
   get sellerLocation() {
-    return [this.seller?.city, this.seller?.country].filter(Boolean).join(", ");
+    // Backend "Turkey" → arayüzde "Türkiye" (İngilizce arayüzde de).
+    return [this.seller?.city, getCountryDisplayName(this.seller?.country)].filter(Boolean).join(", ");
   },
 
   /**

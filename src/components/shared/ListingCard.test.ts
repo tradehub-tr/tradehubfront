@@ -187,3 +187,68 @@ describe("renderListingCard homeCompact modu", () => {
     ).toBe(80);
   });
 });
+
+describe("Aksiyon satırı (Sepete ekle + Sohbet et) — masaüstünde yalnız kart üzerine gelince görünür", () => {
+  const parse = (html: string) => {
+    const el = document.createElement("div");
+    el.innerHTML = html;
+    return el;
+  };
+
+  it("kart sarmalayıcısı hover grubu taşır; aksiyon satırı lg'de saydam başlar, grup hover/odakta görünür", () => {
+    const root = parse(renderListingCard(fullCard));
+    const wrapper = root.querySelector(".fy26-product-card-wrapper");
+    expect(wrapper?.className).toContain("group/card");
+    const row = root.querySelector(".action-area-layout");
+    expect(row?.className).toContain("lg:opacity-0");
+    expect(row?.className).toContain("lg:group-hover/card:opacity-100");
+    // Klavye erişimi: kart içinde odak varken de görünür
+    expect(row?.className).toContain("lg:group-focus-within/card:opacity-100");
+    // Mobilde (lg altı) gizleyen sınıf yok: satır varsayılan görünür
+    expect(row?.className).not.toMatch(/(^|\s)opacity-0(\s|$)/);
+    // İki düğme de bu satırın içinde → aynı kurala tabi
+    expect(row?.querySelector("[data-add-to-cart]")).not.toBeNull();
+    expect(row?.querySelector(".searchx-product-e-chatbutton")).not.toBeNull();
+    expect(row?.querySelector(".searchx-product-e-chatbutton")?.className).not.toContain(
+      "lg:opacity-0"
+    );
+  });
+});
+
+describe("Sosyal kanıt rozeti — başlığın altında, fiyatın üstünde (görsel şeridi yok)", () => {
+  const parse = (html: string) => {
+    const el = document.createElement("div");
+    el.innerHTML = html;
+    return el;
+  };
+
+  it("grid kartında tek rozet yuvası vardır ve içerik alanında, başlık bloğunun sonunda durur", () => {
+    const root = parse(renderListingCard(fullCard));
+    const slots = root.querySelectorAll("[data-sp-slot]");
+    expect(slots.length).toBe(1);
+    const slot = slots[0] as HTMLElement;
+    expect(slot.closest(".fy26-product-card-content")).not.toBeNull();
+    expect(slot.closest(".searchx-img-area")).toBeNull();
+    // Başlık bloğu: h2 + yuva, yuva alta yaslı (mt-auto) → boşluğu rozet doldurur
+    const block = slot.parentElement as HTMLElement;
+    expect(block.querySelector("h2.searchx-product-e-title")).not.toBeNull();
+    expect(block.className).toContain("flex-col");
+    expect(block.className).toMatch(/min-h-\[/);
+    expect(slot.className).toContain("mt-auto");
+    // h2 artık sabit yükseklik taşımaz (boşluk bloğa ait)
+    const h2 = block.querySelector("h2") as HTMLElement;
+    expect(h2.className).not.toMatch(/min-h-\[|\bh-\[/);
+  });
+});
+
+describe("Kart görseli — kırpmadan sığdırma", () => {
+  it("varsayılan liste kartı görseli object-contain ile kare alana sığar, kutu beyaz zeminli", () => {
+    const host = document.createElement("div");
+    host.innerHTML = renderListingCard(fullCard);
+    const img = host.querySelector<HTMLImageElement>(".searchx-img-area img");
+    expect(img?.className).toContain("object-contain");
+    expect(img?.className).not.toContain("object-cover");
+    const box = host.querySelector<HTMLElement>(".searchx-img-area .aspect-square");
+    expect(box?.className).toContain("--product-image-bg");
+  });
+});

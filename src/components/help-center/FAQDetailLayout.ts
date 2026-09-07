@@ -177,7 +177,7 @@ export function FAQDetailLayout(): string {
 
           <!-- Related topics -->
           <div x-show="relatedTopics.length > 0" class="bg-white rounded-md shadow-sm border border-gray-100 p-5 mt-4">
-            <h3 class="text-sm font-bold text-gray-800 mb-3">${t("faqDetail.relatedTopics")}</h3>
+            <h2 class="text-sm font-bold text-gray-800 mb-3">${t("faqDetail.relatedTopics")}</h2>
             <div class="flex flex-wrap gap-2">
               <template x-for="rel in relatedTopics" :key="rel.key">
                 <a

@@ -73,9 +73,9 @@ function renderSourceByCategory(): string {
       }"
     >
       <div class="p-4 flex flex-col h-full" style="background-color: var(--mfr-sidebar-bg, #ffffff); border-radius: var(--mfr-hero-card-radius, 6px); box-shadow: var(--mfr-hero-card-shadow, 0 0 12px rgba(0,0,0,0.05))">
-        <h3 class="text-lg font-bold mb-3" style="color: var(--mfr-sidebar-heading-color, #111827)">
+        <h2 class="text-lg font-bold mb-3" style="color: var(--mfr-sidebar-heading-color, #111827)">
           ${t("mfr.sourceByCategory")}
-        </h3>
+        </h2>
 
         <ul class="flex-1 flex flex-col overflow-hidden">
 
@@ -228,7 +228,7 @@ function renderMiddleColumn(): string {
     >
       <!-- Card A: Get samples -->
       <div class="h-[192px] mb-4 p-4" style="background-color: var(--mfr-hero-card-bg, #ffffff); border-radius: var(--mfr-hero-card-radius, 6px); box-shadow: var(--mfr-hero-card-shadow, 0 0 12px rgba(0,0,0,0.05))">
-        <h3 class="text-lg font-bold leading-6 mb-2.5" style="color: var(--mfr-sample-heading-color, #222222)">${t("mfr.getSamples")}</h3>
+        <h2 class="text-lg font-bold leading-6 mb-2.5" style="color: var(--mfr-sample-heading-color, #222222)">${t("mfr.getSamples")}</h2>
         <div class="flex flex-wrap justify-between">
           ${sampleCard("popular", t("mfr.popularProducts"))}
           ${sampleCard("newArrival", t("mfr.newArrivals"))}
@@ -237,7 +237,7 @@ function renderMiddleColumn(): string {
 
       <!-- Card B: Get samples (2) -->
       <div class="h-[192px] p-4" style="background-color: var(--mfr-hero-card-bg, #ffffff); border-radius: var(--mfr-hero-card-radius, 6px); box-shadow: var(--mfr-hero-card-shadow, 0 0 12px rgba(0,0,0,0.05))">
-        <h3 class="text-lg font-bold leading-6 mb-2.5" style="color: var(--mfr-sample-heading-color, #222222)">${t("mfr.getSamples")}</h3>
+        <h2 class="text-lg font-bold leading-6 mb-2.5" style="color: var(--mfr-sample-heading-color, #222222)">${t("mfr.getSamples")}</h2>
         <div class="flex flex-wrap justify-between">
           ${sampleCard("bestSeller", t("mfr.bestSellers"))}
           ${sampleCard("featured", t("mfr.campaigns"))}
@@ -261,7 +261,7 @@ function renderTopRankingColumn(): string {
         }
       }"
     >
-      <h3 class="text-lg font-bold leading-6 mb-4" style="color: var(--mfr-ranking-heading-color, #222222)">${t("mfr.topRankedMfrs")}</h3>
+      <h2 class="text-lg font-bold leading-6 mb-4" style="color: var(--mfr-ranking-heading-color, #222222)">${t("mfr.topRankedMfrs")}</h2>
       <div class="products flex flex-wrap justify-between">
         <!-- Loading skeleton -->
         <template x-if="sellers.length === 0">

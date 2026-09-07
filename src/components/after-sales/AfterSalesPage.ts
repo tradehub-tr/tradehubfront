@@ -28,7 +28,7 @@ function featureCard(
   return `
     <div class="bg-white border border-[#ECEAE6] rounded-md p-6 flex flex-col gap-3.5 shadow-[0_18px_44px_-24px_rgba(28,12,5,0.35)]">
       <div class="size-12 rounded-full bg-[#FFE285] flex items-center justify-center shrink-0">${icon}</div>
-      <h3 class="text-lg font-bold text-gray-900">${t(titleKey)}</h3>
+      <h2 class="text-lg font-bold text-gray-900">${t(titleKey)}</h2>
       <p class="text-sm text-gray-600 leading-relaxed flex-1">${t(descKey)}</p>
       <a href="${linkHref}" class="text-[13.5px] font-bold text-amber-700 [@media(hover:hover)]:hover:underline">${t(linkKey)} &rarr;</a>
     </div>
@@ -90,7 +90,7 @@ function overlapSection(): string {
         <!-- Destek CTA bandı -->
         <div class="mt-10 lg:mt-12 bg-[#FFFBEB] border border-[#FDE68A] rounded-md p-6 lg:px-8 flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
           <div>
-            <h3 class="text-lg font-bold text-[#1C0C05] mb-1.5">${t("infoMisc.asCtaTitle")}</h3>
+            <h2 class="text-lg font-bold text-[#1C0C05] mb-1.5">${t("infoMisc.asCtaTitle")}</h2>
             <p class="text-[13.5px] text-gray-500">${t("infoMisc.asCtaDesc")}</p>
           </div>
           <a href="/pages/help/help-ticket-new.html" class="th-btn-dark shrink-0 self-start lg:self-auto">${t("infoMisc.asCtaBtn")}</a>

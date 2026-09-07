@@ -166,7 +166,7 @@ function renderCategoriesView(): string {
       <div class="flex flex-col lg:flex-row">
         <!-- Sidebar -->
         <!-- Kenar çubuğu: en fazla SIDEBAR_LIMIT sektör kayan liste, "Tüm Ürünler" dibe sabit -->
-        <div class="flex w-full flex-col border-b border-gray-200 bg-gray-50 lg:w-72 lg:flex-shrink-0 lg:border-b-0 lg:border-e xl:w-80 dark:border-gray-700 dark:bg-gray-900" style="max-height:min(560px, 60vh)" id="mega-sidebar">
+        <div class="flex w-full flex-col border-b border-gray-200 bg-gray-50 lg:w-72 lg:flex-shrink-0 lg:border-b-0 lg:border-e min-[1280px]:w-80 dark:border-gray-700 dark:bg-gray-900" style="max-height:min(560px, 60vh)" id="mega-sidebar">
           <ul class="min-h-0 flex-1 overflow-y-auto overflow-x-hidden py-1" style="-webkit-overflow-scrolling:touch">
             <li class="px-4 py-6 text-center" id="mega-sidebar-loading">
               <svg class="w-5 h-5 animate-spin text-gray-300 mx-auto" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"></path></svg>
@@ -180,7 +180,7 @@ function renderCategoriesView(): string {
           </a>
         </div>
         <!-- Content -->
-        <div class="flex-1 overflow-y-auto px-3 sm:px-4 lg:px-8 py-3 sm:py-4 lg:py-6" style="max-height:min(560px, 60vh);-webkit-overflow-scrolling:touch" id="mega-content">
+        <div class="flex-1 overflow-y-auto px-3 sm:px-4 lg:px-5 min-[1280px]:px-8 py-3 sm:py-4 lg:py-6" style="max-height:min(560px, 60vh);-webkit-overflow-scrolling:touch" id="mega-content">
         </div>
       </div>
     </div>
@@ -942,25 +942,27 @@ export function initMegaMenu(): Promise<void> {
         .join("");
       const moreSlot =
         leaves.length > COLUMN_ROWS
-          ? `<a href="${groupHref}" class="group/grp mt-0.5 inline-flex items-center gap-1 self-start text-sm leading-5 font-medium text-primary-600 transition-colors hover:text-primary-700">${t("commonNav.viewAll")}${grpArrowSvg}</a>`
+          ? `<a href="${groupHref}" class="group/grp mt-0.5 inline-flex items-center gap-1 self-start whitespace-nowrap text-sm leading-5 font-medium text-primary-600 transition-colors hover:text-primary-700">${t("commonNav.viewAll")}${grpArrowSvg}</a>`
           : `<span class="mt-0.5 h-5" aria-hidden="true"></span>`;
       return `
         <div class="flex min-w-0 flex-col gap-3.5">
           <a href="${groupHref}" class="group/grp mb-0.5 flex items-center gap-2.5 text-base leading-6 font-bold text-gray-900 transition-colors hover:text-primary-600 dark:text-white">
             <span class="inline-flex shrink-0 items-center justify-center text-gray-500 [&>svg]:w-5 [&>svg]:h-5 dark:text-gray-400">${icon}</span>
-            <span class="min-w-0">${escapeHtml(group.name)}</span>
+            <span class="min-w-0 line-clamp-2">${escapeHtml(group.name)}</span>
           </a>
           <div class="flex flex-col gap-3.5" style="min-height:${COLUMN_BODY_MIN_H}px">${rows}</div>
           ${moreSlot}
         </div>`;
     }
 
-    /** Sektör gövdesi: gruplar 5'e kadar sütun, fazlası alt satıra sarar. */
+    /** Sektör gövdesi: her sütun en az 190px, genişliğe sığdığı kadar sütun; fazlası alt satıra sarar
+     *  (1024: 3, 1280-1440: 4, 1600+: 5). Sabit sütun sayısı dar ekranda başlıkları kırıyordu; başlık
+     *  yalnızca gerçekten sığmazsa ikinci satıra iner (line-clamp-2). */
     function renderSectorBody(cat: ApiCategory): string {
       const groups = cat.children ?? [];
       if (groups.length === 0) return "";
       return `
-        <div class="grid grid-cols-2 gap-x-6 gap-y-6 sm:grid-cols-3 lg:grid-cols-4 lg:gap-x-8 xl:grid-cols-5">
+        <div class="grid grid-cols-[repeat(auto-fill,minmax(190px,1fr))] gap-x-6 gap-y-6">
           ${groups.map(renderGroupColumn).join("")}
         </div>`;
     }

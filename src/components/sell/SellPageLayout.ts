@@ -181,6 +181,27 @@ function currencySymbol(c: string): string {
   }
 }
 
+// Tutar biçimi: 5990 → "5.990", 499.1666 → "499,17" (sayfa diline göre ayraçlar).
+function fmtAmount(n: number): string {
+  const lang = (typeof document !== "undefined" && document.documentElement.lang) || "tr-TR";
+  const rounded = Math.round(n * 100) / 100;
+  return rounded.toLocaleString(lang, {
+    minimumFractionDigits: Number.isInteger(rounded) ? 0 : 2,
+    maximumFractionDigits: 2,
+  });
+}
+
+// Aylık × 12 ile yıllık arasındaki fark. Her iki fiyat da yoksa ya da yıllık
+// daha pahalıysa karşılaştırma yok (null).
+function yearlyComparison(plan: PricingPlan): { monthlyTotal: number; savedMonths: number } | null {
+  const monthly = plan.monthly_price || 0;
+  const yearly = plan.yearly_price || 0;
+  if (monthly <= 0 || yearly <= 0) return null;
+  const monthlyTotal = monthly * 12;
+  if (monthlyTotal <= yearly) return null;
+  return { monthlyTotal, savedMonths: Math.round((monthlyTotal - yearly) / monthly) };
+}
+
 // "01 · Başlangıç" tag'i — display_order'a göre auto (FREE = 00 vs)
 function tierTag(plan: PricingPlan, idx: number): string {
   const num = String(idx + 1).padStart(2, "0");
@@ -198,6 +219,22 @@ function PricingCard(plan: PricingPlan, idx: number, trial?: TrialConfig): strin
   const sym = currencySymbol(plan.currency);
   const priceY = plan.yearly_price || 0;
   const priceM = plan.monthly_price || 0;
+  // Büyük rakam her iki görünümde AY BAŞINA fiyat (2026-09-07 kararı):
+  //   yıllık görünüm = yıllık peşin tutar / 12 (ör. 5.990 → 499,17/ay),
+  //   aylık görünüm  = aylık fiyat (ör. 599/ay, yılda 7.188).
+  // Alt satır toplamı taşır. Yalnız tek fiyat varsa o basılır.
+  const compare = yearlyComparison(plan);
+  const escJs = (s: string) => s.replace(/\\/g, "\\\\").replace(/'/g, "\\'");
+  const yearlyPerMonth = priceY > 0 ? priceY / 12 : priceM;
+  const monthlyShown = priceM > 0 ? priceM : priceY;
+  const shownPeriod = priceM > 0 || priceY > 0 ? t("sellPage.month") : t("sellPage.year");
+  const yearlyMeta =
+    priceY > 0 && priceM > 0
+      ? `${t("sellPage.yearlyBilled", { amount: `${sym}${fmtAmount(priceY)}` })} · ${t("sellPage.yearlyUpfrontVatExcl")}`
+      : t("sellPage.yearlyUpfrontVatExcl");
+  const monthlyMeta = compare
+    ? `${t("sellPage.monthlyCancelAnytime")} · ${t("sellPage.monthlyYearTotal", { amount: `${sym}${fmtAmount(compare.monthlyTotal)}` })}`
+    : t("sellPage.monthlyCancelAnytime");
   const tag = tierTag(plan, idx);
   const badge = isFeat ? plan.badge_label || t("sellPage.mostPopular") : null;
 
@@ -230,7 +267,7 @@ function PricingCard(plan: PricingPlan, idx: number, trial?: TrialConfig): strin
   const ctaAttr = isSellerSignup ? "data-seller-cta" : "";
 
   return /* html */ `
-    <div class="relative flex flex-col gap-3.5 rounded-2xl border p-5 lg:p-[26px_22px_22px] transition-[border-color,box-shadow,transform] duration-150 motion-reduce:transition-none ${cardCls}">
+    <div data-pricing-card class="relative flex flex-col gap-3.5 rounded-2xl border p-5 lg:p-[26px_22px_22px] transition-[border-color,box-shadow,transform] duration-150 motion-reduce:transition-none ${cardCls}">
       ${
         badge
           ? `<span class="absolute -top-2.5 start-[22px] bg-[#ff8600] text-white text-[10.5px] font-bold uppercase tracking-[0.08em] px-2.5 py-1 rounded-full border border-[#db7300]">${escapeHtml(badge)}</span>`
@@ -246,16 +283,16 @@ function PricingCard(plan: PricingPlan, idx: number, trial?: TrialConfig): strin
             ? `<span class="text-[32px] font-semibold tracking-[-0.03em] leading-none ${amountCls}">${escapeHtml(overrideLabel)}</span>`
             : hasPrice
               ? `<span class="text-[42px] font-semibold tracking-[-0.03em] tabular-nums leading-none ${amountCls}">
-                ${escapeHtml(sym)}<span x-text="yearly ? '${priceY}' : '${priceM}'">${priceM}</span>
+                ${escapeHtml(sym)}<span data-price-amount x-text="yearly ? '${fmtAmount(yearlyPerMonth)}' : '${fmtAmount(monthlyShown)}'">${fmtAmount(yearlyPerMonth)}</span>
               </span>
-              <span class="text-[13px] ${perCls}">/ <span x-text="yearly ? '${t("sellPage.year")}' : '${t("sellPage.month")}'">${t("sellPage.month")}</span></span>`
+              <span class="text-[13px] ${perCls}">/ <span data-price-period>${escapeHtml(shownPeriod)}</span></span>`
               : `<span class="text-[32px] font-semibold tracking-[-0.03em] leading-none ${amountCls}">${t("sellPage.customOffer")}</span>`
         }
       </div>
       <div class="text-[11.5px] -mt-1 ${metaCls}">
         ${
           hasPrice
-            ? `<span x-text="yearly ? '${t("sellPage.yearlyUpfrontVatExcl")}' : '${t("sellPage.monthlyCancelAnytime")}'">${t("sellPage.monthlyCancelAnytime")}</span>`
+            ? `<span data-price-meta x-text="yearly ? '${escJs(yearlyMeta)}' : '${escJs(monthlyMeta)}'">${escapeHtml(yearlyMeta)}</span>`
             : t("sellPage.pricedByVolume")
         }
       </div>
@@ -593,17 +630,18 @@ function PricingMatrixDesktop(
   const escJs = (s: string) => s.replace(/\\/g, "\\\\").replace(/'/g, "\\'");
   const cols = plans.map((p) => ({
     n: p.plan_name,
+    // Kartla aynı: aylık fiyat sabit, yıllık/aylık toplam yanında.
     py:
       (p.yearly_price || 0) > 0
-        ? `${sym}${p.yearly_price} / ${t("sellPage.year")}`
+        ? `${sym}${fmtAmount(p.yearly_price / 12)} / ${t("sellPage.month")} · ${t("sellPage.yearlyBilled", { amount: `${sym}${fmtAmount(p.yearly_price)}` })}`
         : (p.monthly_price || 0) > 0
-          ? `${sym}${p.monthly_price} / ${t("sellPage.month")}`
+          ? `${sym}${fmtAmount(p.monthly_price)} / ${t("sellPage.month")}`
           : t("sellPage.customOffer"),
     pm:
       (p.monthly_price || 0) > 0
-        ? `${sym}${p.monthly_price} / ${t("sellPage.month")}`
+        ? `${sym}${fmtAmount(p.monthly_price)} / ${t("sellPage.month")} · ${t("sellPage.monthlyYearTotal", { amount: `${sym}${fmtAmount(p.monthly_price * 12)}` })}`
         : (p.yearly_price || 0) > 0
-          ? `${sym}${p.yearly_price} / ${t("sellPage.year")}`
+          ? `${sym}${fmtAmount(p.yearly_price)} / ${t("sellPage.year")}`
           : t("sellPage.customOffer"),
     featured: !!p.highlighted,
   }));
@@ -617,14 +655,14 @@ function PricingMatrixDesktop(
       <div class="${MATRIX_GRID_CLS} items-end px-6 py-[18px] bg-[#fafaf8] border-b border-[#d5d2c9]" style="${gridStyle}">
         <div class="text-start">
           <div class="text-[15px] font-semibold text-[#1a1a1a]">${t("sellPage.allPackageFeatures")}</div>
-          <div class="text-xs text-[#8a877f] mt-0.5 tabular-nums" x-text="yearly ? '${escJs(t("sellPage.yearlyPeriodVatExcl"))}' : '${escJs(t("sellPage.monthlyPeriodVatExcl"))}'">${t("sellPage.monthlyPeriodVatExcl")}</div>
+          <div class="text-xs text-[#8a877f] mt-0.5 tabular-nums" x-text="yearly ? '${escJs(t("sellPage.yearlyPeriodVatExcl"))}' : '${escJs(t("sellPage.monthlyPeriodVatExcl"))}'">${t("sellPage.yearlyPeriodVatExcl")}</div>
         </div>
         ${cols
           .map(
             (c) => `
           <div class="text-center ${c.featured ? "bg-[#fff3e6] rounded-lg px-2 py-2.5 -mx-1 -my-2.5" : ""}">
             <div class="text-[15px] font-semibold ${c.featured ? "text-[#db7300]" : "text-[#1a1a1a]"}">${escapeHtml(c.n)}</div>
-            <div class="text-xs text-[#8a877f] mt-0.5 tabular-nums" x-text="yearly ? '${escJs(c.py)}' : '${escJs(c.pm)}'">${escapeHtml(c.pm)}</div>
+            <div class="text-xs text-[#8a877f] mt-0.5 tabular-nums" x-text="yearly ? '${escJs(c.py)}' : '${escJs(c.pm)}'">${escapeHtml(c.py)}</div>
           </div>
         `
           )
@@ -781,12 +819,7 @@ function PricingEmpty(): string {
 function _computeYearlyDiscountBadge(plans: PricingPlan[]): string {
   let bestSavedMonths = 0;
   for (const p of plans) {
-    const monthly = p.monthly_price || 0;
-    const yearly = p.yearly_price || 0;
-    if (monthly <= 0 || yearly <= 0) continue;
-    const savedAmount = monthly * 12 - yearly;
-    if (savedAmount <= 0) continue;
-    const savedMonths = Math.round(savedAmount / monthly);
+    const savedMonths = yearlyComparison(p)?.savedMonths ?? 0;
     if (savedMonths > bestSavedMonths) bestSavedMonths = savedMonths;
   }
   if (bestSavedMonths <= 0) return "";
@@ -808,7 +841,7 @@ function PricingSection(
   const discountBadge = _computeYearlyDiscountBadge(plans);
 
   return /* html */ `
-    <section id="paketler" class="py-16 md:py-24 border-t border-[#e8e6e0] bg-[#f7f7f5]" x-data="{ yearly: false }">
+    <section id="paketler" class="py-16 md:py-24 border-t border-[#e8e6e0] bg-[#f7f7f5]" x-data="{ yearly: true }">
       <div class="${WRAP_CLS}">
         <div class="${INNER_CLS}">
         <div class="${SECTION_HEAD_CLS}">

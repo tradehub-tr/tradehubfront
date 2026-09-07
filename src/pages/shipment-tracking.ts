@@ -94,6 +94,7 @@ const root = mountDashboardShell({
     { label: t("shipment.page.tracking") },
   ],
   contentId: "shipment-tracking-root",
+  heading: t("shipment.page.tracking"),
   initialContent: shellCard(
     `<p class="text-sm text-gray-500">${escapeHtml(t("shipment.page.loading"))}</p>`
   ),
