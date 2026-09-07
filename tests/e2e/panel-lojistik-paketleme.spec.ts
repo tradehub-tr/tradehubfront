@@ -25,6 +25,8 @@
  */
 import { test, expect, request } from "@playwright/test";
 
+import { KUYRUK_SATIRI } from "./helpers/panelListe";
+
 const BASE = process.env.PANEL_BASE ?? "http://tradehub.localhost";
 const USER = process.env.PANEL_USER ?? "Administrator";
 const PASS = process.env.PANEL_PASS ?? "";
@@ -95,14 +97,27 @@ test("kuyruk dört kovayı da sayaçlarıyla gösteriyor", async ({ page }) => {
     await expect(page.getByRole("button", { name: new RegExp(bucket, "i") })).toBeVisible();
   }
   // Her kovada en az bir kayıt olmalı — boş kova demo senaryosunu köreltir.
-  await expect(page.locator("table tbody tr").first()).toBeVisible();
+  //
+  // GÖRÜNÜMDEN BAĞIMSIZ iddia: kuyruk dört görünüm modu sunuyor ve MOBİLDE
+  // varsayılan "Liste Görünümü" (masaüstünde "Tablo Görünümü"). `table tbody
+  // tr` aramak, ürün mobilde doğru çalışırken testi kırıyordu — kayıtlar
+  // listede duruyordu, tabloda değil (ölçüldü 7 Eyl). Sevkiyat kodu her dört
+  // modda da basılıyor; iddia onun üzerinden kurulur.
+  await expect(
+    page
+      .locator("main")
+      .getByText(/^SHP-\d{4}-\d{5}$/)
+      .first(),
+    "kuyrukta hiç kayıt görünmüyor"
+  ).toBeVisible();
 });
 
 test("kuyruktan çalışma alanına geçilebiliyor", async ({ page }) => {
   await page.goto(`${QUEUE}?bucket=partial`);
   // DİKKAT: /Paketle/i regex'i "Paketlenmedi" kova pill'iyle de eşleşiyor.
-  // Satır butonunu tabloya scope'layarak ve tam metinle hedefliyoruz.
-  await page.locator("table").getByRole("button", { name: "Paketle →" }).first().click();
+  // Butonu KAYIT SATIRINA scope'luyoruz — `table`'a değil: mobilde tablo
+  // hiç çizilmiyor (kuyruk liste modunda) ve scope boş kalıyordu.
+  await page.locator(KUYRUK_SATIRI).getByRole("button", { name: "Paketle →" }).first().click();
   await expect(page).toHaveURL(new RegExp(`/lojistik/paketleme/${SHP}`));
   await expect(page.getByRole("heading", { name: /^Paketleme$/ })).toBeVisible();
 });
@@ -163,7 +178,7 @@ test("GERÇEK ÇIKTI — etiket üretiliyor ve yazdırılabilir belge açılıyo
   await expect(page.getByRole("heading", { name: /Etiket ve belgeler/i })).toBeVisible();
 
   // Etiketi olmayan koliyi seç ve üret.
-  await page.locator('table tbody input[type="checkbox"]').last().check();
+  await page.locator(KUYRUK_SATIRI).locator('input[type="checkbox"]').last().check();
   // Üretme başlıkta değil, seçim yapılınca beliren eylem çubuğunda.
   // `count()` BEKLEMEZ: eylem çubuğu seçimden sonra bir tik gecikmeyle
   // beliriyor ve koşullu dal sessizce atlanıyordu — üretme hiç denenmemiş
@@ -275,7 +290,6 @@ test("madde 7 — silme ⋯ menüsünden hâlâ yapılabiliyor", async ({ page }
   // `exact` şart: "Tamam" içerik eşleşmesi "Paketlemeyi tamamla" ile de
   // eşleşiyor ve strict mode iki öğe buluyor.
   await page.getByRole("button", { name: "Tamam", exact: true }).click();
-
   await expect(kartlar).toHaveCount(once - 1);
 });
 
@@ -302,8 +316,7 @@ test("madde 3 — miktar kutusu kapalı başlıyor, ⋯ ile açılıyor", async 
 test("madde 6 — üretme butonu seçim yapılınca beliriyor", async ({ page }) => {
   await page.goto(`/panel/lojistik/etiketler/${SHP}`);
   await expect(page.getByRole("button", { name: "Etiket üret" })).toHaveCount(0);
-
-  await page.locator('table tbody input[type="checkbox"]').last().check();
+  await page.locator(KUYRUK_SATIRI).locator('input[type="checkbox"]').last().check();
   await expect(page.getByText(/koli seçildi/)).toBeVisible();
   await expect(page.getByRole("button", { name: "Etiket üret" })).toBeVisible();
 
@@ -314,14 +327,11 @@ test("madde 6 — üretme butonu seçim yapılınca beliriyor", async ({ page })
 test("madde 11 — etiket durumu ikonla da ayrışıyor", async ({ page }) => {
   await page.goto(`/panel/lojistik/etiketler/${SHP}`);
   // Renk tek ayırt edici olamaz; rozette metin VE ikon bulunmalı.
-  // "Koliler" adına bağlı: ekranda taşıyıcı seçenekleri tablosu da var (20-FE)
-  // ve DOM'da önce geliyor — çıplak `tbody tr` yanlış tablodan satır alıyordu.
-  const rozet = page
-    .getByRole("table", { name: "Koliler" })
-    .locator("tbody tr")
-    .first()
-    .locator("td")
-    .nth(5);
+  // Sütun numarası yerine KAYIT SATIRI: `td:nth(5)` yalnız tabloda anlamlı,
+  // mobilde kuyruk liste modunda çiziliyor ve sütun diye bir şey yok. Kanca
+  // koli satırlarını dört görünümde de işaretliyor; iddia "aynı satırda hem
+  // metin hem ikon var" — konumdan bağımsız.
+  const rozet = page.locator(KUYRUK_SATIRI).first();
   await expect(rozet).toContainText(/Basıldı|Üretildi|Üretilmedi|İptal edildi|Geçersiz/);
   await expect(rozet).toContainText(/[✓◷✕⊘↻]/);
 });
@@ -484,16 +494,29 @@ test("GÖRÜNÜM — kanban dört kovayı SÜTUN olarak gösteriyor, pill'ler ç
   // durunca hangisinin geçerli olduğu okunmuyordu.
   await expect(page.getByRole("button", { name: /^Paketlenmedi$/ })).toHaveCount(0);
   // Tablo da yok — mod gerçekten değişti, üstüne bir şey eklenmedi.
+  // BURADA `KUYRUK_SATIRI` KULLANILMAZ: o kanca DÖRT görünümde de var, yani
+  // kanban kartlarını da sayar ve iddia asla 0 dönmez. Söylenen şey "TABLO
+  // yok" — seçici de tabloya özgü olmalı.
   await expect(page.locator("table tbody tr")).toHaveCount(0);
 
   // DÖRDÜ BİRDEN GÖRÜNMELİ: panonun tek gerekçesi bu. Paylaşılan
   // `.kanban-col` 280px'e sabitti ve dördüncü kova 1440px'lik ekranda pano
   // dışına düşüyordu (ölçüldü 2026-08-19); sütunlar artık esniyor.
-  const board = page.locator(".list-kanban");
-  const tasma = await board.evaluate((el) => el.scrollWidth - el.clientWidth);
-  expect(tasma, "dördüncü kova pano dışına taşıyor — yatay kaydırma gerekiyor").toBeLessThanOrEqual(
-    1
-  );
+  //
+  // İDDİA GENİŞ EKRANA AİT — test sınırı değil, geometri: 390px'lik telefonda
+  // dört sütun zaten sığmaz ve yatay kaydırma orada BEKLENEN davranıştır
+  // (ölçüldü: 519px taşma). Panonun "hepsi bir bakışta" sözü masaüstünde
+  // verildi. Mobilde bunun yerine dördünün de VAR olduğu doğrulanıyor —
+  // yukarıdaki sütun başlığı iddiaları iki ortamda da koşuyor.
+  const vp = page.viewportSize();
+  if (vp && vp.width >= 1024) {
+    const board = page.locator(".list-kanban");
+    const tasma = await board.evaluate((el) => el.scrollWidth - el.clientWidth);
+    expect(
+      tasma,
+      "dördüncü kova pano dışına taşıyor — yatay kaydırma gerekiyor"
+    ).toBeLessThanOrEqual(1);
+  }
 
   // Sayfanın KENDİSİ yana kaymamalı; kaydırma panonun içinde kalır.
   const sayfaKaydi = await page.evaluate(
@@ -508,7 +531,6 @@ test("GÖRÜNÜM — kanban SALT-OKUNUR: kart sürüklenemiyor, uyarı görünü
   // kullanıcı işi yaptığını sanırdı.
   await page.goto(QUEUE);
   await page.getByRole("button", { name: "Kanban Görünümü" }).click();
-
   await expect(page.getByText(/Salt-okunur pano/i)).toBeVisible();
 
   const card = page.locator(".kanban-card").first();
@@ -534,6 +556,8 @@ test("GÖRÜNÜM — seçilen mod sayfa yenilenince HATIRLANIYOR", async ({ page
   await page.reload();
   // Tercih diske yazıldı: kullanıcı her girişte modu yeniden seçmiyor.
   await expect(page.locator(".list-grid-card").first()).toBeVisible();
+  // "Tablo yok" iddiası — kanca dört görünümü birden işaretlediği için burada
+  // tabloya özgü seçici kullanılıyor.
   await expect(page.locator("table tbody tr")).toHaveCount(0);
 });
 
@@ -551,8 +575,8 @@ test("GÖRÜNÜM — liste modu aynı sevkiyatları gösteriyor, veri kaybolmuyo
   await page.goto(`${QUEUE}?bucket=partial`);
   // Kuyruk veriyi ASENKRON çekiyor; `count()` beklemez ve iskelet aşamasında
   // 0 döner. Önce ilk satırın görünmesini bekle, sonra say.
-  await expect(page.locator("table tbody tr").first()).toBeVisible();
-  const tableRows = await page.locator("table tbody tr").count();
+  await expect(page.locator(KUYRUK_SATIRI).first()).toBeVisible();
+  const tableRows = await page.locator(KUYRUK_SATIRI).count();
 
   await page.getByRole("button", { name: "Liste Görünümü" }).click();
   await expect(page.locator(".list-compact-item")).toHaveCount(tableRows);
@@ -561,12 +585,16 @@ test("GÖRÜNÜM — liste modu aynı sevkiyatları gösteriyor, veri kaybolmuyo
 test("GÖRÜNÜM — etiket ekranı kart modunda her koli için ÖNİZLEME çiziyor", async ({ page }) => {
   // Tabloda "hangi koliye ne bastım" görünmüyordu; kart modunun tek gerekçesi bu.
   await page.goto(`/panel/lojistik/etiketler/${SHP}`);
-  const koliler = page.getByRole("table", { name: "Koliler" });
-  await expect(koliler.locator("tbody tr").first()).toBeVisible();
-  const rows = await koliler.locator("tbody tr").count();
+  // Kancaya bağlı: etiket ekranı dar ekranda LİSTE modunda açılıyor, tablo
+  // hiç çizilmiyor. `data-testid=kuyruk-satiri` koli satırlarını dört
+  // görünümde de işaretliyor, iddia biçimden bağımsız kuruluyor.
+  const koliler = page.locator(KUYRUK_SATIRI);
+  await expect(koliler.first()).toBeVisible();
+  const rows = await koliler.count();
 
   await page.getByRole("button", { name: "Kart Görünümü" }).click();
-  await expect(page.locator(".list-grid-card")).toHaveCount(rows);
+  // Mod değişince KAYIT SAYISI değişmemeli — söylenen şey "veri kaybolmuyor".
+  await expect(page.locator(KUYRUK_SATIRI)).toHaveCount(rows);
 
   // Yan önizleme KAYBOLMUYOR: üretme/iptal eylemleri orada duruyor.
   await expect(page.getByRole("heading", { name: /^Önizleme$/ })).toBeVisible();

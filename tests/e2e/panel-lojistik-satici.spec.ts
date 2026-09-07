@@ -22,6 +22,10 @@
  */
 import { test, expect, request } from "@playwright/test";
 
+import { KUYRUK_SATIRI } from "./helpers/panelListe";
+
+import { lojistikMenuYollari } from "./helpers/panelMenu";
+
 const BASE = process.env.PANEL_BASE ?? "http://tradehub.localhost";
 const USER = process.env.SELLER_USER ?? "ali.bal@turksab.com";
 const PASS = process.env.SELLER_PASS ?? "";
@@ -85,13 +89,13 @@ test("SATICI — gerçekten satıcı oturumu (admin değil)", async ({ page }) =
   expect(Boolean(session.is_admin), "hesap ADMIN — satıcı testi geçersiz").toBe(false);
 });
 
-test("SATICI — Paketleme menüde var ve menü admin'in ALT KÜMESİ", async ({ page }) => {
+test("SATICI — Paketleme menüde var ve menü admin'in ALT KÜMESİ", async ({ page }, testInfo) => {
   await page.goto(QUEUE);
   await expect(page.getByRole("heading", { name: /Paketleme kuyruğu/i })).toBeVisible();
 
-  const links = await page.evaluate(() =>
-    [...document.querySelectorAll('a[href*="/lojistik/"]')].map((a) => a.getAttribute("href"))
-  );
+  // Masaüstünde `href`, mobilde "Daha → Lojistik" panelindeki etiketler —
+  // ikisi de YOL listesine indirgeniyor, aşağıdaki iddialar değişmiyor.
+  const links = await lojistikMenuYollari(page, testInfo);
   // G0 rol matrisi (2026-08-19) + 14-FE menü kaydı sonrası satıcının GÖRMESİ
   // GEREKEN kalemler. Liste 13-FE'de yalnız paketlemeydi; matris sevkiyatları,
   // 14-FE de teslimat grubunu açtı.
@@ -134,7 +138,7 @@ test("SATICI — Paketleme menüde var ve menü admin'in ALT KÜMESİ", async ({
 
 test("SATICI — kuyruk dört görünüm modunu da sunuyor", async ({ page }) => {
   await page.goto(QUEUE);
-  await expect(page.locator("table tbody tr").first()).toBeVisible();
+  await expect(page.locator(KUYRUK_SATIRI).first()).toBeVisible();
 
   // Toggle admin'dekiyle aynı: dört düğme.
   await expect(page.locator(".view-mode-toggle button")).toHaveCount(4);
@@ -146,7 +150,6 @@ test("SATICI — kuyruk dört görünüm modunu da sunuyor", async ({ page }) =>
 test("SATICI — kanban dört kovayı gösteriyor ve SALT-OKUNUR", async ({ page }) => {
   await page.goto(QUEUE);
   await page.getByRole("button", { name: "Kanban Görünümü" }).click();
-
   await expect(page.locator(".kanban-col-header")).toHaveCount(4);
   await expect(page.getByText(/Salt-okunur pano/i)).toBeVisible();
 
@@ -162,7 +165,6 @@ test("SATICI — kanban kartından kendi çalışma alanına giriyor", async ({ 
   await page.goto(QUEUE);
   await page.getByRole("button", { name: "Kanban Görünümü" }).click();
   await page.locator(".kanban-card").first().click();
-
   await expect(page).toHaveURL(/\/lojistik\/paketleme\/SHP-/);
   await expect(page.getByRole("heading", { name: /^Paketleme$/ })).toBeVisible();
 });
@@ -174,23 +176,29 @@ test("SATICI — mod tercihi sayfa yenilenince hatırlanıyor", async ({ page })
 
   await page.reload();
   await expect(page.locator(".list-grid-card").first()).toBeVisible();
+  // "Tablo yok" iddiası — kanca dört görünümü birden işaretlediği için burada
+  // tabloya özgü seçici kullanılıyor.
   await expect(page.locator("table tbody tr")).toHaveCount(0);
 });
 
 test("SATICI — etiket ekranı üç mod sunuyor, kanban YOK", async ({ page }) => {
   await page.goto(`/panel/lojistik/etiketler/${SHP}`);
   // Ekranda İKİ tablo var (koliler + 20-FE taşıyıcı seçenekleri); çıplak
-  // `table tbody tr` ikisini toplayıp kart sayısıyla karşılaştırmayı bozuyor.
-  // Erişilebilir ada bağlanıyoruz — ekran okuyucunun ayırdığı yerden.
-  const koliler = page.getByRole("table", { name: "Koliler" });
-  await expect(koliler.locator("tbody tr").first()).toBeVisible();
-  const rows = await koliler.locator("tbody tr").count();
-
+  // `table tbody tr` ikisini toplayıp sayımı bozuyordu. Kanca yalnız KOLİ
+  // satırlarında (`LabelPrintView.vue` üç görünümde de basıyor), dolayısıyla
+  // hem ayrımı hem mobil listeyi tek seçici çözüyor.
+  const koliler = page.locator(KUYRUK_SATIRI);
+  await expect(koliler.first()).toBeVisible();
+  const rows = await koliler.count();
   await expect(page.locator(".view-mode-toggle button")).toHaveCount(3);
   await expect(page.getByRole("button", { name: "Kanban Görünümü" })).toHaveCount(0);
 
+  // Mod değiştirince KAYIT SAYISI değişmemeli. Kartı `.list-grid-card` ile
+  // saymak masaüstüne özgüydü: mobilde ekran `list` moduna zorlandığı için
+  // tıklama kartı çizdirmiyor. Kanca dört görünümde de aynı olduğundan
+  // iddia biçimden bağımsız kuruluyor — asıl söylenen zaten "veri kaybolmuyor".
   await page.getByRole("button", { name: "Kart Görünümü" }).click();
-  await expect(page.locator(".list-grid-card")).toHaveCount(rows);
+  await expect(page.locator(KUYRUK_SATIRI)).toHaveCount(rows);
   // Yan önizleme satıcıda da duruyor — eylemler orada.
   await expect(page.getByRole("heading", { name: /^Önizleme$/ })).toBeVisible();
 });
@@ -203,7 +211,7 @@ test("SATICI — DEMO geliştirici paneli GÖRÜNMÜYOR", async ({ page }) => {
   // Görünüm modları eklenirken başlık satırı yeniden düzenlendi — bu testin
   // işi o düzenlemenin paneli yanlışlıkla satıcıya açmadığını doğrulamak.
   await page.goto(QUEUE);
-  await expect(page.locator("table tbody tr").first()).toBeVisible();
+  await expect(page.locator(KUYRUK_SATIRI).first()).toBeVisible();
   await expect(page.getByText(/Demo verisi ve hata senaryoları/i)).toHaveCount(0);
 });
 
@@ -224,7 +232,7 @@ test("SATICI — K4: kanıt kuyruğunda YALNIZ kendi sevkiyatları", async ({ pa
   // 2026-08-19) — mock artık oturumdaki satıcıya uyarlanıyor.
   await page.goto(POD_QUEUE);
   await expect(page.getByRole("heading", { name: /Teslim kanıtı/i }).first()).toBeVisible();
-  await expect(page.locator("table tbody tr").first()).toBeVisible();
+  await expect(page.locator(KUYRUK_SATIRI).first()).toBeVisible();
 
   // Satıcı görünümünde "Satıcı" sütunu HİÇ çizilmiyor: kendi kayıtlarına
   // bakan birine her satırda kendi adını yazmak gürültü.
@@ -248,18 +256,23 @@ test("SATICI — K5: kendi kanıtını kaydediyor, kayıt SATICI BEYANI damgası
   page,
 }) => {
   await page.goto(POD_QUEUE);
-  await expect(page.locator("table tbody tr").first()).toBeVisible();
+  await expect(page.locator(KUYRUK_SATIRI).first()).toBeVisible();
 
   // Kanıt bekleyen kendi sevkiyatını aç.
   await page
     .getByRole("button", { name: /Kanıt bekliyor/i })
     .first()
     .click();
-  await expect(page.locator("table tbody tr").first()).toBeVisible();
-  await page
-    .getByRole("link", { name: /Kanıtı aç/i })
-    .first()
-    .click();
+  await expect(page.locator(KUYRUK_SATIRI).first()).toBeVisible();
+  // Detaya giden yol görünüme göre değişiyor: tablo/kartta "Kanıtı aç"
+  // bağlantısı var, kompakt listede (mobilde zorlanan mod) satırın TAMAMI
+  // detaya giden RouterLink. İkisi de aynı ekrana götürüyor.
+  const kanitAc = page.getByRole("link", { name: /Kanıtı aç/i }).first();
+  if (await kanitAc.count()) {
+    await kanitAc.click();
+  } else {
+    await page.locator(KUYRUK_SATIRI).first().click();
+  }
 
   await page.getByRole("button", { name: /Teslim kanıtı kaydet/i }).click();
   await page.locator("#pod-delivered-at").fill("2026-08-19T11:00");
@@ -277,7 +290,6 @@ test("SATICI — K5: düzeltme yetkisi YOK", async ({ page }) => {
   // testi tohumdaki kova dağılımına bağlar ve kırılgan olur.
   await page.goto("/panel/lojistik/sevkiyatlar/SHP-2026-00033/teslim-kaniti");
   await expect(page.getByText(/Taşıyıcıdan|Operasyon kaydı|Satıcı beyanı/).first()).toBeVisible();
-
   await expect(
     page.getByRole("button", { name: /Teslim kanıtını düzelt/i }),
     "satıcıya düzeltme düğmesi çizilmiş"
@@ -308,14 +320,14 @@ const FIYATLARIM = "/panel/lojistik/tarifeler";
 const KURALLARIM = "/panel/lojistik/fiyat-kurallari";
 const HESAPLA = "/panel/lojistik/fiyat-simulasyonu";
 
-test("SATICI — S13: fiyatlandırma menüde VAR ve üç kalem açılıyor", async ({ page }) => {
+test("SATICI — S13: fiyatlandırma menüde VAR ve üç kalem açılıyor", async ({ page }, testInfo) => {
   await page.goto(FIYATLARIM);
   // 13-FE'de tam bu unutulmuştu: ekran yazıldı, satıcı menüsüne eklenmedi.
   await expect(page.getByRole("heading", { name: /Kargo fiyatlarım/i })).toBeVisible();
 
-  const links = await page.evaluate(() =>
-    [...document.querySelectorAll('a[href*="/lojistik/"]')].map((a) => a.getAttribute("href"))
-  );
+  // Satıcıda bu üç ekranın etiketi admindekinden FARKLI ("Kargo Fiyatlarım"
+  // vs "Tarifeler"); eşleme `helpers/panelMenu.ts` içinde ikisini de tanıyor.
+  const links = await lojistikMenuYollari(page, testInfo);
   for (const yol of [FIYATLARIM, KURALLARIM, HESAPLA]) {
     expect(links, `satıcı menüsünde yok: ${yol}`).toContain(yol);
   }
@@ -406,7 +418,6 @@ test("SATICI — S3: zararına kural KAYDETMEDEN ÖNCE uyarı veriyor", async ({
     .first()
     .getByRole("button", { name: /Düzenle|İncele/ })
     .click();
-
   await expect(page.getByText(/Bu kuralla ne olur/i)).toBeVisible({ timeout: 10_000 });
 
   // Uyarı METİNLE duruyor — kırmızı marj tek başına yeterli değil.

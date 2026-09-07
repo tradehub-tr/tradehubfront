@@ -18,6 +18,10 @@
  */
 import { test, expect, request } from "@playwright/test";
 
+import { KUYRUK_SATIRI } from "./helpers/panelListe";
+
+import { LOJISTIK_ETIKET, menudeVar, mobilLojistikMenusu, mobilMi } from "./helpers/panelMenu";
+
 const BASE = process.env.PANEL_BASE ?? "http://tradehub.localhost";
 const USER = process.env.PANEL_USER ?? "Administrator";
 const PASS = process.env.PANEL_PASS ?? "";
@@ -88,30 +92,39 @@ test.beforeEach(async ({ context }) => {
 
 // ── Menü ve erişim ───────────────────────────────────────────────────
 
-test("lojistik menüsü GRUPLU ve teslimat kalemleri var", async ({ page }) => {
+test("lojistik menüsü GRUPLU ve teslimat kalemleri var", async ({ page }, testInfo) => {
   await page.goto(QUEUE);
   // Menü SPA ile çiziliyor: başlık görünmeden DOM'u okumak boş dizi döndürür.
   await expect(page.getByRole("heading", { name: /Teslim kanıtı/i }).first()).toBeVisible();
 
-  const links = await page.evaluate(() =>
-    [...document.querySelectorAll('a[href*="/lojistik/"]')].map((a) => a.getAttribute("href"))
-  );
-  for (const yol of [
+  const BEKLENEN = [
     "/panel/lojistik/teslim-kaniti",
     "/panel/lojistik/satici-teslimati",
     "/panel/lojistik/alici-teslim-alma",
-  ]) {
-    expect(links, `menüde yok: ${yol}`).toContain(yol);
-  }
+  ];
+  const HEDEF = ["SEVKİYATLAR", "PAKETLEME", "TESLİMAT", "TAŞIYICI", "AYARLAR"];
 
-  // Grup başlıkları — düz liste değil. Başlıklar menü panelinde ayrı
-  // elemanlar olarak duruyor; sayıları 2'den azsa gruplama uygulanmamıştır.
-  const basliklar = await page.evaluate(() => {
-    const hedef = ["SEVKİYATLAR", "PAKETLEME", "TESLİMAT", "TAŞIYICI", "AYARLAR"];
-    return [...document.querySelectorAll("aside *, nav *, [class*=sidebar] *")]
-      .map((el) => (el.children.length === 0 ? el.textContent?.trim().toUpperCase() : null))
-      .filter((t) => t && hedef.includes(t));
-  });
+  // Mobilde menü paneli BİR KEZ açılır: `menudeVar` + ayrı bir grup okuması
+  // paneli ikinci kez açmaya kalkıp sekme çubuğu panelin altında kaldığı
+  // için tıklamayı yutuyordu.
+  let basliklar: (string | null | undefined)[];
+  if (mobilMi(testInfo)) {
+    const { gruplar, kalemler } = await mobilLojistikMenusu(page);
+    for (const yol of BEKLENEN) {
+      expect(kalemler, `mobil menüde yok: ${LOJISTIK_ETIKET[yol]} (${yol})`).toContain(
+        LOJISTIK_ETIKET[yol]
+      );
+    }
+    basliklar = gruplar.map((t) => t.trim().toUpperCase()).filter((t) => HEDEF.includes(t));
+  } else {
+    await menudeVar(page, testInfo, BEKLENEN);
+    basliklar = await page.evaluate((hedef) => {
+      return [...document.querySelectorAll("aside *, nav *, [class*=sidebar] *")]
+        .map((el) => (el.children.length === 0 ? el.textContent?.trim().toUpperCase() : null))
+        .filter((t) => t && hedef.includes(t));
+    }, HEDEF);
+  }
+  // Grup başlıkları — düz liste değil; 2'den azsa gruplama uygulanmamıştır.
   expect([...new Set(basliklar)].length, "lojistik menüsü gruplanmamış").toBeGreaterThanOrEqual(2);
 });
 
@@ -120,25 +133,25 @@ test("lojistik menüsü GRUPLU ve teslimat kalemleri var", async ({ page }) => {
 test("kuyruk kovaları ve liste AYNI yanıttan geliyor", async ({ page }) => {
   await page.goto(QUEUE);
   await expect(page.getByRole("heading", { name: /Teslim kanıtı/i })).toBeVisible();
-  await expect(page.locator("table tbody tr").first()).toBeVisible();
+  await expect(page.locator(KUYRUK_SATIRI).first()).toBeVisible();
 
   // Kova sayaçlarının toplamı liste toplamını tutmalı.
-  const satirSayisi = await page.locator("table tbody tr").count();
+  const satirSayisi = await page.locator(KUYRUK_SATIRI).count();
   expect(satirSayisi).toBeGreaterThan(0);
 });
 
 test("kova filtresi listeyi süzüyor, sayaçları KAYDIRMIYOR", async ({ page }) => {
   await page.goto(QUEUE);
-  await expect(page.locator("table tbody tr").first()).toBeVisible();
+  await expect(page.locator(KUYRUK_SATIRI).first()).toBeVisible();
 
-  const sayacOnce = await page.locator("table tbody tr").count();
+  const sayacOnce = await page.locator(KUYRUK_SATIRI).count();
   await page
     .getByRole("button", { name: /Kanıt bekliyor/i })
     .first()
     .click();
-  await expect(page.locator("table tbody tr").first()).toBeVisible();
+  await expect(page.locator(KUYRUK_SATIRI).first()).toBeVisible();
 
-  const sayacSonra = await page.locator("table tbody tr").count();
+  const sayacSonra = await page.locator(KUYRUK_SATIRI).count();
   expect(sayacSonra, "filtre listeyi kısaltmadı").toBeLessThan(sayacOnce);
 });
 
@@ -159,8 +172,8 @@ test("kanıt kaydediliyor ve sevkiyat KOVA DEĞİŞTİRİYOR", async ({ page }) 
     .getByRole("button", { name: /Kanıt bekliyor/i })
     .first()
     .click();
-  await expect(page.locator("table tbody tr").first()).toBeVisible();
-  const bekleyenOnce = await page.locator("table tbody tr").count();
+  await expect(page.locator(KUYRUK_SATIRI).first()).toBeVisible();
+  const bekleyenOnce = await page.locator(KUYRUK_SATIRI).count();
 
   // Kanıt kaydet.
   await page.goto(`/panel/lojistik/sevkiyatlar/${BEKLEYEN}/teslim-kaniti`);
@@ -183,8 +196,8 @@ test("kanıt kaydediliyor ve sevkiyat KOVA DEĞİŞTİRİYOR", async ({ page }) 
     .getByRole("button", { name: /Kanıt bekliyor/i })
     .first()
     .click();
-  await expect(page.locator("table tbody tr").first()).toBeVisible();
-  const bekleyenSonra = await page.locator("table tbody tr").count();
+  await expect(page.locator(KUYRUK_SATIRI).first()).toBeVisible();
+  const bekleyenSonra = await page.locator(KUYRUK_SATIRI).count();
   expect(bekleyenSonra, "kayıt sonrası kova değişmedi").toBe(bekleyenOnce - 1);
 });
 
@@ -251,12 +264,12 @@ test("D1 ve D2 AYRI ekran — başlıkları farklı", async ({ page }) => {
 
 test("ÖDEME KAPISI: ödenmemiş kayıtta teslim düğmesi HİÇ ÇİZİLMİYOR", async ({ page }) => {
   await page.goto(BUYER_FLOW);
-  await expect(page.locator("article").first()).toBeVisible();
+  await expect(page.locator(KUYRUK_SATIRI).first()).toBeVisible();
 
   // Ödeme uyarısı taşıyan kartta "Teslim et" düğmesi bulunmamalı — devre dışı
   // değil, HİÇ YOK. Uyarıya rağmen tıklanabilen buton günün sonunda tıklanır.
   const blokluKart = page
-    .locator("article")
+    .locator(KUYRUK_SATIRI)
     .filter({ hasText: /Ödeme alınmadan teslim edilemez/i });
   if (await blokluKart.count()) {
     await expect(
@@ -268,7 +281,7 @@ test("ÖDEME KAPISI: ödenmemiş kayıtta teslim düğmesi HİÇ ÇİZİLMİYOR"
 
 test("teslim kodunun DEĞERİ hiçbir yerde görünmüyor", async ({ page }) => {
   await page.goto(BUYER_FLOW);
-  await expect(page.locator("article").first()).toBeVisible();
+  await expect(page.locator(KUYRUK_SATIRI).first()).toBeVisible();
 
   // Mock evrenindeki geçerli kod "4821" — ekranda asla yazmamalı.
   const govde = await page.locator("body").textContent();
@@ -277,7 +290,7 @@ test("teslim kodunun DEĞERİ hiçbir yerde görünmüyor", async ({ page }) => 
 
 test("randevusu geçmiş kayıt işaretleniyor", async ({ page }) => {
   await page.goto(SELLER_FLOW);
-  await expect(page.locator("article").first()).toBeVisible();
+  await expect(page.locator(KUYRUK_SATIRI).first()).toBeVisible();
   await expect(page.getByText(/Randevu geçti/i).first()).toBeVisible();
 });
 
@@ -367,7 +380,7 @@ test.fixme("K9: konum HİÇ taşınmıyorsa çizelge çizilmiyor, sebep yazıyor
 
 test("K11: teslim noktası ekranı TERK ETMEDEN görünüyor", async ({ page }) => {
   await page.goto(BUYER_FLOW);
-  await expect(page.locator("article").first()).toBeVisible();
+  await expect(page.locator(KUYRUK_SATIRI).first()).toBeVisible();
 
   // Nokta bilgisi ayrı EKRAN değil, kart olarak açılıyor (K-C).
   //
@@ -375,7 +388,7 @@ test("K11: teslim noktası ekranı TERK ETMEDEN görünüyor", async ({ page }) 
   // görünüyordu (ölçüldü 2026-08-19). Tohumda teslim noktası taşıyan kayıt
   // VAR; yoksa bu bir eksiktir ve testin bunu söylemesi gerekir.
   const noktaBtn = page
-    .locator("article button")
+    .locator(`${KUYRUK_SATIRI} button`)
     .filter({ hasText: /^[A-Z]+-[A-Z0-9]+$/ })
     .first();
   await expect(noktaBtn, "teslim noktası bağlantısı hiçbir kartta yok").toBeVisible();
@@ -475,7 +488,12 @@ async function kuyrugaGit(page, mod: "table" | "grid" | "kanban" | "list" = "tab
   await page.addInitScript((m) => {
     if (sessionStorage.getItem("__pod_mod_kuruldu")) return;
     sessionStorage.setItem("__pod_mod_kuruldu", "1");
+    // `lv-mode:` MASAÜSTÜ tercihi; dar ekranda bilerek yok sayılıyor
+    // (`useResponsiveViewMode`: telefonda açan kullanıcı masaüstü tablosunu
+    // kaybetmesin). Mobilde karşılığı OTURUMLUK seçim — kullanıcının o
+    // ekranda açıkça mod seçmesini temsil ediyor.
     localStorage.setItem("lv-mode:logistics-pod-queue", m);
+    sessionStorage.setItem("lv-mode-dar:logistics-pod-queue", m);
   }, mod);
   await page.goto(QUEUE);
   await expect(page.getByRole("heading", { level: 1 })).toBeVisible();

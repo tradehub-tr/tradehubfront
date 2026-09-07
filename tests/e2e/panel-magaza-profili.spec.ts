@@ -11,7 +11,7 @@
  * NOT: Performans sekmesindeki alan etiketleri (TR) sizin DocType label'larınıza
  * göre değişebilir; aşağıdaki metinleri panelde görünenle teyit edin.
  */
-import { test, expect, request } from "@playwright/test";
+import { test, expect, request, type Page, type TestInfo } from "@playwright/test";
 
 const BASE = process.env.PANEL_BASE ?? "http://tradehub.localhost";
 const USER = process.env.PANEL_USER ?? "Administrator";
@@ -83,27 +83,44 @@ test("Faz 0 — liste başlığı 'Mağaza Profilleri'", async ({ page }) => {
   await expect(page.getByText("Admin Seller Profile")).toHaveCount(0);
 });
 
-test("Faz 1 — adres/vergi verisi dinamik dolu (SEL-00001)", async ({ page }) => {
-  await page.goto("/panel/app/Admin%20Seller%20Profile/SEL-00001");
-  // Vue SPA (DocTypeFormView): sekmeler `role="tab"` taşıyor. ESKİDEN düz
-  // <button>'du ve bu test onu `getByRole("button")` ile arıyordu; erişilebilirlik
-  // için rol eklenince arama boş dönmeye başladı ve tıklama zaman aşımına uğradı.
-  const tabs = page.locator('[data-tour="dtf-tabs"]');
-  await tabs.waitFor();
+/**
+ * DocType form sekmesine geçer — MASAÜSTÜ ve MOBİL.
+ *
+ * `DocTypeFormView.vue` sekme şeridini `hidden lg:block` ile mobilde
+ * GİZLİYOR; yerine V4 "Akıllı Tek Sayfa" düzeni geliyor: yapışkan chip
+ * navigasyonu (`data-tour="dtf-tabs-m"`) + tüm bölümlerin aynı sayfada
+ * açık durduğu akordeon. Yani mobilde sekme DEĞİŞTİRİLMİYOR, bölüme
+ * KAYDIRILIYOR. Test masaüstü şeridini beklediği için mobilde 30 sn
+ * zaman aşımına düşüyordu — üründe kusur yokken (ölçüldü 7 Eyl).
+ */
+async function formSekmesi(page: Page, testInfo: TestInfo, ad: RegExp): Promise<void> {
+  const mobil = testInfo.project.name.includes("mobile");
+  const kap = page.locator(mobil ? '[data-tour="dtf-tabs-m"]' : '[data-tour="dtf-tabs"]');
+  await kap.waitFor();
   await dismissTour(page);
-  // İletişim tab: şehir + adres dinamik dolu (city idx 34, address_line1 idx 32; tab_iletisim 27-38)
-  await tabs.getByRole("tab", { name: /İletişim/i }).click();
+  // Mobil chip'ler `<button>`, masaüstü şeridi `role="tab"` taşıyor.
+  await (mobil ? kap.getByRole("button", { name: ad }) : kap.getByRole("tab", { name: ad }))
+    .first()
+    .click();
+}
+
+test("Faz 1 — adres/vergi verisi dinamik dolu (SEL-00001)", async ({ page }, testInfo) => {
+  await page.goto("/panel/app/Admin%20Seller%20Profile/SEL-00001");
+  // Masaüstü şeridinde sekmeler `role="tab"` taşıyor. ESKİDEN düz <button>'du
+  // ve bu test onu `getByRole("button")` ile arıyordu; erişilebilirlik için rol
+  // eklenince arama boş dönmeye başladı ve tıklama zaman aşımına uğradı.
+  // İletişim: şehir + adres dinamik dolu (city idx 34, address_line1 idx 32).
+  await formSekmesi(page, testInfo, /İletişim/i);
   await expect(fieldControl(page, "şehir")).toHaveValue("Adana"); // city
   await expect(fieldControl(page, "Adres")).toHaveValue(/Bursa/); // address_line1
   // NOT: Vergi Dairesi (tax_office) "Şirket Profili" tab'ında (idx 18), İletişim'de değil.
 });
 
-test("Faz 5 — Performans: total_orders/score_grade var, health_score yok", async ({ page }) => {
+test("Faz 5 — Performans: total_orders/score_grade var, health_score yok", async ({
+  page,
+}, testInfo) => {
   await page.goto("/panel/app/Admin%20Seller%20Profile/SEL-00001");
-  const tabs = page.locator('[data-tour="dtf-tabs"]');
-  await tabs.waitFor();
-  await dismissTour(page);
-  await tabs.getByRole("tab", { name: /Performans/i }).click();
+  await formSekmesi(page, testInfo, /Performans/i);
   // total_orders gerçek değer (SEL-00001 = 5), read-only alan
   await expect(fieldControl(page, "Toplam Sipariş")).toHaveValue("5");
   // Gizlenen alanların (Property Setter hidden=1) etiketleri DOM'da olmamalı:
