@@ -32,7 +32,9 @@ function renderEmptyState(): string {
       <div class="inline-flex items-center justify-center w-20 h-20 max-sm:w-16 max-sm:h-16 rounded-full mb-4" style="background:linear-gradient(135deg, var(--color-primary-400, #e6b212) 0%, var(--color-primary-500, #cc6b00) 100%);color:white">
         ${ICONS.shield}
       </div>
-      <h2 class="text-xl max-sm:text-lg font-bold mb-2 text-balance">${t("kyb.notStartedTitle")}</h2>
+      <template x-if="!kybData.exists">
+      <h1 class="text-xl max-sm:text-lg font-bold mb-2 text-balance">${t("kyb.notStartedTitle")}</h1>
+      </template>
       <p class="text-sm mb-6 max-w-md mx-auto" style="color:var(--color-text-tertiary)">${t("kyb.notStartedDesc")}</p>
       <button type="button" @click="startApplication()" class="th-btn px-8 max-sm:w-full max-sm:justify-center">${t("kyb.applyNow")}</button>
     </div>
@@ -119,7 +121,9 @@ function renderHeader(): string {
   return `
     <div class="flex items-center justify-between gap-4 mb-5 flex-wrap">
       <div>
+        <template x-if="kybData.exists">
         <h1 class="text-2xl max-sm:text-xl font-bold mb-1">${t("kyb.title")}</h1>
+        </template>
         <p class="text-sm" style="color:var(--color-text-tertiary)">${t("kyb.subtitle")}</p>
       </div>
       <template x-if="kybData.exists">

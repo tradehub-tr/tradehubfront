@@ -15,6 +15,7 @@ import { t } from "../../i18n";
 export function TicketDetailLayout(): string {
   return `
     <div class="bg-gray-50 min-h-screen" x-data="ticketDetail()">
+      <template x-if="!ticket"><h1 class="sr-only">${t("pageHeading.help_help_ticket")}</h1></template>
       <div class="max-w-[1100px] mx-auto px-4 sm:px-6 py-6">
 
         <!-- Breadcrumb + back -->
@@ -48,7 +49,7 @@ export function TicketDetailLayout(): string {
         <!-- Not found -->
         <template x-if="!loading && !errorMsg && !ticket">
           <div class="bg-white border border-gray-200 rounded-xl p-12 text-center">
-            <h3 class="text-base font-semibold text-gray-700 mb-1">${t("helpUi.ticketNotFound")}</h3>
+            <h2 class="text-base font-semibold text-gray-700 mb-1">${t("helpUi.ticketNotFound")}</h2>
             <p class="text-sm text-gray-400">${t("helpUi.ticketNotFoundDesc")}</p>
           </div>
         </template>

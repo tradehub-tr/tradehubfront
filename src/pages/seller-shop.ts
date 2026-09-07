@@ -109,7 +109,9 @@ async function renderPage() {
         <div class="w-16 h-16 mx-auto mb-4 rounded-md bg-gray-100 flex items-center justify-center">
           <svg class="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M13.5 21v-7.5a.75.75 0 0 1 .75-.75h3a.75.75 0 0 1 .75.75V21m-4.5 0H2.36m11.14 0H18m0 0h3.64m-1.39 0V9.349M3.75 21V9.349"/></svg>
         </div>
-        <h2 class="text-lg font-bold text-gray-700 mb-1">${t("sellPage.storeNotFound")}</h2>
+        <template x-if="!seller">
+        <h1 class="text-lg font-bold text-gray-700 mb-1">${t("sellPage.storeNotFound")}</h1>
+        </template>
         <p class="text-sm text-gray-400">${t("sellPage.storeNotFoundDesc")}</p>
       </div>
 
@@ -141,7 +143,9 @@ async function renderPage() {
                 <div class="flex items-start justify-between gap-4">
                   <div class="min-w-0">
                     <!-- Company Name -->
+                    <template x-if="seller">
                     <h1 class="text-[22px] sm:text-[26px] font-bold text-[#222] leading-tight mb-1.5 truncate" x-text="seller?.seller_name || ''"></h1>
+                    </template>
 
                     <!-- Badges row -->
                     <div class="flex flex-wrap items-center gap-2 mb-2">
@@ -163,7 +167,7 @@ async function renderPage() {
                       <template x-if="seller?.city || seller?.country">
                         <span class="text-[13px] text-[#666]">
                           <span class="mx-1 text-[#ccc]">&middot;</span>
-                          <span x-text="[seller?.city, seller?.country].filter(Boolean).join(', ')"></span>
+                          <span x-text="[seller?.city, $countryName(seller?.country)].filter(Boolean).join(', ')"></span>
                         </span>
                       </template>
                     </div>
@@ -183,8 +187,6 @@ async function renderPage() {
                     <div x-show="seller?.verified" class="flex items-baseline gap-1 mb-1 justify-end text-green-700 dark:text-green-400">
                       <svg class="w-4 h-4 self-center" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
                       <span class="text-[12px] font-semibold">${t("seller.sf.verifiedSupplier")}</span>
-                      <img src="/images/istoc-logo.png" alt="iStoc" width="87" height="32" class="h-[10px] w-auto self-baseline ms-1" />
-                      <span class="text-[10px] text-[#999] font-medium">${t("sellPage.with")}</span>
                     </div>
                     <button
                       class="bg-(--btn-bg,#ff8600) hover:bg-(--btn-hover-bg,#db7300) active:bg-(--btn-hover-bg,#db7300) text-(--btn-text,#1a1a1a) text-[12px] font-medium border border-(--btn-border-color,#db7300) rounded-[var(--radius-button,8px)] px-5 py-2 active:scale-[0.97] transition-[background-color,transform] duration-150 motion-reduce:transition-none motion-reduce:active:scale-100 whitespace-nowrap"

@@ -230,7 +230,7 @@ const SECTION_RENDERERS: Record<string, SectionRenderer> = {
         <div class="max-w-[1200px] mx-auto px-4 lg:px-8 py-6">
           <template x-if="categories && categories.length > 0">
             <div>
-              <h3 class="text-[18px] font-bold text-gray-900 mb-4 uppercase" x-text="sectionTitle('category_grid')"></h3>
+              <h2 class="text-[18px] font-bold text-gray-900 mb-4 uppercase" x-text="sectionTitle('category_grid')"></h2>
               <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
                 <template x-for="cat in categories" :key="(cat.type || 'seller') + '-' + cat.name">
                   <a :href="'#category-' + cat.name"
@@ -261,7 +261,7 @@ const SECTION_RENDERERS: Record<string, SectionRenderer> = {
           <template x-if="products && products.length > 0">
             <div>
               <div class="flex items-center justify-between mb-4">
-                <h3 class="text-[18px] font-bold text-gray-900 uppercase" x-text="sectionTitle('hot_products')"></h3>
+                <h2 class="text-[18px] font-bold text-gray-900 uppercase" x-text="sectionTitle('hot_products')"></h2>
                 <div class="flex items-center gap-2">
                   <button @click="$refs.hotScroll.scrollBy({left: -280, behavior: 'smooth'})" class="w-8 h-8 rounded-full border border-gray-200 flex items-center justify-center hover:bg-gray-50 transition-colors">
                     <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
@@ -315,7 +315,7 @@ const SECTION_RENDERERS: Record<string, SectionRenderer> = {
 
               <!-- Urun Kategorileri -->
               <div class="border-t border-gray-200 pt-4">
-                <h4 class="text-[14px] font-bold text-gray-900 mb-3 px-1">${t("sellerApp.productCategories")}</h4>
+                <h3 class="text-[14px] font-bold text-gray-900 mb-3 px-1">${t("sellerApp.productCategories")}</h3>
                 <div class="space-y-0.5">
                   <template x-for="cat in categories" :key="(cat.type || 'seller') + '-' + cat.name">
                     <a href="#" @click.prevent="filterByCategory(cat.name, cat.type || 'seller')"
@@ -341,7 +341,7 @@ const SECTION_RENDERERS: Record<string, SectionRenderer> = {
               <template x-if="products && products.length > 0">
                 <div id="shop-products-top">
                   <!-- Baslik -->
-                  <h3 class="text-[20px] font-bold text-gray-900 mb-4" x-text="activeCategoryName || '${t("sellerApp.allProducts")}'"></h3>
+                  <h2 class="text-[20px] font-bold text-gray-900 mb-4" x-text="activeCategoryName || '${t("sellerApp.allProducts")}'"></h2>
 
                   <!-- Toolbar: sort + view toggle -->
                   <div class="flex items-center justify-between mb-4 flex-wrap gap-3">
@@ -466,7 +466,7 @@ const SECTION_RENDERERS: Record<string, SectionRenderer> = {
       <section class="storefront-section" data-section="company_info">
         <div class="max-w-[1200px] mx-auto px-4 lg:px-8 py-6">
           <div class="bg-white rounded-md border border-gray-200 p-6">
-            <h3 class="text-[18px] font-bold text-gray-900 mb-4" x-text="sectionTitle('company_info')"></h3>
+            <h2 class="text-[18px] font-bold text-gray-900 mb-4" x-text="sectionTitle('company_info')"></h2>
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-3 text-[14px]">
               <div class="flex justify-between py-2 border-b border-gray-50">
                 <span class="text-gray-500">${t("sellerApp.bizType")}</span>
@@ -511,7 +511,7 @@ const SECTION_RENDERERS: Record<string, SectionRenderer> = {
         }"
       >
         <div class="max-w-[1200px] mx-auto px-4 lg:px-8 py-6">
-          <h3 class="text-[18px] font-bold text-gray-900 mb-4" x-text="sectionTitle('certificates')"></h3>
+          <h2 class="text-[18px] font-bold text-gray-900 mb-4" x-text="sectionTitle('certificates')"></h2>
           <div x-show="verifiedCerts.length > 0" class="grid grid-cols-2 sm:grid-cols-4 gap-4">
             <template x-for="(cert, idx) in verifiedCerts" :key="idx">
               <a
@@ -545,14 +545,14 @@ const SECTION_RENDERERS: Record<string, SectionRenderer> = {
     return `
       <section class="storefront-section" data-section="why_choose_us">
         <div class="max-w-[1200px] mx-auto px-4 lg:px-8 py-6">
-          <h3 class="text-[18px] font-bold text-gray-900 mb-4" x-text="sectionTitle('why_choose_us')"></h3>
+          <h2 class="text-[18px] font-bold text-gray-900 mb-4" x-text="sectionTitle('why_choose_us')"></h2>
           <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             <template x-for="(adv, idx) in (seller?.advantages || [])" :key="idx">
               <div class="bg-white border border-gray-200 rounded-md p-5">
                 <div class="w-10 h-10 bg-blue-50 rounded-md flex items-center justify-center mb-3">
                   <svg class="w-5 h-5 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
                 </div>
-                <h4 class="text-[14px] font-bold text-gray-900 mb-1" x-text="adv.title"></h4>
+                <h3 class="text-[14px] font-bold text-gray-900 mb-1" x-text="adv.title"></h3>
                 <p class="text-[13px] text-gray-500" x-text="adv.description"></p>
               </div>
             </template>
@@ -566,7 +566,7 @@ const SECTION_RENDERERS: Record<string, SectionRenderer> = {
     return `
       <section class="storefront-section" data-section="gallery">
         <div class="max-w-[1200px] mx-auto px-4 lg:px-8 py-6">
-          <h3 class="text-[18px] font-bold text-gray-900 mb-4" x-text="sectionTitle('gallery')"></h3>
+          <h2 class="text-[18px] font-bold text-gray-900 mb-4" x-text="sectionTitle('gallery')"></h2>
           <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
             <template x-for="(photo, idx) in (seller?.gallery_images || [])" :key="idx">
               <div class="aspect-square rounded-md overflow-hidden bg-gray-100 cursor-pointer hover:opacity-90 transition-opacity">
@@ -584,7 +584,7 @@ const SECTION_RENDERERS: Record<string, SectionRenderer> = {
       <section class="storefront-section" data-section="company_introduction">
         <div class="max-w-[1200px] mx-auto px-4 lg:px-8 py-6">
           <div class="bg-white rounded-md border border-gray-200 p-6">
-            <h3 class="text-[18px] font-bold text-gray-900 mb-4" x-text="sectionTitle('company_introduction')"></h3>
+            <h2 class="text-[18px] font-bold text-gray-900 mb-4" x-text="sectionTitle('company_introduction')"></h2>
             <div class="text-[14px] text-gray-600 leading-relaxed" x-html="$safeHtml(seller?.description || seller?.short_description || '')"></div>
           </div>
         </div>
@@ -600,7 +600,7 @@ const SECTION_RENDERERS: Record<string, SectionRenderer> = {
 
             <!-- SOL: Iletisim Bilgileri -->
             <div class="flex-1 bg-white rounded-md border border-gray-200 p-6 lg:p-8 relative">
-              <h3 class="text-[20px] font-bold text-gray-900 mb-6">${t("sellerApp.contactInfo")}</h3>
+              <h2 class="text-[20px] font-bold text-gray-900 mb-6">${t("sellerApp.contactInfo")}</h2>
 
               <!-- Guest uyari banneri -->
               <div x-show="!isLoggedIn" @click="requireLogin()"
@@ -724,7 +724,7 @@ const SECTION_RENDERERS: Record<string, SectionRenderer> = {
                           <template x-if="seller?.address?.city"><span><span x-text="seller.address.city"></span> / </span></template>
                           <span x-text="seller?.address?.state || ''"></span>
                           <template x-if="seller?.address?.postal_code"><span> · <span x-text="seller.address.postal_code"></span></span></template>
-                          <template x-if="seller?.address?.country"><span> · <span x-text="seller.address.country"></span></span></template>
+                          <template x-if="seller?.address?.country"><span> · <span x-text="$countryName(seller.address.country)"></span></span></template>
                         </p>
                       </div>
                     </template>
@@ -742,7 +742,7 @@ const SECTION_RENDERERS: Record<string, SectionRenderer> = {
             <!-- SAG: Tedarikçiye Ulasin Sidebar -->
             <div class="w-full lg:w-[280px] shrink-0">
               <div class="bg-white rounded-md border border-gray-200 p-5 sticky top-[54px]">
-                <h4 class="text-[16px] font-bold text-gray-900 mb-4">${t("sellerApp.reachSupplier")}</h4>
+                <h3 class="text-[16px] font-bold text-gray-900 mb-4">${t("sellerApp.reachSupplier")}</h3>
 
                 <!-- Sirket Mini Karti -->
                 <div class="flex items-center gap-3 mb-5 pb-4 border-b border-gray-100">

@@ -12,7 +12,7 @@
 import { getCurrentProduct } from "../../alpine/product";
 import { t } from "../../i18n";
 import { escapeHtml, sanitizeUrl } from "../../utils/sanitize";
-import { getSellerUrl } from "../../utils/sellerUrl";
+import { getSellerUrl, getSellerStoreUrl } from "../../utils/sellerUrl";
 import { getCountryCode } from "../../utils/country";
 import { getFlagSvg } from "../../utils/flags";
 import { VerificationBadge } from "../seller/VerificationBadge";
@@ -41,12 +41,12 @@ function metricCell(m: SellerMetric): string {
 /**
  * "Mağazayı Ziyaret Et" + "Sohbet et" aksiyon çifti — satıcı panelinde ve
  * Tedarikçi sekmesinde (CompanyProfile) birebir aynı görünür. Outline
- * token'ları nötr ezilir (beyaz zemin, siyah border). `slug` dalı bilinçli:
- * `id` dalının ürettiği ?seller= query URL'i gateway'de 404 veriyor.
+ * token'ları nötr ezilir (beyaz zemin, siyah border). Ziyaret butonu mağazanın
+ * DÜKKAN sayfasına (/magaza/<kod>/dukkan) gider; supplier.id = sellerCode.
  */
 export function SellerActionButtons(wrapperClass = ""): string {
   const p = getCurrentProduct();
-  const url = escapeHtml(sanitizeUrl(getSellerUrl({ slug: p.supplier.id })));
+  const url = escapeHtml(sanitizeUrl(getSellerStoreUrl(p.supplier.id)));
   return `
     <div class="grid grid-cols-2 gap-2 [--btn-outline-bg:#fff] [--btn-outline-text:#222] [--btn-outline-border-color:#222] [--btn-outline-border-width:1px] [--btn-outline-hover-bg:#f5f5f5] [--btn-outline-hover-text:#222]${wrapperClass ? ` ${wrapperClass}` : ""}">
       <a href="${url}" class="th-btn-outline th-btn-sm inline-flex items-center justify-center gap-1.5 whitespace-nowrap">
@@ -66,6 +66,14 @@ export function ProductSellerPanel(): string {
 
   const sellerUrl = escapeHtml(sanitizeUrl(getSellerUrl({ slug: s.id })));
   const sellerInitial = escapeHtml((s.name || "?").trim().charAt(0).toUpperCase() || "?");
+  // Mağaza logosu (Admin Seller Profile.logo) varsa Tedarikçi sekmesiyle aynı
+  // şekilde logo basılır; yoksa baş harf avatarı. 40×40, beyaz zemin, contain.
+  const sellerLogoUrl = s.logo ? sanitizeUrl(s.logo) : "";
+  const sellerAvatar = sellerLogoUrl
+    ? `<span data-seller-logo class="shrink-0 w-10 h-10 rounded-md bg-white border border-[var(--color-border-default,#e5e5e5)] p-1 inline-flex items-center justify-center overflow-hidden">
+         <img src="${escapeHtml(sellerLogoUrl)}" alt="${escapeHtml(s.name || "")}" width="40" height="40" decoding="async" class="w-full h-full object-contain" />
+       </span>`
+    : `<span data-seller-initial class="shrink-0 w-10 h-10 rounded-md bg-gradient-to-br from-[#3b3b3b] to-[#111111] text-white text-base font-extrabold inline-flex items-center justify-center" aria-hidden="true">${sellerInitial}</span>`;
 
   const metrics: SellerMetric[] = [];
   // Hem `rating > 0` hem `reorderRate` (backend falsy 0'ı None'a çeviriyor —
@@ -121,7 +129,7 @@ export function ProductSellerPanel(): string {
     <section id="pd-seller-panel" class="mt-4 rounded-md border border-[var(--color-border-default,#e5e5e5)] bg-[var(--color-surface-raised,#f5f5f5)] p-3">
       <!-- Kimlik: satır yüksekliği 40px, logo 40×40, gap 12px -->
       <div class="flex items-start gap-3 min-w-0">
-        <span class="shrink-0 w-10 h-10 rounded-md bg-gradient-to-br from-[#3b3b3b] to-[#111111] text-white text-base font-extrabold inline-flex items-center justify-center" aria-hidden="true">${sellerInitial}</span>
+        ${sellerAvatar}
         <div class="min-w-0 flex-1">
           <div class="flex items-center gap-1.5 flex-wrap">
             <a href="${sellerUrl}" class="truncate text-[14px] font-semibold leading-[18px] underline underline-offset-2 text-[#222]">${escapeHtml(s.name)}</a>

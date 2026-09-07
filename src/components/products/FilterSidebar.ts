@@ -1,8 +1,16 @@
 import { getCurrencySymbol } from "../../utils/currency";
 import { t } from "../../i18n";
+import { getCountryDisplayName } from "../../utils/country";
 import { escapeHtml, sanitizeUrl, safeHexColor } from "../../utils/sanitize";
 import { updatePriceFacet, initPriceSliders } from "./initPriceSlider";
 import type { FilterFacets } from "../../services/listingService";
+import {
+  buildCategoryFacetTree,
+  filterCategoryFacets,
+  type CategoryFacetItem,
+  type CategoryTreeNode,
+} from "./buildCategoryFacetTree";
+import { renderCategoryTree } from "./renderCategoryTree";
 
 /**
  * FilterSidebar Component (iSTOC-style Filter Panel)
@@ -11,7 +19,7 @@ import type { FilterFacets } from "../../services/listingService";
  * - Supplier features (Verified Supplier, Verified PRO)
  * - Store reviews (radio buttons)
  * - Product features (Paid samples)
- * - Categories (collapsible list)
+ * - Categories (collapsible category tree)
  * - Price range (min/max inputs)
  * - Min. order (input)
  * - Supplier country/region (searchable checkboxes)
@@ -38,8 +46,10 @@ function loadInitialFacets(query?: string, category?: string): Promise<FilterFac
   if (initialFacetPromise && initialFacetKey === key) return initialFacetPromise;
 
   initialFacetKey = key;
+  // İlk yükleme: sonuç boşsa kategori ağacı tüm ürünlerden kurulsun (seçili kategori
+  // 0 sayımla işaretli kalır). Filtre değişimindeki yenileme bu bayrağı göndermez.
   const request = import("../../services/listingService").then(({ getFilterFacets }) =>
-    getFilterFacets(query, category)
+    getFilterFacets({ query, category, fallback_categories: true })
   );
   const cachedRequest = request.catch((error: unknown) => {
     if (initialFacetKey === key) initialFacetPromise = null;
@@ -490,13 +500,29 @@ function renderSectionContent(section: FilterSection, idPrefix = ""): string {
       `;
     }
     case "category": {
+      // Arama kutusu: ağaç 12'den fazla düğüm içerince görünür (paintCategoryTree).
       return `
+        <div data-cat-search-root>
+          <div class="relative mb-2 hidden" data-filter-search-wrapper="categories">
+            <div class="absolute inset-y-0 start-0 ps-2.5 flex items-center pointer-events-none" style="color: var(--filter-search-icon, #9ca3af);">
+              ${icons.search}
+            </div>
+            <input
+              type="text"
+              placeholder="${escapeHtml(t("products.filterSearchCategory"))}"
+              class="th-input th-input-sm ps-8"
+              style="border-color: var(--filter-input-border, #d1d5db); color: var(--filter-text-color, #374151);"
+              data-cat-search
+              autocomplete="off"
+            />
+          </div>
         <div data-filter-dynamic="categories">
           <div class="animate-pulse space-y-2">
             <div class="h-4 bg-gray-200 rounded w-3/4"></div>
             <div class="h-4 bg-gray-200 rounded w-1/2"></div>
             <div class="h-4 bg-gray-200 rounded w-2/3"></div>
           </div>
+        </div>
         </div>
       `;
     }
@@ -599,6 +625,65 @@ export function FilterSidebar(sections?: FilterSection[], idPrefix = ""): string
   `;
 }
 
+/** Arama kutusunun görünmesi için ağaçtaki asgari düğüm sayısı (üstü). */
+const CATEGORY_SEARCH_MIN_NODES = 12;
+let lastCategoryFacets: CategoryFacetItem[] = [];
+let lastCategoryParam: string | undefined;
+let categorySearchBound = false;
+
+function countTreeNodes(nodes: CategoryTreeNode[]): number {
+  return nodes.reduce((sum, n) => sum + 1 + countTreeNodes(n.children), 0);
+}
+
+/** Tek bir konteynere ağacı basar; arama terimi varsa filtreler ve tüm dalları açar. */
+function renderCategoryTreeInto(container: HTMLElement, term: string): void {
+  const facets = filterCategoryFacets(lastCategoryFacets, term);
+  const nodes = buildCategoryFacetTree(facets, lastCategoryParam);
+  if (term.trim()) {
+    const openAll = (list: CategoryTreeNode[]) =>
+      list.forEach((n) => {
+        n.open = true;
+        openAll(n.children);
+      });
+    openAll(nodes);
+  }
+  container.innerHTML =
+    nodes.length === 0
+      ? `<p class="text-xs" style="color:#9ca3af">${t("products.noResults")}</p>`
+      : renderCategoryTree(nodes);
+}
+
+/**
+ * "Kategoriler" filtresini açılır-kapanır ağaç olarak basar (desktop + mobil
+ * konteynerler). Backend facet'i her kategori için kökten ebeveyne ata zinciri
+ * (`path`) döndürür; ağaç ondan kurulur, sayımlar atalara toplanır. Ağaç
+ * 12'den fazla düğüm içeriyorsa kategori arama kutusu görünür olur.
+ */
+function paintCategoryTree(facets: FilterFacets, category?: string): void {
+  lastCategoryFacets = facets.categories;
+  lastCategoryParam = category;
+  const totalNodes = countTreeNodes(buildCategoryFacetTree(facets.categories, category));
+  document.querySelectorAll<HTMLElement>("[data-cat-search-root]").forEach((root) => {
+    const container = root.querySelector<HTMLElement>('[data-filter-dynamic="categories"]');
+    const input = root.querySelector<HTMLInputElement>("input[data-cat-search]");
+    root
+      .querySelector<HTMLElement>('[data-filter-search-wrapper="categories"]')
+      ?.classList.toggle("hidden", totalNodes <= CATEGORY_SEARCH_MIN_NODES);
+    if (container) renderCategoryTreeInto(container, input?.value ?? "");
+  });
+  if (!categorySearchBound) {
+    categorySearchBound = true;
+    document.addEventListener("input", (e) => {
+      const input = e.target;
+      if (!(input instanceof HTMLInputElement) || !input.hasAttribute("data-cat-search")) return;
+      const container = input
+        .closest("[data-cat-search-root]")
+        ?.querySelector<HTMLElement>('[data-filter-dynamic="categories"]');
+      if (container) renderCategoryTreeInto(container, input.value);
+    });
+  }
+}
+
 /**
  * Initialize filter sidebar interactions
  * No-op — Alpine.js handles all filter interactions via x-data="filterSidebar"
@@ -610,30 +695,8 @@ export function initFilterSidebar(query?: string, category?: string): void {
   // isteğini ve sonucu paylaşır; mobil paneli açmak ikinci bir ağ isteği yapmaz.
   void loadInitialFacets(query, category)
     .then((facets) => {
-      // Update category sections
-      document
-        .querySelectorAll<HTMLElement>('[data-filter-dynamic="categories"]')
-        .forEach((container) => {
-          if (facets.categories.length === 0) {
-            container.innerHTML = `<p class="text-xs" style="color:#9ca3af">${t("products.noResults")}</p>`;
-            return;
-          }
-          container.innerHTML = facets.categories
-            .map(
-              (cat) => `
-          <button
-            type="button"
-            class="th-no-press flex items-center justify-between w-full py-1.5 text-[13px] hover:text-primary-600 transition-colors cursor-pointer"
-            style="color: var(--filter-text-color, #374151);"
-            onclick="window.location.href='/pages/products.html?cat=${encodeURIComponent(cat.slug)}'"
-          >
-            <span class="truncate">${escapeHtml(cat.name)}</span>
-            <span class="text-[11px] ms-2 flex-shrink-0" style="color:#9ca3af">(${cat.count})</span>
-          </button>
-        `
-            )
-            .join("");
-        });
+      // Kategori ağacı: mega menü ağacı + facet sayımları (buildCategoryFacetTree)
+      paintCategoryTree(facets, category);
 
       // Update country sections
       toggleSearchForSection("supplier-country", facets.countries.length);
@@ -648,10 +711,13 @@ export function initFilterSidebar(query?: string, category?: string): void {
             container.closest("[data-filter-prefix]")?.getAttribute("data-filter-prefix") || "";
           container.innerHTML = facets.countries
             .map((c) => {
-              // Country facet item: backend `code` alanı varsa onu, yoksa value'yu i18n key olarak kullan
+              // Country facet item: backend `code` varsa i18n key olarak kullan; yoksa
+              // value/label ("Turkey") getCountryDisplayName ile resmî ada ("Türkiye") çevrilir.
               const code = c.code || c.value;
               const translatedName =
-                t(`countries.${code}`) !== `countries.${code}` ? t(`countries.${code}`) : c.label;
+                t(`countries.${code}`) !== `countries.${code}`
+                  ? t(`countries.${code}`)
+                  : getCountryDisplayName(c.label || c.value) || c.label;
               const checkboxId = `filter-${idPrefix ? idPrefix + "-" : ""}supplier-country-country-${c.value.toLowerCase()}`;
               return `
             <label for="${escapeHtml(checkboxId)}" class="flex items-center gap-2 cursor-pointer group py-1 filter-searchable-item">
@@ -908,6 +974,26 @@ export function updateFacetCounts(
         countSpan.textContent = `(${newCount.toLocaleString()})`;
       }
     });
+  // Kategori ağacı sayımları: ağaç yapısı/açık-kapalı durumu korunur, sadece (xx) güncellenir.
+  // Boş liste (sonuç yok) ağacı (0)'a çekmez: ilk yüklemedeki fallback ağacı ve
+  // sıfır sonuçlu filtrede "filtre olmasa kaç ürün var" bilgisi yerinde kalır.
+  if (facets.categories.length === 0) {
+    updatePriceFacet(facets);
+    return;
+  }
+  const catNodes = buildCategoryFacetTree(facets.categories, undefined);
+  const catCounts = new Map<string, number>();
+  const collect = (nodes: typeof catNodes) => {
+    for (const n of nodes) {
+      catCounts.set(n.id, n.count);
+      collect(n.children);
+    }
+  };
+  collect(catNodes);
+  document.querySelectorAll<HTMLElement>("[data-cat-count]").forEach((span) => {
+    const id = span.dataset.catCount || "";
+    span.textContent = `(${(catCounts.get(id) ?? 0).toLocaleString()})`;
+  });
   // Fiyat histogramı + slider da facet ile birlikte güncellenir (kategorik filtre değişince
   // fiyat dağılımı değişir).
   updatePriceFacet(facets);

@@ -88,9 +88,11 @@ export function RegisterPage(initialStep: RegisterStep = "account-type"): string
         x-show="currentStep === 'account-type'"${initialStep !== "account-type" ? " x-cloak" : ""}>
         <!-- Header -->
         <div class="mb-6 text-center lg:text-start">
+          <template x-if="currentStep === 'account-type'">
           <h1 class="text-xl lg:text-2xl font-bold text-gray-900 dark:text-white mb-2" data-i18n="auth.register.title">
             ${t("auth.register.title")}
           </h1>
+          </template>
           <p class="text-sm text-gray-500 dark:text-gray-400" data-i18n="auth.register.selectType">
             ${t("auth.register.selectType")}
           </p>
@@ -123,9 +125,11 @@ export function RegisterPage(initialStep: RegisterStep = "account-type"): string
         x-show="currentStep === 'email'"${initialStep !== "email" ? " x-cloak" : ""}>
         <!-- Header -->
         <div class="mb-6 text-center lg:text-start">
+          <template x-if="currentStep === 'email'">
           <h1 class="text-xl lg:text-2xl font-bold text-gray-900 dark:text-white mb-2" data-i18n="auth.register.emailTitle">
             ${t("auth.register.emailTitle")}
           </h1>
+          </template>
           <p class="text-sm text-gray-500 dark:text-gray-400" data-i18n="auth.register.emailDesc">
             ${t("auth.register.emailDesc")}
           </p>

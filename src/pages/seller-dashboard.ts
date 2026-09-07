@@ -40,7 +40,9 @@ appEl.innerHTML = `
         <svg class="w-12 h-12 text-gray-300 mx-auto mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
         </svg>
-        <h2 class="text-lg font-bold text-gray-900 mb-2">${t("sellerDash.loginRequiredTitle")}</h2>
+        <template x-if="!isAuthenticated">
+        <h1 class="text-lg font-bold text-gray-900 mb-2">${t("sellerDash.loginRequiredTitle")}</h1>
+        </template>
         <p class="text-gray-500 text-sm mb-4">${t("sellerDash.loginRequiredDesc")}</p>
         <a href="/giris" class="inline-block w-full py-2.5 bg-[var(--color-primary-500)] text-white rounded-lg font-semibold text-sm hover:bg-[var(--color-primary-600)] transition-colors">${t("sellerDash.loginBtn")}</a>
       </div>
@@ -52,7 +54,9 @@ appEl.innerHTML = `
         <svg class="w-12 h-12 text-yellow-400 mx-auto mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
         </svg>
-        <h2 class="text-lg font-bold text-gray-900 mb-2">${t("sellerDash.notSellerTitle")}</h2>
+        <template x-if="isAuthenticated && !isSeller">
+        <h1 class="text-lg font-bold text-gray-900 mb-2">${t("sellerDash.notSellerTitle")}</h1>
+        </template>
         <p class="text-gray-500 text-sm mb-4">${t("sellerDash.notSellerDesc")}</p>
         <a href="/satici-ol" class="inline-block w-full py-2.5 bg-[var(--color-primary-500)] text-white rounded-lg font-semibold text-sm hover:bg-[var(--color-primary-600)] transition-colors">${t("sellerDash.becomeSeller")}</a>
       </div>
@@ -69,7 +73,9 @@ appEl.innerHTML = `
             <svg x-show="!profile.logo" class="w-6 h-6 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-2 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>
           </div>
           <div>
+            <template x-if="isSeller">
             <h1 class="text-xl font-bold text-gray-900" x-text="profile.seller_name || '${t("sellerDash.myStore")}'"></h1>
+            </template>
             <div class="flex items-center gap-2 mt-0.5">
               <span class="text-xs font-mono text-gray-400" x-text="profile.seller_code"></span>
               <span class="w-1.5 h-1.5 rounded-full bg-green-400"></span>

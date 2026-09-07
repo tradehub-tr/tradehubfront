@@ -67,7 +67,11 @@ export interface FilterEngineOptions {
     hasNext: boolean,
     hasPrev: boolean,
     categoryName?: string,
-    seo?: ServerSeoPayload
+    seo?: ServerSeoPayload,
+    /** Az sonuç dolgusu: bu sayfada dolgunun başladığı kart indeksi (yoksa null). */
+    fillFrom?: number | null,
+    /** Dolgu hariç, filtreye uyan gerçek toplam. */
+    primaryTotal?: number
   ) => void;
   /** Callback when loading starts */
   onLoading?: () => void;
@@ -226,7 +230,9 @@ export function initFilterEngine(options: FilterEngineOptions): FilterEngine {
         result.hasNext,
         result.hasPrev,
         result.categoryName,
-        result.seo
+        result.seo,
+        result.fillFrom,
+        result.primaryTotal
       );
 
       // Aktif filtrelerle facet sayımlarını yeniden çek → sidebar'daki (xx) rakamları

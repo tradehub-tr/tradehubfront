@@ -41,6 +41,33 @@ function makeProduct(overrides: Record<string, unknown> = {}): ProductDetail {
 describe("ProductSellerPanel", () => {
   beforeEach(() => vi.clearAllMocks());
 
+  it("'Mağazayı Ziyaret Et' mağazanın dükkan sayfasına (/magaza/<kod>/dukkan) gider", () => {
+    getCurrentProduct.mockReturnValue(makeProduct({ supplier: { id: "SEL-00026" } }));
+    const doc = new DOMParser().parseFromString(ProductSellerPanel(), "text/html");
+    const visit = [...doc.querySelectorAll("a")].find((a) =>
+      a.textContent?.includes("Mağazayı Ziyaret Et")
+    );
+    expect(visit?.getAttribute("href")).toBe("/magaza/SEL-00026/dukkan");
+  });
+
+  it("satıcı logosu varsa baş harf yerine logoyu basar", () => {
+    getCurrentProduct.mockReturnValue(
+      makeProduct({ supplier: { logo: "/files/asel-logo.png", name: "Asel Elektrik" } })
+    );
+    const doc = new DOMParser().parseFromString(ProductSellerPanel(), "text/html");
+    const img = doc.querySelector<HTMLImageElement>("[data-seller-logo] img");
+    expect(img?.getAttribute("src")).toBe("/files/asel-logo.png");
+    expect(img?.getAttribute("alt")).toBe("Asel Elektrik");
+    expect(doc.querySelector("[data-seller-initial]")).toBeNull();
+  });
+
+  it("satıcı logosu yoksa baş harf avatarına düşer", () => {
+    getCurrentProduct.mockReturnValue(makeProduct({ supplier: { logo: undefined } }));
+    const doc = new DOMParser().parseFromString(ProductSellerPanel(), "text/html");
+    expect(doc.querySelector("[data-seller-initial]")?.textContent?.trim()).toBe("T");
+    expect(doc.querySelector("[data-seller-logo]")).toBeNull();
+  });
+
   it("satıcı adını mağaza linkiyle basar", () => {
     getCurrentProduct.mockReturnValue(makeProduct());
     const html = ProductSellerPanel();

@@ -306,7 +306,7 @@ function renderAllOrders(): string {
             ${EMPTY_RECEIPT_ICON}
             <template x-if="searchQuery.trim() || dateFilter !== 'all'">
               <div class="flex flex-col items-center gap-2">
-                <h3 class="text-base font-bold text-gray-900">${t("orders.noOrdersFound")}</h3>
+                <h2 class="text-base font-bold text-gray-900">${t("orders.noOrdersFound")}</h2>
                 <p class="text-sm text-gray-500 max-w-[400px]">${t("orders.tryDifferentKeywords")}</p>
                 <button @click="resetFilters()"
                   class="inline-block px-6 py-2 text-sm text-amber-700 border border-amber-300 rounded-full no-underline mt-2 transition-colors hover:bg-amber-50 cursor-pointer bg-transparent">
@@ -316,7 +316,7 @@ function renderAllOrders(): string {
             </template>
             <template x-if="!searchQuery.trim() && dateFilter === 'all'">
               <div class="flex flex-col items-center gap-2">
-                <h3 class="text-base font-bold text-gray-900">${t("orders.noOrdersYet")}</h3>
+                <h2 class="text-base font-bold text-gray-900">${t("orders.noOrdersYet")}</h2>
                 <p class="text-sm text-gray-500 max-w-[400px]">${t("orders.startSourcingDesc")}</p>
                 <a href="/" class="th-btn-outline mt-2 max-sm:py-2 max-sm:text-[13px] max-sm:rounded-full">${t("orders.startSourcing")}</a>
               </div>

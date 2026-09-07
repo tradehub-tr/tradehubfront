@@ -96,9 +96,9 @@ function renderPromoBanner(): string {
         </div>
 
         <!-- Headline -->
-        <h2 class="text-3xl lg:text-4xl font-bold leading-tight text-white mb-3">
+        <p class="text-3xl lg:text-4xl font-bold leading-tight text-white mb-3">
           ${t("authAddr.promoHeadline")}
-        </h2>
+        </p>
         <p class="text-sm text-orange-100/80 leading-relaxed mb-8">
           ${t("authAddr.promoSubtitle")}
         </p>
@@ -206,7 +206,7 @@ export function AuthLayout(content: string, options: AuthLayoutOptions = {}): st
             <div class="lg:hidden">
               <div class="h-14"></div>
               <div class="px-6 pt-6 pb-8 text-white text-center">
-                <h2 class="text-xl font-bold mb-1">${t("authAddr.mobilePromoTitle")}</h2>
+                <p class="text-xl font-bold mb-1">${t("authAddr.mobilePromoTitle")}</p>
                 <p class="text-sm opacity-80">${t("authAddr.mobilePromoSubtitle")}</p>
               </div>
             </div>

@@ -1,3 +1,4 @@
+import { getCountryDisplayName } from "../utils/country";
 import Alpine from "alpinejs";
 import { countries as checkoutCountries, districtsByProvince } from "../data/mockCheckout";
 import type { SavedAddress } from "../types/checkout";
@@ -14,6 +15,11 @@ import {
   type BuyerAddressData,
 } from "../services/cartService";
 import { showToast } from "../utils/toast";
+import {
+  reviewModalTitle,
+  reviewModalDirectPayNote,
+  reviewModalConfirmLabel,
+} from "../components/checkout/reviewModalCopy";
 
 interface CheckoutDeliveryMethod {
   id: string;
@@ -393,6 +399,19 @@ Alpine.data("checkoutReviewModal", () => ({
   }>,
   summary: { itemSubtotal: "0.00", shippingFee: "0.00", couponDiscount: "0.00", total: "0.00" },
 
+  /** Tek satıcıda "Mağaza sipariş onayı", aksi halde genel başlık. */
+  get title(): string {
+    return reviewModalTitle(this.orders);
+  },
+  /** Tek satıcıda "Ödeme doğrudan … satıcısına yapılır.", aksi halde boş (gizli). */
+  get directPayNote(): string {
+    return reviewModalDirectPayNote(this.orders);
+  },
+  /** Tek satıcıda "Mağaza siparişini onayla", aksi halde "Siparişi onayla". */
+  get confirmLabel(): string {
+    return reviewModalConfirmLabel(this.orders);
+  },
+
   init() {
     window.addEventListener("checkout:open-review", ((event: CustomEvent) => {
       const d = event.detail;
@@ -701,7 +720,7 @@ function buyerAddressToCheckout(addr: BuyerAddress): CheckoutStoredAddress {
     addr.apartment,
     addr.city,
     addr.state,
-    addr.country === "TR" ? "Turkey/Turkiye" : addr.country,
+    getCountryDisplayName(addr.country) || addr.country,
   ]
     .filter(Boolean)
     .join(", ");
@@ -710,7 +729,7 @@ function buyerAddressToCheckout(addr: BuyerAddress): CheckoutStoredAddress {
     isDefault: addr.is_default,
     label: addr.title || "Adres",
     country: addr.country || "TR",
-    countryName: addr.country === "TR" ? "Turkey/Turkiye" : addr.country,
+    countryName: getCountryDisplayName(addr.country) || addr.country,
     firstName: parts[0] ?? "",
     lastName: parts.slice(1).join(" "),
     company: addr.company || "",

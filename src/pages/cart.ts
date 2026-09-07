@@ -38,7 +38,8 @@ import '../alpine/cart'
 // Cart components
 import { CartPage, initCartPage } from '../components/cart/page/CartPage'
 import { cartStore } from '../components/cart/state/CartStore'
-import { fetchCart, apiMergeGuestCart } from '../services/cartService'
+import { fetchCart } from '../services/cartService'
+import { syncGuestCartAfterLogin, installGuestCartLogoutReset } from '../components/cart/state/guestCartMerge'
 import { getSessionUser } from '../utils/auth'
 
 const appEl = document.querySelector<HTMLDivElement>('#app')!;
@@ -192,9 +193,8 @@ function renderCartSkeleton(): void {
 }
 
 async function initCartPage_async() {
-  // 1) localStorage'dan yükle (hızlı, fallback)
+  // 1) localStorage'dan yükle (misafir sepeti; oturum varsa aşağıda API ile değişir)
   cartStore.load();
-  const localSkuCount = cartStore.getTotalSkuCount();
 
   // Skeleton'ı hemen göster
   renderCartSkeleton();
@@ -203,70 +203,33 @@ async function initCartPage_async() {
   await initCurrency();
   const currencySymbol = getSelectedCurrencyInfo().symbol;
 
+  // Oturum varsa: hesap sepeti API'den gelir; misafir sepeti (varsa) sonra
+  // guestCartMerge akışıyla aktarılır ya da kullanıcıya sorulur.
+  let accountSuppliers: ReturnType<typeof cartStore.getSuppliers> | null = null;
   try {
     // 3) Oturum kontrolü
     const sessionUser = await getSessionUser();
-
     if (sessionUser) {
       const apiCart = await fetchCart();
-
-      if (apiCart.suppliers.length > 0) {
-        // Backend'deki listing ID'leri
-        const backendListingIds = new Set(
-          apiCart.suppliers.flatMap(s => s.products.map(p => p.id))
-        );
-
-        // localStorage'da olup backend'de olmayan ürünler
-        const localOnlyItems = cartStore.getSuppliers().flatMap(s =>
-          s.products
-            .filter(p => !backendListingIds.has(p.id))
-            .flatMap(p =>
-              p.skus.map(sku => ({
-                listing: p.id,
-                quantity: sku.quantity,
-                ...(sku.listingVariant ? { listing_variant: sku.listingVariant } : {}),
-              }))
-            )
-        );
-
-        if (localOnlyItems.length > 0) {
-          const merged = await apiMergeGuestCart(localOnlyItems);
-          const mergedSkuCount = merged.suppliers.reduce(
-            (acc, s) => acc + s.products.reduce((sum, p) => sum + p.skus.length, 0), 0
-          );
-          // Merge sonucu daha az SKU dönerse localStorage verisini koru
-          if (mergedSkuCount >= localSkuCount) {
-            cartStore.init(merged.suppliers, 0, currencySymbol, 0);
-          }
-        } else {
-          cartStore.init(apiCart.suppliers, 0, currencySymbol, 0);
-        }
-      } else if (localSkuCount > 0) {
-        // Backend boş, localStorage'da ürün var → merge et
-        const localItems = cartStore.getSuppliers().flatMap(s =>
-          s.products.flatMap(p =>
-            p.skus.map(sku => ({
-              listing: p.id,
-              quantity: sku.quantity,
-              ...(sku.listingVariant ? { listing_variant: sku.listingVariant } : {}),
-            }))
-          )
-        );
-        const merged = await apiMergeGuestCart(localItems);
-        const mergedSkuCount = merged.suppliers.reduce(
-          (acc, s) => acc + s.products.reduce((sum, p) => sum + p.skus.length, 0), 0
-        );
-        // Merge sonucu daha az SKU dönerse localStorage verisini koru
-        if (mergedSkuCount >= localSkuCount) {
-          cartStore.init(merged.suppliers, 0, currencySymbol, 0);
-        }
-      }
+      cartStore.init(apiCart.suppliers, 0, currencySymbol, 0);
+      accountSuppliers = apiCart.suppliers;
     }
   } catch {
     // API erişilemez ya da misafir kullanıcı — localStorage verisiyle devam et
   }
 
+  // 4) Giriş sonrası misafir sepeti: hesap sepeti boşsa sessiz aktarım (sayfa
+  // çizilmeden önce beklenir); ikisinde de ürün varsa modal açılır ve seçim
+  // uygulanınca sayfa yenilenir — alpine/cart.ts aboneliği yalnız özet/toplamları
+  // tazeler, ürün listesini yeniden çizmez.
+  if (accountSuppliers) {
+    await syncGuestCartAfterLogin(accountSuppliers, undefined, {
+      onPromptApplied: () => window.location.reload(),
+    });
+  }
+
   renderPage(cartStore.getSuppliers(), cartStore.getSummary());
+  installGuestCartLogoutReset();
 }
 
 initCartPage_async();

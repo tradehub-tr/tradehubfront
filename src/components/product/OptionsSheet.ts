@@ -41,6 +41,8 @@ interface SheetModel {
   /** Satırların üstünde tek-seçim chip grubu olarak render edilen diğer eksenler. */
   chipVariants: ProductVariant[];
   skuMatrix: SkuMatrixEntry[];
+  /** Ürünün ana görseli (video hariç) — görselsiz seçenek satırlarının yedeği; yoksa "". */
+  heroImage: string;
 }
 
 function buildModel(p: ProductDetail): SheetModel {
@@ -48,7 +50,8 @@ function buildModel(p: ProductDetail): SheetModel {
   const rowVariant = variants.find((v) => v.type === "color") ?? variants[0] ?? null;
   const chipVariants = variants.filter((v) => v !== rowVariant);
   const skuMatrix = variants.find((v) => v.skuMatrix && v.skuMatrix.length > 0)?.skuMatrix ?? [];
-  return { variants, rowVariant, chipVariants, skuMatrix };
+  const heroImage = p.images.find((img) => !img.isVideo)?.src || "";
+  return { variants, rowVariant, chipVariants, skuMatrix, heroImage };
 }
 
 /* ── skuMatrix axis lookup (variants[0]=axis1, [1]=axis2, [2+]=extraAxes) ── */
@@ -230,8 +233,11 @@ function renderRowsHtml(model: SheetModel): string {
       const qty = state.rowQty.get(opt.id) ?? 0;
       const available = isRowAvailable(model, opt);
       const label = opt.displayLabel || opt.label;
-      const thumb = opt.thumbnail
-        ? `<img src="${escapeHtml(sanitizeUrl(opt.thumbnail))}" alt="${escapeHtml(label)}" width="80" height="80" decoding="async" class="w-full h-full object-cover" />`
+      // Kendi görseli yoksa ana ürün görseli (PDP renk kutucuğuyla aynı yedek);
+      // ürünün hiç görseli yoksa renk bloğu.
+      const rowImage = opt.thumbnail || model.heroImage;
+      const thumb = rowImage
+        ? `<img src="${escapeHtml(sanitizeUrl(rowImage))}" alt="${escapeHtml(label)}" width="80" height="80" decoding="async" class="w-full h-full object-cover" />`
         : `<div class="w-full h-full" style="background:${safeHexColor(opt.value)}"></div>`;
       const expandBtn = isColorRow
         ? `
@@ -322,8 +328,12 @@ function buildLines(model: SheetModel): CartSubmitLine[] {
   for (const [axis, value] of state.chipSelections) extraAxes[axis] = value;
   const hasExtra = Object.keys(extraAxes).length > 0;
 
+  // Seçeneğin kendi görseli yoksa ürünün ana görseli (video hariç) sepete gider;
+  // hiç görsel yoksa boş kalır ve sepet satırı görsel kutusunu açmaz.
+  const fallbackImage = model.heroImage;
+
   if (!model.rowVariant) {
-    return [{ qty: state.noVariantQty }];
+    return [{ qty: state.noVariantQty, imageUrl: fallbackImage || undefined }];
   }
 
   const isColor = model.rowVariant.type === "color";
@@ -342,7 +352,7 @@ function buildLines(model: SheetModel): CartSubmitLine[] {
       colorId: isColor ? opt.id : undefined,
       variantLabel: parts.join(" | "),
       extraAxes: hasExtra ? extraAxes : undefined,
-      imageUrl: opt.thumbnail,
+      imageUrl: opt.thumbnail || fallbackImage || undefined,
     };
   });
 }

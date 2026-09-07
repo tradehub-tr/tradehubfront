@@ -43,11 +43,11 @@ export function OrderItemsDrawer(): string {
         <!-- Header -->
         <header class="px-4 py-4 border-b border-gray-200">
           <div class="flex items-center justify-between gap-3">
-            <h4 id="order-items-drawer-title" class="text-[15px] font-extrabold text-gray-900 truncate">
+            <p id="order-items-drawer-title" class="text-[15px] font-extrabold text-gray-900 truncate">
               <span x-text="currentOrder ? currentOrder.orderNumber : ''"></span>
               <span class="text-gray-400 font-normal text-sm"> · </span>
               <span x-text="totals.lines + ' ${t("orders.lines")}'" class="text-sm font-medium text-gray-600"></span>
-            </h4>
+            </p>
             <button
               type="button"
               @click="close()"

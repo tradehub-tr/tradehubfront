@@ -74,7 +74,7 @@ function renderCorporateOnlySection(): string {
   // Sadece Kurumsal iken görünür. Şirket Ünvanı.
   return `
 		<section data-kyc-section="corporate" class="bg-white rounded-md border border-gray-200 p-6 max-sm:p-4 mb-4">
-			<h3 class="text-base font-semibold mb-1">${t("kycUi.companyInfoTitle")}</h3>
+			<h2 class="text-base font-semibold mb-1">${t("kycUi.companyInfoTitle")}</h2>
 			<p class="text-xs text-gray-500 mb-4">${t("kycUi.corporateRequired")}</p>
 			<div>
 				<label class="block text-xs font-medium mb-1.5 text-gray-600">${t("kycUi.companyTitleLabel")} <span class="text-red-500">*</span></label>
@@ -88,7 +88,7 @@ function renderCommonSection(): string {
   // Hem Kurumsal hem Bireysel için ortak alanlar.
   return `
 		<section class="bg-white rounded-md border border-gray-200 p-6 max-sm:p-4 mb-4">
-			<h3 class="text-base font-semibold mb-1">${t("kycUi.identityContactTitle")}</h3>
+			<h2 class="text-base font-semibold mb-1">${t("kycUi.identityContactTitle")}</h2>
 			<p class="text-xs text-gray-500 mb-4">${t("kycUi.allFieldsRequired")}</p>
 			<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
 				<div>
@@ -126,7 +126,7 @@ function renderDocumentSection(): string {
   // formData yüklendiğinde JS preview HTML basar; boşsa hidden kalır.
   return `
 		<section class="bg-white rounded-md border border-gray-200 p-6 max-sm:p-4 mb-4">
-			<h3 class="text-base font-semibold mb-1">${t("kycUi.identityDocument")}</h3>
+			<h2 class="text-base font-semibold mb-1">${t("kycUi.identityDocument")}</h2>
 			<p class="text-xs text-gray-500 mb-4">${t("kycUi.documentFormatsHint")}</p>
 			<div id="kyc-identity-preview" class="hidden mb-3"></div>
 			<div id="kyc-document-slots"></div>

@@ -4,6 +4,7 @@ import { formatCurrency, getSelectedCurrency } from "../../services/currencyServ
 import { getSellerUrl } from "../../utils/sellerUrl";
 import { btn } from "../../utils/ui/button";
 import { escapeHtml, sanitizeUrl } from "../../utils/sanitize";
+import { renderItemThumbnailStrip } from "./ItemThumbnailStrip";
 
 export interface OrderSummaryProps {
   data: OrderSummaryData;
@@ -11,23 +12,18 @@ export interface OrderSummaryProps {
   payeeSuppliers?: { id: string; name: string }[];
 }
 
-function renderThumbnailGrid(thumbnails: OrderSummaryThumbnail[], itemCount: number): string {
+/**
+ * Ürün şeridi — sepet sayfasındaki özetle AYNI: tüm ürünler, her biri kendi adet
+ * rozetiyle, yatay kaydırmalı. Altındaki "Tümünü Gör" soldaki ürün listesine
+ * (#checkout-items) kaydırır (pages/checkout.ts bağlar).
+ */
+function renderThumbnailGrid(thumbnails: OrderSummaryThumbnail[]): string {
   if (thumbnails.length === 0) return "";
-
-  const visibleThumbnails = thumbnails.slice(0, 4);
-  const grid = visibleThumbnails
-    .map(
-      (thumb, idx) => `
-      <div class="relative w-10 sm:w-[48px] h-10 sm:h-[48px] min-w-[40px] sm:min-w-[48px] rounded border border-[#e5e5e5]">
-        <img class="w-full h-full object-cover rounded" src="${escapeHtml(sanitizeUrl(thumb.image))}" alt="" width="64" height="64" decoding="async" />
-        ${idx === 0 ? `<div class="absolute -top-1.5 -end-1.5 flex items-center justify-center min-w-[18px] sm:min-w-[20px] h-[18px] sm:h-[20px] rounded-full px-1 bg-[#222222] text-white text-[11px] sm:text-[12px] font-bold z-10 leading-none">${itemCount}</div>` : ""}
-      </div>`
-    )
-    .join("");
-
   return `
-    <div class="flex gap-1.5 sm:gap-2 mb-3 sm:mb-5">
-      ${grid}
+    ${renderItemThumbnailStrip(thumbnails)}
+    <div class="flex justify-end -mt-1.5 sm:-mt-2 mb-2 sm:mb-3">
+      <button type="button" data-scroll-to="#checkout-items"
+        class="text-[12px] sm:text-[13px] font-medium text-primary-700 hover:text-primary-800 hover:underline transition-colors cursor-pointer bg-transparent border-0 p-0">${t("common.viewAll")}</button>
     </div>`;
 }
 
@@ -96,7 +92,7 @@ export function OrderSummary({ data, payeeSuppliers = [] }: OrderSummaryProps): 
       </div>
 
       <!-- Thumbnail Grid -->
-      ${renderThumbnailGrid(data.thumbnails, data.itemCount)}
+      ${renderThumbnailGrid(data.thumbnails)}
 
       <!-- Price Breakdown -->
       <div class="flex flex-col summary-amounts-layout-row">

@@ -36,20 +36,22 @@ function AcceptInviteCard(content: string): string {
 function StepForm(): string {
   return `
     <div x-show="step === 'form'">
-      <h1 class="text-2xl font-bold text-gray-900 text-center mb-3">Daveti Kabul Et</h1>
-      <p class="text-sm text-gray-500 text-center mb-8">Ekibe katılmak için ad-soyadınızı girin ve bir şifre belirleyin.</p>
+      <template x-if="step === 'form'">
+      <h1 class="text-2xl font-bold text-gray-900 text-center mb-3" data-i18n="acceptInvite.title">${t("acceptInvite.title")}</h1>
+      </template>
+      <p class="text-sm text-gray-500 text-center mb-8" data-i18n="acceptInvite.desc">${t("acceptInvite.desc")}</p>
 
       <form @submit.prevent="submitAccept()" class="space-y-5">
         <!-- Full name -->
         <div>
-          <label for="ai-full-name" class="sr-only">Ad Soyad</label>
+          <label for="ai-full-name" class="sr-only">${t("acceptInvite.fullName")}</label>
           <input
             type="text"
             id="ai-full-name"
             name="full-name"
             x-ref="fullName"
             class="th-input th-input-lg"
-            placeholder="Ad Soyad"
+            placeholder="${t("acceptInvite.fullName")}"
             required
             autocomplete="name"
           />
@@ -57,7 +59,7 @@ function StepForm(): string {
 
         <!-- Password -->
         <div class="relative">
-          <label for="ai-new-password" class="sr-only">Şifre</label>
+          <label for="ai-new-password" class="sr-only">${t("acceptInvite.password")}</label>
           <input
             :type="showPassword ? 'text' : 'password'"
             id="ai-new-password"
@@ -65,7 +67,7 @@ function StepForm(): string {
             x-ref="newPassword"
             @input="onPasswordInput()"
             class="th-input th-input-lg pe-12"
-            placeholder="Şifre"
+            placeholder="${t("acceptInvite.password")}"
             required
             autocomplete="new-password"
           />
@@ -103,7 +105,7 @@ function StepForm(): string {
           disabled
           class="w-full h-12 th-btn disabled:opacity-50 disabled:cursor-not-allowed"
         >
-          <span x-show="!loading">Hesabı Oluştur ve Katıl</span>
+          <span x-show="!loading" data-i18n="acceptInvite.submit">${t("acceptInvite.submit")}</span>
           <span x-show="loading" x-cloak class="inline-flex items-center gap-2">
             <svg class="animate-spin h-4 w-4" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/></svg>
             <span data-i18n="common.loading">${t("common.loading")}</span>
@@ -125,8 +127,8 @@ function StepSuccess(): string {
             <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5"/>
           </svg>
         </div>
-        <h1 class="text-2xl font-bold text-gray-900 mb-3">Hesabınız oluşturuldu</h1>
-        <p class="text-sm text-gray-500 mb-8">Davet kabul edildi. Artık giriş yapabilirsiniz.</p>
+        <h1 class="text-2xl font-bold text-gray-900 mb-3" data-i18n="acceptInvite.successTitle">${t("acceptInvite.successTitle")}</h1>
+        <p class="text-sm text-gray-500 mb-8" data-i18n="acceptInvite.successDesc">${t("acceptInvite.successDesc")}</p>
         <a
           href="${baseUrl}pages/auth/login.html"
           class="flex w-full h-12 th-btn no-underline"
@@ -150,13 +152,16 @@ function StepError(): string {
             <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 3.75h.008v.008H12v-.008Z"/>
           </svg>
         </div>
-        <h1 class="text-2xl font-bold text-gray-900 mb-3">Davet geçersiz</h1>
-        <p class="text-sm text-gray-500 mb-8" x-text="error || 'Bu davet linki geçersiz veya süresi dolmuş.'"></p>
+        <h1 class="text-2xl font-bold text-gray-900 mb-3" data-i18n="acceptInvite.errorTitle">${t("acceptInvite.errorTitle")}</h1>
+        <p class="text-sm text-gray-500 mb-8">
+          <span x-show="error" x-text="error" x-cloak></span>
+          <span x-show="!error" data-i18n="acceptInvite.errorDesc">${t("acceptInvite.errorDesc")}</span>
+        </p>
         <a
           href="${baseUrl}"
           class="flex w-full h-12 th-btn no-underline"
         >
-          <span>Ana Sayfaya Dön</span>
+          <span data-i18n="acceptInvite.goHome">${t("acceptInvite.goHome")}</span>
         </a>
       </div>
     </div>

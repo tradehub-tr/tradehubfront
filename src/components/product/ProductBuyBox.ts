@@ -149,9 +149,9 @@ function variantHeaderHtml(
 
   return `
         <div class="flex items-center justify-between gap-3">
-          <h3 class="pd-variant-label min-w-0 text-[16px] leading-6 font-semibold text-[var(--pd-title-color,#111827)]">
+          <p class="pd-variant-label min-w-0 text-[16px] leading-6 font-semibold text-[var(--pd-title-color,#111827)]">
             ${variant.displayLabel || variant.label}<span class="ms-1.5 font-normal text-[14px] text-[var(--color-text-muted,#666)] variant-selected-label">${selectedLabel}</span>
-          </h3>
+          </p>
           ${selectButton}
         </div>`;
 }
@@ -167,6 +167,11 @@ function renderVariant(variant: ProductVariant, allVariants: ProductVariant[], i
   );
 
   if (variant.type === "color") {
+    // Varyantın kendi görseli yoksa ürünün ana görseli (video hariç) kullanılır;
+    // ürünün hiç görseli yoksa görsel alanı açılmaz, yalnız metin kutucuğu basılır.
+    // `data-variant-image` yalnız GERÇEK varyant görselini taşır — tıklama
+    // dinleyicisi bununla "fotoğraflı eksen mi" kararı verip çekmeceyi açar.
+    const fallbackImage = getCurrentProduct().images.find((img) => !img.isVideo)?.src || "";
     return `
       <div class="variant-group mt-5 first:mt-0" data-variant-type="${variant.type}" data-variant-label="${variant.label}">
         ${header}
@@ -175,10 +180,9 @@ function renderVariant(variant: ProductVariant, allVariants: ProductVariant[], i
             .map((opt) => {
               const isDef = !!opt.isDefault;
               const isActive = opt.id === selectedOpt.id;
-              return `
-            <button
-              type="button"
-              class="variant-option pd-color-thumb w-[60px] h-[60px] p-0.5 border border-[var(--color-border-default,#e5e5e5)] rounded-md overflow-hidden cursor-pointer bg-[var(--color-surface,#fff)] transition-[border-color,box-shadow] duration-150 [&_img]:w-full [&_img]:h-full [&_img]:object-cover [&_img]:block [&_img]:rounded-[3px] [&.active]:border-2 [&.active]:border-[var(--pd-title-color,#111827)] [&.active]:p-[3px] [&:hover:not(.active):not(.pd-color-thumb-disabled)]:border-[#999] [&.pd-color-thumb-disabled]:opacity-40 [&.pd-color-thumb-disabled]:cursor-not-allowed ${isActive ? "active" : ""} ${opt.available ? "" : "pd-color-thumb-disabled"}"
+              const label = escapeHtml(opt.displayLabel || opt.label);
+              const image = opt.thumbnail || fallbackImage;
+              const dataAttrs = `
               data-variant-id="${opt.id}"
               data-variant-label="${opt.label}"
               data-variant-display="${opt.displayLabel || opt.label}"
@@ -190,10 +194,29 @@ function renderVariant(variant: ProductVariant, allVariants: ProductVariant[], i
               data-is-default="${isDef ? "1" : "0"}"
               ${opt.price ? `data-variant-price="${escapeHtml(opt.price)}"` : ""}
               ${opt.available ? "" : "disabled"}
-              aria-label="${opt.displayLabel || opt.label}"
-              title="${opt.displayLabel || opt.label}"
+              aria-label="${label}"
+              title="${label}"`;
+
+              if (!image) {
+                return `
+            <button
+              type="button"
+              class="variant-option pd-color-thumb pd-variant-btn min-w-[48px] px-3 py-2 rounded-md text-[14px] leading-[20px] border-0 bg-[var(--color-surface-raised,#f4f4f4)] text-[#222] cursor-pointer transition-[box-shadow] duration-150 [&.active]:shadow-[inset_0_0_0_1.5px_#222,inset_0_0_0_3.5px_#fff] [&:hover:not(.active):not(:disabled)]:shadow-[inset_0_0_0_1px_#999] ${isActive ? "active" : ""} ${opt.available ? "" : "opacity-40 line-through cursor-not-allowed"}"
+              ${dataAttrs}
             >
-              <img src="${opt.thumbnail || ""}" alt="${opt.displayLabel || opt.label}" width="48" height="48" decoding="async" style="background:${opt.value};">
+              ${label}
+            </button>
+          `;
+              }
+
+              return `
+            <button
+              type="button"
+              class="variant-option pd-color-thumb w-[64px] p-0.5 flex flex-col items-center border border-[var(--color-border-default,#e5e5e5)] rounded-md overflow-hidden cursor-pointer bg-[var(--color-surface,#fff)] transition-[border-color,box-shadow] duration-150 [&_img]:w-full [&_img]:aspect-square [&_img]:object-cover [&_img]:block [&_img]:rounded-[3px] [&.active]:border-2 [&.active]:border-[var(--pd-title-color,#111827)] [&.active]:p-[3px] [&:hover:not(.active):not(.pd-color-thumb-disabled)]:border-[#999] [&.pd-color-thumb-disabled]:opacity-40 [&.pd-color-thumb-disabled]:cursor-not-allowed ${isActive ? "active" : ""} ${opt.available ? "" : "pd-color-thumb-disabled"}"
+              ${dataAttrs}
+            >
+              <img src="${escapeHtml(image)}" alt="" width="56" height="56" decoding="async" loading="lazy">
+              <span data-variant-caption class="block w-full mt-1 text-[11px] leading-[14px] text-center truncate text-[var(--color-text-muted,#666)]">${label}</span>
             </button>
           `;
             })
@@ -463,6 +486,25 @@ export function initProductBuyBox(options: { signal?: AbortSignal } = {}): void 
       size: activeSizeBtn?.getAttribute("data-variant-label") || "",
     };
   };
+
+  // Sağ paneldeki "Sepete Ekle" (ve bu ürüne ait diğer [data-add-to-cart]
+  // tetikleyiciler): SharedCartDrawer'ın genel dinleyicisi çekmeceyi seçili
+  // varyantı BİLMEDEN açar ve ilk satırı tohumlar. Yakalama aşamasında önce biz
+  // alırız, aktif çipleri iletiriz ve olayı genel dinleyiciye bırakmayız.
+  document.addEventListener(
+    "click",
+    (e) => {
+      const trigger = (e.target as HTMLElement | null)?.closest<HTMLElement>(
+        `[data-add-to-cart="${CSS.escape(getCurrentProduct().id)}"]`
+      );
+      if (!trigger || trigger.hasAttribute("disabled")) return;
+      e.preventDefault();
+      e.stopPropagation();
+      const { color, size } = getSelectedVariantLabels();
+      openCartDrawer(color, size);
+    },
+    { capture: true, signal: options.signal }
+  );
 
   // "Seçim yap" → sepet çekmecesini aç.
   const makeSelectionBtn = document.querySelector<HTMLButtonElement>(

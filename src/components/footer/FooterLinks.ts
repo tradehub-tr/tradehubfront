@@ -119,10 +119,10 @@ function getFooterColumns(): FooterColumn[] {
 function renderColumn(column: FooterColumnI18n): string {
   return `
     <div class="min-w-0">
-      <h3
+      <h2
         class="text-[11px] sm:text-[12px] font-bold uppercase tracking-wide mb-2 sm:mb-3.5 text-balance"
         style="color: var(--footer-heading-color, #0a0a0a);"
-      ><span data-i18n="${column.titleKey}">${t(column.titleKey)}</span></h3>
+      ><span data-i18n="${column.titleKey}">${t(column.titleKey)}</span></h2>
       <ul>
         ${column.links
           .map(
@@ -149,10 +149,10 @@ function renderTrustColumn(): string {
   return `
     <div class="col-span-2 md:col-span-3 xl:col-span-1 flex flex-col items-center xl:items-start gap-5 pt-2 xl:pt-0 min-w-0">
       <div class="relative w-full xl:w-auto max-w-[320px] mx-auto xl:mx-0">
-        <h3
+        <h2
           class="text-[11px] sm:text-[12px] font-bold uppercase tracking-wide mb-2.5 text-center xl:text-left"
           style="color: var(--footer-heading-color, #0a0a0a);"
-        ><span data-i18n="footer.changeCountry">${t("footer.changeCountry")}</span></h3>
+        ><span data-i18n="footer.changeCountry">${t("footer.changeCountry")}</span></h2>
         <button
           id="footer-region-btn"
           type="button"

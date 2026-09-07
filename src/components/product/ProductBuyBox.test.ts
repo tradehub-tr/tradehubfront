@@ -164,3 +164,103 @@ describe("ProductBuyBox — bilgi sütunu sınırı", () => {
     expect(grid?.textContent).not.toContain("K6");
   });
 });
+
+describe("Sağ paneldeki 'Sepete Ekle' — seçili varyantı çekmeceye iletir", () => {
+  it("[data-add-to-cart] tıklaması aktif renk/boy etiketleriyle openCartDrawer'ı çağırır ve genel dinleyiciye düşmez", async () => {
+    const { openCartDrawer } = await import("./CartDrawer");
+    const { initProductBuyBox } = await import("./ProductBuyBox");
+    getCurrentProduct.mockReturnValue(makeProduct());
+    document.body.innerHTML = `
+      <div class="variant-group" data-variant-type="color">
+        <button type="button" class="variant-option" data-variant-label="Çok Renkli"></button>
+        <button type="button" class="variant-option active" data-variant-label="Pembe"></button>
+      </div>
+      <button type="button" id="pd-add-to-cart" data-add-to-cart="LST-1">Sepete Ekle</button>`;
+    const bubbled = vi.fn();
+    document.addEventListener("click", bubbled); // SharedCartDrawer'ın genel dinleyicisinin yerini tutar
+    const ctrl = new AbortController();
+    initProductBuyBox({ signal: ctrl.signal });
+
+    document.getElementById("pd-add-to-cart")!.click();
+
+    expect(openCartDrawer).toHaveBeenCalledWith("Pembe", "");
+    expect(bubbled).not.toHaveBeenCalled();
+    ctrl.abort();
+    document.removeEventListener("click", bubbled);
+    document.body.innerHTML = "";
+  });
+});
+
+describe("Renk kutucukları — varyant görseli yoksa ana görsel, hiç görsel yoksa yalnız metin", () => {
+  function colorProduct(images: unknown[], options: Record<string, unknown>[]): ProductDetail {
+    return makeProduct({
+      images,
+      variants: [{ type: "color", label: "Renk", options }],
+    });
+  }
+
+  it("görselsiz seçenek ürünün ana görselini basar, altında küçük etiket durur; sürücü verisi boş kalır (çekmece açılsın)", () => {
+    getCurrentProduct.mockReturnValue(
+      colorProduct(
+        [{ id: "1", src: "https://example.com/a.jpg", alt: "a" }],
+        [{ id: "c1", label: "Şeffaf", value: "#fff", available: true }]
+      )
+    );
+    const btn = parse(ProductBuyBox()).querySelector<HTMLButtonElement>(
+      '.variant-option[data-variant-id="c1"]'
+    );
+    expect(btn).not.toBeNull();
+    expect(btn!.querySelector("img")?.getAttribute("src")).toBe("https://example.com/a.jpg");
+    expect(btn!.getAttribute("data-variant-image")).toBe("");
+    expect(btn!.querySelector("[data-variant-caption]")?.textContent?.trim()).toBe("Şeffaf");
+  });
+
+  it("kendi görseli olan seçenek onu basar ve yine etiket taşır", () => {
+    getCurrentProduct.mockReturnValue(
+      colorProduct(
+        [{ id: "1", src: "https://example.com/a.jpg", alt: "a" }],
+        [
+          {
+            id: "c1",
+            label: "Siyah",
+            value: "#000",
+            available: true,
+            thumbnail: "https://example.com/siyah.jpg",
+          },
+        ]
+      )
+    );
+    const btn = parse(ProductBuyBox()).querySelector<HTMLButtonElement>(
+      '.variant-option[data-variant-id="c1"]'
+    );
+    expect(btn!.querySelector("img")?.getAttribute("src")).toBe("https://example.com/siyah.jpg");
+    expect(btn!.getAttribute("data-variant-image")).toBe("https://example.com/siyah.jpg");
+    expect(btn!.querySelector("[data-variant-caption]")?.textContent?.trim()).toBe("Siyah");
+  });
+
+  it("ürünün hiç görseli yoksa kutucukta img olmaz, yalnız etiket görünür", () => {
+    getCurrentProduct.mockReturnValue(
+      colorProduct([], [{ id: "c1", label: "Buzlu", value: "#eee", available: true }])
+    );
+    const btn = parse(ProductBuyBox()).querySelector<HTMLButtonElement>(
+      '.variant-option[data-variant-id="c1"]'
+    );
+    expect(btn).not.toBeNull();
+    expect(btn!.querySelector("img")).toBeNull();
+    expect(btn!.textContent?.trim()).toBe("Buzlu");
+  });
+
+  it("video tek medya ise görsel yedeği sayılmaz — metin kutucuğu basılır", () => {
+    getCurrentProduct.mockReturnValue(
+      colorProduct(
+        [{ id: "v", src: "https://example.com/v.mp4", alt: "v", isVideo: true }],
+        [{ id: "c1", label: "Füme", value: "#333", available: true }]
+      )
+    );
+    const btn = parse(ProductBuyBox()).querySelector<HTMLButtonElement>(
+      '.variant-option[data-variant-id="c1"]'
+    );
+    expect(btn!.querySelector("img")).toBeNull();
+    expect(btn!.textContent?.trim()).toBe("Füme");
+  });
+});

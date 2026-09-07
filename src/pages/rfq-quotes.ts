@@ -3,6 +3,7 @@
  */
 
 // T-123: RUM montajı — MPA ortak boot (çift başlatmaya karşı korumalı).
+import { getCountryDisplayName } from '../utils/country'
 import "../lib/rum/boot";
 import '../style.css'
 import { t } from '../i18n'
@@ -211,7 +212,7 @@ async function loadQuotes() {
               <tr class="border-b border-gray-100">
                 <td class="p-3 text-sm text-gray-500">${t('rfq.country')}</td>
                 ${quotes.map((q) => `
-                  <td class="p-3 text-center text-sm border-s border-gray-100 text-gray-600">${escapeHtml(q.seller_country || '-')}</td>
+                  <td class="p-3 text-center text-sm border-s border-gray-100 text-gray-600">${escapeHtml(getCountryDisplayName(q.seller_country) || '-')}</td>
                 `).join('')}
               </tr>
               <!-- Business Type -->

@@ -108,7 +108,7 @@ function renderDrawer(): string {
         .join("");
       if (!items) return "";
       const title = section.title
-        ? `<h3 class="px-4 pt-4 pb-1 text-[11px] font-normal uppercase tracking-wider text-gray-400 m-0">${section.title}</h3>`
+        ? `<p class="px-4 pt-4 pb-1 text-[11px] font-normal uppercase tracking-wider text-gray-400 m-0">${section.title}</p>`
         : "";
       return title + items;
     })

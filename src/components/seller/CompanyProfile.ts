@@ -68,7 +68,7 @@ function MainProductsCarousel(): string {
     >
       <!-- Header -->
       <div class="flex items-center justify-between mb-4">
-        <h3 class="text-[18px] font-bold text-gray-900 uppercase">${t("seller.sf.mainProducts")}</h3>
+        <h2 class="text-[18px] font-bold text-gray-900 uppercase">${t("seller.sf.mainProducts")}</h2>
         <div class="flex items-center gap-2">
           <button class="main-products-prev w-8 h-8 rounded-full border border-gray-300 flex items-center justify-center hover:bg-gray-100 transition-colors" aria-label="Önceki">
             <svg class="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
@@ -159,7 +159,7 @@ function OverviewTab(): string {
 
         <!-- Profile Header -->
         <div class="flex items-center justify-between flex-wrap gap-3 pb-6 mb-6 border-b border-gray-100">
-          <h3 class="text-[18px] font-bold text-gray-900">${t("seller.sf.profile")}</h3>
+          <h2 class="text-[18px] font-bold text-gray-900">${t("seller.sf.profile")}</h2>
           <div class="flex items-center gap-4">
             ${VerificationBadgeTemplate("seller?.verifications || []")}
             <!-- Rapor = saha denetim belgesi (verifications[0].document_url); belge yoksa link gizlenir -->
@@ -176,7 +176,7 @@ function OverviewTab(): string {
 
         <!-- Genel Bakış -->
         <div class="pb-6 mb-6 border-b border-gray-100">
-          <h4 class="text-[16px] font-bold text-gray-900 mb-5">${t("seller.sf.generalOverview")}</h4>
+          <h3 class="text-[16px] font-bold text-gray-900 mb-5">${t("seller.sf.generalOverview")}</h3>
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-3 text-[14px]">
             <div class="flex justify-between py-2 border-b border-gray-50">
               <span class="text-gray-500">${t("seller.sf.registrationDate")}</span>
@@ -207,7 +207,7 @@ function OverviewTab(): string {
 
         <!-- Sertifikalar -->
         <div class="pb-6 mb-6 border-b border-gray-100">
-          <h4 class="text-[16px] font-bold text-gray-900 mb-5">${t("seller.sf.certificates")}</h4>
+          <h3 class="text-[16px] font-bold text-gray-900 mb-5">${t("seller.sf.certificates")}</h3>
           <div x-show="certList.length > 0" class="grid grid-cols-2 sm:grid-cols-4 gap-4">
             <template x-for="(cert, idx) in certList" :key="idx">
               <a
@@ -233,7 +233,7 @@ function OverviewTab(): string {
 
         <!-- Üretim Özellikleri -->
         <div class="pb-6 mb-6 border-b border-gray-100">
-          <h4 class="text-[16px] font-bold text-gray-900 mb-5">${t("seller.sf.qualityControlSection")}</h4>
+          <h3 class="text-[16px] font-bold text-gray-900 mb-5">${t("seller.sf.qualityControlSection")}</h3>
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-3 text-[14px]">
             <div class="flex justify-between py-2 border-b border-gray-50">
               <span class="text-gray-500">${t("seller.sf.businessType")}</span>
@@ -256,7 +256,7 @@ function OverviewTab(): string {
 
         <!-- Kalite Kontrol -->
         <div>
-          <h4 class="text-[16px] font-bold text-gray-900 mb-5">${t("seller.sf.qualityControl")}</h4>
+          <h3 class="text-[16px] font-bold text-gray-900 mb-5">${t("seller.sf.qualityControl")}</h3>
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-3 text-[14px]">
             <div class="flex justify-between py-2 border-b border-gray-50">
               <span class="text-gray-500">${t("seller.sf.rawMaterialSupport")}</span>
@@ -274,7 +274,7 @@ function OverviewTab(): string {
       <!-- Hizmet (Service) Card -->
       <section class="bg-white rounded-md border border-gray-200 p-6 mb-6">
         <div class="flex items-center justify-between flex-wrap gap-3 pb-6 mb-6 border-b border-gray-100">
-          <h3 class="text-[18px] font-bold text-gray-900">${t("seller.sf.serviceTab")}</h3>
+          <h2 class="text-[18px] font-bold text-gray-900">${t("seller.sf.serviceTab")}</h2>
         </div>
 
         <!-- Customization services -->
@@ -301,7 +301,7 @@ function OverviewTab(): string {
         >
           <!-- Info card -->
           <div class="bg-gray-50 rounded-md p-5 sm:w-[260px] shrink-0">
-            <h4 class="text-[16px] font-bold text-gray-900 mb-3">${t("seller.sf.lowMoqCustomization")}</h4>
+            <h3 class="text-[16px] font-bold text-gray-900 mb-3">${t("seller.sf.lowMoqCustomization")}</h3>
             <ul class="text-[13px] text-gray-600 space-y-1.5">
               <li class="flex items-center gap-1.5">
                 <span class="w-1 h-1 bg-gray-400 rounded-full shrink-0"></span>
@@ -335,10 +335,10 @@ function OverviewTab(): string {
 
       <!-- Şirket Değerlendirmeleri (Company Reviews) Card -->
       <section class="bg-white rounded-md border border-gray-200 p-6 mb-6">
-        <h3 class="text-[18px] font-bold text-gray-900 mb-6">
+        <h2 class="text-[18px] font-bold text-gray-900 mb-6">
           ${t("seller.sf.companyReviews")}
           <span class="text-gray-500 font-normal" x-text="'(' + (seller?.review_count || 0) + ')'"></span>
-        </h3>
+        </h2>
 
         <!-- Rating summary -->
         <div class="flex flex-col sm:flex-row gap-8 pb-6 mb-6 border-b border-gray-100">
@@ -401,7 +401,7 @@ function OverviewTab(): string {
         }"
       >
         <div class="flex items-center justify-between mb-6">
-          <h3 class="text-[18px] font-bold text-gray-900">${t("seller.sf.productsTab")}</h3>
+          <h2 class="text-[18px] font-bold text-gray-900">${t("seller.sf.productsTab")}</h2>
         </div>
 
         <!-- Loading -->
@@ -535,7 +535,7 @@ function ReviewsTab(): string {
 
         <template x-if="!loading">
           <div>
-            <h3 class="text-[18px] font-bold text-gray-900 mb-8">${t("seller.sf.companyReviews")} (<span x-text="total"></span>)</h3>
+            <h2 class="text-[18px] font-bold text-gray-900 mb-8">${t("seller.sf.companyReviews")} (<span x-text="total"></span>)</h2>
 
             <!-- Rating Summary -->
             <div class="flex flex-col md:flex-row gap-10 mb-10 pb-10 border-b border-gray-100">
@@ -580,7 +580,7 @@ function ReviewsTab(): string {
             <!-- ── Review Form / Login Prompt ── -->
             <div class="mb-10 pb-10 border-b border-gray-100">
               <div x-show="isAuthenticated">
-                <h4 class="text-[16px] font-bold text-gray-900 mb-4">${t("seller.sf.writeReview")}</h4>
+                <h3 class="text-[16px] font-bold text-gray-900 mb-4">${t("seller.sf.writeReview")}</h3>
                 <div class="flex items-center gap-2 mb-4">
                   <span class="text-[13px] text-gray-600 me-2">${t("seller.sf.yourRating")}:</span>
                   <template x-for="i in 5" :key="i">
@@ -1005,7 +1005,7 @@ function VideosTab(): string {
             </div>
             <!-- Title -->
             <div class="p-4">
-              <h4 class="text-[15px] font-medium text-gray-900" x-text="activeVideo.product_name"></h4>
+              <h3 class="text-[15px] font-medium text-gray-900" x-text="activeVideo.product_name"></h3>
             </div>
           </div>
         </div>
@@ -1023,7 +1023,7 @@ function ContactSidebar(): string {
       <div class="bg-white rounded-md border border-gray-200 shadow-sm" style="padding: 24px 20px 20px;">
 
         <!-- Header Title -->
-        <h3 class="text-[17px] font-bold text-gray-900 mb-5">${t("seller.sf.contactSupplierTitle")}</h3>
+        <h2 class="text-[17px] font-bold text-gray-900 mb-5">${t("seller.sf.contactSupplierTitle")}</h2>
 
         <!-- Seller Logo & Name -->
         <div class="flex items-center gap-3 mb-5">
@@ -1032,7 +1032,7 @@ function ContactSidebar(): string {
             <svg x-show="!seller?.logo" class="w-6 h-6 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/></svg>
           </div>
           <div class="min-w-0">
-            <h4 class="text-[14px] font-medium text-gray-900 leading-tight line-clamp-2" x-text="seller?.seller_name || '\u2014'"></h4>
+            <h3 class="text-[14px] font-medium text-gray-900 leading-tight line-clamp-2" x-text="seller?.seller_name || '\u2014'"></h3>
           </div>
         </div>
 

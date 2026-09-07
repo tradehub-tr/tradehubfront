@@ -59,6 +59,12 @@ import { FooterLinks } from "./components/footer";
 // Floating components
 import { FloatingPanel, BottomNav, initBottomNav } from "./components/floating";
 
+// Ürün vitrini kart aksiyonları: "Sepete ekle" → paylaşımlı sepet çekmecesi,
+// "Sohbet et" → sohbet penceresi (listeleme sayfasıyla aynı kurulum, 2026-09-07).
+import { ListingCartDrawer } from "./components/products";
+import { ShippingModal, initShippingModal } from "./components/product";
+import { mountChatPopup, initChatTriggers } from "./components/chat-popup";
+
 // Alpine.js
 import { startAlpine } from "./alpine";
 
@@ -142,7 +148,7 @@ const appEl = document.querySelector<HTMLDivElement>("#app")!;
 // ölçülemiyordu; artık markup boyanır boyanmaz görünür.
 appEl.classList.add("relative");
 appEl.innerHTML = `
-  <h1 class="sr-only">iStoc – Türkiye'nin B2B Toptan Satış Pazaryeri</h1>
+  <h1 class="sr-only" data-i18n="pageTitle.homeHeading">${t("pageTitle.homeHeading")}</h1>
   <!-- Sticky Header (global, stays sticky across full page) -->
   <div id="sticky-header" class="sticky top-0 z-(--z-header) bg-white dark:bg-gray-900" style="padding-top:env(safe-area-inset-top,0px)">
     ${TopBar()}
@@ -217,6 +223,10 @@ appEl.innerHTML = `
   <!-- Bottom Navigation (mobile/tablet) -->
   ${BottomNav()}
 
+  <!-- Vitrin kartlarının "Sepete ekle" çekmecesi + sevkiyat seçim penceresi -->
+  ${ListingCartDrawer()}
+  ${ShippingModal()}
+
 `;
 
 // Initialize custom component behaviors FIRST (before Flowbite can interfere)
@@ -225,8 +235,14 @@ const megaMenuReady = initMegaMenu();
 // Initialize Flowbite for other interactive components
 initFlowbite();
 
+// Vitrin kartlarındaki "Sohbet et" için sohbet penceresi + tetikleyiciler
+// (Alpine'dan önce; listeleme sayfasındaki sırayla aynı).
+mountChatPopup();
+initChatTriggers();
+
 // Initialize Alpine.js (FloatingPanel is now Alpine-driven)
 startAlpine();
+initShippingModal();
 
 // Initialize remaining custom behaviors
 initStickyHeaderSearch();

@@ -72,7 +72,10 @@ export function initProductListingGrid(): void {}
  * - transition-transform duration-500 ease-out
  * - group-hover/product:scale-110 (10% zoom)
  */
-export function ProductListingGrid(products: ProductListingCard[] = []): string {
+export function ProductListingGrid(
+  products: ProductListingCard[] = [],
+  fillFrom?: number | null
+): string {
   if (products.length === 0) {
     return `
       <section aria-label="${t("products.productList")}" class="flex-1">
@@ -98,7 +101,7 @@ export function ProductListingGrid(products: ProductListingCard[] = []): string 
         role="list"
         aria-label="${t("products.productListLabel")}"
       >
-        ${products.map((card) => `<div role="listitem" class="flex">${renderListingCard(card)}</div>`).join("")}
+        ${renderGridItems(products, fillFrom)}
       </div>
     </section>
   `;
@@ -140,7 +143,10 @@ let _renderNobeti = 0;
  * @returns Izgara DOM'a basıldığında çözülen promise — çağıran, ızgara DOM'una
  *   dokunan init'leri (slider, sosyal kanıt, favori) bundan SONRA koşmalı.
  */
-export async function rerenderProductGrid(products: ProductListingCard[]): Promise<void> {
+export async function rerenderProductGrid(
+  products: ProductListingCard[],
+  fillFrom?: number | null
+): Promise<void> {
   const grid = document.querySelector<HTMLElement>(".product-grid");
   if (!grid) return;
 
@@ -178,21 +184,7 @@ export async function rerenderProductGrid(products: ProductListingCard[]): Promi
     if (nobet !== _renderNobeti) return;
   }
 
-  if (products.length === 0) {
-    grid.innerHTML = renderNoResults();
-  } else {
-    grid.innerHTML = products
-      .map(
-        (card, i) =>
-          // İlk kart sayfanın LCP ADAYI: görseli `fetchpriority="high"` + eager
-          // basılır (W7-2/A2 deseni — `<link rel=preload>` yerine doğrudan img
-          // önceliği: ızgara işaretlemesi tek görevde kurulup basılıyor, ayrı
-          // preload bağlantısının kapatacağı bir keşif boşluğu yok). TEK kart:
-          // hepsine `high` vermek önceliği anlamsızlaştırır.
-          `<div role="listitem" class="flex">${renderListingCard(card, i === 0 ? { priorityImage: true } : {})}</div>`
-      )
-      .join("");
-  }
+  grid.innerHTML = renderGridItems(products, fillFrom);
 
   // Re-apply list view classes if it was in list mode
   if (isListView) {
@@ -210,6 +202,48 @@ export async function rerenderProductGrid(products: ProductListingCard[]): Promi
       upgradeListingCardMedia(grid);
     });
   }
+}
+
+/** Az sonuç dolgusu başlığı — "Bu ürünler de ilginizi çekebilir" (tam genişlik satır). */
+function renderFillHeading(withDivider: boolean): string {
+  return `
+    <div data-fill-heading class="col-span-full ${withDivider ? "mt-2 border-t border-gray-200 dark:border-gray-700 pt-6" : "pt-1"}">
+      <h2 class="text-lg font-semibold text-gray-900 dark:text-white">${t("products.fillHeading")}</h2>
+    </div>`;
+}
+
+/** Asıl sonuç 0 iken büyük boş-sonuç bloğu yerine kompakt uyarı + filtre temizleme. */
+function renderFillEmptyNotice(): string {
+  return `
+    <div data-fill-empty class="col-span-full flex flex-wrap items-center gap-x-4 gap-y-2 rounded-lg bg-gray-50 dark:bg-gray-800 px-4 py-3 text-sm text-gray-700 dark:text-gray-200">
+      <span>${t("products.noResults")}</span>
+      <button type="button" data-filter-action="clear-all" class="th-btn-link !p-0 text-sm font-medium">${t("products.clearFilters")}</button>
+    </div>`;
+}
+
+/**
+ * Izgara içeriği: kartlar + (varsa) dolgu başlığı. `fillFrom` backend'in verdiği,
+ * bu sayfada dolgunun başladığı kart indeksi; 0 ise asıl sonuç yok demektir.
+ */
+function renderGridItems(products: ProductListingCard[], fillFrom?: number | null): string {
+  if (products.length === 0) return renderNoResults();
+  const parts: string[] = [];
+  const hasFill = typeof fillFrom === "number" && fillFrom >= 0 && fillFrom <= products.length;
+  if (hasFill && fillFrom === 0) {
+    parts.push(renderFillEmptyNotice(), renderFillHeading(false));
+  }
+  products.forEach((card, i) => {
+    if (hasFill && fillFrom === i && i > 0) parts.push(renderFillHeading(true));
+    // İlk kart sayfanın LCP ADAYI: görseli `fetchpriority="high"` + eager
+    // basılır (W7-2/A2 deseni — `<link rel=preload>` yerine doğrudan img
+    // önceliği: ızgara işaretlemesi tek görevde kurulup basılıyor, ayrı
+    // preload bağlantısının kapatacağı bir keşif boşluğu yok). TEK kart:
+    // hepsine `high` vermek önceliği anlamsızlaştırır.
+    parts.push(
+      `<div role="listitem" class="flex">${renderListingCard(card, i === 0 ? { priorityImage: true } : {})}</div>`
+    );
+  });
+  return parts.join("");
 }
 
 /**

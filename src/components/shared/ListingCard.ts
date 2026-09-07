@@ -84,10 +84,10 @@ function renderImageSlider(
   card: ProductListingCard,
   opts: { imgFit?: string; lazy?: boolean; sizesRegion?: string; priority?: boolean } = {}
 ): string {
-  // Görsel doldurma modu — varsayılan object-cover (liste/arama/mağaza). Ana sayfa
-  // vitrini object-contain geçer: görsel KARE (1:1) kalır ama kırpılmaz/bozulmaz,
-  // kare alana sığdırılıp ortalanır (yanlarda beyaz boşluk).
-  const imgFit = opts.imgFit ?? "object-cover";
+  // Görsel doldurma modu — varsayılan object-contain (liste/arama/mağaza/vitrin):
+  // görsel KARE (1:1) alana kırpılmadan sığdırılıp ortalanır; boşluk kutunun beyaz
+  // zeminiyle (--product-image-bg) dolar. Dikey/yatay ürün görselleri tam görünür.
+  const imgFit = opts.imgFit ?? "object-contain";
   // ──────────────────────────────────────────────────────────────
   // DISABLED: Camera/visual search icon (bottom-left overlay)
   // İleride tekrar etkinleştirmek için:
@@ -212,7 +212,7 @@ function renderImageSlider(
     : "";
 
   return `
-    <div class="relative aspect-square w-full flex-shrink-0 overflow-hidden group/img">
+    <div class="relative aspect-square w-full flex-shrink-0 overflow-hidden group/img bg-[var(--product-image-bg,#ffffff)]">
       <!-- Slides container -->
       <div class="product-slider flex w-full h-full transition-transform duration-300 ease-out"
            data-slider-id="${escapeHtml(card.id)}"
@@ -281,8 +281,10 @@ export function renderListingCard(card: ProductListingCard, opts: ListingCardOpt
   // "Yeni ürün" fallback ile doldurup açar (mountRoll → sp-strip-empty + !hidden
   // sınıflarını kaldırır; base `hidden` kalır, sadece ilgili modda flex görünür).
   // list: başlık altı metin satırı — grid: görsel altı tam genişlik şerit.
-  const sellingPointHtml = `<div data-sp-slot="${escapeHtml(card.id)}" class="sp-strip-empty !hidden hidden group-data-[list-mode=list]/grid:flex items-center min-w-0 gap-1 mt-1 h-[15px] overflow-hidden text-[11px] leading-tight min-[480px]:text-xs"></div>`;
-  const sellingOverlayHtml = `<div data-sp-slot="${escapeHtml(card.id)}" data-sp-align="center" class="sp-strip-empty !hidden hidden group-data-[list-mode=grid]/grid:flex items-center justify-center gap-1 absolute inset-x-0 bottom-0 z-20 h-[21px] min-[480px]:h-6 px-2 overflow-hidden bg-white/95 border-t border-gray-100 text-[9.5px] min-[480px]:text-[10.5px] font-bold whitespace-nowrap pointer-events-none"></div>`;
+  // Sosyal kanıt yuvası: başlık bloğunun ALTINA yaslı (mt-auto), fiyatın hemen üstünde —
+  // kısa başlıkların bıraktığı boşluğu rozet doldurur; grid ve list aynı yuvayı kullanır.
+  // Sabit yükseklik (padding'siz): ticker slot.clientHeight ile kaydırır.
+  const sellingPointHtml = `<div data-sp-slot="${escapeHtml(card.id)}" class="sp-strip-empty !hidden mt-auto flex items-center min-w-0 gap-1 h-[15px] min-[480px]:h-4 overflow-hidden text-[11px] leading-tight min-[480px]:text-xs font-semibold whitespace-nowrap"></div>`;
 
   // MOQ
   const moqHtml =
@@ -516,7 +518,7 @@ export function renderListingCard(card: ProductListingCard, opts: ListingCardOpt
     </div>`;
 
   return `
-    <div class="fy26-product-card-wrapper relative isolate flex flex-col justify-between w-full rounded-md overflow-hidden bg-white pb-3 border-0
+    <div class="fy26-product-card-wrapper group/card relative isolate flex flex-col justify-between w-full rounded-md overflow-hidden bg-white pb-3 border-0
             transition-shadow duration-200 ease-out
             hover:z-10 hover:shadow-[0_1px_4px_rgba(0,0,0,0.06),0_8px_24px_rgba(0,0,0,0.14)] hover:ring-1 hover:ring-gray-200
             group-data-[list-mode=grid]/grid:border group-data-[list-mode=grid]/grid:border-gray-200 group-data-[list-mode=grid]/grid:rounded-md
@@ -559,7 +561,6 @@ export function renderListingCard(card: ProductListingCard, opts: ListingCardOpt
           ${kybBadgeHtml}${discountBadgeHtml}
           ${oosOverlayHtml}
           ${renderImageSlider(card, sliderOpts)}
-          ${sellingOverlayHtml}
         </a>
         ${favBtnHtml}
       </div>
@@ -570,16 +571,17 @@ export function renderListingCard(card: ProductListingCard, opts: ListingCardOpt
             group-data-[list-mode=list]/grid:row-start-1
             group-data-[list-mode=list]/grid:min-w-0
             min-[1200px]:group-data-[list-mode=list]/grid:flex-1">
-        <!-- Title area -->
-        <div class="px-3">
-          <h2 class="searchx-product-e-title text-[13px] font-normal leading-[17px] min-h-[34px] min-[480px]:text-sm min-[480px]:leading-[20px] min-[480px]:min-h-[40px] text-[#333] overflow-hidden text-ellipsis line-clamp-2 m-0
-            group-data-[list-mode=list]/grid:line-clamp-1 group-data-[list-mode=list]/grid:!min-h-0 min-[480px]:group-data-[list-mode=list]/grid:line-clamp-2
-            min-[480px]:group-data-[list-mode=list]/grid:!h-auto
+        <!-- Title area — sabit yükseklik BLOKTA (2 satır başlık + 4px + rozet yuvası):
+             başlık kısa kalınca boşluk yuvaya kalır, fiyatlar kartlar arasında hizalı kalır -->
+        <div class="px-3 flex flex-col gap-1 min-h-[53px] min-[480px]:min-h-[60px]
+            group-data-[list-mode=list]/grid:!min-h-0
+            lg:max-[1599px]:group-data-[list-mode=grid]/grid:min-h-[54px]">
+          <h2 class="searchx-product-e-title text-[13px] font-normal leading-[17px] min-[480px]:text-sm min-[480px]:leading-[20px] text-[#333] overflow-hidden text-ellipsis line-clamp-2 m-0
+            group-data-[list-mode=list]/grid:line-clamp-1 min-[480px]:group-data-[list-mode=list]/grid:line-clamp-2
             min-[480px]:group-data-[list-mode=list]/grid:text-base
             min-[480px]:group-data-[list-mode=list]/grid:leading-[22px]
             lg:max-[1599px]:group-data-[list-mode=grid]/grid:text-[13px]
-            lg:max-[1599px]:group-data-[list-mode=grid]/grid:leading-[17px]
-            lg:max-[1599px]:group-data-[list-mode=grid]/grid:h-[51px]">
+            lg:max-[1599px]:group-data-[list-mode=grid]/grid:leading-[17px]">
             ${brandInlineHtml}<a href="${escapeHtml(sanitizeUrl(card.href))}" target="_blank" class="text-inherit no-underline hover:text-primary-500"><span>${escapeHtml(card.name)}</span></a>
           </h2>
           ${sellingPointHtml}
@@ -609,8 +611,8 @@ export function renderListingCard(card: ProductListingCard, opts: ListingCardOpt
 
       ${
         showActions
-          ? `<!-- Action buttons -->
-      <div class="action-area-layout flex group-data-[list-mode=list]/grid:hidden min-[480px]:group-data-[list-mode=list]/grid:flex group-data-[list-mode=grid]/grid:hidden min-[480px]:group-data-[list-mode=grid]/grid:flex flex-col min-[480px]:flex-row gap-2 px-3 mt-3 items-stretch min-[480px]:items-center
+          ? `<!-- Action buttons — masaüstünde (lg+) yalnız kart üzerine gelince / odaktayken görünür (opacity: yer kaymaz); mobilde her zaman -->
+      <div class="action-area-layout lg:opacity-0 lg:group-hover/card:opacity-100 lg:group-focus-within/card:opacity-100 transition-opacity duration-150 flex group-data-[list-mode=list]/grid:hidden min-[480px]:group-data-[list-mode=list]/grid:flex group-data-[list-mode=grid]/grid:hidden min-[480px]:group-data-[list-mode=grid]/grid:flex flex-col min-[480px]:flex-row gap-2 px-3 mt-3 items-stretch min-[480px]:items-center
             group-data-[list-mode=list]/grid:col-start-2
             group-data-[list-mode=list]/grid:row-start-2
             group-data-[list-mode=list]/grid:px-0

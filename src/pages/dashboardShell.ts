@@ -10,6 +10,7 @@
  * geçmişi düzeltmek değil, yeni sayfaların aynı hatayı dört kez yapmasını
  * önlemek.
  */
+import { escapeHtml } from "../utils/sanitize";
 import { initFlowbite } from "flowbite";
 
 import { mountChatPopup, initChatTriggers } from "../components/chat-popup";
@@ -27,6 +28,8 @@ export interface DashboardShellOptions {
   contentId: string;
   /** İlk çizimde gösterilecek içerik (genelde "yükleniyor"). */
   initialContent?: string;
+  /** Sayfanın sr-only h1 metni — sayfanın kendi görünür h1'i yoksa ver. */
+  heading?: string;
 }
 
 /**
@@ -37,11 +40,12 @@ export interface DashboardShellOptions {
  * çağırıyor (kök `alpinejs.md` §3.6).
  */
 export function mountDashboardShell(options: DashboardShellOptions): HTMLElement {
-  const { breadcrumb, contentId, initialContent = "" } = options;
+  const { breadcrumb, contentId, initialContent = "", heading } = options;
 
   const appEl = document.querySelector<HTMLDivElement>("#app")!;
   appEl.classList.add("relative");
   appEl.innerHTML = `
+    ${heading ? `<h1 class="sr-only">${escapeHtml(heading)}</h1>` : ""}
     <div id="sticky-header" class="sticky top-0 z-(--z-header) bg-white">
       ${TopBar({ compact: true })}
     </div>

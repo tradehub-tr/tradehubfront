@@ -6,6 +6,7 @@
  */
 
 // T-123: RUM montajı — MPA ortak boot (çift başlatmaya karşı korumalı).
+import { getCountryDisplayName } from '../utils/country'
 import "../lib/rum/boot";
 import '../style.css'
 import { t } from '../i18n'
@@ -114,7 +115,7 @@ function renderHero(brand: BrandDetail): string {
 
   const metaItems: string[] = []
   if (brand.foundedYear) metaItems.push(`<span><strong>${brand.foundedYear}</strong> ${t('infoMisc.founded')}</span>`)
-  if (brand.country) metaItems.push(`<span>${escapeHtml(brand.country)}</span>`)
+  if (brand.country) metaItems.push(`<span>${escapeHtml(getCountryDisplayName(brand.country))}</span>`)
   if (brand.website) {
     const url = sanitizeUrl(brand.website)
     metaItems.push(`<a href="${escapeHtml(url)}" target="_blank" rel="noopener" class="hover:underline" style="color:${theme}">Website</a>`)

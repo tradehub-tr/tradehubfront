@@ -16,16 +16,16 @@ import { initCategoryDrillSheet } from "../shared/CategoryDrillSheet";
 /* ──── Subcategory thumbnail renderer ──── */
 
 function renderMobileSubcategory(name: string, slug: string, image?: string): string {
-  const placeholderSvg = `<svg class="w-4 h-4 min-[400px]:w-5 min-[400px]:h-5 sm:w-6 sm:h-6 text-gray-300 dark:text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="m2.25 15.75 5.159-5.159a2.25 2.25 0 0 1 3.182 0l5.159 5.159m-1.5-1.5 1.409-1.409a2.25 2.25 0 0 1 3.182 0l2.909 2.909M18 3.75H6A2.25 2.25 0 0 0 3.75 6v12A2.25 2.25 0 0 0 6 20.25h12A2.25 2.25 0 0 0 20.25 18V6A2.25 2.25 0 0 0 18 3.75Z"/></svg>`;
+  const placeholderSvg = `<svg class="w-6 h-6 min-[400px]:w-7 min-[400px]:h-7 sm:w-8 sm:h-8 text-gray-300 dark:text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="m2.25 15.75 5.159-5.159a2.25 2.25 0 0 1 3.182 0l5.159 5.159m-1.5-1.5 1.409-1.409a2.25 2.25 0 0 1 3.182 0l2.909 2.909M18 3.75H6A2.25 2.25 0 0 0 3.75 6v12A2.25 2.25 0 0 0 6 20.25h12A2.25 2.25 0 0 0 20.25 18V6A2.25 2.25 0 0 0 18 3.75Z"/></svg>`;
   const inner = image
-    ? `<img src="${escapeHtml(sanitizeUrl(image))}" alt="${escapeHtml(name)}" width="60" height="60" decoding="async" class="w-full h-full object-cover rounded-md" onerror="this.outerHTML=this.dataset.fallback" data-fallback='${placeholderSvg.replace(/'/g, "&apos;")}' />`
+    ? `<img src="${escapeHtml(sanitizeUrl(image))}" alt="${escapeHtml(name)}" width="72" height="72" decoding="async" class="w-full h-full object-cover rounded-md" onerror="this.outerHTML=this.dataset.fallback" data-fallback='${placeholderSvg.replace(/'/g, "&apos;")}' />`
     : placeholderSvg;
   return `
-    <a href="/urunler?cat=${encodeURIComponent(slug)}" class="mcb-product flex-shrink-0 flex flex-col items-center gap-1 w-[42px] min-[400px]:w-[52px] sm:w-[60px]">
-      <div class="w-[42px] h-[42px] min-[400px]:w-[52px] min-[400px]:h-[52px] sm:w-[60px] sm:h-[60px] rounded-md bg-gray-100 dark:bg-gray-700 flex items-center justify-center overflow-hidden">
+    <a href="/urunler?cat=${encodeURIComponent(slug)}" class="mcb-product flex-shrink-0 flex flex-col items-center gap-1.5 w-[calc((100vw-62px)/5.5)] sm:w-[80px]">
+      <div class="w-full aspect-square rounded-md bg-gray-100 dark:bg-gray-700 flex items-center justify-center overflow-hidden">
         ${inner}
       </div>
-      <span class="text-[9px] min-[400px]:text-[11px] text-gray-600 dark:text-gray-400 text-center leading-tight truncate w-full">${escapeHtml(name)}</span>
+      <span class="text-[11px] min-[400px]:text-[12px] text-gray-600 dark:text-gray-400 text-center leading-tight truncate w-full">${escapeHtml(name)}</span>
     </a>
   `;
 }
@@ -58,9 +58,9 @@ function renderBottomSheet(): string {
 export function MobileCategoryBar(): string {
   return `
     <div id="mobile-category-bar" class="xl:hidden bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700">
-      <!-- Row 1: Category Tabs (skeleton, replaced after API) -->
-      <div class="relative">
-        <div id="mcb-tabs" class="flex overflow-x-auto scrollbar-hide gap-0.5 pe-10">
+      <!-- Row 1: Category Tabs (skeleton, replaced after API) — Alibaba: 55px kutu, yazı üstte, çizgi altta, ince ayraç -->
+      <div class="relative border-b border-gray-200 dark:border-gray-700">
+        <div id="mcb-tabs" class="flex h-11 items-stretch overflow-x-auto scrollbar-hide gap-5 ps-4 pe-12">
           ${Array.from(
             { length: 6 },
             (_, i) => `
@@ -77,7 +77,7 @@ export function MobileCategoryBar(): string {
         <button
           type="button"
           id="mcb-dropdown-btn"
-          class="th-no-press absolute end-0 top-0 bottom-0 w-9 flex items-center justify-center text-gray-500 dark:text-gray-400 bg-white dark:bg-gray-800"
+          class="th-no-press absolute end-0 top-0 bottom-0 w-9 flex items-start pt-2.5 justify-center text-gray-500 dark:text-gray-400 bg-white dark:bg-gray-800"
           aria-label="${t("mobileCategory.allCategories")}" data-i18n-aria-label="mobileCategory.allCategories"
         >
           <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
@@ -87,12 +87,12 @@ export function MobileCategoryBar(): string {
       </div>
 
       <!-- Row 2: Subcategory Items (skeleton, replaced after API) -->
-      <div id="mcb-products" class="flex overflow-x-auto scrollbar-hide gap-2 sm:gap-3 px-2 sm:px-3 py-2.5">
+      <div id="mcb-products" class="flex overflow-x-auto scrollbar-hide gap-2.5 sm:gap-4 px-3 py-3">
         ${Array.from(
           { length: 6 },
           () => `
-          <div class="flex-shrink-0 flex flex-col items-center gap-1 w-[52px] sm:w-[60px] animate-pulse">
-            <div class="w-[52px] h-[52px] sm:w-[60px] sm:h-[60px] rounded-md bg-gray-200 dark:bg-gray-700"></div>
+          <div class="flex-shrink-0 flex flex-col items-center gap-1.5 w-[calc((100vw-62px)/5.5)] sm:w-[80px] animate-pulse">
+            <div class="w-full aspect-square rounded-md bg-gray-200 dark:bg-gray-700"></div>
             <div class="h-2.5 w-10 rounded bg-gray-200 dark:bg-gray-700"></div>
           </div>
         `
@@ -112,14 +112,11 @@ export function initMobileCategoryBar(): Promise<void> {
 
   if (!productsContainer || !tabsContainer) return Promise.resolve();
 
-  const TAB_ACT = [
-    "font-bold",
-    "text-gray-900",
-    "dark:text-white",
-    "border-gray-900",
-    "dark:border-white",
-  ];
-  const TAB_INACT = ["text-gray-500", "dark:text-gray-400", "font-normal", "border-transparent"];
+  // Alibaba mobil sekme düzeni, bir kademe küçük: pasif 14px normal, aktif 16px kalın; renk ikisinde
+  // de aynı (#222), sekmeler arası 20px, sekme 44px yüksek, yazı üstte, 2px çizgi kutunun en altında; altında ince
+  // ayraç ve alt kategori satırı gelir.
+  const TAB_ACT = ["font-bold", "text-base", "border-gray-900", "dark:border-white"];
+  const TAB_INACT = ["font-normal", "text-sm", "border-transparent"];
 
   let _cats: ApiCategory[] = [];
   // Drill-down sheet'in ✓ işareti için aktif kök slug'ı (seçili tab).
@@ -162,10 +159,8 @@ export function initMobileCategoryBar(): Promise<void> {
         (cat, i) => `
       <button
         type="button"
-        class="mcb-tab flex-shrink-0 px-3 py-2 text-xs whitespace-nowrap transition-colors ${
-          i === 0
-            ? "font-bold text-gray-900 dark:text-white border-b-2 border-gray-900 dark:border-white"
-            : "text-gray-500 dark:text-gray-400 font-normal border-b-2 border-transparent"
+        class="mcb-tab flex flex-shrink-0 items-start pt-2 leading-tight whitespace-nowrap border-b-2 text-[#222222] dark:text-white transition-colors ${
+          i === 0 ? TAB_ACT.join(" ") : TAB_INACT.join(" ")
         }"
         data-mcb-cat="${escapeHtml(cat.id)}"
       >${escapeHtml(cat.name)}</button>

@@ -12,7 +12,15 @@ import { initTracking } from '../utils/trackingManager';
 initLinkRewriter();
 initTracking();
 
-document.addEventListener('DOMContentLoaded', () => {
+// i18n modülü top-level await ile yükleniyor; bu noktaya gelindiğinde
+// DOMContentLoaded çoğu zaman ÇOKTAN ateşlenmiş oluyor — dinleyici asla
+// çalışmaz, sayfa boş kalır. Hazırsa hemen çalıştır.
+function onReady(fn: () => void): void {
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', fn);
+  else fn();
+}
+
+onReady(() => {
   const params = new URLSearchParams(window.location.search);
   const count = params.get('count') || '1';
   const method = params.get('method') || 'credit_card';
