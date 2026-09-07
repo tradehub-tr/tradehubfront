@@ -1,3 +1,54 @@
+## [v2.4.0-alpha.36] - 2026-09-07 ALPHA
+
+Bu surum alpha.istoc.com'da gelistirme asamasindadir.
+
+### Eklendi
+- feat(test): gelecek tarihli sabitler için denetim eklendi (@aliiball)
+  - Pickup testi sabit 2026-09-02 yazıyordu; o gün geçince dört test düştü
+  - Geçmiş tarih fixture'dır, serbest; bugünden ileri sabit zaman bombasıdır
+  - Sabit gün hafta sonunu atlayan dinamik güne çevrildi
+- feat(test): panel lojistik testleri mobil görünümde de koşuyor (@aliiball)
+  - Mobilde menü kalemleri href taşımıyor; "Daha → Lojistik" panelinden okunup yola geri çevriliyor
+  - Form sekmeleri mobilde chip navigasyonuna düşüyor (hidden lg:block)
+  - Kuyruk iddiaları görünümden bağımsız kancaya bağlandı
+  - Kanban taşma iddiası geniş ekrana kapsamlandı: 390px'te dört sütun zaten sığmaz, yatay kaydırma orada beklenen davranış
+- feat(test): lojistik metinleri dört dilde denetleniyor (@aliiball)
+  - shipment ad alanının tr/en/ru/ar bütünlüğü; eksik ve fazla anahtar kapısı
+- feat(test): dayanıklılık, monkey ve form fuzz turları eklendi (@aliiball)
+  - Monkey tohumlu ve adım+süre tavanıyla sınırlı; kaç adım koştuğunu raporluyor, anlamlı adım koşulmazsa kırılıyor
+  - Fuzz altı düşmanca girdi deniyor (script yükü, 10.000 karakter, RTL, yol geçişi); XSS yükünün çalışmadığı ve ekranın ayakta kaldığı ölçülüyor
+  - Dayanıklılık: çift tıklama, geri tuşu, 500 yanıtı, reddedilen kayıt
+  - İade mock'unun hiç denenmemiş kapali senaryosu teste bağlandı; kontrol öncesi miktar metni doğru aranıyor
+
+### Duzeltildi
+- fix(test): Playwright çıktısı commit'li kanıtları siliyordu (@aliiball)
+  - outputDir test-results/ altına alındı; 18 medya kanıtı artık silinmiyor
+  - playwright/evidence bundan sonra yalnızca arşiv
+- fix(test): medya izleme sayfası performans matrisine eklendi (@aliiball)
+  - aa1be08 ile üretime girmiş, matrise kaydedilmemişti; kapı kırmızıydı
+  - Rota dinamik olduğu için slug uydurmak yerine PERF_MEDIA_WATCH_PRETTY_PATH
+- fix(lojistik): storefront erişilebilirlik ihlalleri giderildi (@aliiball)
+  - dt/dd tanım listesi dışındaydı (axe dlitem)
+  - İade miktarı ve bildirim anahtarı erişilebilir ad taşımıyordu; yeni i18n anahtarı dört dile birden eklendi
+  - Kenar çubuğu role=menuitem ilan ediyordu ama ebeveyni role=navigation'dı; StoreNav ve OrdersTabs'taki roller DOĞRU olduğu için korundu
+  - Soldurma (opacity-70) ve altı gri nokta kontrast eşiğinin altındaydı
+  - WCAG taraması eklendi: dört ekran, iki viewport, critical/serious kapısı
+- fix(lojistik): çift tıklama aynı kaydı iki kez açabiliyordu (@aliiball)
+  - submitting bayrağı finally ile gezinme BAŞLAMADAN serbest bırakılıyordu; window.location.href beklemediği için ikinci tıklama kapıdan geçiyordu
+  - Başarı yolunda bayrak açık kalıyor, hata ve erken çıkış dalları bırakıyor
+  - Aynı desen satıcı sevkiyat formunda da vardı
+- fix(sipariş): hata anında boş durum da çiziliyordu (@aliiball)
+  - Uç 500 dönünce ekran hem "yüklenemedi" hem "Henüz sipariş yok · Ürün tedarik edin" gösteriyordu; ikincisi yalan ve kullanıcıyı yanlış işe sokuyor
+- fix(tema): outline düğme yazısı WCAG AA eşiğinin altındaydı (@aliiball)
+  - --btn-outline-text primary-700'e alındı (#ad5b00, 4.95:1); önceki primary-600 (#db7300) beyaz zeminde 3.24:1 veriyordu
+  - Kenarlık ve zemin marka renginde kaldı, token uzaktan temadan ezilebilir
+  - Tema editörünün varsayılanı da erişilebilir değerden başlıyor
+
+### Degistirildi
+- refactor(deps): axe-core geliştirme bağımlılığı olarak eklendi (@aliiball)
+  - Storefront'ta WCAG taraması için; panelde zaten kullanılıyordu
+
+---
 ## [v2.4.0-alpha.35] - 2026-09-07 ALPHA
 
 Bu surum alpha.istoc.com'da gelistirme asamasindadir.
