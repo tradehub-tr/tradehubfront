@@ -159,7 +159,12 @@ test("K2 · girilen MİKTAR gerçekten kaydediliyor", async ({ page }) => {
   await page.getByRole("button", { name: /İade talebi gönder/ }).click();
   await expect(page).toHaveURL(/returns\.html\?name=/);
 
-  await expect(page.getByText(/4 istendi/)).toBeVisible();
+  // Depo kontrolü BAŞLAMADAN ekran `qtyRequestedOnly` satırını basıyor
+  // ("4 iade edilmek istendi"); `qtyLine` ("… istendi · … ulaştı · … kabul")
+  // ancak kontrol başlayınca çiziliyor (`BuyerReturnTracking.ts:167`). Bu
+  // bilinçli: yeni açılmış talepte "0 ulaştı · 0 kabul" yazmak yanıltırdı.
+  // Regex araya kelime girmesine dayanıklı — iddia MİKTAR, cümle kalıbı değil.
+  await expect(page.getByText(/4[^·]*istendi/)).toBeVisible();
 });
 
 test("K2 · açılan talep sayfa yenilenince DURUYOR", async ({ page }) => {
@@ -171,7 +176,7 @@ test("K2 · açılan talep sayfa yenilenince DURUYOR", async ({ page }) => {
   const adres = page.url();
   await page.reload();
   await expect(page).toHaveURL(adres);
-  await expect(page.getByText(/2 istendi/)).toBeVisible();
+  await expect(page.getByText(/2[^·]*istendi/)).toBeVisible();
 });
 
 test("K2 · gerekçe kısaysa gönderilemiyor", async ({ page }) => {
@@ -226,6 +231,31 @@ test("K4 · hiç talep yoksa sonraki adım gösteriliyor", async ({ page }) => {
   await ac(page, `${IADELERIM}?mock=1&senaryo=bos`);
   await expect(page.getByText(/Henüz iade talebiniz yok/)).toBeVisible();
   await expect(page.getByRole("link", { name: /Siparişlerime git/ })).toBeVisible();
+});
+
+test("K4b · KAPANMIŞ kayıt salt-okunur: hiçbir eylem sunulmuyor", async ({ page }) => {
+  // Mock'un `kapali` senaryosu 31 Ağustos'ta yazıldı ("kapanmış kayıt hiçbir
+  // rolde düzenlenememeli — TUR-116") ama BİR KEZ BİLE denenmemişti; ölçüldü
+  // 7 Eyl 2026: sekiz senaryodan tek denenmeyen buydu. Denenemeyen hâl,
+  // olmayan hâldir (`FE-MOCK-DISIPLINI.md` §2.4).
+  await ac(page, `${IADELERIM}?mock=1&senaryo=kapali`);
+
+  // Kayıt görünüyor ve KAPANDI olarak işaretli.
+  const satir = page.getByTestId("return-row-link").first();
+  await expect(satir).toBeVisible();
+
+  // Alıcıya yazma eylemi sunulmamalı: iptal/düzenle/yükle düğmesi YOK.
+  // (Salt-okunur olduğunu "buton devre dışı" ile değil, HİÇ ÇİZİLMEMESİYLE
+  //  ölçüyoruz — devre dışı buton günün sonunda etkinleşiyor.)
+  for (const kalip of [/İptal et/i, /Düzenle/i, /Talebi geri çek/i, /Dosya yükle/i]) {
+    await expect(page.getByRole("button", { name: kalip })).toHaveCount(0);
+  }
+
+  // Takip ekranında da durum kapanmış olarak okunuyor.
+  await satir.click();
+  await expect(page).toHaveURL(/returns\.html\?name=RET-/);
+  await expect(page.getByRole("heading", { name: "İade takibi" })).toBeVisible();
+  await expect(page.getByText(/Kapandı|Kapatıldı|Tamamlandı/i).first()).toBeVisible();
 });
 
 // ── K5 · iade etiketi ────────────────────────────────────────────────
