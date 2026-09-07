@@ -21,8 +21,28 @@ import {
   resetPickupMock,
 } from "../logisticsPickupMock";
 
-/** Hafta içi bir gün — hafta sonu kapasitesi dar, testler ona takılmasın. */
-const YARIN_ICI = "2026-09-02"; // Çarşamba
+/**
+ * Hafta içi ve GELECEKTE bir gün — hafta sonu kapasitesi dar (`12-15` ve
+ * `15-18` kapalı, `listAppointmentSlots`), testler ona takılmasın.
+ *
+ * SABİT TARİH YAZMA. Önceki sürüm `"2026-09-02"` diyordu; o gün geçince
+ * dört test birden "A past date cannot be selected" ile düştü — mock geçmiş
+ * tarihi reddediyor (`logisticsPickupMock.ts:283`). Kusur mock'ta değil
+ * testteydi: sabit bir gelecek tarih, patlama günü belli bir zaman
+ * bombasıdır (ölçüldü 7 Eyl 2026 — beş gün sonra patlamıştı).
+ *
+ * `toContractDate` yerel saat bileşenleriyle çalışıyor; buradaki üretim de
+ * öyle, aksi halde UTC farkı gün sınırında ikisini ayırırdı.
+ */
+function yakinHaftaIciGun(): string {
+  const d = new Date();
+  d.setDate(d.getDate() + 1); // en az yarın — "bugün" sınırını A7 ayrı ölçüyor
+  while (d.getDay() === 0 || d.getDay() === 6) d.setDate(d.getDate() + 1);
+  const p = (n: number) => String(n).padStart(2, "0");
+  return `${d.getFullYear()}-${p(d.getMonth() + 1)}-${p(d.getDate())}`;
+}
+
+const YARIN_ICI = yakinHaftaIciGun();
 const SEVKIYAT = "SHP-2026-00035";
 
 /** Senaryo anahtarını URL'e koyar; mock durumu ondan kuruluyor. */
