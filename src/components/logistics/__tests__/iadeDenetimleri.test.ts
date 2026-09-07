@@ -9,7 +9,7 @@
  * Kontrol listesi unutulur; denetim test olur ve yeni ekran yazıldığı anda
  * kendiliğinden kapsanır.
  */
-import { readdirSync, readFileSync } from "node:fs";
+import { existsSync, readdirSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 
 import { describe, expect, it } from "vitest";
@@ -117,29 +117,25 @@ describe("uç adı guest modülünü işaret etmiyor", () => {
   ];
 
   /**
-   * 🔴 KARDEŞ GÖREVLERDE AYNI KUSUR — 15-FE denetimi yazıldığı gün bulundu.
+   * ✅ BORÇ KAPANDI — MOCK-SÖZ (`MOGEM-560`), 7 Eylül 2026.
    *
-   * Altı yetkili uç misafir modülünü işaret ediyor ve bunlar 15-FE'nin işi
-   * DEĞİL. Üstelik POD'da iki repo iki farklı ad kullanıyor: panel
-   * `LOGISTICS_METHOD.POD = "…v1.pod"` derken storefront
-   * `api.v1.logistics.get_proof_of_delivery` diyor — tam olarak kod
-   * yorumlarının uyardığı *"backend'e iki farklı sipariş"* durumu.
+   * Burada altı muafiyet vardı: 15-FE denetimi yazıldığı gün kardeş
+   * görevlerde aynı kusuru bulmuştu (POD · dört bildirim ucu · koli kaydetme).
+   * 15-FE düzeltmedi çünkü `12-FE-VERI-SOZLESMESI.md` §8 o adları açıkça
+   * resmîleştiriyordu ve başka bir görevin imzalı sözleşmesini tek taraflı
+   * değiştirmek doğru olmazdı.
    *
-   * Bilerek DÜZELTİLMEDİ: `12-FE-VERI-SOZLESMESI.md` §8 o adları açıkça
-   * resmîleştiriyor; başka bir görevin imzalı sözleşmesini tek taraflı
-   * değiştirmek doğru olmaz. Sahibiyle birlikte `KALAN-ISLER.md`'ye düştü.
+   * MOCK-SÖZ'ün işi tam olarak sözleşmeleri hizalamak olduğu için düzeltme
+   * yetkisi oradaydı. Altısı da doğru modüle taşındı
+   * (`api.v1.pod` · `api.v1.notifications` · `api.v1.packaging`), 12-FE
+   * sözleşmesi düzeltildi ve modül listesi `LOGISTICS-API-CONTRACT.md`
+   * §3.5'e, kural §6.1'e yazıldı.
    *
-   * Liste BAYATLAMIYOR: ad düzeltildiği gün aşağıdaki denetim
-   * "muafiyet artık gereksiz" diyerek uyarır.
+   * **Muafiyetin kendisi denetlendiği için bayatlamadı:** adlar düzeltildiği
+   * gün aşağıdaki ikinci test kırmızı oldu ve liste silinmek zorunda kaldı.
+   * Boş bırakılıyor — yeni bir borç doğarsa aynı mekanizma yeniden işler.
    */
-  const BILINEN_BORCLAR: Record<string, string> = {
-    "api.v1.logistics.get_proof_of_delivery": "14-BE (Ali) — panel v1.pod diyor",
-    "api.v1.logistics.list_notification_preferences": "12-BE (Bora)",
-    "api.v1.logistics.set_notification_preference": "12-BE (Bora)",
-    "api.v1.logistics.list_notifications": "12-BE (Bora)",
-    "api.v1.logistics.mark_notification_read": "12-BE (Bora)",
-    "api.v1.logistics.save_shipment_packages": "13-BE (Ali)",
-  };
+  const BILINEN_BORCLAR: Record<string, string> = {};
 
   it.each(SERVISLER)("%s guest modülüne yetkili uç yazmıyor", (rel) => {
     const s = kod(rel);
@@ -150,6 +146,63 @@ describe("uç adı guest modülünü işaret etmiyor", () => {
     expect(kacaklar, `${rel}: yetkili uç misafir modülünde`).toEqual([]);
   });
 
+  /**
+   * K4 — MOCK-SÖZ (`MOGEM-560`), 7 Eylül 2026.
+   *
+   * Yukarıdaki denetim yalnız *"guest modülüne yetkili uç yazma"* diyordu;
+   * uç adı **başka** bir uydurma modüle yazılsaydı hiçbir şey uyarmazdı.
+   * MOCK-SÖZ envanteri bunun boş bir korku olmadığını gösterdi: FE 11 lojistik
+   * modül çağırıyordu, `LOGISTICS-API-CONTRACT.md` yalnız 3'ünü tanıyordu —
+   * `api.v1.shipment` dahil, yani **canlı ve kullanımdaki** bir modül bile
+   * sözleşmesizdi.
+   *
+   * Bu denetim sözleşmeyi tek doğruluk kaynağı yapar: storefront'un andığı
+   * her modülün contract'ta karşılığı olmalı. Kardeş repo yoksa (CI tek repo
+   * checkout ediyor) sessizce atlanır — var olmayan bir korumaya güvenmemek
+   * için atlama GÖRÜNÜR olsun diye ayrı testte.
+   */
+  const CONTRACT = join(SRC, "../../tradehub_core/docs/LOGISTICS-API-CONTRACT.md");
+
+  /**
+   * Lojistik sözleşmesinin konusu olmayan modüller.
+   *
+   * Denetim ilk koşuşunda bu ikisini "sözleşmesiz" diye bildirdi ve haklıydı —
+   * ama yanlış belgeye bakıyordu: `dashboard` alıcı analitiği, `public_pricing`
+   * ürün fiyatı. İkisi de lojistik yüzeyi değil, `LOGISTICS-API-CONTRACT.md`
+   * onları tanımak zorunda değil. Liste KISA tutulmalı: buraya bir lojistik
+   * modülü eklenirse denetim işlevini kaybeder.
+   */
+  const KAPSAM_DISI = ["dashboard", "public_pricing"];
+
+  it("storefront'un andığı her modül sözleşmede tanımlı", () => {
+    if (!existsSync(CONTRACT)) {
+      // Kardeş repo yok — bu denetim koşamaz. Yanlış yeşil vermemek için
+      // durumu açıkça söylüyoruz (contract §1'in "var olmayan korumaya
+      // güvenmek hiç koruma olmamasından kötüdür" notu).
+      expect.soft(existsSync(CONTRACT), "kardeş repo yok, modül denetimi ATLANDI").toBe(false);
+      return;
+    }
+
+    const sozlesme = readFileSync(CONTRACT, "utf8");
+    const tanimli = new Set(
+      [...sozlesme.matchAll(/`api\.v1\.([a-z_]+)[.`]/g)].map((m) => m[1])
+    );
+
+    const anilan = new Set(
+      SERVISLER.flatMap((rel) => [...kod(rel).matchAll(/api\.v1\.([a-z_]+)\./g)]).map(
+        (m) => m[1]
+      )
+    );
+
+    const sozlesmesiz = [...anilan]
+      .filter((m) => !tanimli.has(m) && !KAPSAM_DISI.includes(m))
+      .sort();
+    expect(
+      sozlesmesiz,
+      "bu modüller sözleşmede yok — LOGISTICS-API-CONTRACT.md §3'e ekle"
+    ).toEqual([]);
+  });
+
   it("bilinen borç listesi BAYATLAMIYOR — ad düzeltilince liste boşalır", () => {
     // Muafiyetin kendisi denetleniyor: uç adı düzeltildiği an bu satır
     // kırmızı olur ve silinmek zorunda kalır (12-FE `I18N_KEYS_PENDING`
@@ -157,6 +210,108 @@ describe("uç adı guest modülünü işaret etmiyor", () => {
     const tumKaynak = SERVISLER.map(kod).join("\n");
     const artikYok = Object.keys(BILINEN_BORCLAR).filter((ad) => !tumKaynak.includes(`"${ad}"`));
     expect(artikYok, "bu uçlar artık guest modülünü işaret etmiyor — borçtan düşür").toEqual([]);
+  });
+});
+
+// ── 3b. Mock'un ürettiği alan SÖZLEŞMEDE var mı ─────────────────────
+//
+// MOCK-SÖZ (`MOGEM-560`), 7 Eylül 2026.
+//
+// `FE-MOCK-DISIPLINI` §"mock sözleşmedeki yükü BİREBİR üretir; uydurulan alan
+// gerçek uca bağlanınca ekranı bozar" — ama bunu ölçen hiçbir denetim yoktu.
+// MOCK-SÖZ envanteri 15 şema-dışı alan buldu; 13'ü gerçek boşluktu (14-FE POD
+// alanları ve 13-FE etiket yaşam döngüsü sözleşmede hiç tanımlı değildi) ve
+// `contract.py`'ye işlendi.
+//
+// Bu denetim o boşluğun geri gelmesini engeller: mock yeni bir alan uydurursa
+// aynı gün kırmızı olur.
+
+describe("mock alanları sözleşmede tanımlı", () => {
+  const SEMA = join(SRC, "../../tradehub_core/docs/logistics-api.schema.json");
+
+  /**
+   * Sözleşmede OLMAYAN ama meşru alanlar — ikisi de bilinçli karar.
+   * Liste BAYATLAMAZ: alan sözleşmeye girdiği gün aşağıdaki ikinci denetim
+   * "muafiyet artık gereksiz" diyerek uyarır.
+   */
+  const MESRU: Record<string, string> = {
+    // `waybill_number` 7 Eylül 2026'da BU LİSTEDEN DÜŞTÜ: `get_pod_queue`
+    // yükünde (`rows[].waybill_number`) sözleşmeye girdi. 14-FE K-I hâlâ
+    // geçerli — POD DocType'ında alan AÇILMAZ, ama yanıtta TAŞINIR; yanıt da
+    // sözleşmenin parçası. Aşağıdaki bayatlama denetimi bunu aynı gün yakaladı.
+    max_delivery_attempts:
+      "07-BE (MOGEM-540) — Logistics Settings alanı; 07-FE §1: 'FE'de sabit 3 yazılı'",
+  };
+
+  /** Şemanın yalnız bu denetimin okuduğu parçaları. */
+  interface SemaAlan {
+    name: string;
+  }
+  interface SemaVarlik {
+    list_fields: SemaAlan[];
+    detail_fields: SemaAlan[];
+    child_tables: Record<string, SemaAlan[]>;
+  }
+  interface SemaUc {
+    returns: { fields?: string[] };
+    params: SemaAlan[];
+  }
+  interface Sema {
+    provisional: Record<string, SemaVarlik>;
+    catalogs?: Record<string, { fields?: (string | SemaAlan)[] }>;
+    endpoints?: Record<string, { endpoints: SemaUc[] }>;
+  }
+
+  function sozlesmeAlanlari(): Set<string> {
+    const s = JSON.parse(readFileSync(SEMA, "utf8")) as Sema;
+    const bilinen = new Set<string>();
+    for (const spec of Object.values(s.provisional)) {
+      for (const f of [...spec.list_fields, ...spec.detail_fields]) bilinen.add(f.name);
+      for (const rows of Object.values(spec.child_tables))
+        for (const f of rows) bilinen.add(f.name);
+    }
+    for (const cat of Object.values(s.catalogs ?? {}))
+      for (const f of cat.fields ?? []) bilinen.add(typeof f === "string" ? f : f.name);
+    // Uç yükleri de sözleşmedir: `returnable_items[].delivered_qty` hem dizi
+    // adını hem alanı tanımlar — ikisi de meşru.
+    for (const mod of Object.values(s.endpoints ?? {}))
+      for (const ep of mod.endpoints) {
+        for (const f of ep.returns.fields ?? [])
+          for (const parca of f.split(/\[\]\.?|\./)) if (parca) bilinen.add(parca);
+        for (const p of ep.params) bilinen.add(p.name);
+      }
+    return bilinen;
+  }
+
+  const MOCK_MODULLERI = SERVISLER.filter((f) => /Mock\.ts$/.test(f));
+
+  it.each(MOCK_MODULLERI)("%s uydurma alan üretmiyor", (rel) => {
+    if (!existsSync(SEMA)) {
+      expect.soft(existsSync(SEMA), "kardeş repo yok, alan denetimi ATLANDI").toBe(false);
+      return;
+    }
+    const bilinen = sozlesmeAlanlari();
+    const anahtarlar = [...kod(rel).matchAll(/^\s*([a-z][a-z0-9]*(?:_[a-z0-9]+)+)\s*:/gm)].map(
+      (m) => m[1]
+    );
+    const uydurma = [...new Set(anahtarlar)]
+      .filter((a) => !bilinen.has(a) && !(a in MESRU))
+      .sort();
+
+    expect(
+      uydurma,
+      `${rel}: bu alanlar sözleşmede yok — contract.py'ye ekle ya da mock'tan çıkar`
+    ).toEqual([]);
+  });
+
+  it("meşru alan listesi BAYATLAMIYOR", () => {
+    if (!existsSync(SEMA)) return;
+    const bilinen = sozlesmeAlanlari();
+    const artikVar = Object.keys(MESRU).filter((a) => bilinen.has(a));
+    expect(
+      artikVar,
+      "bu alanlar artık sözleşmede tanımlı — muafiyetten düş"
+    ).toEqual([]);
   });
 });
 
