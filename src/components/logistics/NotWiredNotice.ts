@@ -32,7 +32,7 @@ export function NotWiredNotice(props: NotWiredNoticeProps = {}): string {
       </p>
       ${
         endpoint
-          ? `<p class="mt-3 font-mono text-[11px] text-gray-400">${escapeHtml(endpoint)}</p>`
+          ? `<p class="mt-3 font-mono text-[11px] text-gray-600">${escapeHtml(endpoint)}</p>`
           : ""
       }
     </div>`;

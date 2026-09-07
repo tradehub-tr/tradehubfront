@@ -6,6 +6,19 @@
  *
  * Labels are translated via i18n t() at render time and carry data-i18n
  * attributes for live language switching.
+ 
+ * `role="menuitem"` KULLANILMIYOR (7 Eyl 2026'da kaldırıldı):
+ * kapsayıcı `<aside role="navigation">` — gezinme yer imi, menü değil.
+ * `menuitem` rolü ARIA'da `menu`/`menubar`/`group` ebeveyni ŞART koşuyor;
+ * ebeveyn olmayınca axe `aria-required-parent` (critical) veriyordu ve ekran
+ * okuyucu kırık bir menü duyuruyordu. Doğru çözüm rolü ilan etmek değil
+ * kaldırmak: gezinme yer imi içindeki bağlantılar zaten doğru semantik ve
+ * `menu` rolünü ilan etmek ok tuşlarıyla gezinme sözleşmesini de üstlenmek
+ * demekti — bu bileşen onu uygulamıyor. (Aynı ilke `ManualStatusUpdateScreen`
+ * radiogroup yorumunda da yazılı: uygulanmayan rolü ilan etmek yalandır.)
+ *
+ * DİKKAT: `StoreNav.ts` ve `OrdersTabs.ts` içindeki `menuitem` rolleri
+ * DOĞRUDUR — onların kapsayıcısı gerçekten `role="menu"`.
  */
 
 import type { SidebarMenuItem as SidebarMenuItemType } from "../../types/buyerDashboard";
@@ -112,7 +125,6 @@ export function renderSidebarMenuItem({
         data-sidebar-item="${item.id}"
         data-tooltip-target="tooltip-sidebar-${item.id}"
         data-tooltip-placement="right"
-        role="menuitem"
         aria-label="${item.label}"
         ${i18nKey ? `data-i18n-aria-label="${i18nKey}"` : ""}
       >
@@ -132,7 +144,6 @@ export function renderSidebarMenuItem({
       href="${item.href}"
       class="sidebar-item sidebar-item--expanded group relative mx-auto flex h-9 w-9 md:h-11 md:w-11 cursor-pointer items-center justify-center rounded-[8px] ${activeClasses} ${hoverClasses} transition-colors xl:mx-5 xl:mb-2 xl:h-auto xl:min-h-[40px] xl:w-auto xl:justify-start xl:gap-3 xl:p-2"
       data-sidebar-item="${item.id}"
-      role="menuitem"
       aria-label="${item.label}"
       title="${item.label}"
       ${i18nKey ? `data-i18n-aria-label="${i18nKey}" data-i18n-title="${i18nKey}"` : ""}

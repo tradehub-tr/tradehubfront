@@ -122,7 +122,7 @@ function adimlar(props: BuyerReturnTrackingProps): string {
                 aria-hidden="true"></span>
           <span class="absolute start-0 top-1.5 h-2.5 w-2.5 rounded-full ${nokta}"
                 aria-hidden="true"></span>
-          <p class="text-sm ${gecti || aktif ? "font-medium text-gray-900" : "text-gray-400"}">
+          <p class="text-sm ${gecti || aktif ? "font-medium text-gray-900" : "text-gray-600"}">
             ${escapeHtml(adim.baslik)}
           </p>
           <p class="mt-0.5 text-xs text-gray-500">${escapeHtml(adim.alt)}</p>
@@ -258,7 +258,7 @@ export function BuyerReturnList(rows: BuyerReturnTrackingProps[]): string {
   const kartlar = rows
     .map(
       (row) => `
-      <li class="rounded-md border p-4 ${row.is_closed ? "border-gray-200 opacity-70" : "border-gray-200"}">
+      <li class="rounded-md border p-4 ${row.is_closed ? "border-gray-200 bg-gray-50" : "border-gray-200"}">
         <a class="group flex flex-wrap items-center gap-2"
            href="/pages/dashboard/returns.html?name=${encodeURIComponent(row.name)}"
            data-testid="return-row-link">
@@ -273,7 +273,7 @@ export function BuyerReturnList(rows: BuyerReturnTrackingProps[]): string {
           <!-- Satırın tıklanabilir olduğunu söyleyen tek işaret. Görsel turda
                ölçüldü: kart hiçbir affordance taşımıyordu, kullanıcı detaya
                gidilebildiğini bilemiyordu. Ok yön duyarlı (RTL'de döner). -->
-          <svg class="h-3.5 w-3.5 shrink-0 text-gray-400 rtl:rotate-180" viewBox="0 0 24 24"
+          <svg class="h-3.5 w-3.5 shrink-0 text-gray-600 rtl:rotate-180" viewBox="0 0 24 24"
                fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
             <path stroke-linecap="round" stroke-linejoin="round" d="m9 5 7 7-7 7" />
           </svg>

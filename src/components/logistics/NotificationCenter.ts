@@ -61,7 +61,7 @@ export function NotificationCenter(props: { rows: NotificationRow[] }): string {
   const items = rows
     .map(
       (row) => `
-      <li class="rounded-md border p-3 ${row.read_at ? "border-gray-200 opacity-70" : "border-indigo-200 bg-indigo-50/40"}"
+      <li class="rounded-md border p-3 ${row.read_at ? "border-gray-200 bg-gray-50" : "border-indigo-200 bg-indigo-50/40"}"
           data-testid="notification-row" data-read="${row.read_at ? "1" : "0"}"
           data-name="${escapeHtml(row.name)}"
           ${row.read_at ? "" : `@click="okundu('${escapeHtml(row.name)}', $el)"`}>
@@ -129,6 +129,12 @@ export function NotificationPreferences(props: { rows: PreferenceRow[] }): strin
           </span>
           <label class="inline-flex items-center">
             <input type="checkbox" class="peer sr-only"
+                   aria-label="${escapeHtml(
+                     `${t(`shipment.notifyEvent.${row.event}`, { defaultValue: row.event })} · ${t(
+                       `shipment.notifyChannel.${row.channel}`,
+                       { defaultValue: row.channel }
+                     )}`
+                   )}"
                    data-testid="pref-toggle" data-template="${escapeHtml(row.template)}"
                    ${locked || row.enabled ? "checked" : ""}
                    ${locked ? "disabled" : ""}

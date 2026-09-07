@@ -53,10 +53,10 @@ export function LabelDownload(props: LabelDownloadProps): string {
               ? `<img src="${escapeHtml(pkg.barcode_url)}" alt="${escapeHtml(
                   t("shipment.label.barcodeAlt", { code: pkg.package_code })
                 )}" class="max-h-16 max-w-full object-contain"
-                   onerror="this.replaceWith(Object.assign(document.createElement('span'),{className:'text-xs text-gray-400',textContent:'${escapeHtml(
+                   onerror="this.replaceWith(Object.assign(document.createElement('span'),{className:'text-xs text-gray-600',textContent:'${escapeHtml(
                      t("shipment.label.barcodeUnavailable")
                    )}'}))" />`
-              : `<span class="text-xs text-gray-400">${escapeHtml(t("shipment.label.noBarcode"))}</span>`
+              : `<span class="text-xs text-gray-600">${escapeHtml(t("shipment.label.noBarcode"))}</span>`
           }
         </div>
 
