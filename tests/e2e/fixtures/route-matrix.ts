@@ -252,6 +252,14 @@ export const STOREFRONT_ROUTE_MATRIX: StorefrontRouteCase[] = [
   route("terms", "C08-help-legal", "pages/legal/terms.html", "/kullanim-kosullari"),
 
   route("manufacturers", "C02-catalog", "pages/manufacturers.html", "/ureticiler"),
+
+  // `aa1be08` (feat(product): medya izleme sayfası) ile üretime giren sayfa
+  // matrise kaydedilmemişti — kapı 7 Eyl'de kırmızı yakalandı. Pretty adres
+  // dinamik (`/medya/v/<slug>`, vite.config.ts `prettyUrlRewritePlugin` ve
+  // nginx eşlemesi), bu yüzden slug uydurmak yerine ortam değişkeni ister.
+  route("media-watch", "C03-detail", "pages/media-watch.html", null, "public", [
+    { kind: "pretty", pathEnv: "PERF_MEDIA_WATCH_PRETTY_PATH" },
+  ]),
   route("checkout", "C07-checkout", "pages/order/checkout.html", "/odeme", "buyer"),
   route(
     "order-success",

@@ -143,8 +143,10 @@ test("üretim storefront matrisi 70 HTML girişini eksiksiz ve benzersiz kapsar"
   // 71 → 70 (15-FE, 31 Ağu): `pages/seller/return-decision.html` SİLİNDİ.
   // Sayfada karar formu yoktu, düğmesi kendi sayfasına dönüyordu ve
   // storefront'ta satıcı menüsü hiç yok — karar admin panele taşındı (K-3).
-  expect(matrixEntries).toHaveLength(70);
-  expect(new Set(matrixEntries).size).toBe(70);
+  // 70 → 71 (7 Eyl): `pages/media-watch.html` — `aa1be08` ile üretime girmiş,
+  // matrise kaydedilmemişti. Kapının yakaladığı ilk gerçek kaçak.
+  expect(matrixEntries).toHaveLength(71);
+  expect(new Set(matrixEntries).size).toBe(71);
   expect([...matrixEntries].sort()).toEqual([...productionEntries].sort());
   expect(STOREFRONT_VIEWPORTS).toEqual({
     desktop: { width: 1440, height: 1000 },
@@ -162,6 +164,7 @@ test("dinamik pretty rotalar örnek veri uydurmak yerine açık fixture ortam de
   expect(unresolvedPrettyVariants).toEqual([
     { routeId: "brand-detail", pathEnv: "PERF_BRAND_PRETTY_PATH" },
     { routeId: "categories", pathEnv: "PERF_CATEGORY_PRETTY_PATH" },
+    { routeId: "media-watch", pathEnv: "PERF_MEDIA_WATCH_PRETTY_PATH" },
     { routeId: "product-detail", pathEnv: "PERF_PRODUCT_PRETTY_PATH" },
     { routeId: "seller-shop", pathEnv: "PERF_SELLER_SHOP_PRETTY_PATH" },
     { routeId: "seller-storefront", pathEnv: "PERF_SELLER_PRETTY_PATH" },
