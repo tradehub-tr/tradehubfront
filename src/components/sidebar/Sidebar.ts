@@ -43,7 +43,7 @@ function renderSection(section: SidebarSection, expanded: boolean): string {
   if (section.title && expanded) {
     const i18nKey = getSectionI18nKey(section);
     const i18nAttr = i18nKey ? ` data-i18n="${i18nKey}"` : "";
-    title = `<p class="sidebar__section-title hidden px-7 pt-5 pb-2 text-xs font-normal uppercase tracking-wider text-gray-400 dark:text-gray-500 xl:block"${i18nAttr}>${section.title}</p>`;
+    title = `<h3 class="sidebar__section-title hidden px-7 pt-5 pb-2 text-xs font-normal uppercase tracking-wider text-gray-600 dark:text-gray-400 xl:block"${i18nAttr}>${section.title}</h3>`;
   }
 
   const visibleItems = section.items

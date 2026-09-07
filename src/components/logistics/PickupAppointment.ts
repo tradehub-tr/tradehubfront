@@ -89,10 +89,13 @@ export function PickupAppointment(props: PickupAppointmentProps): string {
 
       ${
         !appointmentAt && pickupLocation
-          ? `<div class="rounded-md border border-gray-200 p-3" data-testid="appointment-location">
+          ? // `<dl>` — `<dt>`/`<dd>` yalnız tanım listesi içinde geçerli. Sarmalayıcı
+            // `<div>` iken axe `dlitem` (serious) veriyordu ve ekran okuyucu
+            // etiket-değer bağını kuramıyordu (ölçüldü 7 Eyl 2026).
+            `<dl class="rounded-md border border-gray-200 p-3" data-testid="appointment-location">
                <dt class="text-xs text-gray-500">${escapeHtml(t("shipment.appointment.location"))}</dt>
                <dd class="mt-0.5 text-sm font-medium text-gray-800">${escapeHtml(pickupLocation)}</dd>
-             </div>`
+             </dl>`
           : ""
       }
 

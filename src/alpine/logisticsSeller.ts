@@ -95,6 +95,9 @@ Alpine.data("sellerShipmentForm", (options: { channel?: string; items?: string[]
         // Uç yokken "oluşturuldu" demek satıcıyı yanıltır — sevkiyat yok
         // ama o gönderdiğini sanır.
         this.error = t("shipment.sellerForm.notAvailable");
+        // Köprü yokken bayrağı bırak: `finally` KALDIRILDI (başarıda gezinme
+        // boyunca form kilitli kalsın diye), bu dal onu geri almak zorunda.
+        this.submitting = false;
         return;
       }
 
@@ -106,10 +109,18 @@ Alpine.data("sellerShipmentForm", (options: { channel?: string; items?: string[]
         driver_name: this.needsCarrier ? null : this.driver,
         items: this.selected,
       });
+      // BAŞARIDA `submitting` AÇIK KALIR — bilinçli.
+      //
+      // `window.location.href` gezinmeyi BAŞLATIR, beklemez. `finally` ile
+      // bayrağı hemen serbest bırakmak, gezinme tamamlanana kadar geçen
+      // aralıkta ikinci bir tıklamanın kapıdan geçmesine izin veriyordu ve
+      // aynı işlem İKİ KEZ oluşturuluyordu (ölçüldü 7 Eyl 2026,
+      // `tests/e2e/lojistik-dayaniklilik.spec.ts` D1 — kararsız biçimde,
+      // bazen 1 bazen 2 kayıt). Form artık gezinme boyunca kilitli kalıyor;
+      // sayfa zaten değişeceği için bayrağı geri almanın anlamı yok.
       window.location.href = `/pages/seller/shipment.html?name=${encodeURIComponent(created.name)}`;
     } catch (e) {
       this.error = (e as Error)?.message || t("shipment.sellerForm.failed");
-    } finally {
       this.submitting = false;
     }
   },
@@ -174,6 +185,9 @@ Alpine.data("sellerPacking", (options: { shipment: string }) => ({
 
       if (!saveFn) {
         this.error = t("shipment.packing.notAvailable");
+        // Köprü yokken bayrağı bırak: `finally` KALDIRILDI (başarıda gezinme
+        // boyunca form kilitli kalsın diye), bu dal onu geri almak zorunda.
+        this.submitting = false;
         return;
       }
 

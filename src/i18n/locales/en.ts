@@ -219,6 +219,7 @@ const en = {
         permissionDenied: "You do not have permission to view this record.",
         qtyExceeds: "The return quantity cannot exceed the delivered quantity.",
         qtyRequired: "Enter a return quantity for each item.",
+        qtyFieldLabel: "Return quantity for {{item}}",
         reason: "Reason",
         submit: "Submit return request",
         submitting: "Submitting…",

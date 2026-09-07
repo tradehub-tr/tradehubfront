@@ -13,9 +13,17 @@ export default defineConfig({
   expect: { timeout: 5_000 },
   fullyParallel: true,
   reporter: [["list"]],
-  // T-141 kapanış kanıtı: başarılı kritik vitrin yollarında da yalnız log
-  // değil, incelenebilir ekran ve video artefaktı bırak.
-  outputDir: "playwright/evidence",
+  // Koşum artefaktı `test-results/` altına düşer (gitignore'lu). T-141
+  // kapanış kanıtı korunuyor — `screenshot: "on"` + `video: "on"` sayesinde
+  // başarılı koşumda da ekran ve video kalır, yalnız yeri değişti.
+  //
+  // NEDEN `playwright/evidence` DEĞİL: Playwright `outputDir`'i her koşunun
+  // BAŞINDA temizler. Burası `playwright/evidence` iken `aca725f` ile
+  // bilinçli commit'lenmiş 18 medya kanıtını da siliyordu (ölçüldü 31 Ağu:
+  // E2E sonrası `git status` o 18 dosyayı `D` gösteriyordu ve E2E koşan
+  // herkes silmeyi yanlışlıkla commit'leyebiliyordu). `playwright/evidence/`
+  // artık yalnızca ARŞİV — hiçbir koşum ona dokunmuyor.
+  outputDir: "test-results",
   use: {
     baseURL: "http://localhost:5173",
     trace: "retain-on-failure",

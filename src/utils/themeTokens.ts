@@ -1067,7 +1067,8 @@ export const componentEditors: ComponentEditor[] = [
     ],
     outlineTokens: [
       { var: "--btn-outline-bg", type: "color", default: "#ffffff", label: "Outline Background" },
-      { var: "--btn-outline-text", type: "color", default: "#cc6b00", label: "Outline Text" },
+      // #cc6b00 beyaz zeminde WCAG AA altı; varsayılan #ad5b00 (4.95:1) oldu.
+      { var: "--btn-outline-text", type: "color", default: "#ad5b00", label: "Outline Text" },
       {
         var: "--btn-outline-border-width",
         type: "range",

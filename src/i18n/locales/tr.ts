@@ -220,6 +220,7 @@ const tr = {
         permissionDenied: "Bu kaydı görüntüleme yetkiniz yok.",
         qtyExceeds: "İade miktarı teslim alınandan fazla olamaz.",
         qtyRequired: "Her ürün için iade miktarı girin.",
+        qtyFieldLabel: "{{item}} için iade miktarı",
         reason: "İade nedeni",
         submit: "İade talebi gönder",
         submitting: "Gönderiliyor…",

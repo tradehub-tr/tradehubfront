@@ -220,6 +220,7 @@ const ar = {
         permissionDenied: "ليس لديك صلاحية لعرض هذا السجل.",
         qtyExceeds: "لا يمكن أن تتجاوز كمية الإرجاع الكمية المستلمة.",
         qtyRequired: "أدخل كمية الإرجاع لكل منتج.",
+        qtyFieldLabel: "كمية الإرجاع لـ {{item}}",
         reason: "السبب",
         submit: "إرسال طلب الإرجاع",
         submitting: "جارٍ الإرسال…",

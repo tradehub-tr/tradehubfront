@@ -300,7 +300,16 @@ function renderAllOrders(): string {
       </template>
 
       <!-- Orders List -->
-      <div x-show="!loading" class="px-7 max-sm:px-3.5 pb-6 max-sm:pb-4 space-y-4 max-sm:space-y-2.5">
+      <!-- "!error" ŞART: hata varken liste bloğu da çiziliyordu ve
+           filteredOrders boş olduğu için "Henüz sipariş yok · Ürün tedarik
+           edin" boş durumu hata şeridinin hemen altında beliriyordu. İkisi
+           aynı anda okunduğunda ekran YALAN söylüyor — kullanıcının siparişi
+           olabilir, uç 500 döndüğü için görünmüyor; üstelik "sipariş ver"
+           yönlendirmesi onu yanlış işe sokuyor. Ölçüldü 7 Eyl 2026
+           (tests/e2e/lojistik-dayaniklilik.spec.ts D3).
+           NOT: bu dosya bir template literal — yoruma TERS TIRNAK yazma,
+           literali erken kapatıp derlemeyi kırıyor. -->
+      <div x-show="!loading && !error" class="px-7 max-sm:px-3.5 pb-6 max-sm:pb-4 space-y-4 max-sm:space-y-2.5">
         <template x-if="filteredOrders.length === 0">
           <div class="flex flex-col items-center justify-center gap-3 py-16 max-sm:py-10 text-center">
             ${EMPTY_RECEIPT_ICON}

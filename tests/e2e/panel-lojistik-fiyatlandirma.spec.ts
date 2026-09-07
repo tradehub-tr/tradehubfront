@@ -23,6 +23,8 @@ import { readFileSync } from "node:fs";
 
 import { test, expect, request } from "@playwright/test";
 
+import { menudeVar, mobilMi } from "./helpers/panelMenu";
+
 const BASE = process.env.PANEL_BASE ?? "http://tradehub.localhost";
 const USER = process.env.PANEL_USER ?? "Administrator";
 const PASS = process.env.PANEL_PASS ?? "";
@@ -83,20 +85,22 @@ test.beforeEach(async ({ context }) => {
 
 // ── Menü ve erişim ───────────────────────────────────────────────────
 
-test("lojistik menüsünde FİYATLANDIRMA grubu ve üç kalem var", async ({ page }) => {
+test("lojistik menüsünde FİYATLANDIRMA grubu ve üç kalem var", async ({ page }, testInfo) => {
   await page.goto(TARIFELER);
   // Menü SPA ile çiziliyor: başlık görünmeden DOM'u okumak boş dizi döndürür.
   await expect(page.getByRole("heading", { name: /Kargo tarifeleri/i }).first()).toBeVisible();
 
-  const links = await page.evaluate(() =>
-    [...document.querySelectorAll('a[href*="/lojistik/"]')].map((a) => a.getAttribute("href"))
-  );
-  for (const yol of [TARIFELER, KURALLAR, SIMULASYON]) {
-    expect(links, `menüde yok: ${yol}`).toContain(yol);
-  }
+  await menudeVar(page, testInfo, [TARIFELER, KURALLAR, SIMULASYON]);
 
   // Kural FORMU menüde OLMAMALI — parametreli detay rotası listeden açılıyor.
-  expect(links.some((h) => h?.includes("/fiyat-kurallari/"))).toBeFalsy();
+  // Mobilde kalemler `href` taşımıyor (buton), bu yüzden iddia masaüstüne
+  // özel: orada `href` var ve parametreli rota oraya sızarsa yakalanır.
+  if (!mobilMi(testInfo)) {
+    const links = await page.evaluate(() =>
+      [...document.querySelectorAll('a[href*="/lojistik/"]')].map((a) => a.getAttribute("href"))
+    );
+    expect(links.some((h) => h?.includes("/fiyat-kurallari/"))).toBeFalsy();
+  }
 });
 
 // ── S1 · Kural oluşturma ve KALICILIK ────────────────────────────────

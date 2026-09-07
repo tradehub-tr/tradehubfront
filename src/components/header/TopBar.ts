@@ -466,7 +466,7 @@ function renderCountrySelector(): string {
         <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1 1 15 0Z" />
       </svg>
       <span class="flex items-center gap-1 whitespace-nowrap">
-        <span class="text-gray-500 dark:text-gray-400" data-i18n="header.deliverTo">${t("header.deliverTo")}</span>
+        <span class="text-gray-600 dark:text-gray-400" data-i18n="header.deliverTo">${t("header.deliverTo")}</span>
         <span class="inline-flex items-center gap-1.5 text-gray-900 dark:text-white">${getFlagSvg(defaultCountry.code)}${defaultCountry.code}</span>
       </span>
     </button>

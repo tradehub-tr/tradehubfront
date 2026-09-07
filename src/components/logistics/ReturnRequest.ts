@@ -71,6 +71,7 @@ export function ReturnRequest(props: ReturnRequestProps): string {
           </label>
           <div class="flex items-center gap-2">
             <input type="number" min="1" max="${max}"
+                   aria-label="${escapeHtml(t("shipment.return.qtyFieldLabel", { item: row.item_name }))}"
                    x-model.number="qty['${escapeHtml(row.item)}']"
                    :disabled="!selected.includes('${escapeHtml(row.item)}')"
                    class="w-20 rounded-md border border-gray-300 px-2 py-1 text-right text-sm tabular-nums disabled:opacity-50"
