@@ -12,13 +12,19 @@
  *   VAR   shipment.cancel_shipment
  *   VAR   logistics.track_shipment_public → takip no ile genel sorgu
  *
- *   YOK   teslim kanıtı           (Proof of Delivery DocType'ı bile yok)
+ *   YOK   teslim kanıtı           (Proof of Delivery DocType'ı bile yok · 14-BE
+ *                                  → api.v1.pod)
  *   YOK   iade talepleri          (Return Request DocType'ı yok · 15-BE
  *                                  → api.v1.returns, karar K-1)
- *   YOK   bildirim tercihleri     (uç yok)
- *   YOK   koli kaydetme / etiket  (uç yok)
+ *   YOK   bildirim tercihleri     (12-BE → api.v1.notifications)
+ *   YOK   koli kaydetme / etiket  (13-BE → api.v1.packaging)
  *   YOK   randevu talebi          (07-BE · api.v1.pickup)
  *   YOK   teslim kodu doğrulama   (07-BE · api.v1.pickup)
+ *
+ * Modül adlarının TEK KAYNAĞI `LOGISTICS-API-CONTRACT.md` §3.4–§3.5. Buradaki
+ * adlar 7 Eylül 2026'da (MOCK-SÖZ) o belgeye göre hizalandı: altı uç
+ * `api.v1.logistics` diye etiketlenmişti, oysa o modül misafire açık ve
+ * giriş isteyen uç oraya konmaz (§6.1).
  *
  * Olmayan uçlar için `NotWiredError` fırlatılıyor. Sayfa bunu yakalayıp
  * "bu bölüm henüz bağlı değil" diyor. Sessizce boş dizi döndürmek YANLIŞ
@@ -106,8 +112,16 @@ export async function trackByNumber(trackingNumber: string) {
 // sayfa "bağlı değil" diyebilsin. Boş veri döndürmek, olmayan bir cevabı
 // varmış gibi göstermek olurdu.
 
+/**
+ * ── POD ucu (14-BE · `api/v1/pod.py`) ──
+ *
+ * Modül **`api.v1.pod`** — `api.v1.logistics` DEĞİL (MOCK-SÖZ, 7 Eyl).
+ * Panel bu ucu `LOGISTICS_METHOD.POD` = `…v1.pod` diye çağırıyor; burada
+ * `v1.logistics` yazıyordu ve aynı uç iki repoda iki farklı adla anılıyordu.
+ * Sözleşme: `LOGISTICS-API-CONTRACT.md` §3.5.
+ */
 export async function getProofOfDelivery(_shipment: string): Promise<never> {
-  throw new NotWiredError("api.v1.logistics.get_proof_of_delivery");
+  throw new NotWiredError("api.v1.pod.get_proof_of_delivery");
 }
 
 /**
@@ -152,14 +166,14 @@ export async function decideReturnRequest(_payload: Record<string, unknown>): Pr
 }
 
 export async function listNotificationPreferences(): Promise<never> {
-  throw new NotWiredError("api.v1.logistics.list_notification_preferences");
+  throw new NotWiredError("api.v1.notifications.list_notification_preferences");
 }
 
 export async function setNotificationPreference(_payload: {
   template: string;
   enabled: boolean;
 }): Promise<never> {
-  throw new NotWiredError("api.v1.logistics.set_notification_preference");
+  throw new NotWiredError("api.v1.notifications.set_notification_preference");
 }
 
 /**
@@ -168,20 +182,30 @@ export async function setNotificationPreference(_payload: {
  * Varlık (`notification_log`) 2026-08-28'de sözleşmeye eklendi; uçlar 12-BE'de.
  * Adlar `12-FE-VERI-SOZLESMESI.md` §2 ile birebir — 07-FE'de iki ayrı ad
  * kullanılıp backend'e iki farklı sipariş verilmesi burada tekrarlanmasın.
+ *
+ * Modül **`api.v1.notifications`** — `api.v1.logistics` DEĞİL (MOCK-SÖZ,
+ * 7 Eyl). Dördü de giriş isteyen uçlar; misafire açık modüle konmaz
+ * (`LOGISTICS-API-CONTRACT.md` §6.1). 12-FE sözleşmesi bir zamanlar
+ * `v1.logistics` diyordu, aynı gün düzeltildi (§8).
  */
 export async function listNotifications(_payload?: {
   page?: number;
   page_size?: number;
 }): Promise<never> {
-  throw new NotWiredError("api.v1.logistics.list_notifications");
+  throw new NotWiredError("api.v1.notifications.list_notifications");
 }
 
 export async function markNotificationRead(_name: string): Promise<never> {
-  throw new NotWiredError("api.v1.logistics.mark_notification_read");
+  throw new NotWiredError("api.v1.notifications.mark_notification_read");
 }
 
+/**
+ * Modül **`api.v1.packaging`** (13-BE) — panel bunu
+ * `LOGISTICS_METHOD.PACKAGING` ile çağırıyor; burada `v1.logistics` yazıyordu
+ * (MOCK-SÖZ düzeltmesi, 7 Eyl). Sözleşme: `LOGISTICS-API-CONTRACT.md` §3.5.
+ */
 export async function saveShipmentPackage(_payload: Record<string, unknown>): Promise<never> {
-  throw new NotWiredError("api.v1.logistics.save_shipment_packages");
+  throw new NotWiredError("api.v1.packaging.save_shipment_packages");
 }
 
 /**
