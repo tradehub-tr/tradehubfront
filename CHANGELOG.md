@@ -1,3 +1,23 @@
+## [v2.4.0-alpha.34] - 2026-09-07 ALPHA
+
+Bu surum alpha.istoc.com'da gelistirme asamasindadir.
+
+### Eklendi
+- feat(lojistik): mock alanları sözleşme denetimine bağlandı (@aliiball)
+  - Mock modüllerinin ürettiği her alan şemayla karşılaştırılıyor
+  - Storefront'un andığı her modülün sözleşmede tanımlı olması denetleniyor
+  - BILINEN_BORCLAR boşaldı: altı uç adı düzeltilince muafiyet bayatladı
+  - Üretilmiş fixture ve tip kopyaları sözleşmeyle senkronlandı
+
+### Duzeltildi
+- fix(lojistik): uç adları misafire açık modülden çıkarıldı (@aliiball)
+  - Altı uç api.v1.logistics diye etiketliydi; o modül allow_guest=True ve docstring'i 'satıcı/alıcı verisine dokunan her şey başka yerde' diyor
+  - get_proof_of_delivery → api.v1.pod
+  - Dört bildirim ucu → api.v1.notifications
+  - save_shipment_packages → api.v1.packaging
+  - Panel aynı uçları zaten doğru modülle çağırıyordu; iki repo iki farklı ad taşıyordu
+
+---
 ## [v2.4.0-alpha.33] - 2026-09-03 ALPHA
 
 Bu surum alpha.istoc.com'da gelistirme asamasindadir.
