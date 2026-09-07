@@ -81,6 +81,9 @@ Alpine.data("returnRequest", (options: { shipment: string; max: Record<string, n
         | undefined;
       if (!fn) {
         this.error = t("shipment.return.notAvailable");
+        // Köprü yokken bayrağı bırak: `finally` KALDIRILDI (başarıda gezinme
+        // boyunca form kilitli kalsın diye), bu dal onu geri almak zorunda.
+        this.submitting = false;
         return;
       }
       const created = await fn({
@@ -94,10 +97,18 @@ Alpine.data("returnRequest", (options: { shipment: string; max: Record<string, n
       // Yeni talebin KENDİ takip sayfasına gidiliyor. Adres eskiden de bunu
       // gösteriyordu ama sayfa `name` parametresini hiç okumuyordu; alıcı
       // az önce açtığı talebi listede arıyordu (analiz §3.10).
+      // BAŞARIDA `submitting` AÇIK KALIR — bilinçli.
+      //
+      // `window.location.href` gezinmeyi BAŞLATIR, beklemez. `finally` ile
+      // bayrağı hemen serbest bırakmak, gezinme tamamlanana kadar geçen
+      // aralıkta ikinci bir tıklamanın kapıdan geçmesine izin veriyordu ve
+      // aynı işlem İKİ KEZ oluşturuluyordu (ölçüldü 7 Eyl 2026,
+      // `tests/e2e/lojistik-dayaniklilik.spec.ts` D1 — kararsız biçimde,
+      // bazen 1 bazen 2 kayıt). Form artık gezinme boyunca kilitli kalıyor;
+      // sayfa zaten değişeceği için bayrağı geri almanın anlamı yok.
       window.location.href = `/pages/dashboard/returns.html?name=${encodeURIComponent(created.name)}`;
     } catch (e) {
       this.error = (e as Error)?.message || t("shipment.return.failed");
-    } finally {
       this.submitting = false;
     }
   },
@@ -151,6 +162,9 @@ Alpine.data("pickupAppointment", (options: { shipment: string; today: string }) 
         | undefined;
       if (!fn) {
         this.error = t("shipment.appointment.notAvailable");
+        // Köprü yokken bayrağı bırak: `finally` KALDIRILDI (başarıda gezinme
+        // boyunca form kilitli kalsın diye), bu dal onu geri almak zorunda.
+        this.submitting = false;
         return;
       }
       await fn({ shipment: this.shipment, date: this.date, slot: this.slot });
