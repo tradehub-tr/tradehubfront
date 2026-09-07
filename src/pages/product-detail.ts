@@ -229,7 +229,7 @@ async function renderProductPage() {
         <div class="flex items-center justify-center py-32">
           <div class="text-center">
             <svg class="w-16 h-16 mx-auto mb-4 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/></svg>
-            <h2 class="text-xl font-semibold text-gray-600 mb-2">${t('prodUi.productNotFound')}</h2>
+            <h1 class="text-xl font-semibold text-gray-600 mb-2">${t('prodUi.productNotFound')}</h1>
             <p class="text-gray-400 mb-4">${t('prodUi.productNotFoundDesc')}</p>
             <a href="/urunler" class="text-primary hover:underline font-medium">${t('prodUi.browseProducts')}</a>
           </div>
@@ -415,28 +415,16 @@ async function renderProductPage() {
     upgradeGalleryMedia();
   });
 
-  // ── Original images + title (for "back to default" fallback) ──
-  const originalTitle = product.title || '';
+  // ── Original images (for "back to default" gallery fallback) ──
   // Store original listing images on window for Alpine gallery to access
   window.__originalListingImages = product.images.map((img) => ({
     ...img,
   }));
 
-  // Variant change → swap document.title + page H1
-  // SKIP title change if the selected variant is the default (listing title stays)
-  document.addEventListener('product-variant-change', ((e: CustomEvent) => {
-    const title = e.detail?.title as string | undefined;
-    const isDefault = e.detail?.isDefault as boolean | undefined;
-    if (!isDefault && title && title.trim()) {
-      const h1 = document.getElementById('pd-product-title');
-      if (h1) h1.textContent = title;
-      document.title = `${title} | iStoc`;
-    } else if (isDefault) {
-      const h1 = document.getElementById('pd-product-title');
-      if (h1) h1.textContent = originalTitle;
-      document.title = `${originalTitle} | iStoc`;
-    }
-  }) as EventListener);
+  // Varyant seçimi sayfa başlığını (H1 + document.title) DEĞİŞTİRMEZ: ürün adı
+  // sabit kalır, seçilen varyant "Renk: Şeffaf" satırında ve kutucuk etiketinde
+  // okunur. (Eskiden backend'in "Varyant + Ürün adı" birleşik başlığı basılıyordu;
+  // varyant değeri SKU/kod olduğunda başlık anlamsızlaşıyordu — 2026-09-07 kararı.)
 
   // If URL has ?variant=VAR-XXX, auto-click that variant after render
   const preselectVariant = new URLSearchParams(window.location.search).get('variant');

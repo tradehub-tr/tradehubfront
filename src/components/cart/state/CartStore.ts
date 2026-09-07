@@ -10,7 +10,8 @@ import { getCurrencySymbol } from "../../../utils/currency";
 import { isLoggedIn } from "../../../utils/auth";
 
 export class CartStore {
-  private static STORAGE_KEY = "tradehub_cart";
+  /** Misafir sepetinin localStorage anahtarı (guestCartMerge de okur/temizler). */
+  static readonly STORAGE_KEY = "tradehub_cart";
 
   private suppliers: CartSupplier[] = [];
   private shippingFee = 0;

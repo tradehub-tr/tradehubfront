@@ -5,6 +5,21 @@
 
 import { t } from "../../i18n";
 import { btn } from "../../utils/ui/button";
+import { getUser } from "../../utils/auth";
+import { escapeHtml } from "../../utils/sanitize";
+
+// Oturum kullanıcısı; sayfa requireAuth() sonrası render edildiği için dolu gelir.
+function sessionUser() {
+  const u = getUser();
+  const fullName = (u?.full_name || u?.email || "").trim();
+  return {
+    fullName,
+    email: u?.email ?? "",
+    emailVerified: Boolean(u?.email_verified),
+    memberId: u?.member_id ?? "",
+    initial: (fullName || "?").charAt(0).toUpperCase(),
+  };
+}
 
 // ── SVG Icons ────────────────────────────────────────────────────
 
@@ -34,7 +49,11 @@ function getContactInfo(): InfoSection {
   return {
     title: t("profile.contactInfo"),
     fields: [
-      { label: t("profile.email"), value: "met***@gmail.com", isVerified: true },
+      {
+        label: t("profile.email"),
+        value: escapeHtml(sessionUser().email) || t("profile.none"),
+        isVerified: sessionUser().emailVerified,
+      },
       { label: t("profile.altEmail"), value: t("profile.none") },
       { label: t("profile.socialLinks"), value: t("profile.none") },
       { label: t("profile.fax"), value: t("profile.none") },
@@ -48,7 +67,7 @@ function getCompanyInfo(): InfoSection {
   return {
     title: t("profile.companyInfo"),
     fields: [
-      { label: t("profile.companyName"), value: "Metin K." },
+      { label: t("profile.companyName"), value: t("profile.none") },
       { label: t("profile.foundedYear"), value: t("profile.none") },
       { label: t("profile.officialWebsite"), value: t("profile.none") },
       { label: t("profile.businessType"), value: t("profile.none") },
@@ -127,29 +146,27 @@ function renderCover(): string {
 }
 
 function renderProfileCard(): string {
+  const u = sessionUser();
   return `
     <div class="flex items-start justify-between gap-6 bg-white rounded-b-lg py-6 px-8 -mt-px max-md:flex-col max-md:p-5 max-md:gap-4">
       <div class="flex gap-5 flex-1 min-w-0 max-md:flex-col max-md:items-start">
         <div class="w-20 h-20 rounded-full flex items-center justify-center flex-shrink-0 -mt-10 border-3 border-white shadow-md max-md:w-16 max-md:h-16 max-md:-mt-8" style="background:var(--color-border-default)">
-          <span class="text-4xl font-bold text-white lowercase leading-none max-md:text-[28px]">m</span>
+          <span class="text-4xl font-bold text-white leading-none max-md:text-[28px]">${escapeHtml(u.initial)}</span>
         </div>
         <div class="flex flex-col gap-1 min-w-0">
           <div class="flex items-center gap-2">
-            <h1 class="text-xl font-bold m-0 max-sm:text-[17px]" style="color:var(--color-text-primary)">Metin K.</h1>
+            <h1 class="text-xl font-bold m-0 max-sm:text-[17px]" style="color:var(--color-text-primary)">${escapeHtml(u.fullName)}</h1>
             <a href="#" class="inline-flex items-center justify-center w-7 h-7 rounded transition-colors duration-150 motion-reduce:transition-none [@media(hover:hover)_and_(pointer:fine)]:hover:bg-surface-raised" style="color:var(--color-text-tertiary)" title="${t("profile.copyProfileLink")}">${ICONS.link}</a>
           </div>
           <div class="flex items-center gap-1.5 text-[13px]" style="color:var(--color-text-secondary)">
             <span class="inline-flex items-center">${ICONS.flag}</span>
             <span>TR</span>
           </div>
-          <div class="text-[13px]" style="color:var(--color-text-secondary)">at Metin K.</div>
           <div class="flex items-center gap-2 text-[13px] flex-wrap mt-1 max-sm:flex-col max-sm:items-start max-sm:gap-1" style="color:var(--color-text-secondary)">
             <span class="inline-flex items-center gap-1">
-              ${t("profile.email")} met***@gmail.com
-              <span class="inline-flex items-center gap-[3px] text-xs font-medium text-green-500">${ICONS.verified} ${t("profile.verified")}</span>
+              ${t("profile.email")} ${escapeHtml(u.email)}
+              ${u.emailVerified ? `<span class="inline-flex items-center gap-[3px] text-xs font-medium text-green-500">${ICONS.verified} ${t("profile.verified")}</span>` : ""}
             </span>
-            <span class="max-sm:hidden" style="color:var(--color-border-default)">|</span>
-            <span>${t("profile.joinedYear", { year: "2026" })}</span>
           </div>
           <div class="flex items-center gap-2 text-[13px] mt-1">
             <span style="color:var(--color-text-tertiary)">${t("profile.mainProductsLabel")}</span>
@@ -185,20 +202,20 @@ function getAccountFields(): FormField[] {
   return [
     {
       label: t("profile.accountNumber"),
-      value: "tr29243492599miuy",
+      value: escapeHtml(sessionUser().memberId),
       name: "accountId",
       readonly: true,
     },
-    { label: t("profile.fullName"), value: "Metin K.", name: "fullName" },
+    { label: t("profile.fullName"), value: escapeHtml(sessionUser().fullName), name: "fullName" },
     { label: t("profile.gender"), value: "", name: "gender" },
     {
       label: t("profile.emailAddress"),
-      value: "met***@gmail.com",
+      value: escapeHtml(sessionUser().email),
       name: "email",
-      isVerified: true,
+      isVerified: sessionUser().emailVerified,
     },
     { label: t("profile.altEmailAddress"), value: "", name: "altEmail" },
-    { label: t("profile.contactAddress"), value: "Turkey", name: "address" },
+    { label: t("profile.contactAddress"), value: t("countries.TR"), name: "address" },
     { label: t("profile.postalCode"), value: "", name: "postalCode" },
     { label: t("profile.tel"), value: "--", name: "phone" },
     { label: t("profile.fax"), value: "", name: "fax" },

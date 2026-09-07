@@ -1,7 +1,7 @@
 /**
  * ProductGrid Component
- * Ana sayfa ürün vitrini — liste/arama sayfasıyla AYNI kartı kullanır
- * (shared/ListingCard) ama butonsuz: `renderListingCard(card, { showActions: false })`.
+ * Ana sayfa ürün vitrini — liste/arama sayfasıyla AYNI kartı, AYNI görünümle kullanır
+ * (shared/ListingCard); tek fark butonsuz: `renderListingCard(card, { showActions: false })`.
  * Tek kart bileşeni birden çok sayfada → "az kod, çok yer" (DRY).
  *
  * Veri kaynağı zaten ortak: searchListings() → ProductListingCard[]. Eski sürüm
@@ -16,6 +16,7 @@ import {
   syncListingFavoriteHearts,
 } from "../products/initListingFavorites";
 import { applyListingSocialProof } from "../products/initListingSocialProof";
+import { initListingCartDrawer } from "../products/ListingCartDrawer";
 
 const HOME_EAGER_CARD_COUNT = 8;
 const HOME_PROGRESSIVE_ROOT_MARGIN = "200px";
@@ -39,9 +40,14 @@ function showProductGridEmptyState(grid: HTMLElement): void {
 }
 
 function renderHomeCard(card: Parameters<typeof renderListingCard>[0], lazy: boolean): string {
+  // Liste/arama sayfasındaki kartla BİREBİR aynı görünüm ve davranış: görsel,
+  // başlık, "Yeni ürün" sosyal kanıt şeridi, fiyat, "Minimum sipariş" satırı ve
+  // aksiyon butonları (Sepete ekle / Sohbet et — masaüstünde hover'da, mobilde
+  // her zaman). Butonlar 2026-09-07'ye kadar ana sayfada kapalıydı; kullanıcı
+  // kararıyla açıldı. Sepet çekmecesi + sohbet tetikleyicileri main.ts'te kurulur.
+  // Eski `homeCompact` kipi (MOQ'suz, şeritsiz, object-contain) aynı gün bırakıldı.
   return `<div role="listitem" data-home-card="${card.id}" class="flex">${renderListingCard(card, {
-    homeCompact: true,
-    containImage: true,
+    sizesRegion: "home/hero_showcase_grid",
     lazy,
   })}</div>`;
 }
@@ -156,6 +162,8 @@ export function initProductGrid(): Promise<void> {
         // Kartlar DOM'a girdi → favori kalplerini mevcut favori durumuna göre doldur.
         initProductSliders();
         syncListingFavoriteHearts(grid);
+        // "Sepete ekle" → paylaşımlı sepet çekmecesi (listeleme sayfasıyla aynı kurulum).
+        initListingCartDrawer(result.products);
         // Sosyal kanıt: sinyali olan kartların ad↔fiyat arası slotunu dinamik
         // (dönen) etiketle doldur — grid innerHTML yazıldıktan SONRA çağrılır.
         void applyListingSocialProof(eagerProducts, {

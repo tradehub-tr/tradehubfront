@@ -55,6 +55,7 @@ const root = mountDashboardShell({
     { label: t("shipment.return.title") },
   ],
   contentId: "return-request-root",
+  heading: t("shipment.return.title"),
   initialContent: shellCard(
     `<p class="text-sm text-gray-500">${escapeHtml(t("shipment.page.loading"))}</p>`
   ),

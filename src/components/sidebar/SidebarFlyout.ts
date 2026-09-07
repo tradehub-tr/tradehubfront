@@ -107,7 +107,7 @@ export function renderSidebarFlyout({ item }: SidebarFlyoutProps): string {
     for (const [groupName, items] of groups) {
       sections.push(`
         <div class="sidebar-flyout__section ${sections.length > 0 ? "mt-3 pt-3 border-t border-gray-100 dark:border-gray-700" : ""}">
-          ${groupName ? `<h4 class="px-3 mb-1.5 text-xs font-normal text-gray-400 dark:text-gray-500">${groupName}</h4>` : ""}
+          ${groupName ? `<p class="px-3 mb-1.5 text-xs font-normal text-gray-400 dark:text-gray-500">${groupName}</p>` : ""}
           ${items.map(renderFlyoutLink).join("")}
         </div>
       `);
@@ -128,7 +128,7 @@ export function renderSidebarFlyout({ item }: SidebarFlyoutProps): string {
       aria-label="${item.label} submenu"
       style="display: none; clip-path: inset(-20px -20px -20px 0); box-shadow: 0 0 12px 0 rgba(0,0,0,0.12);"
     >
-      <h3 class="px-3 mb-3 text-base font-bold text-gray-900 dark:text-white"${headingI18nKey ? ` data-i18n="${headingI18nKey}"` : ""}>${item.label}</h3>
+      <p class="px-3 mb-3 text-base font-bold text-gray-900 dark:text-white"${headingI18nKey ? ` data-i18n="${headingI18nKey}"` : ""}>${item.label}</p>
       ${content}
     </div>
   `;

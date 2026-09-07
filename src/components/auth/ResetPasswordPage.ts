@@ -54,7 +54,9 @@ function ResetPasswordCard(content: string): string {
 function StepForm(): string {
   return `
     <div x-show="step === 'form'">
+      <template x-if="step === 'form'">
       <h1 class="text-2xl font-bold text-gray-900 text-center mb-3" data-i18n="auth.reset.title">${t("auth.reset.title")}</h1>
+      </template>
       <p class="text-sm text-gray-500 text-center mb-8" data-i18n="auth.reset.subtitle">${t("auth.reset.subtitle")}</p>
 
       <form @submit.prevent="submitReset()" class="space-y-5">

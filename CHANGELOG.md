@@ -1,3 +1,16 @@
+## [v2.4.0-alpha.35] - 2026-09-07 ALPHA
+
+Bu surum alpha.istoc.com'da gelistirme asamasindadir.
+
+### Eklendi
+- feat(sepet): misafir sepeti birleştirme akışı ekle (@ahmeetseker)
+  - Giriş sonrası misafir ve hesap sepetlerini çakışma durumuna göre birleştirir
+  - Sepet ve ödeme özetlerinde ortak ürün küçük-resim şeridi kullanır
+  - Görselsiz ürünlerde kırık görsel yerine boş ya da ad tabanlı yedek gösterir
+  - Ürün listeleme filtrelerini kategori ağacı ve az sonuç dolgusu ile iyileştirir
+  - Sayfa başlık hiyerarşisini ve çok dilli görünür metinleri düzenler
+
+---
 ## [v2.4.0-alpha.34] - 2026-09-07 ALPHA
 
 Bu surum alpha.istoc.com'da gelistirme asamasindadir.

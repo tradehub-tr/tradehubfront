@@ -60,6 +60,7 @@ const root = mountDashboardShell({
     { label: t("shipment.notifyPref.title") },
   ],
   contentId: "notification-preferences-root",
+  heading: t("shipment.notifyPref.title"),
   initialContent: shellCard(
     `<p class="text-sm text-gray-500">${escapeHtml(t("shipment.page.loading"))}</p>`
   ),

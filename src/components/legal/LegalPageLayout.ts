@@ -52,7 +52,7 @@ export function LegalPageLayout({
           <aside class="hidden lg:block w-[240px] shrink-0">
             <nav class="sticky top-[72px]">
               <div class="bg-white rounded-lg border border-gray-200 p-4">
-                <h3 class="text-sm font-semibold text-gray-700 mb-3">${t("legal.tableOfContents")}</h3>
+                <h2 class="text-sm font-semibold text-gray-700 mb-3">${t("legal.tableOfContents")}</h2>
                 <ul class="space-y-1">
                   ${sections
                     .map(

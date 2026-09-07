@@ -26,3 +26,15 @@ export function getSellerUrl(
   if (seller.id) return `/pages/seller/seller-shop.html?seller=${encodeURIComponent(seller.id)}`;
   return "#";
 }
+
+/**
+ * Mağazanın DÜKKAN sayfası (/magaza/<satıcı kodu>/dukkan) — "Mağazayı Ziyaret Et"
+ * aksiyonu buraya gider; /magaza/<slug> profil sayfasıdır. Native bundle'da
+ * pretty route yok → seller-shop.html?seller= yoluna düşer.
+ */
+export function getSellerStoreUrl(sellerCode: string | null | undefined): string {
+  if (!sellerCode) return "#";
+  if (isNativeBundleContext())
+    return `/pages/seller/seller-shop.html?seller=${encodeURIComponent(sellerCode)}`;
+  return `/magaza/${encodeURIComponent(sellerCode)}/dukkan`;
+}

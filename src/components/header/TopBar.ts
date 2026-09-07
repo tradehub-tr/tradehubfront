@@ -7,6 +7,10 @@
 
 import type { LocaleOption, CurrencyOption } from "../../types/navigation";
 import { cartStore } from "../cart/state/CartStore";
+import {
+  syncGuestCartAfterLogin,
+  installGuestCartLogoutReset,
+} from "../cart/state/guestCartMerge";
 import { isLoggedIn, getUser, waitForAuth, logout } from "../../utils/auth";
 import { getListingUrl } from "../../utils/listingUrl";
 import { getBrandUrl } from "../../utils/brandUrl";
@@ -14,6 +18,7 @@ import { getSellerUrl } from "../../utils/sellerUrl";
 import { getSellerStoreUrl } from "../../utils/seller";
 import { getFlagSvg } from "../../utils/flags";
 import { escapeHtml, sanitizeUrl } from "../../utils/sanitize";
+import { cartThumbNameTile } from "./cartThumbNameTile";
 // DISABLED: import { mockConversations } from '../../data/mockMessages';
 import { t, getCurrentLang, updatePageTranslations } from "../../i18n";
 import type { SupportedLang } from "../../i18n";
@@ -50,9 +55,9 @@ function renderCompactSearchGroup(title: string, items: CompactSearchGroupItem[]
   if (items.length === 0) return "";
   return `
     <div class="mb-3 last:mb-0">
-      <h4 class="px-2 py-1 text-[11px] font-semibold uppercase tracking-wide text-gray-500 dark:text-gray-400">
+      <div class="px-2 py-1 text-[11px] font-semibold uppercase tracking-wide text-gray-500 dark:text-gray-400">
         ${escapeHtml(title)}
-      </h4>
+      </div>
       <ul>
         ${items
           .map(
@@ -198,17 +203,20 @@ function renderCompactLogo(): string {
 function renderUserButton(): string {
   const user = getUser();
   const displayName = escapeHtml(user?.full_name ?? t("topbar.defaultUser"));
+  const initial = (user?.full_name || user?.email || "?").charAt(0).toUpperCase();
   return `
     <div class="relative">
       <button
         id="user-dropdown-btn"
         data-dropdown-toggle="user-dropdown-menu"
         data-dropdown-placement="bottom-end"
-        class="th-header-icon inline-flex items-center justify-center w-7 h-7 rounded-full hover:bg-gray-200 transition-colors cursor-pointer shrink-0"
+        class="th-no-press inline-flex items-center gap-1.5 h-9 ps-1 pe-2 rounded-full hover:bg-gray-100 transition-colors cursor-pointer shrink-0 dark:hover:bg-gray-800"
         aria-label="${t("header.myAccount")}" data-i18n-aria-label="header.myAccount"
       >
-        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z"/>
+        <span class="w-7 h-7 rounded-full flex items-center justify-center text-[12px] font-bold text-white uppercase" style="background:linear-gradient(135deg, var(--color-primary-400, #e6b212) 0%, var(--color-primary-500, #cc6b00) 100%)" aria-hidden="true">${escapeHtml(initial)}</span>
+        <span class="text-[13px] font-semibold text-[#222] dark:text-white"><span data-i18n="header.myAccount">${t("header.myAccount")}</span></span>
+        <svg class="w-3.5 h-3.5 text-gray-500" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M6 9l6 6 6-6"/>
         </svg>
       </button>
 
@@ -332,7 +340,7 @@ function renderCompactStickySearch(): string {
         class="absolute start-0 end-0 top-[110px] z-(--z-modal) rounded-2xl border border-gray-200 bg-white px-5 py-4 dark:border-gray-700 dark:bg-gray-800"
       >
         <div class="flex items-center justify-between gap-4">
-          <h3 class="text-lg font-bold text-gray-900 dark:text-white"><span data-i18n="header.recommendedForYou">${t("header.recommendedForYou")}</span></h3>
+          <p class="text-lg font-bold text-gray-900 dark:text-white"><span data-i18n="header.recommendedForYou">${t("header.recommendedForYou")}</span></p>
           <button
             id="topbar-compact-refresh"
             type="button"
@@ -420,7 +428,7 @@ function renderMobileSearchOverlay(): string {
 
       <div class="flex-1 overflow-y-auto px-4 py-3" id="mobile-search-suggestions">
         <div class="flex items-center justify-between mb-3">
-          <h3 class="text-base font-bold text-gray-900 dark:text-white" data-i18n="header.recommendedForYou">${t("header.recommendedForYou")}</h3>
+          <p class="text-base font-bold text-gray-900 dark:text-white" data-i18n="header.recommendedForYou">${t("header.recommendedForYou")}</p>
         </div>
         <div id="mobile-search-results-groups"></div>
       </div>
@@ -434,7 +442,7 @@ function renderMobileSearchOverlay(): string {
 function renderCountryPopoverContent(): string {
   return `
     <div class="p-5">
-      <h3 class="text-base font-bold text-gray-900 dark:text-white mb-1"><span data-i18n="header.specifyLocation">${t("header.specifyLocation")}</span></h3>
+      <p class="text-base font-bold text-gray-900 dark:text-white mb-1"><span data-i18n="header.specifyLocation">${t("header.specifyLocation")}</span></p>
       <p class="text-sm text-gray-500 dark:text-gray-400 mb-4"><span data-i18n="header.shippingVary">${t("header.shippingVary")}</span></p>
       <a href="/pages/dashboard/addresses.html" class="th-btn w-full px-4 py-2.5 text-sm font-medium transition-colors mb-4 inline-block text-center">
         <span data-i18n="header.addAddress">${t("header.addAddress")}</span>
@@ -478,7 +486,7 @@ function renderCountrySelector(): string {
 function renderLanguageCurrencyPopoverContent(): string {
   return `
     <div class="p-5">
-      <h3 class="text-base font-bold text-gray-900 dark:text-white mb-1"><span data-i18n="header.langCurrency">${t("header.langCurrency")}</span></h3>
+      <p class="text-base font-bold text-gray-900 dark:text-white mb-1"><span data-i18n="header.langCurrency">${t("header.langCurrency")}</span></p>
       <p class="text-sm text-gray-500 dark:text-gray-400 mb-5"><span data-i18n="header.langCurrencyDesc">${t("header.langCurrencyDesc")}</span></p>
       <div class="mb-4">
         <label class="block text-sm font-medium text-gray-900 dark:text-white mb-2" data-i18n="header.language">${t("header.language")}</label>
@@ -663,7 +671,7 @@ function renderCartButton(itemCount: number = 0): string {
       <!-- Header -->
       <div class="flex items-center justify-between px-5 pt-4 pb-3 border-b border-gray-100">
         <div class="flex items-center gap-2">
-          <h3 class="text-[15px] font-bold text-gray-900"><span data-i18n="header.myCart">${t("header.myCart")}</span></h3>
+          <p class="text-[15px] font-bold text-gray-900"><span data-i18n="header.myCart">${t("header.myCart")}</span></p>
           <span id="header-cart-count-chip" class="hidden text-[11px] font-bold px-2 py-0.5 rounded-full" style="background:var(--btn-bg,#d97706);color:#fff"></span>
         </div>
         <a href="${baseUrl}pages/cart.html" class="text-xs font-semibold text-[--btn-bg] hover:underline" style="color:var(--btn-bg,#d97706)"><span data-i18n="common.viewAll">${t("common.viewAll")}</span> &rarr;</a>
@@ -701,55 +709,42 @@ function renderCartButton(itemCount: number = 0): string {
 }
 
 /**
- * Generates the sign-in button with dropdown panel (iSTOC-style)
- * Shows person icon + "Sign in" text; dropdown has sign-in CTA, social logins, and nav links
+ * Oturum kapalıyken header sağ bloğu: "Giriş yap" (çerçeveli hap) + "Kayıt ol" (dolu hap).
+ * Eski tek kişi ikonu + açılır panel kaldırıldı; iki eylem doğrudan görünür.
  */
 function renderAuthButtons(): string {
   const baseUrl = getBaseUrl();
   return `
-    <div class="relative">
-      <button
-        id="auth-dropdown-button"
-        data-dropdown-toggle="auth-dropdown-menu"
-        data-dropdown-placement="bottom-end"
-        data-tooltip-target="tooltip-auth-signin"
-        data-tooltip-placement="bottom"
-        class="th-no-press inline-flex items-center px-2 py-1.5 rounded-md hover:bg-gray-50 transition-colors cursor-pointer"
-        aria-label="${t("header.signIn")}"
-        data-i18n-aria-label="header.signIn"
+    <div class="flex items-center gap-2">
+      <a
+        href="${baseUrl}pages/auth/login.html"
+        class="th-no-press inline-flex h-9 items-center gap-1.5 rounded-full border border-gray-300 bg-white px-3.5 text-[13px] font-semibold text-[#222] transition-colors hover:border-gray-400 hover:bg-gray-50 whitespace-nowrap dark:border-gray-600 dark:bg-gray-800 dark:text-white"
       >
-        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z"/>
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="1.75" viewBox="0 0 24 24" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0 0 13.5 3h-6a2.25 2.25 0 0 0-2.25 2.25v13.5A2.25 2.25 0 0 0 7.5 21h6a2.25 2.25 0 0 0 2.25-2.25V15M12 9l3 3m0 0-3 3m3-3H2.25"/>
         </svg>
-      </button>
-      <div id="tooltip-auth-signin" role="tooltip" class="absolute z-50 invisible inline-block whitespace-nowrap px-2.5 py-1.5 text-xs font-semibold text-white bg-[#222] rounded-md shadow-md opacity-0 tooltip">
-        <span data-i18n="header.signIn">${t("header.signIn")}</span>
-        <div class="tooltip-arrow" data-popper-arrow></div>
-      </div>
-
-      <!-- Auth Dropdown Menu -->
-      <div
-        id="auth-dropdown-menu"
-        class="z-50 hidden bg-white rounded-lg shadow-lg border border-gray-200 w-[280px] py-4"
+        <span data-i18n="header.loginBtn">${t("header.loginBtn")}</span>
+      </a>
+      <a
+        href="${baseUrl}pages/auth/register.html"
+        class="th-btn th-no-press inline-flex h-9 items-center rounded-full px-4 text-[13px] font-semibold whitespace-nowrap"
       >
-        <!-- Sign in CTA -->
-        <div class="px-5 pb-3">
-          <p class="text-[15px] font-bold text-[#222] mb-0.5"><span data-i18n="header.welcomeBack">${t("header.welcomeBack")}</span></p>
-          <p class="text-[13px] text-gray-500 mb-3.5"><span data-i18n="header.welcomeBackDesc">${t("header.welcomeBackDesc")}</span></p>
-          <a
-            href="${baseUrl}pages/auth/login.html"
-            class="block w-full text-center th-btn"
-          >
-            <span data-i18n="header.signIn">${t("header.signIn")}</span>
-          </a>
-          <p class="text-xs text-gray-500 text-center mt-3 mb-0">
-            <span data-i18n="header.noAccount">${t("header.noAccount")}</span>
-            <a href="${baseUrl}pages/auth/register.html" class="font-bold hover:underline" style="color:var(--btn-bg,#d97706)"><span data-i18n="header.signUp">${t("header.signUp")}</span></a>
-          </p>
-        </div>
-
-      </div>
+        <span data-i18n="header.registerBtn">${t("header.registerBtn")}</span>
+      </a>
     </div>
+  `;
+}
+
+/** Mobil header (xl altı), oturum kapalı: tek kompakt "Kayıt ol" butonu. */
+function renderMobileRegisterButton(): string {
+  const baseUrl = getBaseUrl();
+  return `
+    <a
+      href="${baseUrl}pages/auth/register.html"
+      class="th-btn th-no-press inline-flex h-7 min-[400px]:h-8 items-center rounded-full px-3 text-[11px] min-[400px]:text-xs font-semibold whitespace-nowrap shrink-0"
+    >
+      <span data-i18n="header.registerBtn">${t("header.registerBtn")}</span>
+    </a>
   `;
 }
 
@@ -935,6 +930,11 @@ export function TopBar(props?: TopBarProps): string {
             <div class="hidden xl:block" data-auth-area>
               ${isLoggedIn() ? renderUserButton() : renderAuthButtons()}
             </div>
+
+            <!-- Mobil: oturum kapalıyken tek kompakt "Kayıt ol"; açıkken alt nav/avatar çipi devrede -->
+            <div class="xl:hidden" data-auth-area-mobile>
+              ${isLoggedIn() ? "" : renderMobileRegisterButton()}
+            </div>
           </div>
         </div>
       </div>
@@ -1038,10 +1038,10 @@ function ensureCartSupplierModal(): HTMLElement {
   modal.innerHTML = `
     <div class="bg-white rounded-md shadow-xl w-full overflow-hidden max-w-[360px] sm:max-w-[420px] md:max-w-[480px] lg:max-w-[560px] xl:max-w-[640px]" data-cart-modal-content>
       <div class="flex items-center justify-between gap-2 px-4 py-3 border-b border-gray-100">
-        <h3 class="text-[14px] font-bold text-gray-900 truncate">
+        <p class="text-[14px] font-bold text-gray-900 truncate">
           ${t("cart.orderSummary")} <span class="mx-0.5 text-gray-400">—</span>
           <span data-cart-modal-count style="color:var(--btn-bg,#d97706)"></span>
-        </h3>
+        </p>
         <button type="button" data-cart-modal-close class="w-7 h-7 inline-flex items-center justify-center rounded-md text-gray-400 hover:text-gray-700 hover:bg-gray-100 flex-shrink-0" aria-label="${t("common.close")}">
           <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
         </button>
@@ -1166,7 +1166,8 @@ export function initHeaderCart(): void {
     if (itemsContainer) {
       const selectedCurrency = csGetSelectedCurrency();
       const storeIconSvg = `<svg class="w-3 h-3 text-gray-400" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 21v-7.5a.75.75 0 0 1 .75-.75h3a.75.75 0 0 1 .75.75V21m-4.5 0H2.36m11.14 0H18m0 0h3.64m-1.39 0V9.349M3.75 21V9.349m0 0a3.001 3.001 0 0 0 3.75-.615A2.993 2.993 0 0 0 9.75 9.75c.896 0 1.7-.393 2.25-1.016a2.993 2.993 0 0 0 2.25 1.016 2.993 2.993 0 0 0 2.25-1.016 3.001 3.001 0 0 0 3.75.614m-16.5 0a3.004 3.004 0 0 1-.621-4.72l1.189-1.19A1.5 1.5 0 0 1 5.378 3h13.243a1.5 1.5 0 0 1 1.06.44l1.19 1.189a3 3 0 0 1-.621 4.72"/></svg>`;
-      const placeholderThumbSvg = `<svg class="w-4 h-4 text-gray-300" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m2.25 15.75 5.159-5.159a2.25 2.25 0 0 1 3.182 0l5.159 5.159m-1.5-1.5 1.409-1.409a2.25 2.25 0 0 1 3.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 0 0 1.5-1.5V6a1.5 1.5 0 0 0-1.5-1.5H3.75A1.5 1.5 0 0 0 2.25 6v12a1.5 1.5 0 0 0 1.5 1.5Z"/></svg>`;
+      // Görselsiz ürün: ikon değil ürün adı (kırpılmış) — bkz. cartThumbNameTile.
+      const nameTileTemplate = document.createElement("template");
       const MAX_THUMBS = 4;
 
       let html =
@@ -1186,10 +1187,12 @@ export function initHeaderCart(): void {
         const remainingThumbs = Math.max(0, allSkus.length - MAX_THUMBS);
 
         const thumbsHtml = visibleThumbs
-          .map(({ sku }) => {
+          .map(({ sku, product }) => {
+            // alt = ürün adı (ekran okuyucu için). Görsel yoksa ya da yüklenemezse
+            // kutuda ürün adı gösterilir (aşağıdaki swap alt metninden üretir).
             const img = sku.skuImage
-              ? `<img src="${escapeHtml(sanitizeUrl(sku.skuImage))}" alt="sku" width="40" height="40" decoding="async" class="w-10 h-10 rounded-md object-cover border border-gray-100 shadow-sm">`
-              : `<div class="w-10 h-10 rounded-md bg-gray-100 border border-gray-100 flex items-center justify-center">${placeholderThumbSvg}</div>`;
+              ? `<img src="${escapeHtml(sanitizeUrl(sku.skuImage))}" alt="${escapeHtml(product.title)}" width="40" height="40" decoding="async" data-sku-thumb class="w-10 h-10 rounded-md object-cover border border-gray-100 shadow-sm">`
+              : cartThumbNameTile(product.title);
             return `
               <div class="relative w-10 h-10 flex-shrink-0 group">
                 ${img}
@@ -1236,6 +1239,17 @@ export function initHeaderCart(): void {
 
       itemsContainer.innerHTML = html;
       itemsContainer.classList.remove("hidden");
+
+      // Kırık görsel: tarayıcının alt metnini küçük kutuya sıkıştırmasına izin verme,
+      // ürün adı kutusuna geç.
+      itemsContainer.querySelectorAll<HTMLImageElement>("img[data-sku-thumb]").forEach((img) => {
+        const swap = () => {
+          nameTileTemplate.innerHTML = cartThumbNameTile(img.alt);
+          img.replaceWith(nameTileTemplate.content.firstElementChild!.cloneNode(true));
+        };
+        if (img.complete && img.naturalWidth === 0) swap();
+        else img.addEventListener("error", swap, { once: true });
+      });
     }
   };
 
@@ -1249,6 +1263,10 @@ export function initHeaderCart(): void {
         const apiCart = await fetchCart();
         const sym = getCurrencySymbol();
         cartStore.init(apiCart.suppliers, 0, sym, 0);
+        // Giriş öncesi (misafir) sepet varsa hesaba aktar ya da sor
+        // (cart/state/guestCartMerge.ts). Sepet sayfası kendi başlığını
+        // kullandığı için orada pages/cart.ts aynı akışı çağırır.
+        void syncGuestCartAfterLogin(apiCart.suppliers);
       } catch {
         cartStore.load();
       }
@@ -1256,6 +1274,7 @@ export function initHeaderCart(): void {
       cartStore.load();
     }
   })();
+  installGuestCartLogoutReset();
 
   // Initial read and subscribe to future cart metadata
   renderFromStore();
@@ -1352,6 +1371,9 @@ export async function initAuthState(): Promise<void> {
     const authAreas = document.querySelectorAll<HTMLElement>("[data-auth-area]");
     authAreas.forEach((container) => {
       container.innerHTML = user ? renderUserButton() : renderAuthButtons();
+    });
+    document.querySelectorAll<HTMLElement>("[data-auth-area-mobile]").forEach((container) => {
+      container.innerHTML = user ? "" : renderMobileRegisterButton();
     });
   }
 

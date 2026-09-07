@@ -30,7 +30,7 @@ await requireAuth();
 const appEl = document.querySelector<HTMLDivElement>('#app')!;
 appEl.classList.add('relative');
 appEl.innerHTML = `
-  <h1 class="sr-only">Hesap Ayarları</h1>
+  <h1 class="sr-only" data-i18n="pageHeading.dashboard_settings">${t("pageHeading.dashboard_settings")}</h1>
   <div id="sticky-header" class="sticky top-0 z-(--z-header) bg-white">
     ${TopBar({ compact: true })}
   </div>

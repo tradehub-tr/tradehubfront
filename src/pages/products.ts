@@ -158,7 +158,7 @@ appEl.innerHTML = `
         })}
 
         <!-- Active Filter Chips -->
-        <div id="active-filter-chips" x-data="filterChips" class="flex flex-wrap gap-2 mb-3 empty:hidden"></div>
+        <div id="active-filter-chips" x-data="filterChips" class="mb-3 empty:hidden"></div>
 
         <!-- Main layout: Filter Sidebar + Product Grid -->
         <div class="flex flex-col lg:flex-row gap-4 lg:gap-6">
@@ -357,6 +357,8 @@ if (categoryParam) {
 const baseParams = {
   query: queryParam || undefined,
   category: categoryParam || undefined,
+  // Az sonuç dolgusu: filtreye uyan ürün 50'nin altındaysa arkasına tüm ürünler gelir.
+  fill_sparse: true,
 };
 
 // Filter engine reference
@@ -370,18 +372,30 @@ initCurrency().then(() => {
   engine = initFilterEngine({
     baseParams,
     pageSize: 40,
-    onUpdate: (products, total, page, totalPages, hasNext, hasPrev, categoryName, seo) => {
+    onUpdate: (
+      products,
+      total,
+      page,
+      totalPages,
+      hasNext,
+      hasPrev,
+      categoryName,
+      seo,
+      fillFrom,
+      primaryTotal
+    ) => {
       // Izgara boyaması artık async: soğuk önbellekte manifesti kısa bir tavan
       // kadar bekler ki LCP adayı İLK boyamada türev (AVIF/WebP) ile çıksın
       // (rapor 91 §2.5). Izgara DOM'una dokunan init'ler aşağıda bu promise'i
       // bekliyor; DOM'dan bağımsız güncellemeler (SEO, başlık, sayfalama)
       // beklemeden koşar.
-      const izgaraHazir = rerenderProductGrid(products);
+      const izgaraHazir = rerenderProductGrid(products, fillFrom);
       applyServerSeo(seo);
       if (categoryName) apiCategoryName = categoryName;
       const resolvedKeyword = resolveKeyword() || undefined;
+      // Başlıktaki "N ürün bulundu" dolguyu değil, filtreye uyan gerçek sayıyı gösterir.
       updateSubHeader({
-        totalCount: total,
+        totalCount: primaryTotal ?? total,
         keyword: resolvedKeyword,
       });
       if (engine) updateFilterChips(engine.getState());

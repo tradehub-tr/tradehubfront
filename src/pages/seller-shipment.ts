@@ -65,6 +65,7 @@ const root = mountDashboardShell({
     { label: t("shipment.page.sellerShipment") },
   ],
   contentId: "seller-shipment-root",
+  heading: t("shipment.page.sellerShipment"),
   initialContent: shellCard(
     `<p class="text-sm text-gray-500">${escapeHtml(t("shipment.page.loading"))}</p>`
   ),
@@ -110,9 +111,9 @@ function renderCreate(): void {
             channels: kanallar(),
             carriers: tasiyicilar(),
           })
-        : `<h1 class="mb-3 text-base font-semibold text-gray-900">
+        : `<h2 class="mb-3 text-base font-semibold text-gray-900">
              ${escapeHtml(t("shipment.sellerForm.title"))}
-           </h1>
+           </h2>
            ${NotWiredNotice({
              title: t("shipment.page.createNotWired"),
              endpoint: "api.v1.shipment.create_shipment (yalnız order/items alıyor)",

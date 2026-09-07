@@ -17,14 +17,26 @@ import { escapeHtml, sanitizeUrl } from "../../../utils/sanitize";
 export interface SkuRowProps {
   sku: CartSku;
   productHref?: string;
+  /** Görselin alt metni — SKU kodu değil ürün adı (erişilebilirlik + kırık resim yazısı). */
+  productTitle?: string;
 }
 
-export function SkuRow({ sku, productHref }: SkuRowProps): string {
+export function SkuRow({ sku, productHref, productTitle }: SkuRowProps): string {
   const unavailable = sku.isAvailable === false;
-  const imgContent = `<img src="${escapeHtml(sanitizeUrl(sku.skuImage))}" alt="SKU ${escapeHtml(sku.id)}" width="60" height="60" decoding="async" class="w-full h-full object-cover" loading="lazy" />`;
-  const imgWrapper = productHref
-    ? `<a href="${escapeHtml(sanitizeUrl(productHref))}" class="block w-full h-full">${imgContent}</a>`
-    : imgContent;
+  // Görsel yoksa görsel kutusu HİÇ açılmaz — kırık resim ya da "SKU" yer tutucusu
+  // yerine satır yalnız varyant metniyle başlar (2026-09-07 kararı).
+  const imgContent = sku.skuImage
+    ? `<img src="${escapeHtml(sanitizeUrl(sku.skuImage))}" alt="${escapeHtml(productTitle || "")}" width="60" height="60" decoding="async" class="w-full h-full object-cover" loading="lazy" />`
+    : "";
+  const imgWrapper =
+    imgContent && productHref
+      ? `<a href="${escapeHtml(sanitizeUrl(productHref))}" class="block w-full h-full">${imgContent}</a>`
+      : imgContent;
+  const imgBox = imgWrapper
+    ? `<div data-sku-image class="w-9 h-9 sm:w-10 sm:h-10 rounded-md border border-[#e5e5e5] overflow-hidden bg-[#fafafa] shrink-0${unavailable ? " grayscale" : ""}">
+          ${imgWrapper}
+        </div>`
+    : "";
 
   return `
     <article class="sc-c-sku-container-new bg-[#fafafa] border border-[#e5e5e5] rounded-md p-[6px_8px] sm:p-[8px_12px] [&+&]:mt-1.5${unavailable ? " opacity-60" : ""}" data-sku-id="${escapeHtml(sku.id)}" x-data>
@@ -33,9 +45,7 @@ export function SkuRow({ sku, productHref }: SkuRowProps): string {
           ${Checkbox({ id: `sku-checkbox-${sku.id}`, checked: sku.selected, onChange: unavailable ? "" : `sku-select-${sku.id}`, disabled: unavailable })}
         </div>
 
-        <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-md border border-[#e5e5e5] overflow-hidden bg-[#fafafa] shrink-0${unavailable ? " grayscale" : ""}">
-          ${imgWrapper}
-        </div>
+        ${imgBox}
 
         <div class="flex-1 min-w-0 flex flex-col gap-0">
           <div class="flex items-center gap-1.5 sm:gap-2 flex-wrap">

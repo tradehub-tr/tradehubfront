@@ -97,7 +97,7 @@ export function renderRankingGroupCard(group: RankingCategoryGroup): string {
   return `
     <div class="relative bg-surface border border-border-default rounded-md p-4 hover:-translate-y-0.5 hover:shadow-md transition-[transform,box-shadow] duration-200 motion-reduce:transition-none motion-reduce:hover:translate-y-0">
       <a href="${headerHref}" class="block group/header before:absolute before:inset-0 before:content-['']" aria-label="${safeName}">
-        <h3 class="text-sm xl:text-base font-bold text-text-primary mb-3 truncate group-hover/header:underline" title="${safeName}">${safeName}</h3>
+        <h2 class="text-sm xl:text-base font-bold text-text-primary mb-3 truncate group-hover/header:underline" title="${safeName}">${safeName}</h2>
       </a>
       <div class="grid grid-cols-3 gap-3">
         ${productsHtml}

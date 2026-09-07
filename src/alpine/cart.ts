@@ -5,6 +5,7 @@ import { isItemFavorited } from "../stores/favorites";
 import { cartStore } from "../components/cart/state/CartStore";
 import { showFavoriteToast, showCartError } from "../components/cart/page/CartPage";
 import { sanitizeHtml, escapeHtml, sanitizeUrl } from "../utils/sanitize";
+import { renderThumbnailCard } from "../components/checkout/ItemThumbnailStrip";
 import {
   formatCurrency,
   formatPrice,
@@ -633,16 +634,9 @@ Alpine.data("cartPage", () => ({
     const track = document.querySelector<HTMLElement>(".checkout-items-images");
     if (!track) return;
 
-    track.innerHTML = items
-      .map(
-        (item) => `
-      <div class="relative w-14 h-14 sm:w-16 sm:h-16 rounded-md overflow-hidden border border-border-default shrink-0">
-        <img src="${escapeHtml(sanitizeUrl(item.image))}" alt="Ürün görseli" class="w-full h-full object-cover" />
-        <span class="absolute end-0 bottom-0 px-1 py-[2px] rounded-ss bg-black/65 text-white text-[11px] font-bold leading-none">${item.quantity}</span>
-      </div>
-    `
-      )
-      .join("");
+    // İlk boyamayla (CartSummary → renderItemThumbnailStrip) aynı kart: görselsiz
+    // üründe kırık img yerine yer tutucu, adet rozeti aynı yerde.
+    track.innerHTML = items.map(renderThumbnailCard).join("");
 
     track.dispatchEvent(new Event("scroll"));
   },

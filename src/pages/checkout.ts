@@ -4,6 +4,7 @@
  */
 
 // T-123: RUM montajı — MPA ortak boot (çift başlatmaya karşı korumalı).
+import { initItemThumbnailStrip } from '../components/checkout/ItemThumbnailStrip'
 import "../lib/rum/boot";
 import '../style.css'
 import { initFlowbite } from 'flowbite'
@@ -788,6 +789,13 @@ appEl.innerHTML = `
 initFlowbite(); // Profil dropdown Flowbite data-dropdown-toggle ile çalışır
 startAlpine();
 initStickyHeights();
+// Sipariş özeti ürün şeridi: ok kaydırması + "Tümünü Gör" → ürün listesine kaydır
+document.querySelectorAll<HTMLElement>('.checkout-sidebar .checkout-items-wrapper').forEach(initItemThumbnailStrip)
+document.querySelectorAll<HTMLButtonElement>('.checkout-sidebar [data-scroll-to]').forEach((btn) => {
+  btn.addEventListener('click', () => {
+    document.querySelector(btn.dataset.scrollTo || '')?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+  })
+})
 initCheckoutMinimalHeader(); // Logout button click handler
 
 // Sprint 2.6: Checkout sayfasında KYB doğrulanmamış satıcının ürünü varsa

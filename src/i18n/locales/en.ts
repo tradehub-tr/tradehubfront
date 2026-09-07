@@ -342,6 +342,7 @@ const en = {
     },
     pageTitle: {
       home: "iStoc | Global B2B Wholesale & Trade Marketplace",
+      homeHeading: "iStoc: Global B2B Wholesale & Trade Marketplace",
       auth_forgot_password: "Forgot Password | iStoc",
       auth_login: "Sign In | iStoc",
       auth_register: "Sign Up | iStoc",
@@ -407,6 +408,34 @@ const en = {
       top_ranking_category: "Best Sellers by Category | iStoc",
       top_ranking: "Best Selling Wholesale Products | iStoc",
       trade_assurance: "Trade Assurance – Secure Wholesale Shopping | iStoc",
+    },
+    pageHeading: {
+      help_help_ticket: "Support Ticket",
+      dashboard_buyer_dashboard: "Buyer Dashboard",
+      dashboard_contacts: "My Contacts",
+      dashboard_inquiries: "My Product Questions",
+      dashboard_messages: "My Messages",
+      dashboard_settings: "Account Settings",
+      manufacturers: "Manufacturers & Wholesalers",
+      seller_application_pending: "Application Status",
+    },
+    notFound: {
+      title: "Something went wrong",
+      desc: "The page you are looking for is currently unavailable.",
+      back: "Go Back",
+      home: "Go to Homepage",
+    },
+    acceptInvite: {
+      title: "Accept Invitation",
+      desc: "Enter your full name and choose a password to join the team.",
+      fullName: "Full Name",
+      password: "Password",
+      submit: "Create Account & Join",
+      successTitle: "Your account has been created",
+      successDesc: "Invitation accepted. You can now sign in.",
+      errorTitle: "Invalid invitation",
+      errorDesc: "This invitation link is invalid or has expired.",
+      goHome: "Back to Homepage",
     },
     p2g0: {
       categoryProductsAria: "{{category}} products",
@@ -1644,6 +1673,8 @@ const en = {
       cartSubtotal: "Subtotal",
       goToCart: "Go to Cart",
       signIn: "Sign in",
+      loginBtn: "Sign in",
+      registerBtn: "Sign up",
       joinFree: "Join Free",
       welcomeBack: "Welcome back",
       welcomeBackDesc: "Your cart and orders are waiting for you.",
@@ -1837,7 +1868,7 @@ const en = {
       helpCenterDesc: "FAQ and support requests",
       settings: "Settings",
       deliveryCountry: "Delivery Country",
-      deliveryCountryValue: "Turkey 🇹🇷",
+      deliveryCountryValue: "Türkiye 🇹🇷",
       language: "Language",
       languageValue: "English",
       currency: "Currency",
@@ -2131,6 +2162,20 @@ const en = {
     // CART
     // ============================================================
     cart: {
+      // Post-login guest cart ↔ account cart (state/guestCartMerge.ts)
+      guestMergeTitle: "Merge your carts?",
+      guestMergeDesc:
+        "You added {{guest}} items to your cart before signing in. Your account cart already has {{account}} items. What would you like to do?",
+      guestMergeKeepBoth: "Merge carts",
+      guestMergeKeepBothHint: "Keep the items in your account and add the ones from before sign-in.",
+      guestMergeReplace: "Empty account cart, add new items",
+      guestMergeReplaceHint:
+        "The {{account}} items in your account are removed; only the {{guest}} items from before sign-in remain.",
+      guestMergeLater: "Not now",
+      guestMergeDone: "Carts merged.",
+      guestMergeReplaced: "Account cart emptied, new items added.",
+      guestMergeMoved: "Your pre-sign-in cart was moved to your account.",
+      guestMergeFailed: "Carts could not be merged. Please try again.",
       title: "My Cart",
       empty: "Your cart is empty",
       emptyDesc: "You haven't added any products yet. Explore products and add them to your cart.",
@@ -2235,6 +2280,8 @@ const en = {
       pageTitle: "Order summary",
       // Order review modal
       reviewOrderTitle: "Review your order",
+      reviewOrderTitleSeller: "{{seller}} order confirmation",
+      reviewOrderDirectPay: "Payment goes directly to {{seller}}.",
       shippingAddressLabel: "Shipping address",
       notProvided: "Not provided",
       notSelected: "Not selected",
@@ -2245,6 +2292,7 @@ const en = {
       totalLabel: "Total",
       backToCheckoutBtn: "Back to checkout",
       confirmOrderBtn: "Confirm order",
+      confirmOrderBtnSeller: "Confirm {{seller}} order",
       closeModalAria: "Close modal",
       // Shipping address modal
       selectShippingAddress: "Select shipping address",
@@ -2718,6 +2766,12 @@ const en = {
       filterProductFeatures: "Product Features",
       filterPaidSamples: "Paid Samples",
       filterCategories: "Categories",
+      filterToggleSubcategories: "Toggle subcategories",
+      chipsShowMore: "+{{count}} more",
+      chipsShowLess: "Show less",
+      chipsToggle: "Toggle filter tags",
+      filterSearchCategory: "Search categories",
+      fillHeading: "You may also like these products",
       filterViewMore: "View more",
       filterPrice: "Price",
       filterMin: "Min",
@@ -3440,7 +3494,7 @@ const en = {
         breadcrumbLabel: "Legal Notice",
         section1Title: "1. Company Information",
         section1Content:
-          '<p><strong>Operator (Legal Entity):</strong> iStoc Private Company Limited</p><p><strong>Jurisdiction:</strong> England and Wales (United Kingdom)</p><p><strong>Brand:</strong> iStoc</p><p><strong>Email:</strong> info@istoc.com</p><p class="text-sm text-gray-500 mt-2"><em>Companies House registration number, registered address and Turkey representative information will be updated on this page as they become available.</em></p>',
+          '<p><strong>Operator (Legal Entity):</strong> iStoc Private Company Limited</p><p><strong>Jurisdiction:</strong> England and Wales (United Kingdom)</p><p><strong>Brand:</strong> iStoc</p><p><strong>Email:</strong> info@istoc.com</p><p class="text-sm text-gray-500 mt-2"><em>Companies House registration number, registered address and Türkiye representative information will be updated on this page as they become available.</em></p>',
         section2Title: "2. About the Platform",
         section2Content:
           "<p>iStoc, operated by iStoc Private Company Limited (United Kingdom), is a global electronic commerce platform established to facilitate business-to-business (B2B) trade. The Platform acts as an intermediary service provider in the commercial relationship between seller and buyer.</p><p>Responsibility for products and services offered on the Platform belongs to the respective sellers.</p>",
@@ -4433,7 +4487,7 @@ const en = {
     // COUNTRIES
     // ============================================================
     countries: {
-      TR: "Turkey",
+      TR: "Türkiye",
       US: "United States",
       DE: "Germany",
       GB: "United Kingdom",
@@ -7387,8 +7441,10 @@ const en = {
       year: "year",
       month: "month",
       customOffer: "Custom quote",
-      yearlyUpfrontVatExcl: "billed annually · VAT excluded",
+      yearlyUpfrontVatExcl: "VAT excluded",
       monthlyCancelAnytime: "monthly · cancel anytime",
+      yearlyBilled: "{{amount}} billed yearly",
+      monthlyYearTotal: "{{amount}} per year",
       pricedByVolume: "priced by volume",
       continue: "Continue",
       packageContents: "Package contents",
@@ -7873,7 +7929,7 @@ const en = {
     pkgTableBoxSize: "Carton Size",
     pkgTableBoxQty: "Pieces per Carton",
     pkgTableBoxQtyVal: "100 pcs",
-    countryTR: "Turkey",
+    countryTR: "Türkiye",
     countryDE: "Germany",
     countryUS: "United States",
     countryIT: "Italy",
@@ -7944,7 +8000,7 @@ const en = {
   // ─── Seller Mock Data ──────────────────────────────────────
   sellerMock: {
     companyName: "Anadolu Industrial Measurement Systems Inc.",
-    location: "Ankara, Turkey",
+    location: "Ankara, Türkiye",
     catElectricMeters: "Electric Meters",
     catWaterMeters: "Water Meters",
     catGasMeters: "Gas Meters",
@@ -8022,7 +8078,7 @@ const en = {
     heroTitle: "Anadolu Measurement Systems",
     heroSubtitle: "Reliable Solutions in Industrial Measurement Since 2004",
     companyDesc:
-      "Anadolu Industrial Measurement Systems has been a leading manufacturer of electric, water, and gas meters since 2004. Located in Ankara, Turkey, our 15,000m2 facility produces over 500,000 meters annually for markets across Africa, the Middle East, and Asia.",
+      "Anadolu Industrial Measurement Systems has been a leading manufacturer of electric, water, and gas meters since 2004. Located in Ankara, Türkiye, our 15,000m2 facility produces over 500,000 meters annually for markets across Africa, the Middle East, and Asia.",
     companyDescExt:
       "With IEC, MID, and CE certifications, we offer both standard and custom metering solutions. Our R&D team of 45 engineers continuously develops smart metering technologies including LoRa, NB-IoT, and GPRS communication modules.",
     fpProductionLine: "Automatic SMT Production Line",
@@ -8056,7 +8112,7 @@ const en = {
     featOem: "OEM/ODM Production",
     featService: "7/24 Technical Service",
     ciCountry: "Country/Region",
-    ciCountryVal: "Turkey",
+    ciCountryVal: "Türkiye",
     ciEstablished: "Year Established",
     ciBusinessType: "Business Type",
     ciBusinessTypeVal: "Manufacturer & Exporter",

@@ -159,7 +159,7 @@ export function HelpCenterHeader(opts: HelpCenterHeaderOptions = {}): string {
               class="absolute z-50 invisible inline-block w-64 bg-white border border-gray-200 rounded-md shadow-lg opacity-0 transition-opacity duration-150 motion-reduce:transition-none"
             >
               <div class="p-4">
-                <h3 class="text-sm font-bold text-gray-900 mb-3">${t("header.language") || "Dil"}</h3>
+                <p class="text-sm font-bold text-gray-900 mb-3">${t("header.language") || "Dil"}</p>
                 <select id="hc-lang-select" class="th-input th-input-sm cursor-pointer">
                   ${languageOptions
                     .map(

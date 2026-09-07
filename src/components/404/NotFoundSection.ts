@@ -1,3 +1,5 @@
+import { t } from "../../i18n";
+
 /**
  * 404 Not Found — Error Hero Section
  * SVG illustration + error message + action buttons
@@ -54,25 +56,19 @@ export function NotFoundSection(): string {
 
           <!-- Text + Buttons -->
           <div class="flex flex-col items-center sm:items-start gap-4">
-            <h1 class="text-xl sm:text-2xl font-bold text-secondary-900 dark:text-secondary-100">
-              Bir hata olustu
-            </h1>
-            <p class="text-sm sm:text-base text-secondary-500 dark:text-secondary-400 max-w-md">
-              Aradiginiz sayfa su anda kullanilamaz durumda
-            </p>
+            <h1 class="text-xl sm:text-2xl font-bold text-secondary-900 dark:text-secondary-100" data-i18n="notFound.title">${t("notFound.title")}</h1>
+            <p class="text-sm sm:text-base text-secondary-500 dark:text-secondary-400 max-w-md" data-i18n="notFound.desc">${t("notFound.desc")}</p>
             <div class="flex flex-wrap items-center justify-center sm:justify-start gap-3 mt-1">
               <button
                 onclick="history.back()"
                 class="th-btn"
-              >
-                Geri Don
-              </button>
+                data-i18n="notFound.back"
+              >${t("notFound.back")}</button>
               <a
                 href="/"
                 class="th-btn-outline"
-              >
-                Ana Sayfaya Git
-              </a>
+                data-i18n="notFound.home"
+              >${t("notFound.home")}</a>
             </div>
           </div>
 

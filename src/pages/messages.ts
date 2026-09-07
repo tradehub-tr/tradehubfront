@@ -18,6 +18,7 @@ import '../alpine/sidebar'
 import '../alpine/messages'
 import { renderSidebarColumn, initSidebar } from '../components/sidebar'
 import { MessagesLayout, initMessagesLayout } from '../components/messages'
+import { t } from '../i18n'
 import { requireAuth } from '../utils/auth-guard'
 
 await requireAuth();
@@ -25,7 +26,7 @@ await requireAuth();
 const appEl = document.querySelector<HTMLDivElement>('#app')!;
 appEl.classList.add('relative');
 appEl.innerHTML = `
-  <h1 class="sr-only">Mesajlarım</h1>
+  <h1 class="sr-only" data-i18n="pageHeading.dashboard_messages">${t("pageHeading.dashboard_messages")}</h1>
   <!-- Compact Dashboard Header -->
   <div id="sticky-header" class="sticky top-0 z-(--z-header) bg-white">
     ${TopBar({ compact: true })}

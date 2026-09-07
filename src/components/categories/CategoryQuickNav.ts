@@ -19,7 +19,7 @@ export function CategoryQuickNav(sections: CategorySection[]): string {
         <nav class="bg-white rounded-lg border border-gray-200 p-4 max-h-[calc(100vh-120px)] overflow-y-auto">
           <!-- Quick Nav -->
           <div class="border-b border-gray-200 pb-3 mb-4">
-            <h3 class="text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">${t("categoryPage.quickNav")}</h3>
+            <h2 class="text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">${t("categoryPage.quickNav")}</h2>
             <ul class="space-y-1 list-none p-0 m-0">
               ${sections.map((s, i) => `<li><a href="#cat-section-${i}" class="text-[13px] text-gray-600 hover:text-(--primary) hover:underline block py-0.5">${escapeHtml(s.title)}</a></li>`).join("")}
             </ul>
