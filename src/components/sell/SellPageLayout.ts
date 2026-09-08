@@ -20,6 +20,7 @@
 
 import heroImg from "../../assets/images/liman.avif";
 import { escapeHtml } from "../../utils/sanitize";
+import { isIosApp } from "../../utils/platform";
 import { t } from "../../i18n";
 import type {
   PricingPlan,
@@ -93,13 +94,19 @@ function HeroSection(): string {
               <a href="${SELL_HREF}" data-seller-cta class="th-btn th-btn-lg w-full lg:w-auto">
                 ${t("sellPage.applyAsSeller")} ${SVG_ARROW}
               </a>
-              <a href="#paketler" class="hidden lg:inline-flex th-btn-outline th-btn-lg">${t("sellPage.howItWorks")}</a>
+              ${
+                // iOS app modunda #paketler section'ı render edilmediğinden
+                // ona işaret eden çıpa linkleri de çıkar (AC-1).
+                isIosApp()
+                  ? ""
+                  : `<a href="#paketler" class="hidden lg:inline-flex th-btn-outline th-btn-lg">${t("sellPage.howItWorks")}</a>
               <a
                 href="#paketler"
                 class="lg:hidden appearance-none inline-flex items-center justify-center gap-1.5 min-h-11 text-sm font-semibold text-[#4a4a48] hover:text-[#1a1a1a] focus:outline-none transition-colors duration-150"
               >
                 ${t("sellPage.howItWorks")} ${SVG_CHEVRON_DOWN}
-              </a>
+              </a>`
+              }
             </div>
           </div>
           <div class="relative w-full lg:max-w-[720px] xl:max-w-[800px] 2xl:max-w-[860px] lg:me-auto xl:h-full">
@@ -127,10 +134,14 @@ function TrustStrip(): string {
   const cells = [
     { v: t("sellPage.trustCommissionValue"), l: t("sellPage.trustCommission") },
     { v: t("sellPage.trustApplyTimeValue"), l: t("sellPage.trustApplyTime") },
-    { v: t("sellPage.trustTrialValue"), l: t("sellPage.trustTrial") },
   ];
+  // iOS app modunda "ücretsiz deneme" teklifi gösterilmez (AC-1 — 'ücretsiz
+  // dene' satış yüzeyi ailesi); web'de mevcut 3 hücre aynen kalır.
+  if (!isIosApp()) {
+    cells.push({ v: t("sellPage.trustTrialValue"), l: t("sellPage.trustTrial") });
+  }
   return /* html */ `
-    <div class="grid grid-cols-3 divide-x divide-[#e8e6e0] bg-white border-y border-[#e8e6e0]">
+    <div class="grid ${cells.length === 3 ? "grid-cols-3" : "grid-cols-2"} divide-x divide-[#e8e6e0] bg-white border-y border-[#e8e6e0]">
       ${cells
         .map(
           (c) => `
@@ -943,6 +954,16 @@ function StickyCtaBar(plans: PricingPlan[]): string {
 // FAZ 4.1 — pricingData zorunlu: backend'den (veya cache'ten) gelir.
 // Plan listesi boşsa PricingSection kendi "yüklenemedi" mesajını gösterir.
 export function SellPageLayout(pricingData?: PricingPlansResponse): string {
+  // App Store uyumu (AC-1): iOS app modunda paket kartları, fiyat matrisi ve
+  // fiyatlı sticky CTA bar render edilmez — sayfa bilgi içeriğiyle (hero,
+  // güven bandı, başvuru CTA'sı) kalır. Başvuru ücretsizdir, fiyat içermez.
+  if (isIosApp()) {
+    return `
+      ${HeroSection()}
+      ${TrustStrip()}
+      ${FinalCtaSection()}
+    `;
+  }
   const plans = pricingData?.plans ?? [];
   const featuresMatrix = pricingData?.features_matrix;
   const trial = pricingData?.trial_config;

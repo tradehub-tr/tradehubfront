@@ -14,6 +14,7 @@ import { FloatingPanel } from '../components/floating'
 import { startAlpine } from '../alpine'
 import { SellPageLayout } from '../components/sell'
 import { t } from '../i18n'
+import { isIosApp } from '../utils/platform'
 import { routeToSellerFlow } from '../utils/sellerRouter'
 import {
   fetchPricingPlans,
@@ -56,7 +57,8 @@ function buildPage(data: PricingPlansResponse): string {
 }
 
 // Eğer cache yoksa fetch'i await et — boş card göstermeyelim.
-if (!pricingData.plans.length) {
+// iOS app modunda pricing section hiç render edilmediği için veri de çekilmez (AC-1).
+if (!pricingData.plans.length && !isIosApp()) {
   pricingData = await fetchPricingPlans();
 }
 
@@ -94,7 +96,7 @@ document.addEventListener('click', async (e) => {
 // kullanılmıyor. Backend'de değişiklik (CTA/oran/feature) her sayfa yüklemesinde
 // kullanıcıya yansır. Eski `!isCacheFresh()` guard backend invalidation ile
 // frontend cache arasında 5dk gecikme bırakıyordu.
-if (pricingData.plans.length) {
+if (pricingData.plans.length && !isIosApp()) {
   fetchPricingPlans().then((fresh) => {
     if (!fresh.plans.length) return;
     // updated_at değişmediyse re-render skip (gereksiz DOM swap)

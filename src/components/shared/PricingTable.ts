@@ -4,6 +4,7 @@
  */
 
 import { t } from "../../i18n";
+import { isIosApp } from "../../utils/platform";
 
 export interface PricingPlan {
   name: string;
@@ -21,6 +22,8 @@ interface PricingTableProps {
 }
 
 export function PricingTable({ plans, features }: PricingTableProps): string {
+  // App Store uyumu (AC-1): iOS app modunda paket/fiyat tablosu hiç render edilmez.
+  if (isIosApp()) return "";
   return `
     <!-- Desktop: table -->
     <div class="hidden md:block overflow-x-auto">

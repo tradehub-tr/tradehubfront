@@ -13,6 +13,10 @@ import type { FooterColumn } from "../../types/navigation";
 import { t, getCurrentLang } from "../../i18n";
 import { getSelectedCurrency, setSelectedCurrency } from "../../utils/currency";
 import { getSupportedCurrencies } from "../../services/currencyService";
+import { isIosApp } from "../../utils/platform";
+// Native bundle'da pretty URL'ler (/gizlilik vb.) nginx rewrite olmadan çözülemez;
+// import anında self-init olan interceptor bunları dist içi HTML yoluna çevirir (AC-15).
+import "../../utils/nativePrettyUrls";
 import { FooterPolicy } from "./FooterPolicy";
 
 /** Footer bölge seçicisinde sunulan UI dilleri (BottomNav ile tutarlı: tr/en). */
@@ -109,8 +113,21 @@ const footerColumnsI18n: FooterColumnI18n[] = [
   },
 ];
 
-function getFooterColumns(): FooterColumn[] {
+/**
+ * App Store uyumu (AC-1): iOS app modunda fiyat tablosuna işaret eden
+ * "Fiyat Tablosu" (/satici-ol#paketler) linki render edilmez. Diğer linkler
+ * (satıcı ol bilgi sayfası dahil) kalır.
+ */
+function visibleFooterColumnsI18n(): FooterColumnI18n[] {
+  if (!isIosApp()) return footerColumnsI18n;
   return footerColumnsI18n.map((col) => ({
+    ...col,
+    links: col.links.filter((link) => link.labelKey !== "footer.priceTable"),
+  }));
+}
+
+function getFooterColumns(): FooterColumn[] {
+  return visibleFooterColumnsI18n().map((col) => ({
     title: t(col.titleKey),
     links: col.links.map((link) => ({ label: t(link.labelKey), href: link.href })),
   }));
@@ -201,7 +218,9 @@ export function FooterLinks(): string {
     >
       <div class="container-boxed px-3 sm:px-4 py-6 sm:py-9">
         <div class="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-[repeat(5,minmax(0,1fr))_minmax(225px,1.3fr)] gap-x-5 gap-y-7 xl:gap-x-6">
-          ${footerColumnsI18n.map((col) => renderColumn(col)).join("")}
+          ${visibleFooterColumnsI18n()
+            .map((col) => renderColumn(col))
+            .join("")}
           ${renderTrustColumn()}
         </div>
       </div>

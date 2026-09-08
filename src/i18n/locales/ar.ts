@@ -5650,8 +5650,17 @@ const ar = {
       accountDeactivatedContactAdmin:
         "حسابك معطَّل. يُرجى التواصل مع دعم عملاء iStoc لإعادة تنشيطه.",
       goToLogin: "الانتقال إلى صفحة تسجيل الدخول",
+      backToHome: "العودة إلى الصفحة الرئيسية",
       confirmDeleteRequired: "يُرجى تحديد مربّع التأكيد.",
       deleteAccountFailed: "فشل حذف الحساب. يُرجى المحاولة مرة أخرى.",
+      // FE-2 — قائمة عواقب حذف الحساب (get_account_deletion_preview)
+      deletePreviewTitle: "عند حذف حسابك:",
+      deletePreviewSubscriptionEnd:
+        "ينتهي اشتراكك النشط فورًا؛ ولا يُردّ أي مبلغ عن الفترة المتبقية.",
+      deletePreviewStore: "يتم تعليق متجرك وإغلاقه أمام المبيعات.",
+      deletePreviewSubUsers: "يتم إلغاء وصول {{count}} من المستخدمين الفرعيين إلى اللوحة.",
+      deletePreviewKvkk:
+        "تُخفى هوية بياناتك الشخصية نهائيًا خلال {{days}} يومًا وفقًا لقانون حماية البيانات (KVKK).",
       featureComingSoon: "هذه الميزة قادمة قريبًا.",
       featureComingSoonDesc: "هذه الميزة غير متاحة بعد. يُرجى المحاولة مرة أخرى لاحقًا.",
 

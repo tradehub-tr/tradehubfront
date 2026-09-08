@@ -81,6 +81,22 @@ export function SettingsDeleteAccount(): string {
           </div>
           <p class="text-sm mb-5 m-0" style="color:var(--color-text-secondary)">${t("settings.deleteIrreversibleDesc")}</p>
 
+          <!-- FE-2 (Apple 5.1.1(v) + AC-12): silme öncesi akıbet listesi —
+               abonelik hemen sonlanır/iade yok, mağaza & alt kullanıcı etkisi,
+               15 günlük KVKK anonimleştirme penceresi. Veri: get_account_deletion_preview;
+               preview yüklenemezse KVKK maddesi fallback ile yine gösterilir. -->
+          <div class="mb-5 p-4 rounded-md border border-gray-200 bg-gray-50">
+            <p class="text-[13px] font-semibold mb-2 m-0" style="color:var(--color-text-primary)">${t("settings.deletePreviewTitle")}</p>
+            <ul class="list-none p-0 m-0 flex flex-col gap-1.5">
+              <template x-for="line in previewLines()">
+                <li class="flex items-start gap-2 text-[13px]" style="color:var(--color-text-secondary)">
+                  <span class="text-red-500 mt-0.5 flex-shrink-0">&#8226;</span>
+                  <span x-text="line"></span>
+                </li>
+              </template>
+            </ul>
+          </div>
+
           <div class="mb-4 max-sm:mb-3">
             <label class="block text-[13px] max-sm:text-xs font-medium mb-1.5" style="color:var(--color-text-secondary)">${t("settings.currentPassword")}</label>
             <input type="password" class="th-input th-input-md is-error max-w-[360px] max-sm:max-w-full" x-ref="deletePassword" placeholder="${t("settings.currentPassword")}" />
@@ -111,7 +127,7 @@ export function SettingsDeleteAccount(): string {
         <div class="max-w-[640px] mx-auto text-center py-4 max-sm:py-2">
           <h3 class="text-lg max-sm:text-base font-bold mb-2 m-0" style="color:var(--color-text-primary)">${t("settings.accountDeleted")}</h3>
           <p class="text-sm max-sm:text-[13px] mb-6 max-sm:mb-4 m-0" style="color:var(--color-text-secondary)">${t("settings.accountDeletedDesc")}</p>
-          <a href="/giris" class="th-btn max-sm:py-2 max-sm:text-[13px] no-underline inline-flex max-sm:w-full max-sm:justify-center">${t("settings.goToLogin")}</a>
+          <a href="/" class="th-btn max-sm:py-2 max-sm:text-[13px] no-underline inline-flex max-sm:w-full max-sm:justify-center">${t("settings.backToHome")}</a>
         </div>
       </div>
     </div>

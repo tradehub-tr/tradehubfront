@@ -762,15 +762,65 @@ Alpine.data("settingsConsentManagement", () => ({
   },
 }));
 
+/**
+ * Hesap silme onay ekranı verisi (BE-5 get_account_deletion_preview sözleşmesi).
+ * Apple 5.1.1(v): silme uygulama içinden, telefon/destek gerektirmeden başlar;
+ * preview alınamazsa akış BLOKLANMAZ (KVKK metni fallback ile gösterilir).
+ */
+interface AccountDeletionPreview {
+  has_store: boolean;
+  store_name: string | null;
+  active_subscription: { plan: string; status: string; current_period_end: string } | null;
+  sub_user_count: number;
+  grace_days: number;
+  consequences: string[];
+}
+
 Alpine.data("settingsDeleteAccount", () => ({
   step: 1,
   error: "",
   loading: false,
   reason: "",
+  preview: null as AccountDeletionPreview | null,
 
   goToStep2() {
     this.reason = (this.$refs as Record<string, HTMLSelectElement>).reason.value;
     this.step = 2;
+    void this.loadPreview();
+  },
+
+  async loadPreview() {
+    try {
+      const res = await api<{ message: AccountDeletionPreview }>(
+        "/method/tradehub_core.api.v1.identity.get_account_deletion_preview"
+      );
+      this.preview = res.message ?? null;
+    } catch {
+      // Preview alınamazsa silme akışı engellenmez — previewLines() KVKK
+      // metnini varsayılan 15 günle gösterir (AC-12).
+      this.preview = null;
+    }
+  },
+
+  /**
+   * Onay ekranı madde listesi — abonelik akıbeti (hemen sonlanır, iade yok),
+   * mağaza/alt kullanıcı etkisi ve KVKK anonimleştirme penceresi.
+   * i18n client-side üretilir (backend consequences yalnız Türkçe).
+   */
+  previewLines(): string[] {
+    const p = this.preview;
+    const lines: string[] = [];
+    if (p?.active_subscription) {
+      lines.push(t("settings.deletePreviewSubscriptionEnd"));
+    }
+    if (p?.has_store) {
+      lines.push(t("settings.deletePreviewStore"));
+    }
+    if (p && p.sub_user_count > 0) {
+      lines.push(t("settings.deletePreviewSubUsers", { count: p.sub_user_count }));
+    }
+    lines.push(t("settings.deletePreviewKvkk", { days: p?.grace_days ?? 15 }));
+    return lines;
   },
 
   async confirmDelete() {
@@ -793,11 +843,12 @@ Alpine.data("settingsDeleteAccount", () => ({
         method: "POST",
         body: JSON.stringify({ password, reason: this.reason }),
       });
-      // Account disabled in DB — now logout and redirect
+      // Account disabled in DB — now logout and redirect (FE-2: başarıda
+      // logout & anasayfaya dönüş; tekrar giriş backend'de engellenir).
       this.step = 3;
       await logout();
       setTimeout(() => {
-        window.location.href = "/giris";
+        window.location.href = "/";
       }, 3000);
     } catch (err) {
       const msg = err instanceof Error ? err.message : "";
