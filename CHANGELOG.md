@@ -1,3 +1,16 @@
+## [v2.4.0-alpha.37] - 2026-09-08 ALPHA
+
+Bu surum alpha.istoc.com'da gelistirme asamasindadir.
+
+### Eklendi
+- feat(abonelik): iOS satış yüzeyi gizleme + hesap silme onay akışı (@boraydeger32)
+  - capacitor.config.ts: ios.appendUserAgent "istocApp/ios" (panel webview tespitinin ortak sinyali) + YENİ utils/platform.ts isIosApp()
+  - iOS modunda satış yüzeyleri render edilmez: PricingTable, SellPageLayout fiyat/paket bölümleri + trial CTA'ları + sticky bar, sell.ts pricing fetch'i, footer "Fiyat Tablosu" linki (anti-steering, TR storefront)
+  - Hesap silme: get_account_deletion_preview ile onay ekranı (abonelik akıbeti + mağaza/alt kullanıcı etkisi + 15 gün KVKK penceresi); telefon/ destek adımı yok (Apple 5.1.1(v)); başarıda logout + anasayfa
+  - YENİ utils/nativePrettyUrls.ts: native bundle'da uzantısız URL'ler SPA fallback'ine düşüyordu — yasal sayfalar dahil statik pretty linkler artık iOS'ta çalışıyor (TestFlight doğrulaması bekliyor)
+  - 4 locale'e yeni anahtarlar; 10 vitest iOS gating bekçisi
+
+---
 ## [v2.4.0-alpha.36] - 2026-09-07 ALPHA
 
 Bu surum alpha.istoc.com'da gelistirme asamasindadir.
