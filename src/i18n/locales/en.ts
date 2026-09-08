@@ -5658,8 +5658,17 @@ const en = {
       accountDeactivatedContactAdmin:
         "Your account is deactivated. Please contact iStoc customer support to reactivate it.",
       goToLogin: "Go to login page",
+      backToHome: "Back to Home",
       confirmDeleteRequired: "Please check the confirmation box.",
       deleteAccountFailed: "Failed to delete account. Please try again.",
+      // FE-2 — account deletion confirmation preview (get_account_deletion_preview)
+      deletePreviewTitle: "When you delete your account:",
+      deletePreviewSubscriptionEnd:
+        "Your active subscription ends immediately; no refund is issued for the remaining period.",
+      deletePreviewStore: "Your store is suspended and closed to sales.",
+      deletePreviewSubUsers: "Panel access for {{count}} sub-user(s) is revoked.",
+      deletePreviewKvkk:
+        "Your personal data is permanently anonymized within {{days}} days in accordance with KVKK.",
       featureComingSoon: "This feature is coming soon.",
       featureComingSoonDesc: "This feature is not yet available. Please try again later.",
 

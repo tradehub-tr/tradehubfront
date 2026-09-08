@@ -37,6 +37,11 @@ const config: CapacitorConfig = {
     contentInset: "automatic",
     limitsNavigationsToAppBoundDomains: false,
     preferredContentMode: "mobile",
+    // App Store uyum bayrağı (Guideline 3.1.1/3.1.3 anti-steering): iOS webview
+    // UA'sına build-time işaret ekler. /panel'de yüklenen admin-panel dahil tüm
+    // web yüzeyleri bu işaretle iOS app modunu tespit eder (bkz. src/utils/platform.ts
+    // isIosApp). Güvenlik sınırı DEĞİL, yalnız uyum bayrağı.
+    appendUserAgent: "istocApp/ios",
   },
   android: {
     allowMixedContent: false,

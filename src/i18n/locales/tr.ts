@@ -5629,8 +5629,17 @@ const tr = {
       accountDeactivatedContactAdmin:
         "Hesabınız pasif. Yeniden etkinleştirmek için iStoc müşteri hizmetlerine başvurun.",
       goToLogin: "Giriş sayfasına git",
+      backToHome: "Ana Sayfaya Dön",
       confirmDeleteRequired: "Lütfen onay kutusunu işaretleyin.",
       deleteAccountFailed: "Hesap silinemedi. Lütfen tekrar deneyin.",
+      // FE-2 — silme onay ekranı akıbet listesi (get_account_deletion_preview)
+      deletePreviewTitle: "Hesabınızı sildiğinizde:",
+      deletePreviewSubscriptionEnd:
+        "Aktif aboneliğiniz hemen sonlandırılır; kalan süre için iade yapılmaz.",
+      deletePreviewStore: "Mağazanız askıya alınır ve satışa kapatılır.",
+      deletePreviewSubUsers: "{{count}} alt kullanıcının panel erişimi kapanır.",
+      deletePreviewKvkk:
+        "Kişisel verileriniz {{days}} gün içinde KVKK kapsamında kalıcı olarak anonimleştirilir.",
       featureComingSoon: "Bu özellik yakında kullanıma sunulacaktır.",
       featureComingSoonDesc: "Bu işlev henüz aktif değildir. Lütfen daha sonra tekrar deneyin.",
 
