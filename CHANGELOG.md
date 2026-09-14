@@ -1,3 +1,13 @@
+## [v2.5.1-alpha.1] - 2026-09-14 ALPHA
+
+Bu surum alpha.istoc.com'da gelistirme asamasindadir.
+
+### Duzeltildi
+- fix(ios): login istemcisi merkezi API tabanını kullanıyor (@boraydeger32)
+  - auth.ts login() base URL'i yerel hesaplayıp NATIVE_API_BASE'i atlıyordu; global fetch yaması tesadüfen kurtarıyordu. api.ts'in BASE_URL'ü export edilip login ona bağlandı — örtük bağımlılık kalktı
+  - 4 yeni base-çözümleme testi
+
+---
 ## [v2.5.0] - 2026-09-14 PROD
 
 Bu surum istoc.com'da yayindadir.
