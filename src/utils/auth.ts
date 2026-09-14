@@ -3,7 +3,7 @@
  * All auth-related API calls go through the api() wrapper from utils/api.ts.
  */
 
-import { api, frappeLogout, clearCsrfCache } from "./api";
+import { api, BASE_URL, frappeLogout, clearCsrfCache } from "./api";
 
 const FRAPPE_BASE = import.meta.env.VITE_FRAPPE_BASE || "";
 
@@ -144,9 +144,11 @@ export function invalidateAuthCache(): void {
 
 /* ── Login / Logout ─────────────────────────────────── */
 
-/** Login with email and password via Frappe */
+/** Login with email and password via Frappe.
+ * Base, api.ts'in merkezi BASE_URL'inden gelir (öncelik: native base → env →
+ * relative /api) — buradaki yerel hesap NATIVE_API_BASE'i atlıyordu; iOS
+ * bundle'da isteği yalnız global fetch patch'i tesadüfen kurtarıyordu. */
 export async function login(email: string, password: string): Promise<LoginResponse> {
-  const BASE_URL = import.meta.env.VITE_API_URL || "/api";
   const res = await fetch(`${BASE_URL}/method/login`, {
     method: "POST",
     credentials: "include",
