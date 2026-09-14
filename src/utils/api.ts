@@ -3,7 +3,10 @@ import { getCurrentLang, t } from "../i18n";
 import { NATIVE_API_BASE } from "./nativeHttp";
 
 // Native bundle (App Store) modunda mutlak backend base; web/live-reload'da relative /api.
-const BASE_URL = NATIVE_API_BASE || import.meta.env.VITE_API_URL || "/api";
+// EXPORT: base çözümünün tek kaynağı burasıdır — raw fetch yapan istemciler
+// (auth.ts login gibi) kendi base'ini hesaplamak yerine bunu import eder;
+// aksi hâlde NATIVE_API_BASE atlanır ve iOS bundle'da istek kırılır.
+export const BASE_URL = NATIVE_API_BASE || import.meta.env.VITE_API_URL || "/api";
 
 /**
  * Aktif içerik dilini bir GET endpoint URL'ine `lang` query param olarak ekler.
