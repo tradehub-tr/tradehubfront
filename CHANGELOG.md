@@ -1,3 +1,395 @@
+## [v2.4.0-rc.1] - 2026-09-14 RC
+
+Bu surum rc.istoc.com'da onay asamasindadir.
+
+### Eklendi
+- feat(cart): tek eksenli ürünler için satır bazlı sepet ekle (@ahmeetseker)
+  - Tek varyant ekseninde her seçeneği fiyat, stok ve adet kontrolüyle satır olarak göster
+  - Varyant bazlı fiyatları sepete satır özelinde taşıyarak toplamları doğru hesapla
+  - Kargo seçimi olmayan ürünlerde boş modal yerine mevcut görüşülecektir akışını koru
+- feat(cart): tutar değişimlerine number-flow animasyonu ekle (@TurksabYonetim)
+  - Sepet sayfası ve drawer tutarlarını number-flow slotlarıyla render et
+  - Para birimi format kurallarını ortaklaştırarak animasyonlu ve düz gösterimi hizala
+  - Drawer yeniden açıldığında eski ürün tutarlarından kalan animasyon durumunu sıfırla
+- feat(theme): marka rengini iSTOC turuncusuna (#ff8600) çevir, gri zeminleri #f9f9f9 yap (@TurksabYonetim)
+  - @theme primary skalası #ff8600 merkezli yeniden üretildi (50-950)
+  - Tüm hardcoded sarı fallback'ler (#f5b800 ailesi, ~420 geçiş) turuncu karşılıklarıyla eşlendi
+  - Link/focus rengi #cc9900 → #cc6b00, hover #b38600 → #b35e00
+  - Sayfa zemin grileri (#f0f2f5, cart/checkout #fafafa, --color-surface-muted) → #f9f9f9
+- feat(theme): turuncu zeminli butonlarda yazı rengini beyaza çevir (@TurksabYonetim)
+  - --btn-text ve --btn-hover-text #1a1a1a → #ffffff (th-btn tüm CTA'lar)
+  - Elle yazılmış koyu yazı + turuncu zemin kombinasyonları beyaza çevrildi: HeroSidePanel, SellPageLayout, CategoryShowcase, SubHeader, FooterPolicy
+- feat(theme): PWA manifest ve meta theme-color'ı marka turuncusuna (#ff8600) güncelle (@TurksabYonetim)
+- feat(pdm): mobil Seçenekler sheet'ini masaüstü drawer'la eşitle (@TurksabYonetim)
+  - Adet stepper'ı artık masaüstündeki kuralla aynı: sellInMoqMultiples ürünlerde adım = MOQ (örn. 96'şar), diğerlerinde 1 (önceden hep 1'di).
+  - Ara toplam tutarı masaüstündeki number-flow 'odometre' animasyonuyla güncelleniyor (moneyFlow utility, optsheet: anahtar grubu).
+  - Detaylar bölümünün başına eksik olan Açıklama (rich HTML) bölümü eklendi — collapsibleSection + sanitizeRichHtml, tipografi ProductDescription ile birebir.
+- feat(logistics): üretilmiş API tip tanımları eklendi (@aliiball)
+  - Lojistik API sözleşmesinden üretilen tip tanımları eklendi; yanıt zarfı, hata kodları, numaralandırmalar ve on katalog arayüzü
+  - Yanlış alan adı artık derleme zamanında yakalanıyor
+  - Dosya üretilmiştir, elle düzenlenmez; kaynağı tradehub_core sözleşmesidir
+- feat(lojistik): sozlesme tipleri storefront'a senkronlandi (@aliiball)
+  - 32 yeni tip: Shipment (+items/packages/legs/events), ProofOfDelivery, ReturnRequest, PriceQuote, PricingRule, ConnectionTest, IntegrationLog,
+  - Uretilmis dosya: tradehub_core/scripts/gen_logistics_types.py --sync
+  - S1-S13 storefront lojistik ekranlari bu tipleri kullanacak
+- feat(storybook): storefront component gelistirme ortami kuruldu (@aliiball)
+  - @storybook/html-vite 10.5.7 (Alpine + Tailwind v4 + cok sayfali Vite)
+  - Storybook proje vite.config.ts'ini OKUYOR: VitePWA, SEO ve URL rewrite eklentileri siziyordu, iframe.html'e service worker kaydi enjekte ediliyordu. Ada gore elendiler; tailwindcss() stil zinciri icin zorunlu
+  - Alpine bir kez baslatiliyor; startAlpine() yerine elle, cunku o fonksiyon initTracking() de cagiriyor
+  - Duman testi story'si: Tailwind utility, proje siniflari, Alpine reaktivite
+  - Uretim bagimliliklarina yeni zafiyet gelmedi (kurulum oncesi/sonrasi ayni)
+- feat(lojistik): storefront mock verileri eklendi (@aliiball)
+  - 12 fixture, tradehub_core ureticisinden senkron (maskelenmiş alt küme)
+  - Elle duzenlenmez; kaynak scripts/gen_logistics_types.py
+  - 12 fixture (filtreli + maskeli alt kume), tradehub_core ureticisinden
+- feat(i18n): shipment ad alanı dört locale'e eklendi (@aliiball)
+  - Mevcut logistics ad alanı navlun pazaryerine ait (deniz/hava/kara, forwarder)
+  - Kendi shipmentStatus/pending/delivered anahtarları var, birleştirmek iki kavramı karıştırırdı
+  - ar ve ru şimdilik İngilizce yer tutucu (// TODO çeviri)
+- feat(shipment): S1-S13 storefront lojistik ekranları eklendi (@aliiball)
+  - Alıcı: çoklu sevkiyat, randevu, teslim onayı, takip, bildirim, teslim özeti, iade, checkout
+  - Satıcı: sevkiyat oluşturma, paketleme, etiket, iade kuyruğu
+  - Teslim kodunun DEĞERİ hiçbir yerde gösterilmiyor, yalnız durumu
+  - Ödeme tamamlanmadan onay formu hiç render edilmiyor (devre dışı buton değil)
+  - Ham taşıyıcı kodu ve olay kaynağı alıcıdan süzülüyor
+  - Platform maliyet alanları satıcı ekranlarında yok
+  - İade kapanışı satıcıda yok, platform kararı
+- feat(storybook): S1-S13 story'leri ve fixture köprüsü eklendi (@aliiball)
+  - 68 story, veri üretilen fixture'lardan türetiliyor, elle kurulmuyor
+  - Alan adı sözleşmeden saparsa story de sapsın diye
+  - S6 bildirim akışı elle yazıldı: sözleşmede gönderilmiş-bildirim varlığı yok
+- feat(media): tarayıcıda görsel WebP + video WebM/MP4 sıkıştırma (WP1) (@TurksabYonetim)
+- feat(media): uploader.ts kuyruğa girmeden prepareMedia'dan geçirir (WP1) (@TurksabYonetim)
+- feat(shipment): S1-S13 ekranlari icin 6 sayfa acildi (@aliiball)
+  - Alici: sevkiyat takibi, iade taleplerim, iade talebi, bildirim tercihleri
+  - Satici: sevkiyat yonetimi, iade karari
+  - shipmentService: hangi ucun gercekten oldugu tek yerde; olmayanlar NotWiredError firlatiyor, bos dizi dondurmuyor
+  - NotWiredNotice: bos liste yerine sebep — \"kayit yok\" ile \"henuz
+  - dashboardShell: dort sayfa ayni iskeleti ve 8 init cagrisini tekrar
+  - Sayfa modulu buyer-returns adiyla: returns adi Iade Politikasi hukuki sayfasina ait
+- feat(shipment): lojistik ekranlari icin ornek veri modu eklendi (@aliiball)
+- feat(media): akıllı video sıkıştırma — yalnız MB düşürüyorsa çevir (@TurksabYonetim)
+  - Ön kontrol: kaynak ≤1280px VE ≤2Mbps ise dokunma (çevirmek büyütürdü)
+  - Son kontrol: encode çıktısı orijinalden küçük değilse orijinali kullan
+  - Kalite-bazlı encode (Quality medium, sabit bitrate değil) → düşük-bitrate şişmez
+  - 60sn sabit limit kalktı; 3dk üstü verimsiz video sunucuya devredilir
+- feat(e2e): paketleme ve etiket ekranları için 11 senaryo eklendi (@aliiball)
+  - Frappe cookie-login + docker; tur localStorage'dan kapatılıyor
+  - Gevşek regex komşu öğeye tıkladığı için locator'lar kapsayıcıya scope'lu
+- feat(e2e): kontrast denetimi ve UI/UX regresyon testleri eklendi (@aliiball)
+  - Kontrast: 4 ekran x 2 tema x (duran + hover), efektif zemin harmanlanarak
+  - Renk ayrıştırıcı canvas tabanlı; rgb() regex'i Tailwind v4'ün oklch()'ini kaçırıyordu
+  - 9 yeni senaryo: menü, miktar kutusu, seçim çubuğu, filtre rozeti, taşma, barkod çözme
+- feat(e2e): teslim kanıtı ekranları için 14 senaryo eklendi (@aliiball)
+  - Kanıt kaydedince kova değişimi, kısmi teslimde zorunlu tutarsızlık
+  - Ödeme bloklu kayıtta teslim düğmesinin hiç çizilmediği doğrulanıyor
+  - Teslim kodunun değerinin hiçbir ekranda görünmediği doğrulanıyor
+  - Satıcı menü beklentisi G0 rol matrisine göre güncellendi
+- feat(e2e): kontrast denetimi 20 ekran ve 8 sekmeyi kapsıyor (@aliiball)
+  - Denetim yalniz 4 ekrani olcuyordu; hazir 20 ekran ve sevkiyat detayinin 8 sekmesi eklendi
+  - Sekmelerin ayri rotasi yok, sekme cubugu uzerinden geziliyor
+  - Rapor uretimi icin kalici tarama araci eklendi; onceki surumu gecici klasordeydi ve kaybolmustu
+  - Test sureleri dosya icinde ayarlandi, genel varsayilan bozulmadi
+- feat(e2e): kontrast denetimi görünüm modlarını da ölçüyor (@aliiball)
+  - Tarama her ekrani yalniz varsayilan modunda aciyordu; kart, pano ve liste dallari hic olculmemisti
+  - Acilinca uc ihlal cikti, biri koyu temada 1:1 (metin zeminle ayni renk)
+  - Kapsam 879 metin ogesinden 1442'ye cikti
+- feat(e2e): kanıt kuyruğu görünüm modları için 6 senaryo eklendi (@aliiball)
+  - Birim testler statik: dugmeye BASILDIGINDA ekranin degistigini yalniz tarayici gosterir
+  - Mod kaliciligi sinaniyor; addInitScript her navigasyonda kostugu icin sessionStorage ile korundu
+- feat(product-media): HLS video, LCP preload ve manifest tabanlı responsi (@TurksabYonetim)
+  - Ürün video oynatıcısını hls.js ile HLS-farkındalıklı hâle getir (poster, önizleme klibi, autoplay kademesi) çünkü backend artık HLS master/optimize mp4/önizleme türevleri sunuyor; hls.js yalnız gerçek .m3u8 oynatıldığında dinamik import ile iner.
+  - StoreHeader ve CompanyProfile video oynatıcılarını yeni `x-video-src` Alpine direktifine geçir ki aynı HLS bağlama mantığı tekrarlanmasın.
+  - Ürün galerisi ve ürün listeleme kartlarına manifest tabanlı `ResponsiveImage` (`<picture>`/`srcset`) ve LCP preload akışı ekle; soğuk önbellekte ilk boyama kısa bir tavan kadar manifesti bekler, yetişmezse ham `<img>` basılıp manifest gelince yerinde yükseltilir (rapor 91 §2.5, rapor 95).
+  - `categories.html` sayfasını Lighthouse ölçüm kapsamına al ve ürün detay URL'ine gerçek bir ilan kimliği ekle; ikisi de ölçülmeyen/yanlış ölçülen sayfa yüzünden LCP/CLS verisinin geçersiz çıktığı 2026-08-20 koşumunda tespit edildi (docs/reports/62).
+  - Kategori grid konteynerine `min-h-[75vh]` ekleyerek ölçülen 0,5396 CLS'in kaynağı olan geç yüklenen footer kaymasını önle.
+  - `/files/` ve `/private/files/` nginx bloklarına T-131 medya sertleştirmesi ekle: SVG'lerde koşullu CSP sandbox, HTML/JS uzantılarına Content-Disposition: attachment, nosniff'i edge'de sahiplenme, ve enumeration'ı yavaşlatmak için limit_req.
+  - RUM (Real User Monitoring) istemcisini `web-vitals` ile tüm MPA girişlerinden ortak `lib/rum/boot` üzerinden aç (T-123); backend ucu zaten kurulu.
+  - CSP sözleşme testini `replaceAll`e çevir çünkü T-131 sonrası şablonda iki özdeş DENY satırı oluştu ve tekli `replace` mutasyonu yakalayamıyordu.
+- feat(medya): manifest tabanlı responsive görsel/video teslimi ve RUM izl (@TurksabYonetim)
+  - Ürün medyası için HLS video, LCP preload ve manifest tabanlı responsive image/video boyutlandırma eklendi; amaç sayfa yükleme performansını ve Core Web Vitals'ı iyileştirmek
+  - Gerçek kullanıcı izleme (RUM) alt sistemi eklendi (collector, sampling, routePhysical, transport, sha256) — LCP ve medya teslim metriklerini üretimde ölçmek için
+  - ListingCard, ProductImageGallery, ProductVideoSection ve ProductListingGrid için ilgili unit ve e2e testleri eklendi
+  - Lighthouse CI çalıştırma sonuçları (.lighthouseci/) commit'e dahil edildi
+- feat(test): fiyatlandırma E2E senaryoları eklendi (@aliiball)
+  - Admin 17, satıcı 8 senaryo; kontrast yüzeyi 20'den 24 ekrana çıktı
+  - Hover kontrast taraması geçişleri kapatıyor: ara renk ölçüldüğü için aynı ihlal bir koşuda görünüp diğerinde kayboluyordu
+  - Etiket ekranındaki iki tablo erişilebilir adla ayrıştırıldı
+  - Şartlı atlama kaldırıldı: teklifler asenkron geldiği için count() ile atlayan senaryo K8'i hiç doğrulamıyordu
+- feat(seo): expose product media metadata (@Metin Bektemur)
+- feat(media): add stable landing and responsive delivery (@Metin Bektemur)
+- feat(i18n): lojistik sözlüğü tamamlandı, ar/ru'ya çevrildi (@aliiball)
+  - 07-FE ve satıcı sevkiyat ekranı için 13 yeni anahtar, dört dilde
+  - shipment.* bloğunun tamamı Arapça ve Rusçaya çevrildi (229 anahtar)
+  - Kalan İngilizce metinler kasıtlı: marka adları, placeholder'lar, IBAN/MOQ
+  - TODO çeviri işaretleri kaldırıldı
+- feat(lojistik): alıcı teslim alma akışı eklendi (07-FE) (@aliiball)
+  - Randevu talebi ve teslim kodu blokları mock üzerinde uçtan uca çalışıyor
+  - Kod süresi sayacı ve süre dolumu ekranı eklendi; kilit ekranından ayrı
+  - Bloklar yalnız Buyer Pickup / Seller Delivery sevkiyatlarında çiziliyor
+  - Siparişler sayfasına Teslim al girişi eklendi
+  - Uç yokken form yerine bağlı değil kutusu çiziliyor, ölü düğme kalmadı
+  - Teslim onayı formu Alpine modülü import edilmediği için hiç çalışmıyordu
+  - Pickup uçları sözleşmedeki adlarla tanımlandı (api.v1.pickup.*)
+  - 29 birim, 13 E2E testi
+- feat(lojistik): storefront ekran kalite denetimi eklendi (@aliiball)
+  - 46 test: ham i18n anahtarı sızıntısı, boş durum, ölü buton, erişilebilirlik
+  - Ölü köprü denetimi: window.__th* arayan her modülün tanımı olmalı
+  - Bilinen eksikler it.fails ile sahibiyle kayıtlı; bağlandıkları gün uyarır
+  - ReturnRequest kapalı pencere uyarısı ekran okuyucuya duyuruluyor
+- feat(lojistik): satıcı sevkiyat akışı mock üzerinde kapatıldı (@aliiball)
+  - Sevkiyat oluşturma ve koli girişi köprüleri bağlandı
+  - Kanal, taşıyıcı ve paket tipi listeleri katalog fixture'larından besleniyor
+  - Kalan miktarı sıfır olan kalem formu sessizce kilitliyordu, filtrelendi
+  - Oluşturulan sevkiyat kendi ekranında görünüyor
+  - Kalemler varsayılan seçili geliyor
+  - Paketleme kilidi ekran okuyucuya duyuruluyor
+  - 13 birim, 4 E2E testi
+- feat(product): video slaytlarına poster ve altyazı track'i (@ahmeetseker)
+- feat(product): medya izleme sayfası ve ürün dokümanları bloğu ekle (@ahmeetseker)
+  - `/medya/v/<slug>` izleme sayfası eklendi (Task 4): backend `get_watch_page` tek veri kaynağı, video player + transkript + lisans bilgisi + ilişkili ürünler basıyor; nginx `/medya/v/…` isteklerini SEO enjeksiyonu için `page_resolver.render_media_watch`'a proxy'liyor
+  - Ürün detay sayfasına "Dokümanlar" sekmesi eklendi (Task 5): katalog/ sertifika/kılavuz/teknik föy dosyaları `ProductCertificates` ile aynı desende (liste boşsa blok hiç render edilmez), tüm alanlar `escapeHtml`/ `sanitizeUrl`'den geçiyor
+  - Promo videoya "sayfasında izle" linki eklendi (varyant videosunda basılmaz)
+  - `listingService`e `videoWatchUrl` ve `documents` alan eşlemeleri eklendi, boş/güvensiz URL'li satırlar filtreleniyor
+  - 4 dilde (tr/en/ru/ar) yeni i18n anahtarları eklendi
+- feat(lojistik): alıcı bildirim ve teslim kanıtı mock'u eklendi (@aliiball)
+  - Yedi senaryo anahtarı, localStorage kalıcılığı, rol süzgeci
+  - __thSetNotificationPref köprüsü bağlandı: ekran 13 Ağustos'tan beri çiziliyordu ama anahtar hiçbir modda kaydetmiyordu
+  - Ortam kapısı (isMockMode): mock veri canlıya sızmıyor
+  - POD'un sözleşmede olmayan alanları override tablosunda (K-F) — varlık 14-BE'ye ait, sözleşme genişletilmedi
+  - listNotifications ve markNotificationRead stub'ları (sözleşme §2.3, §2.4)
+  - Sözleşme: docs/lojistik/12-FE-VERI-SOZLESMESI.md
+- feat(lojistik): bildirim tercihleri ve teslim kanıtı ekranları (@aliiball)
+  - ProofOfDelivery: kanıt yok / medya yetkisi yok / eksik teslim üç ayrı hâl; iç operasyon damgaları (source, recorded_by) alıcıya gösterilmiyor
+  - Tercih anahtarı iyimser güncelleniyor, hata gelirse eski değere dönüyor
+  - Kanal etiketi shipment.notifyChannel.* ad alanından: eskiden sevkiyat kanalı bloğundan çağrılıyordu ve ekranda ham 'email' yazıyordu
+  - Okunmuşluk read_at'ten türetiliyor; okunmamış bildirime tıklamak onu okundu işaretliyor
+  - Mock modda ?name= artık dikkate alınıyor — sevkiyat bağlantıları ölüydü
+  - Dört dile 38 i18n anahtarı (notifyChannel, pod blokları)
+- feat(test): 12-FE birim ve E2E testleri (@aliiball)
+  - ProofOfDelivery: üç hâlin birbirine karışmadığını kilitliyor
+  - E2E: K1…K13 kabul senaryoları, masaüstü ve mobil
+  - Gerçek mod testi: ?mock=0 ile sahte veri görünmüyor
+- feat(test): mock disiplini denetimleri ve kırık kaynak taraması (@aliiball)
+  - ekranKalitesi: her mock modülü ortam kapısı taşıyor mu, var olmayan dosyaya işaret ediyor mu, tanımlı köprü çağrılıyor mu
+  - Denetim yazıldığı gün iki kusur buldu: pickup ve seller mock'ları ortam kapısı taşımıyordu, koruma sayfa katmanındaydı
+  - barcodeSeed: koli kodundan deterministik data: URI barkod ve etiket — 13-FE etiket ekranında üç barkod da kırıktı (A11'in etiket karşılığı)
+  - storybook-kirik-tarama: 404 dönen statik varlıkları tarar; kasıtlı kırıklar BEKLENEN listesinde gerekçesiyle
+  - Sözleşme: GOREV-TAMAMLAMA-SOZLESMESI.md §2.4, §6
+- feat(lojistik): storefront iade talebi akışı ve takip ekranı eklendi (@aliiball)
+  - sipariş kartına iade başlatma düğmesi: forma kod tabanında hiçbir bağlantı yoktu, ekran yalnız adres elle yazılarak açılıyordu
+  - girilen miktar artık gönderiliyor; x-model yoktu ve kısmi iade sessizce tam iadeye dönüyordu
+  - iade takibi ekranı sıfırdan: zaman çizgisi, iade etiketi, kalem kırılımı
+  - pencere ve nedenler sunucudan (get_return_eligibility); windowOpen sabiti kaldırıldı
+  - alıcı artık kendi kaydını görüyor, satıcı karar bağlantısı çizilmiyor
+  - kontrol başlamadan ulaşan/kabul edilen miktar gösterilmiyor
+  - __thCreateReturn köprüsü bağlandı, mock uç bazında bayraklı
+- feat(lojistik): mock alanları sözleşme denetimine bağlandı (@aliiball)
+  - Mock modüllerinin ürettiği her alan şemayla karşılaştırılıyor
+  - Storefront'un andığı her modülün sözleşmede tanımlı olması denetleniyor
+  - BILINEN_BORCLAR boşaldı: altı uç adı düzeltilince muafiyet bayatladı
+  - Üretilmiş fixture ve tip kopyaları sözleşmeyle senkronlandı
+- feat(sepet): misafir sepeti birleştirme akışı ekle (@ahmeetseker)
+  - Giriş sonrası misafir ve hesap sepetlerini çakışma durumuna göre birleştirir
+  - Sepet ve ödeme özetlerinde ortak ürün küçük-resim şeridi kullanır
+  - Görselsiz ürünlerde kırık görsel yerine boş ya da ad tabanlı yedek gösterir
+  - Ürün listeleme filtrelerini kategori ağacı ve az sonuç dolgusu ile iyileştirir
+  - Sayfa başlık hiyerarşisini ve çok dilli görünür metinleri düzenler
+- feat(test): gelecek tarihli sabitler için denetim eklendi (@aliiball)
+  - Pickup testi sabit 2026-09-02 yazıyordu; o gün geçince dört test düştü
+  - Geçmiş tarih fixture'dır, serbest; bugünden ileri sabit zaman bombasıdır
+  - Sabit gün hafta sonunu atlayan dinamik güne çevrildi
+- feat(test): panel lojistik testleri mobil görünümde de koşuyor (@aliiball)
+  - Mobilde menü kalemleri href taşımıyor; "Daha → Lojistik" panelinden okunup yola geri çevriliyor
+  - Form sekmeleri mobilde chip navigasyonuna düşüyor (hidden lg:block)
+  - Kuyruk iddiaları görünümden bağımsız kancaya bağlandı
+  - Kanban taşma iddiası geniş ekrana kapsamlandı: 390px'te dört sütun zaten sığmaz, yatay kaydırma orada beklenen davranış
+- feat(test): lojistik metinleri dört dilde denetleniyor (@aliiball)
+  - shipment ad alanının tr/en/ru/ar bütünlüğü; eksik ve fazla anahtar kapısı
+- feat(test): dayanıklılık, monkey ve form fuzz turları eklendi (@aliiball)
+  - Monkey tohumlu ve adım+süre tavanıyla sınırlı; kaç adım koştuğunu raporluyor, anlamlı adım koşulmazsa kırılıyor
+  - Fuzz altı düşmanca girdi deniyor (script yükü, 10.000 karakter, RTL, yol geçişi); XSS yükünün çalışmadığı ve ekranın ayakta kaldığı ölçülüyor
+  - Dayanıklılık: çift tıklama, geri tuşu, 500 yanıtı, reddedilen kayıt
+  - İade mock'unun hiç denenmemiş kapali senaryosu teste bağlandı; kontrol öncesi miktar metni doğru aranıyor
+- feat(abonelik): iOS satış yüzeyi gizleme + hesap silme onay akışı (@boraydeger32)
+  - capacitor.config.ts: ios.appendUserAgent "istocApp/ios" (panel webview tespitinin ortak sinyali) + YENİ utils/platform.ts isIosApp()
+  - iOS modunda satış yüzeyleri render edilmez: PricingTable, SellPageLayout fiyat/paket bölümleri + trial CTA'ları + sticky bar, sell.ts pricing fetch'i, footer "Fiyat Tablosu" linki (anti-steering, TR storefront)
+  - Hesap silme: get_account_deletion_preview ile onay ekranı (abonelik akıbeti + mağaza/alt kullanıcı etkisi + 15 gün KVKK penceresi); telefon/ destek adımı yok (Apple 5.1.1(v)); başarıda logout + anasayfa
+  - YENİ utils/nativePrettyUrls.ts: native bundle'da uzantısız URL'ler SPA fallback'ine düşüyordu — yasal sayfalar dahil statik pretty linkler artık iOS'ta çalışıyor (TestFlight doğrulaması bekliyor)
+  - 4 locale'e yeni anahtarlar; 10 vitest iOS gating bekçisi
+
+### Duzeltildi
+- fix(cart): misafir sepetinde MOQ katı adımını koru (@ahmeetseker)
+  - syncToCartStore'un iki CartSku üretim noktasına bayrak eklendi
+  - submitCartLines (OptionsSheet yolu) CartSku'suna bayrak eklendi
+  - CartSubmitItem'a sellInMoqMultiples alanı eklendi; OptionsSheet currentSubmitItem ProductDetail'den dolduruyor
+- fix(cart): satır bazlı eklemede MOQ katı bayrağını taşı (@ahmeetseker)
+- fix(theme): input focus ring rengindeki eski sarı kalıntısını turuncuya çevir (@TurksabYonetim)
+- fix(home): mobil bölüm aralıklarını 24px ritmine oturt (@TurksabYonetim)
+- fix(ui): tanimsiz buton siniflari mevcut karsiliklarina eslendi (@aliiball)
+  - ReservationModal 3 butonda th-btn-primary kullaniyordu; bu sinif
+  - TicketDetailLayout'ta th-btn-outlined yazim hatasi duzeltildi
+  - Yeni CSS eklenmedi, style.css 2258 satirda kaldi
+- fix(media): WP1 fix round 1 — KYC kimlik belgesi sıkıştırmadan muaf (@TurksabYonetim)
+- fix(media): video sıkıştırma hatasını console'a yaz (sessiz yutma yok) (@TurksabYonetim)
+- fix(e2e): koddan geri kalan dört test güncellendi (@aliiball)
+  - Route matrisi 66'da kalmisti; uretimde 72 sayfa var, 12-FE/15-FE ile gelen alti sayfa eklendi
+  - Urun detay duzeni degismis: 1024-1279 bandinda sag ray asagi inmiyor, 300px'e daraliyor; test bugunku davranisa gore yazildi ve 1280px
+  - Para birimi secici popover icine tasinmis, test onu dogrudan ariyordu
+  - Magaza profili sekmelerine role=tab eklenmis, test hala button ariyordu
+  - Mock suite 7 kirik -> 4 kirik
+- fix(e2e): bayat performans testleri gerçeğe uyarlandı (@aliiball)
+  - Ana sayfa ilk acilis butcesi 12'den 13'e alindi: butce 25 Temmuz'da konuldu, iki gun sonra SEO meta ucu eklendi ve guncellenmedi
+  - Kategori onbellek testi urunler sayfasiyla isitiyordu; lazy-mount sonrasi orada mega menu istegi hic atilmiyor, isitma ana sayfaya alindi
+  - listing-prefetch testi kaldirildi: prefetch 25 Temmuz'da BILINCLI silinmis ve ayni committe tersini savunan test eklenmis, yalnizca eski
+  - Storefront suite 7 kirikten 0'a indi
+- fix(product-media): reduced-motion video/HLS önizlemesini durdur, LCP ka (@ahmeetseker)
+  - Video sekmesinde ve galeri inline oynatıcıda prefers-reduced-motion açıkken video/iframe/HLS yerine yalnız statik poster basılır; kullanıcı hareket azaltmayı seçtiğinde arka planda video runtime'ı (autoplay/HLS) hâlâ tetikleniyordu
+  - Ürün görseli sıkıştırma hedef genişliği 1920px'den 2400px'e çıkarıldı; master 2000px politika tavanının altına düşmemesi ve sunucu tarafında geri üretilemeyen piksel kaybını önlemek için
+  - lcpAsset.js kanonik `/files/<ad>.ext` kaynak dosyalarını `original` olarak etiketler, kanıtsız eski shard türevlerini (`/files/ab/<hash>.webp`) artık yanlışlıkla `original` saymaz; RUM metriklerinde kaynak/türev kohortlarının doğru ayrışması için
+  - lcpAsset.js için eksik TypeScript tip tanımları (.d.ts) ve profil ayrıştırma testleri eklendi
+- fix(e2e): silinmiş sayfa fixture'dan düşürüldü, serial zinciri açıldı (@aliiball)
+  - route-matrix: sell-pricing kaydı silindi, sayaç 72 -> 71
+  - panel-lojistik-pod: mock eksikliğinden düşen test test.fixme ile işaretlendi, serial modda kilitlediği 10 test yeniden koşuyor
+- fix(lojistik): üretilmiş artefaktlar formatter'ın dışına alındı (@aliiball)
+  - src/mocks/logistics ve src/types/logistics.d.ts
+  - admin-panel'de yaşanan çakışma burada önden kapatıldı
+- fix(urun-detay): bayat kalan üç test dosyası düzeltildi (@aliiball)
+  - aa7ddfa fiyat kademelerini, varyantları ve kart sekmelerini ProductOrderPanel'den ProductBuyBox'a taşımış ama testler bf982cf tasarımını beklemeye devam etmişti
+  - Testler bugünkü davranışa göre karakterizasyona çevrildi
+  - messages testinin mock'unda BottomNav export'u eksikti
+  - Suite ilk kez tamamen yeşil: 423 passed
+- fix(e2e): route ölçüm testinde CI ortamı sabitlendi (@aliiball)
+  - process.env mirası Actions'ın CI=true değerini CLI alt sürecine sızdırıyordu; measure-home-perf.mjs strict moda geçip fixture'ın kasıtlı duplicate ID'sini bütçe ihlali sayıyordu — lokalde yeşil, CI'da kırmızı
+  - Kardeş home-performance.spec.ts bu sabitlemeyi zaten yapıyordu
+  - CI'ın route modunda strict kapı olduğunu kilitleyen regresyon testi eklendi
+- fix(e2e): mega menü niyet penceresi tarayıcı içinde ölçülüyor (@aliiball)
+  - dispatch'in CDP gidiş-dönüşü 100 ms'lik pencereye dahil oluyor, yük altında eşik aşılınca test düşüyordu
+  - Dispatch ve 50 ms'lik ölçüm tek evaluate çağrısına alındı; mount sabit beklemeyle değil Playwright'ın bekleyişiyle doğrulanıyor
+  - Aynı düzeltme dosyanın iptal-niyet bloğunda zaten vardı
+- fix(nginx): medya istekleri için rate limit eşiğini artır (@ahmeetseker)
+  - Küçük resim patlamalarında kırık görsel oluşturan 503 yanıtlarını azaltmak için files_zone hız sınırı 30r/s yapıldı
+  - Sayfa başına eşzamanlı medya yüklemelerini karşılamak için burst 120'ye çıkarıldı
+- fix(kategori): kategori menülerinde güncel hiyerarşiyi göster (@ahmeetseker)
+  - Mega menü ve mobil kategori paneli, ana kategori sayısını sınırlandırıp sabit Tüm Ürünler bağlantısı gösterecek şekilde düzenlendi
+  - Alt kategoriler ikonlu grup başlıkları ve sınırlı yaprak satırlarıyla listelendi; fazla öğeler için Tümünü Gör bağlantısı eklendi
+  - Kategori sürümü IndexedDB önbelleği dışında alınarak admin değişikliklerinin 7 gün beklemeden menülere yansıması sağlandı
+- fix(lojistik): uç adları misafire açık modülden çıkarıldı (@aliiball)
+  - Altı uç api.v1.logistics diye etiketliydi; o modül allow_guest=True ve docstring'i 'satıcı/alıcı verisine dokunan her şey başka yerde' diyor
+  - get_proof_of_delivery → api.v1.pod
+  - Dört bildirim ucu → api.v1.notifications
+  - save_shipment_packages → api.v1.packaging
+  - Panel aynı uçları zaten doğru modülle çağırıyordu; iki repo iki farklı ad taşıyordu
+- fix(test): Playwright çıktısı commit'li kanıtları siliyordu (@aliiball)
+  - outputDir test-results/ altına alındı; 18 medya kanıtı artık silinmiyor
+  - playwright/evidence bundan sonra yalnızca arşiv
+- fix(test): medya izleme sayfası performans matrisine eklendi (@aliiball)
+  - aa1be08 ile üretime girmiş, matrise kaydedilmemişti; kapı kırmızıydı
+  - Rota dinamik olduğu için slug uydurmak yerine PERF_MEDIA_WATCH_PRETTY_PATH
+- fix(lojistik): storefront erişilebilirlik ihlalleri giderildi (@aliiball)
+  - dt/dd tanım listesi dışındaydı (axe dlitem)
+  - İade miktarı ve bildirim anahtarı erişilebilir ad taşımıyordu; yeni i18n anahtarı dört dile birden eklendi
+  - Kenar çubuğu role=menuitem ilan ediyordu ama ebeveyni role=navigation'dı; StoreNav ve OrdersTabs'taki roller DOĞRU olduğu için korundu
+  - Soldurma (opacity-70) ve altı gri nokta kontrast eşiğinin altındaydı
+  - WCAG taraması eklendi: dört ekran, iki viewport, critical/serious kapısı
+- fix(lojistik): çift tıklama aynı kaydı iki kez açabiliyordu (@aliiball)
+  - submitting bayrağı finally ile gezinme BAŞLAMADAN serbest bırakılıyordu; window.location.href beklemediği için ikinci tıklama kapıdan geçiyordu
+  - Başarı yolunda bayrak açık kalıyor, hata ve erken çıkış dalları bırakıyor
+  - Aynı desen satıcı sevkiyat formunda da vardı
+- fix(sipariş): hata anında boş durum da çiziliyordu (@aliiball)
+  - Uç 500 dönünce ekran hem "yüklenemedi" hem "Henüz sipariş yok · Ürün tedarik edin" gösteriyordu; ikincisi yalan ve kullanıcıyı yanlış işe sokuyor
+- fix(tema): outline düğme yazısı WCAG AA eşiğinin altındaydı (@aliiball)
+  - --btn-outline-text primary-700'e alındı (#ad5b00, 4.95:1); önceki primary-600 (#db7300) beyaz zeminde 3.24:1 veriyordu
+  - Kenarlık ve zemin marka renginde kaldı, token uzaktan temadan ezilebilir
+  - Tema editörünün varsayılanı da erişilebilir değerden başlıyor
+
+### Degistirildi
+- refactor(deps): lockfile peer bagimlilik isaretleri guncellendi (@aliiball)
+  - npm 11.6.2 agaci yeniden cozdugunde eklenen 11 "peer": true satiri
+  - Paket eklenmedi, surum degismedi, hicbir sey kaldirilmadi
+- refactor(scripts): check:dup taraması story dosyalarını atlıyor (@aliiball)
+  - Story export'ları hiçbir yerden import edilmiyor, isimler dosya kapsamında
+  - Bos/Varsayilan gibi durum adları her ekranda tekrar ediyor, bu doğru olan
+  - Allowlist'e eklemek her yeni ekranda baseline'ı büyütür, bekçiyi körelirdi
+- refactor(storybook): dil seçici eklendi, initialGlobals doğru seviyeye alındı (@aliiball)
+  - tr/en/ar/ru araç çubuğu; RTL için ar zorunlu, storefront dört dilli
+  - changeLanguage() loader'da: t() şablon dizesinde çağrılıyor, render öncesi hazır olmalı
+  - initialGlobals parameters'ın içindeydi, Storybook yok sayıyordu
+- refactor(e2e): görünüm modu ve satıcı rolü testleri eklendi (@aliiball)
+- refactor(lojistik): storefront yarım teslim kanıtı gösterimi kaldırıldı (@aliiball)
+  - Alıcıya sahte imza, fotoğraf ve teslim alan bilgisi gösteriliyordu; kayıt hiç yoktu
+  - Yerine bağlanmamış uç bildirimi kondu, dört dile de çevirisi eklendi
+  - Teslim kanıtı ekranları için yedi kabul senaryosu daha eklendi
+  - Satıcı rolüyle kendi kayıtları, başkasına erişim reddi ve beyan damgası doğrulanıyor
+- refactor(e2e): kontrast ölçümü ortak modüllere ayrıldı (@aliiball)
+  - Ölçüm kodu template literal icindeydi; regex kaciglari JS tarafindan cozulup tarayiciya bozuk gidiyordu
+  - Tarama araci ayni blogu metin okudugu icin kaciglar orada korunuyordu, iki taraf ayni kodu farkli yorumluyordu
+  - Fonksiyon olarak paylasilinca tek kaynak gercekten tek oldu ve ESLint kodu denetleyebilir hale geldi
+- refactor(lint): E2E araçları için ortam tanımları eklendi (@aliiball)
+  - Playwright spec ve araclari Node'da kosuyor; process tanimsiz sayiliyordu
+  - Tarayicida kosan olcum modulu icin DOM globalleri ayrildi
+  - Sonuc: 85 problem (65 hata) -> 33 problem (23 hata)
+- refactor(lint): script ortamları tanımlandı ve 6 hata giderildi (@aliiball)
+  - CommonJS, URL ve tarayicida kosan olcum parcalari icin ortam tanimlari eklendi
+  - Yan etki icin kullanilan bes ternary if/else'e cevrildi
+  - Yeniden atanmayan let sabite alindi
+  - Script davranisi degismedi: cikti birebir ayni, hata dallari mutasyonla dogrulandi
+  - Sonuc: 23 hata -> 0
+- refactor(sell,tema,cart): fiyatlandırma sayfasını birleştir, renk tokenl (@TurksabYonetim)
+  - /satici/fiyatlandirma ve sell-pricing sayfaları /satici-ol içine konsolide edildi; nginx, SEO registry, staticPageUrl ve alpine modülleri buna göre temizlendi, eski URL'ler 301 ile /satici-ol'a yönlendirildi
+  - Marka rengi (#ff8600) artık tüm bileşenlerde CSS değişkeni üzerinden uygulanıyor (hero, upload-ui, trade-assurance, seller pagination, filtre butonları) — tema paneli değişikliği yaptığında tutarlı görünsün diye hardcoded hex değerler kaldırıldı
+  - Paylaşılan sepet çekmecesine galeri önizlemesi eklendi (renk varyantı olmayan ürünlerde sol panelde ürün görselleri gösterilir), mobil eşik 1280px'ten 768px'e indirildi ve önizleme kutusu kare oranına sabitlendi
+- refactor(lojistik): silinen takip kaydına yapılan atıflar kaldırıldı (@aliiball)
+- refactor(ci): biçim, lint ve test kapıları eklendi (@aliiball)
+  - lint.yml: format:check + eslint + tsc
+  - test.yml: vitest + mock E2E (masaüstü ve mobil), izleri artifact'a yükler
+  - package.json script kapsamları tests/ ve kök dosyaları içeriyor
+  - İkisi de temizlik bittikten SONRA açıldı; bugün yeşil başlıyor
+- refactor(e2e): mobil viewport projesi eklendi (@aliiball)
+  - chromium-mobile (Pixel 5) projesi suite'e eklendi
+  - Düşen 19 testin hiçbiri uygulama hatası değildi; masaüstü DOM'u arıyorlardı
+  - yalnizMasaustu() yardımcısıyla gerekçelendirilip sınırlandılar
+  - Mobilde 69 test koşuyor, suite 180 passed
+- refactor(format): prettier borcu temizlendi (@aliiball)
+  - src/ altında 111, tests/ altında 25, kökte 3 dosya uyumsuzdu
+  - Kök neden: github-lint.sh elle çalıştırılıyordu ve tests/ dizinini kapsamıyordu; prettier cache dizini boştu
+  - Yalnız biçim değişikliği; davranış değişmedi
+- refactor(ci): kapılar arıza dayanıklı hale getirildi (@aliiball)
+  - concurrency: arka arkaya push'ta eski koşular iptal ediliyor
+  - timeout-minutes: varsayılan 360 dakika yerine 10/10/20
+  - Playwright tarayıcısı önbelleğe alındı, anahtar package-lock hash'i
+  - paths-ignore: belge değişikliği koşu açmıyor
+  - Artifact yolu düzeltildi; repo kökü zaten tradehubfront
+- refactor(lojistik): notification_log fixture ve tipi senkronlandı (@aliiball)
+  - gen_logistics_types.py --sync çıktısı; elle düzenlenmez
+  - Kaynak: tradehub_core contract.py
+- refactor(lojistik): ölü mockNotificationFeed kaldırıldı (@aliiball)
+  - Fonksiyon hiçbir yerde çağrılmıyordu; kendi yorumu 'varlık sözleşmeye eklenince buradan silinip fixture'a taşınmalı' diyordu
+  - notification_log varlığı eklendi ve fixtures.ts ondan besleniyor
+- refactor(lojistik): tarih ve para birimi arayüz diline bağlandı (@aliiball)
+  - toLocaleString tarayıcı dilini kullanıyordu; arayüzü Türkçe seçen alıcı Türkçe ekranda 'Aug 09, 2026, 10:00 AM' ve 'TRY 2,480.00' görüyordu
+  - yerel artık getCurrentLang()'den; dört dilde doğrulandı
+  - tüm lojistik yüzeyini etkiliyordu (07/12/13/14-FE ekranları dahil)
+- refactor(lojistik): iade uçları api.v1.returns modülüne taşındı (@aliiball)
+  - api.v1.logistics misafire açık (allow_guest); yetkili uç oraya yazılmaz
+  - aynı düzeltme 20 Ağustos denetiminde POD/OPS/PRICING için yapılmıştı
+  - create_return_request yükü artık items:[{item,qty}] tipinde
+- refactor(lojistik): storefront satıcı iade karar sayfası kaldırıldı (@aliiball)
+  - sayfada karar formu yoktu, düğmesi kendi sayfasına dönüyordu
+  - storefront'ta satıcı menüsü yok; sayfaya yalnız alıcı ekranındaki rol sızıntısından ulaşılıyordu
+  - karar admin panele taşındı (G0 rol matrisi, I2)
+  - SellerReturnQueue ölü kod kaldı, story'siyle birlikte silindi
+  - rota matrisi 71 - 70
+- refactor(test): iade akışı testleri ve otomatik denetimler eklendi (@aliiball)
+  - iade mock birim testleri ve E2E: K1-K15 kabul senaryoları
+  - sekiz yeni denetim: form alanı gönderime bağlı, rol sızıntısı, guest modül adı, liste/DETAIL ayrımı, biçim yereli, şablon literali, kontrol öncesi veri, mock yüzeyi i18n
+  - katalog degerlerinin dört dilde çevirisi denetleniyor
+  - BILINEN_EKSIKLER boşaldı: __thCreateReturn bağlandı
+  - playwright kanıt çıktısı ve görsel tur çıktısı yok sayılıyor
+- refactor(deps): axe-core geliştirme bağımlılığı olarak eklendi (@aliiball)
+  - Storefront'ta WCAG taraması için; panelde zaten kullanılıyordu
+
+---
 ## [v2.4.0-alpha.37] - 2026-09-08 ALPHA
 
 Bu surum alpha.istoc.com'da gelistirme asamasindadir.
