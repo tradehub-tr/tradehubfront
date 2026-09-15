@@ -16,7 +16,9 @@ import {
   syncListingFavoriteHearts,
 } from "../products/initListingFavorites";
 import { applyListingSocialProof } from "../products/initListingSocialProof";
-import { initListingCartDrawer } from "../products/ListingCartDrawer";
+// `ListingCartDrawer` statik import edilmez: SharedCartDrawer zincirini ana
+// sayfanın modulepreload grafiğine sokuyordu (MOGEM-638 §2.4). Kartlar DOM'a
+// girdikten sonra dinamik yüklenir (initProductGrid içinde).
 
 const HOME_EAGER_CARD_COUNT = 8;
 const HOME_PROGRESSIVE_ROOT_MARGIN = "200px";
@@ -138,7 +140,7 @@ export function initProductGrid(): Promise<void> {
       // 14 = büyük ekran gridinin (2xl: 7 kolon) tam 2 satırı — alt satırda boşluk kalmasın.
       // verified_supplier: anasayfa vitrini KYB doğrulanmamış satıcı ürünü göstermez.
       .then(() => searchListings({ page_size: 14, verified_supplier: true }))
-      .then((result) => {
+      .then(async (result) => {
         if (result.products.length === 0) {
           showProductGridEmptyState(grid);
           return;
@@ -162,8 +164,6 @@ export function initProductGrid(): Promise<void> {
         // Kartlar DOM'a girdi → favori kalplerini mevcut favori durumuna göre doldur.
         initProductSliders();
         syncListingFavoriteHearts(grid);
-        // "Sepete ekle" → paylaşımlı sepet çekmecesi (listeleme sayfasıyla aynı kurulum).
-        initListingCartDrawer(result.products);
         // Sosyal kanıt: sinyali olan kartların ad↔fiyat arası slotunu dinamik
         // (dönen) etiketle doldur — grid innerHTML yazıldıktan SONRA çağrılır.
         void applyListingSocialProof(eagerProducts, {
@@ -171,6 +171,10 @@ export function initProductGrid(): Promise<void> {
           createMissingSlots: true,
         });
         initProgressiveHomeCards(grid, progressiveProducts);
+        // "Sepete ekle" → paylaşımlı sepet çekmecesi (listeleme sayfasıyla aynı
+        // kurulum). Dinamik import: kartlar zaten ekranda, çekmece kodu arkadan gelir.
+        const { initListingCartDrawer } = await import("../products/ListingCartDrawer");
+        initListingCartDrawer(result.products);
       })
       .catch((err) => {
         console.warn("[ProductGrid] API load failed:", err);

@@ -7,6 +7,7 @@ import { t } from "../i18n";
 import { isLoggedIn, waitForAuth } from "../utils/auth";
 import { showLoginModal } from "../components/product/LoginModal";
 import { saveRecentSeller } from "../services/recentHistoryService";
+import { fetchStorefrontLayout } from "../services/sellerLayoutService";
 
 const API_BASE = window.API_BASE || "/api";
 
@@ -354,12 +355,8 @@ Alpine.data("sellerShop", () => ({
           fetch(`${API_BASE}/method/tradehub_core.api.seller.get_seller?slug=${this.sellerCode}`, {
             credentials: "omit",
           }).then((r) => r.json()),
-          fetch(
-            `${API_BASE}/method/tradehub_core.api.seller.get_storefront_layout?seller_code=${this.sellerCode}`,
-            { credentials: "omit" }
-          )
-            .then((r) => r.json())
-            .catch(() => null),
+          // Sayfa kabuğu (pages/seller-shop.ts) aynı düzeni zaten istedi — memoize.
+          fetchStorefrontLayout<StorefrontSection>(this.sellerCode),
           fetch(
             `${API_BASE}/method/tradehub_core.api.seller.get_seller_categories?seller_code=${this.sellerCode}`,
             { credentials: "omit" }

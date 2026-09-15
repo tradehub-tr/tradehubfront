@@ -11,6 +11,7 @@ import { initFlowbite } from 'flowbite';
 import 'swiper/swiper-bundle.css';
 import { startAlpine } from '../alpine';
 import { initCurrency } from '../services/currencyService';
+import { fetchStorefrontLayout } from '../services/sellerLayoutService';
 import { t } from '../i18n';
 
 // Components
@@ -26,13 +27,12 @@ import '../alpine/loginModal';
 
 // Section registry
 import { renderDynamicSections, SECTION_RENDERERS_REF } from '../utils/seller/section-registry';
-import type { LayoutConfig } from '../utils/seller/section-registry';
+import type { LayoutConfig, SectionConfig } from '../utils/seller/section-registry';
 
 // Interactions (Swiper init, dropdowns, etc.)
 import { initAllSwipers } from '../utils/seller/interactions';
 
 // ─── Pre-fetch layout for SSR-like initial render ───────
-const API_BASE = window.API_BASE || '/api';
 // Gateway nginx "internal rewrite" yaptığı için browser URL `/magaza/<code>/dukkan`
 // olarak kalır, `?seller=` query browser'da görünmez. Path'tan parse +
 // fallback olarak query (direct dosya erişimleri için).
@@ -59,11 +59,8 @@ async function getInitialLayout(): Promise<LayoutConfig> {
   if (!sellerCode) return getDefaultLayout();
 
   try {
-    const res = await fetch(
-      `${API_BASE}/method/tradehub_core.api.seller.get_storefront_layout?seller_code=${sellerCode}`,
-      { credentials: 'omit' }
-    );
-    const data = await res.json();
+    // Alpine `sellerShop` init'i aynı ucu tekrar çekiyordu; memoize servis tek istek atar.
+    const data = await fetchStorefrontLayout<SectionConfig>(sellerCode);
     if (data?.message?.sections) {
       return { sections: data.message.sections, theme: data.message.theme };
     }

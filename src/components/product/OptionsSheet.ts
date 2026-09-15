@@ -27,7 +27,9 @@ import { chatTriggerAttrs } from "../chat-popup/chatTriggerAttrs";
 import { escapeHtml, sanitizeUrl, safeHexColor } from "../../utils/sanitize";
 import { isLoggedIn } from "../../utils/auth";
 import { openLoginModal } from "./LoginModal";
-import { submitCartLines } from "../cart/overlay/SharedCartDrawer";
+// SharedCartDrawer yalnız tip olarak statik; `submitCartLines` gerçekten
+// gerektiğinde (sepete ekle) dinamik yüklenir — aksi hâlde 49 KB sepet
+// çekmecesi bu sheet'i barındıran her sayfanın ilk boyama grafiğine giriyordu.
 import type { CartSubmitItem, CartSubmitLine } from "../cart/overlay/SharedCartDrawer";
 
 const SHEET_ID = "pdm-sheet-options";
@@ -448,6 +450,7 @@ async function submitSelection(): Promise<boolean> {
   if (total < p.moq) return false;
 
   const tier = p.priceTiers[getActiveTierIndex(p, total)];
+  const { submitCartLines } = await import("../cart/overlay/SharedCartDrawer");
   const ok = await submitCartLines(
     currentSubmitItem(p),
     buildLines(model),

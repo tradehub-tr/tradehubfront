@@ -125,6 +125,20 @@ function startRotation(card: HTMLElement, slides: HTMLElement[], dots: HTMLEleme
   play();
 }
 
+/**
+ * Fırsat yoksa/uç düşerse kart GİZLENMEZ (MOGEM-638 §2.3, ölçüldü 15 Eyl): 230px'lik
+ * kartın `display:none` olması altındaki her şeyi 242px yukarı çekiyordu — ana
+ * sayfa mobil CLS'in tamamı (0,116) bu tek kaymaydı. Kart ölçüsünü korur, iskelet
+ * yerine "Tüm fırsatlar" bağlantısı basar.
+ */
+function showDealsFallback(stage: HTMLElement, dotsWrap: HTMLElement): void {
+  stage.innerHTML = `
+    <a href="/pages/top-deals.html" class="absolute inset-0 flex items-center justify-center rounded-md border border-dashed border-[#3a362c] text-[12px] font-semibold text-neutral-300 no-underline appearance-none focus:outline-none hover:text-[var(--color-primary-400,#ffd75e)]">
+      ${t("heroSide.allDeals")} ›
+    </a>`;
+  dotsWrap.innerHTML = "";
+}
+
 export function initHeroSidePanel(): Promise<void> {
   const card = document.getElementById("hero-deals");
   const stage = document.getElementById("hero-deals-stage");
@@ -144,7 +158,7 @@ export function initHeroSidePanel(): Promise<void> {
       )
       .then((result) => {
         if (result.products.length === 0) {
-          card.style.display = "none";
+          showDealsFallback(stage, dotsWrap);
           return;
         }
         const deals: SideDeal[] = result.products.slice(0, DEAL_COUNT).map((p) => ({
@@ -174,7 +188,7 @@ export function initHeroSidePanel(): Promise<void> {
       })
       .catch((err) => {
         console.warn("[HeroSidePanel] fırsatlar yüklenemedi:", err);
-        card.style.display = "none";
+        showDealsFallback(stage, dotsWrap);
       })
   );
 }

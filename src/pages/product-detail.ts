@@ -150,10 +150,7 @@ initAnimatedPlaceholder('#topbar-compact-search-input');
 
 // Load product from API, then render the full page
 async function renderProductPage() {
-  // Initialize currency settings first
-  await initCurrency();
-
-  // Load real data from API
+  // Load real data from API (kur ayarı aşağıda ürünle paralel başlatılır)
   // Medya manifesti ürün verisiyle PARALEL başlar ama BEKLENMEZ: manifest bir
   // İYİLEŞTİRMEDİR, ürünün kendisi çizilmeden ona bağlanmak yanlış yönde bir
   // bağımlılık olurdu — uç yavaşsa (istemcide 4 sn zaman aşımı) sayfa o kadar
@@ -166,7 +163,12 @@ async function renderProductPage() {
   let manifestHazir: Promise<unknown> = Promise.resolve();
   if (listingId) {
     manifestHazir = primeMediaManifests([listingId]).catch(() => undefined);
-    await loadProduct(listingId);
+    // Kur ayarı ile ürün verisi PARALEL (MOGEM-638 §7-9): ikisi birbirine bağlı
+    // değil — fiyat biçimlendirme render'da olur, `loadProduct` yalnız çeker.
+    // Sıralı hâli LCP'ye bir tam API turu ekliyordu.
+    await Promise.all([initCurrency(), loadProduct(listingId)]);
+  } else {
+    await initCurrency();
   }
 
   const product = getCurrentProduct();

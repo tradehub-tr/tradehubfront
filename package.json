@@ -11,6 +11,7 @@
     "perf:home": "node scripts/measure-home-perf.mjs",
     "perf:home:promote": "PERF_PROMOTE_BASELINE=1 node scripts/measure-home-perf.mjs",
     "test:perf:home": "PERF_FIXTURE_TEST=1 playwright test tests/e2e/home-performance.spec.ts --project=chromium-desktop",
+    "test:perf:dist": "node scripts/perf-budget-dist.mjs dist",
     "preview": "vite preview",
     "lint": "eslint \"src/**/*.{ts,js}\" \"tests/**/*.{ts,js}\"",
     "check:dup": "node scripts/check-duplicate-exports.mjs",

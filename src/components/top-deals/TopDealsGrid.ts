@@ -6,35 +6,29 @@
  * renderCard() üzerinden gelir (pages/top-deals.ts).
  */
 import { t } from "../../i18n";
+import { renderListingCardSkeletons } from "../shared/ListingCardSkeleton";
 
-/** Zengin kart anatomisine uygun skeleton (görsel + başlık + fiyat + butonlar). */
-function renderSkeletonCard(): string {
-  return `
-    <div class="animate-pulse rounded-md border border-gray-200 bg-white overflow-hidden">
-      <div class="aspect-square bg-gray-200"></div>
-      <div class="p-3 space-y-2">
-        <div class="h-4 w-full bg-gray-200 rounded"></div>
-        <div class="h-4 w-2/3 bg-gray-200 rounded"></div>
-        <div class="h-5 w-24 bg-gray-200 rounded"></div>
-        <div class="h-3 w-20 bg-gray-200 rounded"></div>
-        <div class="flex gap-2 pt-1">
-          <div class="h-9 flex-1 bg-gray-200 rounded-md"></div>
-          <div class="h-9 flex-1 bg-gray-200 rounded-md"></div>
-        </div>
-      </div>
-    </div>
-  `;
-}
+// İskelet: masaüstünde 2 satır (5 sütun × 2), mobilde 2 satır (2 sütun × 2) görünür.
+// Viewport'u doldurmak yeter; gerçek 24 kart geldiğinde fazlası katlanma
+// çizgisinin altına düşer (görünmeyen kayma CLS'e girmez), sonuç boş çıktığında
+// da boş-durum bloğu aynı yüksekliği korur.
+const SKELETON_MOBILE_VISIBLE = 4;
 
-export function TopDealsGrid(): string {
+/**
+ * @param skeletonCount İskelet kart sayısı (MOGEM-638 §2.3): eskiden 10 iskelet
+ *   `<template x-if>` içindeydi — Alpine açılana kadar HİÇ çizilmiyor, footer
+ *   ızgaranın yerine boyanıyordu. Statik `x-show` iskelet Alpine'dan önce görünür.
+ *   Ölçüm (15 Eyl) kaymanın asıl kaynağını gösterdi: sonuç BOŞ dönünce iskelet
+ *   çöküyor, footer yukarı fırlıyordu (0,649'un tamamı). Çözüm: viewport'u dolduran
+ *   iskelet + aynı yükseklikte boş-durum bloğu (`min-h`).
+ */
+export function TopDealsGrid(skeletonCount = 10): string {
   return `
     <section class="mt-4" aria-label="Top deals products">
-      <!-- Yükleme skeleton'ı (ilk yükleme + sayfa geçişi) -->
-      <template x-if="loading">
-        <div class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 lg:gap-4">
-          ${Array.from({ length: 10 }).map(renderSkeletonCard).join("")}
-        </div>
-      </template>
+      <!-- Yükleme skeleton'ı (ilk yükleme + sayfa geçişi) — statik, Alpine'dan önce görünür -->
+      <div x-show="loading" class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 lg:gap-4">
+        ${renderListingCardSkeletons(skeletonCount, SKELETON_MOBILE_VISIBLE)}
+      </div>
 
       <template x-if="!loading">
         <div>
@@ -50,8 +44,9 @@ export function TopDealsGrid(): string {
             </template>
           </div>
 
-          <!-- Boş durum -->
-          <div class="flex items-center justify-center py-12" x-show="products.length === 0">
+          <!-- Boş durum: iskelet bloğuyla AYNI yükseklik (2 satır) — sonuç boş çıkınca
+               iskelet çökmesin, footer yukarı fırlamasın (ölçüldü: 0,649'un tamamı buydu) -->
+          <div class="flex items-center justify-center py-12 min-h-[600px] md:min-h-[740px]" x-show="products.length === 0">
             <p class="text-sm text-gray-400" data-i18n="topDealsPage.noResults">${t("topDealsPage.noResults")}</p>
           </div>
 
