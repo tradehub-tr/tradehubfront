@@ -1,3 +1,14 @@
+## [v2.5.1-alpha.2] - 2026-09-15 ALPHA
+
+Bu surum alpha.istoc.com'da gelistirme asamasindadir.
+
+### Eklendi
+- feat(hesap-silme): onay ekranında açık sipariş uyarısı (@boraydeger32)
+  - Silme önizlemesine open_order_count'lu vurgulu uyarı satırı (4 locale) — backend consequences[] listesi bu ekranda render edilmediği için uyarı client-side eklendi (tespit: önizleme maddeleri i18n gereği istemcide kuruluyor; spec uygulama notunda)
+  - Sayı 0 veya alan yoksa davranış birebir aynı; silme akışına dokunulmadı, iOS webview'da aynen çalışır
+  - 5 yeni test + eslint temiz
+
+---
 ## [v2.5.1-alpha.1] - 2026-09-14 ALPHA
 
 Bu surum alpha.istoc.com'da gelistirme asamasindadir.
