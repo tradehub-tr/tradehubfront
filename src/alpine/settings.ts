@@ -772,6 +772,8 @@ interface AccountDeletionPreview {
   store_name: string | null;
   active_subscription: { plan: string; status: string; current_period_end: string } | null;
   sub_user_count: number;
+  /** FE-1 (AC-9): BE-4 additive alanı — eski backend'de bulunmayabilir. */
+  open_order_count?: number;
   grace_days: number;
   consequences: string[];
 }
@@ -803,9 +805,24 @@ Alpine.data("settingsDeleteAccount", () => ({
   },
 
   /**
+   * FE-1 (AC-9): açık sipariş sayısı — BE-4 additive alanı; preview yok/eski
+   * backend'de alan yoksa 0 (uyarı gizli, davranış değişmez).
+   */
+  openOrderCount(): number {
+    return this.preview?.open_order_count ?? 0;
+  },
+
+  /** FE-1 (AC-9): vurgulu açık-sipariş uyarı metni (yalnız count>0 iken render edilir). */
+  openOrderWarning(): string {
+    return t("settings.deletePreviewOpenOrders", { count: this.openOrderCount() });
+  },
+
+  /**
    * Onay ekranı madde listesi — abonelik akıbeti (hemen sonlanır, iade yok),
    * mağaza/alt kullanıcı etkisi ve KVKK anonimleştirme penceresi.
-   * i18n client-side üretilir (backend consequences yalnız Türkçe).
+   * i18n client-side üretilir (backend consequences yalnız Türkçe; DOĞRUDAN
+   * render EDİLMEZ — BE-4'ün yeni maddesi otomatik gelmez, açık sipariş
+   * uyarısı openOrderCount()/openOrderWarning() ile ayrıca gösterilir).
    */
   previewLines(): string[] {
     const p = this.preview;

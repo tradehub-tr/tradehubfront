@@ -5693,6 +5693,8 @@ const tr = {
         "Aktif aboneliğiniz hemen sonlandırılır; kalan süre için iade yapılmaz.",
       deletePreviewStore: "Mağazanız askıya alınır ve satışa kapatılır.",
       deletePreviewSubUsers: "{{count}} alt kullanıcının panel erişimi kapanır.",
+      deletePreviewOpenOrders:
+        "{{count}} açık siparişiniz var; mağaza askıya alındığında bu siparişlerin akıbetini alıcılarınızla netleştirin.",
       deletePreviewKvkk:
         "Kişisel verileriniz {{days}} gün içinde KVKK kapsamında kalıcı olarak anonimleştirilir.",
       featureComingSoon: "Bu özellik yakında kullanıma sunulacaktır.",
