@@ -1,3 +1,19 @@
+## [v2.6.0] - 2026-09-15 PROD
+
+Bu surum istoc.com'da yayindadir.
+
+### Eklendi
+- feat(hesap-silme): onay ekranında açık sipariş uyarısı (@boraydeger32)
+  - Silme önizlemesine open_order_count'lu vurgulu uyarı satırı (4 locale) — backend consequences[] listesi bu ekranda render edilmediği için uyarı client-side eklendi (tespit: önizleme maddeleri i18n gereği istemcide kuruluyor; spec uygulama notunda)
+  - Sayı 0 veya alan yoksa davranış birebir aynı; silme akışına dokunulmadı, iOS webview'da aynen çalışır
+  - 5 yeni test + eslint temiz
+
+### Duzeltildi
+- fix(ios): login istemcisi merkezi API tabanını kullanıyor (@boraydeger32)
+  - auth.ts login() base URL'i yerel hesaplayıp NATIVE_API_BASE'i atlıyordu; global fetch yaması tesadüfen kurtarıyordu. api.ts'in BASE_URL'ü export edilip login ona bağlandı — örtük bağımlılık kalktı
+  - 4 yeni base-çözümleme testi
+
+---
 ## [v2.5.1-rc.1] - 2026-09-15 RC
 
 Bu surum rc.istoc.com'da onay asamasindadir.
