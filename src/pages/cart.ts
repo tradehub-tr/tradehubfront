@@ -40,7 +40,7 @@ import { CartPage, initCartPage } from '../components/cart/page/CartPage'
 import { cartStore } from '../components/cart/state/CartStore'
 import { fetchCart } from '../services/cartService'
 import { syncGuestCartAfterLogin, installGuestCartLogoutReset } from '../components/cart/state/guestCartMerge'
-import { getSessionUser } from '../utils/auth'
+import { waitForAuth } from '../utils/auth'
 
 const appEl = document.querySelector<HTMLDivElement>('#app')!;
 appEl.classList.add('relative');
@@ -207,8 +207,10 @@ async function initCartPage_async() {
   // guestCartMerge akışıyla aktarılır ya da kullanıcıya sorulur.
   let accountSuppliers: ReturnType<typeof cartStore.getSuppliers> | null = null;
   try {
-    // 3) Oturum kontrolü
-    const sessionUser = await getSessionUser();
+    // 3) Oturum kontrolü — modül yüklenirken başlatılan tek oturum isteğini paylaş;
+    // `getSessionUser()` doğrudan çağrısı aynı ucu ikinci kez vuruyordu
+    // (MOGEM-638 §2.6: sepette 2× get_session_user).
+    const sessionUser = await waitForAuth();
     if (sessionUser) {
       const apiCart = await fetchCart();
       cartStore.init(apiCart.suppliers, 0, currencySymbol, 0);

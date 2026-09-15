@@ -3,7 +3,10 @@ import { queryKeys, policies } from "./keys";
 
 describe("queryKeys", () => {
   it("categories key embeds the version", () => {
-    expect(queryKeys.categories("7694-x-0")).toEqual(["categories", "7694-x-0"]);
+    expect(queryKeys.categories("7694-x-0", "tr")).toEqual(["categories", "7694-x-0", "tr"]);
+    expect(queryKeys.categories("7694-x-0", "en")).not.toEqual(
+      queryKeys.categories("7694-x-0", "tr")
+    );
   });
 
   it("categoryVersion key is stable", () => {

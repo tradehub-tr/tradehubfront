@@ -29,7 +29,9 @@ function normalize(params: Record<string, unknown>): Array<[string, unknown]> {
 
 export const queryKeys = {
   // Versiyon anahtara gömülü: değişince eski entry gc'lenir, yenisi çekilir.
-  categories: (version: string) => ["categories", version] as const,
+  // Dil de anahtarda: `callMethod` isteğe `?lang=` ekliyor ama anahtar dili
+  // taşımıyordu; dil değişince 24 saatlik cache eski dilin ağacını döndürüyordu.
+  categories: (version: string, lang: string) => ["categories", version, lang] as const,
   categoryVersion: () => ["category-version"] as const,
   currencyRates: () => ["currency", "rates"] as const,
   filters: (category: string) => ["filters", category] as const,

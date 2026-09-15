@@ -5,6 +5,7 @@
  */
 
 import { callMethod } from "../utils/api";
+import { getCurrentLang } from "../i18n";
 import { queryFetch, queryKeys, policies } from "../lib/query";
 import type { ServerSeoPayload } from "../seo/setPageMeta";
 
@@ -154,7 +155,7 @@ export function loadCategories(): Promise<ApiCategory[]> {
   return fetchCategoryVersion()
     .then((version) =>
       queryFetch(
-        queryKeys.categories(version),
+        queryKeys.categories(version, getCurrentLang()),
         async () => {
           const data = await callMethod<MegaMenuResponse>(
             "tradehub_core.api.category.get_mega_menu"

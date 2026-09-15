@@ -48,10 +48,14 @@ import {
 } from '../components/top-deals'
 import { renderListingCard, initProductSliders } from '../components/shared/ListingCard'
 import { renderPagination } from '../components/shared/Pagination'
-import { ListingCartDrawer, initListingCartDrawer } from '../components/products'
+// Sepet çekmecesi statik import edilmez: `ListingCartDrawer → SharedCartDrawer`
+// zinciri sayfanın modulepreload grafiğine giriyordu (MOGEM-638 §2.4).
+// `loadCartDrawer()` ilk grid render'ında dinamik yükleyip slot'a takar.
 import { applyListingSocialProof } from '../components/products/initListingSocialProof'
 import { initListingFavoriteTriggers, syncListingFavoriteHearts } from '../components/products/initListingFavorites'
-import { LoginModal } from '../components/product'
+// Somut modül: `../components/product` barrel'ı CartDrawer → alpine/product →
+// WriteReviewModal/uploader/dropzone zincirini preload grafiğine sokuyordu.
+import { LoginModal } from '../components/product/LoginModal'
 
 // Services
 import { searchListings } from '../services/listingService'
@@ -68,6 +72,20 @@ import { initAnimatedPlaceholder } from '../utils/animatedPlaceholder'
 // İlk yükte 24 zengin kart: 40 kartın DOM/görsel maliyetini sayfalama
 // sözleşmesini değiştirmeden düşürür. Sonraki sayfalar mevcut replace akışıyla gelir.
 const PAGE_SIZE = 24
+
+/* Sepet çekmecesi modülü: bir kez yüklenir, çekmece işaretlemesi slot'a basılır. */
+type CartDrawerModule = typeof import('../components/products/ListingCartDrawer')
+let cartDrawerModule: Promise<CartDrawerModule> | null = null
+function loadCartDrawer(): Promise<CartDrawerModule> {
+  if (!cartDrawerModule) {
+    cartDrawerModule = import('../components/products/ListingCartDrawer').then((m) => {
+      const slot = document.getElementById('top-deals-cart-overlay')
+      if (slot && !slot.childElementCount) slot.innerHTML = m.ListingCartDrawer()
+      return m
+    })
+  }
+  return cartDrawerModule
+}
 
 /* ── Alpine Data Registration ────────────────────────────────────────── */
 
@@ -88,7 +106,11 @@ Alpine.data('topDealsPage', () => ({
   products: [] as ProductListingCard[],
   page: 1,
   totalPages: 1,
-  loading: false,
+  // `true` başlar (MOGEM-638 §2.3, ölçüldü 15 Eyl: CLS 0,649 FOOTER'dan): `false`
+  // başlayınca Alpine açılır açılmaz statik iskeleti gizliyor, footer ızgaranın
+  // yerine çıkıyor, yükleme başlayınca geri iniyordu — iki büyük kayma. İlk
+  // `loadProducts` zaten `true` yapıyor; başlangıç değeri aynı olunca kayma yok.
+  loading: true,
   /* Monotonic request id — drops stale responses when the category changes
      mid-flight (otherwise an older fetch could overwrite the new grid). */
   reqId: 0,
@@ -208,7 +230,8 @@ Alpine.data('topDealsPage', () => ({
   /* Kart etkileşim altyapısı her grid render'ından sonra tazelenir
      (products.ts onUpdate'iyle aynı sıra). */
   afterGridRender() {
-    initListingCartDrawer(this.products)
+    const products = this.products
+    void loadCartDrawer().then((m) => m.initListingCartDrawer(products))
     initProductSliders()
     applyListingSocialProof(this.products)
     syncListingFavoriteHearts()
@@ -289,7 +312,7 @@ appEl.innerHTML = `
          bu bölümde hapsolur, sticky tab barının (z-20) üstüne çıkamaz -->
     <section class="isolate pb-8 lg:pb-12" style="background: var(--products-bg, #f9fafb);">
       <div class="container-boxed">
-        ${TopDealsGrid()}
+        ${TopDealsGrid(10)}
       </div>
     </section>
   </main>
@@ -300,7 +323,8 @@ appEl.innerHTML = `
   </footer>
 
   ${LoginModal()}
-  ${ListingCartDrawer()}
+  <!-- Sepet çekmecesi: ilk grid render'ında dinamik yüklenip buraya takılır -->
+  <div id="top-deals-cart-overlay"></div>
 
   <!-- Floating Panel -->
   ${FloatingPanel()}

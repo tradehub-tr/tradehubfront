@@ -353,7 +353,32 @@ const API_PROXY_TARGET = process.env.VITE_API_PROXY || "http://localhost:8000";
 const FRAPPE_SITE_NAME = process.env.FRAPPE_SITE_NAME || "dev.localhost";
 const isLocalBackend = API_PROXY_TARGET.includes("localhost");
 
+// `server` ve `preview` aynı proxy'yi kullanır: üretim derlemesini yerelde
+// ölçerken (`vite preview`, MOGEM-638 §1 yöntemi) /api'nin de backend'e gitmesi
+// gerekir; aksi hâlde her uç 404 verir ve ölçüm anlamsızlaşır.
+const backendProxy = {
+  "/api": {
+    target: API_PROXY_TARGET,
+    changeOrigin: true,
+    ...(isLocalBackend ? { headers: { Host: FRAPPE_SITE_NAME } } : {}),
+  },
+  "/files": {
+    target: API_PROXY_TARGET,
+    changeOrigin: true,
+    ...(isLocalBackend ? { headers: { Host: FRAPPE_SITE_NAME } } : {}),
+  },
+  "/private/files": {
+    target: API_PROXY_TARGET,
+    changeOrigin: true,
+    ...(isLocalBackend ? { headers: { Host: FRAPPE_SITE_NAME } } : {}),
+  },
+};
+
 export default defineConfig({
+  preview: {
+    host: "0.0.0.0",
+    proxy: backendProxy,
+  },
   base: process.env.GITHUB_PAGES === "true" ? "/tradehubfront/" : "/",
   define: {
     "import.meta.env.VITE_APP_VERSION": JSON.stringify(pkg.version),
@@ -366,23 +391,7 @@ export default defineConfig({
       usePolling: true,
       interval: 300,
     },
-    proxy: {
-      "/api": {
-        target: API_PROXY_TARGET,
-        changeOrigin: true,
-        ...(isLocalBackend ? { headers: { Host: FRAPPE_SITE_NAME } } : {}),
-      },
-      "/files": {
-        target: API_PROXY_TARGET,
-        changeOrigin: true,
-        ...(isLocalBackend ? { headers: { Host: FRAPPE_SITE_NAME } } : {}),
-      },
-      "/private/files": {
-        target: API_PROXY_TARGET,
-        changeOrigin: true,
-        ...(isLocalBackend ? { headers: { Host: FRAPPE_SITE_NAME } } : {}),
-      },
-    },
+    proxy: backendProxy,
   },
   plugins: [
     tailwindcss(),
@@ -470,6 +479,17 @@ export default defineConfig({
         // günlerce yaşatabiliyordu (eksiklik denetimi #3). HTML artık aşağıda
         // NetworkFirst runtime cache ile (taze öncelikli, offline yedekli).
         globPatterns: ["**/*.{js,css,woff,woff2,svg,png,webp,ico}"],
+        // MOGEM-638 §2.5: ön-bellek 7,95 MB'tı ve %43'ü ilk ziyarette hiç
+        // gerekmeyen parçalardı — dört dil chunk'ı (yalnız biri yüklenir) ve
+        // yalnız dinamik import ile gelen ağır vendor'lar. Bunlar precache'ten
+        // çıkar; ihtiyaç anında aşağıdaki runtime cache (StaleWhileRevalidate
+        // değil, tarayıcı HTTP cache'i + Vite hash) onları zaten tutar.
+        // `????????` = Vite'ın 8 karakterlik hash'i; `tr-validation-*.js` gibi
+        // farklı uzunluktaki adlar eşleşmez.
+        globIgnores: [
+          "**/assets/{ar,en,ru,tr}-????????.js",
+          "**/assets/vendor-{hls,echarts,mediabunny}-????????.js",
+        ],
         // Multi-page: her HTML kendi entry. SPA fallback yok.
         navigateFallback: null,
         cleanupOutdatedCaches: true,

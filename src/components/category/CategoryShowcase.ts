@@ -128,7 +128,10 @@ function pick(tr: string, en: string): string {
   return lang === "en" && en && en.trim() ? en : tr;
 }
 
-function categoryTile(t: ShowcaseTile, columns: number): string {
+// Mobilde 2 sütun: ilk iki karo katlanma çizgisinin üstünde (hero 280px + karo 85px).
+const ABOVE_FOLD_TILES = 2;
+
+function categoryTile(t: ShowcaseTile, columns: number, index = ABOVE_FOLD_TILES): string {
   const label = pick(t.label_tr, t.label_en);
   const hover =
     pick(t.hover_text_tr, t.hover_text_en) ||
@@ -150,8 +153,16 @@ function categoryTile(t: ShowcaseTile, columns: number): string {
 
   // Görsel cover ile hücreyi tam doldurur (contain'in yüzen beyaz boşluğu yok → tutarlı ağırlık);
   // alttan gradient scrim label'ı her görselde okunur kılar. Görsel yoksa tonal gri + koyu metin.
+  // LCP (MOGEM-638 §2.3 / §7-9): mobilde ana sayfanın LCP öğesi bu görsel — ölçüldü
+  // (15 Eyl, Slow-4G): `IMG.absolute.inset-0`, 25 s. `loading="lazy"` LCP adayında
+  // tarayıcıyı görsel için son sıraya atıyordu. Ekranın üstündeki ilk karolar eager,
+  // ilk karo yüksek öncelikli; gerisi yine tembel.
+  const eager = index < ABOVE_FOLD_TILES;
+  const loadingAttrs = eager
+    ? `loading="eager" ${index === 0 ? 'fetchpriority="high"' : ""}`
+    : 'loading="lazy"';
   const media = hasImage
-    ? `<img src="${escapeAttr(safeImage)}" alt="${escapeAttr(label)}" width="400" height="400" loading="lazy" decoding="async" class="absolute inset-0 h-full w-full object-cover transition-transform duration-300 ease-out group-hover:scale-[1.04] motion-reduce:transition-none motion-reduce:group-hover:scale-100" />
+    ? `<img src="${escapeAttr(safeImage)}" alt="${escapeAttr(label)}" width="400" height="400" ${loadingAttrs} decoding="async" class="absolute inset-0 h-full w-full object-cover transition-transform duration-300 ease-out group-hover:scale-[1.04] motion-reduce:transition-none motion-reduce:group-hover:scale-100" />
       <span class="absolute inset-0 bg-gradient-to-t from-black/75 via-black/25 to-transparent transition-colors duration-200 group-hover:from-black/85 motion-reduce:transition-none"></span>`
     : "";
   const labelColor = hasImage ? "text-white" : "text-gray-900";
@@ -205,8 +216,8 @@ function promoTile(t: ShowcaseTile, columns: number): string {
   `;
 }
 
-function tileHtml(t: ShowcaseTile, columns: number): string {
-  return t.tile_type === "promo" ? promoTile(t, columns) : categoryTile(t, columns);
+function tileHtml(t: ShowcaseTile, columns: number, index = ABOVE_FOLD_TILES): string {
+  return t.tile_type === "promo" ? promoTile(t, columns) : categoryTile(t, columns, index);
 }
 
 // Render'ı etkileyen TÜM veriyi imzala — değişiklik (boyut, sıra, renk, içerik) tespiti için.
@@ -231,7 +242,7 @@ export function CategoryShowcase(data: ShowcaseData = getCachedShowcase()): stri
   // sayısına tam bölünüyorsa (aksi halde kısa tile'ların altında boş hücre kalırdı).
   // Bölen yoksa base columns'ta kalır → her tile sayısında boşluksuz dizilim.
   const twoXlColCls = TWOXL_COLUMN_CLASSES[pickTwoXlColumns(data)] ?? "";
-  const tilesHtml = data.tiles.map((t) => tileHtml(t, data.columns)).join("");
+  const tilesHtml = data.tiles.map((t, i) => tileHtml(t, data.columns, i)).join("");
   return `
     <div data-category-showcase-root data-showcase-hash='${escapeAttr(hashAttr)}'>
       ${

@@ -29,25 +29,55 @@ import '../alpine/products-filter'
 import '../alpine/loginModal'
 
 // Products listing components
+// Somut modüllerden import (MOGEM-638 §2.4): `../components/products` ve
+// `../components/product` barrel'ları `ListingCartDrawer → SharedCartDrawer` ve
+// `CartDrawer → alpine/product → WriteReviewModal/uploader/…` zincirlerini
+// sayfanın statik grafiğine sokuyor, Vite hepsini modulepreload ediyordu
+// (47 preload / 1 MB). Sepet çekmecesi + sevkiyat penceresi `mountCartOverlays`
+// ile dinamik gelir.
+import { FilterSidebar, initFilterSidebar } from '../components/products/FilterSidebar'
 import {
-  FilterSidebar,
-  initFilterSidebar,
   ProductListingGrid,
-  ListingCartDrawer,
-  initListingCartDrawer,
-  SubHeader,
-  updateSubHeader,
-  updateBreadcrumb,
   rerenderProductGrid,
-  initFilterEngine,
-  updateFilterChips,
   setGridViewMode,
-} from '../components/products'
+} from '../components/products/ProductListingGrid'
+import { SubHeader, updateSubHeader, updateBreadcrumb } from '../components/products/SubHeader'
+import { initFilterEngine } from '../components/products/filterEngine'
+import { updateFilterChips } from '../components/products/FilterChips'
 import { initProductSliders } from '../components/shared/ListingCard'
+import { renderListingCardSkeletons } from '../components/shared/ListingCardSkeleton'
+
+// Yükleme iskeleti kart sayısı: mobil/tablet katlanma çizgisini fazlasıyla doldurur;
+// gerçek sayfa 40 kart (pageSize) — footer viewport'a iskelet aşamasında girmez.
+const GRID_SKELETON_COUNT = 24
 import { renderPagination } from '../components/shared/Pagination'
 import { applyListingSocialProof } from '../components/products/initListingSocialProof'
 import { initListingFavoriteTriggers, syncListingFavoriteHearts } from '../components/products/initListingFavorites'
-import { ShippingModal, initShippingModal, LoginModal } from '../components/product'
+import { LoginModal } from '../components/product/LoginModal'
+
+type CartOverlayModules = [
+  typeof import('../components/products/ListingCartDrawer'),
+  typeof import('../components/product/CartDrawer'),
+]
+let cartOverlays: Promise<CartOverlayModules> | null = null
+/** Sepet çekmecesi + sevkiyat penceresi: bir kez dinamik yüklenir, slot'a basılır. */
+function mountCartOverlays(): Promise<CartOverlayModules> {
+  if (!cartOverlays) {
+    cartOverlays = Promise.all([
+      import('../components/products/ListingCartDrawer'),
+      import('../components/product/CartDrawer'),
+    ]).then((mods) => {
+      const [{ ListingCartDrawer }, { ShippingModal, initShippingModal }] = mods
+      const slot = document.getElementById('products-cart-overlays')
+      if (slot && !slot.childElementCount) {
+        slot.innerHTML = `${ListingCartDrawer()}${ShippingModal()}`
+        initShippingModal()
+      }
+      return mods
+    })
+  }
+  return cartOverlays
+}
 
 import { initCurrency } from '../services/currencyService'
 import { applyServerSeo } from '../seo/setPageMeta'
@@ -194,9 +224,8 @@ appEl.innerHTML = `
   <!-- Mobile filter content mounts only after the filter trigger is used. -->
   <div id="mobile-filter-host"></div>
 
-  <!-- Listing Cart Drawer -->
-  ${ListingCartDrawer()}
-  ${ShippingModal()}
+  <!-- Listing Cart Drawer + Shipping Modal: dinamik yüklenip buraya takılır (mountCartOverlays) -->
+  <div id="products-cart-overlays"></div>
 `;
 
 // Initialize custom component behaviors FIRST (before Flowbite can interfere)
@@ -291,23 +320,21 @@ document.addEventListener('filter-apply', (e: Event) => {
 
 initMobileFilterDialog();
 
-// Initialize shipping modal
-initShippingModal();
+// Sepet çekmecesi + sevkiyat penceresi (Alpine başladıktan sonra, dinamik)
+void mountCartOverlays();
 
 // Favori kalbi tıklamaları (body delegation — grid re-render'larından etkilenmez)
 initListingFavoriteTriggers();
 
-// Show loading state in grid
+// Show loading state in grid — sayfa boyutu kadar iskelet kart (MOGEM-638 §2.3):
+// eski 200px'lik spinner kartlar gelince footer'ı 3000+ px aşağı itiyordu
+// (mobil CLS 0,44, kaynak FOOTER). İskelet gerçek kartlarla aynı yükseklikte.
 function showGridLoading(): void {
   const grid = document.querySelector<HTMLElement>('.product-grid');
   if (grid) {
     grid.innerHTML = `
-      <div class="col-span-full flex items-center justify-center py-16">
-        <div class="flex flex-col items-center gap-3">
-          <div class="w-8 h-8 border-3 border-primary border-t-transparent rounded-full animate-spin"></div>
-          <span class="text-sm text-text-muted">${t('infoMisc.productsLoading')}</span>
-        </div>
-      </div>
+      <span class="sr-only" role="status">${t('infoMisc.productsLoading')}</span>
+      ${renderListingCardSkeletons(GRID_SKELETON_COUNT)}
     `;
   }
 }
@@ -424,8 +451,8 @@ initCurrency().then(() => {
           paginationEl.innerHTML = renderPagination(page, totalPages, hasNext, hasPrev);
         }
 
-        // Initialize listing cart drawer with current products
-        initListingCartDrawer(products);
+        // Initialize listing cart drawer with current products (modül dinamik gelir)
+        void mountCartOverlays().then(([{ initListingCartDrawer }]) => initListingCartDrawer(products));
         initProductSliders();
 
         // Sosyal kanıt: sinyali olan kartların rozetini dinamik (dönen) etiketle değiştir

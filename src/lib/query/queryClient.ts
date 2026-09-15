@@ -10,6 +10,13 @@ const persister = experimental_createQueryPersister({
   maxAge: 1000 * 60 * 60 * 24 * 7, // 7 gün üst sınır
   buster: APP_VERSION,
   prefix: "tradehub-query",
+  // MOGEM-638 §2.6: varsayılan `true`, IndexedDB'den geri yüklenen her sorgu
+  // için `query.isStale()` sorup arka planda ikinci bir fetch atıyordu. Biz
+  // `queryClient.fetchQuery` kullanıyoruz (gözlemci yok) ve gözlemcisiz
+  // sorguda `isStale()` staleTime'ı hiç bakmadan "bayat" diyor — sonuç: her
+  // sayfada currency 2×, mega menü 2×, listings 2× (ana sayfada 6). Tazelik
+  // zaten `staleTime`/`maxAge` ile yönetiliyor; geri yükleme fetch'i gereksiz.
+  refetchOnRestore: false,
 });
 
 export const queryClient = new QueryClient({

@@ -61,8 +61,11 @@ import { FloatingPanel, BottomNav, initBottomNav } from "./components/floating";
 
 // Ürün vitrini kart aksiyonları: "Sepete ekle" → paylaşımlı sepet çekmecesi,
 // "Sohbet et" → sohbet penceresi (listeleme sayfasıyla aynı kurulum, 2026-09-07).
-import { ListingCartDrawer } from "./components/products";
-import { ShippingModal, initShippingModal } from "./components/product";
+// Sepet çekmecesi + sevkiyat penceresi burada STATİK import edilmez (MOGEM-638
+// §2.4): `ListingCartDrawer → SharedCartDrawer` ve `CartDrawer → alpine/product
+// → WriteReviewModal/uploader/dropzone…` zincirleri ana sayfanın statik
+// grafiğine giriyor, Vite hepsini `modulepreload` ediyordu (44 preload / 1 MB,
+// ilk boyamadan önce). Dinamik import: `mountCartOverlays()` aşağıda.
 import { mountChatPopup, initChatTriggers } from "./components/chat-popup";
 
 // Alpine.js
@@ -72,7 +75,11 @@ import { startAlpine } from "./alpine";
 import { initAnimatedPlaceholder } from "./utils/animatedPlaceholder";
 import { markHomeReadyAfterInitialTasks } from "./performance/homeReadiness";
 import { loadCategories } from "./services/categoryService";
-import { fetchActiveShowcase } from "./services/categoryShowcaseService";
+import {
+  fetchActiveShowcase,
+  getCachedShowcase,
+  isCacheFresh,
+} from "./services/categoryShowcaseService";
 
 interface DeferredHomeSection {
   name: string;
@@ -141,7 +148,17 @@ function initDeferredHomeSections(sections: readonly DeferredHomeSection[]): voi
 // sonradan yüksek bir bento grid eklemek, aşağıdaki hero alanını viewport'tan
 // iterek ölçülebilir CLS üretiyordu. İlk görünür düzeni API'nin güncel sonucu
 // ile bir kez kuruyoruz; initCategoryShowcase aynı payload'ı tekrar kullanır.
-const initialCategoryShowcase = await fetchActiveShowcase();
+//
+// MOGEM-638 §2.2/§7-9: bu `await` ilk boyamayı API turuna bağlıyordu — sayfada
+// tek bir piksel çizilmeden önce `get_active_tiles` bitmek zorundaydı (mobil
+// Slow-4G'de saniyeler). Taze yerel kopya varsa düzen ONDAN kurulur ve sayfa
+// hemen boyanır; `initCategoryShowcase` arka planda gerçek sonucu çekip yalnız
+// imza değişmişse bölümü değiştirir. İlk ziyaret (kopya yok) eski yolda kalır:
+// boş kabuk basıp sonra yüksek bir grid eklemek ölçülmüş CLS kaynağıydı.
+const showcaseFromCache = isCacheFresh();
+const initialCategoryShowcase = showcaseFromCache
+  ? getCachedShowcase()
+  : await fetchActiveShowcase();
 const appEl = document.querySelector<HTMLDivElement>("#app")!;
 // FE-2 (CWV): opacity-0 giriş gating'i KALDIRILDI (UX onaylı karar,
 // 2026-07-23). İçerik saydam beklerken LCP tüm init bitene kadar
@@ -223,9 +240,9 @@ appEl.innerHTML = `
   <!-- Bottom Navigation (mobile/tablet) -->
   ${BottomNav()}
 
-  <!-- Vitrin kartlarının "Sepete ekle" çekmecesi + sevkiyat seçim penceresi -->
-  ${ListingCartDrawer()}
-  ${ShippingModal()}
+  <!-- Vitrin kartlarının "Sepete ekle" çekmecesi + sevkiyat seçim penceresi:
+       ilk boyamadan sonra dinamik yüklenip buraya takılır (mountCartOverlays) -->
+  <div id="home-cart-overlays"></div>
 
 `;
 
@@ -242,7 +259,22 @@ initChatTriggers();
 
 // Initialize Alpine.js (FloatingPanel is now Alpine-driven)
 startAlpine();
-initShippingModal();
+
+// Sepet çekmecesi + sevkiyat penceresi: Alpine başladıktan sonra dinamik
+// import ile gelir ve slot'a takılır; Alpine yeni düğümleri MutationObserver
+// ile kendisi başlatır. İlk boyamayı beklemez, ama modulepreload grafiğine de
+// girmez — indirme ilk boyamayla yarışmaz, onun ardından paralel akar.
+async function mountCartOverlays(): Promise<void> {
+  const [{ ListingCartDrawer }, { ShippingModal, initShippingModal }] = await Promise.all([
+    import("./components/products/ListingCartDrawer"),
+    import("./components/product/CartDrawer"),
+  ]);
+  const slot = document.getElementById("home-cart-overlays");
+  if (!slot) return;
+  slot.innerHTML = `${ListingCartDrawer()}${ShippingModal()}`;
+  initShippingModal();
+}
+void mountCartOverlays();
 
 // Initialize remaining custom behaviors
 initStickyHeaderSearch();
@@ -267,7 +299,9 @@ const homeReady = markHomeReadyAfterInitialTasks(appEl, [
   mobileCategoryBarReady,
   bottomNavReady,
   initHeaderNotice(),
-  initCategoryShowcase(initialCategoryShowcase),
+  // Kopyadan kurulduysa init API'ye gidip gerçek veriyi doğrular (imza
+  // değişmişse bölümü değiştirir); API'den kurulduysa aynı payload yeniden kullanılır.
+  initCategoryShowcase(showcaseFromCache ? undefined : initialCategoryShowcase),
   initHeroTopSlider(),
   initHeroSidePanel(),
   initRecommendationSlider(),
