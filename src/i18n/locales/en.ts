@@ -5722,6 +5722,8 @@ const en = {
         "Your active subscription ends immediately; no refund is issued for the remaining period.",
       deletePreviewStore: "Your store is suspended and closed to sales.",
       deletePreviewSubUsers: "Panel access for {{count}} sub-user(s) is revoked.",
+      deletePreviewOpenOrders:
+        "You have {{count}} open order(s); once your store is suspended, settle the outcome of these orders with your buyers.",
       deletePreviewKvkk:
         "Your personal data is permanently anonymized within {{days}} days in accordance with KVKK.",
       featureComingSoon: "This feature is coming soon.",

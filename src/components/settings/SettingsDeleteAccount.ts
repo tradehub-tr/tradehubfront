@@ -10,6 +10,7 @@ import { t } from "../../i18n";
 const ICONS = {
   warning: `<svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M12 9v4m0 4h.01M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z" stroke="#dc2626" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
   trash: `<svg width="48" height="48" viewBox="0 0 48 48" fill="none"><circle cx="24" cy="24" r="22" fill="#fef2f2"/><path d="M16 20h16M20 20V16h8v4M18 20v12a2 2 0 002 2h8a2 2 0 002-2V20" stroke="#dc2626" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
+  warningSmall: `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 9v4m0 4h.01M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z" stroke="#dc2626" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
 };
 
 function getReasonOptions(): { value: string; label: string }[] {
@@ -87,6 +88,12 @@ export function SettingsDeleteAccount(): string {
                preview yüklenemezse KVKK maddesi fallback ile yine gösterilir. -->
           <div class="mb-5 p-4 rounded-md border border-gray-200 bg-gray-50">
             <p class="text-[13px] font-semibold mb-2 m-0" style="color:var(--color-text-primary)">${t("settings.deletePreviewTitle")}</p>
+            <!-- FE-1 (AC-9): açık sipariş VURGULU uyarısı — yalnız open_order_count>0
+                 iken görünür (bilgilendirme; silme engellenmez). -->
+            <p x-show="openOrderCount() > 0" x-cloak class="flex items-start gap-2 mb-2 m-0 p-2.5 rounded-md border border-red-200 bg-red-50 text-[13px] font-semibold text-red-700">
+              <span class="mt-0.5 flex-shrink-0">${ICONS.warningSmall}</span>
+              <span x-text="openOrderWarning()"></span>
+            </p>
             <ul class="list-none p-0 m-0 flex flex-col gap-1.5">
               <template x-for="line in previewLines()">
                 <li class="flex items-start gap-2 text-[13px]" style="color:var(--color-text-secondary)">
