@@ -1,3 +1,18 @@
+# ── Ülke başlığı temizliği — MOGEM-642 Faz 1.4 (güvenlik) ─────────────────
+# Backend `_detect_country()` (api/currency.py) ülkeyi `CF-IPCountry` → `X-Country`
+# → `Accept-Language` sırasıyla okuyor. İlk ikisi İSTEMCİDEN gelirse ziyaretçi
+# kendi ülkesini uydurabilir: para birimi önerisi (ve ileride açılış dili)
+# istemcinin dediğine göre belirlenir.
+#
+# Ölçüldü (16 Eyl 2026, gerçek nginx + curl): satırlar yokken istemcinin
+# gönderdiği `X-Country: US` / `CF-IPCountry: US` backend'e AYNEN ulaşıyor.
+#
+# Bu yüzden backend'e proxy geçen HER blokta iki başlık da boş değerle eziliyor —
+# nginx boş değerli başlığı proxy'ye hiç göndermez. Ülke kodunun nereden
+# geleceğine (Cloudflare / nginx geo / başka) karar VERİLMEDİ; o karar geldiğinde
+# başlığı dolduran kaynak buraya eklenecek. Bugün kural tek yönlü: istemci
+# ülke söyleyemez.
+
 # Türkçe pretty URL → dist HTML fallback mapping. SEO backend routing'e
 # düşmeyen path'ler (registry'de olmayan eski URL'ler) bu map üzerinden
 # doğru HTML dosyasına yönlendirilir.
@@ -315,6 +330,8 @@ server {
         proxy_pass https://${BACKEND_DOMAIN}/api/method/tradehub_core.api.seo.get_sitemap_index;
         proxy_ssl_server_name on;
         proxy_set_header Host ${BACKEND_DOMAIN};
+        proxy_set_header X-Country "";
+        proxy_set_header CF-IPCountry "";
         proxy_set_header X-Real-IP $remote_addr;
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
         proxy_set_header X-Forwarded-Proto $scheme;
@@ -326,6 +343,8 @@ server {
         proxy_pass https://${BACKEND_DOMAIN}/api/method/tradehub_core.api.seo.get_sitemap?name=$1;
         proxy_ssl_server_name on;
         proxy_set_header Host ${BACKEND_DOMAIN};
+        proxy_set_header X-Country "";
+        proxy_set_header CF-IPCountry "";
         proxy_set_header X-Real-IP $remote_addr;
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
         proxy_set_header X-Forwarded-Proto $scheme;
@@ -340,6 +359,8 @@ server {
         proxy_pass https://${BACKEND_DOMAIN}/api/method/tradehub_core.api.media_public.asset_landing?asset_id=$1;
         proxy_ssl_server_name on;
         proxy_set_header Host ${BACKEND_DOMAIN};
+        proxy_set_header X-Country "";
+        proxy_set_header CF-IPCountry "";
         proxy_set_header X-Real-IP $remote_addr;
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
         proxy_set_header X-Forwarded-Proto $scheme;
@@ -358,6 +379,8 @@ server {
         proxy_pass https://${BACKEND_DOMAIN}/api/method/tradehub_core.seo.page_resolver.render_media_watch?slug=$1;
         proxy_ssl_server_name on;
         proxy_set_header Host ${BACKEND_DOMAIN};
+        proxy_set_header X-Country "";
+        proxy_set_header CF-IPCountry "";
         proxy_set_header X-Real-IP $remote_addr;
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
         proxy_set_header X-Forwarded-Proto $scheme;
@@ -409,6 +432,8 @@ server {
         proxy_cookie_flags ~ SameSite=None Secure;
         proxy_ssl_server_name on;
         proxy_set_header Host ${BACKEND_DOMAIN};
+        proxy_set_header X-Country "";
+        proxy_set_header CF-IPCountry "";
         proxy_set_header X-Real-IP $remote_addr;
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
         proxy_set_header X-Forwarded-Proto $scheme;
@@ -439,6 +464,8 @@ server {
         proxy_pass https://${BACKEND_DOMAIN}/private/files/;
         proxy_ssl_server_name on;
         proxy_set_header Host ${BACKEND_DOMAIN};
+        proxy_set_header X-Country "";
+        proxy_set_header CF-IPCountry "";
         proxy_set_header X-Real-IP $remote_addr;
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
         proxy_set_header X-Forwarded-Proto $scheme;
@@ -467,6 +494,8 @@ server {
         proxy_pass https://${BACKEND_DOMAIN}/files/;
         proxy_ssl_server_name on;
         proxy_set_header Host ${BACKEND_DOMAIN};
+        proxy_set_header X-Country "";
+        proxy_set_header CF-IPCountry "";
         proxy_set_header X-Real-IP $remote_addr;
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
         proxy_set_header X-Forwarded-Proto $scheme;
@@ -491,6 +520,8 @@ server {
         proxy_pass https://${BACKEND_DOMAIN};
         proxy_ssl_server_name on;
         proxy_set_header Host ${BACKEND_DOMAIN};
+        proxy_set_header X-Country "";
+        proxy_set_header CF-IPCountry "";
     }
 
     # Socket.IO WebSocket proxy
@@ -502,6 +533,8 @@ server {
         proxy_set_header Connection "upgrade";
         proxy_ssl_server_name on;
         proxy_set_header Host ${BACKEND_DOMAIN};
+        proxy_set_header X-Country "";
+        proxy_set_header CF-IPCountry "";
     }
 
     # Dinamik SEO URL'leri — bot: backend'den meta injection, user: lokal HTML
@@ -522,6 +555,8 @@ server {
         proxy_pass https://${BACKEND_DOMAIN};
         proxy_ssl_server_name on;
         proxy_set_header Host ${BACKEND_DOMAIN};
+        proxy_set_header X-Country "";
+        proxy_set_header CF-IPCountry "";
         proxy_set_header X-Real-IP $remote_addr;
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
         proxy_set_header X-Forwarded-Proto $scheme;
@@ -545,6 +580,8 @@ server {
         proxy_pass https://${BACKEND_DOMAIN};
         proxy_ssl_server_name on;
         proxy_set_header Host ${BACKEND_DOMAIN};
+        proxy_set_header X-Country "";
+        proxy_set_header CF-IPCountry "";
         proxy_set_header X-Real-IP $remote_addr;
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
         proxy_set_header X-Forwarded-Proto $scheme;
@@ -568,6 +605,8 @@ server {
         proxy_pass https://${BACKEND_DOMAIN};
         proxy_ssl_server_name on;
         proxy_set_header Host ${BACKEND_DOMAIN};
+        proxy_set_header X-Country "";
+        proxy_set_header CF-IPCountry "";
         proxy_set_header X-Real-IP $remote_addr;
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
         proxy_set_header X-Forwarded-Proto $scheme;
@@ -596,6 +635,8 @@ server {
         proxy_pass https://${BACKEND_DOMAIN};
         proxy_ssl_server_name on;
         proxy_set_header Host ${BACKEND_DOMAIN};
+        proxy_set_header X-Country "";
+        proxy_set_header CF-IPCountry "";
         proxy_set_header X-Real-IP $remote_addr;
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
         proxy_set_header X-Forwarded-Proto $scheme;
@@ -616,6 +657,8 @@ server {
         proxy_pass https://${BACKEND_DOMAIN};
         proxy_ssl_server_name on;
         proxy_set_header Host ${BACKEND_DOMAIN};
+        proxy_set_header X-Country "";
+        proxy_set_header CF-IPCountry "";
         proxy_set_header X-Real-IP $remote_addr;
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
         proxy_set_header X-Forwarded-Proto $scheme;
