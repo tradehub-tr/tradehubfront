@@ -10,7 +10,13 @@
  */
 
 import type { FooterColumn } from "../../types/navigation";
-import { t, getCurrentLang } from "../../i18n";
+import {
+  LANGUAGE_OPTIONS,
+  getCurrentLang,
+  languageLabel,
+  setLanguageManually,
+  t,
+} from "../../i18n";
 import { getSelectedCurrency, setSelectedCurrency } from "../../utils/currency";
 import { getSupportedCurrencies } from "../../services/currencyService";
 import { isIosApp } from "../../utils/platform";
@@ -19,17 +25,10 @@ import { isIosApp } from "../../utils/platform";
 import "../../utils/nativePrettyUrls";
 import { FooterPolicy } from "./FooterPolicy";
 
-/** Footer bölge seçicisinde sunulan UI dilleri (BottomNav ile tutarlı: tr/en). */
-const FOOTER_LANG_LABELS: Record<string, string> = {
-  tr: "Türkçe",
-  en: "English",
-  ar: "العربية",
-  ru: "Русский",
-};
-const FOOTER_LANGS: { code: string; label: string }[] = [
-  { code: "tr", label: FOOTER_LANG_LABELS.tr },
-  { code: "en", label: FOOTER_LANG_LABELS.en },
-];
+/** Footer bölge seçicisinde sunulan UI dilleri — tek kaynak
+ *  `i18n/languageChoice`. Önceden yalnız tr/en sunuluyordu; mobilde header
+ *  seçicisi görünmediği için AR/RU hiçbir yoldan seçilemiyordu. */
+const FOOTER_LANGS = LANGUAGE_OPTIONS.map((o) => ({ code: o.code, label: o.name }));
 
 /** currencyService yüklenmişse desteklenen para birimleri, yoksa fallback. */
 function getFooterCurrencyCodes(): string[] {
@@ -42,7 +41,7 @@ function getFooterCurrencyCodes(): string[] {
 function renderRegionLabel(): string {
   const lang = getCurrentLang();
   const cur = getSelectedCurrency().code;
-  return `${FOOTER_LANG_LABELS[lang] || "English"} · ${cur}`;
+  return `${languageLabel(lang)} · ${cur}`;
 }
 
 /** Dil/para birimi seçicisi için globe ikonu (ülke bayrağı değil). */
@@ -264,7 +263,7 @@ function applyFooterRegion(): void {
   const langSel = document.getElementById("footer-lang-select") as HTMLSelectElement | null;
   const curSel = document.getElementById("footer-currency-select") as HTMLSelectElement | null;
   const lang = langSel?.value || getCurrentLang();
-  localStorage.setItem("i18nextLng", lang);
+  setLanguageManually(lang);
   if (curSel?.value) setSelectedCurrency(curSel.value);
   window.location.reload();
 }

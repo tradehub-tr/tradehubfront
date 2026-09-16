@@ -1,0 +1,99 @@
+/**
+ * Dil seçiminin TEK KARAR NOKTASI — davranış sözleşmesi.
+ *
+ * Korunan iddialar:
+ *  1. Elle seçim `th-lang-source=manual` ile işaretlenir (otomatik ülke
+ *     tespiti MOGEM-642'de buna bakıp geri çekilecek).
+ *  2. Desteklenmeyen kod YAZILMAZ — eski `langMap[code] || "en"` kalıbı
+ *     AR/RU seçimini sessizce İngilizceye çeviriyordu.
+ *  3. Kod biçimi ne olursa olsun ("TR", "tr-TR", "tr") aynı sonuca normalize olur.
+ */
+import { beforeEach, describe, expect, it, vi } from "vitest";
+
+import {
+  LANG_SOURCE_KEY,
+  LANG_STORAGE_KEY,
+  isLanguageManuallySelected,
+  normalizeLang,
+  setLanguageManually,
+} from "../languageChoice";
+
+describe("normalizeLang", () => {
+  it("büyük/küçük harf ve bölge ekini normalize eder", () => {
+    expect(normalizeLang("TR")).toBe("tr");
+    expect(normalizeLang("tr-TR")).toBe("tr");
+    expect(normalizeLang("  EN  ")).toBe("en");
+    expect(normalizeLang("ar")).toBe("ar");
+    expect(normalizeLang("RU")).toBe("ru");
+  });
+
+  it("desteklenmeyen kodda null döner", () => {
+    expect(normalizeLang("de")).toBeNull();
+    expect(normalizeLang("zh-CN")).toBeNull();
+    expect(normalizeLang("")).toBeNull();
+    expect(normalizeLang(null)).toBeNull();
+    expect(normalizeLang(undefined)).toBeNull();
+  });
+});
+
+describe("setLanguageManually", () => {
+  beforeEach(() => localStorage.clear());
+
+  it("dili yazar ve 'manual' olarak işaretler", () => {
+    expect(setLanguageManually("TR")).toBe("tr");
+    expect(localStorage.getItem(LANG_STORAGE_KEY)).toBe("tr");
+    expect(localStorage.getItem(LANG_SOURCE_KEY)).toBe("manual");
+    expect(isLanguageManuallySelected()).toBe(true);
+  });
+
+  it("dört dilin dördünü de kabul eder", () => {
+    for (const [girdi, beklenen] of [
+      ["TR", "tr"],
+      ["EN", "en"],
+      ["AR", "ar"],
+      ["RU", "ru"],
+    ] as const) {
+      localStorage.clear();
+      expect(setLanguageManually(girdi)).toBe(beklenen);
+      expect(localStorage.getItem(LANG_STORAGE_KEY)).toBe(beklenen);
+    }
+  });
+
+  it("DESTEKLENMEYEN kodu yazmaz ve null döner", () => {
+    expect(setLanguageManually("de")).toBeNull();
+    expect(localStorage.getItem(LANG_STORAGE_KEY)).toBeNull();
+    expect(localStorage.getItem(LANG_SOURCE_KEY)).toBeNull();
+  });
+
+  it("geçersiz koddan sonra önceki seçim bozulmaz", () => {
+    setLanguageManually("ar");
+    setLanguageManually("de");
+    expect(localStorage.getItem(LANG_STORAGE_KEY)).toBe("ar");
+  });
+
+  it("localStorage yazılamıyorsa çökmez, dili yine döner", () => {
+    const orijinal = Storage.prototype.setItem;
+    Storage.prototype.setItem = vi.fn(() => {
+      throw new Error("QuotaExceeded");
+    });
+    try {
+      expect(setLanguageManually("ru")).toBe("ru");
+    } finally {
+      Storage.prototype.setItem = orijinal;
+    }
+  });
+});
+
+describe("isLanguageManuallySelected", () => {
+  beforeEach(() => localStorage.clear());
+
+  it("işaret yokken false — otomatik tespit dili ezebilir", () => {
+    localStorage.setItem(LANG_STORAGE_KEY, "tr"); // i18next'in kendi cache'i
+    expect(isLanguageManuallySelected()).toBe(false);
+  });
+
+  it("işaret varken true", () => {
+    setLanguageManually("en");
+    expect(isLanguageManuallySelected()).toBe(true);
+  });
+});

@@ -4,13 +4,15 @@
  * navigation as full-height tabs on desktop, equal-width tab row below lg.
  */
 
-import { t, getCurrentLang } from "../../i18n";
+import { LANGUAGE_OPTIONS, getCurrentLang, setLanguageManually, t } from "../../i18n";
 import { waitForAuth } from "../../utils/auth";
 
-const languageOptions = [
-  { code: "TR", name: "Türkçe" },
-  { code: "EN", name: "English" },
-];
+/** Dil seçenekleri — tek kaynak `i18n/languageChoice`. `<option value>`
+ *  biçimi tarihsel olarak BÜYÜK harf; `setLanguageManually()` normalize eder. */
+const languageOptions = LANGUAGE_OPTIONS.map((o) => ({
+  code: o.code.toUpperCase(),
+  name: o.name,
+}));
 
 const getBaseUrl = (): string => {
   const viteBase = typeof import.meta !== "undefined" ? import.meta.env?.BASE_URL : undefined;
@@ -240,11 +242,8 @@ export function HelpCenterHeader(opts: HelpCenterHeaderOptions = {}): string {
 export function initHelpCenterLangSelector(): void {
   const langSelect = document.getElementById("hc-lang-select") as HTMLSelectElement | null;
   const saveBtn = document.getElementById("hc-lang-save-btn");
-  const langMap: Record<string, string> = { TR: "tr", EN: "en" };
-
   const applyLang = (code: string) => {
-    localStorage.setItem("i18nextLng", langMap[code] || "en");
-    window.location.reload();
+    if (setLanguageManually(code)) window.location.reload();
   };
   saveBtn?.addEventListener("click", () => applyLang(langSelect?.value || "EN"));
   // Mobil menü açılırken mount edildiği için dil seçimini event delegation ile bağla.
