@@ -81,7 +81,14 @@ function renderMobileGroup(group: ApiCategoryChild): string {
   `;
 }
 
-const SIDEBAR_ACTIVE = ["bg-white", "dark:bg-gray-900", "font-bold", "text-gray-900", "dark:text-white", "border-s-primary-500"];
+const SIDEBAR_ACTIVE = [
+  "bg-white",
+  "dark:bg-gray-900",
+  "font-bold",
+  "text-gray-900",
+  "dark:text-white",
+  "border-s-primary-500",
+];
 const SIDEBAR_INACTIVE = ["text-gray-700", "dark:text-gray-300", "border-s-transparent"];
 
 function populateCategoryOverlay(overlay: HTMLElement): () => void {

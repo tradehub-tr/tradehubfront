@@ -7,10 +7,7 @@
 
 import type { LocaleOption, CurrencyOption } from "../../types/navigation";
 import { cartStore } from "../cart/state/CartStore";
-import {
-  syncGuestCartAfterLogin,
-  installGuestCartLogoutReset,
-} from "../cart/state/guestCartMerge";
+import { syncGuestCartAfterLogin, installGuestCartLogoutReset } from "../cart/state/guestCartMerge";
 import { isLoggedIn, getUser, waitForAuth, logout } from "../../utils/auth";
 import { getListingUrl } from "../../utils/listingUrl";
 import { getBrandUrl } from "../../utils/brandUrl";
