@@ -140,9 +140,17 @@ for (const dil of ["ru", "ar"] as const) {
       });
     }
 
-    test(`sol menüdeki lojistik bölümü ${dil} dilinde`, async ({ context, page }) => {
+    test(`sol menüdeki lojistik bölümü ${dil} dilinde`, async ({ context, page }, testInfo) => {
       // `nav.*` ad alanı ru/ar'da eksikken menüde "Logistics" İngilizce
       // görünüyordu — ölçüldü 16 Eyl 2026, Rusça arayüzün ortasında.
+      //
+      // YALNIZ MASAÜSTÜ: dar ekranda sol menü hiç çizilmiyor, sayfada yalnız
+      // ekranın kendi başlığı kalıyor ("Витрина категорий"). Bu dosya
+      // `e2e.sh`'ın spec listesine 16 Eyl'de eklenene kadar HİÇ koşmamıştı,
+      // bu yüzden mobil kısıtı da o güne kadar görülmedi.
+      const genislik = testInfo.project.use.viewport?.width ?? 1280;
+      test.skip(genislik < 1024, "Sol menü yalnız geniş ekranda çiziliyor.");
+
       await oturumAc(context, dil);
       await page.goto(EKRANLAR[1].yol);
       await page.waitForLoadState("networkidle");
