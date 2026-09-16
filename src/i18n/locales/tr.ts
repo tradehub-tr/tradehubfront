@@ -2165,7 +2165,8 @@ const tr = {
       guestMergeDesc:
         "Giriş yapmadan önce sepetinize {{guest}} ürün eklemiştiniz. Hesabınızdaki sepette zaten {{account}} ürün var. Ne yapmak istersiniz?",
       guestMergeKeepBoth: "Sepetleri birleştir",
-      guestMergeKeepBothHint: "Hesabınızdaki ürünler kalır, giriş öncesi eklediğiniz ürünler üstüne eklenir.",
+      guestMergeKeepBothHint:
+        "Hesabınızdaki ürünler kalır, giriş öncesi eklediğiniz ürünler üstüne eklenir.",
       guestMergeReplace: "Hesap sepetini boşalt, yenileri ekle",
       guestMergeReplaceHint:
         "Hesabınızdaki {{account}} ürün silinir, yalnızca giriş öncesi eklediğiniz {{guest}} ürün kalır.",
@@ -7596,12 +7597,6 @@ const tr = {
       verificationLevelPremiumLabel: "Premium Doğrulama:",
       verificationLevelPremiumDesc:
         "En üst düzey güvenilirlik rozetidir. Gelişmiş doğrulamaya ek olarak, finansal sağlamlık analizi, müşteri referans kontrolü ve yıllık düzenli denetimler içerir. Premium doğrulanmış tedarikçiler, iStoc'un en güvenilir iş ortakları olarak öne çıkarılır. Yıllık 7.990 TL doğrulama ücreti uygulanır.",
-      heroTitleMain: "Fabrikanı tüm dünyaya aç.",
-      heroDescNoCommission:
-        "iStoc, üreticileri dünyanın dört bir yanındaki B2B alıcılarıyla aracısız buluşturur. Listele, sat, sevk et — komisyon yok.",
-      heroImageAltWorld: "Dünya geneline ihracat: liman ve konteyner lojistiği",
-      manufacturersFocusedSupport: "Üreticilere özel destek",
-      startApplicationLink: "başvuruyu başlat",
 
       // Trust strip (hero altı)
       trustCommission: "Satış komisyonu",
