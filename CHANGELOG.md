@@ -1,3 +1,23 @@
+## [v2.6.0-alpha.4] - 2026-09-16 ALPHA
+
+Bu surum alpha.istoc.com'da gelistirme asamasindadir.
+
+### Eklendi
+- feat(i18n): dil tercihi çerezi ve hl bağlantı parametresi eklendi (@aliiball)
+  - hl ve lang parametreleri kodda HİÇ okunmuyordu: istoc.com/?hl=ar yazan ziyaretçi Türkçe sayfa görüyordu. Artık okunuyor, tercih kalıcı yazılıyor ve adres replaceState ile temizleniyor. Parametre adreste bırakılsaydı ilk iç bağlantıda zaten düşecekti; bu arada Google /?hl=tr ile /yi iki ayrı sayfa sayardı.
+  - Tercih artık th-lang ve th-lang-source çerezlerinde. Storefront i18nextLng, panel th-lang localStorage anahtarını kullanıyordu ve iki depo birbirini görmüyordu: mağaza yüzünde Arapça seçen kullanıcı panele girince İngilizce karşılanıyordu. Çerezi sunucu da görebiliyor, ilk boyama ve önbellek anahtarı işleri buna bağlı.
+  - resolveLang kararın tek yeri oldu: hl, elle seçim, ülke, tarayıcı, en. Haritada olmayan ülke ülke basamağını BİTİRMEZ; aksi hâlde Almanyadan bağlanan Rusça tarayıcılı kullanıcı İngilizceye kilitlenirdi.
+  - Çerez yokken eski localStorage seçimi çereze taşınıyor, yayın anında kimsenin tercihi sıfırlanmasın diye. Taşıma yalnız th-lang-source manual işaretliyken: i18next otomatik tespiti de aynı anahtara yazıyor.
+  - readDetectedCountry meta th-country okuyor. Kaynağı K1 kararına bağlı; meta yokken davranış bugünküyle aynı kalıyor.
+- feat(i18n): dil seçimi denetimi çereze genişletildi (@aliiball)
+  - Denetim yalnız localStorage yazımına bakıyordu. Tercih çereze de yazılmaya başlanınca yeni bir kaçış yolu açıldı: bir seçici document.cookie ile yazarsa th-lang-source işareti eksik kalır ve ülke tespiti kullanıcının kendi seçimini ezer, yani kapatılmak istenen kusurun çerez üzerinden tekrarı.
+
+### Duzeltildi
+- fix(i18n): panel dil bütünlüğü testi koşum listesine alındı (@aliiball)
+  - Spec panel öneki yüzünden mock suitten hariç tutuluyordu ama PANEL_SPECS listesine de eklenmemişti: yazıldığı günden beri hiç koşmamıştı. e2e.sh listesine eklendi.
+  - İlk koşumda dar ekranda düştüğü görüldü: sol menü mobilde hiç çizilmiyor, sayfada yalnız ekranın kendi başlığı kalıyor. Test kendi genişlik koşuluna bağlandı.
+
+---
 ## [v2.6.0-alpha.3] - 2026-09-16 ALPHA
 
 Bu surum alpha.istoc.com'da gelistirme asamasindadir.
