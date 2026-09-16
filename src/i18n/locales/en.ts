@@ -2167,7 +2167,8 @@ const en = {
       guestMergeDesc:
         "You added {{guest}} items to your cart before signing in. Your account cart already has {{account}} items. What would you like to do?",
       guestMergeKeepBoth: "Merge carts",
-      guestMergeKeepBothHint: "Keep the items in your account and add the ones from before sign-in.",
+      guestMergeKeepBothHint:
+        "Keep the items in your account and add the ones from before sign-in.",
       guestMergeReplace: "Empty account cart, add new items",
       guestMergeReplaceHint:
         "The {{account}} items in your account are removed; only the {{guest}} items from before sign-in remain.",

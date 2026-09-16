@@ -3,7 +3,7 @@ import type { Plugin } from "vite";
 import tailwindcss from "@tailwindcss/vite";
 import { VitePWA } from "vite-plugin-pwa";
 import { resolve } from "path";
-import { readFileSync, writeFileSync, existsSync } from "fs";
+import { readFileSync, existsSync } from "fs";
 import fg from "fast-glob";
 import { getStaticPageHtmlMap } from "./src/utils/staticPageUrl";
 import pkg from "./package.json" with { type: "json" };

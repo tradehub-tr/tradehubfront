@@ -114,4 +114,3 @@ for (const { ad, yol } of SAYFALAR) {
     expect(ihlaller.length, `${ad} (${yol}):\n${ayrinti(ihlaller)}`).toBe(0);
   });
 }
-

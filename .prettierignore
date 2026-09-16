@@ -13,3 +13,11 @@ CHANGELOG.md
 # `npm run format` bu dosyalara denk gelmemişti — kapı önden kapatılıyor.
 src/mocks/logistics
 src/types/logistics.d.ts
+
+# ÜRETİLMİŞ çakışma allowlist'i — `npm run check:dup:update` yazıyor
+# (`scripts/check-duplicate-exports.mjs:77`, `JSON.stringify(…, null, 2)`).
+# Üreteç her dizi elemanını ayrı satıra koyar, Prettier kısa dizileri tek
+# satıra toplar: biri yazar, diğeri geri alır. Ölçüldü (16 Eyl 2026): tek
+# `prettier --write` koşusu 8 anahtarı tek satıra indirdi, `check:dup:update`
+# ilk çalıştığında hepsini geri açardı.
+scripts/duplicate-exports-allowlist.json

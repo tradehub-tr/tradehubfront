@@ -67,7 +67,7 @@ describe("toVideoEmbedHtml — HLS dalı", () => {
   });
 
   // Task 8 (2026-08-26 medya-video-seo) — `<track kind="captions">`.
-  it("captionsUrl verilirse <video> dallarında <track kind=\"captions\"> basılır", () => {
+  it('captionsUrl verilirse <video> dallarında <track kind="captions"> basılır', () => {
     expect(toVideoEmbedHtml("/files/v.mp4", false, "", "/files/v.vtt")).toContain(
       '<track kind="captions" src="/files/v.vtt" default>'
     );

@@ -9,7 +9,11 @@ vi.mock("../../i18n", () => ({
   t: (k: string, o?: Record<string, unknown>) => (o ? `${k}:${Object.values(o).join(",")}` : k),
 }));
 
-import { reviewModalTitle, reviewModalDirectPayNote, reviewModalConfirmLabel } from "./reviewModalCopy";
+import {
+  reviewModalTitle,
+  reviewModalDirectPayNote,
+  reviewModalConfirmLabel,
+} from "./reviewModalCopy";
 
 const one = [{ sellerName: "Özgen Plastik" }];
 const two = [{ sellerName: "Özgen Plastik" }, { sellerName: "Bursev Plastik" }];

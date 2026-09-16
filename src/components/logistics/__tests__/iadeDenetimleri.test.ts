@@ -184,23 +184,18 @@ describe("uç adı guest modülünü işaret etmiyor", () => {
     }
 
     const sozlesme = readFileSync(CONTRACT, "utf8");
-    const tanimli = new Set(
-      [...sozlesme.matchAll(/`api\.v1\.([a-z_]+)[.`]/g)].map((m) => m[1])
-    );
+    const tanimli = new Set([...sozlesme.matchAll(/`api\.v1\.([a-z_]+)[.`]/g)].map((m) => m[1]));
 
     const anilan = new Set(
-      SERVISLER.flatMap((rel) => [...kod(rel).matchAll(/api\.v1\.([a-z_]+)\./g)]).map(
-        (m) => m[1]
-      )
+      SERVISLER.flatMap((rel) => [...kod(rel).matchAll(/api\.v1\.([a-z_]+)\./g)]).map((m) => m[1])
     );
 
     const sozlesmesiz = [...anilan]
       .filter((m) => !tanimli.has(m) && !KAPSAM_DISI.includes(m))
       .sort();
-    expect(
-      sozlesmesiz,
-      "bu modüller sözleşmede yok — LOGISTICS-API-CONTRACT.md §3'e ekle"
-    ).toEqual([]);
+    expect(sozlesmesiz, "bu modüller sözleşmede yok — LOGISTICS-API-CONTRACT.md §3'e ekle").toEqual(
+      []
+    );
   });
 
   it("bilinen borç listesi BAYATLAMIYOR — ad düzeltilince liste boşalır", () => {
@@ -294,9 +289,7 @@ describe("mock alanları sözleşmede tanımlı", () => {
     const anahtarlar = [...kod(rel).matchAll(/^\s*([a-z][a-z0-9]*(?:_[a-z0-9]+)+)\s*:/gm)].map(
       (m) => m[1]
     );
-    const uydurma = [...new Set(anahtarlar)]
-      .filter((a) => !bilinen.has(a) && !(a in MESRU))
-      .sort();
+    const uydurma = [...new Set(anahtarlar)].filter((a) => !bilinen.has(a) && !(a in MESRU)).sort();
 
     expect(
       uydurma,
@@ -308,10 +301,7 @@ describe("mock alanları sözleşmede tanımlı", () => {
     if (!existsSync(SEMA)) return;
     const bilinen = sozlesmeAlanlari();
     const artikVar = Object.keys(MESRU).filter((a) => bilinen.has(a));
-    expect(
-      artikVar,
-      "bu alanlar artık sözleşmede tanımlı — muafiyetten düş"
-    ).toEqual([]);
+    expect(artikVar, "bu alanlar artık sözleşmede tanımlı — muafiyetten düş").toEqual([]);
   });
 });
 

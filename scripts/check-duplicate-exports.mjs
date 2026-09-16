@@ -75,7 +75,9 @@ for (const [name, files] of nameToFiles) {
 
 if (process.argv.includes("--update")) {
   writeFileSync(ALLOWLIST, JSON.stringify(collisions, null, 2) + "\n");
-  console.log(`✓ Allowlist güncellendi: ${Object.keys(collisions).length} bilinen çakışma kaydedildi.`);
+  console.log(
+    `✓ Allowlist güncellendi: ${Object.keys(collisions).length} bilinen çakışma kaydedildi.`
+  );
   process.exit(0);
 }
 
@@ -110,4 +112,6 @@ if (offenders.length) {
   process.exit(1);
 }
 
-console.log(`✓ Yeni isim çakışması yok (${Object.keys(collisions).length} bilinen çakışma allowlist'te).`);
+console.log(
+  `✓ Yeni isim çakışması yok (${Object.keys(collisions).length} bilinen çakışma allowlist'te).`
+);

@@ -103,7 +103,9 @@ describe("applyGuestCartMerge", () => {
   it("'replace' önce hesap sepetini boşaltır, sonra misafir ürünlerini ekler, localStorage'ı temizler", async () => {
     const order: string[] = [];
     api.apiClearCart.mockImplementation(async () => (order.push("clear"), { success: true }));
-    api.apiMergeGuestCart.mockImplementation(async () => (order.push("merge"), { suppliers: accountCart }));
+    api.apiMergeGuestCart.mockImplementation(
+      async () => (order.push("merge"), { suppliers: accountCart })
+    );
     expect(await applyGuestCartMerge("replace")).toBe(true);
     expect(order).toEqual(["clear", "merge"]);
     expect(localStorage.getItem("tradehub_cart")).toBeNull();

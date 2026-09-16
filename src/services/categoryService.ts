@@ -130,9 +130,9 @@ function fetchCategoryVersion(): Promise<string> {
   // görünmüyordu (2026-09-03, 12 ana kategori geçişinde yaşandı). Sayfa başına tek
   // hafif istek; aynı yüklemedeki paralel çağrılar bu promise ile dedup edilir.
   if (_versionPromise === null) {
-    _versionPromise = callMethod<string>(
-      "tradehub_core.api.category.get_category_version"
-    ).catch(() => "v0");
+    _versionPromise = callMethod<string>("tradehub_core.api.category.get_category_version").catch(
+      () => "v0"
+    );
   }
   return _versionPromise;
 }

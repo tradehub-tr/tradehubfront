@@ -65,32 +65,26 @@ export default [
     },
   },
 
-  // ── Tarayıcı içinde çalıştırılan ölçüm parçaları ─────────────────────
-  // `measure-home-perf.mjs` Playwright ile sayfaya kod enjekte ediyor;
-  // o bloklar Node'da değil TARAYICIDA koşuyor. Dosyanın kendisi Node
-  // script'i olduğu için üstteki blok da geçerli — bu yalnız ek globaller.
+  // ── Playwright ile sayfaya enjekte edilen ölçüm parçaları ────────────
+  // Bu dosyaların KENDİSİ Node script'i (üstteki blok da geçerli), ama
+  // `page.evaluate()` callback'leri TARAYICIDA koşuyor — orada DOM globalleri
+  // yasal. Liste tek blokta: üç dosya da aynı aileden ve ayrı bloklar
+  // tutulduğunda yeni bir ölçüm script'i eklendiğinde unutuluyordu
+  // (ölçüldü: `heading-audit.mjs` bu yüzden 1 `no-undef` hatası veriyordu).
   {
-    files: ["scripts/measure-home-perf.mjs"],
-    languageOptions: {
-      globals: {
-        PerformanceObserver: "readonly",
-        performance: "readonly",
-        getComputedStyle: "readonly",
-      },
-    },
-  },
-
-  // ── Tarayıcı içinde çalıştırılan ölçüm ───────────────────────────────
-  // `page.evaluate()` ile sayfaya geçirilen fonksiyon; Node'da değil
-  // TARAYICIDA koşuyor, bu yüzden DOM globalleri yasal.
-  {
-    files: ["tests/e2e/kontrast-olcum.mjs"],
+    files: [
+      "scripts/measure-home-perf.mjs",
+      "scripts/heading-audit.mjs",
+      "tests/e2e/kontrast-olcum.mjs",
+    ],
     languageOptions: {
       globals: {
         document: "readonly",
         getComputedStyle: "readonly",
         innerHeight: "readonly",
         innerWidth: "readonly",
+        PerformanceObserver: "readonly",
+        performance: "readonly",
       },
     },
   },

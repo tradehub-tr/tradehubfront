@@ -277,11 +277,16 @@ describe("KD-F03/3 · ResponsiveImage sözleşmesi", () => {
       { sources: null },
       { src: "/a.jpg", sources: [{}] },
       { src: "/a.jpg", width: -1, height: -1, sources: [{ type: "", srcset: "" }] },
-      { src: "/a.jpg", width: "abc", height: "abc", sources: [{ type: "image/webp", srcset: "x" }] },
+      {
+        src: "/a.jpg",
+        width: "abc",
+        height: "abc",
+        sources: [{ type: "image/webp", srcset: "x" }],
+      },
     ];
     for (const m of bozuklar) {
       expect(() => ResponsiveImage({ manifest: m as never, fallback: yedek })).not.toThrow(
-        JSON.stringify(m),
+        JSON.stringify(m)
       );
       const html = ResponsiveImage({ manifest: m as never, fallback: yedek });
       expect(typeof html).toBe("string");
