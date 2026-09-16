@@ -91,6 +91,10 @@ export function setLanguageManually(raw: string | null | undefined): SupportedLa
     // localStorage kapalı (gizli sekme, izin reddi): seçim bu oturumda
     // geçerli olur, kalıcı olmaz. Site açılmaya devam eder.
   }
+  // Çerez AYRI bir try içinde: localStorage kapalıyken de yazılabilir ve
+  // paneli/sunucuyu ancak o besliyor. Tek try'a konsaydı ilk hata
+  // ikincisini de atlatırdı.
+  writeLangCookie(lang, "manual");
   return lang;
 }
 
@@ -167,9 +171,295 @@ export function languageForCountry(raw: string | null | undefined): SupportedLan
 
 /** Kullanıcı dili kendi seçti mi? Otomatik tespit buna bakıp geri çekilir. */
 export function isLanguageManuallySelected(): boolean {
+  // Çerez ÖNCE: panelde yapılan seçim storefront'un localStorage'ında
+  // görünmez, çerezde görünür. İki kaynaktan biri "manual" diyorsa
+  // otomatik tespit geri çeker.
+  if (readCookie(LANG_SOURCE_COOKIE_KEY) === "manual") return true;
   try {
     return localStorage.getItem(LANG_SOURCE_KEY) === "manual";
   } catch {
     return false;
+  }
+}
+
+/**
+ * Kullanıcının elle seçtiği dil — çerez ve localStorage birlikte.
+ *
+ * Çerez önce okunur (panel ve storefront ortak kaynağı odur). Çerez yoksa
+ * localStorage'daki ESKİ seçim kabul edilir ve çereze TAŞINIR — bu özellik
+ * yayına çıktığında hâlihazırda dil seçmiş kullanıcılar tercihlerini
+ * kaybetmesin diye. Taşıma yalnız `th-lang-source=manual` işaretliyken
+ * yapılır: i18next otomatik tespit sonucunu da aynı anahtara yazıyor,
+ * onu "kullanıcı seçti" saymak ülke tespitini hiç çalıştırmazdı.
+ */
+export function readManualLang(): SupportedLang | null {
+  // Çerezdeki dil TEK BAŞINA yeterli değil: otomatik karar da aynı çereze
+  // yazılıyor ("auto"). Kaynağa bakmasaydık ilk ziyarette yazılan otomatik
+  // değer "kullanıcı seçti" sayılır ve ülke tespiti bir daha hiç
+  // çalışmazdı — ziyaretçi Türkiye'den bağlansa bile ilk tahmine kilitli
+  // kalırdı.
+  if (readCookie(LANG_SOURCE_COOKIE_KEY) === "manual") {
+    const cerez = readLangCookie();
+    if (cerez) return cerez;
+  }
+  try {
+    if (localStorage.getItem(LANG_SOURCE_KEY) !== "manual") return null;
+    const eski = normalizeLang(localStorage.getItem(LANG_STORAGE_KEY));
+    if (eski) {
+      writeLangCookie(eski, "manual"); // geçiş: eski seçimi çereze taşı
+      return eski;
+    }
+  } catch {
+    // localStorage yok — çerez de yoksa seçim yapılmamış demektir.
+  }
+  return null;
+}
+
+/* ────────────────────────────────────────────────────────────────────────
+ * ÇEREZ KÖPRÜSÜ (MOGEM-642 · Faz 1)
+ *
+ * Neden çerez, localStorage yetmiyor mu: localStorage üç yerde yetersiz.
+ *  1. Storefront ile panel AYRI uygulama (Vite MPA ↔ Vue SPA) ve ayrı
+ *     localStorage anahtarı kullanıyordu — `i18nextLng` ve `th-lang`.
+ *     Aynı kullanıcı iki taraf arasında geçerken dili iki kez seçiyordu.
+ *  2. localStorage yalnız tarayıcıda okunur; sunucu göremez. Sayfanın
+ *     `<html lang>` değeri sunucudan sabit "tr" geliyor (ölçüldü 16 Eyl) —
+ *     düzeltmek için sunucunun tercihi BİLMESİ gerekiyor.
+ *  3. Ön bellek anahtarı dile göre ayrılacaksa (Faz 3) ayırt edici şey
+ *     istek başlığında olmalı; çerez istekle birlikte gider, localStorage
+ *     gitmez.
+ *
+ * Çerez ADI panelin bugünkü localStorage anahtarıyla aynı tutuldu (`th-lang`)
+ * — iki taraf tek isimde buluşsun, yeni bir kavram doğmasın diye.
+ * ──────────────────────────────────────────────────────────────────────── */
+
+/** Dil tercihi çerezi — storefront ve panel ORTAK okur/yazar. */
+export const LANG_COOKIE_KEY = "th-lang";
+
+/** Tercihin kaynağı çerezi: "manual" → kullanıcı seçti, otomatik tespit ezmez. */
+export const LANG_SOURCE_COOKIE_KEY = "th-lang-source";
+
+/** Bir yıl. Dil tercihi mevsimlik değil; kısa ömür kullanıcıya iş çıkarır. */
+export const LANG_COOKIE_MAX_AGE = 60 * 60 * 24 * 365;
+
+/**
+ * Çerez okuma — ham `document.cookie` dizesinden ayrıştırır.
+ *
+ * Dışarıdan dize alabildiği için saftır ve test edilebilir; parametresiz
+ * çağrıldığında gerçek `document.cookie`'yi okur.
+ */
+export function readCookie(ad: string, ham?: string): string | null {
+  let kaynak = ham;
+  if (kaynak === undefined) {
+    try {
+      kaynak = document.cookie;
+    } catch {
+      return null; // çerez erişimi engelli (bazı gömülü tarayıcılar)
+    }
+  }
+  if (!kaynak) return null;
+  for (const parca of kaynak.split(";")) {
+    const esittir = parca.indexOf("=");
+    if (esittir < 0) continue;
+    if (parca.slice(0, esittir).trim() !== ad) continue;
+    try {
+      return decodeURIComponent(parca.slice(esittir + 1).trim());
+    } catch {
+      return parca.slice(esittir + 1).trim(); // bozuk yüzdelik kodlama
+    }
+  }
+  return null;
+}
+
+/**
+ * Çerez yazar. `Secure` YALNIZ https'te eklenir — http://localhost'ta
+ * `Secure` konursa tarayıcı çerezi sessizce atar ve lokal geliştirmede
+ * dil hiç hatırlanmaz.
+ *
+ * `SameSite=Lax`: dil tercihi üçüncü taraf iframe'de gerekmiyor; `None`
+ * demek `Secure` zorunluluğu ve gereksiz izleme yüzeyi getirirdi.
+ */
+export function writeCookie(ad: string, deger: string, maxAge = LANG_COOKIE_MAX_AGE): void {
+  try {
+    const guvenli = location.protocol === "https:" ? "; Secure" : "";
+    document.cookie = `${ad}=${encodeURIComponent(deger)}; Path=/; Max-Age=${maxAge}; SameSite=Lax${guvenli}`;
+  } catch {
+    // Çerez yazılamıyor (gizli sekme kısıtı / izin reddi): tercih bu
+    // oturumda localStorage'da yaşar, site açılmaya devam eder.
+  }
+}
+
+/** Çerezdeki dil tercihi; geçersiz/eksik değerde null. */
+export function readLangCookie(ham?: string): SupportedLang | null {
+  return normalizeLang(readCookie(LANG_COOKIE_KEY, ham));
+}
+
+/** Tercih çerezini ve kaynağını birlikte yazar — ikisi hiç ayrışmasın. */
+export function writeLangCookie(lang: SupportedLang, kaynak: "manual" | "auto"): void {
+  writeCookie(LANG_COOKIE_KEY, lang);
+  writeCookie(LANG_SOURCE_COOKIE_KEY, kaynak);
+}
+
+/* ────────────────────────────────────────────────────────────────────────
+ * `?hl=` BAĞLANTI PARAMETRESİ (MOGEM-642 · Faz 1)
+ *
+ * Yönetici kararı: dil bağlantısı `/tr` gibi yol öneki DEĞİL, `?hl=tr`
+ * biçiminde olacak. Bugün ölçüldü (16 Eyl 2026): `?hl=` ve `?lang=`
+ * parametrelerinin ikisi de kodda HİÇ okunmuyordu — `istoc.com/?hl=ar`
+ * yazan ziyaretçi Türkçe bir sayfa görüyordu.
+ *
+ * Karar (16 Eyl): parametre okunur, tercih KALICI yazılır, sonra adres
+ * `replaceState` ile temizlenir. Gerekçe: `?hl=` bir GİRİŞ KAPISI, kalıcı
+ * hafıza çerezde. Parametre adreste bırakılsaydı ilk iç bağlantıda zaten
+ * düşecek (adres üreticilerinin hiçbiri onu taşımıyor), bu arada Google
+ * `/?hl=tr` ile `/`yi iki ayrı sayfa sayacaktı.
+ * ──────────────────────────────────────────────────────────────────────── */
+
+/** Kabul edilen parametre adları — `lang` eski bağlantılar için takma ad. */
+export const HL_PARAM_NAMES = ["hl", "lang"] as const;
+
+/**
+ * Sorgu dizesinden dil parametresini okur. Saf: `location` görmez.
+ *
+ * Desteklenmeyen değer (`?hl=de`) null döner — hata verilmez, akış normal
+ * sıraya düşer. Ziyaretçiye "Almanca yok" demenin yeri dil seçicisi değil,
+ * boş bir ekran hiç değil.
+ */
+export function readLangParam(search: string): SupportedLang | null {
+  if (!search) return null;
+  let params: URLSearchParams;
+  try {
+    params = new URLSearchParams(search);
+  } catch {
+    return null;
+  }
+  for (const ad of HL_PARAM_NAMES) {
+    const lang = normalizeLang(params.get(ad));
+    if (lang) return lang;
+  }
+  return null;
+}
+
+/**
+ * Dil parametrelerini adresten çıkarır, GERİ KALAN her şeyi korur.
+ *
+ * Kritik: `?hl=ar&q=çelik&page=2` → `?q=çelik&page=2`. Naif bir yaklaşım
+ * (sorguyu tamamen silmek) arama sayfasında kullanıcının sorgusunu
+ * uçururdu. Parametre yoksa girdi AYNEN döner — çağıran `replaceState`
+ * çağırıp çağırmayacağına buna bakarak karar verir.
+ */
+export function stripLangParam(url: string): string {
+  const [yol, ...sorguParcalari] = url.split("?");
+  if (sorguParcalari.length === 0) return url;
+  const sorguVeCapa = sorguParcalari.join("?");
+  const [sorgu, ...capaParcalari] = sorguVeCapa.split("#");
+  const capa = capaParcalari.length ? `#${capaParcalari.join("#")}` : "";
+
+  let params: URLSearchParams;
+  try {
+    params = new URLSearchParams(sorgu);
+  } catch {
+    return url;
+  }
+  let dokunuldu = false;
+  for (const ad of HL_PARAM_NAMES) {
+    if (params.has(ad)) {
+      params.delete(ad);
+      dokunuldu = true;
+    }
+  }
+  if (!dokunuldu) return url;
+
+  const kalan = params.toString();
+  return kalan ? `${yol}?${kalan}${capa}` : `${yol}${capa}`;
+}
+
+/* ────────────────────────────────────────────────────────────────────────
+ * ÖNCELİK SIRASI — tek karar fonksiyonu
+ * ──────────────────────────────────────────────────────────────────────── */
+
+/** `resolveLang()` girdileri — hepsi dışarıdan verilir, fonksiyon SAFTIR. */
+export interface DilKaynaklari {
+  /** `?hl=` parametresi (varsa). */
+  hl?: SupportedLang | null;
+  /** Kullanıcının daha önce ELLE seçtiği dil (çerez/localStorage). */
+  manuel?: SupportedLang | null;
+  /** Bağlantının geldiği ülke kodu (Faz 5'te bağlanacak). */
+  ulke?: string | null;
+  /** Tarayıcı dili (`navigator.language`). */
+  tarayici?: string | null;
+}
+
+/** `resolveLang()` çıktısı — hangi dil, NEDEN o dil. */
+export interface DilKarari {
+  lang: SupportedLang;
+  /** Kararı veren kaynak; günlüğe ve teste girer, davranışı da belirler. */
+  kaynak: "hl" | "manual" | "country" | "browser" | "default";
+}
+
+/**
+ * Dil kararının TEK yeri. Sıra bilinçli:
+ *
+ *  1. `?hl=`     — paylaşılan bağlantı her şeyi ezer. Birisi Arapça bir
+ *                  bağlantı gönderdiyse alıcı Arapça görmeli; "ama sen
+ *                  geçen ay Türkçe seçmiştin" demek bağlantıyı işlevsiz
+ *                  kılardı.
+ *  2. elle seçim — kullanıcının kendi kararı, otomatik tespitten ÜSTÜN.
+ *                  Görev metninin "elle seçim hatırlanacak ve otomatik
+ *                  tespit onu ezmeyecek" şartı tam olarak bu satır.
+ *  3. ülke       — görevin asıl işi. Yalnız kullanıcı henüz seçim
+ *                  yapmamışken devreye girer.
+ *  4. tarayıcı   — ülke bilinmiyorsa ikinci en iyi tahmin.
+ *  5. `en`       — "ülke tespiti bozulursa site İngilizce açılmaya devam
+ *                  etsin" şartı.
+ *
+ * Her koşulda GEÇERLİ bir dil döner; çağıranın hata yakalaması gerekmez.
+ */
+export function resolveLang(kaynaklar: DilKaynaklari = {}): DilKarari {
+  const hl = normalizeLang(kaynaklar.hl);
+  if (hl) return { lang: hl, kaynak: "hl" };
+
+  const manuel = normalizeLang(kaynaklar.manuel);
+  if (manuel) return { lang: manuel, kaynak: "manual" };
+
+  if (kaynaklar.ulke) {
+    // languageForCountry tanınmayan ülkede VARSAYILAN_DIL döndürüyor.
+    // Onu "ülke kararı" saymak yanlış olurdu: Almanya'dan gelen biri
+    // tarayıcısı Rusça olsa bile İngilizceye kilitlenirdi. Yalnız haritada
+    // GERÇEKTEN bulunan ülkeler bu basamağı bitirir.
+    const ulkeDili = languageForCountry(kaynaklar.ulke);
+    const haritada =
+      ulkeDili !== VARSAYILAN_DIL ||
+      COUNTRY_LANG_MAP[String(kaynaklar.ulke).trim().slice(0, 2).toUpperCase()];
+    if (haritada) return { lang: ulkeDili, kaynak: "country" };
+  }
+
+  const tarayici = normalizeLang(kaynaklar.tarayici);
+  if (tarayici) return { lang: tarayici, kaynak: "browser" };
+
+  return { lang: VARSAYILAN_DIL, kaynak: "default" };
+}
+
+/**
+ * Sayfaya sunucunun yazdığı ülke kodunu okur.
+ *
+ * KAYNAĞI K1 KARARI BELİRLER, bu fonksiyon değil. Burada tanımlanan tek şey
+ * ön yüzün ülke kodunu nereden OKUYACAĞI: `<meta name="th-country">`.
+ * Cloudflare `CF-IPCountry`, nginx `geo` ya da backend — hangisi seçilirse
+ * seçilsin, işi bu meta etiketini doldurmak olacak; buradaki kod değişmez.
+ *
+ * Meta yoksa null döner ve akış tarayıcı diline düşer: Faz 5 bağlanana
+ * kadar davranış BUGÜNKÜNÜN AYNISI kalır.
+ */
+export function readDetectedCountry(): string | null {
+  try {
+    const meta = document.querySelector('meta[name="th-country"]');
+    const kod = meta?.getAttribute("content")?.trim();
+    // Sunucu değeri dolduramadığında şablonda `XX` ya da boş bırakılıyor;
+    // ikisi de "bilmiyorum" demektir, ülke basamağı atlanır.
+    if (!kod || kod.toUpperCase() === "XX") return null;
+    return kod;
+  } catch {
+    return null;
   }
 }

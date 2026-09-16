@@ -66,6 +66,28 @@ describe("dil seçimi kaynak denetimi", () => {
     ).toEqual([]);
   });
 
+  it("hiçbir dosya dil ÇEREZİNE doğrudan yazmıyor", () => {
+    // Yukarıdaki denetim yalnız `localStorage`a bakıyordu. MOGEM-642 Faz 1'de
+    // tercih ÇEREZE de yazılmaya başlandı (storefront ↔ panel köprüsü) ve
+    // böylece yeni bir kaçış yolu açıldı: bir seçici `document.cookie` ile
+    // yazarsa tercih kaydolur ama `th-lang-source` işareti eksik kalır —
+    // ülke tespiti o kullanıcının seçimini ezer. Tam olarak kapatılmak
+    // istenen kusurun çerez üzerinden tekrarı.
+    const ihlaller: string[] = [];
+    for (const dosya of dosyalar) {
+      const icerik = readFileSync(join(SRC, dosya), "utf8");
+      icerik.split("\n").forEach((satir, i) => {
+        if (/document\.cookie\s*=\s*[`"']?\s*th-lang/.test(satir)) {
+          ihlaller.push(`${dosya}:${i + 1}`);
+        }
+      });
+    }
+    expect(
+      ihlaller,
+      `Dil çerezi doğrudan yazılmış. setLanguageManually() kullan:\n${ihlaller.join("\n")}`
+    ).toEqual([]);
+  });
+
   it("dil seçiciler merkezi fonksiyonu çağırıyor", () => {
     for (const dosya of SECICI_DOSYALARI) {
       const icerik = readFileSync(join(SRC, dosya), "utf8");
