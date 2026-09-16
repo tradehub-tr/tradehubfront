@@ -256,7 +256,9 @@ Alpine.data("sellerStorefront", () => ({
 
   get sellerLocation() {
     // Backend "Turkey" → arayüzde "Türkiye" (İngilizce arayüzde de).
-    return [this.seller?.city, getCountryDisplayName(this.seller?.country)].filter(Boolean).join(", ");
+    return [this.seller?.city, getCountryDisplayName(this.seller?.country)]
+      .filter(Boolean)
+      .join(", ");
   },
 
   /**

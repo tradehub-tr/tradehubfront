@@ -13,7 +13,9 @@ describe("mapListingDetail — video görsel künyesi (Task 8)", () => {
     const detail = mapListingDetail({
       title: "X",
       images: ["/files/v.webm"],
-      imageMeta: [{ alt: "video", poster: "/files/p.jpg", durationSec: 30, captionsUrl: "/files/c.vtt" }],
+      imageMeta: [
+        { alt: "video", poster: "/files/p.jpg", durationSec: 30, captionsUrl: "/files/c.vtt" },
+      ],
     });
 
     expect(detail.images[0].poster).toBe("/files/p.jpg");
@@ -96,12 +98,24 @@ describe("mapListingDetail — documents eşlemesi (Task 5, dosya-yöneticisi-se
       title: "X",
       images: [],
       documents: [
-        { url: "/files/katalog.pdf", title: "Ürün Kataloğu", docType: "Katalog", language: "tr", sizeBytes: 204800 },
+        {
+          url: "/files/katalog.pdf",
+          title: "Ürün Kataloğu",
+          docType: "Katalog",
+          language: "tr",
+          sizeBytes: 204800,
+        },
       ],
     });
 
     expect(detail.documents).toEqual([
-      { url: "/files/katalog.pdf", title: "Ürün Kataloğu", docType: "Katalog", language: "tr", sizeBytes: 204800 },
+      {
+        url: "/files/katalog.pdf",
+        title: "Ürün Kataloğu",
+        docType: "Katalog",
+        language: "tr",
+        sizeBytes: 204800,
+      },
     ]);
   });
 

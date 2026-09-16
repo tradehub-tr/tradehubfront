@@ -109,21 +109,28 @@ describe("SellPageLayout — iOS modu (UA 'istocApp/ios')", () => {
 });
 
 describe("SellPageLayout — web modu (regresyon yok, AC-3)", () => {
-  it("pricing section, paket kartları, fiyatlar ve trial CTA bugünkü gibi render edilir", () => {
+  it("pricing section, paket kartları ve trial CTA web modunda render edilir", () => {
     vi.stubGlobal("navigator", { userAgent: WEB_UA });
     const html = SellPageLayout(PRICING);
     expect(html).toContain('id="paketler"');
     expect(html).toContain("MEGAPAKET");
     expect(html).toContain("DEVPAKET");
-    expect(html).toContain("4321");
-    expect(html).toContain("8765");
     expect(html).toContain('data-trial-plan="start"');
     expect(html).toContain("14 gün ücretsiz dene");
     expect(html).toContain("sellPage.trustTrial");
-    // Aylık/yıllık toggle state'i (pricing section'ın Alpine kökü)
-    expect(html).toContain('x-data="{ yearly: false }"');
     // Fiyatlı sticky CTA bar (mobil)
     expect(html).toContain("sellPage.stickyFrom");
+
+    // Fiyat rakamı çıktıda olmalı, ama BİÇİMİNDEN bağımsız doğrulanır:
+    // ayırıcılar temizlenip aranır. Bu testin sorusu "satış yüzeyi web'de
+    // görünüyor mu"; fiyatın hangi biçimde yazıldığı (4321 mi 4.321 mi,
+    // varsayılan aylık mı yıllık mı) SellPageLayout.test.ts'in sorusu.
+    // Ölçüldü 16 Eyl 2026: biçim 4321 → 4.321 olarak değiştiğinde ve
+    // varsayılan dönem yıllığa alındığında bu test kırılmıştı, oysa aynı
+    // davranışı SellPageLayout.test.ts zaten doğruluyordu.
+    const ayiricisiz = html.replace(/[.,\s]/g, "");
+    expect(ayiricisiz).toContain("4321");
+    expect(ayiricisiz).toContain("8765");
   });
 });
 

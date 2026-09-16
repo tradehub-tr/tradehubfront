@@ -22,72 +22,88 @@ const DIST = join(ROOT, "dist");
 // staticMeta.ts'i TS olarak import edemeyiz (node) — regex ile parse ediyoruz.
 const staticMetaSrc = readFileSync(join(ROOT, "src/seo/staticMeta.ts"), "utf8");
 const noindexFiles = [...staticMetaSrc.matchAll(/^\s+"([^"]+\.html)",$/gm)].map((m) => m[1]);
-const indexableEntries = [...staticMetaSrc.matchAll(/"([^"]+\.html)":\s*\{\s*prettyPath:\s*("([^"]*)"|null)/g)]
-	.map((m) => ({ file: m[1], prettyPath: m[3] ?? null }));
+const indexableEntries = [
+  ...staticMetaSrc.matchAll(/"([^"]+\.html)":\s*\{\s*prettyPath:\s*("([^"]*)"|null)/g),
+].map((m) => ({ file: m[1], prettyPath: m[3] ?? null }));
 
-let pass = 0, fail = 0;
-const ok = (msg) => { pass++; };
-const bad = (msg) => { fail++; console.error(`  FAIL ${msg}`); };
+let pass = 0,
+  fail = 0;
+const ok = (msg) => {
+  pass++;
+};
+const bad = (msg) => {
+  fail++;
+  console.error(`  FAIL ${msg}`);
+};
 
 function walk(dir) {
-	return readdirSync(dir, { withFileTypes: true }).flatMap((e) => {
-		const p = join(dir, e.name);
-		return e.isDirectory() ? walk(p) : [p];
-	});
+  return readdirSync(dir, { withFileTypes: true }).flatMap((e) => {
+    const p = join(dir, e.name);
+    return e.isDirectory() ? walk(p) : [p];
+  });
 }
 
 if (!existsSync(DIST)) {
-	console.error("dist/ yok — önce npm run build");
-	process.exit(1);
+  console.error("dist/ yok — önce npm run build");
+  process.exit(1);
 }
 
 const htmlFiles = walk(DIST).filter((f) => f.endsWith(".html"));
 
 // 1-2. robots / canonical
 for (const file of noindexFiles) {
-	const p = join(DIST, file);
-	if (!existsSync(p)) { bad(`${file} dist'te yok`); continue; }
-	const html = readFileSync(p, "utf8");
-	const expected = file === "404.html" ? "noindex, follow" : "noindex, nofollow";
-	if (html.includes(`<meta name="robots" content="${expected}"`)) ok(file);
-	else bad(`${file} → robots "${expected}" yok`);
+  const p = join(DIST, file);
+  if (!existsSync(p)) {
+    bad(`${file} dist'te yok`);
+    continue;
+  }
+  const html = readFileSync(p, "utf8");
+  const expected = file === "404.html" ? "noindex, follow" : "noindex, nofollow";
+  if (html.includes(`<meta name="robots" content="${expected}"`)) ok(file);
+  else bad(`${file} → robots "${expected}" yok`);
 }
 for (const { file, prettyPath } of indexableEntries) {
-	const p = join(DIST, file);
-	if (!existsSync(p)) { bad(`${file} dist'te yok`); continue; }
-	const html = readFileSync(p, "utf8");
-	if (/name="robots"\s+content="noindex/i.test(html)) bad(`${file} → indexlenecek sayfada noindex!`);
-	else ok(file);
-	if (prettyPath) {
-		if (html.includes('rel="canonical"')) ok(file);
-		else bad(`${file} → canonical yok (prettyPath=${prettyPath})`);
-	} else if (html.includes('rel="canonical"')) {
-		bad(`${file} → dinamik şablonda STATİK canonical olmamalı`);
-	}
+  const p = join(DIST, file);
+  if (!existsSync(p)) {
+    bad(`${file} dist'te yok`);
+    continue;
+  }
+  const html = readFileSync(p, "utf8");
+  if (/name="robots"\s+content="noindex/i.test(html))
+    bad(`${file} → indexlenecek sayfada noindex!`);
+  else ok(file);
+  if (prettyPath) {
+    if (html.includes('rel="canonical"')) ok(file);
+    else bad(`${file} → canonical yok (prettyPath=${prettyPath})`);
+  } else if (html.includes('rel="canonical"')) {
+    bad(`${file} → dinamik şablonda STATİK canonical olmamalı`);
+  }
 }
 
 // 3. tek title + lang=tr
 for (const f of htmlFiles) {
-	const rel = relative(DIST, f);
-	const html = readFileSync(f, "utf8");
-	const titles = (html.match(/<title[^>]*>/gi) || []).length;
-	if (titles === 1) ok(rel);
-	else bad(`${rel} → ${titles} adet <title>`);
-	if (/<html[^>]*lang="tr"/i.test(html)) ok(rel);
-	else bad(`${rel} → lang="tr" değil`);
+  const rel = relative(DIST, f);
+  const html = readFileSync(f, "utf8");
+  const titles = (html.match(/<title[^>]*>/gi) || []).length;
+  if (titles === 1) ok(rel);
+  else bad(`${rel} → ${titles} adet <title>`);
+  if (/<html[^>]*lang="tr"/i.test(html)) ok(rel);
+  else bad(`${rel} → lang="tr" değil`);
 }
 
 // 4. TradeHub kalıntısı
 for (const f of htmlFiles) {
-	const rel = relative(DIST, f);
-	if (readFileSync(f, "utf8").includes("TradeHub")) bad(`${rel} → "TradeHub" kalıntısı`);
+  const rel = relative(DIST, f);
+  if (readFileSync(f, "utf8").includes("TradeHub")) bad(`${rel} → "TradeHub" kalıntısı`);
 }
 
 // 5. dist hijyeni
 for (const orphan of ["docs", "mockups", "style-test.html", "perf-reports"]) {
-	if (existsSync(join(DIST, orphan))) bad(`dist/${orphan} build'e sızmış`);
-	else ok(orphan);
+  if (existsSync(join(DIST, orphan))) bad(`dist/${orphan} build'e sızmış`);
+  else ok(orphan);
 }
 
-console.log(`\nverify-seo-meta: ${pass} PASS / ${fail} FAIL  (noindex=${noindexFiles.length}, indexable=${indexableEntries.length})`);
+console.log(
+  `\nverify-seo-meta: ${pass} PASS / ${fail} FAIL  (noindex=${noindexFiles.length}, indexable=${indexableEntries.length})`
+);
 process.exit(fail === 0 ? 0 : 1);

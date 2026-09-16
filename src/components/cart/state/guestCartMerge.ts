@@ -16,11 +16,7 @@
  */
 import type { CartSupplier } from "../../../types/cart";
 import { CartStore, cartStore } from "./CartStore";
-import {
-  apiClearCart,
-  apiMergeGuestCart,
-  type CartItemInput,
-} from "../../../services/cartService";
+import { apiClearCart, apiMergeGuestCart, type CartItemInput } from "../../../services/cartService";
 import { isLoggedIn } from "../../../utils/auth";
 import { getCurrencySymbol } from "../../../utils/currency";
 import { showToast } from "../../../utils/toast";

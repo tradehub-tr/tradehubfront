@@ -47,6 +47,10 @@ const REQUIRED_SOURCES = new Map([
   ],
   ["frame-src", ["https://www.googletagmanager.com", "blob:", "https://mc.yandex.ru"]],
   ["child-src", ["blob:", "https://mc.yandex.ru"]],
+  // worker-src TANIMLI OLMAZSA child-src'a düşer; child-src'ta 'self' yok
+  // (yalnız blob: + Yandex) ve service worker reddedilir. Ölçüldü 16 Eyl 2026:
+  // alpha ve prod'da SW kayıt sayısı 0, PWA/offline önbellek çalışmıyordu.
+  ["worker-src", ["'self'"]],
 ]);
 
 function parseDirectives(policy) {

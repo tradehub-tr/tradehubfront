@@ -94,6 +94,77 @@ export function setLanguageManually(raw: string | null | undefined): SupportedLa
   return lang;
 }
 
+/**
+ * Ülke → arayüz dili eşlemesi (MOGEM-642).
+ *
+ * Bu tablo ülke kodunun NEREDEN geldiğini bilmez ve umursamaz: Cloudflare'in
+ * `CF-IPCountry` başlığı da olabilir, nginx'in `geo` modülü de, backend'in
+ * `detectedCountry` alanı da. Eşleme aynı kalır.
+ *
+ * Kapsam kararları (16 Eyl 2026):
+ *  - Türkçe: yalnız TR.
+ *  - Rusça: yalnız RU. Belarus/Kazakistan/Kırgızistan'da Rusça yaygın iş dili
+ *    olsa da görev metni "Rusya: Rusça" diyor; oralardan gelenler İngilizce
+ *    görür ve dili elle değiştirebilir. Liste tek kaynakta olduğu için
+ *    sonradan ülke eklemek tek satır.
+ *  - Arapça: Arap Ligi'nin 22 üyesinden 18'i. Moritanya (MR), Somali (SO),
+ *    Cibuti (DJ) ve Komorlar (KM) BİLİNÇLİ olarak dışarıda: bu ülkelerde
+ *    Arapça baskın arayüz dili değil (Fransızca ve yerel diller yaygın),
+ *    ziyaretçileri İngilizce görür.
+ *  - Haritada olmayan her ülke ve ülkenin belirlenemediği durum: İngilizce.
+ *    Görevin "ülke tespiti bozulursa site açılmaya devam etsin" şartı budur.
+ */
+export const COUNTRY_LANG_MAP: Readonly<Record<string, SupportedLang>> = {
+  TR: "tr",
+  RU: "ru",
+  // Arapça — Körfez
+  SA: "ar",
+  AE: "ar",
+  QA: "ar",
+  KW: "ar",
+  BH: "ar",
+  OM: "ar",
+  YE: "ar",
+  // Arapça — Levant ve Mezopotamya
+  JO: "ar",
+  LB: "ar",
+  SY: "ar",
+  IQ: "ar",
+  PS: "ar",
+  // Arapça — Kuzey Afrika
+  EG: "ar",
+  LY: "ar",
+  TN: "ar",
+  DZ: "ar",
+  MA: "ar",
+  SD: "ar",
+};
+
+/** Ülke belirlenemediğinde ve haritada bulunmadığında kullanılan dil. */
+export const VARSAYILAN_DIL: SupportedLang = "en";
+
+/**
+ * Ülke kodundan arayüz dilini verir.
+ *
+ * ISO 3166-1 alpha-2 (iki harfli) kod bekler: "tr" · "TR" · " tr " · "tr-TR"
+ * biçimlerini normalize eder. Üç harfli kodlar (TUR) DESTEKLENMEZ — ilk iki
+ * harfi alındığı için yanlış ülkeye denk gelebilirdi; bunun yerine haritada
+ * bulunamaz ve İngilizceye düşer. Boş, bozuk ya da tanınmayan her girdide de
+ * İngilizce döner — çağıranın hata yakalamasına gerek yoktur, ekran her
+ * hâlükârda açılır.
+ */
+export function languageForCountry(raw: string | null | undefined): SupportedLang {
+  if (!raw) return VARSAYILAN_DIL;
+  // Yalnız alpha-2 ("TR") ve bölgeli biçim ("tr-TR") kabul edilir.
+  // Üç harfli kodda körü körüne ilk iki harfi almak TEHLİKELİ: "SAU" → "SA"
+  // (Suudi Arabistan) ve "EGY" → "EG" (Mısır) tesadüfen DOĞRU eşleşirken
+  // "TUR" → "TU" hiçbir şeye denk gelmiyordu — yani davranış öngörülemezdi.
+  // Ölçüldü 16 Eyl 2026. Kaynaklarımız (CF-IPCountry, nginx geo) alpha-2 üretir.
+  const kirpik = raw.trim();
+  if (!/^[A-Za-z]{2}(-|$)/.test(kirpik)) return VARSAYILAN_DIL;
+  return COUNTRY_LANG_MAP[kirpik.slice(0, 2).toUpperCase()] ?? VARSAYILAN_DIL;
+}
+
 /** Kullanıcı dili kendi seçti mi? Otomatik tespit buna bakıp geri çekilir. */
 export function isLanguageManuallySelected(): boolean {
   try {

@@ -73,7 +73,9 @@ describe("renderFilterChips — ülke etiketi", () => {
     const chip = c.querySelector<HTMLElement>("[data-chip]")!;
     expect(chip.querySelector("span")!.textContent).toBe("Türkiye");
     // Kaldırma düğmesi ham backend değeriyle çalışmaya devam eder
-    expect(chip.querySelector("button")!.getAttribute("@click")).toContain("'supplier-country', 'Turkey'");
+    expect(chip.querySelector("button")!.getAttribute("@click")).toContain(
+      "'supplier-country', 'Turkey'"
+    );
   });
 });
 

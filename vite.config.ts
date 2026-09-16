@@ -3,7 +3,7 @@ import type { Plugin } from "vite";
 import tailwindcss from "@tailwindcss/vite";
 import { VitePWA } from "vite-plugin-pwa";
 import { resolve } from "path";
-import { readFileSync, writeFileSync, existsSync } from "fs";
+import { readFileSync, existsSync } from "fs";
 import fg from "fast-glob";
 import { getStaticPageHtmlMap } from "./src/utils/staticPageUrl";
 import pkg from "./package.json" with { type: "json" };
@@ -28,6 +28,33 @@ function injectAfterCharset(html: string, snippet: string): string {
  * Script, localStorage'daki remote-theme cache'ini okuyup CSS vars'ı ilk
  * paint'ten önce :root'a uygular. Boş cache varsa no-op.
  */
+function storageShimPlugin(): Plugin {
+  // Depolama erişilemezse (tarayıcı ayarıyla site verileri engelli, bazı
+  // WebView'lar, kurumsal politika) `localStorage` okumak SecurityError
+  // FIRLATIR. Bu, site açılmadan çökmeye yol açıyordu — ölçüldü 16 Eyl 2026,
+  // alpha ve prod aynı: 75 element, 0 başlık, 0 ürün kartı.
+  //
+  // Erişim tek bir yerden gelmiyor: `<head>` içindeki tema script'i, Alpine,
+  // i18next'in `cacheUserLanguage`'ı ve currencyService — ikisi 3. parti
+  // kütüphane, oralara try/catch konulamaz. Bu yüzden düzeltme tek tek değil
+  // GLOBAL: depolama çalışmıyorsa yerine bellek içi bir taklit konur, veri o
+  // sekme boyunca yaşar ve geri kalan kod hiçbir şey olmamış gibi çalışır.
+  //
+  // En erken çalışmalı: tema script'inden de önce (o da localStorage okuyor),
+  // bu yüzden themeBootstrapPlugin'DEN ÖNCE kayıtlı.
+  const inlineScript = `<script>(function(){var w=window;function kur(ad){try{var t='__st__';w[ad].setItem(t,t);w[ad].removeItem(t);return;}catch(e){}var m={};var s={getItem:function(k){k=String(k);return Object.prototype.hasOwnProperty.call(m,k)?m[k]:null;},setItem:function(k,v){m[String(k)]=String(v);},removeItem:function(k){delete m[String(k)];},clear:function(){m={};},key:function(i){var ks=Object.keys(m);return i<ks.length?ks[i]:null;}};try{Object.defineProperty(s,'length',{get:function(){return Object.keys(m).length;}});}catch(e){}try{Object.defineProperty(w,ad,{value:s,configurable:true});}catch(e){}}kur('localStorage');kur('sessionStorage');})();</script>`;
+  return {
+    name: "storage-shim-inject",
+    transformIndexHtml: {
+      order: "pre",
+      handler(html) {
+        if (html.includes("__st__")) return html; // idempotent
+        return injectAfterCharset(html, inlineScript);
+      },
+    },
+  };
+}
+
 function themeBootstrapPlugin(): Plugin {
   // 1) Cache'ten CSS vars'ı ilk paint öncesi uygula (FOUC önleme)
   // 2) Arka planda taze veriyi fetch et, cache'i güncelle (bir sonraki sayfa taze olsun)
@@ -396,6 +423,12 @@ export default defineConfig({
   plugins: [
     tailwindcss(),
     themeBootstrapPlugin(),
+    // Tema script'i de localStorage okuyor; shim ondan ÖNCE çalışmalı.
+    // `injectAfterCharset` her çağrıda charset'in HEMEN ardına eklediği için
+    // SONRA kaydedilen plugin HTML'de ÖNE geçer — bu yüzden shim burada,
+    // themeBootstrapPlugin'den sonra kayıtlı. (Ölçüldü: ters sırada tema
+    // script'i shim'den önce çıkıyordu.)
+    storageShimPlugin(),
     fontHeadPlugin(),
     // notFoundFallbackPlugin'den ÖNCE çalışmalı: önce rewrite,
     // eşleşmezse 404.html fallback.

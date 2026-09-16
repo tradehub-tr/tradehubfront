@@ -39,7 +39,10 @@ export function olcumYap() {
     if (!renk || renk === "transparent" || renk === "none") return { r: 0, g: 0, b: 0, a: 0 };
     const m = renk.match(/^rgba?\(([^)]+)\)$/);
     if (m) {
-      const p = m[1].split(/[,\s/]+/).filter(Boolean).map((x) => parseFloat(x));
+      const p = m[1]
+        .split(/[,\s/]+/)
+        .filter(Boolean)
+        .map((x) => parseFloat(x));
       return { r: p[0], g: p[1], b: p[2], a: p.length > 3 ? p[3] : 1 };
     }
     ctx.fillStyle = "#000000";
@@ -86,7 +89,13 @@ export function olcumYap() {
   const gorunur = (el) => {
     const cs = getComputedStyle(el);
     const r = el.getBoundingClientRect();
-    return r.width > 0 && r.height > 0 && cs.visibility !== "hidden" && cs.display !== "none" && parseFloat(cs.opacity) > 0.15;
+    return (
+      r.width > 0 &&
+      r.height > 0 &&
+      cs.visibility !== "hidden" &&
+      cs.display !== "none" &&
+      parseFloat(cs.opacity) > 0.15
+    );
   };
 
   const bulgular = [];

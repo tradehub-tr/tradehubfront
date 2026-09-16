@@ -428,7 +428,11 @@ Alpine.data("imageGallery", () => ({
     const first = newImages[0];
     if (mainImage && first) {
       if (first.isVideo) {
-        mainImage.innerHTML = renderInlineVideo(first.src, first.poster || "", first.captionsUrl || "");
+        mainImage.innerHTML = renderInlineVideo(
+          first.src,
+          first.poster || "",
+          first.captionsUrl || ""
+        );
       } else {
         mainImage.innerHTML = renderGalleryMedia(
           first.src,
@@ -540,7 +544,11 @@ Alpine.data("imageGallery", () => ({
     if (mainImage) {
       const image = currentProduct.images[index];
       if (image && image.isVideo) {
-        mainImage.innerHTML = renderInlineVideo(image.src, image.poster || "", image.captionsUrl || "");
+        mainImage.innerHTML = renderInlineVideo(
+          image.src,
+          image.poster || "",
+          image.captionsUrl || ""
+        );
       } else {
         mainImage.innerHTML = renderGalleryMedia(
           image?.src,
@@ -580,7 +588,11 @@ Alpine.data("imageGallery", () => ({
     if (lightboxImage) {
       const image = currentProduct.images[index];
       if (image && image.isVideo) {
-        lightboxImage.innerHTML = renderInlineVideo(image.src, image.poster || "", image.captionsUrl || "");
+        lightboxImage.innerHTML = renderInlineVideo(
+          image.src,
+          image.poster || "",
+          image.captionsUrl || ""
+        );
       } else {
         lightboxImage.innerHTML = renderGalleryMedia(
           image?.src,

@@ -21,12 +21,16 @@ const BOUND = String.raw`(^|[\s"'\`:{>(])`;
 const re = new RegExp(
   BOUND +
     String.raw`(-)?(` +
-    String.raw`(?:(ml|mr|pl|pr)-(` + VALUE + String.raw`))` +
+    String.raw`(?:(ml|mr|pl|pr)-(` +
+    VALUE +
+    String.raw`))` +
     String.raw`|(?:text-(left|right))(?=[\s"'\`:{}>)]|$)` +
     String.raw`|(?:border-(l|r))(?=[-\s"'\`:{}>)]|$)` +
     String.raw`|(?:rounded-(tl|tr|bl|br|l|r))(?=[-\s"'\`:{}>)]|$)` +
     String.raw`|(?:float-(left|right))(?=[\s"'\`:{}>)]|$)` +
-    String.raw`|(?:(left|right)-(` + VALUE + String.raw`))(?=[\s"'\`:{}>)]|$)` +
+    String.raw`|(?:(left|right)-(` +
+    VALUE +
+    String.raw`))(?=[\s"'\`:{}>)]|$)` +
     String.raw`)`,
   "g"
 );
@@ -46,24 +50,40 @@ function convert(text) {
   return text.replace(re, (m, b, neg, _cls, mp, mpv, ta, bd, rc, fl, ins, insv) => {
     neg = neg || "";
     let out;
-    if (mp) { out = `${b}${neg}${MP[mp]}-${mpv}`; bump("margin/padding"); }
-    else if (ta) { out = `${b}${neg}text-${TA[ta]}`; bump("text-align"); }
-    else if (bd) { out = `${b}${neg}border-${bd === "l" ? "s" : "e"}`; bump("border-side"); }
-    else if (rc) { out = `${b}${neg}rounded-${RC[rc]}`; bump("rounded"); }
-    else if (fl) { out = `${b}${neg}float-${TA[fl]}`; bump("float"); }
-    else if (ins) {
+    if (mp) {
+      out = `${b}${neg}${MP[mp]}-${mpv}`;
+      bump("margin/padding");
+    } else if (ta) {
+      out = `${b}${neg}text-${TA[ta]}`;
+      bump("text-align");
+    } else if (bd) {
+      out = `${b}${neg}border-${bd === "l" ? "s" : "e"}`;
+      bump("border-side");
+    } else if (rc) {
+      out = `${b}${neg}rounded-${RC[rc]}`;
+      bump("rounded");
+    } else if (fl) {
+      out = `${b}${neg}float-${TA[fl]}`;
+      bump("float");
+    } else if (ins) {
       // Skip fractional positions (left-1/2 etc.) — these are centering patterns
       // paired with -translate-x; "center is center" in both directions, and
       // logical conversion would break them in RTL since translate-x doesn't flip.
-      if (insv.includes("/")) { bump("skipped-center-fraction"); return m; }
-      out = `${b}${neg}${INS[ins]}-${insv}`; bump("position(left/right)");
-    }
-    else return m;
+      if (insv.includes("/")) {
+        bump("skipped-center-fraction");
+        return m;
+      }
+      out = `${b}${neg}${INS[ins]}-${insv}`;
+      bump("position(left/right)");
+    } else return m;
     if (samples.length < 20) samples.push(`${m.trim()}  ->  ${out.trim()}`);
     return out;
   });
 }
-function bump(k) { counts[k] = (counts[k] || 0) + 1; total++; }
+function bump(k) {
+  counts[k] = (counts[k] || 0) + 1;
+  total++;
+}
 
 function walk(dir, acc) {
   for (const name of readdirSync(dir)) {

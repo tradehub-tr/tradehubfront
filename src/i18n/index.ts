@@ -13,6 +13,7 @@ import { sanitizeHtml } from "../utils/sanitize";
 import { LANG_STORAGE_KEY, SUPPORTED_LANGS, isRtl, type SupportedLang } from "./languageChoice";
 
 export {
+  COUNTRY_LANG_MAP,
   LANGUAGE_OPTIONS,
   LANG_SOURCE_KEY,
   LANG_STORAGE_KEY,
@@ -20,9 +21,11 @@ export {
   SUPPORTED_LANGS,
   isLanguageManuallySelected,
   isRtl,
+  languageForCountry,
   languageLabel,
   normalizeLang,
   setLanguageManually,
+  VARSAYILAN_DIL,
   type LanguageOption,
   type SupportedLang,
 } from "./languageChoice";

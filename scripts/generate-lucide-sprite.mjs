@@ -3,10 +3,7 @@ import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const projectRoot = resolve(dirname(fileURLToPath(import.meta.url)), "..");
-const manifestPath = resolve(
-  projectRoot,
-  "src/components/icons/lucideIconNames.json"
-);
+const manifestPath = resolve(projectRoot, "src/components/icons/lucideIconNames.json");
 const outputPath = resolve(projectRoot, "public/icons/ui.svg");
 const iconDirectory = resolve(projectRoot, "node_modules/lucide-static/icons");
 const checkOnly = process.argv.includes("--check");

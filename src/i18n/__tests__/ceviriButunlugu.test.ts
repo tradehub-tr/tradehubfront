@@ -19,15 +19,16 @@ import tr from "../locales/tr";
 
 /**
  * Üç dilde birden eksik olan, TR'de yeni eklenip hiç çevrilmemiş anahtarlar.
- * Ayrı bir çeviri işi olarak takip ediliyor.
+ *
+ * 16 Eyl 2026: liste BOŞALDI. İçindeki beş `sellPage.*` anahtarı çevrilmedi,
+ * SİLİNDİ — ölçüldü ki hiçbiri çağrılmıyordu ve üçünün kullanılan karşılığı
+ * zaten dört dilde vardı (`heroTitle`, `heroImageAlt`, `dedicatedTurkishSupport`
+ * — sonuncusu `manufacturersFocusedSupport` ile birebir aynı metin).
+ *
+ * Liste boş kalmalı: TR'ye yeni anahtar eklenip diğer dillere eklenmezse test
+ * kırmızıya döner. Buraya madde eklemek borç yazmaktır — önce çevirmeyi dene.
  */
-const BILINEN_EKSIKLER = new Set([
-  "translation.sellPage.heroTitleMain",
-  "translation.sellPage.heroDescNoCommission",
-  "translation.sellPage.heroImageAltWorld",
-  "translation.sellPage.manufacturersFocusedSupport",
-  "translation.sellPage.startApplicationLink",
-]);
+const BILINEN_EKSIKLER = new Set<string>([]);
 
 type Sozluk = Record<string, unknown>;
 
@@ -63,6 +64,31 @@ describe("çeviri bütünlüğü", () => {
     });
   }
 
+  /**
+   * TERS YÖN — tr'de olmayıp çeviri dosyasında duran anahtar.
+   *
+   * Yukarıdaki denetim yalnız "eksik"e bakıyordu; bir anahtar tr'den silinince
+   * ar/ru kopyaları geride kalıyor ve hiçbir test bunu görmüyordu. Ölçüldü
+   * (16 Eyl 2026): ar.ts ve ru.ts'te tr'de ve en'de karşılığı olmayan, kodda
+   * hiç çağrılmayan 11 yetim anahtar vardı (`mega.*`, `footer.*`,
+   * `cart.movedToFavorites`) — silindiler.
+   *
+   * `_one`/`_other` gibi i18next ÇOĞUL biçimleri meşru istisnadır: Türkçe
+   * tekil/çoğul ayrımı yapmadığı için tr.ts'te karşılıkları yoktur.
+   */
+  const COGUL_SONEKLERI = /_(one|other|few|many|two|zero)$/;
+
+  for (const [ad, sozluk] of diller) {
+    it(`${ad}: tr'de olmayan yetim anahtar yok`, () => {
+      const mevcut = duzles(sozluk);
+      const yetim = [...mevcut].filter((k) => !trAnahtarlar.has(k) && !COGUL_SONEKLERI.test(k));
+      expect(
+        yetim,
+        `${ad}.ts'te ${yetim.length} yetim anahtar var — tr'den silinmiş ama burada kalmış:\n${yetim.slice(0, 20).join("\n")}`
+      ).toEqual([]);
+    });
+  }
+
   it("ana sayfa hero paneli dört dilde de çevrili", () => {
     // Bu blok Arapça ekranda ham görünen kusurun ta kendisiydi.
     const heroAnahtarlar = [...trAnahtarlar].filter((k) => k.startsWith("translation.heroSide."));
@@ -74,7 +100,10 @@ describe("çeviri bütünlüğü", () => {
     }
   });
 
-  it("bilinen eksikler listesi büyümemiş (borç artmıyor)", () => {
-    expect(BILINEN_EKSIKLER.size).toBeLessThanOrEqual(5);
+  it("çeviri borcu SIFIR — bilinen eksikler listesi boş", () => {
+    // 16 Eyl 2026'da boşaldı. Yeniden dolması, "çeviremedim, muaf tutayım"
+    // demenin yoludur; eşik gevşetilmeden önce anahtarın gerçekten gerekli
+    // olduğu (bir yerden çağrıldığı) doğrulanmalı.
+    expect([...BILINEN_EKSIKLER]).toEqual([]);
   });
 });

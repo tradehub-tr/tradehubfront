@@ -43,7 +43,13 @@ describe("ProductDocuments — dolu liste", () => {
   it("başlık, doc_type etiketi ve URL basılır", () => {
     currentProduct.value = {
       documents: [
-        { url: "/files/katalog.pdf", title: "Ürün Kataloğu", docType: "Katalog", language: "tr", sizeBytes: 0 },
+        {
+          url: "/files/katalog.pdf",
+          title: "Ürün Kataloğu",
+          docType: "Katalog",
+          language: "tr",
+          sizeBytes: 0,
+        },
       ],
     };
     const html = ProductDocuments();
@@ -68,7 +74,7 @@ describe("ProductDocuments — dolu liste", () => {
       documents: [
         {
           url: "/files/x.pdf",
-          title: '<img src=x onerror=alert(1)>',
+          title: "<img src=x onerror=alert(1)>",
           docType: "",
           language: "",
           sizeBytes: 0,
@@ -96,7 +102,9 @@ describe("ProductDocuments — dolu liste", () => {
 
   it("TÜM satırlar güvensiz/boş URL'liyse blok yine hiç render edilmez", () => {
     currentProduct.value = {
-      documents: [{ url: "javascript:alert(1)", title: "Kötücül", docType: "", language: "", sizeBytes: 0 }],
+      documents: [
+        { url: "javascript:alert(1)", title: "Kötücül", docType: "", language: "", sizeBytes: 0 },
+      ],
     };
     expect(ProductDocuments()).toBe("");
   });
@@ -104,9 +112,21 @@ describe("ProductDocuments — dolu liste", () => {
   it("boyut MB/KB olarak biçimlenir, 0/boş ise hiç basılmaz", () => {
     currentProduct.value = {
       documents: [
-        { url: "/files/buyuk.pdf", title: "Büyük", docType: "", language: "", sizeBytes: 2 * 1024 * 1024 },
+        {
+          url: "/files/buyuk.pdf",
+          title: "Büyük",
+          docType: "",
+          language: "",
+          sizeBytes: 2 * 1024 * 1024,
+        },
         { url: "/files/kucuk.pdf", title: "Küçük", docType: "", language: "", sizeBytes: 5 * 1024 },
-        { url: "/files/bilinmeyen.pdf", title: "Bilinmeyen", docType: "", language: "", sizeBytes: 0 },
+        {
+          url: "/files/bilinmeyen.pdf",
+          title: "Bilinmeyen",
+          docType: "",
+          language: "",
+          sizeBytes: 0,
+        },
       ],
     };
     const html = ProductDocuments();

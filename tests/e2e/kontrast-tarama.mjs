@@ -30,12 +30,19 @@ const BASE = process.env.PANEL_BASE ?? "http://tradehub.localhost";
 const USER = process.env.PANEL_USER ?? "Administrator";
 const PASS = process.env.PANEL_PASS ?? "";
 
-
 async function hazirOl(page, url) {
   await page.goto(BASE + url, { waitUntil: "domcontentloaded" });
   await page.waitForLoadState("networkidle").catch(() => {});
-  await page.locator("main h1").first().waitFor({ state:"visible", timeout:15000 }).catch(() => {});
-  await page.locator('main [aria-busy="true"]').first().waitFor({ state:"detached", timeout:12000 }).catch(() => {});
+  await page
+    .locator("main h1")
+    .first()
+    .waitFor({ state: "visible", timeout: 15000 })
+    .catch(() => {});
+  await page
+    .locator('main [aria-busy="true"]')
+    .first()
+    .waitFor({ state: "detached", timeout: 12000 })
+    .catch(() => {});
   // Rehberli tur overlay'i içeriği karartıp ölçümü zehirliyor. Tur, sayfa
   // oturduktan SONRA açılıyor — bu yüzden önce bekle, sonra kapat.
   await page.waitForTimeout(800);
@@ -50,20 +57,27 @@ async function hazirOl(page, url) {
 }
 
 const jsonYolu = process.argv.includes("--json")
-  ? process.argv[process.argv.indexOf("--json") + 1] : null;
+  ? process.argv[process.argv.indexOf("--json") + 1]
+  : null;
 
-if (!PASS) { console.error("PANEL_PASS gerekli."); process.exit(2); }
+if (!PASS) {
+  console.error("PANEL_PASS gerekli.");
+  process.exit(2);
+}
 
 const api = await request.newContext({ baseURL: BASE });
-const giris = await api.post("/api/method/login", { form:{ usr:USER, pwd:PASS } });
-if (!giris.ok()) { console.error("Frappe login başarısız:", giris.status()); process.exit(2); }
+const giris = await api.post("/api/method/login", { form: { usr: USER, pwd: PASS } });
+if (!giris.ok()) {
+  console.error("Frappe login başarısız:", giris.status());
+  process.exit(2);
+}
 const { cookies } = await api.storageState();
 
 const browser = await chromium.launch();
 const sonuc = [];
 
 for (const tema of ["light", "dark"]) {
-  const ctx = await browser.newContext({ viewport:{ width:1600, height:1000 } });
+  const ctx = await browser.newContext({ viewport: { width: 1600, height: 1000 } });
   await ctx.addCookies(cookies);
   await ctx.addInitScript((t) => {
     localStorage.setItem("th-lang", "tr");
@@ -75,12 +89,12 @@ for (const tema of ["light", "dark"]) {
     try {
       await hazirOl(page, e.url);
       const { bulgular, taranan } = await page.evaluate(olcumYap);
-      sonuc.push({ ...e, tip:"ekran", tema, taranan, bulgular });
+      sonuc.push({ ...e, tip: "ekran", tema, taranan, bulgular });
       const im = taranan <= 15 ? " ⚠ EKRAN YÜKLENMEMİŞ OLABİLİR" : "";
       console.log(`${tema} · ${e.key} ${e.ad}: ${bulgular.length} ihlal / ${taranan} öğe${im}`);
     } catch (err) {
-      sonuc.push({ ...e, tip:"ekran", tema, hata:String(err).slice(0,160) });
-      console.log(`${tema} · ${e.key} ${e.ad}: HATA — ${String(err).slice(0,90)}`);
+      sonuc.push({ ...e, tip: "ekran", tema, hata: String(err).slice(0, 160) });
+      console.log(`${tema} · ${e.key} ${e.ad}: HATA — ${String(err).slice(0, 90)}`);
     }
   }
 
@@ -90,14 +104,18 @@ for (const tema of ["light", "dark"]) {
   for (const y of MOD_YUZEYLERI) {
     for (const mod of y.modlar) {
       try {
-        await page.addInitScript(({ a, m }) => localStorage.setItem(`lv-mode:${a}`, m),
-                                 { a: y.anahtar, m: mod });
+        await page.addInitScript(({ a, m }) => localStorage.setItem(`lv-mode:${a}`, m), {
+          a: y.anahtar,
+          m: mod,
+        });
         await hazirOl(page, y.url);
         const { bulgular, taranan } = await page.evaluate(olcumYap);
-        sonuc.push({ ...y, tip:`mod:${mod}`, tema, taranan, bulgular });
-        console.log(`${tema} · ${y.key} [${mod}] ${y.ad}: ${bulgular.length} ihlal / ${taranan} öğe`);
+        sonuc.push({ ...y, tip: `mod:${mod}`, tema, taranan, bulgular });
+        console.log(
+          `${tema} · ${y.key} [${mod}] ${y.ad}: ${bulgular.length} ihlal / ${taranan} öğe`
+        );
       } catch (err) {
-        sonuc.push({ ...y, tip:`mod:${mod}`, tema, hata:String(err).slice(0,160) });
+        sonuc.push({ ...y, tip: `mod:${mod}`, tema, hata: String(err).slice(0, 160) });
         console.log(`${tema} · ${y.key} [${mod}] ${y.ad}: HATA`);
       }
     }
@@ -108,15 +126,17 @@ for (const tema of ["light", "dark"]) {
   const dugmeler = page.locator('[role="tab"]');
   const adet = await dugmeler.count();
   for (let i = 0; i < adet; i++) {
-    const meta = SEKMELER[i] ?? { key:`?${i}`, ad:`sekme ${i}`, sahip:"?" };
+    const meta = SEKMELER[i] ?? { key: `?${i}`, ad: `sekme ${i}`, sahip: "?" };
     try {
       await dugmeler.nth(i).click();
       await page.waitForTimeout(700);
       const { bulgular, taranan } = await page.evaluate(olcumYap);
-      sonuc.push({ ...meta, tip:"sekme", tema, taranan, bulgular });
-      console.log(`${tema} · ${meta.key} [sekme] ${meta.ad}: ${bulgular.length} ihlal / ${taranan} öğe`);
+      sonuc.push({ ...meta, tip: "sekme", tema, taranan, bulgular });
+      console.log(
+        `${tema} · ${meta.key} [sekme] ${meta.ad}: ${bulgular.length} ihlal / ${taranan} öğe`
+      );
     } catch (err) {
-      sonuc.push({ ...meta, tip:"sekme", tema, hata:String(err).slice(0,160) });
+      sonuc.push({ ...meta, tip: "sekme", tema, hata: String(err).slice(0, 160) });
       console.log(`${tema} · ${meta.key} [sekme] ${meta.ad}: HATA`);
     }
   }
@@ -129,4 +149,7 @@ await browser.close();
 
 const toplam = sonuc.reduce((n, s) => n + (s.bulgular?.length ?? 0), 0);
 console.log(`\nTOPLAM ${toplam} ihlal · ${sonuc.length} yüzey-ölçümü`);
-if (jsonYolu) { fs.writeFileSync(jsonYolu, JSON.stringify(sonuc, null, 1)); console.log("JSON:", jsonYolu); }
+if (jsonYolu) {
+  fs.writeFileSync(jsonYolu, JSON.stringify(sonuc, null, 1));
+  console.log("JSON:", jsonYolu);
+}
