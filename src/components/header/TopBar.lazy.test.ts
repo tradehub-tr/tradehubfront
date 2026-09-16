@@ -4,6 +4,15 @@ vi.mock("../../i18n", () => ({
   t: (key: string) => key,
   getCurrentLang: () => "tr",
   updatePageTranslations: vi.fn(),
+  setLanguageManually: vi.fn(),
+  // TopBar dil listesini merkezden alıyor; mock gerçek listeyi yansıtmalı,
+  // yoksa seçici testleri gerçekte olmayan bir dünyayı doğrular.
+  LANGUAGE_OPTIONS: [
+    { code: "tr", name: "Türkçe", flag: "🇹🇷" },
+    { code: "en", name: "English", flag: "🇬🇧" },
+    { code: "ar", name: "العربية", flag: "🇸🇦" },
+    { code: "ru", name: "Русский", flag: "🇷🇺" },
+  ],
 }));
 vi.mock("../../utils/auth", () => ({
   isLoggedIn: () => false,

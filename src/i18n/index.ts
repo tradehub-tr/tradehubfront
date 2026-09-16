@@ -8,17 +8,24 @@ import i18next from "i18next";
 import LanguageDetector from "i18next-browser-languagedetector";
 import { sanitizeHtml } from "../utils/sanitize";
 
-export const SUPPORTED_LANGS = ["en", "tr", "ar", "ru"] as const;
-export type SupportedLang = (typeof SUPPORTED_LANGS)[number];
+// Dil seçiminin tek karar noktası `languageChoice.ts`'te; burada yalnız
+// re-export ediliyor ki 266 çağıran dosyanın import satırı değişmesin.
+import { LANG_STORAGE_KEY, SUPPORTED_LANGS, isRtl, type SupportedLang } from "./languageChoice";
 
-/** Right-to-left languages — drive document `dir` attribute. */
-export const RTL_LANGS: readonly SupportedLang[] = ["ar"];
-
-export function isRtl(lang: SupportedLang): boolean {
-  return RTL_LANGS.includes(lang);
-}
-
-const LANG_STORAGE_KEY = "i18nextLng";
+export {
+  LANGUAGE_OPTIONS,
+  LANG_SOURCE_KEY,
+  LANG_STORAGE_KEY,
+  RTL_LANGS,
+  SUPPORTED_LANGS,
+  isLanguageManuallySelected,
+  isRtl,
+  languageLabel,
+  normalizeLang,
+  setLanguageManually,
+  type LanguageOption,
+  type SupportedLang,
+} from "./languageChoice";
 
 // Merge namespace-level objects (mockProduct, dropshipping, sellerMock)
 // into the translation namespace so t('mockProduct.title') works correctly.

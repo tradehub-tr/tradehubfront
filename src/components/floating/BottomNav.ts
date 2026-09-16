@@ -4,7 +4,7 @@
  * Visible on screens below xl breakpoint.
  */
 
-import { t } from "../../i18n";
+import { LANGUAGE_OPTIONS, getCurrentLang, setLanguageManually, t } from "../../i18n";
 import { subscribeCategories } from "../../services/categoryService";
 import type { ApiCategory, ApiCategoryChild } from "../../services/categoryService";
 import { COLUMN_ROWS, SIDEBAR_LIMIT, getIconByName } from "../header/MegaMenu";
@@ -187,16 +187,18 @@ function renderAccountCountryOptions(): string {
 }
 
 function renderAccountLanguageOptions(): string {
-  return `
-    <button type="button" data-lang-switch="tr" class="th-no-press w-full flex items-center justify-between px-4 py-3 text-sm hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors text-start border-b border-gray-100 dark:border-gray-700">
-      <span>Türkçe — TRY (₺)</span>
-      <span id="lang-check-tr" class="text-[var(--color-primary-500,#ff8600)] hidden">✓</span>
-    </button>
-    <button type="button" data-lang-switch="en" class="th-no-press w-full flex items-center justify-between px-4 py-3 text-sm hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors text-start">
-      <span>English — TRY (₺)</span>
-      <span id="lang-check-en" class="text-[var(--color-primary-500,#ff8600)] hidden">✓</span>
-    </button>
-  `;
+  // Diller tek kaynaktan (`i18n/languageChoice`). Önceden tr/en sabit
+  // yazılıydı; mobilde header seçicisi görünmediği için AR/RU hiçbir yoldan
+  // seçilemiyordu. Satır biçimi ("Türkçe — TRY (₺)") korunuyor.
+  return LANGUAGE_OPTIONS.map((o, i) => {
+    const sonSatir = i === LANGUAGE_OPTIONS.length - 1;
+    const kenar = sonSatir ? "" : " border-b border-gray-100 dark:border-gray-700";
+    return `
+    <button type="button" data-lang-switch="${o.code}" class="th-no-press w-full flex items-center justify-between px-4 py-3 text-sm hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors text-start${kenar}">
+      <span>${o.name} — TRY (₺)</span>
+      <span id="lang-check-${o.code}" class="text-[var(--color-primary-500,#ff8600)] hidden">✓</span>
+    </button>`;
+  }).join("");
 }
 
 function renderAccountOverlay(): string {
@@ -445,15 +447,16 @@ function initAccountOverlay(overlay: HTMLElement): () => void {
       if (langContent.dataset.lazyMounted !== "true") {
         langContent.dataset.lazyMounted = "true";
         langContent.innerHTML = renderAccountLanguageOptions();
-        const currentLang = localStorage.getItem("i18nextLng") || "tr";
-        const currentCheck = langContent.querySelector<HTMLElement>(
-          currentLang === "tr" ? "#lang-check-tr" : "#lang-check-en"
-        );
+        // Önceden `tr ? #lang-check-tr : #lang-check-en` yazılıydı — AR/RU
+        // seçiliyken işaret yanlış satıra düşerdi.
+        const currentLang = getCurrentLang();
+        const currentCheck = langContent.querySelector<HTMLElement>(`#lang-check-${currentLang}`);
         currentCheck?.classList.remove("hidden");
         langContent.querySelectorAll<HTMLButtonElement>("[data-lang-switch]").forEach((btn) => {
           btn.addEventListener("click", () => {
-            localStorage.setItem("i18nextLng", btn.dataset.langSwitch || "tr");
-            window.location.reload();
+            // Geçersiz kodda sayfayı yenileme — eski `|| "tr"` fallback'i
+            // bozuk bir data-attribute'u sessizce Türkçeye çeviriyordu.
+            if (setLanguageManually(btn.dataset.langSwitch)) window.location.reload();
           });
         });
       }

@@ -20,8 +20,13 @@ import { getFlagSvg } from "../../utils/flags";
 import { escapeHtml, sanitizeUrl } from "../../utils/sanitize";
 import { cartThumbNameTile } from "./cartThumbNameTile";
 // DISABLED: import { mockConversations } from '../../data/mockMessages';
-import { t, getCurrentLang, updatePageTranslations } from "../../i18n";
-import type { SupportedLang } from "../../i18n";
+import {
+  LANGUAGE_OPTIONS,
+  getCurrentLang,
+  setLanguageManually,
+  t,
+  updatePageTranslations,
+} from "../../i18n";
 import { getSelectedCurrency, setSelectedCurrency, getCurrencySymbol } from "../../utils/currency";
 import {
   formatCurrency,
@@ -115,13 +120,14 @@ const countryOptions: LocaleOption[] = [
   { code: "FR", name: "France", flag: "🇫🇷" },
 ];
 
-/** Default language options */
-const languageOptions: LocaleOption[] = [
-  { code: "TR", name: "Türkçe", flag: "🇹🇷" },
-  { code: "EN", name: "English", flag: "🇬🇧" },
-  { code: "AR", name: "العربية", flag: "🇸🇦" },
-  { code: "RU", name: "Русский", flag: "🇷🇺" },
-];
+/** Dil seçenekleri — tek kaynak `i18n/languageChoice`. Bu seçicinin
+ *  `<option value>`'ları tarihsel olarak BÜYÜK harf ("TR"); biçim korunuyor,
+ *  `setLanguageManually()` zaten normalize ediyor. */
+const languageOptions: LocaleOption[] = LANGUAGE_OPTIONS.map((o) => ({
+  code: o.code.toUpperCase(),
+  name: o.name,
+  flag: o.flag,
+}));
 
 /** Currency options — from currencyService (queryFetch-backed list, defaults until loaded) */
 function getCurrencyOptions(): CurrencyOption[] {
@@ -1434,14 +1440,6 @@ export function initLanguageSelector(): void {
   // Run initial translation update for all data-i18n elements
   updatePageTranslations();
 
-  const langMap: Record<string, SupportedLang> = {
-    TR: "tr",
-    EN: "en",
-    AR: "ar",
-    RU: "ru",
-    DE: "en",
-  };
-
   // Rozeti seçili dil + para birimine göre güncelle (statik i18n metni değil).
   updateLangCurrencyLabel();
 
@@ -1508,7 +1506,7 @@ export function initLanguageSelector(): void {
         "click",
         () => {
           const selectedLangCode = langSelect?.value || getCurrentLang().toUpperCase();
-          localStorage.setItem("i18nextLng", langMap[selectedLangCode] || "en");
+          setLanguageManually(selectedLangCode);
           if (currencySelect) setSelectedCurrency(currencySelect.value);
           window.location.reload();
         },
