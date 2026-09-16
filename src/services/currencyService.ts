@@ -87,8 +87,26 @@ export async function initCurrency(): Promise<void> {
       _currencyMeta = _buildCurrencyMeta(_settings.currencies);
     }
 
-    if (!localStorage.getItem(STORAGE_KEY) && _settings.defaultCurrency) {
-      _selectedCurrency = _settings.defaultCurrency;
+    // Depolanan seçim de geçersiz olabilir: bu kusur düzeltilmeden önce
+    // localStorage'a "GBP"/"CNY" yazılmış kullanıcılar hâlâ o değerle geliyor.
+    // Meta yüklendikten sonra temizliyoruz ki öneri yeniden uygulanabilsin —
+    // aksi halde o kullanıcılar seçiciden de düzeltemedikleri bir koda
+    // süresiz kilitli kalır.
+    const stored = localStorage.getItem(STORAGE_KEY);
+    if (stored && !_currencyMeta[stored]) {
+      localStorage.removeItem(STORAGE_KEY);
+      _selectedCurrency = "USD";
+    }
+
+    // Sunucunun önerdiği para birimi desteklenen listede olmayabilir
+    // (COUNTRY_CURRENCY_MAP tanımsız bir koda işaret ederse). setSelectedCurrency
+    // elle seçimde bu doğrulamayı zaten yapıyor; otomatik atamada da yapılmazsa
+    // geçersiz kod localStorage'a yazılır ve kullanıcı seçiciden düzeltemez.
+    // Yazmayı atlarsak varsayılan USD'de kalırız ve para birimi ileride
+    // tanımlandığında sonraki ziyarette kendiliğinden uygulanır.
+    const proposed = _settings.defaultCurrency;
+    if (!localStorage.getItem(STORAGE_KEY) && proposed && _currencyMeta[proposed]) {
+      _selectedCurrency = proposed;
       localStorage.setItem(STORAGE_KEY, _selectedCurrency);
     }
 
