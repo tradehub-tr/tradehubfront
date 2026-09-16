@@ -11,12 +11,30 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import {
+  LANG_COOKIE_KEY,
+  LANG_SOURCE_COOKIE_KEY,
   LANG_SOURCE_KEY,
   LANG_STORAGE_KEY,
   isLanguageManuallySelected,
   normalizeLang,
+  readCookie,
+  readLangCookie,
   setLanguageManually,
 } from "../languageChoice";
+
+/**
+ * Seçim artık localStorage'a VE çereze yazılıyor (MOGEM-642 · Faz 1 — panel
+ * ile ortak köprü). `localStorage.clear()` tek başına yetmiyor: çerez sayfa
+ * ömrünü aşıyor ve bir sonraki testin başlangıç durumuna sızıyor. Ölçüldü —
+ * bu temizleyici eklenene kadar "işaret yokken false" testi, kendisinden
+ * önceki `setLanguageManually("en")` çağrısının çerezi yüzünden kırmızıydı.
+ */
+function ortamiTemizle() {
+  localStorage.clear();
+  for (const ad of [LANG_COOKIE_KEY, LANG_SOURCE_COOKIE_KEY]) {
+    document.cookie = `${ad}=; Path=/; Max-Age=0`;
+  }
+}
 
 describe("normalizeLang", () => {
   it("büyük/küçük harf ve bölge ekini normalize eder", () => {
@@ -37,7 +55,7 @@ describe("normalizeLang", () => {
 });
 
 describe("setLanguageManually", () => {
-  beforeEach(() => localStorage.clear());
+  beforeEach(ortamiTemizle);
 
   it("dili yazar ve 'manual' olarak işaretler", () => {
     expect(setLanguageManually("TR")).toBe("tr");
@@ -63,6 +81,7 @@ describe("setLanguageManually", () => {
     expect(setLanguageManually("de")).toBeNull();
     expect(localStorage.getItem(LANG_STORAGE_KEY)).toBeNull();
     expect(localStorage.getItem(LANG_SOURCE_KEY)).toBeNull();
+    expect(readLangCookie()).toBeNull(); // çereze de sızmamalı
   });
 
   it("geçersiz koddan sonra önceki seçim bozulmaz", () => {
@@ -71,21 +90,31 @@ describe("setLanguageManually", () => {
     expect(localStorage.getItem(LANG_STORAGE_KEY)).toBe("ar");
   });
 
-  it("localStorage yazılamıyorsa çökmez, dili yine döner", () => {
+  it("localStorage yazılamıyorsa çökmez, dili yine döner VE çerez yazılır", () => {
+    // Çerez ayrı bir `try` içinde olmasaydı localStorage hatası onu da
+    // atlatırdı; gizli sekmedeki kullanıcının seçimi panele hiç geçmezdi.
     const orijinal = Storage.prototype.setItem;
     Storage.prototype.setItem = vi.fn(() => {
       throw new Error("QuotaExceeded");
     });
     try {
       expect(setLanguageManually("ru")).toBe("ru");
+      expect(readLangCookie()).toBe("ru");
     } finally {
       Storage.prototype.setItem = orijinal;
     }
   });
+
+  it("seçim localStorage ve çerezin İKİSİNE birden yazılır", () => {
+    setLanguageManually("ar");
+    expect(localStorage.getItem(LANG_STORAGE_KEY)).toBe("ar");
+    expect(readLangCookie()).toBe("ar");
+    expect(readCookie(LANG_SOURCE_COOKIE_KEY)).toBe("manual");
+  });
 });
 
 describe("isLanguageManuallySelected", () => {
-  beforeEach(() => localStorage.clear());
+  beforeEach(ortamiTemizle);
 
   it("işaret yokken false — otomatik tespit dili ezebilir", () => {
     localStorage.setItem(LANG_STORAGE_KEY, "tr"); // i18next'in kendi cache'i
@@ -94,6 +123,14 @@ describe("isLanguageManuallySelected", () => {
 
   it("işaret varken true", () => {
     setLanguageManually("en");
+    expect(isLanguageManuallySelected()).toBe(true);
+  });
+
+  it("PANELDE yapılan seçim de görülür — çerez localStorage'sız da yeter", () => {
+    // Panel ayrı bir uygulama; storefront'un localStorage'ına hiç yazmaz.
+    // Köprü yalnız çerez olduğu için bu senaryo localStorage boşken sınanır.
+    document.cookie = `${LANG_SOURCE_COOKIE_KEY}=manual; Path=/`;
+    expect(localStorage.getItem(LANG_SOURCE_KEY)).toBeNull();
     expect(isLanguageManuallySelected()).toBe(true);
   });
 });

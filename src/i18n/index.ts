@@ -10,11 +10,27 @@ import { sanitizeHtml } from "../utils/sanitize";
 
 // Dil seçiminin tek karar noktası `languageChoice.ts`'te; burada yalnız
 // re-export ediliyor ki 266 çağıran dosyanın import satırı değişmesin.
-import { LANG_STORAGE_KEY, SUPPORTED_LANGS, isRtl, type SupportedLang } from "./languageChoice";
+import {
+  LANG_STORAGE_KEY,
+  SUPPORTED_LANGS,
+  isRtl,
+  readDetectedCountry,
+  readLangParam,
+  readManualLang,
+  resolveLang,
+  setLanguageManually,
+  stripLangParam,
+  writeLangCookie,
+  type SupportedLang,
+} from "./languageChoice";
 
 export {
   COUNTRY_LANG_MAP,
+  HL_PARAM_NAMES,
   LANGUAGE_OPTIONS,
+  LANG_COOKIE_KEY,
+  LANG_COOKIE_MAX_AGE,
+  LANG_SOURCE_COOKIE_KEY,
   LANG_SOURCE_KEY,
   LANG_STORAGE_KEY,
   RTL_LANGS,
@@ -24,8 +40,19 @@ export {
   languageForCountry,
   languageLabel,
   normalizeLang,
+  readCookie,
+  readDetectedCountry,
+  readLangCookie,
+  readLangParam,
+  readManualLang,
+  resolveLang,
   setLanguageManually,
+  stripLangParam,
+  writeCookie,
+  writeLangCookie,
   VARSAYILAN_DIL,
+  type DilKarari,
+  type DilKaynaklari,
   type LanguageOption,
   type SupportedLang,
 } from "./languageChoice";
@@ -41,17 +68,45 @@ function mergeIntoTranslation(resource: any): any {
 // Aktif dili resource'lardan ÖNCE tespit et — yalnızca o dilin locale dosyasını
 // (400-600 KB) dinamik import ederiz, 4 dilin tamamını (1.68 MB) değil.
 function detectInitialLang(): SupportedLang {
-  try {
-    const stored = localStorage.getItem(LANG_STORAGE_KEY);
-    if (stored) {
-      const s = stored.substring(0, 2) as SupportedLang;
-      if (SUPPORTED_LANGS.includes(s)) return s;
+  const hl = readLangParam(location.search);
+  const { lang, kaynak } = resolveLang({
+    hl,
+    manuel: readManualLang(),
+    ulke: readDetectedCountry(),
+    tarayici: navigator.language,
+  });
+
+  if (kaynak === "hl") {
+    // Bağlantıyla gelen dil KALICI tercih sayılır ve "manual" işaretlenir:
+    // ziyaretçiye Arapça bir bağlantı gönderildiyse ikinci sayfada ülke
+    // tespitinin onu İngilizceye çevirmesi bağlantıyı işlevsiz kılardı.
+    setLanguageManually(lang);
+    // Adresi temizle — karar (16 Eyl): `?hl=` giriş kapısı, hafıza çerezde.
+    // `replaceState` geçmişe kayıt EKLEMEZ; `pushState` olsaydı ziyaretçi
+    // geri tuşuna bastığında parametreli adrese dönüp döngüye girerdi.
+    try {
+      const temiz = stripLangParam(location.href);
+      if (temiz !== location.href) history.replaceState(history.state, "", temiz);
+    } catch {
+      // history API yok/engelli: adres kirli kalır, dil yine de doğrudur.
     }
-  } catch {
-    // localStorage erişilemezse navigator'a düş
+  } else if (kaynak === "country" || kaynak === "browser") {
+    // Otomatik kararı da çereze yaz ki panel ve sunucu aynı dili görsün.
+    // "auto" işareti bilinçli: kullanıcı elle seçtiğinde bu değer ezilir,
+    // ülke tespiti de bir dahaki ziyarette yeniden karar verebilir.
+    writeLangCookie(lang, "auto");
   }
-  const nav = (navigator.language || "en").substring(0, 2) as SupportedLang;
-  return SUPPORTED_LANGS.includes(nav) ? nav : "en";
+
+  // localStorage i18next'in kendi tespit zincirinin okuduğu yer; karar
+  // burada verildiği için sonucu oraya da yazıyoruz, yoksa `detection`
+  // ayarı bir sonraki açılışta farklı bir dile karar verebilir.
+  try {
+    localStorage.setItem(LANG_STORAGE_KEY, lang);
+  } catch {
+    // localStorage kapalı — karar bu oturum için geçerli.
+  }
+
+  return lang;
 }
 
 /** Bir dilin locale modülünü dinamik yükleyip i18next'e resource bundle olarak ekler. */
