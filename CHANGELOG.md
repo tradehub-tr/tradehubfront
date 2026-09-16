@@ -1,3 +1,23 @@
+## [v2.6.0-alpha.1] - 2026-09-16 ALPHA
+
+Bu surum alpha.istoc.com'da gelistirme asamasindadir.
+
+### Eklendi
+- feat(i18n): Arapça ve Rusça tüm dil seçicilerine eklendi (@aliiball)
+  - AR/RU 3 Haziran 2026'da eklendiğinde yalnız header güncellendi; Temmuz'da eklenen footer ve mobil hesap menüsü, dört dil zaten mevcutken ikişer dille yazıldı. Mobilde header gizli olduğu için mobil kullanıcı AR/RU'yu hiçbir yoldan seçemiyordu.
+  - Dil seçimi ve dil listesi languageChoice.ts'te tek karar noktasına toplandı: seçim dört ayrı yerde doğrudan localStorage.setItem("i18nextLng", ...) ile yazılıyordu, bu yüzden "kullanıcı kendi mi seçti?" sorusunun cevabı yoktu. Elle seçim artık th-lang-source=manual ile işaretleniyor; ülkeye göre otomatik seçim buna bakıp geri çekilecek.
+  - Mobil menüde seçili dil işareti currentLang === "tr" ? "#lang-check-tr" : "#lang-check-en" diye yazılıydı; AR veya RU seçiliyken tik İngilizce satırında görünüyordu. Artık #lang-check-${currentLang}.
+  - Desteklenmeyen dil kodu artık yazılmıyor: eski langMap[code] || "en" kalıbı AR/RU seçimini sessizce İngilizceye çeviriyordu.
+  - AR ve RU'da ham anahtar olarak ekrana basılan 6 metin çevrildi: heroSide.* ve mobileCategory.allInCategory.
+  - Denetim testleri beşinci bir seçici eklenirse ya da biri kendi sabit dil listesini tanımlarsa kırmızıya düşer.
+
+### Duzeltildi
+- fix(para-birimi): geçersiz para birimi seçimine doğrulama eklendi (@aliiball)
+  - setSelectedCurrency elle seçimde kodu zaten doğruluyordu, otomatik atama doğrulamıyordu. Bu asimetri yüzünden sunucunun önerdiği tanımsız kod localStorage'a yazılıyor, kullanıcı seçicide göremediği için düzeltemiyordu.
+  - Düzeltme öncesinde kilitlenmiş kullanıcılar da kurtarılıyor: meta yüklendikten sonra geçersiz değer siliniyor ve öneri yeniden uygulanabiliyor.
+  - Birim testi kusur geri alınınca kırmızıya düşüyor, E2E aynı senaryoyu tarayıcıda koruyor.
+
+---
 ## [v2.6.0] - 2026-09-15 PROD
 
 Bu surum istoc.com'da yayindadir.
