@@ -1,3 +1,57 @@
+## [v2.6.0-alpha.3] - 2026-09-16 ALPHA
+
+Bu surum alpha.istoc.com'da gelistirme asamasindadir.
+
+### Eklendi
+- feat(i18n): ülke-dil eşlemesi eklendi (@aliiball)
+  - COUNTRY_LANG_MAP ve languageForCountry(): TR Türkçe, RU Rusça, 18 Arap ülkesi Arapça, kalan her ülke ve tespit edilemeyen durum İngilizce açar.
+  - Arap Ligi'nin 22 üyesinden dördü (MR, SO, DJ, KM) bilinçli olarak dışarıda: bu ülkelerde Arapça baskın arayüz dili değil, Fransızca ve yerel diller yaygın. Gerekçe kodda yazılı.
+  - Üç harfli ülke kodları artık reddediliyor. Körü körüne ilk iki harfi almak öngörülemez sonuç veriyordu: SAU ve EGY tesadüfen doğru eşleşirken TUR hiçbir şeye denk gelmiyordu.
+  - Eşleme ülke kodunun kaynağından bağımsız; Cloudflare, nginx geo ya da backend hangisi verirse versin sonuç aynı. Faz 2'de nginx map'i bu tek listeden üretilecek.
+
+### Duzeltildi
+- fix(guvenlik): CSP worker-src eklendi, service worker artik kaydolabiliyor (@aliiball)
+  - worker-src direktifi tanimli olmadigi icin CSP onu child-src'tan miras aliyordu; child-src'ta 'self' yok (yalniz blob: ve Yandex), bu yuzden kendi alan adimizdaki sw.js reddediliyordu.
+  - Sonuc alpha ve prod'da ayniydi: service worker kayit sayisi 0, PWA kurulumu ve offline onbellek calismiyordu. Her build 4.5 MB precache uretiyor ve tamami bosa gidiyordu.
+  - CSP sozlesmesine yazildi: worker-src dusurulurse nginxCspContract testi kirmiziya doner.
+- fix(storefront): depolama engelliyken site acilmiyordu (@aliiball)
+  - localStorage erisimi SecurityError firlattiginda (tarayici ayariyla site verileri engelli, bazi WebView'lar, kurumsal politika) site hic acilmiyordu: 75 element, 0 baslik, 0 urun karti. Kismi bozulma degil, tam kayipti; alpha ve prod ayni.
+  - Erisim tek yerden gelmiyordu: head icindeki tema script'i, Alpine, i18next cacheUserLanguage ve currencyService. Ikisi 3. parti kutuphane oldugu icin tek tek try/catch mumkun degildi, bu yuzden duzeltme global yapildi.
+  - storageShimPlugin depolama calismiyorsa yerine bellek ici taklit koyar; veri o sekme boyunca yasar ve geri kalan kod degismeden calisir. Calisan tarayicida devreye girmez: gercek Storage ve kalicilik korunur.
+  - E2E dort senaryoyu korur; shim devre disi birakilinca ikisi kirmiziya duser.
+- fix(test): satış sayfası regresyon testi biçimden bağımsız hâle getirildi (@aliiball)
+  - Test mock eksikliğinden değil, 7 Eylül'deki bilinçli davranış değişikliğinden kırıktı: fiyat biçimi 4321'den 4.321'e, varsayılan dönem aylıktan yıllığa alınmıştı.
+  - Aynı davranışı SellPageLayout.test.ts zaten doğruluyor; fiyat biçimi ve dönem toggle kontrolü oraya bırakıldı. Bu testte kalmasının tek sonucu, biçim her değiştiğinde iki testin birden kırılmasıydı.
+  - Fiyat rakamı artık ayırıcılardan arındırılıp aranıyor, yani biçim değişse de test yalan söylemiyor. Kontrolün yanlış pozitif olmadığı, var olmayan bir değerle kırmızıya düşürülerek doğrulandı.
+  - Birim suite ilk kez tamamen yeşil: 1017 test, 100 dosya.
+- fix(güvenlik): ülke başlıkları nginx'te istemciden alınmıyor (@aliiball)
+  - Backend _detect_country ülkeyi CF-IPCountry ve X-Country başlıklarından okuyor; ikisi de istemciden gelebildiği için ziyaretçi kendi ülkesini uydurup para birimi önerisini belirleyebiliyordu.
+  - Ölçüldü, gerçek nginx ve curl ile: satırlar yokken istemcinin gönderdiği US değeri backend'e aynen ulaşıyor, satırlarla birlikte boş geliyor.
+  - Sözleşme testi tek bir bloğun unutulmasını yakalıyor; yeni bir location eklenip satırlar kopyalanmazsa kırmızıya döner.
+  - Ülke kodunun nereden geleceğine karar verilmedi, o yüzden başlığı dolduran kaynak eklenmedi: bugün kural tek yönlü, istemci ülke söyleyemez.
+
+### Degistirildi
+- refactor(storefront): TopBar ve BottomNav prettier biçimine uyduruldu (@aliiball)
+  - İki dosya prettier sözleşmesinin dışında kalmıştı; 14 satırlık biçim farkı giderildi, davranış değişmedi.
+  - BottomNav dil seçicisi bu dosyada olduğu için gerçek tarayıcı turu tekrarlandı: dört dil sunuluyor, Arapça seçimi RTL'i açıyor, seçili işaret doğru satırda.
+- refactor(i18n): kullanılmayan beş sellPage anahtarı silindi (@aliiball)
+  - heroTitleMain, heroDescNoCommission, heroImageAltWorld, manufacturersFocusedSupport ve startApplicationLink hiçbir yerden çağrılmıyordu; tek referansları testin muafiyet listesiydi.
+  - Çevirmek yerine silindi: çeviri borcu kapanmış görünürdü ama üç dile ölü metin yazılmış olurdu.
+  - Test muafiyet listesi boşaldı ve eşik 'en fazla beş' yerine 'hiç yok' katılığına çevrildi; borç yazmak artık listeyi büyütmeyi ve bunun diff'te görünmesini gerektiriyor.
+  - Aynı dosyada ters yön denetimi de eklendi: tr'den silinip ar veya ru'da kalan yetim anahtar artık yakalanıyor.
+- refactor(test): panel dil bütünlüğü E2E'si eklendi (@aliiball)
+  - Panel fallbackLocale en taşıdığı için eksik çeviri ham anahtar DEĞİL İngilizce üretir; ham anahtar araması bu kusuru asla yakalayamaz. Test bu yüzden ekranda o dile ait metni arıyor.
+  - Beş ekran iki dilde doğrulanıyor: özellik kataloğu, kategori vitrini, medya yedeği, lojistik panosu ve sevkiyat listesi.
+  - Sol menü ayrıca denetleniyor: Логистика ve görünmeli, çevrilmemiş Logistics kalmamalı.
+  - Üç engel teste yorum olarak geçti: sekme URL ile seçilemiyor, sekme şeridi iki kez ةيتسجوللا تامدخلا çiziliyor ve biri gizli, tur overlay'i page: önekiyle ayrı işaretleniyor.
+- refactor(lint): eslint hatası giderildi ve biçim borcu kapatıldı (@aliiball)
+  - heading-audit.mjs tek eslint hatası veriyordu; yanlış pozitifti, getComputedStyle page.evaluate callback'inin içinde yani tarayıcıda koşuyor. Config'de aynı sorun için iki ayrı blok vardı, üçü tek bloğa birleştirildi.
+  - duplicate-exports-allowlist.json prettierignore'a alındı: dosyayı check-duplicate-exports.mjs JSON.stringify ile yazıyor, her dizi elemanını ayrı satıra koyuyor; prettier kısa dizileri tek satıra topluyor. İkisi birbirini sonsuza kadar geri alırdı, admin-panel'de 2026-08-24'te tam bu olmuştu.
+  - ar.ts ve ru.ts'ten 11 yetim anahtar silindi: tr'de ve en'de karşılığı yok, kodda hiç çağrılmıyorlar. Silme kök farkındalıklı yapıldı, productionMonitoring iki ayrı kökte geçtiği için kör arama yanlış satırı silerdi.
+  - vite.config.ts'te initial commit'ten beri kullanılmayan writeFileSync import'u kaldırıldı.
+  - Kalan 27 dosya prettier biçimine getirildi; dört locale dosyası HEAD ile derin karşılaştırıldı, içeriği değişen anahtar yok.
+
+---
 ## [v2.6.0-alpha.1] - 2026-09-16 ALPHA
 
 Bu surum alpha.istoc.com'da gelistirme asamasindadir.
