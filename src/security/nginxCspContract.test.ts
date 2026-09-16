@@ -22,6 +22,15 @@ describe("validateNginxCspTemplate", () => {
     expect(validateNginxCspTemplate(mutated)).toContain("connect-src wss://mc.yandex.com.tr");
   });
 
+  it("rejects a missing worker-src self", () => {
+    // worker-src düşerse CSP onu child-src'tan miras alır; child-src'ta 'self'
+    // yok, dolayısıyla service worker sessizce reddedilir ve PWA ölür.
+    // Ölçüldü (16 Eyl 2026): alpha + prod'da SW kayıt sayısı 0.
+    const mutated = template.replace(" worker-src 'self';", "");
+
+    expect(validateNginxCspTemplate(mutated)).toContain("worker-src 'self'");
+  });
+
   it("requires frame-ancestors to contain only 'none'", () => {
     const mutated = template.replace(
       "frame-ancestors 'none'",
