@@ -18,6 +18,7 @@ import {
   LANG_SOURCE_COOKIE_KEY,
   LANG_SOURCE_KEY,
   LANG_STORAGE_KEY,
+  ULKE_COOKIE_KEY,
   readDetectedCountry,
   readLangParam,
   readManualLang,
@@ -45,7 +46,7 @@ function ortamiKur(s: Senaryo) {
   document.documentElement.removeAttribute("lang");
   document.documentElement.removeAttribute("dir");
   document.head.innerHTML = "";
-  for (const ad of [LANG_COOKIE_KEY, LANG_SOURCE_COOKIE_KEY]) {
+  for (const ad of [LANG_COOKIE_KEY, LANG_SOURCE_COOKIE_KEY, ULKE_COOKIE_KEY]) {
     document.cookie = `${ad}=; Path=/; Max-Age=0`;
   }
   localStorage.clear();
@@ -119,6 +120,7 @@ const SENARYOLAR: Senaryo[] = [
     depo: { [LANG_STORAGE_KEY]: "ar" },
     tarayici: "tr-TR",
   },
+  // ── Ülke META'dan (Faz 1 sözleşmesi; sunucu bir gün HTML'e yazarsa) ──
   { ad: "ülke TR → Türkçe", ulke: "TR", tarayici: "en-US" },
   { ad: "ülke SA → Arapça", ulke: "SA", tarayici: "en-US" },
   { ad: "ülke RU → Rusça", ulke: "RU", tarayici: "en-US" },
@@ -129,6 +131,40 @@ const SENARYOLAR: Senaryo[] = [
   { ad: "ülke üç harfli (TUR) → geçersiz, atlanır", ulke: "TUR", tarayici: "ru-RU" },
   { ad: "ülke küçük harf (sa)", ulke: "sa", tarayici: "en-US" },
   { ad: "ülke boş dize", ulke: "", tarayici: "tr-TR" },
+
+  // ── Ülke ÇEREZTEN (Faz 5; nginx'in bugün kullandığı yol) ─────────────
+  { ad: "çerezden ülke SA → Arapça", cerez: { "th-country": "SA" }, tarayici: "en-US" },
+  { ad: "çerezden ülke TR → Türkçe", cerez: { "th-country": "TR" }, tarayici: "en-US" },
+  { ad: "çerezden ülke RU → Rusça", cerez: { "th-country": "RU" }, tarayici: "en-US" },
+  {
+    ad: "çerezden haritada olmayan ülke → tarayıcıya düşer",
+    cerez: { "th-country": "DE" },
+    tarayici: "ru-RU",
+  },
+  {
+    ad: "meta XX iken çerez devreye girer (bugünkü gerçek durum)",
+    ulke: "XX",
+    cerez: { "th-country": "SA" },
+    tarayici: "en-US",
+  },
+  {
+    ad: "meta DOLUYSA çerezi ezer (sunucu HTML'e yazmaya geçerse)",
+    ulke: "RU",
+    cerez: { "th-country": "SA" },
+    tarayici: "en-US",
+  },
+  {
+    ad: "elle seçim çerezi ülke çerezini de ezer",
+    cerez: { "th-lang": "tr", "th-lang-source": "manual", "th-country": "SA" },
+    tarayici: "en-US",
+  },
+  {
+    ad: "?hl= ülke çerezini ezer",
+    search: "?hl=ru",
+    cerez: { "th-country": "SA" },
+    tarayici: "en-US",
+  },
+  { ad: "çerezde geçersiz ülke kodu", cerez: { "th-country": "zzz" }, tarayici: "ru-RU" },
 ];
 
 describe("ilk boyama dili — script kararı `resolveLang()` ile aynı", () => {
@@ -214,6 +250,34 @@ describe("ilk boyama dili — belge nitelikleri", () => {
     expect(document.cookie).toBe(cerezOnce);
     expect(JSON.stringify({ ...localStorage })).toBe(depoOnce);
     expect(localStorage.getItem(LANG_STORAGE_KEY)).toBeNull();
+  });
+});
+
+describe("ülke çerezi — sunucunun yazdığı değer", () => {
+  it("çerezden okunan ülke belgeye RTL olarak yansıyor", () => {
+    // Zincirin ucu: nginx `th-country=SA` yazar → açılış script'i okur →
+    // Arapça açılır → yön sağdan sola döner.
+    ortamiKur({ ad: "SA", cerez: { "th-country": "SA" }, tarayici: "en-US" });
+    const karar = scriptiCalistir({ ad: "SA", tarayici: "en-US" });
+    expect(karar).toEqual({ lang: "ar", kaynak: "country" });
+    expect(document.documentElement.dir).toBe("rtl");
+  });
+
+  it("ülke çerezi YOKSA davranış değişmez (tarayıcı diline düşer)", () => {
+    // nginx ülkeyi bilmiyorsa başlığı hiç göndermiyor. O durumda akış Faz 1
+    // davranışının aynısı olmalı — yeni kod eski yolu bozmamalı.
+    ortamiKur({ ad: "yok", tarayici: "ru-RU" });
+    expect(scriptiCalistir({ ad: "yok", tarayici: "ru-RU" })).toEqual({
+      lang: "ru",
+      kaynak: "browser",
+    });
+  });
+
+  it("ülke çerezine YAZMIYOR — yazan tek taraf sunucu", () => {
+    ortamiKur({ ad: "yazma", cerez: { "th-country": "SA" }, tarayici: "en-US" });
+    const once = document.cookie;
+    scriptiCalistir({ ad: "yazma", tarayici: "en-US" });
+    expect(document.cookie).toBe(once);
   });
 });
 
