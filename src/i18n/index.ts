@@ -34,6 +34,7 @@ export {
   LANG_SOURCE_KEY,
   LANG_STORAGE_KEY,
   RTL_LANGS,
+  ULKE_COOKIE_KEY,
   SUPPORTED_LANGS,
   isLanguageManuallySelected,
   isRtl,

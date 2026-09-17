@@ -42,6 +42,7 @@ import {
   LANG_STORAGE_KEY,
   RTL_LANGS,
   SUPPORTED_LANGS,
+  ULKE_COOKIE_KEY,
   VARSAYILAN_DIL,
 } from "./languageChoice";
 
@@ -53,6 +54,11 @@ import {
  * değeri "bilmiyorum" sayar, ülke basamağı atlanır ve davranış Faz 1'dekinin
  * birebir aynısı kalır. Faz 5'te nginx/backend bu satırı gerçek kodla
  * dolduracak.
+ *
+ * Faz 5'ten beri ülke asıl olarak ÇEREZLE geliyor (`th-country`, nginx her
+ * HTML yanıtında yazıyor). Meta sözleşmesi korunuyor: bir gün sunucu HTML'e
+ * doğrudan yazmaya geçerse kod değişmeden çalışsın. Sıra: meta (XX değilse)
+ * → çerez.
  *
  * ⚠ Bu meta, açılış script'inden ÖNCE gelmek ZORUNDA: script `<head>`
  * ayrıştırılırken çalışıyor, o an DOM'da yalnız kendinden önceki etiketler
@@ -89,7 +95,9 @@ var lang=null,kaynak="default";
 try{var s=location.search;if(s){var q=new URLSearchParams(s);lang=nrm(q.get("hl"))||nrm(q.get("lang"));if(lang)kaynak="hl";}}catch(x){}
 if(!lang&&cerez(${JSON.stringify(LANG_SOURCE_COOKIE_KEY)})==="manual"){lang=nrm(cerez(${JSON.stringify(LANG_COOKIE_KEY)}));if(lang)kaynak="manual";}
 if(!lang&&depo(${JSON.stringify(LANG_SOURCE_KEY)})==="manual"){lang=nrm(depo(${JSON.stringify(LANG_STORAGE_KEY)}));if(lang)kaynak="manual";}
-if(!lang){var m=document.querySelector('meta[name="th-country"]');var u=m?String(m.getAttribute("content")||"").trim():"";if(u&&u.toUpperCase()!=="XX"&&/^[A-Za-z]{2}(-|$)/.test(u)){var d=ULKE[u.slice(0,2).toUpperCase()];if(d){lang=d;kaynak="country";}}}
+if(!lang){var u="";try{var m=document.querySelector('meta[name="th-country"]');u=m?String(m.getAttribute("content")||"").trim():"";}catch(x){}
+if(!u||u.toUpperCase()==="XX"){u=cerez(${JSON.stringify(ULKE_COOKIE_KEY)})||"";}
+if(u&&u.toUpperCase()!=="XX"&&/^[A-Za-z]{2}(-|$)/.test(u)){var d=ULKE[u.slice(0,2).toUpperCase()];if(d){lang=d;kaynak="country";}}}
 if(!lang){var nv=null;try{nv=navigator.language;}catch(x){}lang=nrm(nv);if(lang)kaynak="browser";}
 if(!lang){lang=${JSON.stringify(VARSAYILAN_DIL)};kaynak="default";}
 var r=document.documentElement;r.lang=lang;r.dir=RTL.indexOf(lang)>=0?"rtl":"ltr";

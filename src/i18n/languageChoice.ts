@@ -239,6 +239,19 @@ export const LANG_COOKIE_KEY = "th-lang";
 /** Tercihin kaynağı çerezi: "manual" → kullanıcı seçti, otomatik tespit ezmez. */
 export const LANG_SOURCE_COOKIE_KEY = "th-lang-source";
 
+/**
+ * Sunucunun yazdığı ülke çerezi (MOGEM-642 · Faz 5).
+ *
+ * nginx her HTML yanıtında ziyaretçinin IP'sinden bulduğu ülkeyi buraya
+ * yazıyor. Ön yüz yalnız OKUR — bu çereze hiçbir yerde yazmıyoruz; yazan tek
+ * taraf sunucu. Ülke bilinmiyorsa (ya da ziyaretçi bot olarak tanındıysa)
+ * başlık hiç gönderilmiyor, yani çerez yoksa "bilmiyorum" demektir.
+ *
+ * Ömrü sunucuda 1 saat: kullanıcı ağ/VPN değiştirdiğinde tercih kendini
+ * düzeltebilsin diye.
+ */
+export const ULKE_COOKIE_KEY = "th-country";
+
 /** Bir yıl. Dil tercihi mevsimlik değil; kısa ömür kullanıcıya iş çıkarır. */
 export const LANG_COOKIE_MAX_AGE = 60 * 60 * 24 * 365;
 
@@ -456,10 +469,15 @@ export function readDetectedCountry(): string | null {
     const meta = document.querySelector('meta[name="th-country"]');
     const kod = meta?.getAttribute("content")?.trim();
     // Sunucu değeri dolduramadığında şablonda `XX` ya da boş bırakılıyor;
-    // ikisi de "bilmiyorum" demektir, ülke basamağı atlanır.
-    if (!kod || kod.toUpperCase() === "XX") return null;
-    return kod;
+    // ikisi de "bilmiyorum" demektir, meta basamağı atlanır.
+    if (kod && kod.toUpperCase() !== "XX") return kod;
   } catch {
-    return null;
+    // DOM erişilemedi — çerez yine denenir.
   }
+  // Çerez: BUGÜN KULLANILAN yol. nginx ülkeyi her HTML yanıtında buraya
+  // yazıyor (`th-country`). Meta önce denendi çünkü sözleşme Faz 1'de o
+  // şekilde yazılmıştı ve bir gün sunucu HTML'e doğrudan yazmaya geçerse
+  // kod değişmeden çalışsın; bugün şablondaki değer `XX` olduğu için akış
+  // her zaman çereze düşüyor.
+  return readCookie(ULKE_COOKIE_KEY);
 }
