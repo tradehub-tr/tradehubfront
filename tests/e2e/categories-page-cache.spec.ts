@@ -94,7 +94,12 @@ test("categories.html shows error UI (not a blank grid) when category load fails
   // render the error state instead of a silently empty grid.
   // Hata metni artık i18n'den geliyor (eski hardcoded Türkçe kaldırıldı); Türkçe
   // assertion için dili TR'ye sabitle.
-  await page.addInitScript(() => localStorage.setItem("i18nextLng", "tr"));
+  // MOGEM-642 Faz 1: `th-lang-source=manual` işareti olmadan yazılan
+  // `i18nextLng` kullanıcı seçimi sayılmıyor, karar tarayıcı diline düşüyor.
+  await page.addInitScript(() => {
+    localStorage.setItem("i18nextLng", "tr");
+    localStorage.setItem("th-lang-source", "manual");
+  });
   await mockBackend(page);
   await page.route("**/api/method/tradehub_core.api.category.get_mega_menu*", (route: Route) =>
     route.fulfill({
