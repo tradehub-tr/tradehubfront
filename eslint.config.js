@@ -75,6 +75,7 @@ export default [
     files: [
       "scripts/measure-home-perf.mjs",
       "scripts/heading-audit.mjs",
+      "scripts/ilk-boyama-olc.mjs",
       "tests/e2e/kontrast-olcum.mjs",
     ],
     languageOptions: {
@@ -83,6 +84,7 @@ export default [
         getComputedStyle: "readonly",
         innerHeight: "readonly",
         innerWidth: "readonly",
+        MutationObserver: "readonly",
         PerformanceObserver: "readonly",
         performance: "readonly",
       },
