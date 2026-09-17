@@ -115,6 +115,16 @@ map $http_user_agent $is_bot {
     ~*petalbot                           1;
 }
 
+# ── MOGEM-642 Faz 0: teşhis ucu sürüm damgası ─────────────────────────
+# Bu map'in tek işi YENİ bir nginx değişkeninin `envsubst`'tan sağ çıktığını
+# kanıtlamak. Üretim imajında şablonlar `NGINX_ENVSUBST_FILTER` ile
+# süzülüyor; filtre yanlışsa nginx değişkenleri boşaltılır ve config sessizce
+# bozulur. Faz 5'te eklenecek `$ulke_kodu` de aynı yoldan geçecek — önce bu
+# zararsız değişkenle ölçülüyor.
+map $host $dil_teshis_surumu {
+    default "faz0";
+}
+
 # Statik sayfa SEO path registry (bot-only). static_pages_registry.py ile
 # senkron tutulmalı. $is_bot=1 olduğunda bu map'ten eşleşen path'ler
 # backend render_static_page endpoint'ine proxy edilir.
@@ -313,6 +323,29 @@ server {
     # Sitemap satırı BE-MAP canlıya çıkınca eklenir (404 sitemap ilan etme).
     location = /robots.txt {
         try_files $robots_file =404;
+    }
+
+    # ── DİL TEŞHİS UCU (MOGEM-642) ────────────────────────────────
+    # "Rusya'dan bağlandım ama Rusça gelmedi" sorusunu tahminle değil KANITLA
+    # cevaplamak için. Sunucunun o istek hakkında GÖRDÜĞÜ her şeyi döner.
+    #
+    # Faz 0'daki işi: Caddy'nin gerçek ziyaretçi IP'sini `X-Forwarded-For` ile
+    # gönderip göndermediğini ölçmek. Bütün ülke tespiti buna dayanıyor; XFF
+    # gelmiyorsa nginx herkesi Caddy'nin özel IP'si olarak görür ve hiçbir
+    # ülke eşleşmez. Ölçülmeden tablo yazmak temeli görmeden ev dikmektir.
+    #
+    # Gizlilik: yalnız ÇAĞIRANIN KENDİ isteğine ait değerler döner; başka
+    # kullanıcının verisi yok, oturum/çerez içeriği yok.
+    #
+    # add_header miras tuzağı (bkz. server bloğundaki not): bu blok kendi
+    # add_header'ını tanımladığı için server seviyesindekileri MİRAS ALMAZ —
+    # gerekli üçü burada tekrar yazıldı.
+    location = /__dil-teshis {
+        default_type application/json;
+        add_header X-Robots-Tag "noindex, nofollow" always;
+        add_header Cache-Control "no-store" always;
+        add_header X-Content-Type-Options "nosniff" always;
+        return 200 '{"surum":"$dil_teshis_surumu","gorulen_ip":"$remote_addr","xff":"$http_x_forwarded_for","proto":"$http_x_forwarded_proto","host":"$host","bot":"$is_bot"}';
     }
 
     # ── PWA manifest — nginx mime.types'ta .webmanifest yok, varsayılan
