@@ -1,3 +1,17 @@
+## [v2.6.0-alpha.6] - 2026-09-17 ALPHA
+
+Bu surum alpha.istoc.com'da gelistirme asamasindadir.
+
+### Eklendi
+- feat(i18n): dil teşhis ucu eklendi (@aliiball)
+  - Ülkeye göre dil seçimi gerçek ziyaretçi IP'sine dayanıyor; TLS Caddy'de bittiği için IP nginx'e ancak X-Forwarded-For ile gelir.
+  - Bu uç, sunucunun o istek için gördüğü değerleri döndürüyor: kaynak IP, XFF, protokol, host ve bot işareti.
+  - İkinci işi, yeni bir nginx değişkeninin envsubst filtresinden sağ çıktığını Faz 5 öncesi zararsız bir değişkenle ölçmek.
+  - Uç kalıcı: neden bu dil geldi sorusu tahminle değil kanıtla cevaplanacak, yalnız çağıranın kendi isteği dönüyor.
+  - noindex, no-store ve nosniff blok içinde tekrar yazıldı: kendi add_header'ı olan blok server seviyesini miras almıyor.
+  - İlk boyama ölçeri geçici klasörden repoya alındı; YAVAS=1 olmadan koşulursa titremeyi göstermez.
+
+---
 ## [v2.6.0-alpha.5] - 2026-09-17 ALPHA
 
 Bu surum alpha.istoc.com'da gelistirme asamasindadir.
