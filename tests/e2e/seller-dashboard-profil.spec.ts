@@ -31,7 +31,12 @@ test.beforeEach(async ({ context }) => {
   // Fresh context navigator dili en'e düşer → tab label'ları İngilizce olur.
   // Storefront i18next dil anahtarı "i18nextLng" (src/i18n/index.ts) — TR'ye sabitle;
   // locator'lar TR label ("Hesabım", "Şirket Profili") bekliyor.
-  await context.addInitScript(() => localStorage.setItem("i18nextLng", "tr"));
+  // MOGEM-642 Faz 1: `th-lang-source=manual` işareti olmadan yazılan
+  // `i18nextLng` kullanıcı seçimi sayılmıyor, karar tarayıcı diline düşüyor.
+  await context.addInitScript(() => {
+    localStorage.setItem("i18nextLng", "tr");
+    localStorage.setItem("th-lang-source", "manual");
+  });
 });
 
 /** Dashboard #app render + satıcı görünümü hazır olana kadar bekle.

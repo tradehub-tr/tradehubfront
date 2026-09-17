@@ -55,6 +55,79 @@ function storageShimPlugin(): Plugin {
   };
 }
 
+/**
+ * İLK BOYAMA DİLİ (MOGEM-642 · Faz 2) — iki enjeksiyon.
+ *
+ * 1) `<meta name="th-country">` + açılış script'i, charset'ten sonra:
+ *    `<html lang>` ve `dir` daha `<head>` ayrıştırılırken doğru dile
+ *    ayarlanır. Bugün bu iş `type="module"` zincirinin sonunda yapılıyor ve
+ *    ölçüldü (17 Eyl 2026, dist+nginx, 400 kbps/4x CPU): 12.307 ms sürüyor.
+ *
+ * 2) `</title>`ın ARDINA başlık çeviri script'i: sekme başlığı ziyaretçinin
+ *    JS'ten önce gördüğü TEK dil parçası (aynı ölçümde 447 ms'te Türkçe
+ *    yazılıp 11,9 saniye öyle kalıyordu). Başlıktan ÖNCE konsaydı ayrıştırıcı
+ *    `<title>`a geldiğinde değeri geri yazardı.
+ *
+ * Script metni `src/i18n/ilkBoyamaDili.ts`'te üretilir — orada test edilebilir;
+ * ülke haritası ve anahtarlar `languageChoice.ts`'ten gömülür (tek kaynak).
+ */
+function ilkBoyamaDiliPlugin(): Plugin {
+  // Sözlükler derleme anında bir kez okunur; 71 HTML için tekrar tekrar
+  // import etmek build süresini boşuna uzatırdı.
+  let sozlukler: Record<string, unknown> | null = null;
+
+  async function baslikHaritasi(anahtar: string): Promise<Record<string, string>> {
+    if (!sozlukler) {
+      const { SUPPORTED_LANGS } = await import("./src/i18n/languageChoice");
+      const yuklu: Record<string, unknown> = {};
+      for (const dil of SUPPORTED_LANGS) {
+        const mod = await import(`./src/i18n/locales/${dil}.ts`);
+        yuklu[dil] = (mod.default as { translation?: unknown }).translation ?? {};
+      }
+      sozlukler = yuklu;
+    }
+    const harita: Record<string, string> = {};
+    for (const [dil, sozluk] of Object.entries(sozlukler)) {
+      let dugum: unknown = sozluk;
+      for (const parca of anahtar.split(".")) {
+        dugum =
+          typeof dugum === "object" && dugum
+            ? (dugum as Record<string, unknown>)[parca]
+            : undefined;
+      }
+      // Anahtarı olmayan dil haritaya GİRMEZ: script o dilde başlığa
+      // dokunmaz, statik başlık kalır. Uydurulmuş bir karşılık koymaktansa
+      // Türkçe başlık görünsün — eksik çeviri `ceviriButunlugu` testinin işi.
+      if (typeof dugum === "string" && dugum) harita[dil] = dugum;
+    }
+    return harita;
+  }
+
+  return {
+    name: "ilk-boyama-dili-inject",
+    transformIndexHtml: {
+      order: "pre",
+      async handler(html) {
+        const { ULKE_META, baslikScripti, ilkBoyamaScripti } =
+          await import("./src/i18n/ilkBoyamaDili");
+        if (html.includes("__thDil")) return html; // idempotent
+        let out = injectAfterCharset(html, `${ULKE_META}\n    ${ilkBoyamaScripti()}`);
+
+        // Başlık: yalnız `<title data-i18n="...">` olan sayfalarda. Anahtarsız
+        // yedi sayfa (404, media-watch, returns, …) dokunulmadan kalır.
+        const baslik = /<title\s[^>]*data-i18n="([^"]+)"[^>]*>[\s\S]*?<\/title>/i.exec(out);
+        if (baslik) {
+          const harita = await baslikHaritasi(baslik[1]);
+          if (Object.keys(harita).length > 0) {
+            out = out.replace(baslik[0], `${baslik[0]}\n    ${baslikScripti(harita)}`);
+          }
+        }
+        return out;
+      },
+    },
+  };
+}
+
 function themeBootstrapPlugin(): Plugin {
   // 1) Cache'ten CSS vars'ı ilk paint öncesi uygula (FOUC önleme)
   // 2) Arka planda taze veriyi fetch et, cache'i güncelle (bir sonraki sayfa taze olsun)
@@ -422,6 +495,12 @@ export default defineConfig({
   },
   plugins: [
     tailwindcss(),
+    // Dil açılış script'i EN BAŞA kayıtlı, yani HTML'de en SONA düşer
+    // (injectAfterCharset her çağrıda charset'in hemen ardına eklediği için
+    // sonra kaydedilen öne geçer). Bilinçli: font preload'ları ve depolama
+    // shim'i önde kalsın — ilki LCP'yi, ikincisi `localStorage`ı korur.
+    // Dil script'i yine de `<body>`den çok önce, ~1 ms'te çalışır.
+    ilkBoyamaDiliPlugin(),
     themeBootstrapPlugin(),
     // Tema script'i de localStorage okuyor; shim ondan ÖNCE çalışmalı.
     // `injectAfterCharset` her çağrıda charset'in HEMEN ardına eklediği için

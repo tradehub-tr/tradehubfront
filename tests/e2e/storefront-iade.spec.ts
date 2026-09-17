@@ -32,7 +32,13 @@ const IADE = "RET-2026-00007";
  */
 async function oturumAc(page: Page): Promise<void> {
   await page.addInitScript(() => {
+    // MOGEM-642 Faz 1: dil seçimi artık `th-lang-source=manual`
+    // işareti olmadan KULLANICI SEÇİMİ sayılmıyor (otomatik tespit onu
+    // ezebilsin diye). İşaretsiz yazılan `i18nextLng` sessizce yok
+    // sayılıyor, karar tarayıcı diline düşüyor ve ekran İngilizce
+    // açılıyor — Türkçe metin arayan her iddia kırmızıya dönüyordu.
     localStorage.setItem("i18nextLng", "tr");
+    localStorage.setItem("th-lang-source", "manual");
     localStorage.setItem(
       "istoc_cookie_prefs",
       JSON.stringify({ necessary: true, analytics: false, marketing: false })
@@ -134,7 +140,13 @@ test("K1 · alıcı iadeyi sipariş listesinden başlatabiliyor", async ({ page 
   await dugme.click();
 
   await expect(page).toHaveURL(new RegExp("return-request\\.html\\?shipment="));
-  await expect(page.getByRole("heading", { name: "İade talebi" })).toBeVisible();
+  // Sayfada aynı metinle İKİ başlık var: ekran okuyucu için `h1.sr-only` ve
+  // görünen `h2`. Ekran Türkçe açılmaya başlayınca (MOGEM-642 Faz 1 işareti
+  // eklendi) seçici ikisini birden bulup strict-mode ihlaline düşüyordu.
+  // Görünen başlığa bağlanıyoruz — testin ölçmek istediği o.
+  await expect(
+    page.locator("#return-request-root").getByRole("heading", { name: "İade talebi" })
+  ).toBeVisible();
 });
 
 // ── K2 · talep açma + miktar + kalıcılık ────────────────────────────

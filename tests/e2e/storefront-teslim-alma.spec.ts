@@ -28,7 +28,13 @@ const TESLIM_ALMA_SAYFASI = "/pages/dashboard/shipment-tracking.html";
  */
 async function oturumAc(page: Page): Promise<void> {
   await page.addInitScript(() => {
+    // MOGEM-642 Faz 1: dil seçimi artık `th-lang-source=manual`
+    // işareti olmadan KULLANICI SEÇİMİ sayılmıyor (otomatik tespit onu
+    // ezebilsin diye). İşaretsiz yazılan `i18nextLng` sessizce yok
+    // sayılıyor, karar tarayıcı diline düşüyor ve ekran İngilizce
+    // açılıyor — Türkçe metin arayan her iddia kırmızıya dönüyordu.
     localStorage.setItem("i18nextLng", "tr");
+    localStorage.setItem("th-lang-source", "manual");
     // Çerez onay bandı ekranın ALTINI kaplıyor ve mobilde teslim onayı
     // düğmesini yutuyor (375×667'de ölçüldü: "subtree intercepts pointer
     // events"). Gerçek kullanıcı bandı bir kez kapatıp devam ediyor; test de

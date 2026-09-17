@@ -16,7 +16,13 @@ const SAYFA = "/pages/seller/shipment.html";
 
 async function oturumAc(page: Page): Promise<void> {
   await page.addInitScript(() => {
+    // MOGEM-642 Faz 1: dil seçimi artık `th-lang-source=manual`
+    // işareti olmadan KULLANICI SEÇİMİ sayılmıyor (otomatik tespit onu
+    // ezebilsin diye). İşaretsiz yazılan `i18nextLng` sessizce yok
+    // sayılıyor, karar tarayıcı diline düşüyor ve ekran İngilizce
+    // açılıyor — Türkçe metin arayan her iddia kırmızıya dönüyordu.
     localStorage.setItem("i18nextLng", "tr");
+    localStorage.setItem("th-lang-source", "manual");
     // Çerez bandı alttaki düğmeleri yutuyor (07-FE ölçümü).
     localStorage.setItem(
       "istoc_cookie_prefs",
