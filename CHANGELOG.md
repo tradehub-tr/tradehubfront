@@ -1,3 +1,23 @@
+## [v2.6.0-alpha.5] - 2026-09-17 ALPHA
+
+Bu surum alpha.istoc.com'da gelistirme asamasindadir.
+
+### Eklendi
+- feat(i18n): dil ve yön ilk boyamada head script ile ayarlandı (@aliiball)
+  - Dil kararı modül zincirinin sonunda veriliyordu. Ölçüldü (dist + nginx, 400 kbps / 4x CPU, /?hl=ar): lang ve dir 12.307 ms, sekme başlığı 11,9 saniye Türkçe kalıyordu. Satır içi head script kararı 471,8 ms'te veriyor.
+  - Script metni languageChoice.ts'ten üretiliyor; ülke haritası, desteklenen diller, RTL listesi ve çerez anahtarları oraya gömülüyor. Elle kopyalanan tek şey öncelik sırası ve onu denetim testi resolveLang ile 22 senaryoda karşılaştırıyor.
+  - Başlık çeviri script'i title etiketinin ARDINA konuyor: öncesine konsaydı ayrıştırıcı başlığı statik Türkçe değerine geri yazardı. Başlığında data-i18n olmayan yedi sayfa dokunulmadan kalıyor.
+  - th-country meta'sı script'ten önce eklendi (Faz 5 kancası). XX degeri bilinmiyor demek, doldurulana kadar davranış Faz 1'dekinin aynısı.
+  - Script SALT OKUR: tercihi yazan tek yer setLanguageManually olarak kaldı, iki ayrı kaynak işareti üretme riski doğmadı.
+
+### Duzeltildi
+- fix(test): E2E dil kurulumuna elle seçim işareti eklendi (@aliiball)
+  - Faz 1'de i18nextLng artık th-lang-source=manual işareti olmadan kullanıcı seçimi sayılmıyor. Dili öyle kuran dokuz spec'te karar tarayıcı diline düşüyor, Playwright bağlamı en-US açıldığı için ekran İngilizce çiziliyor ve Türkçe metin arayan her iddia sessizce düşüyordu: mock paketinde 76 test.
+  - Kusurun genel hâli denetime çevrildi: i18nextLng yazan her spec işareti de yazmak zorunda. Denetim yorumdaki metni değil gerçek setItem çağrısını arıyor.
+  - storefront-iade'de dil düzelince açığa çıkan strict-mode ihlali görünen başlığa bağlandı: sayfada h1.sr-only ve h2 aynı metni taşıyor.
+  - Ölçüm: mock paketi 97 kırıktan 21 kırığa indi, 191 geçenden 267 geçene çıktı. Kalan 21 dil ile ilgisiz.
+
+---
 ## [v2.6.0-alpha.4] - 2026-09-16 ALPHA
 
 Bu surum alpha.istoc.com'da gelistirme asamasindadir.
