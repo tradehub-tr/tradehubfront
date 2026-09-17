@@ -1,3 +1,24 @@
+## [v2.6.0-alpha.7] - 2026-09-17 ALPHA
+
+Bu surum alpha.istoc.com'da gelistirme asamasindadir.
+
+### Eklendi
+- feat(i18n): ülkeye göre otomatik dil seçimi eklendi (@aliiball)
+  - Ziyaretçinin IP'si nginx'te ülke tablosunda aranıyor, bulunan ülke th-country çerezine yazılıyor, açılış script'i dili ondan seçiyor.
+  - Tablo DB-IP Country Lite'tan üretiliyor; ülke listesi COUNTRY_LANG_MAP'ten okunuyor, ikinci liste tutulmuyor.
+  - Tablo nginx.conf.template'in İÇİNDE: PROD imajına repodan kopyalanan tek config dosyası o, ayrı dosya alpha'da çalışıp canlıda sessizce ölürdü.
+  - Gerçek IP yalnız özel adres aralıklarından gelen X-Forwarded-For ile alınıyor; dışarıdan gelen sahte başlık yok sayılıyor.
+  - Botlara ülke verilmiyor, arama motorlarının tarama davranışı bu özellikten etkilenmiyor.
+  - Çerez server seviyesinde ve içerik tipine göre yazılıyor: location içine konsaydı CSP ve HSTS dahil altı güvenlik başlığı düşerdi.
+  - 304 yanıtında Content-Type gelmediği için boş içerik tipi de kabul ediliyor, yoksa çerez tazelenmiyordu.
+  - Teşhis ucu eklendi: neden bu dil geldi sorusu tahminle değil kanıtla cevaplanıyor.
+
+### Degistirildi
+- refactor(lint): ölçüm script'i tarayıcı globalleri listesine alındı (@aliiball)
+  - ilk-boyama-olc.mjs tarayıcıda koşan callback'ler taşıyor ve beş no-undef hatası veriyordu; config'in kendi notu bu tuzağı zaten anlatıyordu.
+  - npm run lint yalnız src ve tests'e baktığı için hata CI'da görünmüyordu.
+
+---
 ## [v2.6.0-alpha.6] - 2026-09-17 ALPHA
 
 Bu surum alpha.istoc.com'da gelistirme asamasindadir.
