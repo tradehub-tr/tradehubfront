@@ -99,7 +99,7 @@ const CACHE_TTL_MS = 5 * 60_000;
 /** İstek zaman aşımı. Aşılırsa boş sonuç — sayfa beklemede kalmaz. */
 const TIMEOUT_MS = 4_000;
 
-const STORAGE_KEY = "tradehub-media-manifest-v1";
+const STORAGE_KEY = "tradehub-media-manifest-avif-v2";
 
 /**
  * "Bayrak kapalı" bilgisinin kalıcı anahtarı.
@@ -109,7 +109,7 @@ const STORAGE_KEY = "tradehub-media-manifest-v1";
  * bayrak kapalıyken bile her sayfa geçişinde bir istek atılırdı. Böylece
  * bedel oturum başına TEK isteğe iner.
  */
-const DISABLED_KEY = "tradehub-media-manifest-off-v1";
+const DISABLED_KEY = "tradehub-media-manifest-off-avif-v2";
 
 const BASE_URL = NATIVE_API_BASE || import.meta.env.VITE_API_URL || "/api";
 const BATCH_ENDPOINT = `${BASE_URL}/method/tradehub_core.api.media_manifest.get_manifest_batch`;

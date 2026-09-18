@@ -1,3 +1,4 @@
+import { hydrateProductImages } from "../components/media/ProductImage";
 /**
  * Checkout Page — Entry Point
  * Assembles header, checkout content, and footer.
@@ -329,7 +330,7 @@ function getFilteredCartSummary() {
   const filtered = cartStore.getSuppliers().filter((s) => supplierFilter.includes(s.id));
   let selectedCount = 0;
   let productSubtotal = 0;
-  const items: { image: string; quantity: number }[] = [];
+  const items: { listingId?: string; image: string; quantity: number }[] = [];
 
   for (const supplier of filtered) {
     for (const product of supplier.products) {
@@ -338,7 +339,7 @@ function getFilteredCartSummary() {
           selectedCount++;
           const converted = convertPrice(sku.unitPrice, sku.baseCurrency || 'USD');
           productSubtotal += converted * sku.quantity;
-          items.push({ image: sku.skuImage, quantity: sku.quantity });
+          items.push({ listingId: product.id, image: sku.skuImage, quantity: sku.quantity });
         }
       }
     }
@@ -705,7 +706,7 @@ const freshCartSummary = getFilteredCartSummary();
 
 currentCheckoutOrderSummary = isSampleMode ? {
   itemCount: 1,
-  thumbnails: sampleOrderData?.color?.imageUrl ? [{ image: sampleOrderData.color.imageUrl, quantity: 1 }] : [],
+  thumbnails: sampleOrderData?.color?.imageUrl ? [{ listingId: sampleOrderData.productId, image: sampleOrderData.color.imageUrl, quantity: 1 }] : [],
   itemSubtotal: sampleSubtotal,
   shipping: currentDefaultShippingFee,
   subtotal: sampleSubtotal + currentDefaultShippingFee,
@@ -714,7 +715,7 @@ currentCheckoutOrderSummary = isSampleMode ? {
   currency: getSelectedCurrencyInfo().code,
 } : {
   itemCount: freshCartSummary.selectedCount || freshCartSummary.items.reduce((s, i) => s + i.quantity, 0),
-  thumbnails: freshCartSummary.items.map(i => ({ image: i.image, quantity: i.quantity })),
+  thumbnails: freshCartSummary.items.map(i => ({ listingId: i.listingId, image: i.image, quantity: i.quantity })),
   itemSubtotal: freshCartSummary.productSubtotal,
   shipping: currentDefaultShippingFee,
   subtotal: freshCartSummary.productSubtotal + currentDefaultShippingFee - freshCartSummary.discount,
@@ -784,6 +785,7 @@ appEl.innerHTML = `
   <!-- Order Review Modal -->
   ${OrderReviewModal()}
 `;
+void hydrateProductImages();
 
 // Initialize behaviors
 initFlowbite(); // Profil dropdown Flowbite data-dropdown-toggle ile çalışır

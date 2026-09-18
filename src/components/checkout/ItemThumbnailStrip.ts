@@ -1,3 +1,4 @@
+import { ProductImage } from "../media/ProductImage";
 /**
  * ItemThumbnailStrip — sipariş özetindeki ürün küçük-resim şeridi.
  *
@@ -8,10 +9,10 @@
  */
 
 import { t } from "../../i18n";
-import { escapeHtml, sanitizeUrl } from "../../utils/sanitize";
 
 export interface ThumbnailItem {
   image: string;
+  listingId?: string;
   quantity: number;
 }
 
@@ -28,7 +29,14 @@ export function renderThumbnailCard(item: ThumbnailItem): string {
         <div class="block w-full h-full">
           ${
             item.image
-              ? `<img class="w-full h-full object-cover" src="${escapeHtml(sanitizeUrl(item.image))}" alt="" width="64" height="64" decoding="async" />`
+              ? ProductImage({
+                  listing: item.listingId || "",
+                  src: item.image,
+                  className: "w-full h-full object-cover",
+                  sizes: "(min-width: 640px) 64px, (max-width: 380px) 48px, 56px",
+                  width: 64,
+                  height: 64,
+                })
               : `<div data-thumb-placeholder class="w-full h-full flex items-center justify-center bg-[#f5f5f5] text-[#c4c4c4]" aria-hidden="true">
                   <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
                 </div>`

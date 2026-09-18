@@ -1,3 +1,4 @@
+import { hydrateProductImages } from "../components/media/ProductImage";
 import Alpine from "alpinejs";
 import { t } from "../i18n";
 import { openFavoritesDropdown } from "../components/favorites/FavoritesDropdown";
@@ -637,6 +638,7 @@ Alpine.data("cartPage", () => ({
     // İlk boyamayla (CartSummary → renderItemThumbnailStrip) aynı kart: görselsiz
     // üründe kırık img yerine yer tutucu, adet rozeti aynı yerde.
     track.innerHTML = items.map(renderThumbnailCard).join("");
+    void hydrateProductImages(track);
 
     track.dispatchEvent(new Event("scroll"));
   },

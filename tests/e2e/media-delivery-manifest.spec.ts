@@ -1,3 +1,4 @@
+import { readFileSync } from "node:fs";
 /**
  * T-141 — kritik medya senaryolarının VİTRİN (storefront) yarısı.
  *
@@ -380,3 +381,24 @@ test("EK — boru hattı bayrağı kapalıyken vitrin bugünkü <img> yolunda ka
   await expect(anaImg(page).first()).toHaveAttribute("src", ANA);
   expect(istek).toBe(ilk);
 });
+
+
+for (const [viewportWidth, expectedWidth] of [[1280, 384], [1600, 768]]) {
+  test(`AVIF-only gallery downloads the ${expectedWidth}px srcset candidate at ${viewportWidth}px`, async ({ page }) => {
+    await page.setViewportSize({ width: viewportWidth, height: 900 });
+    const man = gorselManifesti(ANA, [96, 384, 768], [768, 768]);
+    man.sources = man.sources.filter((source) => source.type === "image/avif");
+    man.src = "/files/urun-ana-768.avif";
+    await kur(page, { manifest: manifestYaniti(ILAN, [galeriKaydi(ANA, man, true)]) });
+    await page.route(/\/files\/urun-ana-(96|384|768)\.avif$/, (route) => {
+      const width = route.request().url().match(/-(\d+)\.avif$/)![1];
+      return route.fulfill({ contentType: "image/avif", body: readFileSync(new URL(`./fixtures/avif/${width}.avif`, import.meta.url)) });
+    });
+    await page.goto(`/pages/product-detail.html?id=${ILAN}`);
+    const img = anaImg(page).first();
+    await expect(img).toHaveAttribute("srcset", /\.avif 96w.*\.avif 768w/);
+    await expect(anaPicture(page)).toHaveCount(0);
+    await expect.poll(() => img.evaluate((node: HTMLImageElement) => node.currentSrc)).toContain(`-${expectedWidth}.avif`);
+    await expect.poll(() => img.evaluate((node: HTMLImageElement) => node.complete && node.naturalWidth > 0)).toBe(true);
+  });
+}

@@ -1,3 +1,4 @@
+import { hydrateProductImages } from "../components/media/ProductImage";
 import { getCountryDisplayName } from "../utils/country";
 import Alpine from "alpinejs";
 import { countries as checkoutCountries, districtsByProvince } from "../data/mockCheckout";
@@ -418,6 +419,7 @@ Alpine.data("checkoutReviewModal", () => ({
       this.shippingAddress = d.shippingAddress || "";
       this.paymentMethod = d.paymentMethod || "";
       this.orders = d.orders || [];
+      Alpine.nextTick(() => { void hydrateProductImages(); });
       this.summary = d.summary || this.summary;
       this.open = true;
       document.body.style.overflow = "hidden";

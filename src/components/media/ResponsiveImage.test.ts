@@ -103,7 +103,9 @@ describe("ResponsiveImage — `<picture>` üretimi", () => {
   });
 
   it("[FR-121] bölge `sizes`i manifestin slot `sizes`ini ezer", () => {
-    const html = ResponsiveImage({ manifest: manifest(), fallback, sizes: "70px" });
+    const man = manifest();
+    for (const source of man.sources) source.sizes = "100vw";
+    const html = ResponsiveImage({ manifest: man, fallback, sizes: "70px" });
     expect(html).toContain('sizes="70px"');
     expect(html).not.toContain('sizes="100vw"');
   });

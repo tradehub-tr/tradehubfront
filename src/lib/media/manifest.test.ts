@@ -86,7 +86,7 @@ describe("media manifest istemcisi — devre kesici TAZE sayfada da tutar", () =
   });
 
   it("sessionStorage'da kapalı işareti varken taze modül HİÇ istek atmaz", async () => {
-    sessionStorage.setItem("tradehub-media-manifest-off-v1", "1");
+    sessionStorage.setItem("tradehub-media-manifest-off-avif-v2", "1");
     const sahte = vi.fn(async () => yanit({ enabled: true, manifests: {} }));
     vi.stubGlobal("fetch", sahte);
 
