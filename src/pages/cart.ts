@@ -1,3 +1,4 @@
+import { hydrateProductImages } from "../components/media/ProductImage";
 /**
  * Cart Page — Entry Point
  * Assembles header, cart content, and footer.
@@ -73,6 +74,8 @@ function renderPage(suppliers: ReturnType<typeof cartStore.getSuppliers>, summar
     <!-- Bottom Navigation (mobile/tablet) -->
     ${BottomNav()}
   `;
+
+  void hydrateProductImages(appEl);
 
   // Tutar slot'larına animasyonlu <number-flow> elemanlarını yerleştir.
   mountMoneyFlows(appEl);

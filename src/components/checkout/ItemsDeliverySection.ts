@@ -1,3 +1,4 @@
+import { ProductImage } from "../media/ProductImage";
 /**
  * ItemsDeliverySection Component (C4)
  * Seller-based order list and delivery option selection.
@@ -6,7 +7,7 @@
 import { getCurrencyCode } from "../../utils/currency";
 import { formatCurrency } from "../../services/currencyService";
 import { t } from "../../i18n";
-import { escapeHtml, sanitizeUrl } from "../../utils/sanitize";
+import { escapeHtml } from "../../utils/sanitize";
 
 export interface CheckoutDeliveryMethod {
   id: string;
@@ -97,7 +98,7 @@ function renderShippingSummary(order: CheckoutDeliveryOrderGroup): string {
   `;
 }
 
-function renderSkuLine(sku: CheckoutDeliverySkuLine): string {
+function renderSkuLine(sku: CheckoutDeliverySkuLine, listingId: string): string {
   const total = sku.unitPrice * sku.quantity;
   const sampleBadge = sku.isSample
     ? `<span class="inline-flex items-center gap-1 text-[11px] font-semibold text-amber-800 bg-amber-100 border border-amber-200 rounded-full px-2 py-0.5 w-fit">
@@ -108,7 +109,7 @@ function renderSkuLine(sku: CheckoutDeliverySkuLine): string {
   return `
     <!-- Mobile: 2-col grid, image top-aligned. Desktop: 4-col with qty+total columns -->
     <div class="grid ${sku.image ? "grid-cols-[36px_1fr] sm:grid-cols-[40px_1fr_auto_auto]" : "grid-cols-[1fr] sm:grid-cols-[1fr_auto_auto]"} gap-x-2.5 gap-y-0 sm:gap-3 items-start sm:items-center rounded-md bg-[#fafafa] border border-[#e5e5e5] px-2.5 sm:px-[14px] py-2.5 sm:py-[10px]">
-      ${sku.image ? `<img src="${escapeHtml(sanitizeUrl(sku.image))}" alt="" width="40" height="40" decoding="async" class="w-9 h-9 sm:w-10 sm:h-10 rounded-md object-cover border border-[#e5e5e5] mt-0.5 sm:mt-0" />` : ""}
+      ${sku.image ? ProductImage({ listing: listingId, src: sku.image, className: "w-9 h-9 sm:w-10 sm:h-10 rounded-md object-cover border border-[#e5e5e5] mt-0.5 sm:mt-0", sizes: "(min-width: 640px) 40px, 36px", width: 40, height: 40 }) : ""}
       <div class="min-w-0">
         ${sampleBadge ? `<div class="mb-1">${sampleBadge}</div>` : ""}
         <p class="text-[12px] sm:text-[13px] text-text-secondary leading-[1.4]">${escapeHtml(sku.variantText)}</p>
@@ -142,8 +143,8 @@ function renderProductCard(
   const hiddenSkus = collapsible ? product.skuLines.slice(SKU_VISIBLE_WHEN_COLLAPSED) : [];
   const hiddenCount = hiddenSkus.length;
 
-  const visibleRows = visibleSkus.map(renderSkuLine).join("");
-  const hiddenRows = hiddenSkus.map(renderSkuLine).join("");
+  const visibleRows = visibleSkus.map((sku) => renderSkuLine(sku, product.id)).join("");
+  const hiddenRows = hiddenSkus.map((sku) => renderSkuLine(sku, product.id)).join("");
 
   // Tek ürünlü tedarikçide otomatik açık; çok ürünlü tedarikçide
   // (≥2) varsayılan kapalı — sayfa uzamasın diye.
@@ -162,7 +163,7 @@ function renderProductCard(
         @click="open = !open"
         :aria-expanded="open"
       >
-        ${product.image ? `<img src="${escapeHtml(sanitizeUrl(product.image))}" alt="" width="48" height="48" decoding="async" class="w-10 h-10 sm:w-12 sm:h-12 rounded-md object-cover border border-[#e5e5e5] shrink-0" />` : ""}
+        ${product.image ? ProductImage({ listing: product.id, src: product.image, className: "w-10 h-10 sm:w-12 sm:h-12 rounded-md object-cover border border-[#e5e5e5] shrink-0", sizes: "(min-width: 640px) 48px, 40px", width: 48, height: 48 }) : ""}
         <div class="flex-1 min-w-0">
           <h4 class="text-[12.5px] sm:text-[13.5px] leading-[1.35] font-semibold text-[#1a1a1a] truncate">${escapeHtml(product.title)}</h4>
           <p class="text-[11px] sm:text-[11.5px] text-text-tertiary mt-0.5 leading-[1.4]">${escapeHtml(product.moqLabel)}</p>

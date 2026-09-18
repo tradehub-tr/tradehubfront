@@ -1,3 +1,4 @@
+import { ProductImage } from "../../media/ProductImage";
 /**
  * SKU row inside product card.
  * Alpine.js: Uses x-data on article for @click + $dispatch on delete button.
@@ -16,17 +17,26 @@ import { escapeHtml, sanitizeUrl } from "../../../utils/sanitize";
 
 export interface SkuRowProps {
   sku: CartSku;
+  listingId?: string;
   productHref?: string;
   /** Görselin alt metni — SKU kodu değil ürün adı (erişilebilirlik + kırık resim yazısı). */
   productTitle?: string;
 }
 
-export function SkuRow({ sku, productHref, productTitle }: SkuRowProps): string {
+export function SkuRow({ sku, listingId = "", productHref, productTitle }: SkuRowProps): string {
   const unavailable = sku.isAvailable === false;
   // Görsel yoksa görsel kutusu HİÇ açılmaz — kırık resim ya da "SKU" yer tutucusu
   // yerine satır yalnız varyant metniyle başlar (2026-09-07 kararı).
   const imgContent = sku.skuImage
-    ? `<img src="${escapeHtml(sanitizeUrl(sku.skuImage))}" alt="${escapeHtml(productTitle || "")}" width="60" height="60" decoding="async" class="w-full h-full object-cover" loading="lazy" />`
+    ? ProductImage({
+        listing: listingId,
+        src: sku.skuImage,
+        alt: productTitle || "",
+        className: "w-full h-full object-cover",
+        sizes: "(min-width: 640px) 40px, 36px",
+        width: 60,
+        height: 60,
+      })
     : "";
   const imgWrapper =
     imgContent && productHref

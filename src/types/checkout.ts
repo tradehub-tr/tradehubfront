@@ -16,6 +16,7 @@ export interface Province {
 }
 
 export interface OrderSummaryThumbnail {
+  listingId?: string;
   image: string;
   quantity: number;
 }

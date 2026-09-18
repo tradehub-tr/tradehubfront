@@ -209,7 +209,7 @@ function _hazirla(opts: ResponsiveImageOptions): _Hazir | null {
     const srcset = _guvenliSrcset(kaynak.srcset);
     // Tüm adayları elenen bir biçim `<source>` olarak basılamaz.
     if (!srcset || !kaynak.type) continue;
-    kaynaklar.push({ type: kaynak.type, srcset, sizes: kaynak.sizes || sizes });
+    kaynaklar.push({ type: kaynak.type, srcset, sizes: opts.sizes || kaynak.sizes || sizes });
   }
   if (!kaynaklar.length) return null;
 

@@ -1,3 +1,4 @@
+import { ProductImage, hydrateProductImages } from "../../media/ProductImage";
 import type { ProductImageKind } from "../../../types/productListing";
 import { cartStore } from "../state/CartStore";
 import type { CartSku } from "../../../types/cart";
@@ -10,7 +11,7 @@ import { isLoggedIn } from "../../../utils/auth";
 import { apiCheckStock, apiAddToCart, fetchCart } from "../../../services/cartService";
 import { getCurrencySymbol as _getCurrencySymbolForCart } from "../../../utils/currency";
 import { showCartError } from "../page/CartPage";
-import { safeHexColor, escapeHtml, sanitizeUrl } from "../../../utils/sanitize";
+import { safeHexColor, escapeHtml } from "../../../utils/sanitize";
 import { getPreviewEntries } from "./previewEntries";
 import { moneyFlowHtml, mountMoneyFlows, resetMoneyFlows } from "../../../utils/moneyFlow";
 
@@ -568,7 +569,8 @@ function updatePreview(): void {
   if (entry.imageUrl) {
     // imageUrl backend listing/galeri verisinden geliyor; quote breakout +
     // event handler injection riski. URL'i escape edip src'ye yaz.
-    image.innerHTML = `<img src="${escapeHtml(sanitizeUrl(entry.imageUrl))}" alt="${escapeHtml(alt)}" decoding="async" class="max-w-full max-h-full w-auto h-auto object-contain" />`;
+    image.innerHTML = ProductImage({ listing: state.item.id, src: entry.imageUrl, alt, className: "max-w-full max-h-full w-auto h-auto object-contain", sizes: "(min-width: 1280px) 560px, (min-width: 768px) 400px, 90vw", width: 800, height: 800 });
+    void hydrateProductImages(image);
   } else {
     // colorHex satıcı kontrollü; CSS context injection (";background:url(...)")
     // engellemek için hex pattern doğrulamasından geçir.
@@ -743,8 +745,7 @@ function renderSingleAxisSectionHtml(
       const frame = selected ? "border-2 border-[#222] p-[2px]" : "border-2 border-transparent p-0";
       const thumb = opt.imageUrl
         ? `<span class="w-16 h-16 shrink-0 block rounded-md ${frame}">
-             <img src="${escapeHtml(sanitizeUrl(opt.imageUrl))}" alt="${escapeHtml(opt.label)}" width="64" height="64" decoding="async" loading="lazy"
-               class="w-full h-full rounded-[3px] object-contain bg-[var(--color-surface-raised,#f5f5f5)]${available ? "" : " grayscale"}" />
+             ${ProductImage({ listing: item.id, src: opt.imageUrl, alt: opt.label, className: `w-full h-full rounded-[3px] object-contain bg-[var(--color-surface-raised,#f5f5f5)]${available ? "" : " grayscale"}`, sizes: "64px", width: 64, height: 64 })}
            </span>`
         : opt.colorHex
           ? `<span class="w-16 h-16 shrink-0 block rounded-md ${selected ? "border-2 border-[#222] p-[2px]" : "border border-[#e6e7eb] p-0"}">
@@ -827,7 +828,7 @@ function renderColorChip(color: CartDrawerColorModel, isSelected: boolean): stri
       : "border-border-default bg-surface opacity-40 cursor-not-allowed";
 
   const thumb = color.imageUrl
-    ? `<img src="${escapeHtml(sanitizeUrl(color.imageUrl))}" alt="${escapeHtml(color.label)}" width="28" height="28" decoding="async" class="w-7 h-7 rounded-md object-contain shrink-0${!available ? " grayscale" : ""}" loading="lazy" />`
+    ? ProductImage({ listing: state.item?.id || "", src: color.imageUrl, alt: color.label, className: `w-7 h-7 rounded-md object-contain shrink-0${!available ? " grayscale" : ""}`, sizes: "28px", width: 28, height: 28 })
     : `<span class="w-5 h-5 rounded shrink-0 border border-border-default" style="background:${safeHexColor(color.colorHex || "#e5e5e5")};${!available ? "opacity:0.4;" : ""}"></span>`;
 
   return `
@@ -1039,6 +1040,7 @@ function renderDrawerBody(): void {
   `;
 
   mountMoneyFlows(body);
+  void hydrateProductImages(body);
 }
 
 function renderDrawerFooter(): void {

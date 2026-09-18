@@ -82,6 +82,7 @@ export interface CartSummaryData {
 }
 
 export interface CartSummaryItem {
+  listingId?: string;
   image: string;
   quantity: number;
 }

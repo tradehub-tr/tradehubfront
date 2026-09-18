@@ -189,7 +189,7 @@ export class CartStore {
   getSummary(): CartSummaryData {
     let selectedCount = 0;
     let productSubtotal = 0;
-    const items: { image: string; quantity: number }[] = [];
+    const items: CartSummaryData["items"] = [];
 
     for (const supplier of this.suppliers) {
       for (const product of supplier.products) {
@@ -201,7 +201,7 @@ export class CartStore {
             // böylece satır toplamları ile ara toplam kuruşu kuruşuna tutar.
             const lineTotal = convertPrice(sku.unitPrice * sku.quantity, sku.baseCurrency || "USD");
             productSubtotal += lineTotal;
-            items.push({ image: sku.skuImage, quantity: sku.quantity });
+            items.push({ listingId: product.id, image: sku.skuImage, quantity: sku.quantity });
           }
         }
       }
