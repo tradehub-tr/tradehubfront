@@ -1,3 +1,16 @@
+## [v2.6.0-alpha.8] - 2026-09-18 ALPHA
+
+Bu surum alpha.istoc.com'da gelistirme asamasindadir.
+
+### Duzeltildi
+- fix(media): sepet ve ödeme görsellerini AVIF manifestle yükle (@ahmeetseker)
+  - Ürün görselleri için ortak ProductImage bileşeni eklendi
+  - Sepet, checkout ve modal görselleri manifestten AVIF srcset kullanacak şekilde güncellendi
+  - Soğuk yüklemede mevcut img düğümleri korunarak sonradan hydrate ediliyor
+  - Görsel seçiminde doğru sizes değeri ve AVIF cache anahtarları kullanılıyor
+  - AVIF aday seçimi ve fallback davranışı testlerle güvenceye alındı
+
+---
 ## [v2.6.0-alpha.7] - 2026-09-17 ALPHA
 
 Bu surum alpha.istoc.com'da gelistirme asamasindadir.
