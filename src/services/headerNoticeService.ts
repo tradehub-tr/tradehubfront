@@ -9,12 +9,29 @@ const CACHE_TTL_MS = 60_000;
 
 export type HeaderNoticeDisplayMode = "single" | "slide" | "marquee";
 
-export interface HeaderNoticeItem {
-  name: string;
+/**
+ * Duyuru metinlerinin dilleri — backend `header_notice.DILLER` ile birebir.
+ *
+ * 2026-09-21: `ar` ve `ru` eklendi. Vitrin dört dile açılırken yapılan kırma
+ * turunda bulundu: bu modül de yalnız `_tr`/`_en` taşıyordu ve duyuru şeridi
+ * sitenin HER sayfasında çiziliyor — Arapça/Rusça ziyaretçi her sayfada
+ * Türkçe bir şerit görüyordu. Kusur o gün gizliydi (canlıda aktif duyuru yok).
+ */
+export const NOTICE_LANGS = ["tr", "en", "ar", "ru"] as const;
+export type NoticeLang = (typeof NOTICE_LANGS)[number];
+
+/** Duyuru başına çevrilebilir alan kökleri. */
+export const NOTICE_CEVRILEBILIR_KOKLER = ["message", "link_text"] as const;
+export type NoticeKok = (typeof NOTICE_CEVRILEBILIR_KOKLER)[number];
+
+/** `message_tr` … `link_text_ru` — 2 kök × 4 dil = 8 alan, elle yazılmaz. */
+export type DilliNoticeAlanlari = { [K in `${NoticeKok}_${NoticeLang}`]?: string } & {
+  /** Kaynak dil zorunlu: diğerleri boşsa ekran buna düşer. */
   message_tr: string;
-  message_en?: string;
-  link_text_tr?: string;
-  link_text_en?: string;
+};
+
+export interface HeaderNoticeItem extends DilliNoticeAlanlari {
+  name: string;
   link_href?: string;
   icon: string;
   background_color?: string;

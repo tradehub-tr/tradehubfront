@@ -4797,6 +4797,14 @@ const tr = {
     // ============================================================
     // TAILORED SELECTIONS PAGE (View More)
     // ============================================================
+    // ============================================================
+    // CATEGORY SHOWCASE (ana sayfa bento vitrini)
+    // ============================================================
+    categoryShowcase: {
+      seeProducts: "Ürünleri gör",
+      allCategories: "Tüm kategoriler",
+    },
+
     tailoredPage: {
       pickedForYou: "Senin için seçildi",
       viewProducts: "Ürünleri gör",

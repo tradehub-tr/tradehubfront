@@ -4798,6 +4798,14 @@ const en = {
     // ============================================================
     // TAILORED SELECTIONS PAGE (View More)
     // ============================================================
+    // ============================================================
+    // CATEGORY SHOWCASE (ana sayfa bento vitrini)
+    // ============================================================
+    categoryShowcase: {
+      seeProducts: "See products",
+      allCategories: "All categories",
+    },
+
     tailoredPage: {
       pickedForYou: "Picked for you",
       viewProducts: "View products",
