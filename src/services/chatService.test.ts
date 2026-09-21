@@ -8,7 +8,12 @@ vi.mock("../utils/api", () => ({
   fetchCsrfToken: vi.fn(async () => "tok"),
 }));
 
-vi.mock("../i18n", () => ({ t: (k: string) => k }));
+vi.mock("../i18n", () => ({
+  // `numberLocale` i18n'den `getCurrentLang` okuyor; kısmi mock onu da
+  // vermeli, yoksa biçimlendirme çağrısı "export tanımlı değil" ile patlar.
+  t: (k: string) => k,
+  getCurrentLang: () => "tr",
+}));
 
 import { getMessages, pinnedFromProductRef, sendTextMessage } from "./chatService";
 

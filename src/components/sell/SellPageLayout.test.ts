@@ -7,7 +7,10 @@ import { describe, expect, it, vi } from "vitest";
 import type { PricingPlan, PricingPlansResponse } from "../../services/pricingService";
 
 vi.mock("../../i18n", () => ({
+  // `numberLocale` i18n'den `getCurrentLang` okuyor; kısmi mock onu da
+  // vermeli, yoksa biçimlendirme çağrısı "export tanımlı değil" ile patlar.
   t: (k: string, o?: Record<string, unknown>) => (o ? `${k}:${Object.values(o).join(",")}` : k),
+  getCurrentLang: () => "tr",
 }));
 vi.mock("../../assets/images/liman.avif", () => ({ default: "/liman.avif" }));
 
