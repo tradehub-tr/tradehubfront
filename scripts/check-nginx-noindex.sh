@@ -39,13 +39,28 @@ assert '$robots_file map istoc.com=/robots-prod.txt' 0 $?
 n=$(grep -c 'add_header X-Robots-Tag \$robots_tag always;' "$T")
 assert 'add_header X-Robots-Tag sayısı' 5 "$n"
 
-# 4. proxy_hide_header — backend'e giden TÜM bloklar (10 proxy + 2 sitemap + media)
+# 4. proxy_hide_header — backend'e giden TÜM bloklar
+#    (10 proxy + 2 sitemap + 2 medya = 14)
+#
+#    13 → 14 GÜNCELLENDİ (21 Eyl 2026). Sebep arkeolojiyle bulundu: bu dosya
+#    en son 22 Ağustos'ta (e8d0339) güncellenmiş; 28 Ağustos'ta aa1be08
+#    (feat(product): medya izleme sayfası…) `location ~ ^/medya/v/([a-z0-9-]+)$`
+#    bloğunu ekledi. Blok DOĞRU deseni taşıyor — `proxy_hide_header X-Robots-Tag`
+#    ve `X-Istoc-Storefront "1"` ikisi de yerinde (gözle doğrulandı) — yani kayma
+#    masum, bayat olan sabitti.
+#
+#    ⚠ Bu denetim CI'da KOŞMUYOR (ölçüldü 21 Eyl: lint.yml/test.yml'de satırı yok),
+#    bu yüzden kayma 24 gün fark edilmeden durdu. Sayı yine değişirse ÖNCE yeni
+#    bloğun bu iki satırı taşıyıp taşımadığına bakılır: taşımıyorsa sabit
+#    güncellenmez, BLOK düzeltilir — eksik `proxy_hide_header`, backend'in
+#    X-Robots-Tag başlığını müşteriye sızdırır.
 n=$(grep -c 'proxy_hide_header X-Robots-Tag;' "$T")
-assert 'proxy_hide_header X-Robots-Tag sayısı' 13 "$n"
+assert 'proxy_hide_header X-Robots-Tag sayısı' 14 "$n"
 
-# 5. X-Istoc-Storefront marker — 5 @seo_* + 2 sitemap + media = 8
+# 5. X-Istoc-Storefront marker — 5 @seo_* + 2 sitemap + 2 medya = 9
+#    (8 → 9: yukarıdaki aynı sebep — /medya/v/ bloğu)
 n=$(grep -c 'X-Istoc-Storefront' "$T")
-assert 'X-Istoc-Storefront marker sayısı' 8 "$n"
+assert 'X-Istoc-Storefront marker sayısı' 9 "$n"
 
 # 6. robots.txt location + dosya seçimi
 grep -q 'location = /robots.txt' "$T" && grep -q 'try_files \$robots_file =404;' "$T"
@@ -60,7 +75,14 @@ n=$(grep -cE '^\s+/(blog|kariyer|kurumsal-sorumluluk|izleme|haberler|ortakliklar
 assert 'hayalet path kalıntısı' 0 "$n"
 
 # 9. /markalar yalnız 301 olarak var
-grep -q 'location = /markalar' "$T" && grep -q 'return 301 /ureticiler;' "$T"
+#
+#    Hedef DESENLE aranır, birebir dizeyle değil (2026-09-21): yönlendirmeler
+#    o gün `return 301 /ureticiler;` yerine `return 301 https://$host/ureticiler;`
+#    oldu — göreli Location, Caddy arkasında `$scheme=http` verdiği için
+#    tarayıcıyı önce http'ye gönderiyordu (ölçüldü: canlıda
+#    `location: http://istoc.com/ureticiler`). İddianın AMACI değişmedi:
+#    /markalar hâlâ yalnız 301 olarak var ve hedefi /ureticiler.
+grep -q 'location = /markalar' "$T" && grep -qE 'return 301 [^;]*/ureticiler;' "$T"
 assert '/markalar → 301 /ureticiler' 0 $?
 
 # 10. robots dosyaları: prod'da Allow + env marker + canlı sitemap bildirimi

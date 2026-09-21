@@ -42502,18 +42502,55 @@ server {
 
     # Hayalet path kararı: /markalar kaybetti → kalıcı 301 /ureticiler
     # (nginx map + backend static_pages_registry + FE listesi senkron).
+    #
+    # Location MUTLAK ve https (2026-09-21): göreli `return 301 /x` yazılırsa
+    # nginx adresi `$scheme` ile kurar; Caddy arkasında `$scheme=http` olduğu
+    # için tarayıcı önce http'ye gider ve Caddy'nin 308'iyle İKİNCİ bir hop
+    # yaşanır. Ölçüldü (21 Eyl, canlı): bu kural
+    # `location: http://istoc.com/ureticiler` döndürüyordu.
     location = /markalar {
-        return 301 /ureticiler;
+        return 301 https://$host/ureticiler;
+    }
+
+    # ── Eski `/en/...` dil öneki → kalıcı 301 (şema 2026-09-21'de söküldü) ──
+    #
+    # NEDEN: şema yazılmıştı ama HİÇ SUNULMUYORDU. Ölçüldü (2026-09-21, canlı):
+    # `/en/kategori/<slug>` → 404, `/en/` → 404; buna karşılık beş site haritası
+    # toplam 25.997 adet `hreflang="en"` alternate'i Google'a bildiriyordu
+    # (products 2.431 · categories 23.511 · brands 3 · sellers 28 · static 24).
+    # Google kırık alternate'i yok sayar, Search Console'da hata olarak
+    # raporlar ve tekrarlanan 404'ler tarama bütçesini yer.
+    #
+    # KARAR (K7, yönetici): yol öneki kullanılmayacak, dil `?hl=` ile taşınacak
+    # ve tercih çerezde kalıcı olacak. İndekste kalan eski adresler burada
+    # kapanıyor: hem doğru sayfaya hem doğru dile gidiyor.
+    #
+    # Location MUTLAK ve `https`: göreli `return 301 /x` yazılırsa nginx adresi
+    # `$scheme` ile kurar; Caddy arkasında `$scheme=http` olduğu için tarayıcı
+    # önce http'ye gider ve Caddy'nin 308'iyle İKİNCİ bir hop yaşanır. Ölçüldü
+    # (2026-09-21): mevcut `/markalar` kuralı `location: http://istoc.com/ureticiler`
+    # döndürüyor. 25.997 adresi ilgilendiren bir kuralda o hop ücretsiz değil.
+    #
+    # `rewrite ... permanent` orijinal query string'i `hl=en`in ARDINA ekler
+    # (nginx davranışı), yani `?sayfa=2` gibi parametreler kaybolmaz.
+    location = /en {
+        return 301 https://$host/?hl=en;
+    }
+    location = /en/ {
+        return 301 https://$host/?hl=en;
+    }
+    location ^~ /en/ {
+        rewrite ^/en/(.*)$ https://$host/$1?hl=en permanent;
     }
 
     # sell-pricing sayfası kaldırıldı: fiyat planları artık /satici-ol'da
     # (#paketler bölümü). Eski pretty URL + ham HTML path kalıcı 301.
     # (nginx map + backend static_pages_registry + FE listesi senkron).
     location = /satici/fiyatlandirma {
-        return 301 /satici-ol;
+        return 301 https://$host/satici-ol;
     }
     location = /pages/seller/sell-pricing.html {
-        return 301 /satici-ol;
+        return 301 https://$host/satici-ol;
     }
 
     # ── robots.txt — ortama göre statik dosya (map $robots_file) ──
