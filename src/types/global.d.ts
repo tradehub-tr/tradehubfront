@@ -20,6 +20,23 @@ declare global {
     /** Manufacturer sayfası kategori ikonu helper'ı (manufacturers.ts) */
     __getCatIcon?: (iconClass: string, name: string) => string;
 
+    /**
+     * Sayı/para/tarih biçimlendiricileri — `utils/numberLocale.ts` yayınlıyor,
+     * i18n init'te kuruluyor.
+     *
+     * NEDEN GLOBAL: bazı ekranlar Alpine `x-data`/`x-text` ifadelerini TEMPLATE
+     * STRING içinde yazıyor (CompanyProfile, OrdersPageLayout). O metin
+     * tarayıcıda Alpine tarafından değerlendiriliyor; modül import'u oraya
+     * ulaşmıyor ve TypeScript de bunu göremiyor.
+     */
+    __thBicim: {
+      sayi: (n: number) => string;
+      para: (n: number, secenekler?: Intl.NumberFormatOptions) => string;
+      paraKisa: (n: number) => string;
+      tarih: (d: Date | string | number, secenekler?: Intl.DateTimeFormatOptions) => string;
+      tarihSaat: (d: Date | string | number, secenekler?: Intl.DateTimeFormatOptions) => string;
+    };
+
     /** Manufacturer sayfası son kategori slug'ları (manufacturers.ts) */
     __getRecentCategorySlugs?: () => string[];
 
