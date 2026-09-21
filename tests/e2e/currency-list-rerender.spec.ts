@@ -80,10 +80,19 @@ test("currency picker is rebuilt with backend currencies after async load", asyn
     }
   );
 
+  // İsteğin GERÇEKTEN tamamlanmasını bekle — sabit uyku değil.
+  //
+  // 2026-09-21: burada `waitForTimeout(800)` vardı ve YÜKE DUYARLIYDI. Aynı gün
+  // 19 kırık test düzelince paralel koşan test sayısı 281'den 308'e çıktı;
+  // 800 ms para birimi isteğinin (route handler'ı 250 ms bekletiyor) çözülmesine
+  // yetmemeye başladı ve bu spec ilk kez kırmızı verdi. Tek başına koşunca
+  // geçiyordu — klasik sabit-uyku kararsızlığı.
+  const ayarYaniti = page.waitForResponse(
+    (r) => r.url().includes("currency.get_currency_settings") && r.status() === 200
+  );
   await page.goto("/pages/products.html");
+  await ayarYaniti;
   await page.waitForLoadState("networkidle");
-  // initCurrency resolve + rebuild listener fire is async — settle determinism.
-  await page.waitForTimeout(800);
 
   // Seçici artık DOĞRUDAN görünür değil: dil/para birimi popover'ının
   // içinde yaşıyor (`TopBar.ts` → `popover-language-currency`). Test bunu
@@ -95,8 +104,11 @@ test("currency picker is rebuilt with backend currencies after async load", asyn
 
   // The extra backend currency (GBP) must be present after the async rebuild —
   // i.e. the picker was NOT left stuck on the 3 defaults.
-  const gbpCount = await select.locator('option[value="GBP"]').count();
-  expect(gbpCount).toBe(1);
+  //
+  // `toHaveCount` beklemeli bir iddia: yanıt geldikten sonra seçicinin yeniden
+  // kurulması da asenkron. Eskiden anlık `count()` okunuyordu ve o an henüz
+  // kurulmamışsa test düşüyordu.
+  await expect(select.locator('option[value="GBP"]')).toHaveCount(1);
 
   // Sanity: the full backend list is present (5 options), not just 3 defaults.
   const optionCount = await select.locator("option").count();
