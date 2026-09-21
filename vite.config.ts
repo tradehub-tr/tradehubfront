@@ -4,8 +4,8 @@ import tailwindcss from "@tailwindcss/vite";
 import { VitePWA } from "vite-plugin-pwa";
 import { resolve } from "path";
 import { readFileSync, existsSync } from "fs";
-import fg from "fast-glob";
 import { getStaticPageHtmlMap } from "./src/utils/staticPageUrl";
+import { sunulanSayfalar } from "./src/build/sunulanSayfalar";
 import pkg from "./package.json" with { type: "json" };
 import { visualizer } from "rollup-plugin-visualizer";
 
@@ -113,8 +113,11 @@ function ilkBoyamaDiliPlugin(): Plugin {
         if (html.includes("__thDil")) return html; // idempotent
         let out = injectAfterCharset(html, `${ULKE_META}\n    ${ilkBoyamaScripti()}`);
 
-        // Başlık: yalnız `<title data-i18n="...">` olan sayfalarda. Anahtarsız
-        // yedi sayfa (404, media-watch, returns, …) dokunulmadan kalır.
+        // Başlık: yalnız `<title data-i18n="...">` olan sayfalarda.
+        // 21 Eyl 2026'ya kadar yedi sayfa anahtarsızdı ve bu yüzden başlık
+        // script'i onlara HİÇ konmuyordu — Arapça ziyaretçi sekmede Türkçe
+        // başlık görüyordu. Yedisine de anahtar verildi; boşluğun tekrarını
+        // `sayfaBasligiDenetimi.test.ts` engelliyor.
         const baslik = /<title\s[^>]*data-i18n="([^"]+)"[^>]*>[\s\S]*?<\/title>/i.exec(out);
         if (baslik) {
           const harita = await baslikHaritasi(baslik[1]);
@@ -706,28 +709,14 @@ export default defineConfig({
   build: {
     copyPublicDir: true,
     rollupOptions: {
+      // Liste ve gerekçeleri `src/build/sunulanSayfalar.ts`de — aynı listeyi
+      // sayfa başlığı denetimi de okuyor. İki yerde kopyalanırsa biri bayatlar
+      // ve denetim, build'in derlediği bir sayfayı görmemeye başlar.
       input: Object.fromEntries(
-        fg
-          .sync("**/*.html", {
-            ignore: [
-              "node_modules/**",
-              "dist/**",
-              "ios/**",
-              "android/**",
-              "**/style-test.html",
-              "**/test-*.html",
-              // Geliştirici dokümantasyonu build'e/dist'e girmesin (FE-3)
-              "docs/**",
-              // ANALYZE build'inin ürettiği bundle-stats.html'i build entry
-              // olarak ALMA — yoksa kökte varken glob onu yakalayıp dist'e
-              // (dolayısıyla prod image'ına + SW precache'e) sokuyor.
-              "**/perf-reports/**",
-            ],
-          })
-          .map((file) => [
-            file.replace(/\.html$/, "").replace(/\//g, "-"),
-            resolve(__dirname, file),
-          ])
+        sunulanSayfalar(__dirname).map((file) => [
+          file.replace(/\.html$/, "").replace(/\//g, "-"),
+          resolve(__dirname, file),
+        ])
       ),
       output: {
         manualChunks(id) {
