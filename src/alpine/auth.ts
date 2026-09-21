@@ -486,7 +486,11 @@ Alpine.data("acceptInvitePage", () => ({
     this.token = params.get("token") || "";
 
     if (!this.token) {
-      this.error = "Davet linki geçersiz veya eksik.";
+      // 2026-09-21: sabit Türkçe metinler i18n'e bağlandı. Ölçüldü (Playwright
+      // sayfa anlık görüntüsü): sayfa İngilizce açılıyor ama bu satırlar Türkçe
+      // basılıyordu — yabancı ziyaretçi KARIŞIK DİLDE ekran görüyordu
+      // (heading "Invalid invitation" + paragraf "Davet linki geçersiz…").
+      this.error = t("acceptInvite.errorMissingToken");
       this.step = "error";
     }
   },
@@ -514,7 +518,7 @@ Alpine.data("acceptInvitePage", () => ({
     const pw = (this.$refs as Record<string, HTMLInputElement>).newPassword?.value || "";
 
     if (!fullName) {
-      this.error = "Lütfen adınızı ve soyadınızı girin.";
+      this.error = t("acceptInvite.fullNameRequired");
       return;
     }
     if (!this.passwordValid || this.loading) return;
@@ -534,10 +538,12 @@ Alpine.data("acceptInvitePage", () => ({
         lower.includes("geçersiz") ||
         lower.includes("süresi")
       ) {
-        this.error = "Bu davet linki geçersiz veya süresi dolmuş.";
+        // Karşılığı zaten vardı (`acceptInvite.errorDesc`) ve metni birebir aynıydı;
+        // yine de sabit yazılmıştı.
+        this.error = t("acceptInvite.errorDesc");
         this.step = "error";
       } else {
-        this.error = msg || "Bir hata oluştu. Lütfen tekrar deneyin.";
+        this.error = msg || t("commonSvc.genericError");
       }
     } finally {
       this.loading = false;

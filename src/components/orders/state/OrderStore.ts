@@ -5,6 +5,7 @@
  */
 
 import type { Order, OrderStatus, OrderStatusColor } from "../../../types/order";
+import { t } from "../../../i18n";
 import { callMethod } from "../../../utils/api";
 
 // Eski mock verinin tüm kalıntılarını temizle
@@ -211,7 +212,7 @@ export class OrderStore {
       this.orders = [];
       this.total = 0;
       this.statusCounts = {};
-      this.error = "Siparişler yüklenemedi. Lütfen tekrar deneyin.";
+      this.error = t("ordersUi.ordersLoadFailed");
     } finally {
       if (requestId === this.requestId) {
         this.loading = false;
