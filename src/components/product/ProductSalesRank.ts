@@ -6,13 +6,12 @@
  * listesine linklenir. `ranks` boşsa hiçbir şey render edilmez.
  */
 
-import { t, getCurrentLang } from "../../i18n";
+import { t } from "../../i18n";
+import { sayiBicimle } from "../../utils/numberLocale";
 import { escapeHtml } from "../../utils/sanitize";
 import type { CategoryRank } from "../../types/product";
 
-function fmt(n: number): string {
-  return n.toLocaleString(getCurrentLang() === "en" ? "en-US" : "tr-TR");
-}
+const fmt = sayiBicimle;
 
 function laurelBranch(mirrored: boolean): string {
   return `<svg class="h-[26px] w-4 shrink-0${mirrored ? " -scale-x-100" : ""}" viewBox="0 0 16 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 24C7 21.5 4.5 16 5.5 9.5"/><path d="M5.5 9.5C4 8.2 3.4 6.2 4 4.2c1.9.6 3.1 2.1 3.4 4"/><path d="M4.8 14.5c-1.8-.5-3-2-3.4-3.9 2-.2 3.7.7 4.6 2.3"/><path d="M6.8 19c-1.9 0-3.4-1-4.4-2.7 1.8-.7 3.7-.3 5 .9"/></svg>`;

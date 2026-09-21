@@ -9,7 +9,8 @@
  * Fixed position overlay below SubHeader nav
  */
 
-import { t, getCurrentLang } from "../../i18n";
+import { t } from "../../i18n";
+import { sayiBicimle } from "../../utils/numberLocale";
 import { loadCategories } from "../../services/categoryService";
 import type { ApiCategory, ApiCategoryChild } from "../../services/categoryService";
 import { searchListings } from "../../services/listingService";
@@ -542,8 +543,7 @@ async function loadFeaturedCounts(): Promise<void> {
     const result = await searchListings({ is_best_seller: true, page_size: 1 });
     const count = result.searchHeader.totalProducts;
     if (count > 0) {
-      const locale = getCurrentLang() === "en" ? "en-US" : "tr-TR";
-      const formatted = count.toLocaleString(locale);
+      const formatted = sayiBicimle(count);
       const suffix = t("mega.productCountSuffix");
       document
         .querySelectorAll<HTMLElement>('[data-meta-source="best-seller-count"]')
