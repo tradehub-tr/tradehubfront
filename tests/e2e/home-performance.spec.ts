@@ -1128,7 +1128,19 @@ test.describe("Task 4: fold-altı ana sayfa bölümleri kademeli yüklenir", () 
     await page.goto("/", { waitUntil: "domcontentloaded" });
     await expect(page.locator("#app")).toHaveAttribute("data-perf-ready", "true");
     await expect(page.locator("[data-home-section]")).toHaveCount(4);
-    await expect(page.locator("[data-home-section-skeleton]")).toHaveCount(4);
+    // İddianın AMACI: dört bölümün DÖRDÜ de iskelet tutuyor.
+    // Eskiden `toHaveCount(4)` yazıyordu; bu, "bölüm başına TEK bir iskelet
+    // elemanı" varsayımıydı ve bir uygulama ayrıntısıydı. 2026-09-21'de ürün
+    // ızgarasının iskeleti tek sabit yükseklikli bloktan gerçek kart
+    // geometrisini taşıyan 14 hücreye çevrildi (sabit px yer ayırma, kart
+    // yüksekliği viewport genişliğiyle ölçeklendiği için bir kırılma noktası
+    // ARALIĞI boyunca doğru olamıyordu). Sayı artık 17; amaç değişmedi.
+    for (const bolum of ["tailored-selections", "product-grid", "top-deals", "top-ranking"]) {
+      await expect(
+        page.locator(`[data-home-section="${bolum}"] [data-home-section-skeleton]`).first(),
+        `${bolum} bölümü iskelet tutmuyor`
+      ).toBeAttached();
+    }
     await expect
       .poll(() =>
         page
@@ -1567,9 +1579,7 @@ test.describe("Task 4: fold-altı ana sayfa bölümleri kademeli yüklenir", () 
     });
   });
 
-  test("ürün vitrini 8 kompakt karttan 14 karta sabit yükseklikte progressive geçer", async ({
-    page,
-  }) => {
+  test("ürün vitrini 8 karttan 14 karta sabit yükseklikte progressive geçer", async ({ page }) => {
     await page.route("**/api/method/tradehub_core.api.listing.get_listings*", (route) => {
       const url = new URL(route.request().url());
       if (url.searchParams.get("page_size") !== "14") return route.fallback();
@@ -1608,9 +1618,18 @@ test.describe("Task 4: fold-altı ana sayfa bölümleri kademeli yüklenir", () 
     await expect(section).toHaveAttribute("data-home-section-state", "mounted");
     await expect(grid.locator("[data-home-card]")).toHaveCount(8);
     await expect(grid.locator("[data-home-card-placeholder]")).toHaveCount(6);
-    await expect(grid.locator('[data-card-variant="home-compact"]')).toHaveCount(8);
-    await expect(grid.locator(".action-area-layout")).toHaveCount(0);
-    await expect(grid.locator("[data-sp-slot]")).toHaveCount(0);
+    // Bu üç iddia 2026-09-07'de BIRAKILAN `homeCompact` kipinden kalmaydı.
+    // O kip MOQ'suz, şeritsiz ve aksiyon butonsuzdu; kullanıcı kararıyla ana
+    // sayfa kartları liste sayfasındakiyle birebir aynı hâle getirildi
+    // (`ProductGrid.renderHomeCard` yorumu). Test güncellenmediği için
+    // `home-compact` sayısı 8 bekliyordu ve 0 buluyordu.
+    //
+    // Kusur AYLARCA görünmedi çünkü bu test `mode: "serial"` bloğunda ve
+    // kendisinden önceki CLS testi kırıktı — Playwright onu hiç KOŞMUYORDU
+    // ("did not run"). Yukarıdaki bütçe düzelince ilk kez çalıştı.
+    await expect(grid.locator('[data-card-variant="home-compact"]')).toHaveCount(0);
+    await expect(grid.locator(".action-area-layout")).toHaveCount(8);
+    await expect(grid.locator("[data-sp-slot]")).toHaveCount(8);
 
     const initialDomNodes = await grid.evaluate((element) => element.querySelectorAll("*").length);
     const initialImages = await grid.locator("img").count();
