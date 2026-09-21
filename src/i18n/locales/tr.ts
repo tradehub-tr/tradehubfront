@@ -436,6 +436,8 @@ const tr = {
       successDesc: "Davet kabul edildi. Artık giriş yapabilirsiniz.",
       errorTitle: "Davet geçersiz",
       errorDesc: "Bu davet linki geçersiz veya süresi dolmuş.",
+      errorMissingToken: "Davet linki geçersiz veya eksik.",
+      fullNameRequired: "Lütfen adınızı ve soyadınızı girin.",
       goHome: "Ana Sayfaya Dön",
     },
     p2g0: {
@@ -1036,6 +1038,7 @@ const tr = {
       kepPlaceholder: "ornek@hs01.kep.tr",
     },
     ordersUi: {
+      ordersLoadFailed: "Siparişler yüklenemedi. Lütfen tekrar deneyin.",
       confirmAcceptQuote: "Bu teklifi kabul etmek istediğinize emin misiniz?",
       confirmRejectQuote: "Bu teklifi reddetmek istediğinize emin misiniz?",
       confirmCloseRfq: "Bu RFQ'yu kapatmak istediğinize emin misiniz?",
@@ -2825,6 +2828,8 @@ const tr = {
       noResultsDesc:
         "Seçtiğiniz filtrelerle eşleşen ürün bulunamadı. Filtreleri değiştirmeyi veya temizlemeyi deneyin.",
       clearFilters: "Filtreleri Temizle",
+      filtersLoadFailed: "Filtreler yüklenemedi",
+      filtersLoadFailedDesc: "Sayfayı yenileyip tekrar deneyin.",
       productList: "Ürün Listesi",
       productListLabel: "Ürün listesi",
       yearLabel: "{{count}} yıl",
