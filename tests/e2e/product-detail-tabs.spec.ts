@@ -185,6 +185,10 @@ test("ürün detay yalnız etkin viewport bileşimini mount eder ve breakpoint d
   await expect(page.locator("#pdm-gallery-wrap")).toBeVisible();
   await expect(page.locator("#pd-mobile-bar")).toBeVisible();
   await expect(page.locator("#pdm-bar-cart")).toBeEnabled();
+  // `disabled` olmaması yetmiyor: kırılma noktası değişiminde düğme DOM'a
+  // dinleyicisinden ÖNCE giriyor ve erken tıklama sessizce yutuluyor.
+  // Bağlanma işareti için bekle (MobileLayout `initSheetTriggers` koyuyor).
+  await expect(page.locator("#pdm-bar-cart")).toHaveAttribute("data-pdm-sheet-wired", "1");
   await page.locator("#pdm-bar-cart").click();
   await expect(page.locator("#pdm-sheet-options")).toBeVisible();
 
