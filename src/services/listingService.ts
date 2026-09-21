@@ -27,6 +27,7 @@ import type {
 } from "../types/product";
 import type { ProductListingCard, SearchHeaderInfo } from "../types/productListing";
 import type { ServerSeoPayload } from "../seo/setPageMeta";
+import { sayiBicimle } from "../utils/numberLocale";
 
 // Frappe API response wrapper
 interface FrappeResponse<T> {
@@ -1604,7 +1605,7 @@ export function mapListingDetail(raw: any): ProductDetail {
     description: raw.description || "",
     rating: raw.rating || 0,
     reviewCount: raw.reviewCount || 0,
-    orderCount: raw.orderCount ? Number(raw.orderCount).toLocaleString("tr-TR") : "0",
+    orderCount: raw.orderCount ? sayiBicimle(Number(raw.orderCount)) : "0",
     reviews: [],
     samplePrice: raw.samplePrice ? convertPrice(raw.samplePrice, baseCur) : undefined,
     baseSamplePrice: raw.samplePrice || undefined,

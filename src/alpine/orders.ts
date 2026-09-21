@@ -6,6 +6,7 @@ import { getOrderTabs, getOrderFilters } from "../components/buyer-dashboard/ord
 import { loadPickupEntries, pickupHref, type PickupEntryMap } from "../services/pickupEntry";
 import { loadReturnEntries, returnHref, type ReturnEntryMap } from "../services/returnEntry";
 import type { Order, OrderProduct } from "../types/order";
+import { paraBicimle, tarihBicimle } from "../utils/numberLocale";
 
 // Backend get_payment_records API response satırları (snake_case alanlar)
 interface PaymentRecord {
@@ -253,7 +254,7 @@ Alpine.data("ordersListComponent", () => ({
       (s: number, p) => s + parsePrice(p.totalPrice),
       0
     );
-    return total.toLocaleString("en-US", { minimumFractionDigits: 2 });
+    return paraBicimle(total);
   },
 
   get selectedOrderQty(): number {
@@ -540,7 +541,7 @@ Alpine.data("ordersListComponent", () => ({
     }
     if (order.refundStatus === "Approved") {
       const amt = order.refundAmount
-        ? `${order.currency} ${Number(order.refundAmount).toLocaleString("tr-TR", { minimumFractionDigits: 2 })} `
+        ? `${order.currency} ${paraBicimle(Number(order.refundAmount))} `
         : "";
       return t("ordersUi.descRefundApproved", { amount: amt });
     }
@@ -784,7 +785,7 @@ function fmtTrDate(d: string | undefined | null): string {
   if (isNaN(date.getTime())) return d;
   const opts: Intl.DateTimeFormatOptions = { day: "numeric", month: "short" };
   if (date.getFullYear() !== new Date().getFullYear()) opts.year = "numeric";
-  return date.toLocaleDateString("tr-TR", opts);
+  return tarihBicimle(date, opts);
 }
 
 // Deterministik placeholder görsel — mock modda dış CDN'e bağımlı kalmamak için
@@ -890,7 +891,7 @@ Alpine.data("refundsComponent", () => ({
   fmtAmount(r: RefundSummary): string {
     const amount = Number(r.refund_amount || 0);
     if (amount <= 0) return "-";
-    return `${r.currency || ""} ${amount.toLocaleString("tr-TR", { minimumFractionDigits: 2 })}`;
+    return `${r.currency || ""} ${paraBicimle(amount)}`;
   },
 
   fmtDate(d: string | undefined | null): string {

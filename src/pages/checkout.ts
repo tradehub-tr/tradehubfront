@@ -9,7 +9,7 @@ import { initItemThumbnailStrip } from '../components/checkout/ItemThumbnailStri
 import "../lib/rum/boot";
 import '../style.css'
 import { initFlowbite } from 'flowbite'
-import { t, getCurrentLang } from '../i18n'
+import { t } from '../i18n'
 import { getBaseUrl } from '../utils/url'
 
 import { isLoggedIn } from '../utils/auth'
@@ -48,6 +48,7 @@ import type { CheckoutDeliveryOrderGroup, CheckoutDeliveryMethod } from '../comp
 import { initStickyHeights } from '../utils/stickyHeights'
 import { orderStore } from '../components/orders/state/OrderStore'
 import type { Order } from '../types/order'
+import { tarihBicimle } from "../utils/numberLocale";
 
 // Expose coupon validator for Alpine component
 (window as unknown as Record<string, unknown>).__validateCoupon = apiValidateCoupon;
@@ -141,8 +142,8 @@ if (cartStore.hasSelectedSkuMoqViolation()) {
 }
 
 function formatMonthDay(date: Date): string {
-  const locale = getCurrentLang() === 'tr' ? 'tr-TR' : 'en-US';
-  return date.toLocaleDateString(locale, { month: 'short', day: '2-digit' });
+  // İKİ DİLLİ desen kaldırıldı (D1) — dört dilin haritası `numberLocale`de.
+  return tarihBicimle(date, { month: 'short', day: '2-digit' });
 }
 
 function addDays(base: Date, days: number): Date {
@@ -398,7 +399,7 @@ function buildOrdersFromCheckout(
   backendOrderNumbers: string[] = [],
 ): Order[] {
   const now = Date.now();
-  const dateStr = new Date().toLocaleDateString('tr-TR', {
+  const dateStr = tarihBicimle(new Date(), {
     month: 'short',
     day: '2-digit',
     year: 'numeric',

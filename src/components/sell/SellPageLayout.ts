@@ -29,6 +29,7 @@ import type {
   PricingMatrixCell,
   TrialConfig,
 } from "../../services/pricingService";
+import { aktifSayiYereli, sayiBicimle } from "../../utils/numberLocale";
 
 const SELL_HREF = "/pages/auth/register.html?type=supplier";
 
@@ -166,7 +167,7 @@ function TrustStrip(): string {
 // Sayı formatı: "1500" → "1.500", 0 → "Sınırsız"
 function fmtListings(n: number): string {
   if (!n || n <= 0) return t("sellPage.unlimited");
-  return n.toLocaleString("tr-TR");
+  return sayiBicimle(n);
 }
 
 // Komisyon etiketi: admin komisyon alanını boş bıraktıysa (commission_custom)
@@ -194,9 +195,10 @@ function currencySymbol(c: string): string {
 
 // Tutar biçimi: 5990 → "5.990", 499.1666 → "499,17" (sayfa diline göre ayraçlar).
 function fmtAmount(n: number): string {
-  const lang = (typeof document !== "undefined" && document.documentElement.lang) || "tr-TR";
+  // `documentElement.lang` bir DİL kodu ('tr'), Intl ise YEREL bekler
+  // ('tr-TR'); Arapça/Rusçada bu ikisi ayrışıyor. Harita `numberLocale`de.
   const rounded = Math.round(n * 100) / 100;
-  return rounded.toLocaleString(lang, {
+  return rounded.toLocaleString(aktifSayiYereli(), {
     minimumFractionDigits: Number.isInteger(rounded) ? 0 : 2,
     maximumFractionDigits: 2,
   });

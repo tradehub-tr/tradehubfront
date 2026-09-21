@@ -14,6 +14,7 @@ import { showCartError } from "../page/CartPage";
 import { safeHexColor, escapeHtml } from "../../../utils/sanitize";
 import { getPreviewEntries } from "./previewEntries";
 import { moneyFlowHtml, mountMoneyFlows, resetMoneyFlows } from "../../../utils/moneyFlow";
+import { sayiBicimle } from "../../../utils/numberLocale";
 
 export interface CartDrawerTierModel {
   minQty: number;
@@ -390,14 +391,14 @@ function getTotalQty(): number {
 }
 
 function formatTierLabel(tier: CartDrawerTierModel, unit: string): string {
-  if (tier.maxQty === null) return `≥ ${tier.minQty.toLocaleString()} ${unit}`;
-  return `${tier.minQty.toLocaleString()} - ${tier.maxQty.toLocaleString()} ${unit}`;
+  if (tier.maxQty === null) return `≥ ${sayiBicimle(tier.minQty)} ${unit}`;
+  return `${sayiBicimle(tier.minQty)} - ${sayiBicimle(tier.maxQty)} ${unit}`;
 }
 
 /** Satır modu kademe etiketi — referans düzende boşluksuz: "1-399 Adet" / "≥400 Adet". */
 function formatCompactTierLabel(tier: CartDrawerTierModel, unit: string): string {
-  if (tier.maxQty === null) return `≥${tier.minQty.toLocaleString()} ${unit}`;
-  return `${tier.minQty.toLocaleString()}-${tier.maxQty.toLocaleString()} ${unit}`;
+  if (tier.maxQty === null) return `≥${sayiBicimle(tier.minQty)} ${unit}`;
+  return `${sayiBicimle(tier.minQty)}-${sayiBicimle(tier.maxQty)} ${unit}`;
 }
 
 function getActiveTierIndex(totalQty: number): number {

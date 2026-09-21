@@ -888,7 +888,7 @@ function renderAllOrders(): string {
                         <div class="absolute -start-[25px] top-1 w-3 h-3 bg-purple-500 rounded-full border-2 border-white"></div>
                         <p class="text-sm font-medium text-purple-700">${t("ordersUi.refundApprovedTitle")}</p>
                         <p class="text-xs text-gray-400 mt-1">
-                          <span x-text="selectedOrder.currency + ' ' + Number(selectedOrder.total).toLocaleString('tr-TR', {minimumFractionDigits: 2})"></span> ${t("ordersUi.refundApprovedBySeller")}
+                          <span x-text="selectedOrder.currency + ' ' + window.__thBicim.para(Number(selectedOrder.total))"></span> ${t("ordersUi.refundApprovedBySeller")}
                         </p>
                       </div>
                     </template>
@@ -1032,7 +1032,7 @@ function renderAllOrders(): string {
                       </template>
                       <template x-for="rec in paymentRecords" :key="rec.name">
                         <tr class="border-b border-gray-100">
-                          <td class="py-3 pe-4 text-gray-700" x-text="rec.payment_date ? new Date(rec.payment_date).toLocaleDateString('tr-TR') : '-'"></td>
+                          <td class="py-3 pe-4 text-gray-700" x-text="rec.payment_date ? window.__thBicim.tarih(rec.payment_date) : '-'"></td>
                           <td class="py-3 pe-4 text-gray-700" x-text="rec.method || '-'"></td>
                           <td class="py-3 pe-4 text-end font-medium text-gray-900" x-text="(rec.currency || 'USD') + ' ' + Number(rec.amount || 0).toFixed(2)"></td>
                           <td class="py-3 text-end">
@@ -1064,7 +1064,7 @@ function renderAllOrders(): string {
                       </template>
                       <template x-for="rec in refundRecords" :key="rec.name">
                         <tr class="border-b border-gray-100">
-                          <td class="py-3 pe-4 text-gray-700" x-text="rec.payment_date ? new Date(rec.payment_date).toLocaleDateString('tr-TR') : '-'"></td>
+                          <td class="py-3 pe-4 text-gray-700" x-text="rec.payment_date ? window.__thBicim.tarih(rec.payment_date) : '-'"></td>
                           <td class="py-3 pe-4 text-gray-700" x-text="rec.reason || '-'"></td>
                           <td class="py-3 pe-4 text-end font-medium text-red-600" x-text="(rec.currency || 'USD') + ' -' + Number(rec.amount || 0).toFixed(2)"></td>
                           <td class="py-3 text-end">
@@ -1093,7 +1093,7 @@ function renderAllOrders(): string {
                       <div class="grid grid-cols-2 gap-3 text-sm">
                         <div>
                           <p class="text-xs text-gray-400 mb-0.5">${t("ordersUi.transferDate")}</p>
-                          <p class="font-medium text-gray-800" x-text="rec.payment_date ? new Date(rec.payment_date).toLocaleDateString('tr-TR') : '-'"></p>
+                          <p class="font-medium text-gray-800" x-text="rec.payment_date ? window.__thBicim.tarih(rec.payment_date) : '-'"></p>
                         </div>
                         <div>
                           <p class="text-xs text-gray-400 mb-0.5">${t("ordersUi.sender")}</p>
@@ -1101,7 +1101,7 @@ function renderAllOrders(): string {
                         </div>
                         <div>
                           <p class="text-xs text-gray-400 mb-0.5">${t("ordersUi.amountLabel")}</p>
-                          <p class="font-semibold text-gray-900" x-text="(rec.currency || 'USD') + ' ' + Number(rec.amount || 0).toLocaleString('tr-TR', {minimumFractionDigits: 2})"></p>
+                          <p class="font-semibold text-gray-900" x-text="(rec.currency || 'USD') + ' ' + window.__thBicim.para(Number(rec.amount || 0))"></p>
                         </div>
                         <div x-show="rec.receipt_url">
                           <p class="text-xs text-gray-400 mb-0.5">${t("ordersUi.receipt")}</p>
@@ -1172,7 +1172,7 @@ function renderAllOrders(): string {
                   <label class="block text-xs font-semibold text-gray-600 mb-1.5">${t("ordersUi.refundAmount")}</label>
                   <div class="relative">
                     <span class="absolute start-3 top-1/2 -translate-y-1/2 text-xs text-gray-400" x-text="selectedOrder?.currency || 'TRY'"></span>
-                    <input type="text" :value="Number(refundForm.amount).toLocaleString('tr-TR', {minimumFractionDigits: 2})" readonly
+                    <input type="text" :value="window.__thBicim.para(Number(refundForm.amount))" readonly
                       class="th-input th-input-md ps-12" aria-disabled="true" />
                   </div>
                 </div>

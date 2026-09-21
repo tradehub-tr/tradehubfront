@@ -1,5 +1,6 @@
 import Alpine from "alpinejs";
 import type { Order, OrderProduct } from "../types/order";
+import { paraBicimle } from "../utils/numberLocale";
 
 type SortMode = "added" | "price_asc" | "price_desc" | "qty";
 
@@ -102,13 +103,13 @@ Alpine.data("orderItemsDrawer", () => ({
 
   lineSubtotal(product: OrderProduct): string {
     const sub = parsePrice(product.unitPrice) * product.quantity;
-    return sub.toLocaleString("tr-TR", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    return paraBicimle(sub);
   },
 
   formattedGrandTotal(): string {
     if (!this.currentOrder) return "";
     const num = parsePrice(this.currentOrder.total);
-    return num.toLocaleString("tr-TR", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    return paraBicimle(num);
   },
 
   canPay(): boolean {

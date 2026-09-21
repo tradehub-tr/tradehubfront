@@ -18,7 +18,8 @@
 import type { BreadcrumbItem } from "../shared/Breadcrumb";
 import { Breadcrumb } from "../shared/Breadcrumb";
 import type { SortOption, ViewMode } from "../../types/productListing";
-import { t, getCurrentLang } from "../../i18n";
+import { t } from "../../i18n";
+import { sayiBicimle } from "../../utils/numberLocale";
 
 export interface SubHeaderProps {
   activeTab: "products" | "manufacturers";
@@ -56,9 +57,9 @@ function getDefaultSortOptions(): SortOption[] {
 }
 
 function formatNumber(num: number): string {
-  const lang = getCurrentLang();
-  const locale = lang === "tr" ? "tr-TR" : "en-US";
-  return num.toLocaleString(locale);
+  // İKİ DİLLİ desen kaldırıldı (D1): Arapça/Rusça ziyaretçi Türkçe biçim
+  // görüyordu. Dört dilin haritası `numberLocale`de.
+  return sayiBicimle(num);
 }
 
 function buildTabUrl(

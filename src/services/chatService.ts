@@ -20,6 +20,7 @@ import type { Conversation, Message, PinnedProduct, ProductRef } from "../types/
 import { getListingUrl } from "../utils/listingUrl";
 import { callMethod, clearCsrfCache, fetchCsrfToken } from "../utils/api";
 import { t } from "../i18n";
+import { tarihBicimle } from "../utils/numberLocale";
 
 const API_BASE = import.meta.env.VITE_API_URL || "/api";
 
@@ -96,7 +97,7 @@ function toRelative(d: Date | null): string {
   if (diffSec < 3600) return t("commonSvc.minutesShort", { n: Math.floor(diffSec / 60) });
   if (diffSec < 86400) return t("commonSvc.hoursShort", { n: Math.floor(diffSec / 3600) });
   if (diffSec < 172800) return t("commonSvc.yesterday");
-  return d.toLocaleDateString("tr-TR", { day: "numeric", month: "short" });
+  return tarihBicimle(d, { day: "numeric", month: "short" });
 }
 
 // ──────────────────────────────────────────────────────────────────────────
@@ -212,9 +213,7 @@ function messageToView(m: ChatwootMessage, conversationId: string): Message {
     direction: isOutgoing ? "them" : "me",
     body,
     time: toHHMM(date),
-    dateLabel: date
-      ? date.toLocaleDateString("tr-TR", { day: "numeric", month: "short" })
-      : undefined,
+    dateLabel: date ? tarihBicimle(date, { day: "numeric", month: "short" }) : undefined,
     read: true,
     videoCallUrl: extractVideoCallUrl(text),
     productRef,

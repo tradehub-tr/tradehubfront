@@ -1,6 +1,7 @@
 import { t } from "../../i18n";
 import { escapeHtml } from "../../utils/sanitize";
 import type { CategoryTreeNode } from "./buildCategoryFacetTree";
+import { sayiBicimle } from "../../utils/numberLocale";
 
 /** Girinti: seviye → Tailwind padding sınıfı (JIT için literal olmalı). */
 const INDENT_BY_DEPTH = ["", "ps-3", "ps-6", "ps-9", "ps-12", "ps-14"] as const;
@@ -42,7 +43,7 @@ function renderNode(node: CategoryTreeNode): string {
       <div class="flex items-center ${indent}">
         <a href="${href}" class="${linkClasses}" style="--cat-color: ${linkColor};" title="${escapeHtml(node.name)}"${node.selected ? ' aria-current="page"' : ""}>
           <span class="break-words group-hover:underline underline-offset-2">${escapeHtml(node.name)}</span>
-          <span class="text-[11px] ms-2 flex-shrink-0 pt-0.5" data-cat-count="${escapeHtml(node.id)}" style="color: var(--filter-count-color, #9ca3af);">(${node.count.toLocaleString()})</span>
+          <span class="text-[11px] ms-2 flex-shrink-0 pt-0.5" data-cat-count="${escapeHtml(node.id)}" style="color: var(--filter-count-color, #9ca3af);">(${sayiBicimle(node.count)})</span>
         </a>
         ${toggle}
       </div>
