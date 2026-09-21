@@ -66,16 +66,34 @@ export function buildCategoryFacetTree(
     return node;
   };
 
-  for (const f of facets) {
+  for (const f of facets ?? []) {
+    // `path` tip sözleşmesinde ZORUNLU, ama bu veri AĞDAN geliyor ve tipin
+    // çalışma anında hiçbir güvencesi yok.
+    //
+    // ÖLÇÜLDÜ (21 Eyl 2026): `path` eksik gelen tek bir kategori
+    // `f.path.forEach` satırında TypeError atıyordu. İstisna, çağıranın
+    // `.then()` zincirinin içinde olduğu için aynı `.catch()`e düşüyor ve orası
+    // TÜM `[data-filter-dynamic]` kutularını siliyordu — yani BİR bozuk kategori
+    // yüzünden ülke, marka ve sertifika filtreleri de ekrandan kayboluyor,
+    // kullanıcı "Sonuç bulunamadı" görüyordu. 13 E2E testi bu tek hatadan
+    // düşüyordu (products-filter.spec.ts).
+    //
+    // Yeni davranış: bozuk kayıt KENDİ satırına hapsedilir. `path` yoksa
+    // kategori kök düzeyinde gösterilir — ata zinciri kaybolur ama kategori
+    // listeden düşmez ve panelin geri kalanı sağlam kalır.
+    if (!f || typeof f.id !== "string" || !f.id) continue;
+    const path = Array.isArray(f.path) ? f.path.filter((ref) => ref && ref.id) : [];
+
     let parent: CategoryTreeNode | null = null;
     const chain: CategoryTreeNode[] = [];
-    f.path.forEach((ref, i) => {
+    path.forEach((ref, i) => {
       parent = ensure(parent, ref, i);
       chain.push(parent);
     });
-    const self = ensure(parent, f, f.path.length);
+    const self = ensure(parent, f, path.length);
     chain.push(self);
-    for (const n of chain) n.count += f.count;
+    const sayim = Number.isFinite(f.count) ? f.count : 0;
+    for (const n of chain) n.count += sayim;
   }
 
   const finalize = (nodes: CategoryTreeNode[]): boolean => {
