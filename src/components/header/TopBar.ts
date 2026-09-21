@@ -12,7 +12,7 @@ import { isLoggedIn, getUser, waitForAuth, logout } from "../../utils/auth";
 import { getListingUrl } from "../../utils/listingUrl";
 import { getBrandUrl } from "../../utils/brandUrl";
 import { getSellerUrl } from "../../utils/sellerUrl";
-import { getSellerStoreUrl } from "../../utils/seller";
+import { getSellerPanelUrl } from "../../utils/seller";
 import { getFlagSvg } from "../../utils/flags";
 import { escapeHtml, sanitizeUrl } from "../../utils/sanitize";
 import { cartThumbNameTile } from "./cartThumbNameTile";
@@ -233,7 +233,7 @@ function renderUserButton(): string {
         </div>
         <ul class="py-1">
           <li><a href="/pages/dashboard/buyer-dashboard.html" class="block px-4 py-2 text-[13px] text-[#222] hover:bg-gray-50 transition-colors"><span data-i18n="header.myDashboard">${t("header.myDashboard")}</span></a></li>
-          ${user?.has_seller_profile ? `<li><a href="${escapeHtml(sanitizeUrl(getSellerStoreUrl(user!)))}" class="block px-4 py-2 text-[13px] text-[#222] hover:bg-gray-50 transition-colors"><span data-i18n="header.myStore">${t("header.myStore")}</span></a></li>` : ""}
+          ${user?.has_seller_profile ? `<li><a href="${escapeHtml(sanitizeUrl(getSellerPanelUrl(user!)))}" class="block px-4 py-2 text-[13px] text-[#222] hover:bg-gray-50 transition-colors"><span data-i18n="header.myStore">${t("header.myStore")}</span></a></li>` : ""}
           <li><a href="/pages/dashboard/orders.html" class="block px-4 py-2 text-[13px] text-[#222] hover:bg-gray-50 transition-colors"><span data-i18n="header.myOrders">${t("header.myOrders")}</span></a></li>
           <li>
             <a href="javascript:void(0)"
