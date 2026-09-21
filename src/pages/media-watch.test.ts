@@ -12,8 +12,11 @@ describe("getSlugFromPath", () => {
     expect(getSlugFromPath("/medya/v/yeni-urun-tanitimi")).toBe("yeni-urun-tanitimi");
   });
 
-  it("/en/medya/v/<slug> dev-rewrite varyantını da kabul eder", () => {
-    expect(getSlugFromPath("/en/medya/v/yeni-urun-tanitimi")).toBe("yeni-urun-tanitimi");
+  it("/en/medya/v/<slug> ARTIK kabul edilmez — dil öneki şeması söküldü", () => {
+    // Dev-rewrite `/en/` varyantını kabul ediyordu; 2026-09-21'de kaldırıldı.
+    // nginx `/en/medya/v/x` isteğini 301 ile `/medya/v/x?hl=en` yapıyor, yani
+    // sayfaya gelen path hiçbir zaman önekli olmuyor.
+    expect(getSlugFromPath("/en/medya/v/yeni-urun-tanitimi")).toBe("");
   });
 
   it("slug'dan sonraki fazla path segmentini kırpar", () => {

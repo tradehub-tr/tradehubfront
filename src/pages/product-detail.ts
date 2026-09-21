@@ -89,7 +89,7 @@ import { getSellerUrl } from '../utils/sellerUrl'
 // arama yapar (Faz 4d).
 function _resolveListingIdFromUrl(): string | null {
   // Pretty URL: /urun/<slug>
-  const prettyMatch = window.location.pathname.match(/^\/(?:en\/)?urun\/([^/]+)/);
+  const prettyMatch = window.location.pathname.match(/^\/urun\/([^/]+)/);
   if (prettyMatch) return prettyMatch[1];
   // Legacy URL: /pages/product-detail.html?id=<id>
   const params = new URLSearchParams(window.location.search);

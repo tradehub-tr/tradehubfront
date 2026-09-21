@@ -11,12 +11,14 @@ describe("static page SEO HTTP refresh", () => {
     document.documentElement.lang = "tr";
   });
 
-  it("normalizes the English URL prefix", () => {
-    expect(normalizeStaticSeoPath("/en/urunler")).toEqual({
-      path: "/urunler",
-      langFromPath: "en",
-    });
-    expect(normalizeStaticSeoPath("/en")).toEqual({ path: "/", langFromPath: "en" });
+  it("yol dil öneki taşımaz — `/en/...` artık ayrıştırılmaz (2026-09-21)", () => {
+    // Şema söküldü: `/en/...` nginx'te 301 ile önekiz karşılığına + `?hl=en`e
+    // dönüyor, yani tarayıcı bu fonksiyona hiç önekli yol vermiyor. Önek
+    // ayrıştırması dursaydı, gerçekten `/en...` diye başlayan bir statik sayfa
+    // eklendiği gün yolu yanlış kırpardı.
+    expect(normalizeStaticSeoPath("/en/urunler")).toEqual({ path: "/en/urunler" });
+    expect(normalizeStaticSeoPath("/urunler")).toEqual({ path: "/urunler" });
+    expect(normalizeStaticSeoPath("")).toEqual({ path: "/" });
   });
 
   it("loads and applies current metadata for a registered static page", async () => {
@@ -35,14 +37,14 @@ describe("static page SEO HTTP refresh", () => {
     expect(document.title).toBe("Veritabanı başlığı");
   });
 
-  it("sends the canonical path and English language for an English-prefixed URL", async () => {
+  it("dil AKTİF dilden gelir, yoldan değil", async () => {
     const fetchMock = vi.fn().mockResolvedValue({
       ok: true,
       json: async () => ({ message: { title: "Current English title" } }),
     });
     vi.stubGlobal("fetch", fetchMock);
 
-    await loadStaticPageSeo("tr", "/en/urunler");
+    await loadStaticPageSeo("en", "/urunler");
 
     const request = new URL(fetchMock.mock.calls[0][0], window.location.origin);
     expect(request.searchParams.get("path")).toBe("/urunler");
@@ -80,14 +82,14 @@ describe("static page SEO HTTP refresh", () => {
     expect(document.documentElement.lang).toBe("ru");
   });
 
-  it("uses English for document metadata on an English-prefixed URL", async () => {
+  it("belge dili aktif dile göre kurulur", async () => {
     const fetchMock = vi.fn().mockResolvedValue({
       ok: true,
       json: async () => ({ message: { title: "Current English title", lang: "tr" } }),
     });
     vi.stubGlobal("fetch", fetchMock);
 
-    await loadStaticPageSeo("tr", "/en/urunler");
+    await loadStaticPageSeo("en", "/urunler");
 
     expect(document.documentElement.lang).toBe("en");
   });

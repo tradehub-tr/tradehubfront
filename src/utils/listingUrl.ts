@@ -5,7 +5,8 @@
  * ile render eder. Storefront tüm linkleri bu pretty URL formatında üretmeli ki
  * (a) SEO meta server-side inject edilsin, (b) Google indeksleme doğru olsun.
  *
- * Multi-language: lang='en' verilirse /en/urun/<slug> (Faz 7 path prefix).
+ * Dil öneki YOK — dil `?hl=` parametresiyle taşınır (K7, 16 Eyl 2026).
+ * Eski `/en/...` adresleri nginx'te 301 ile buraya döner.
  *
  * Eski format `/pages/product-detail.html?id=<id>` deprecated — slug yoksa
  * legacy fallback olarak kullanılır (gradual migration için).
@@ -31,10 +32,7 @@ export interface ListingUrlInput {
  * Capacitor bundle modunda pretty URL'ler (/urun/<slug>) fiziksel dosyaya karşılık
  * gelmediği için daima legacy formata düşer.
  */
-export function getListingUrl(
-  listing: ListingUrlInput | null | undefined,
-  lang: "tr" | "en" = "tr"
-): string {
+export function getListingUrl(listing: ListingUrlInput | null | undefined): string {
   if (!listing) return "#";
   // Backend href is untrusted — reject javascript:/data:/protocol-relative
   // (open redirect / XSS) before it reaches an href attribute sink.
@@ -44,8 +42,7 @@ export function getListingUrl(
   if (isNativeBundleContext() && listing.id) {
     return `/pages/product-detail.html?id=${listing.id}`;
   }
-  const prefix = lang === "en" ? "/en" : "";
-  if (listing.slug) return `${prefix}/urun/${listing.slug}`;
+  if (listing.slug) return `/urun/${listing.slug}`;
   if (listing.id) return `/pages/product-detail.html?id=${listing.id}`;
   return "#";
 }

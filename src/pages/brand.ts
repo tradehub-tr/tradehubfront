@@ -78,10 +78,10 @@ interface BrandDetailResponse {
 }
 
 function getSlugFromUrl(): string {
-  // Pretty URL /marka/<slug> (ve /en/marka/<slug>) slug'ı PATH'te taşır; nginx
+  // Pretty URL /marka/<slug> slug'ı PATH'te taşır; nginx
   // dahili rewrite tarayıcı URL'ini path olarak bırakır, ?slug= query'sine çevirmez.
   // Bu yüzden path önce denenir (product-detail.ts:77 / seller.ts:262 ile aynı desen).
-  const prettyMatch = window.location.pathname.match(/^\/(?:en\/)?marka\/([^/]+)/)
+  const prettyMatch = window.location.pathname.match(/^\/marka\/([^/]+)/)
   if (prettyMatch) return decodeURIComponent(prettyMatch[1]).trim()
   const params = new URLSearchParams(window.location.search)
   return (params.get('slug') || params.get('code') || '').trim()

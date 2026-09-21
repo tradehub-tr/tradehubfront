@@ -45,11 +45,9 @@ const STATIC_PAGE_PATHS: Record<string, string> = {
   "tailored-selections": "/size-ozel",
 };
 
-export function getStaticPageUrl(key: string, lang: "tr" | "en" = "tr"): string {
+export function getStaticPageUrl(key: string): string {
   const path = STATIC_PAGE_PATHS[key];
   if (!path) return "#";
-  if (lang === "en" && path !== "/") return `/en${path}`;
-  if (lang === "en" && path === "/") return "/en";
   return path;
 }
 

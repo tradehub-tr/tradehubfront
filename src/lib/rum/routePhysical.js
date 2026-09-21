@@ -47,9 +47,11 @@ const FIZIKSEL_ROTA = Object.freeze({
  *
  * 1. Sorgu/fragment zaten `location.pathname`'de yoktur; yine de savunmacı
  *    olarak kırpılır ve sondaki `/` atılır.
- * 2. Dil öneki `/en` soyulur (`getStaticPageUrl` Faz 7 path prefix'i) —
- *    `/en/urun/x` de `/urun/:slug` kovasında sayılsın.
- * 3. Fiziksel `.html` yolu haritadan pretty karşılığına çevrilir.
+ * 2. Fiziksel `.html` yolu haritadan pretty karşılığına çevrilir.
+ *
+ * Dil öneki soyma ADIMI KALDIRILDI (2026-09-21): `/en/...` şeması söküldü,
+ * dil `?hl=` ile taşınıyor ve eski adresler nginx'te 301 ile önekiz
+ * karşılığına dönüyor — yani bu fonksiyona `/en/` hiç ulaşmıyor.
  *
  * Eşleşme yoksa yol OLDUĞU GİBİ döner; şablona indirgeme kararı yine
  * `routeTemplate()`'indir (sunucu sözleşmesiyle birebir kalan tek yer).
@@ -65,7 +67,5 @@ export function normalizePhysicalPath(path) {
   if (!yol) return yol;
   if (!yol.startsWith("/")) yol = `/${yol}`;
   yol = yol.replace(/\/+$/, "") || "/";
-  if (yol === "/en") yol = "/";
-  else if (yol.startsWith("/en/")) yol = yol.slice(3);
   return FIZIKSEL_ROTA[yol] || yol;
 }
