@@ -41,11 +41,15 @@ describe("normalizePhysicalPath — pretty URL geçirgenliği", () => {
     expect(sablon("/")).toBe("/");
   });
 
-  it("`/en` dil öneki soyulur (Faz 7 path prefix)", () => {
-    expect(sablon("/en/urun/bonny-kap")).toBe("/urun/:slug");
-    expect(sablon("/en/urunler")).toBe("/urunler");
-    expect(sablon("/en")).toBe("/");
-    // /en ile BAŞLAYAN ama dil öneki olmayan yol soyulmaz
+  it("`/en` dil öneki ARTIK SOYULMAZ — şema söküldü (2026-09-21)", () => {
+    // 2026-09-21'e kadar burada soyma vardı ve `/en/urun/x` → `/urun/:slug`
+    // beklenirdi. Şema söküldü: `/en/...` adresleri nginx'te 301 ile önekiz
+    // karşılığına dönüyor, yani bu fonksiyona hiç ulaşmıyorlar. Soyma kodu
+    // dursaydı, gerçekten `/en...` diye başlayan bir pretty rota eklendiği
+    // gün RUM onu yanlış kovaya yazardı.
+    expect(sablon("/en/urun/bonny-kap")).toBe("other");
+    expect(sablon("/en")).toBe("other");
+    // Bu zaten hep `other`dı — soyma kaldırıldığında da değişmedi.
     expect(sablon("/envanter")).toBe("other");
   });
 

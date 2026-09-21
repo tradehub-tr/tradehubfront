@@ -233,7 +233,13 @@ export function applyServerSeo(seo: ServerSeoPayload | null | undefined): void {
 
 /**
  * FE-4: hreflang client fallback — backend payload'ı hreflang üretmediyse
- * `/` ↔ `/en/` alternates + x-default ekler.
+ * `tr` + `x-default` self-alternate'i ekler.
+ *
+ * 2026-09-21: `/en/` alternate'i KALDIRILDI. Şema hiç sunulmuyordu (ölçüldü:
+ * canlıda 404) ve beş sitemap 25.997 kırık alternate bildiriyordu. Dil artık
+ * `?hl=` ile taşınıyor (K7); adres tek olduğu için alternate de tek.
+ * Backend `build_hreflang_links` ile BİREBİR aynı kümeyi üretir — iki kanalın
+ * ayrışması Google'a çelişkili sinyal gönderir.
  *
  * Kurallar:
  * - DOM'da zaten hreflang'lı alternate varsa (server payload uygulanmış) NO-OP.
@@ -249,12 +255,9 @@ export function applyHreflangFallback(): void {
     ?.getAttribute("content");
   if (robots?.includes("noindex")) return;
 
-  const path = window.location.pathname;
-  const trPath = path.replace(/^\/en(\/|$)/, "/") || "/";
-  const enPath = trPath === "/" ? "/en/" : `/en${trPath}`;
+  const path = window.location.pathname || "/";
   const origin = window.location.origin;
 
-  upsertLinkTag("alternate", `${origin}${trPath}`, "tr");
-  upsertLinkTag("alternate", `${origin}${enPath}`, "en");
-  upsertLinkTag("alternate", `${origin}${trPath}`, "x-default");
+  upsertLinkTag("alternate", `${origin}${path}`, "tr");
+  upsertLinkTag("alternate", `${origin}${path}`, "x-default");
 }

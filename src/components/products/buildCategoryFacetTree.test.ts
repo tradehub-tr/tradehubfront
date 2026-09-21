@@ -125,3 +125,81 @@ describe("filterCategoryFacets", () => {
     expect(filterCategoryFacets(mutfakFacets, "zzz")).toEqual([]);
   });
 });
+
+/**
+ * BOZUK VERİYE DAYANIKLILIK — 21 Eyl 2026'da eklendi.
+ *
+ * NEDEN: `path` alanı tip sözleşmesinde zorunlu ama veri AĞDAN geliyor ve tipin
+ * çalışma anında güvencesi yok. Eksik `path` gelen TEK bir kategori
+ * `f.path.forEach` satırında TypeError atıyordu; istisna çağıranın `.then()`
+ * zincirinin içinde olduğu için `.catch()`e düşüyor ve orası TÜM dinamik facet
+ * kutularını siliyordu. Sonuç: bir bozuk kategori yüzünden ülke, marka ve
+ * sertifika filtreleri de ekrandan kayboluyor, kullanıcı "Sonuç bulunamadı"
+ * görüyordu. 13 E2E testi bu tek hatadan düşüyordu.
+ *
+ * Kural: bozuk kayıt KENDİ satırına hapsedilir, ağacın geri kalanı sağlam kalır.
+ */
+describe("bozuk facet verisine dayanıklılık", () => {
+  const SAGLAM = item(SAKLAMA, 10, [EV, MUTFAK]);
+
+  it("`path` eksikse kategori KÖK düzeyinde görünür, çökmez", () => {
+    const bozuk = { id: "X", name: "Yolsuz", slug: "yolsuz", count: 5 } as CategoryFacetItem;
+    const agac = buildCategoryFacetTree([bozuk], undefined);
+    expect(agac).toHaveLength(1);
+    expect(agac[0]).toMatchObject({ id: "X", depth: 0, count: 5 });
+  });
+
+  it("bozuk kayıt SAĞLAM kayıtları düşürmez — hata kendi satırına hapsolur", () => {
+    const bozuk = { id: "X", name: "Yolsuz", slug: "yolsuz", count: 5 } as CategoryFacetItem;
+    const agac = buildCategoryFacetTree([bozuk, SAGLAM], undefined);
+    const kokler = agac.map((n) => n.id).sort();
+    expect(kokler).toEqual(["EV", "X"]);
+    // Sağlam kaydın ata zinciri bozulmamış olmalı
+    const ev = agac.find((n) => n.id === "EV");
+    expect(ev?.children[0]).toMatchObject({ id: "MUTFAK" });
+  });
+
+  it("`path` dizi değilse (null / string / nesne) yine çökmez", () => {
+    for (const kotu of [null, undefined, "EV", 42, { id: "EV" }]) {
+      const item = { id: "X", name: "N", slug: "s", count: 1, path: kotu } as unknown;
+      expect(() => buildCategoryFacetTree([item as CategoryFacetItem], undefined)).not.toThrow();
+    }
+  });
+
+  it("`path` içindeki bozuk halka atlanır, sağlam atalar korunur", () => {
+    const item = {
+      id: "KAVANOZ",
+      name: "Kavanoz",
+      slug: "kavanoz",
+      count: 3,
+      path: [EV, null, MUTFAK],
+    } as unknown as CategoryFacetItem;
+    const agac = buildCategoryFacetTree([item], undefined);
+    expect(agac[0]).toMatchObject({ id: "EV" });
+    expect(agac[0].children[0]).toMatchObject({ id: "MUTFAK" });
+  });
+
+  it("id'siz kayıt tamamen atlanır — anahtarsız düğüm ağacı kirletmez", () => {
+    const idsiz = { name: "Adsız", slug: "adsiz", count: 9 } as unknown as CategoryFacetItem;
+    const agac = buildCategoryFacetTree([idsiz, SAGLAM], undefined);
+    expect(agac.map((n) => n.id)).toEqual(["EV"]);
+  });
+
+  it("sayım sayı değilse 0 sayılır — NaN ağaca yayılmaz", () => {
+    const item = {
+      id: "X",
+      name: "N",
+      slug: "s",
+      count: "çok" as unknown as number,
+      path: [],
+    } as CategoryFacetItem;
+    expect(buildCategoryFacetTree([item], undefined)[0].count).toBe(0);
+  });
+
+  it("facet listesi null/undefined ise boş ağaç döner", () => {
+    expect(buildCategoryFacetTree(null as unknown as CategoryFacetItem[], undefined)).toEqual([]);
+    expect(buildCategoryFacetTree(undefined as unknown as CategoryFacetItem[], undefined)).toEqual(
+      []
+    );
+  });
+});

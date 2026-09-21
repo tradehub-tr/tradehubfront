@@ -129,7 +129,7 @@ initCategoryQuickNav();
 
 // Pretty kategori route'u backend'in kategori meta/schema üreticisini kullanır.
 // /kategoriler genel dizininde belirli bir kategori breadcrumb'u yayınlanmaz.
-const prettyCategoryMatch = window.location.pathname.match(/^\/(?:en\/)?kategori\/([^/]+)\/?$/);
+const prettyCategoryMatch = window.location.pathname.match(/^\/kategori\/([^/]+)\/?$/);
 if (prettyCategoryMatch) {
   const slug = decodeURIComponent(prettyCategoryMatch[1]);
   void getPublicPageSeo('category', slug)

@@ -3,14 +3,17 @@
  * - İki kutu tipi: category (görsel+etiket+hover link) ve promo (düz renk+büyük metin+CTA)
  * - Serbest boyut: col_span/row_span → Tailwind col-span/row-span sınıfları (admin'den ayarlanır)
  * - Senkron CategoryShowcase() render + async initCategoryShowcase() ile arka plan yenileme
- * - i18n: getCurrentLang() ile TR/EN; EN boşsa TR fallback
+ * - i18n: dört dil (tr/en/ar/ru); seçili dil boşsa TR fallback
  */
 
-import { getCurrentLang } from "../../i18n";
+import { getCurrentLang, t } from "../../i18n";
 import {
   fetchActiveShowcase,
   getCachedShowcase,
+  type CevrilebilirKok,
+  type DilliTileAlanlari,
   type ShowcaseData,
+  type ShowcaseLang,
   type ShowcaseTile,
 } from "../../services/categoryShowcaseService";
 
@@ -56,9 +59,9 @@ const TWOXL_COLUMN_CLASSES: Record<number, string> = {
 // Örn. 12 hücre + columns=4 → 6; 8 hücre + columns=4 → 4 (6 ve 5 bölmez).
 function pickTwoXlColumns(data: ShowcaseData): number {
   const columns = data.columns || 4;
-  const cells = data.tiles.reduce((sum, t) => {
-    const c = Math.max(1, Math.min(t.col_span || 1, columns));
-    const r = Math.max(1, Math.min(t.row_span || 1, 4));
+  const cells = data.tiles.reduce((sum, kutu) => {
+    const c = Math.max(1, Math.min(kutu.col_span || 1, columns));
+    const r = Math.max(1, Math.min(kutu.row_span || 1, 4));
     return sum + c * r;
   }, 0);
   for (let n = Math.min(columns + 2, 6); n > columns; n--) {
@@ -123,28 +126,45 @@ function sanitizeImageUrl(url: string): string {
   return u;
 }
 
-function pick(tr: string, en: string): string {
+/**
+ * Aktif dildeki metni seç; o dil boşsa Türkçeye düş.
+ *
+ * 2026-09-21: iki dilli `pick(tr, en)` yerine alan KÖKÜNDEN çözüm. Eskisi
+ * `lang === "en"` diye soruyordu, yani Arapça/Rusça ziyaretçi her zaman
+ * Türkçe görüyordu — ölçüldü, alpha'da gerçek Suudi IP'siyle
+ * (`docs/ulke-turu-kanit/alpha/01-SA-anasayfa.png`). Yeni biçimde dil
+ * listesi tek yerde (`SHOWCASE_LANGS`) ve beşinci dil eklendiğinde burada
+ * yapılacak iş yok.
+ */
+function pick(kaynak: DilliTileAlanlari, kok: CevrilebilirKok): string {
   const lang = getCurrentLang();
-  return lang === "en" && en && en.trim() ? en : tr;
+  const secili = kaynak[`${kok}_${lang}` as keyof DilliTileAlanlari] ?? "";
+  if (secili.trim()) return secili;
+  return kaynak[`${kok}_tr`] ?? "";
+}
+
+/** `section_title` gibi dil→metin sözlükleri için aynı kural. */
+function pickSozluk(sozluk: Record<ShowcaseLang, string>): string {
+  const lang = getCurrentLang();
+  const secili = sozluk[lang as ShowcaseLang] ?? "";
+  return secili.trim() ? secili : (sozluk.tr ?? "");
 }
 
 // Mobilde 2 sütun: ilk iki karo katlanma çizgisinin üstünde (hero 280px + karo 85px).
 const ABOVE_FOLD_TILES = 2;
 
-function categoryTile(t: ShowcaseTile, columns: number, index = ABOVE_FOLD_TILES): string {
-  const label = pick(t.label_tr, t.label_en);
-  const hover =
-    pick(t.hover_text_tr, t.hover_text_en) ||
-    (getCurrentLang() === "en" ? "See products" : "Ürünleri gör");
-  const href = t.link_href ? escapeAttr(sanitizeHref(t.link_href)) : "#";
-  const sizeCls = spanClasses(t.col_span, t.row_span, columns);
-  const safeImage = sanitizeImageUrl(t.image);
+function categoryTile(kutu: ShowcaseTile, columns: number, index = ABOVE_FOLD_TILES): string {
+  const label = pick(kutu, "label");
+  const hover = pick(kutu, "hover_text") || t("categoryShowcase.seeProducts");
+  const href = kutu.link_href ? escapeAttr(sanitizeHref(kutu.link_href)) : "#";
+  const sizeCls = spanClasses(kutu.col_span, kutu.row_span, columns);
+  const safeImage = sanitizeImageUrl(kutu.image);
   const hasImage = !!safeImage;
 
   // Tile ağırlığı label boyutuna yansır: hero (2x2) manşet gibi, geniş (2x1) ara,
   // standart (1x1) kompakt — bento'da hiyerarşi boyutla okunur.
-  const isHero = (t.col_span || 1) >= 2 && (t.row_span || 1) >= 2;
-  const isWide = !isHero && (t.col_span || 1) >= 2;
+  const isHero = (kutu.col_span || 1) >= 2 && (kutu.row_span || 1) >= 2;
+  const isWide = !isHero && (kutu.col_span || 1) >= 2;
   const labelSize = isHero
     ? "text-base sm:text-xl lg:text-2xl"
     : isWide
@@ -186,13 +206,13 @@ function categoryTile(t: ShowcaseTile, columns: number, index = ABOVE_FOLD_TILES
 const SHIELD_SVG =
   '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="h-full w-full"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/><path d="m9 12 2 2 4-4"/></svg>';
 
-function promoTile(t: ShowcaseTile, columns: number): string {
-  const badge = pick(t.promo_badge_tr, t.promo_badge_en);
-  const title = pick(t.promo_title_tr, t.promo_title_en);
-  const cta = pick(t.cta_text_tr, t.cta_text_en);
-  const href = t.cta_href ? escapeAttr(sanitizeHref(t.cta_href)) : "#";
-  const sizeCls = spanClasses(t.col_span, t.row_span, columns);
-  const bg = sanitizeColor(t.background_color, "#0a0a0a");
+function promoTile(kutu: ShowcaseTile, columns: number): string {
+  const badge = pick(kutu, "promo_badge");
+  const title = pick(kutu, "promo_title");
+  const cta = pick(kutu, "cta_text");
+  const href = kutu.cta_href ? escapeAttr(sanitizeHref(kutu.cta_href)) : "#";
+  const sizeCls = spanClasses(kutu.col_span, kutu.row_span, columns);
+  const bg = sanitizeColor(kutu.background_color, "#0a0a0a");
   return `
     <a
       href="${href}"
@@ -216,8 +236,8 @@ function promoTile(t: ShowcaseTile, columns: number): string {
   `;
 }
 
-function tileHtml(t: ShowcaseTile, columns: number, index = ABOVE_FOLD_TILES): string {
-  return t.tile_type === "promo" ? promoTile(t, columns) : categoryTile(t, columns, index);
+function tileHtml(kutu: ShowcaseTile, columns: number, index = ABOVE_FOLD_TILES): string {
+  return kutu.tile_type === "promo" ? promoTile(kutu, columns) : categoryTile(kutu, columns, index);
 }
 
 // Render'ı etkileyen TÜM veriyi imzala — değişiklik (boyut, sıra, renk, içerik) tespiti için.
@@ -236,20 +256,20 @@ export function CategoryShowcase(data: ShowcaseData = getCachedShowcase()): stri
     return `<div data-category-showcase-root class="hidden"></div>`;
   }
   const hashAttr = signature(data);
-  const title = pick(data.section_title.tr, data.section_title.en);
+  const title = pickSozluk(data.section_title);
   const colCls = COLUMN_CLASSES[data.columns] ?? COLUMN_CLASSES[4];
   // 2xl'de geniş ekranı ek kartlarla doldurur — AMA yalnızca tile hücreleri yeni sütun
   // sayısına tam bölünüyorsa (aksi halde kısa tile'ların altında boş hücre kalırdı).
   // Bölen yoksa base columns'ta kalır → her tile sayısında boşluksuz dizilim.
   const twoXlColCls = TWOXL_COLUMN_CLASSES[pickTwoXlColumns(data)] ?? "";
-  const tilesHtml = data.tiles.map((t, i) => tileHtml(t, data.columns, i)).join("");
+  const tilesHtml = data.tiles.map((kutu, i) => tileHtml(kutu, data.columns, i)).join("");
   return `
     <div data-category-showcase-root data-showcase-hash='${escapeAttr(hashAttr)}'>
       ${
         title
           ? `<div class="mb-4 flex items-baseline justify-between gap-3">
               <h2 class="text-sm sm:text-lg lg:text-xl font-semibold text-gray-900">${escapeText(title)}</h2>
-              <a href="/kategoriler" class="inline-flex shrink-0 items-center gap-1 text-xs sm:text-sm font-medium text-gray-600 transition-colors duration-150 hover:text-gray-900 appearance-none focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-primary-500,#ff8600)] focus-visible:ring-offset-2 rounded-md motion-reduce:transition-none">${getCurrentLang() === "en" ? "All categories" : "Tüm kategoriler"} ${ARROW_SVG}</a>
+              <a href="/kategoriler" class="inline-flex shrink-0 items-center gap-1 text-xs sm:text-sm font-medium text-gray-600 transition-colors duration-150 hover:text-gray-900 appearance-none focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-primary-500,#ff8600)] focus-visible:ring-offset-2 rounded-md motion-reduce:transition-none">${t("categoryShowcase.allCategories")} ${ARROW_SVG}</a>
             </div>`
           : ""
       }

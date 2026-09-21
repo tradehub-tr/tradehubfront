@@ -42,12 +42,32 @@ function govde(): string {
     .replace(/<\/script>$/, "");
 }
 
+/**
+ * Çerez silmenin DETERMİNİST yolu.
+ *
+ * `Max-Age=0` happy-dom'da çerezi hemen düşürmüyor; BOŞ DEĞERLE listede
+ * bırakıyor ve bir süre sonra siliyor. Ölçüldü (21 Eyl 2026):
+ *
+ *   document.cookie = "a=1; Path=/"; document.cookie = "b=2; Path=/";
+ *   document.cookie = "a=; Path=/; Max-Age=0";   → "b=2; a="   ← a hâlâ listede
+ *   document.cookie = "c=; Path=/; <geçmiş Expires>";           → "b=2"      ← anında düştü
+ *
+ * Sonucu KARARSIZ testti: `document.cookie`yi iki kez okuyan iddialar, arada
+ * artık çerez düştüyse farklı dize görüyordu. `ilkBoyamaDili.test.ts` dört
+ * koşumun ikisinde kırmızıydı ve DÜŞEN TEST koşumdan koşuma değişiyordu.
+ */
+const GECMIS_TARIH = "Expires=Thu, 01 Jan 1970 00:00:00 GMT";
+
+function cerezSil(ad: string) {
+  document.cookie = `${ad}=; Path=/; ${GECMIS_TARIH}`;
+}
+
 function ortamiKur(s: Senaryo) {
   document.documentElement.removeAttribute("lang");
   document.documentElement.removeAttribute("dir");
   document.head.innerHTML = "";
   for (const ad of [LANG_COOKIE_KEY, LANG_SOURCE_COOKIE_KEY, ULKE_COOKIE_KEY]) {
-    document.cookie = `${ad}=; Path=/; Max-Age=0`;
+    cerezSil(ad);
   }
   localStorage.clear();
 

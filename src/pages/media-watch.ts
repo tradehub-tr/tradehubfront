@@ -6,8 +6,7 @@
  * `media_public.get_watch_page(slug)` (allow_guest) tek veri kaynağı;
  * bulunamayan/private slug 404 zarfı fırlatır (`frappe.DoesNotExistError`).
  *
- * NOT — tek dilli sayfa (koordinatör ruling'i): dev-rewrite `/en/medya/v/…`
- * varyantını kabul eder (slug aynı okunur) ama sayfa içeriği yalnız Türkçe
+ * NOT — tek dilli sayfa (koordinatör ruling'i): sayfa içeriği yalnız Türkçe
  * basılır; `t()` ile çevrilmez.
  *
  * Prod'da nginx `location ~ ^/medya/v/([a-z0-9-]+)$` TÜM istekleri (bot/insan
@@ -80,12 +79,11 @@ export interface WatchPageResponse {
 // ── Pure helpers — DOM'suz, Vitest kapsamı (media-watch.test.ts) ────────────
 
 /**
- * `/medya/v/<slug>` (ve dev-rewrite'ta kalan `/en/medya/v/<slug>`) slug'ını
- * path'ten okur — `brand.ts:getSlugFromUrl` ile aynı desen (nginx dahili
+ * `/medya/v/<slug>` slug'ını path'ten okur — `brand.ts:getSlugFromUrl` ile aynı desen (nginx dahili
  * rewrite tarayıcı URL'ini path olarak bırakır, query'ye çevirmez).
  */
 export function getSlugFromPath(pathname: string): string {
-  const match = (pathname || "").match(/^\/(?:en\/)?medya\/v\/([^/]+)/);
+  const match = (pathname || "").match(/^\/medya\/v\/([^/]+)/);
   return match ? decodeURIComponent(match[1]).trim() : "";
 }
 

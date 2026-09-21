@@ -14,7 +14,7 @@
  */
 
 import { getUser, getSessionUser } from "./auth";
-import { getSellerStoreUrl } from "./seller";
+import { getSellerPanelUrl } from "./seller";
 
 export async function routeToSellerFlow(): Promise<void> {
   const user = getUser() || (await getSessionUser());
@@ -28,7 +28,7 @@ export async function routeToSellerFlow(): Promise<void> {
   // Draft dahil her başvuru durumu application-pending'e gider; mağaza varsa
   // (Approved + can_sell=1) seller admin paneline gider.
   if (user.seller_application_status || user.has_seller_profile) {
-    window.location.href = getSellerStoreUrl(user);
+    window.location.href = getSellerPanelUrl(user);
     return;
   }
 

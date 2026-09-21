@@ -436,6 +436,8 @@ const ar = {
       successDesc: "تم قبول الدعوة. يمكنك تسجيل الدخول الآن.",
       errorTitle: "الدعوة غير صالحة",
       errorDesc: "رابط الدعوة هذا غير صالح أو منتهي الصلاحية.",
+      errorMissingToken: "رابط الدعوة غير صالح أو مفقود.",
+      fullNameRequired: "يرجى إدخال اسمك الأول واسم العائلة.",
       goHome: "العودة إلى الصفحة الرئيسية",
     },
     p2g0: {
@@ -1022,6 +1024,7 @@ const ar = {
       kepPlaceholder: "example@hs01.kep.tr",
     },
     ordersUi: {
+      ordersLoadFailed: "تعذّر تحميل الطلبات. يرجى المحاولة مرة أخرى.",
       confirmAcceptQuote: "هل أنت متأكد من أنك تريد قبول عرض السعر هذا؟",
       confirmRejectQuote: "هل أنت متأكد من أنك تريد رفض عرض السعر هذا؟",
       confirmCloseRfq: "هل أنت متأكد من أنك تريد إغلاق طلب عرض السعر هذا؟",
@@ -2783,6 +2786,8 @@ const ar = {
       noResultsDesc:
         "لم تتطابق أي منتجات مع الفلاتر التي اخترتها. حاول تغيير جميع الفلاتر أو مسحها.",
       clearFilters: "مسح الفلاتر",
+      filtersLoadFailed: "تعذّر تحميل عوامل التصفية",
+      filtersLoadFailedDesc: "حدّث الصفحة وحاول مرة أخرى.",
       productList: "قائمة المنتجات",
       productListLabel: "قائمة المنتجات",
       yearLabel: "{{count}} سنة",
@@ -4733,6 +4738,14 @@ const ar = {
     // ============================================================
     // TAILORED SELECTIONS PAGE (View More)
     // ============================================================
+    // ============================================================
+    // CATEGORY SHOWCASE (ana sayfa bento vitrini)
+    // ============================================================
+    categoryShowcase: {
+      seeProducts: "عرض المنتجات",
+      allCategories: "جميع الفئات",
+    },
+
     tailoredPage: {
       pickedForYou: "مختار خصيصاً لك",
       viewProducts: "عرض المنتجات",

@@ -435,6 +435,8 @@ const en = {
       successDesc: "Invitation accepted. You can now sign in.",
       errorTitle: "Invalid invitation",
       errorDesc: "This invitation link is invalid or has expired.",
+      errorMissingToken: "The invitation link is invalid or missing.",
+      fullNameRequired: "Please enter your first and last name.",
       goHome: "Back to Homepage",
     },
     p2g0: {
@@ -1040,6 +1042,7 @@ const en = {
       kepPlaceholder: "example@hs01.kep.tr",
     },
     ordersUi: {
+      ordersLoadFailed: "Orders could not be loaded. Please try again.",
       confirmAcceptQuote: "Are you sure you want to accept this quotation?",
       confirmRejectQuote: "Are you sure you want to reject this quotation?",
       confirmCloseRfq: "Are you sure you want to close this RFQ?",
@@ -2826,6 +2829,8 @@ const en = {
       noResultsDesc:
         "No products matched your selected filters. Try changing or clearing all filters.",
       clearFilters: "Clear Filters",
+      filtersLoadFailed: "Filters could not be loaded",
+      filtersLoadFailedDesc: "Refresh the page and try again.",
       productList: "Product List",
       productListLabel: "Product list",
       yearLabel: "{{count}} yrs",
@@ -4798,6 +4803,14 @@ const en = {
     // ============================================================
     // TAILORED SELECTIONS PAGE (View More)
     // ============================================================
+    // ============================================================
+    // CATEGORY SHOWCASE (ana sayfa bento vitrini)
+    // ============================================================
+    categoryShowcase: {
+      seeProducts: "See products",
+      allCategories: "All categories",
+    },
+
     tailoredPage: {
       pickedForYou: "Picked for you",
       viewProducts: "View products",

@@ -4,14 +4,13 @@ import { applyServerSeo, type ServerSeoPayload } from "./setPageMeta";
 
 const ENDPOINT = "/api/method/tradehub_core.seo.page_resolver.get_static_page_meta";
 
-export function normalizeStaticSeoPath(pathname: string): {
-  path: string;
-  langFromPath?: "en";
-} {
-  if (pathname === "/en") return { path: "/", langFromPath: "en" };
-  if (pathname.startsWith("/en/")) {
-    return { path: pathname.slice(3) || "/", langFromPath: "en" };
-  }
+/**
+ * Yol artık dil öneki taşımaz — dil `?hl=` ile gelir (K7). Eski `/en/...`
+ * adresleri nginx'te 301 ile önekiz karşılığına döner, yani tarayıcı bu
+ * fonksiyona hiç `/en/` vermez. Fonksiyon korunuyor çünkü sondaki `/`
+ * ve boş yol normalizasyonu hâlâ gerekli.
+ */
+export function normalizeStaticSeoPath(pathname: string): { path: string } {
   return { path: pathname || "/" };
 }
 
@@ -26,7 +25,7 @@ export async function loadStaticPageSeo(
   const normalized = normalizeStaticSeoPath(pathname);
   if (!getStaticPageHtmlPath(normalized.path)) return;
 
-  const effectiveUiLang = normalized.langFromPath || activeLang;
+  const effectiveUiLang = activeLang;
   const apiLang = normalizeStaticSeoLanguage(effectiveUiLang);
   const query = new URLSearchParams({ path: normalized.path, lang: apiLang });
   try {

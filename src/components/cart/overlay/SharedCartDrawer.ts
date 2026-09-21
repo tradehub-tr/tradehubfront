@@ -569,7 +569,15 @@ function updatePreview(): void {
   if (entry.imageUrl) {
     // imageUrl backend listing/galeri verisinden geliyor; quote breakout +
     // event handler injection riski. URL'i escape edip src'ye yaz.
-    image.innerHTML = ProductImage({ listing: state.item.id, src: entry.imageUrl, alt, className: "max-w-full max-h-full w-auto h-auto object-contain", sizes: "(min-width: 1280px) 560px, (min-width: 768px) 400px, 90vw", width: 800, height: 800 });
+    image.innerHTML = ProductImage({
+      listing: state.item.id,
+      src: entry.imageUrl,
+      alt,
+      className: "max-w-full max-h-full w-auto h-auto object-contain",
+      sizes: "(min-width: 1280px) 560px, (min-width: 768px) 400px, 90vw",
+      width: 800,
+      height: 800,
+    });
     void hydrateProductImages(image);
   } else {
     // colorHex satıcı kontrollü; CSS context injection (";background:url(...)")
@@ -828,7 +836,15 @@ function renderColorChip(color: CartDrawerColorModel, isSelected: boolean): stri
       : "border-border-default bg-surface opacity-40 cursor-not-allowed";
 
   const thumb = color.imageUrl
-    ? ProductImage({ listing: state.item?.id || "", src: color.imageUrl, alt: color.label, className: `w-7 h-7 rounded-md object-contain shrink-0${!available ? " grayscale" : ""}`, sizes: "28px", width: 28, height: 28 })
+    ? ProductImage({
+        listing: state.item?.id || "",
+        src: color.imageUrl,
+        alt: color.label,
+        className: `w-7 h-7 rounded-md object-contain shrink-0${!available ? " grayscale" : ""}`,
+        sizes: "28px",
+        width: 28,
+        height: 28,
+      })
     : `<span class="w-5 h-5 rounded shrink-0 border border-border-default" style="background:${safeHexColor(color.colorHex || "#e5e5e5")};${!available ? "opacity:0.4;" : ""}"></span>`;
 
   return `

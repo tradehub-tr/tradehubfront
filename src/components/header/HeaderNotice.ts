@@ -3,15 +3,17 @@
  * - 3 display mode: single (sabit), slide (JS-driven dikey geçiş), marquee (kayan)
  * - Per-notice background_color desteği
  * - Senkron HeaderNotice() render + async initHeaderNotice() ile arka plan yenileme
- * - i18n: getCurrentLang() ile TR/EN; EN boşsa TR fallback
+ * - i18n: dört dil (tr/en/ar/ru); seçili dil boşsa TR fallback
  */
 
 import { getCurrentLang } from "../../i18n";
 import {
   fetchActiveNoticeData,
   getCachedNoticeData,
+  type DilliNoticeAlanlari,
   type HeaderNoticeData,
   type HeaderNoticeItem,
+  type NoticeKok,
 } from "../../services/headerNoticeService";
 
 function escapeText(s: string): string {
@@ -39,12 +41,23 @@ function sanitizeHref(url: string): string {
   return url;
 }
 
-function noticeContent(n: HeaderNoticeItem): string {
+/**
+ * Aktif dildeki metni seç; o dil boşsa Türkçeye düş.
+ *
+ * 2026-09-21: eskiden `lang === "en"` diye soruyordu, yani Arapça/Rusça
+ * ziyaretçi HER SAYFADA Türkçe şerit görüyordu. Dil listesi artık tek yerde
+ * (`NOTICE_LANGS`) ve beşinci dil eklendiğinde burada yapılacak iş yok.
+ */
+function pick(n: HeaderNoticeItem, kok: NoticeKok): string {
   const lang = getCurrentLang();
-  const message =
-    lang === "en" && n.message_en && n.message_en.trim() ? n.message_en : n.message_tr;
-  const linkText =
-    lang === "en" && n.link_text_en && n.link_text_en.trim() ? n.link_text_en : n.link_text_tr;
+  const secili = n[`${kok}_${lang}` as keyof DilliNoticeAlanlari] as string | undefined;
+  if (secili && secili.trim()) return secili;
+  return (n[`${kok}_tr` as keyof DilliNoticeAlanlari] as string | undefined) ?? "";
+}
+
+function noticeContent(n: HeaderNoticeItem): string {
+  const message = pick(n, "message");
+  const linkText = pick(n, "link_text");
   const linkHtml =
     linkText && n.link_href
       ? `<a href="${escapeAttr(sanitizeHref(n.link_href))}" class="ms-2 underline text-[#ffb800] hover:text-white">${escapeText(linkText)}</a>`

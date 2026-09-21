@@ -419,7 +419,9 @@ Alpine.data("checkoutReviewModal", () => ({
       this.shippingAddress = d.shippingAddress || "";
       this.paymentMethod = d.paymentMethod || "";
       this.orders = d.orders || [];
-      Alpine.nextTick(() => { void hydrateProductImages(); });
+      Alpine.nextTick(() => {
+        void hydrateProductImages();
+      });
       this.summary = d.summary || this.summary;
       this.open = true;
       document.body.style.overflow = "hidden";

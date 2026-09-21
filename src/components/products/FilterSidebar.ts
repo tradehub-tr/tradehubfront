@@ -696,7 +696,22 @@ export function initFilterSidebar(query?: string, category?: string): void {
   void loadInitialFacets(query, category)
     .then((facets) => {
       // Kategori ağacı: mega menü ağacı + facet sayımları (buildCategoryFacetTree)
-      paintCategoryTree(facets, category);
+      //
+      // KENDİ HATASINI YUTAR (21 Eyl 2026): bu çağrı `.then()` zincirinin ilk
+      // adımı; burada atılan bir istisna aşağıdaki ülke/marka/sertifika
+      // çizimlerine SIRA GELMEDEN zinciri kesiyor ve `.catch()`e düşürüyordu.
+      // Ölçüldü: tek bir bozuk kategori kaydı yüzünden filtre panelinin tamamı
+      // siliniyordu. Kategori ağacı çizilemezse yalnız O BÖLÜM boş kalmalı.
+      try {
+        paintCategoryTree(facets, category);
+      } catch (err) {
+        console.warn("[FilterSidebar] kategori ağacı çizilemedi:", err);
+        document
+          .querySelectorAll<HTMLElement>('[data-filter-dynamic="categories"]')
+          .forEach((container) => {
+            container.innerHTML = `<p class="text-xs" style="color:#9ca3af">${escapeHtml(t("products.noResults"))}</p>`;
+          });
+      }
 
       // Update country sections
       toggleSearchForSection("supplier-country", facets.countries.length);
@@ -905,9 +920,19 @@ export function initFilterSidebar(query?: string, category?: string): void {
       document.dispatchEvent(new CustomEvent("filter-facets-loaded"));
     })
     .catch((err) => {
+      // Buraya YALNIZ facet isteğinin kendisi başarısız olduğunda düşülür
+      // (ağ hatası, 5xx, bozuk yük). Kategori çizimi artık kendi hatasını
+      // yutuyor, yani tek bir bozuk kayıt tüm paneli buraya sürüklemiyor.
       console.warn("[FilterSidebar] getFilterFacets failed:", err);
+      // MESAJ DÜRÜST OLMALI (21 Eyl 2026): eskiden "Sonuç bulunamadı" yazıyordu
+      // ve bu YANILTICIYDI — veri yokluğu değil, isteğin çökmesi söz konusu.
+      // Kullanıcı filtreyi değiştirerek çözemeyeceği bir durumda "filtreleri
+      // değiştirmeyi deneyin" tavsiyesi alıyordu.
+      const hataHtml =
+        `<p class="text-xs" style="color:#9ca3af">${escapeHtml(t("products.filtersLoadFailed"))}<br>` +
+        `<span style="color:#b0b6bf">${escapeHtml(t("products.filtersLoadFailedDesc"))}</span></p>`;
       document.querySelectorAll<HTMLElement>("[data-filter-dynamic]").forEach((container) => {
-        container.innerHTML = `<p class="text-xs" style="color:#9ca3af">${t("products.noResults")}</p>`;
+        container.innerHTML = hataHtml;
       });
       ["supplier-country", "brands", "mgmt-certifications", "product-certifications"].forEach(
         (id) => toggleSearchForSection(id, 0)

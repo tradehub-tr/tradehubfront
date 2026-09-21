@@ -159,7 +159,7 @@ i18next.use(LanguageDetector).init({
     loadStaticPageSeo(initialLang)
   );
 
-  // FE-4: server hreflang payload'ı yoksa `/` ↔ `/en/` alternates fallback'i.
+  // FE-4: server hreflang payload'ı yoksa `tr` + `x-default` self-alternate'i.
   // Her sayfada i18n init koştuğu için MPA genelinde tek çağrı noktası burası.
   import("../seo/setPageMeta").then(({ applyHreflangFallback }) => applyHreflangFallback());
 }

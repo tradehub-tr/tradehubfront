@@ -21,21 +21,40 @@ import { applyListingSocialProof } from "../products/initListingSocialProof";
 // girdikten sonra dinamik yüklenir (initProductGrid içinde).
 
 const HOME_EAGER_CARD_COUNT = 8;
-const HOME_PROGRESSIVE_ROOT_MARGIN = "200px";
-const HOME_GRID_SKELETON_HEIGHT_CLASSES = [
-  "min-h-[2240px]",
-  "md:min-h-[1900px]",
-  "lg:min-h-[1510px]",
-  "xl:min-h-[1000px]",
-  "2xl:min-h-[670px]",
-];
 
+/**
+ * Ana sayfa ızgarasının istediği ürün sayısı — TEK KAYNAK.
+ *
+ * Hem ağ isteğinin `page_size`ı hem de iskeletin çizdiği yer tutucu sayısı
+ * buradan okunur. İkisi ayrışırsa iskelet yanlış yer ayırır ve içerik gelince
+ * sayfa zıplar.
+ *
+ * 14 = büyük ekran gridinin (2xl: 7 kolon) tam 2 satırı — alt satırda boşluk kalmasın.
+ */
+const HOME_GRID_PAGE_SIZE = 14;
+const HOME_PROGRESSIVE_ROOT_MARGIN = "200px";
+/**
+ * İskeleti kaldırır.
+ *
+ * 2026-09-21: eskiden ızgara kabından beş sabit `min-h-[...]` sınıfı
+ * siliniyordu. O yaklaşım YAPISAL OLARAK yanlıştı — kart yüksekliği viewport
+ * GENİŞLİĞİYLE ölçekleniyor, sabit px ise bir kırılma noktası ARALIĞI boyunca
+ * sabit kalıyor. Ölçüldü (beş genişlikte): `xl` aralığında (1024-1535) gerçek
+ * içerik 1058px'den 1133px'e çıkıyor, yani tek bir sayı 8px'lik bütçeyi o
+ * aralıkta asla tutturamaz. Bugüne kadar test yalnız 1280'de koştuğu için
+ * tek bir sayı ayarlanmaya çalışılmıştı.
+ *
+ * Yeni yaklaşım: iskelet de gerçek kartla AYNI geometriyi taşıyan yer
+ * tutuculardan oluşuyor (`renderHomeCardPlaceholder`), sayısı da ağ isteğinin
+ * `page_size`ıyla aynı sabitten geliyor. Yükseklik artık tarayıcı tarafından
+ * hesaplanıyor; sütun sayısı ve kart genişliği değişse de kendiliğinden uyuyor.
+ */
 function releaseProductGridSkeletonHeight(grid: HTMLElement): void {
-  grid.classList.remove(...HOME_GRID_SKELETON_HEIGHT_CLASSES);
+  grid.querySelectorAll("[data-home-section-skeleton]").forEach((el) => el.remove());
 }
 
 function showProductGridEmptyState(grid: HTMLElement): void {
-  grid.querySelector("[data-home-section-skeleton]")?.remove();
+  // Tek çağrı yeter: yardımcı artık TÜM iskelet hücrelerini kaldırıyor.
   releaseProductGridSkeletonHeight(grid);
   const emptyState = document.getElementById("product-grid-empty");
   if (emptyState) emptyState.style.display = "";
@@ -61,7 +80,16 @@ function renderHomeCardPlaceholder(cardId: string): string {
       class="flex"
       aria-hidden="true"
     >
-      <div class="w-full overflow-hidden rounded-md border border-gray-200 bg-white before:block before:aspect-square before:w-full before:animate-pulse before:bg-gray-200/70 after:block after:h-[128px] after:animate-pulse after:bg-gray-100/70"></div>
+      <!--
+        Metin bloğu ölçülerek belirlendi (21 Eyl 2026, beş genişlikte):
+        gerçek kartın görsel altındaki alan = kart yüksekliği − kart genişliği
+        − kenarlık → 393px'te 139 · 768/1280/1536'da 170 · 1024'te 188.
+        Dar kartta (2 sütun) kart daha kompakt çiziliyor, bu yüzden md den
+        itibaren 170. 1024'teki 188 başlık sarmasından geliyor ve yer tutucu
+        gerçek metni çizmediği için birebir yakalanamıyor — kalan sapma orada.
+        Eskiden 128 sabitti ve her yer tutucu gerçek karttan ~42px KISAydı.
+      -->
+      <div class="w-full overflow-hidden rounded-md border border-gray-200 bg-white before:block before:aspect-square before:w-full before:animate-pulse before:bg-gray-200/70 after:block after:h-[139px] after:animate-pulse after:bg-gray-100/70 md:after:h-[170px]"></div>
     </div>
   `;
 }
@@ -139,7 +167,7 @@ export function initProductGrid(): Promise<void> {
     initCurrency()
       // 14 = büyük ekran gridinin (2xl: 7 kolon) tam 2 satırı — alt satırda boşluk kalmasın.
       // verified_supplier: anasayfa vitrini KYB doğrulanmamış satıcı ürünü göstermez.
-      .then(() => searchListings({ page_size: 14, verified_supplier: true }))
+      .then(() => searchListings({ page_size: HOME_GRID_PAGE_SIZE, verified_supplier: true }))
       .then(async (result) => {
         if (result.products.length === 0) {
           showProductGridEmptyState(grid);
@@ -197,17 +225,15 @@ export function ProductGrid(): string {
       <div class="container-wide">
         <div
           id="home-product-grid"
-          class="group/grid grid min-h-[2240px] grid-cols-2 md:min-h-[1900px] md:grid-cols-3 lg:min-h-[1510px] lg:grid-cols-4 xl:min-h-[1000px] xl:grid-cols-6 2xl:min-h-[670px] 2xl:grid-cols-7 product-grid home-product-grid"
+          class="group/grid grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 2xl:grid-cols-7 product-grid home-product-grid"
           style="gap: var(--product-grid-gap, 16px);"
           data-list-mode="grid"
           role="list"
           aria-label="Product listings"
         >
-          <div
-            data-home-section-skeleton
-            class="col-span-full h-full min-h-[2240px] animate-pulse rounded-md bg-gray-200/70 md:min-h-[1900px] lg:min-h-[1510px] xl:min-h-[1000px] 2xl:min-h-[670px]"
-            aria-hidden="true"
-          ></div>
+          ${Array.from({ length: HOME_GRID_PAGE_SIZE }, () => renderHomeCardPlaceholder("skeleton"))
+            .join("")
+            .replace(/data-home-card-placeholder="skeleton"/g, "data-home-section-skeleton")}
           <div
             id="product-grid-empty"
             data-home-section-empty

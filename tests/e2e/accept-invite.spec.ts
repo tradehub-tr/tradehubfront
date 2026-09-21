@@ -8,7 +8,26 @@
  */
 import { test, expect, type Route, type Page } from "@playwright/test";
 
+/**
+ * Dili TÜRKÇEYE sabitler.
+ *
+ * MOGEM-642 Faz 1: dil seçimi `th-lang-source=manual` işareti olmadan KULLANICI
+ * SEÇİMİ sayılmıyor (otomatik ülke tespiti onu ezebilsin diye). Bu spec hiç dil
+ * kurmuyordu; Playwright bağlamı `en-US` açıldığı için ekran İngilizce
+ * çiziliyor ve Türkçe metin arayan iddialar düşüyordu.
+ *
+ * Ölçüldü (21 Eyl 2026, Playwright sayfa anlık görüntüsü):
+ *     heading "Invalid invitation"  ← İngilizce, test "Davet geçersiz" arıyordu
+ */
+async function diliTurkceyeSabitle(page: Page): Promise<void> {
+  await page.addInitScript(() => {
+    localStorage.setItem("i18nextLng", "tr");
+    localStorage.setItem("th-lang-source", "manual");
+  });
+}
+
 async function mockBackend(page: Page): Promise<void> {
+  await diliTurkceyeSabitle(page);
   // Catch-all önce eklenir; spesifik route'lar sonra eklendiği için önceliklidir.
   await page.route("**/api/method/**", (route: Route) =>
     route.fulfill({
