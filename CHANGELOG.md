@@ -1,3 +1,115 @@
+## [v2.6.0-rc.1] - 2026-09-21 RC
+
+Bu surum rc.istoc.com'da onay asamasindadir.
+
+### Eklendi
+- feat(i18n): Arapça ve Rusça tüm dil seçicilerine eklendi (@aliiball)
+  - AR/RU 3 Haziran 2026'da eklendiğinde yalnız header güncellendi; Temmuz'da eklenen footer ve mobil hesap menüsü, dört dil zaten mevcutken ikişer dille yazıldı. Mobilde header gizli olduğu için mobil kullanıcı AR/RU'yu hiçbir yoldan seçemiyordu.
+  - Dil seçimi ve dil listesi languageChoice.ts'te tek karar noktasına toplandı: seçim dört ayrı yerde doğrudan localStorage.setItem("i18nextLng", ...) ile yazılıyordu, bu yüzden "kullanıcı kendi mi seçti?" sorusunun cevabı yoktu. Elle seçim artık th-lang-source=manual ile işaretleniyor; ülkeye göre otomatik seçim buna bakıp geri çekilecek.
+  - Mobil menüde seçili dil işareti currentLang === "tr" ? "#lang-check-tr" : "#lang-check-en" diye yazılıydı; AR veya RU seçiliyken tik İngilizce satırında görünüyordu. Artık #lang-check-${currentLang}.
+  - Desteklenmeyen dil kodu artık yazılmıyor: eski langMap[code] || "en" kalıbı AR/RU seçimini sessizce İngilizceye çeviriyordu.
+  - AR ve RU'da ham anahtar olarak ekrana basılan 6 metin çevrildi: heroSide.* ve mobileCategory.allInCategory.
+  - Denetim testleri beşinci bir seçici eklenirse ya da biri kendi sabit dil listesini tanımlarsa kırmızıya düşer.
+- feat(i18n): ülke-dil eşlemesi eklendi (@aliiball)
+  - COUNTRY_LANG_MAP ve languageForCountry(): TR Türkçe, RU Rusça, 18 Arap ülkesi Arapça, kalan her ülke ve tespit edilemeyen durum İngilizce açar.
+  - Arap Ligi'nin 22 üyesinden dördü (MR, SO, DJ, KM) bilinçli olarak dışarıda: bu ülkelerde Arapça baskın arayüz dili değil, Fransızca ve yerel diller yaygın. Gerekçe kodda yazılı.
+  - Üç harfli ülke kodları artık reddediliyor. Körü körüne ilk iki harfi almak öngörülemez sonuç veriyordu: SAU ve EGY tesadüfen doğru eşleşirken TUR hiçbir şeye denk gelmiyordu.
+  - Eşleme ülke kodunun kaynağından bağımsız; Cloudflare, nginx geo ya da backend hangisi verirse versin sonuç aynı. Faz 2'de nginx map'i bu tek listeden üretilecek.
+- feat(i18n): dil tercihi çerezi ve hl bağlantı parametresi eklendi (@aliiball)
+  - hl ve lang parametreleri kodda HİÇ okunmuyordu: istoc.com/?hl=ar yazan ziyaretçi Türkçe sayfa görüyordu. Artık okunuyor, tercih kalıcı yazılıyor ve adres replaceState ile temizleniyor. Parametre adreste bırakılsaydı ilk iç bağlantıda zaten düşecekti; bu arada Google /?hl=tr ile /yi iki ayrı sayfa sayardı.
+  - Tercih artık th-lang ve th-lang-source çerezlerinde. Storefront i18nextLng, panel th-lang localStorage anahtarını kullanıyordu ve iki depo birbirini görmüyordu: mağaza yüzünde Arapça seçen kullanıcı panele girince İngilizce karşılanıyordu. Çerezi sunucu da görebiliyor, ilk boyama ve önbellek anahtarı işleri buna bağlı.
+  - resolveLang kararın tek yeri oldu: hl, elle seçim, ülke, tarayıcı, en. Haritada olmayan ülke ülke basamağını BİTİRMEZ; aksi hâlde Almanyadan bağlanan Rusça tarayıcılı kullanıcı İngilizceye kilitlenirdi.
+  - Çerez yokken eski localStorage seçimi çereze taşınıyor, yayın anında kimsenin tercihi sıfırlanmasın diye. Taşıma yalnız th-lang-source manual işaretliyken: i18next otomatik tespiti de aynı anahtara yazıyor.
+  - readDetectedCountry meta th-country okuyor. Kaynağı K1 kararına bağlı; meta yokken davranış bugünküyle aynı kalıyor.
+- feat(i18n): dil seçimi denetimi çereze genişletildi (@aliiball)
+  - Denetim yalnız localStorage yazımına bakıyordu. Tercih çereze de yazılmaya başlanınca yeni bir kaçış yolu açıldı: bir seçici document.cookie ile yazarsa th-lang-source işareti eksik kalır ve ülke tespiti kullanıcının kendi seçimini ezer, yani kapatılmak istenen kusurun çerez üzerinden tekrarı.
+- feat(i18n): dil ve yön ilk boyamada head script ile ayarlandı (@aliiball)
+  - Dil kararı modül zincirinin sonunda veriliyordu. Ölçüldü (dist + nginx, 400 kbps / 4x CPU, /?hl=ar): lang ve dir 12.307 ms, sekme başlığı 11,9 saniye Türkçe kalıyordu. Satır içi head script kararı 471,8 ms'te veriyor.
+  - Script metni languageChoice.ts'ten üretiliyor; ülke haritası, desteklenen diller, RTL listesi ve çerez anahtarları oraya gömülüyor. Elle kopyalanan tek şey öncelik sırası ve onu denetim testi resolveLang ile 22 senaryoda karşılaştırıyor.
+  - Başlık çeviri script'i title etiketinin ARDINA konuyor: öncesine konsaydı ayrıştırıcı başlığı statik Türkçe değerine geri yazardı. Başlığında data-i18n olmayan yedi sayfa dokunulmadan kalıyor.
+  - th-country meta'sı script'ten önce eklendi (Faz 5 kancası). XX degeri bilinmiyor demek, doldurulana kadar davranış Faz 1'dekinin aynısı.
+  - Script SALT OKUR: tercihi yazan tek yer setLanguageManually olarak kaldı, iki ayrı kaynak işareti üretme riski doğmadı.
+- feat(i18n): dil teşhis ucu eklendi (@aliiball)
+  - Ülkeye göre dil seçimi gerçek ziyaretçi IP'sine dayanıyor; TLS Caddy'de bittiği için IP nginx'e ancak X-Forwarded-For ile gelir.
+  - Bu uç, sunucunun o istek için gördüğü değerleri döndürüyor: kaynak IP, XFF, protokol, host ve bot işareti.
+  - İkinci işi, yeni bir nginx değişkeninin envsubst filtresinden sağ çıktığını Faz 5 öncesi zararsız bir değişkenle ölçmek.
+  - Uç kalıcı: neden bu dil geldi sorusu tahminle değil kanıtla cevaplanacak, yalnız çağıranın kendi isteği dönüyor.
+  - noindex, no-store ve nosniff blok içinde tekrar yazıldı: kendi add_header'ı olan blok server seviyesini miras almıyor.
+  - İlk boyama ölçeri geçici klasörden repoya alındı; YAVAS=1 olmadan koşulursa titremeyi göstermez.
+- feat(i18n): ülkeye göre otomatik dil seçimi eklendi (@aliiball)
+  - Ziyaretçinin IP'si nginx'te ülke tablosunda aranıyor, bulunan ülke th-country çerezine yazılıyor, açılış script'i dili ondan seçiyor.
+  - Tablo DB-IP Country Lite'tan üretiliyor; ülke listesi COUNTRY_LANG_MAP'ten okunuyor, ikinci liste tutulmuyor.
+  - Tablo nginx.conf.template'in İÇİNDE: PROD imajına repodan kopyalanan tek config dosyası o, ayrı dosya alpha'da çalışıp canlıda sessizce ölürdü.
+  - Gerçek IP yalnız özel adres aralıklarından gelen X-Forwarded-For ile alınıyor; dışarıdan gelen sahte başlık yok sayılıyor.
+  - Botlara ülke verilmiyor, arama motorlarının tarama davranışı bu özellikten etkilenmiyor.
+  - Çerez server seviyesinde ve içerik tipine göre yazılıyor: location içine konsaydı CSP ve HSTS dahil altı güvenlik başlığı düşerdi.
+  - 304 yanıtında Content-Type gelmediği için boş içerik tipi de kabul ediliyor, yoksa çerez tazelenmiyordu.
+  - Teşhis ucu eklendi: neden bu dil geldi sorusu tahminle değil kanıtla cevaplanıyor.
+
+### Duzeltildi
+- fix(para-birimi): geçersiz para birimi seçimine doğrulama eklendi (@aliiball)
+  - setSelectedCurrency elle seçimde kodu zaten doğruluyordu, otomatik atama doğrulamıyordu. Bu asimetri yüzünden sunucunun önerdiği tanımsız kod localStorage'a yazılıyor, kullanıcı seçicide göremediği için düzeltemiyordu.
+  - Düzeltme öncesinde kilitlenmiş kullanıcılar da kurtarılıyor: meta yüklendikten sonra geçersiz değer siliniyor ve öneri yeniden uygulanabiliyor.
+  - Birim testi kusur geri alınınca kırmızıya düşüyor, E2E aynı senaryoyu tarayıcıda koruyor.
+- fix(guvenlik): CSP worker-src eklendi, service worker artik kaydolabiliyor (@aliiball)
+  - worker-src direktifi tanimli olmadigi icin CSP onu child-src'tan miras aliyordu; child-src'ta 'self' yok (yalniz blob: ve Yandex), bu yuzden kendi alan adimizdaki sw.js reddediliyordu.
+  - Sonuc alpha ve prod'da ayniydi: service worker kayit sayisi 0, PWA kurulumu ve offline onbellek calismiyordu. Her build 4.5 MB precache uretiyor ve tamami bosa gidiyordu.
+  - CSP sozlesmesine yazildi: worker-src dusurulurse nginxCspContract testi kirmiziya doner.
+- fix(storefront): depolama engelliyken site acilmiyordu (@aliiball)
+  - localStorage erisimi SecurityError firlattiginda (tarayici ayariyla site verileri engelli, bazi WebView'lar, kurumsal politika) site hic acilmiyordu: 75 element, 0 baslik, 0 urun karti. Kismi bozulma degil, tam kayipti; alpha ve prod ayni.
+  - Erisim tek yerden gelmiyordu: head icindeki tema script'i, Alpine, i18next cacheUserLanguage ve currencyService. Ikisi 3. parti kutuphane oldugu icin tek tek try/catch mumkun degildi, bu yuzden duzeltme global yapildi.
+  - storageShimPlugin depolama calismiyorsa yerine bellek ici taklit koyar; veri o sekme boyunca yasar ve geri kalan kod degismeden calisir. Calisan tarayicida devreye girmez: gercek Storage ve kalicilik korunur.
+  - E2E dort senaryoyu korur; shim devre disi birakilinca ikisi kirmiziya duser.
+- fix(test): satış sayfası regresyon testi biçimden bağımsız hâle getirildi (@aliiball)
+  - Test mock eksikliğinden değil, 7 Eylül'deki bilinçli davranış değişikliğinden kırıktı: fiyat biçimi 4321'den 4.321'e, varsayılan dönem aylıktan yıllığa alınmıştı.
+  - Aynı davranışı SellPageLayout.test.ts zaten doğruluyor; fiyat biçimi ve dönem toggle kontrolü oraya bırakıldı. Bu testte kalmasının tek sonucu, biçim her değiştiğinde iki testin birden kırılmasıydı.
+  - Fiyat rakamı artık ayırıcılardan arındırılıp aranıyor, yani biçim değişse de test yalan söylemiyor. Kontrolün yanlış pozitif olmadığı, var olmayan bir değerle kırmızıya düşürülerek doğrulandı.
+  - Birim suite ilk kez tamamen yeşil: 1017 test, 100 dosya.
+- fix(güvenlik): ülke başlıkları nginx'te istemciden alınmıyor (@aliiball)
+  - Backend _detect_country ülkeyi CF-IPCountry ve X-Country başlıklarından okuyor; ikisi de istemciden gelebildiği için ziyaretçi kendi ülkesini uydurup para birimi önerisini belirleyebiliyordu.
+  - Ölçüldü, gerçek nginx ve curl ile: satırlar yokken istemcinin gönderdiği US değeri backend'e aynen ulaşıyor, satırlarla birlikte boş geliyor.
+  - Sözleşme testi tek bir bloğun unutulmasını yakalıyor; yeni bir location eklenip satırlar kopyalanmazsa kırmızıya döner.
+  - Ülke kodunun nereden geleceğine karar verilmedi, o yüzden başlığı dolduran kaynak eklenmedi: bugün kural tek yönlü, istemci ülke söyleyemez.
+- fix(i18n): panel dil bütünlüğü testi koşum listesine alındı (@aliiball)
+  - Spec panel öneki yüzünden mock suitten hariç tutuluyordu ama PANEL_SPECS listesine de eklenmemişti: yazıldığı günden beri hiç koşmamıştı. e2e.sh listesine eklendi.
+  - İlk koşumda dar ekranda düştüğü görüldü: sol menü mobilde hiç çizilmiyor, sayfada yalnız ekranın kendi başlığı kalıyor. Test kendi genişlik koşuluna bağlandı.
+- fix(test): E2E dil kurulumuna elle seçim işareti eklendi (@aliiball)
+  - Faz 1'de i18nextLng artık th-lang-source=manual işareti olmadan kullanıcı seçimi sayılmıyor. Dili öyle kuran dokuz spec'te karar tarayıcı diline düşüyor, Playwright bağlamı en-US açıldığı için ekran İngilizce çiziliyor ve Türkçe metin arayan her iddia sessizce düşüyordu: mock paketinde 76 test.
+  - Kusurun genel hâli denetime çevrildi: i18nextLng yazan her spec işareti de yazmak zorunda. Denetim yorumdaki metni değil gerçek setItem çağrısını arıyor.
+  - storefront-iade'de dil düzelince açığa çıkan strict-mode ihlali görünen başlığa bağlandı: sayfada h1.sr-only ve h2 aynı metni taşıyor.
+  - Ölçüm: mock paketi 97 kırıktan 21 kırığa indi, 191 geçenden 267 geçene çıktı. Kalan 21 dil ile ilgisiz.
+- fix(media): sepet ve ödeme görsellerini AVIF manifestle yükle (@ahmeetseker)
+  - Ürün görselleri için ortak ProductImage bileşeni eklendi
+  - Sepet, checkout ve modal görselleri manifestten AVIF srcset kullanacak şekilde güncellendi
+  - Soğuk yüklemede mevcut img düğümleri korunarak sonradan hydrate ediliyor
+  - Görsel seçiminde doğru sizes değeri ve AVIF cache anahtarları kullanılıyor
+  - AVIF aday seçimi ve fallback davranışı testlerle güvenceye alındı
+
+### Degistirildi
+- refactor(storefront): TopBar ve BottomNav prettier biçimine uyduruldu (@aliiball)
+  - İki dosya prettier sözleşmesinin dışında kalmıştı; 14 satırlık biçim farkı giderildi, davranış değişmedi.
+  - BottomNav dil seçicisi bu dosyada olduğu için gerçek tarayıcı turu tekrarlandı: dört dil sunuluyor, Arapça seçimi RTL'i açıyor, seçili işaret doğru satırda.
+- refactor(i18n): kullanılmayan beş sellPage anahtarı silindi (@aliiball)
+  - heroTitleMain, heroDescNoCommission, heroImageAltWorld, manufacturersFocusedSupport ve startApplicationLink hiçbir yerden çağrılmıyordu; tek referansları testin muafiyet listesiydi.
+  - Çevirmek yerine silindi: çeviri borcu kapanmış görünürdü ama üç dile ölü metin yazılmış olurdu.
+  - Test muafiyet listesi boşaldı ve eşik 'en fazla beş' yerine 'hiç yok' katılığına çevrildi; borç yazmak artık listeyi büyütmeyi ve bunun diff'te görünmesini gerektiriyor.
+  - Aynı dosyada ters yön denetimi de eklendi: tr'den silinip ar veya ru'da kalan yetim anahtar artık yakalanıyor.
+- refactor(test): panel dil bütünlüğü E2E'si eklendi (@aliiball)
+  - Panel fallbackLocale en taşıdığı için eksik çeviri ham anahtar DEĞİL İngilizce üretir; ham anahtar araması bu kusuru asla yakalayamaz. Test bu yüzden ekranda o dile ait metni arıyor.
+  - Beş ekran iki dilde doğrulanıyor: özellik kataloğu, kategori vitrini, medya yedeği, lojistik panosu ve sevkiyat listesi.
+  - Sol menü ayrıca denetleniyor: Логистика ve görünmeli, çevrilmemiş Logistics kalmamalı.
+  - Üç engel teste yorum olarak geçti: sekme URL ile seçilemiyor, sekme şeridi iki kez ةيتسجوللا تامدخلا çiziliyor ve biri gizli, tur overlay'i page: önekiyle ayrı işaretleniyor.
+- refactor(lint): eslint hatası giderildi ve biçim borcu kapatıldı (@aliiball)
+  - heading-audit.mjs tek eslint hatası veriyordu; yanlış pozitifti, getComputedStyle page.evaluate callback'inin içinde yani tarayıcıda koşuyor. Config'de aynı sorun için iki ayrı blok vardı, üçü tek bloğa birleştirildi.
+  - duplicate-exports-allowlist.json prettierignore'a alındı: dosyayı check-duplicate-exports.mjs JSON.stringify ile yazıyor, her dizi elemanını ayrı satıra koyuyor; prettier kısa dizileri tek satıra topluyor. İkisi birbirini sonsuza kadar geri alırdı, admin-panel'de 2026-08-24'te tam bu olmuştu.
+  - ar.ts ve ru.ts'ten 11 yetim anahtar silindi: tr'de ve en'de karşılığı yok, kodda hiç çağrılmıyorlar. Silme kök farkındalıklı yapıldı, productionMonitoring iki ayrı kökte geçtiği için kör arama yanlış satırı silerdi.
+  - vite.config.ts'te initial commit'ten beri kullanılmayan writeFileSync import'u kaldırıldı.
+  - Kalan 27 dosya prettier biçimine getirildi; dört locale dosyası HEAD ile derin karşılaştırıldı, içeriği değişen anahtar yok.
+- refactor(lint): ölçüm script'i tarayıcı globalleri listesine alındı (@aliiball)
+  - ilk-boyama-olc.mjs tarayıcıda koşan callback'ler taşıyor ve beş no-undef hatası veriyordu; config'in kendi notu bu tuzağı zaten anlatıyordu.
+  - npm run lint yalnız src ve tests'e baktığı için hata CI'da görünmüyordu.
+
+---
 ## [v2.6.0-alpha.8] - 2026-09-18 ALPHA
 
 Bu surum alpha.istoc.com'da gelistirme asamasindadir.
