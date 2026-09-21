@@ -1,3 +1,16 @@
+## [v2.7.0-alpha.1] - 2026-09-21 ALPHA
+
+Bu surum alpha.istoc.com'da gelistirme asamasindadir.
+
+### Duzeltildi
+- fix(i18n): para birimi ülke başlığı nginx kaynağına bağlandı (@aliiball)
+  - Dil ile para birimi aynı anda farklı ülke görüyordu: Türkiye IP'sinde dil TR, para birimi US ve USD. Para birimi IP'yi değil tarayıcı dilini takip ediyordu, yani Türkiye'deki İngilizce tarayıcılı kullanıcı arayüzü Türkçe fiyatları dolar görüyordu.
+  - Faz 1.4'te X-Country güvenlik için boşaltılmış ve kaynak belli olunca doldurulacak notu düşülmüştü; kaynak M1 ile belli oldu ama satır beş gün boş kaldı.
+  - Güvenlik kazanımı kayıp değil: proxy_set_header istemciden geleni ezer, değeri nginx üretir. Ölçüldü, istemci X-Country ya da CF-IPCountry uydurduğunda backend yine gerçek ülkeyi alıyor.
+  - ulke_kodu değil ulke_yayin kullanıldı: ikincisi bot muafiyetini taşıyor, arama motoruna ülke sızmıyor.
+  - Kusur check:nginx'te üç iddiaya çevrildi, üçü de karşı kanıtla sınandı.
+
+---
 ## [v2.7.0] - 2026-09-21 PROD
 
 Bu surum istoc.com'da yayindadir.
