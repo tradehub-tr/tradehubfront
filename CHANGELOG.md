@@ -1,3 +1,72 @@
+## [v2.6.0-beta.2] - 2026-09-21 BETA
+
+Bu surum beta.istoc.com'da test asamasindadir.
+
+### Eklendi
+- feat(duyuru): duyuru şeridi Arapça ve Rusça çiziliyor (@aliiball)
+  - noticeContent lang === en diye soruyordu, yani Arapça ve Rusça ziyaretçi şeridi HER SAYFADA Türkçe görüyordu.
+  - Seçim artık alan kökünden yapılıyor ve dil listesi tek yerde; o dilde metin yoksa Türkçeye düşüyor, boşluktan ibaret çeviri dolu sayılmıyor.
+  - Gerçek tarayıcıda doğrulandı: LOCAL'e dört dilli geçici bir duyuru eklendi, hl=ar ve hl=ru turlarında şerit kendi dilinde geldi, Türkçe kalıntı yok.
+  - Yol üstünde: ilk ölçümde şerit Arapça'da Türkçe göründü çünkü dist yeniden derlenmemişti. LOCAL'de HMR yok, build zorunlu.
+- feat(i18n): sayaçlar arayüz dilinin sayı biçimini kullanıyor (@aliiball)
+  - getCurrentLang() === en ? en-US : tr-TR deseni Arapça ve Rusça ziyaretçiye Türkçe sayı biçimi veriyordu. Rusçada binlik ayırıcı boşluktur ve nokta ondalık gibi okunur, yani 1.234 bir Rus için bin iki yüz otuz dört değil bir tam iki yüz otuz dört görünümünde.
+  - Gerçek tarayıcıda ölçüldü: tr-TR 1.234, en-US 1,234, ar 1,234 Latin rakam, ar-SA ve ar-EG Doğu Arap rakamı, ru-RU 1 234. Arapça için bilinçli olarak bölgesiz ar kullanılıyor; bölge kodu Doğu Arap rakamı üretir ve bu pazaryerinde istenmiyor.
+  - Yardımcı yalnız SAYAÇLAR içindir. Para biçimlendirmesi utils/currency.ts'in işi ve orada bilinçli sabit yereller var; para gösterimi arayüz diline değil para birimine bağlıdır, oraya dokunulmadı.
+  - Test Doğu Arap rakamı üretilmediğini ve her dilin kendi ayırıcısını kullandığını ayrıca kilitliyor.
+- feat(test): dil kurmayan spec'ler için denetim eklendi (@aliiball)
+  - Mevcut denetim yalnız i18nextLng YAZAN spec'leri kontrol ediyordu; hiç dil kurmayan ama Türkçe metin arayan spec'i görmüyordu. accept-invite tam bu boşluktan kaçtı ve dört testi aylarca kırmızı tuttu.
+  - İlk sürüm Türkçeye özgü harf arıyordu; ölçüldü ki yetersiz: Sepete ekle, Devam et, Kaydet gibi çok yaygın dizeler o harfleri taşımıyor ve denetim onları sessizce kaçırıyordu.
+  - Yöntem sözlük tabanlı hâle getirildi: aranan metin TR sözlüğünde var ve EN karşılığı farklıysa dile duyarlıdır. Tahmin yok, ölçüt veri.
+  - Sözlük yöntemi iki sahte pozitif verdi; ikisi de fixture VERİSİ çıktı, arayüz metni değil. Biri gerekçesiyle muafiyete yazıldı, diğeri yöntem değişince ihlal etmez oldu.
+
+### Duzeltildi
+- fix(seo): /en dil öneki söküldü, eski adresler 301 ile bağlandı (@aliiball)
+  - Beş URL üreticisi /en öneki üretebiliyordu; ölçüldü, üretimdeki 30 çağrının hiçbiri ikinci argümanı geçmiyordu, yani şema ölü koddu ve zarar yalnız site haritasında birikiyordu: 25.997 kırık alternate.
+  - nginx'e üç kural eklendi: /en, /en/ ve /en/* kalıcı olarak önekiz karşılığına ve ?hl=en'e gidiyor. Location mutlak ve https, çünkü göreli yazılırsa Caddy arkasında scheme http oluyor ve ikinci bir hop doğuyor.
+  - Yeni denetim iki katmanlı: üreticiler hiçbir girdide /en dönmüyor ve kaynakta /en adresi üreten ifade kalmadı. Yorumlar soyularak taranıyor, ham metinde arama sahte kırmızı verir.
+  - applyHreflangFallback'in bugüne kadar hiç testi yoktu, oysa doğrudan Google'a giden etiketleri basıyor; altı test eklendi.
+- fix(denetim): check:nginx ve check:dup kırmızıları giderildi (@aliiball)
+  - check-nginx-noindex.sh 22 Ağustos'ta yazıldı, 28 Ağustos'ta medya izleme sayfası /medya/v/ bloğunu ekledi ve sabitler güncellenmedi. Blok doğru deseni taşıyor, proxy_hide_header ve X-Istoc-Storefront ikisi de yerinde, yani kayma masum: 13 sayısı 14, 8 sayısı 9 oldu.
+  - Sabiti yükseltmek denetimi körleştirmedi: o bloktan proxy_hide_header silinince denetim yine kırmızıya düşüyor. Script'e uyarı yazıldı, sayı yine değişirse önce yeni bloğun iki satırı taşıyıp taşımadığına bakılır.
+  - getSellerStoreUrl aynı adla iki bambaşka fonksiyondu: utils/seller.ts satıcı paneline, utils/sellerUrl.ts vitrindeki dükkan sayfasına götürüyor. Yanlışını içe aktarmak tip hatası vermeden yanlış sayfaya götürürdü; panel sürümü getSellerPanelUrl oldu.
+  - ProductImage çakışması kasıtlı sayıldı ve allowlist'e eklendi: biri bileşen fonksiyonu, diğeri veri arayüzü.
+- fix(seo): eski üç yönlendirme mutlak https döndürüyor (@aliiball)
+  - /markalar, /satici/fiyatlandirma ve /pages/seller/sell-pricing.html göreli return 301 kullanıyordu; nginx adresi scheme ile kurduğu ve Caddy arkasında scheme http olduğu için tarayıcı önce http'ye gidiyor ve Caddy'nin 308'iyle ikinci bir hop yaşanıyordu. Ölçüldü: canlıda location http://istoc.com/ureticiler dönüyordu.
+  - Üçü de https ile host değişkenine çevrildi; üretim imajında ölçüldü, altı yönlendirmenin altısı da https.
+  - check:nginx bu değişikliği yakaladı çünkü hedefi birebir dizeyle arıyordu; iddia amacını koruyacak şekilde desene çevrildi ve karşı kanıtla sınandı: /markalar bloğu tamamen silinince yine kırmızıya düşüyor.
+- fix(test): çerez silme deterministik hâle getirildi (@aliiball)
+  - ilkBoyamaDili.test.ts dört koşumun ikisinde kırmızıydı ve düşen test koşumdan koşuma değişiyordu; ikisi de aynı çerez bloğundaydı.
+  - Kök neden ölçüldü: happy-dom'da Max-Age=0 çerezi hemen düşürmüyor, boş değerle listede bırakıyor. a=; Max-Age=0 sonrası liste b=2; a= oluyor, geçmiş Expires sonrası ise b=2. document.cookie'yi iki kez okuyan iddialar arada artık çerez düştüyse farklı dize görüyordu.
+  - Üç test dosyasındaki silme geçmiş Expires'e çevrildi ve gerekçe yorumla yazıldı.
+  - Ölçüm: düzeltmeyle sekiz koşumun sekizi yeşil. Karşı kanıt: Max-Age=0 geri konunca altı koşumun biri yine kırmızı.
+- fix(filtre): bozuk kategori kaydı tüm paneli çökertmiyor (@aliiball)
+  - Ölçüldü: path alanı eksik gelen TEK bir kategori buildCategoryFacetTree icinde TypeError atıyordu. İstisna çağıranın then zincirinin içinde olduğu için aynı catch bloğuna düşüyor ve orası TÜM dinamik facet kutularını siliyordu; bir bozuk kayıt yüzünden ülke, marka ve sertifika filtreleri de ekrandan kayboluyordu.
+  - path tip sözleşmesinde zorunlu ama veri ağdan geliyor ve tipin çalışma anında güvencesi yok. Artık bozuk kayıt kendi satırına hapsoluyor: path yoksa kategori kök düzeyinde gösteriliyor, id'siz kayıt atlanıyor, sayı olmayan sayım sıfır sayılıyor.
+- fix(i18n): sabit Türkçe hata metinleri sözlüğe bağlandı (@aliiball)
+  - Playwright sayfa anlık görüntüsüyle ölçüldü: davet kabul sayfası İngilizce açılıyor ama hata metni Türkçe basılıyordu. Yabancı ziyaretçi karışık dilde ekran görüyordu: başlık Invalid invitation, paragraf Davet linki geçersiz veya eksik.
+  - auth.ts dört metni sabit yazıyordu ve ikisinin i18n karşılığı ZATEN vardı; acceptInvite.errorDesc birebir aynı metindi.
+  - Kusurun genel hâli teste çevrildi: sabitMetinDenetimi.test.ts, kullanıcıya basılan hata ve mesaj atamalarında sabit Türkçe metin arıyor.
+  - Denetim yazıldığı gün kardeş bir ihlal daha buldu: OrderStore.ts siparişler yüklenemedi metnini sabit yazıyordu. O da sözlüğe bağlandı.
+  - Build kırmıyor, test kırmızıya düşürmüyor ve Türkçe geliştirici ekranında doğru görünüyor; bu yüzden aylarca fark edilmemişti.
+- fix(test): 19 kırık E2E testinin kök nedenleri giderildi (@aliiball)
+  - products-filter 13 test: fixture kategori facet'lerinde path alanını taşımıyordu, oysa backend sözleşmesi onu zorunlu döndürüyor. Tek satırlık düzeltme 13 kırığı birden kapattı; mock gerçek yükü birebir üretmeli.
+  - accept-invite 4 test: spec hiç dil kurmuyordu. Playwright bağlamı en-US açıldığı için ekran İngilizce çiziliyor ve Türkçe metin arayan iddialar element bulunamadı ile düşüyordu.
+  - home-performance 2 test: dil seçici iki dil bekliyordu, site dört dilli oldu. Sayı elle güncellendi çünkü bu bir sözleşme iddiası: dil eklendiğinde bu satırın bilerek gözden geçirilmesi isteniyor.
+  - Ölçüm: mock paketi 21 kırıktan 2'ye indi, geçen test 281'den 308'e çıktı. Kalan iki kırık iskelet yükseklik bütçesi ve bilerek açık bırakıldı.
+- fix(vitrin): iskelet yer ayırma kart geometrisinden türüyor (@aliiball)
+  - Izgara iskeleti beş sabit min-h değeriyle yer ayırıyordu ve bu YAPISAL olarak yanlıştı: kart yüksekliği viewport genişliğiyle ölçekleniyor, sabit px ise bir kırılma noktası aralığı boyunca sabit kalıyor. Ölçüldü, xl aralığında (1024-1535) gerçek içerik 1058 pikselden 1133 piksele çıkıyor; tek bir sayı 8 piksellik bütçeyi o aralıkta asla tutturamaz. Test yalnız 1280'de koştuğu için bugüne kadar tek sayı ayarlanmaya çalışılmıştı.
+- fix(test): currency spec sabit uyku yerine yanıtı bekliyor (@aliiball)
+  - Spec waitForTimeout ile sabit 800 milisaniye bekliyordu ve yüke duyarlıydı. Aynı gün 19 kırık test düzelince paralel koşan test sayısı 281'den 312'ye çıktı; route handler yanıtı 250 milisaniye bekletiyor ve 800 milisaniye yetmemeye başladı.
+  - Artık para birimi ayar isteğinin gerçekten tamamlanması bekleniyor, GBP seçeneği de anlık sayım yerine beklemeli iddiayla doğrulanıyor.
+  - Tek başına koşunca zaten geçiyordu; kararsızlık yalnız paralel yük altında görünüyordu.
+
+### Degistirildi
+- refactor(bicim): üç dosyada prettier borcu kapatıldı (@aliiball)
+  - CI'ın format:check adımı bu üç dosyayı kırmızı görüyordu; borç bu turda dokunulan işlerden bağımsızdı.
+  - Diff gözle incelendi: yalnız satır sarma ve süslü parantez açma, davranış değişikliği yok.
+  - Doğrulama: npm run format:check artık tüm dosyalarda temiz.
+
+---
 ## [v2.6.0-alpha.9] - 2026-09-21 ALPHA
 
 Bu surum alpha.istoc.com'da gelistirme asamasindadir.
