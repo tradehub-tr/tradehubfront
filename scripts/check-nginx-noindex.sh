@@ -93,6 +93,33 @@ assert 'robots-prod.txt Sitemap satırı' 1 "$n"
 grep -q '^# env: noindex' public/robots-noindex.txt && grep -q '^Disallow: /$' public/robots-noindex.txt
 assert 'robots-noindex.txt marker + Disallow' 0 $?
 
+# 11. Ülke başlığı backend'e GİDİYOR, ama yalnız nginx'in ürettiği değerle
+#
+#     NEDEN BU DENETİM VAR (21 Eyl 2026): Faz 1.4'te `X-Country` güvenlik için
+#     boşaltıldı (istemci ülkesini uydurabiliyordu) ve "kaynak belli olunca
+#     doldurulacak" notu düşüldü. Kaynak 17 Eyl'de belli oldu (M1: nginx geo)
+#     ama satır beş gün boş kaldı. Sonuç ölçüldü: dil `TR` derken para birimi
+#     `US`/USD diyordu — Türkiye'deki İngilizce tarayıcılı kullanıcı arayüzü
+#     Türkçe, fiyatları dolar görüyordu. Hiçbir test bunu söylemedi.
+#
+#     İki yönlü iddia: (a) /api/ bloğu ülkeyi GÖNDERMELİ, (b) değer
+#     `$ulke_yayin` olmalı — `$ulke_kodu` DEĞİL, çünkü bot muafiyeti
+#     ikincisinde yok ve arama motoruna ülke sızardı.
+grep -qE 'proxy_set_header X-Country \$ulke_yayin;' "$T"
+assert 'X-Country backend'"'"'e gidiyor ($ulke_yayin ile)' 0 $?
+n=$(grep -c 'proxy_set_header X-Country \$ulke_kodu;' "$T" || true)
+assert 'X-Country bot muafiyetsiz değişken KULLANMIYOR' 0 "$n"
+
+# 12. CF-IPCountry HER blokta boş kalmalı
+#
+#     Backend `_detect_country()` bunu X-Country'den ÖNCE okuyor. Dolu
+#     bırakılsaydı istemci `CF-IPCountry: US` gönderip ülkesini uydurabilir,
+#     11. maddedeki düzeltme anlamsızlaşırdı. Cloudflare M1 ile elendi, yani
+#     bu başlık meşru bir kaynaktan da gelmiyor.
+n=$(grep -c 'proxy_set_header CF-IPCountry "";' "$T" || true)
+d=$(grep -c 'proxy_set_header CF-IPCountry' "$T" || true)
+assert 'CF-IPCountry her blokta boş' "$d" "$n"
+
 echo
 if [ "$FAIL" -eq 0 ]; then echo "== TÜM ASSERT'LER GEÇTİ =="; else echo "== BAŞARISIZ =="; fi
 exit "$FAIL"

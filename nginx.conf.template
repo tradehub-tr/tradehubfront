@@ -42704,7 +42704,32 @@ server {
         proxy_cookie_flags ~ SameSite=None Secure;
         proxy_ssl_server_name on;
         proxy_set_header Host ${BACKEND_DOMAIN};
-        proxy_set_header X-Country "";
+        # ── Ülke başlığı: BOŞ DEĞİL, nginx'in ÜRETTİĞİ değer (MOGEM-642, 21 Eyl) ──
+        #
+        # Faz 1.4'te (16 Eyl) bu satır güvenlik için boşaltılmıştı: istemci
+        # `X-Country: US` gönderip kendi ülkesini uydurabiliyordu. O günkü not
+        # aynen şöyleydi: *"ülke kodunun nereden geleceğine karar VERİLMEDİ;
+        # o karar geldiğinde başlığı dolduran kaynak buraya eklenecek."*
+        # Karar 17 Eyl'de verildi (M1: nginx `geo`) ama başlık doldurulmadı.
+        #
+        # ÖLÇÜLDÜ (21 Eyl, alpha, gerçek yabancı IP'ler): dil ile para birimi
+        # AYNI ANDA farklı ülke görüyordu — Türkiye IP'sinde dil `TR`, para
+        # birimi `US`/USD. Sebep: `api/currency.py::_detect_country()` ülkeyi
+        # `CF-IPCountry` → `X-Country` → `Accept-Language` sırasıyla okuyor;
+        # ilk ikisi boş gelince tarayıcı diline düşüyordu. Yani Türkiye'deki
+        # İngilizce tarayıcılı kullanıcı arayüzü Türkçe, fiyatları USD görüyordu.
+        #
+        # GÜVENLİK KAZANIMI KAYBOLMUYOR: `proxy_set_header` istemciden geleni
+        # EZER; değeri nginx üretiyor, ziyaretçi değil.
+        #
+        # `$ulke_kodu` DEĞİL `$ulke_yayin`: ikincisi bot muafiyetini taşıyor
+        # (arama motoruna ülke verilmez). Dil tarafı da aynı değişkeni kullanıyor,
+        # yani iki özellik ayrışamaz.
+        #
+        # `CF-IPCountry` BOŞ KALIYOR: Cloudflare M1 ile elendi, o başlık artık
+        # hiçbir yerden gelmiyor. Backend onu ÖNCE okuduğu için boş bırakmak
+        # zorunlu — dolu bırakılsaydı istemci yine ülkesini uydurabilirdi.
+        proxy_set_header X-Country $ulke_yayin;
         proxy_set_header CF-IPCountry "";
         proxy_set_header X-Real-IP $remote_addr;
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
