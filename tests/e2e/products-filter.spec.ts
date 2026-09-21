@@ -16,7 +16,24 @@ const FACETS_BASE: Record<string, unknown> = {
     { value: "DE", label: "Germany", code: "DE", count: 15 },
   ],
   categories: [
-    { id: "kitchen", name: "Mutfak Aksesuarları", slug: "mutfak-aksesuarlari", count: 30 },
+    // `path` = kökten ebeveyne ata zinciri; backend sözleşmesinde ZORUNLU
+    // (`api/listing.py:180` → {"name", "slug", "path": [...]}) ve
+    // `buildCategoryFacetTree` onu okuyor.
+    //
+    // 2026-09-21'e kadar bu alan fixture'da YOKTU ve tek başına 13 testi
+    // düşürüyordu: eksik `path`, `f.path.forEach` satırında TypeError atıyor,
+    // istisna `.then()` zincirini kesip `.catch()`e düşüyor ve orası TÜM
+    // dinamik facet kutularını siliyordu — ülke/marka/sertifika filtreleri de
+    // ekrandan kayboluyordu. Ürün tarafı o gün dayanıklı hâle getirildi
+    // (bozuk kayıt kendi satırına hapsoluyor), ama fixture'ın sözleşmeyle
+    // uyumlu olması ayrı bir gereklilik: mock, gerçek yükü BİREBİR üretmeli.
+    {
+      id: "kitchen",
+      name: "Mutfak Aksesuarları",
+      slug: "mutfak-aksesuarlari",
+      count: 30,
+      path: [{ id: "home", name: "Ev & Yaşam", slug: "ev-yasam" }],
+    },
   ],
   managementCertifications: [
     { value: "ISO9001", label: "ISO 9001", count: 12 },

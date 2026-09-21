@@ -787,7 +787,11 @@ test.describe("Task 3: mobil overlay'ler ilk etkileşimde bir kez mount edilir",
     await page.locator("#account-country-btn").click();
     await expect(page.locator("[data-account-picker-content='country'] button")).toHaveCount(5);
     await page.locator("#account-lang-btn").click();
-    await expect(page.locator("[data-account-picker-content='language'] button")).toHaveCount(2);
+    // Dört dil: tr / en / ar / ru. 2026-09-21'e kadar burada 2 yazıyordu ve
+    // test iki dil zamanından kalmıştı (MOGEM-642 ile ar+ru eklendi).
+    // Sayı `SUPPORTED_LANGS`ten türetilmiyor çünkü bu bir E2E sözleşme
+    // iddiası: dil eklendiğinde bu satırın BİLEREK güncellenmesi isteniyor.
+    await expect(page.locator("[data-account-picker-content='language'] button")).toHaveCount(4);
     await page.locator("#account-currency-btn").click();
     await expect(page.locator("[data-account-picker-content='currency']")).not.toBeEmpty();
     const accountMountedNodes = await accountDialog.evaluate(
