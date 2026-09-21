@@ -479,7 +479,9 @@ function ReviewsTab(): string {
         },
         formatDate(d) {
           if (!d) return '';
-          return new Date(d).toLocaleDateString('tr-TR', {day:'2-digit', month:'short', year:'numeric'});
+          // Alpine ifadesi TEMPLATE STRING icinde; modul import'u buraya
+          // ulasmiyor. Bicimlendiriciler global'de (bkz. bicimleyicileriYayinla).
+          return window.__thBicim.tarih(d, {day:'2-digit', month:'short', year:'numeric'});
         },
         maskName(n) {
           if (!n) return '\u2014';

@@ -14,6 +14,7 @@
 
 import { api } from "../utils/api";
 import { queryFetch, queryKeys, policies } from "../lib/query";
+import { aktifSayiYereli, paraBicimle } from "../utils/numberLocale";
 
 // ── Types ──
 
@@ -203,8 +204,15 @@ export function getCurrencyFormatSpec(currencyCode: string): {
   return {
     symbol: info.symbol,
     decimalPlaces: info.decimalPlaces,
-    // TRY binlik ayıracı "." ve ondalık ","; diğerleri en-US düzeni.
-    locale: currencyCode === "TRY" ? "tr-TR" : "en-US",
+    // BİÇİM arayüz diline bağlı (kullanıcı kararı D1, 21 Eyl 2026).
+    //
+    // Eskiden para birimine bağlıydı: TRY → tr-TR, diğerleri → en-US. Sonuç,
+    // Rusça arayüzde TL fiyatının Türkçe biçimde (`1.234,56`) çıkmasıydı;
+    // aynı ekrandaki lojistik tutarı ise Rusça biçimdeydi.
+    //
+    // `decimalPlaces` BİLEREK para birimine bağlı kaldı — JPY'nin kuruşu yok,
+    // bu dile göre değişen bir şey değil.
+    locale: aktifSayiYereli(),
   };
 }
 
@@ -277,12 +285,13 @@ function _buildCurrencyMeta(currencies?: CurrencyInfo[]): Record<string, Currenc
 // ── Helpers ──
 
 function _formatNumber(num: number): string {
-  if (_selectedCurrency === "TRY") {
-    const parts = num.toFixed(2).split(".");
-    const intPart = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ".");
-    return `${intPart},${parts[1]}`;
-  }
-  return num.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  // BİÇİM arayüz diline bağlı (kullanıcı kararı D1, 21 Eyl 2026).
+  //
+  // Eskiden iki dallıydı: TRY için ELLE yazılmış bir binlik ayıraç regex'i,
+  // diğerleri için `en-US`. Elle yazılan dal `Intl`in zaten yaptığı işi
+  // tekrarlıyordu ve yalnız iki biçim üretebiliyordu — Rusça ziyaretçi TL
+  // fiyatını Türkçe biçimde görüyordu.
+  return paraBicimle(num);
 }
 
 // ── Global Access for Alpine templates ──

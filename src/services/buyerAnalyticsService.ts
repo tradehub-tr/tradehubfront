@@ -7,6 +7,7 @@ import {
   KPI_META,
   CATEGORY_PALETTE,
 } from "../data/buyerAnalytics";
+import { sayiBicimle } from "../utils/numberLocale";
 
 /** Backend ham response şekli (tradehub_core.api.v1.dashboard.get_buyer_analytics). */
 interface RawAnalytics {
@@ -31,8 +32,8 @@ export interface BuyerAnalytics {
   categoryBreakdown: CategorySlice[];
 }
 
-const fmtTRY = (n: number): string => "₺" + Math.round(n).toLocaleString("tr-TR");
-const fmtNum = (n: number): string => n.toLocaleString("tr-TR");
+const fmtTRY = (n: number): string => "₺" + sayiBicimle(Math.round(n));
+const fmtNum = (n: number): string => sayiBicimle(n);
 
 function mapKpis(k: RawAnalytics["kpis"]): KpiCard[] {
   return [

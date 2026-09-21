@@ -20,6 +20,7 @@ import {
   setupAttachmentInteractions,
 } from "../rfq/attachments";
 import { initCurrency, getExchangeRate } from "../../services/currencyService";
+import { aktifSayiYereli, tarihBicimle, tarihSaatBicimle } from "../../utils/numberLocale";
 
 // ── Types (matching API response) ────────────────────────────────────────────
 
@@ -175,7 +176,7 @@ function renderInquiryList(inquiries: Inquiry[]): string {
       <div class="inq-row sm:grid sm:grid-cols-[1fr_1fr_auto] sm:items-center px-4 sm:px-5 py-3 sm:py-4 border-b border-gray-50 hover:bg-gray-50/60 transition-colors cursor-pointer" data-inquiry-id="${escapeHtml(inq.name)}">
         <div>
           <div class="flex items-center gap-2 text-xs text-gray-400 flex-wrap">
-            <span>${new Date(inq.creation).toLocaleString("tr-TR", { dateStyle: "short", timeStyle: "short" })}</span>
+            <span>${tarihSaatBicimle(inq.creation, { dateStyle: "short", timeStyle: "short" })}</span>
             <span class="text-gray-300 max-sm:hidden">|</span>
             <span>ID: ${escapeHtml(inq.name)}</span>
           </div>
@@ -212,7 +213,7 @@ function renderRfqList(rfqs: RFQItem[]): string {
       <div class="rfq-row sm:grid sm:grid-cols-[1fr_1fr_auto] sm:items-center px-4 sm:px-5 py-3 sm:py-4 border-b border-gray-50 hover:bg-gray-50/60 transition-colors cursor-pointer" data-rfq-id="${escapeHtml(rfq.name)}">
         <div>
           <div class="flex items-center gap-2 text-xs text-gray-400 flex-wrap">
-            <span>${new Date(rfq.creation).toLocaleDateString("tr-TR")}</span>
+            <span>${tarihBicimle(rfq.creation)}</span>
             <span class="text-gray-300">|</span>
             <span>ID: ${escapeHtml(rfq.name)}</span>
           </div>
@@ -287,7 +288,7 @@ function renderSellerRfqList(rfqs: SellerRFQItem[]): string {
       <div class="seller-rfq-row sm:grid sm:grid-cols-[1fr_auto_auto] sm:items-center px-4 sm:px-5 py-3 sm:py-4 border-b border-gray-50 hover:bg-gray-50/60 transition-colors cursor-pointer" data-rfq-id="${escapeHtml(rfq.name)}">
         <div>
           <div class="flex items-center gap-2 text-xs text-gray-400 flex-wrap">
-            <span>${new Date(rfq.creation).toLocaleDateString("tr-TR")}</span>
+            <span>${tarihBicimle(rfq.creation)}</span>
             <span class="text-gray-300">|</span>
             <span>ID: ${escapeHtml(rfq.name)}</span>
             ${rfq.category ? `<span class="text-gray-300">|</span><span class="text-amber-600">${escapeHtml(rfq.category)}</span>` : ""}
@@ -347,7 +348,7 @@ function renderMyQuotesList(quotes: MyQuoteItem[]): string {
       <div class="my-quote-row sm:grid sm:grid-cols-[1fr_120px_120px] gap-4 sm:items-center px-4 sm:px-5 py-3 sm:py-4 border-b border-gray-50 hover:bg-gray-50/60 transition-colors" data-quote-id="${escapeHtml(q.name)}">
         <div>
           <div class="flex items-center gap-2 text-xs text-gray-400 flex-wrap">
-            <span>${new Date(q.creation).toLocaleDateString("tr-TR")}</span>
+            <span>${tarihBicimle(q.creation)}</span>
             <span class="text-gray-300">|</span>
             <span>ID: ${escapeHtml(q.rfq)}</span>
           </div>
@@ -482,7 +483,7 @@ function showQuoteSubmitModal(rfq: SellerRFQItem, onSuccess: () => void): void {
   // oranı korunur. Kur cache localStorage'da — anında yanıt verir.
   const currencySelect = document.getElementById("quote-currency") as HTMLSelectElement;
   const rateHint = document.getElementById("quote-rate-hint") as HTMLParagraphElement;
-  const trRateFmt = new Intl.NumberFormat("tr-TR", {
+  const trRateFmt = new Intl.NumberFormat(aktifSayiYereli(), {
     minimumFractionDigits: 2,
     maximumFractionDigits: 4,
   });
@@ -689,7 +690,7 @@ function renderDetailPanel(inq: Inquiry): string {
         </div>
         <div class="flex items-center justify-between text-xs text-gray-400 mb-4 pb-4 border-b border-gray-100">
           <span>ID: ${escapeHtml(inq.name)}</span>
-          <span>${new Date(inq.creation).toLocaleString("tr-TR")}</span>
+          <span>${tarihSaatBicimle(inq.creation)}</span>
         </div>
         <p class="text-sm text-gray-700 leading-relaxed">${escapeHtml(inq.message)}</p>
       </div>

@@ -53,6 +53,7 @@ function ticketDropzoneTexts(): DropzoneTexts {
 }
 import { createLead } from "../services/leadService";
 import { getLucideIcon } from "../components/icons/lucideIcons";
+import { tarihBicimle, tarihSaatBicimle } from "../utils/numberLocale";
 
 // Yardım merkezi / SSS kategori id → lucide ikon adı eşlemesi.
 // helpCenter (kategori grid), faqPage (sidebar+chip+kart) ve faqDetail (breadcrumb ikon
@@ -1134,7 +1135,7 @@ const UI_TO_BACKEND_STATUS: Record<string, string> = {
 function formatTicketDate(s: string): string {
   if (!s) return "";
   try {
-    return new Date(s).toLocaleDateString("tr-TR", {
+    return tarihBicimle(s, {
       day: "2-digit",
       month: "2-digit",
       year: "numeric",
@@ -1192,7 +1193,7 @@ function _priorityChipDirectCls(p: string): string {
 function _fmtDT(s: string): string {
   if (!s) return "";
   try {
-    return new Date(s).toLocaleString("tr-TR", {
+    return tarihSaatBicimle(s, {
       day: "2-digit",
       month: "2-digit",
       year: "numeric",

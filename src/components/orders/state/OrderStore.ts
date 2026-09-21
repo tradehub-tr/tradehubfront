@@ -7,6 +7,7 @@
 import type { Order, OrderStatus, OrderStatusColor } from "../../../types/order";
 import { t } from "../../../i18n";
 import { callMethod } from "../../../utils/api";
+import { tarihBicimle } from "../../../utils/numberLocale";
 
 // Eski mock verinin tüm kalıntılarını temizle
 localStorage.removeItem("tradehub_orders");
@@ -60,7 +61,7 @@ interface ApiOrder {
 
 function apiOrderToOrder(apiOrder: ApiOrder): Order {
   const dateStr = apiOrder.order_date
-    ? new Date(apiOrder.order_date).toLocaleDateString("en-US", {
+    ? tarihBicimle(apiOrder.order_date, {
         month: "short",
         day: "2-digit",
         year: "numeric",

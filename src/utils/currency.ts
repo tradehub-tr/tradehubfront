@@ -12,6 +12,7 @@ import {
   getSelectedCurrency as getServiceCurrencyCode,
   setSelectedCurrency as setServiceCurrency,
 } from "../services/currencyService";
+import { paraBicimleKisa } from "./numberLocale";
 
 export interface CurrencyInfo {
   code: string;
@@ -89,17 +90,18 @@ export function formatStartingPrice(price: string): string {
     const b = parseNum(rangeMatch[2]);
     if (!isNaN(a) && !isNaN(b)) {
       const startingPrice = Math.max(a, b);
-      // Binlik ayraçlı biçim (de-DE: `1.234,56` TRY ile uyumlu; en-US: `1,234.56`).
-      // Tam sayı sonuçta `,00`/`.00` kuyruğu atılır.
-      if (code === "TRY") {
-        const formatted = startingPrice
-          .toLocaleString("de-DE", { minimumFractionDigits: 2, maximumFractionDigits: 2 })
-          .replace(/,00$/, "");
-        return `${symbol}${formatted}`;
-      }
-      return `${symbol}${startingPrice
-        .toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })
-        .replace(/\.00$/, "")}`;
+      // ÇIKTI biçimi ARAYÜZ diline bağlı (kullanıcı kararı D1, 21 Eyl 2026).
+      //
+      // Eskiden para birimi koduna bakılıyordu ve TL için ALMANCA yerel
+      // (`de-DE`) kullanılıyordu — çünkü Almanca da `1.234,56` yazıyor. Kod
+      // "Almanca" diyor ama "TL biçimi" kastediyordu; okuyan yanılıyordu.
+      // Ayrıca Rusça arayüzde ürün fiyatı Türkçe biçimde çıkıyor, aynı
+      // ekrandaki lojistik tutarı ise Rusça biçimde çıkıyordu.
+      //
+      // GİRDİ tarafı bilinçli olarak `code`a bağlı kaldı (yukarıdaki
+      // `parseNum`): gelen dizenin biçimini backend'in para birimi belirliyor,
+      // ziyaretçinin dili değil.
+      return `${symbol}${paraBicimleKisa(startingPrice)}`;
     }
   }
   return localizePriceString(price);

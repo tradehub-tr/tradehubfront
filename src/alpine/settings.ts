@@ -3,6 +3,7 @@ import { t } from "../i18n";
 import { isPasswordValid } from "../utils/password-validation";
 import { getSessionUser, logout } from "../utils/auth";
 import { api, OtpVerifyError, RateLimitError } from "../utils/api";
+import { tarihBicimle } from "../utils/numberLocale";
 
 Alpine.data("settingsLayout", () => ({
   currentSection: "",
@@ -715,7 +716,7 @@ Alpine.data("settingsConsentManagement", () => ({
 
   formatDate(dateStr: string): string {
     try {
-      return new Date(dateStr).toLocaleDateString("tr-TR", {
+      return tarihBicimle(dateStr, {
         day: "2-digit",
         month: "2-digit",
         year: "numeric",

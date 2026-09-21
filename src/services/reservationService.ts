@@ -8,6 +8,7 @@
  */
 
 import { callMethod } from "../utils/api";
+import { tarihBicimle } from "../utils/numberLocale";
 
 export interface AvailableSlot {
   id: string;
@@ -79,12 +80,12 @@ export async function cancelReservation(reservationId: string): Promise<Reservat
   });
 }
 
-/** Tarih formatla — tr-TR locale, "14 May 17:24" gibi. */
+/** Tarih formatla — aktif arayüz dilinin yereli, "14 May 17:24" gibi. */
 export function formatSlot(start: string, end: string): string {
   try {
     const s = new Date(start.replace(" ", "T"));
     const e = new Date(end.replace(" ", "T"));
-    const day = s.toLocaleDateString("tr-TR", { day: "numeric", month: "short" });
+    const day = tarihBicimle(s, { day: "numeric", month: "short" });
     const sh = `${String(s.getHours()).padStart(2, "0")}:${String(s.getMinutes()).padStart(2, "0")}`;
     const eh = `${String(e.getHours()).padStart(2, "0")}:${String(e.getMinutes()).padStart(2, "0")}`;
     return `${day} · ${sh} – ${eh}`;

@@ -14,6 +14,7 @@ import type { ProductListingCard } from "../../types/productListing";
 import { ResponsiveImage } from "../media/ResponsiveImage";
 import { getMediaImageManifest } from "../../lib/media/manifest";
 import { mediaSizesFor } from "../../lib/media/sizes";
+import { sayiBicimle } from "../../utils/numberLocale";
 
 export interface ListingCardOptions {
   /** %N indirim rozeti + üstü çizili originalPrice gösterir. Varsayılan: false. */
@@ -469,7 +470,7 @@ export function renderListingCard(card: ProductListingCard, opts: ListingCardOpt
   const denseMetaParts: string[] = [];
   if (card.rating) {
     const reviewBit = card.reviewCount
-      ? `<span class="text-gray-400">(${card.reviewCount.toLocaleString()})</span>`
+      ? `<span class="text-gray-400">(${sayiBicimle(card.reviewCount)})</span>`
       : "";
     denseMetaParts.push(
       `<span class="inline-flex items-center gap-0.5">${starIcon()}<span class="font-medium text-gray-700">${card.rating}</span>${reviewBit}</span>`

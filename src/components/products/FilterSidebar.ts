@@ -36,6 +36,7 @@ import type {
   SearchableCheckboxFilterSection,
   FilterOption,
 } from "../../types/productListing";
+import { sayiBicimle } from "../../utils/numberLocale";
 
 let initialFacetKey = "";
 let initialFacetPromise: Promise<FilterFacets> | null = null;
@@ -215,7 +216,7 @@ function renderCheckbox(option: FilterOption, sectionId: string, idPrefix = ""):
         <span
           class="text-[11px] ms-auto"
           style="color: var(--filter-count-color, #9ca3af);"
-        >(${option.count.toLocaleString()})</span>
+        >(${sayiBicimle(option.count)})</span>
       `
           : ""
       }
@@ -996,7 +997,7 @@ export function updateFacetCounts(
       // Label'ın son span'ı count taşıyor (renderCheckbox: <span class="...ms-auto">({{count}})</span>)
       const countSpan = label?.querySelector<HTMLSpanElement>("span.ms-auto");
       if (countSpan) {
-        countSpan.textContent = `(${newCount.toLocaleString()})`;
+        countSpan.textContent = `(${sayiBicimle(newCount)})`;
       }
     });
   // Kategori ağacı sayımları: ağaç yapısı/açık-kapalı durumu korunur, sadece (xx) güncellenir.
@@ -1017,7 +1018,7 @@ export function updateFacetCounts(
   collect(catNodes);
   document.querySelectorAll<HTMLElement>("[data-cat-count]").forEach((span) => {
     const id = span.dataset.catCount || "";
-    span.textContent = `(${(catCounts.get(id) ?? 0).toLocaleString()})`;
+    span.textContent = `(${sayiBicimle(catCounts.get(id) ?? 0)})`;
   });
   // Fiyat histogramı + slider da facet ile birlikte güncellenir (kategorik filtre değişince
   // fiyat dağılımı değişir).

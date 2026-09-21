@@ -24,7 +24,7 @@ function formatCurrency(amount: number | string | null | undefined, currencyCode
   if (!isFinite(num)) return '-';
   const code = (currencyCode || 'TRY').toUpperCase();
   try {
-    return new Intl.NumberFormat('tr-TR', { style: 'currency', currency: code }).format(num);
+    return new Intl.NumberFormat(aktifSayiYereli(), { style: 'currency', currency: code }).format(num);
   } catch {
     return `${code} ${num}`;
   }
@@ -36,6 +36,7 @@ import {
   renderAttachmentModal,
   setupAttachmentInteractions,
 } from '../components/rfq/attachments';
+import { aktifSayiYereli, tarihSaatBicimle } from "../utils/numberLocale";
 
 /** Bir tedarikçi tarafından gönderilen teklif kaydı (RFQ detail API response item) */
 interface Quote {
@@ -105,7 +106,7 @@ async function loadQuotes() {
           <div>
             <h1 class="text-lg font-bold text-gray-800">${escapeHtml(rfq.product_name)}</h1>
             <p class="text-sm text-gray-500 mt-1">${t('rfq.quantityRequired')}: ${escapeHtml(rfq.quantity)} ${escapeHtml(rfq.unit)}</p>
-            ${rfq.creation ? `<p class="text-xs text-gray-400 mt-0.5">${t('rfq.created')}: ${new Date(rfq.creation).toLocaleString('tr-TR')}</p>` : ''}
+            ${rfq.creation ? `<p class="text-xs text-gray-400 mt-0.5">${t('rfq.created')}: ${tarihSaatBicimle(rfq.creation)}</p>` : ''}
             ${rfq.description ? `<details class="mt-2"><summary class="text-sm text-gray-500 cursor-pointer">Show more</summary><p class="mt-1 text-sm text-gray-600">${escapeHtml(rfq.description)}</p></details>` : ''}
           </div>
         </div>

@@ -22,7 +22,48 @@ const PASS = process.env.SMOKE_PASS ?? process.env.PANEL_PASS ?? process.env.SEL
 
 test.use({ baseURL: BASE });
 
-type PageDef = { name: string; path: string; xdata: string; gated: boolean; seedCart?: boolean };
+type PageDef = {
+  name: string;
+  path: string;
+  xdata: string;
+  gated: boolean;
+  seedCart?: boolean;
+  /** Yol çalışma anında çözülüyorsa (sabit fixture kimliği yerine) */
+  yolCoz?: () => Promise<string>;
+};
+
+/**
+ * Ürün detay sayfası bir ürün kimliği ister; sabit kimlik BAYATLIYOR.
+ *
+ * Ölçüldü (21 Eyl 2026): test `LST-00082`ye çakılıydı ve o kayıt dev DB'den
+ * düşmüştü (toplam 4 listing var, en büyüğü `LST-00032`). Sayfa ürünü
+ * bulamayınca galeriyi hiç çizmiyor ve test `x-data="imageGallery" kökü
+ * DOM'da yok` diyordu — yani ALPINE WIRING'İ suçluyordu. Oysa wiring sağlam,
+ * eksik olan veriydi. Yanlış yeri gösteren bir kırık, kırık olmamasından
+ * daha pahalı: saatlerce Alpine'da hata arandı.
+ *
+ * Artık kimlik canlı uçtan alınıyor; DB'de hiç aktif ürün yoksa test bunu
+ * AÇIKÇA söylüyor.
+ */
+async function aktifUrunYolu(): Promise<string> {
+  const api = await request.newContext({ baseURL: BASE });
+  const res = await api.get("/api/method/tradehub_core.api.listing.get_listings?limit=1");
+  if (!res.ok()) {
+    throw new Error(
+      `product-detail: ürün listesi ucu ${res.status()} döndü — docker stack ayakta mı? (${BASE})`
+    );
+  }
+  const govde = (await res.json()) as { message?: { data?: Array<{ id?: string }> } };
+  const id = govde.message?.data?.[0]?.id;
+  await api.dispose();
+  if (!id) {
+    throw new Error(
+      "product-detail: dev veritabanında hiç aktif ürün yok — seed gerekli " +
+        "(./seed-lojistik-e2e.sh ya da elle bir Listing). Bu bir Alpine kusuru DEĞİL."
+    );
+  }
+  return `/pages/product-detail.html?id=${encodeURIComponent(id)}`;
+}
 
 // Boş sepette CartPage x-data="cartPage" render ETMEZ (empty-state). cartPage'i
 // doğrulamak için misafir localStorage sepetine 1 ürün seed edilir.
@@ -182,12 +223,14 @@ const PAGES: PageDef[] = [
     xdata: "loginModal",
     gated: false,
   },
-  // product-detail veri gerektirir (?id=<listing>); LST-00082 dev DB'de mevcut
+  // product-detail veri gerektirir (?id=<listing>) — kimlik çalışma anında
+  // canlı uçtan çözülür, sabit fixture kimliği bayatlıyor (bkz. aktifUrunYolu).
   {
     name: "product-detail",
-    path: "/pages/product-detail.html?id=LST-00082",
+    path: "/pages/product-detail.html",
     xdata: "imageGallery",
     gated: false,
+    yolCoz: aktifUrunYolu,
   },
 ];
 
@@ -233,7 +276,8 @@ for (const p of PAGES) {
       );
     }
 
-    await page.goto(p.path, { waitUntil: "networkidle" });
+    const yol = p.yolCoz ? await p.yolCoz() : p.path;
+    await page.goto(yol, { waitUntil: "networkidle" });
     // Alpine start + requireAuth redirect + async render (cart) için bekleme
     await page.waitForTimeout(p.seedCart ? 3500 : 1200);
 

@@ -6,6 +6,7 @@ import {
   exportTransactions,
 } from "../components/payment/state/PaymentStore";
 import type { PaymentTransaction } from "../types/payment";
+import { paraBicimle, tarihBicimle } from "../utils/numberLocale";
 
 /** İşlem tabı tipleri — list filtreleri için */
 type TransactionTab = "payment" | "refund";
@@ -133,7 +134,7 @@ Alpine.data("paymentManagement", () => ({
 
   formatDate(dateStr: string) {
     if (!dateStr) return "—";
-    return new Date(dateStr).toLocaleDateString("tr-TR", {
+    return tarihBicimle(dateStr, {
       day: "2-digit",
       month: "2-digit",
       year: "numeric",
@@ -143,7 +144,7 @@ Alpine.data("paymentManagement", () => ({
   },
 
   formatAmount(amount: number, currency: string) {
-    return `${currency || "TRY"} ${(amount || 0).toLocaleString("tr-TR", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+    return `${currency || "TRY"} ${paraBicimle(amount || 0)}`;
   },
 }));
 
@@ -244,7 +245,7 @@ Alpine.data("transactionList", () => ({
 
   formatDate(dateStr: string) {
     if (!dateStr) return "—";
-    return new Date(dateStr).toLocaleDateString("tr-TR", {
+    return tarihBicimle(dateStr, {
       day: "2-digit",
       month: "2-digit",
       year: "numeric",
@@ -254,6 +255,6 @@ Alpine.data("transactionList", () => ({
   },
 
   formatAmount(amount: number, currency: string) {
-    return `${currency || "TRY"} ${(amount || 0).toLocaleString("tr-TR", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+    return `${currency || "TRY"} ${paraBicimle(amount || 0)}`;
   },
 }));

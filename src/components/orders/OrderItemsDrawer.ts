@@ -123,7 +123,7 @@ export function OrderItemsDrawer(): string {
           </div>
           <div class="flex justify-between items-center text-xs text-gray-600 mb-2">
             <span>${t("orders.vat")}</span>
-            <span x-text="currentOrder ? currentOrder.currency + ' ' + totals.vat.toLocaleString('tr-TR',{minimumFractionDigits:2,maximumFractionDigits:2}) : ''"></span>
+            <span x-text="currentOrder ? currentOrder.currency + ' ' + window.__thBicim.para(totals.vat) : ''"></span>
           </div>
           <div class="flex justify-between items-baseline pt-2 border-t border-dashed border-gray-200">
             <span class="text-xs font-semibold text-gray-700">${t("orders.grandTotal")}</span>

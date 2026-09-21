@@ -47,6 +47,30 @@ jobs:
       - name: Birim testleri (vitest)
         run: npx vitest run
 
+  # Derleme kapısı (21 Eyl 2026, kullanıcı kararı D3).
+  #
+  # NEDEN SADECE BU KAPI: beş denetim script'i ve pre-commit bilinçli olarak
+  # EKLENMEDİ — birden çok geliştirici çalıştığı için o kapılar sık kırmızıya
+  # düşüyor ve iş akışını kesiyor. Derleme kapısı farklı: geliştiriciye ya da
+  # kod stiline bağlı değil, ya derlenir ya derlenmez.
+  #
+  # NE YAKALAR: bugüne kadar kırık bir build ancak ALPHA deploy'unda
+  # görülüyordu, yani `main`e girdikten SONRA. Vite'ın girdi listesi, statik
+  # sayfa eşlemeleri ve PWA precache üretimi yalnız build sırasında koşuyor;
+  # birim testleri ve lint bunların hiçbirine bakmıyor.
+  derleme:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+      - run: npm ci
+      - name: Üretim derlemesi (npm run build)
+        run: npm run build
+
   e2e:
     runs-on: ubuntu-latest
     timeout-minutes: 20

@@ -781,14 +781,27 @@ export function closeSheet(sheetId: string): void {
 function initSheetTriggers(options: { signal?: AbortSignal }): void {
   // Open triggers — all driven by data-pdm-sheet attribute
   document.querySelectorAll<HTMLButtonElement>("[data-pdm-sheet]").forEach((trigger) => {
-    trigger.addEventListener("click", () => {
-      const target = trigger.dataset.pdmSheet!;
-      if (target === "shipping-modal") {
-        openShippingModal();
-      } else {
-        openSheet(target);
-      }
-    });
+    trigger.addEventListener(
+      "click",
+      () => {
+        const target = trigger.dataset.pdmSheet!;
+        if (target === "shipping-modal") {
+          openShippingModal();
+        } else {
+          openSheet(target);
+        }
+      },
+      options
+    );
+    // Düğmenin BAĞLANDIĞINI dışarıdan görülebilir yap.
+    //
+    // Ölçüldü (21 Eyl 2026): kırılma noktası değişiminde mobil düzen yeniden
+    // mount oluyor; düğme DOM'da ve `disabled` değil, ama bu init henüz
+    // koşmamışsa tıklama HİÇBİR ŞEY yapmıyor. Test `toBeEnabled()` görüp
+    // tıklıyor, sayfa sessizce yutuyor ve iddia "sheet açılmadı" diye
+    // düşüyordu — yük altında koşan turların 1-2 kararsız spec'inden biri.
+    // `disabled` olmamak "hazır" demek değil; hazırlık ölçülebilir olmalı.
+    trigger.dataset.pdmSheetWired = "1";
   });
 
   // Close triggers — all driven by data-pdm-close attribute

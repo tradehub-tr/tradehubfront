@@ -19,7 +19,12 @@ vi.mock("@capacitor/core", () => ({
 
 // src/i18n — side-effect zinciri (nativeHttp, deepLinks, i18next init) test
 // ortamında koşmasın; t anahtarı aynen döndürür (interpolasyon önemsiz).
-vi.mock("../../i18n", () => ({ t: (key: string) => key }));
+vi.mock("../../i18n", () => ({
+  // `numberLocale` i18n'den `getCurrentLang` okuyor; kısmi mock onu da
+  // vermeli, yoksa biçimlendirme çağrısı "export tanımlı değil" ile patlar.
+  t: (key: string) => key,
+  getCurrentLang: () => "tr",
+}));
 
 import { SellPageLayout } from "./SellPageLayout";
 import { PricingTable } from "../shared/PricingTable";

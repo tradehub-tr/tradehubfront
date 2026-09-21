@@ -23,6 +23,7 @@ import {
   writeLangCookie,
   type SupportedLang,
 } from "./languageChoice";
+import { bicimleyicileriYayinla } from "../utils/numberLocale";
 
 export {
   COUNTRY_LANG_MAP,
@@ -149,6 +150,9 @@ i18next.use(LanguageDetector).init({
   const initialLang = getCurrentLang();
   document.documentElement.lang = initialLang;
   applyDocumentDirection(initialLang);
+  // Alpine ifadeleri modül import'u göremiyor; biçimlendiriciler global'e
+  // konuyor (bkz. `numberLocale.bicimleyicileriYayinla`).
+  bicimleyicileriYayinla();
   // Statik HTML'deki <title> Türkçe sabit; ilk boyamada aktif dile çevir.
   // (Dil değişiminde updatePageTranslations zaten <title> textContent'ini günceller.)
   const titleEl = document.querySelector("title[data-i18n]");
