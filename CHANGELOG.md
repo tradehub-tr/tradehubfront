@@ -1,3 +1,13 @@
+## [v2.7.0-alpha.2] - 2026-09-22 ALPHA
+
+Bu surum alpha.istoc.com'da gelistirme asamasindadir.
+
+### Duzeltildi
+- fix(header): mega menü boşluk ve scroll hissini düzelt (@ahmeetseker)
+  - Az yapraklı kategori sütunlarında sabit min-height kaldırıldı; sütunlar gereksiz boşluk bırakmadan kendi içeriği kadar yükseliyor
+  - Sidebar ve içerik scroll alanlarına alt blur eklendi; sabit "Tüm Ürünler" satırı korunurken listenin devam ettiği daha net görünüyor
+
+---
 ## [v2.7.0-alpha.1] - 2026-09-21 ALPHA
 
 Bu surum alpha.istoc.com'da gelistirme asamasindadir.
