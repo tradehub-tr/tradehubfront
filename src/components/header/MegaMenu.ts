@@ -967,14 +967,30 @@ export function initMegaMenu(): Promise<void> {
      *  (1024: 3, 1280-1440: 4, 1600+: 5). Sabit sütun sayısı dar ekranda başlıkları kırıyordu; başlık
      *  yalnızca gerçekten sığmazsa ikinci satıra iner (line-clamp-2). `items-start`: grid'in varsayılan
      *  `stretch` davranışı az yapraklı sütunları komşu sütunun boyuna uzatıp altlarında boşluk
-     *  bırakıyordu — her sütun artık kendi içeriği kadar yüksek, üstten hizalı kalıyor. */
+     *  bırakıyordu — her sütun artık kendi içeriği kadar yüksek, üstten hizalı kalıyor.
+     *
+     *  Yaprağı (3. seviye) olmayan grup bu kategoride son seviyedir — "Parti Malzemeleri ve Süsleri"
+     *  gibi kategorilerde TÜMÜ bu durumda olabilir. Böyle bir grubu yine de ikonlu+kalın "başlık" sütunu
+     *  olarak basmak hem yanlış (aslında alt kategori) hem çirkin (her sütunda tek satır boş başlık) —
+     *  bu yüzden yaprağı olan gruplar ızgarada, yaprağı olmayanlar ise normal (bold olmayan) yaprak
+     *  linki gibi ayrı bir sarılan satırda gösterilir. */
     function renderSectorBody(cat: ApiCategory): string {
       const groups = cat.children ?? [];
       if (groups.length === 0) return "";
-      return `
-        <div class="grid grid-cols-[repeat(auto-fill,minmax(190px,1fr))] items-start gap-x-6 gap-y-6">
-          ${groups.map(renderGroupColumn).join("")}
-        </div>`;
+      const withLeaves = groups.filter((g) => (g.children?.length ?? 0) > 0);
+      const terminal = groups.filter((g) => (g.children?.length ?? 0) === 0);
+      const gridPart = withLeaves.length
+        ? `<div class="grid grid-cols-[repeat(auto-fill,minmax(190px,1fr))] items-start gap-x-6 gap-y-6">${withLeaves.map(renderGroupColumn).join("")}</div>`
+        : "";
+      const terminalPart = terminal.length
+        ? `<div class="flex flex-wrap gap-x-6 gap-y-3${withLeaves.length ? " mt-5" : ""}">${terminal
+            .map(
+              (g) =>
+                `<a href="/pages/products.html?cat=${encodeURIComponent(g.slug)}" class="${leafCls}">${escapeHtml(g.name)}</a>`
+            )
+            .join("")}</div>`
+        : "";
+      return gridPart + terminalPart;
     }
 
     sidebarUl.innerHTML = cats
