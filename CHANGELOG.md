@@ -1,3 +1,13 @@
+## [v2.7.0-alpha.3] - 2026-09-22 ALPHA
+
+Bu surum alpha.istoc.com'da gelistirme asamasindadir.
+
+### Duzeltildi
+- fix(header): terminal mega menü gruplarını yaprak linki göster (@ahmeetseker)
+  - Yaprağı olmayan 2. seviye kategoriler artık başlık sütunu yerine normal link olarak basılır
+  - Boş görünümlü tek satırlı sütunlar önlenerek terminal kategorilerin menüde daha doğru görünmesi sağlanır
+
+---
 ## [v2.7.0-alpha.2] - 2026-09-22 ALPHA
 
 Bu surum alpha.istoc.com'da gelistirme asamasindadir.
