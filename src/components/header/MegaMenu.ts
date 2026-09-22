@@ -25,8 +25,6 @@ import { escapeHtml } from "../../utils/sanitize";
 export const SIDEBAR_LIMIT = 12;
 /** Her grupta gösterilen en fazla yaprak satırı; fazlası "Tümünü Gör" ile. Masaüstü + mobil ortak. */
 export const COLUMN_ROWS = 4;
-/** Satır 20px (leading-5) + satır arası 14px (gap-3.5) → masaüstü sütun gövdesi min yüksekliği. */
-const COLUMN_BODY_MIN_H = COLUMN_ROWS * 20 + (COLUMN_ROWS - 1) * 14;
 
 /**
  * @deprecated Kullanmayın — categoryService.ts kullanın.
@@ -168,11 +166,15 @@ function renderCategoriesView(): string {
         <!-- Sidebar -->
         <!-- Kenar çubuğu: en fazla SIDEBAR_LIMIT sektör kayan liste, "Tüm Ürünler" dibe sabit -->
         <div class="flex w-full flex-col border-b border-gray-200 bg-gray-50 lg:w-72 lg:flex-shrink-0 lg:border-b-0 lg:border-e min-[1280px]:w-80 dark:border-gray-700 dark:bg-gray-900" style="max-height:min(560px, 60vh)" id="mega-sidebar">
-          <ul class="min-h-0 flex-1 overflow-y-auto overflow-x-hidden py-1" style="-webkit-overflow-scrolling:touch">
-            <li class="px-4 py-6 text-center" id="mega-sidebar-loading">
-              <svg class="w-5 h-5 animate-spin text-gray-300 mx-auto" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"></path></svg>
-            </li>
-          </ul>
+          <div class="relative min-h-0 flex-1">
+            <ul class="h-full overflow-y-auto overflow-x-hidden py-1" style="-webkit-overflow-scrolling:touch">
+              <li class="px-4 py-6 text-center" id="mega-sidebar-loading">
+                <svg class="w-5 h-5 animate-spin text-gray-300 mx-auto" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"></path></svg>
+              </li>
+            </ul>
+            <!-- Kaydırılan listenin "Tüm Ürünler" satırına değmeden bitiş kenarı: devamı var hissi için beyaz blur -->
+            <div class="pointer-events-none absolute inset-x-0 bottom-0 h-10 bg-linear-to-b from-transparent to-white dark:to-gray-900" aria-hidden="true"></div>
+          </div>
           <!-- Sabit alt satır: filtresiz tüm ürün listesi -->
           <a href="/pages/products.html" id="mega-sidebar-all" class="flex shrink-0 items-center gap-2 sm:gap-3 border-t border-gray-200 border-s-2 border-s-transparent px-3 sm:px-4 py-3 text-sm font-semibold text-primary-600 transition-colors hover:bg-white hover:text-primary-700 dark:border-gray-700 dark:hover:bg-gray-800/60">
             <svg class="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M4 4h6v6H4zM14 4h6v6h-6zM4 14h6v6H4zM14 14h6v6h-6z"/></svg>
@@ -181,7 +183,11 @@ function renderCategoriesView(): string {
           </a>
         </div>
         <!-- Content -->
-        <div class="flex-1 overflow-y-auto px-3 sm:px-4 lg:px-5 min-[1280px]:px-8 py-3 sm:py-4 lg:py-6" style="max-height:min(560px, 60vh);-webkit-overflow-scrolling:touch" id="mega-content">
+        <div class="relative min-h-0 flex-1" style="max-height:min(560px, 60vh)">
+          <div class="h-full overflow-y-auto px-3 sm:px-4 lg:px-5 min-[1280px]:px-8 py-3 sm:py-4 lg:py-6" style="-webkit-overflow-scrolling:touch" id="mega-content">
+          </div>
+          <!-- Panel scroll ile kesiliyor: alt kenarda beyaz blur, altta daha çok kategori olduğunu hissettirir -->
+          <div class="pointer-events-none absolute inset-x-0 bottom-0 h-14 bg-linear-to-b from-transparent to-white dark:to-gray-800" aria-hidden="true"></div>
         </div>
       </div>
     </div>
@@ -925,9 +931,10 @@ export function initMegaMenu(): Promise<void> {
 
     /**
      * Bir grubu (2. seviye) tek sütun olarak render eder:
-     * ikonlu kalın başlık + sabit COLUMN_ROWS yaprak satırı + 5. satır "Tümünü Gör" yuvası.
-     * Yuva yalnızca COLUMN_ROWS'tan fazla yaprak varsa dolar; aksi halde boş kalır ki
-     * komşu sütunlarla hiza bozulmasın. Yaprağı olmayan grupta satırlar boş kalır.
+     * ikonlu kalın başlık + en fazla COLUMN_ROWS yaprak satırı + gerekirse "Tümünü Gör".
+     * Sütun kendi içeriği kadar yüksek kalır (bkz. renderSectorBody'deki `items-start`) —
+     * az yapraklı bir grup, komşu sütundaki 4 yapraklı grubun boyuna zorlanıp altında
+     * boşluk bırakmasın diye eskiden burada sabit min-height ayrılıyordu; kaldırıldı.
      */
     function renderGroupColumn(group: ApiCategoryChild): string {
       const leaves = group.children ?? [];
@@ -940,29 +947,32 @@ export function initMegaMenu(): Promise<void> {
             `<a href="/pages/products.html?cat=${encodeURIComponent(leaf.slug)}" class="${leafCls}">${escapeHtml(leaf.name)}</a>`
         )
         .join("");
+      const rowsBlock = rows ? `<div class="flex flex-col gap-3.5">${rows}</div>` : "";
       const moreSlot =
         leaves.length > COLUMN_ROWS
           ? `<a href="${groupHref}" class="group/grp mt-0.5 inline-flex items-center gap-1 self-start whitespace-nowrap text-sm leading-5 font-medium text-primary-600 transition-colors hover:text-primary-700">${t("commonNav.viewAll")}${grpArrowSvg}</a>`
-          : `<span class="mt-0.5 h-5" aria-hidden="true"></span>`;
+          : "";
       return `
         <div class="flex min-w-0 flex-col gap-3.5">
           <a href="${groupHref}" class="group/grp mb-0.5 flex items-center gap-2.5 text-base leading-6 font-bold text-gray-900 transition-colors hover:text-primary-600 dark:text-white">
             <span class="inline-flex shrink-0 items-center justify-center text-gray-500 [&>svg]:w-5 [&>svg]:h-5 dark:text-gray-400">${icon}</span>
             <span class="min-w-0 line-clamp-2">${escapeHtml(group.name)}</span>
           </a>
-          <div class="flex flex-col gap-3.5" style="min-height:${COLUMN_BODY_MIN_H}px">${rows}</div>
+          ${rowsBlock}
           ${moreSlot}
         </div>`;
     }
 
     /** Sektör gövdesi: her sütun en az 190px, genişliğe sığdığı kadar sütun; fazlası alt satıra sarar
      *  (1024: 3, 1280-1440: 4, 1600+: 5). Sabit sütun sayısı dar ekranda başlıkları kırıyordu; başlık
-     *  yalnızca gerçekten sığmazsa ikinci satıra iner (line-clamp-2). */
+     *  yalnızca gerçekten sığmazsa ikinci satıra iner (line-clamp-2). `items-start`: grid'in varsayılan
+     *  `stretch` davranışı az yapraklı sütunları komşu sütunun boyuna uzatıp altlarında boşluk
+     *  bırakıyordu — her sütun artık kendi içeriği kadar yüksek, üstten hizalı kalıyor. */
     function renderSectorBody(cat: ApiCategory): string {
       const groups = cat.children ?? [];
       if (groups.length === 0) return "";
       return `
-        <div class="grid grid-cols-[repeat(auto-fill,minmax(190px,1fr))] gap-x-6 gap-y-6">
+        <div class="grid grid-cols-[repeat(auto-fill,minmax(190px,1fr))] items-start gap-x-6 gap-y-6">
           ${groups.map(renderGroupColumn).join("")}
         </div>`;
     }
