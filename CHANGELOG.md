@@ -1,3 +1,35 @@
+## [v2.7.0-rc.1] - 2026-09-25 RC
+
+Bu surum rc.istoc.com'da onay asamasindadir.
+
+### Eklendi
+- feat(categories): kategori sayfasını API hiyerarşisiyle yenile (@ahmeetseker)
+  - Statik kategori tiplerini kaldırıp sayfayı doğrudan API verisiyle render et
+  - Mega menüyle aynı grup ızgarasını kullanarak 2. ve 3. seviye kategorileri göster
+  - Masaüstü sticky quick-nav ve mobil çip şeridini aktif bölümle senkron tut
+  - İlk kategori bölümlerine hafif giriş animasyonu ekleyerek sayfa geçişini iyileştir
+
+### Duzeltildi
+- fix(i18n): para birimi ülke başlığı nginx kaynağına bağlandı (@aliiball)
+  - Dil ile para birimi aynı anda farklı ülke görüyordu: Türkiye IP'sinde dil TR, para birimi US ve USD. Para birimi IP'yi değil tarayıcı dilini takip ediyordu, yani Türkiye'deki İngilizce tarayıcılı kullanıcı arayüzü Türkçe fiyatları dolar görüyordu.
+  - Faz 1.4'te X-Country güvenlik için boşaltılmış ve kaynak belli olunca doldurulacak notu düşülmüştü; kaynak M1 ile belli oldu ama satır beş gün boş kaldı.
+  - Güvenlik kazanımı kayıp değil: proxy_set_header istemciden geleni ezer, değeri nginx üretir. Ölçüldü, istemci X-Country ya da CF-IPCountry uydurduğunda backend yine gerçek ülkeyi alıyor.
+  - ulke_kodu değil ulke_yayin kullanıldı: ikincisi bot muafiyetini taşıyor, arama motoruna ülke sızmıyor.
+  - Kusur check:nginx'te üç iddiaya çevrildi, üçü de karşı kanıtla sınandı.
+- fix(header): mega menü boşluk ve scroll hissini düzelt (@ahmeetseker)
+  - Az yapraklı kategori sütunlarında sabit min-height kaldırıldı; sütunlar gereksiz boşluk bırakmadan kendi içeriği kadar yükseliyor
+  - Sidebar ve içerik scroll alanlarına alt blur eklendi; sabit "Tüm Ürünler" satırı korunurken listenin devam ettiği daha net görünüyor
+- fix(header): terminal mega menü gruplarını yaprak linki göster (@ahmeetseker)
+  - Yaprağı olmayan 2. seviye kategoriler artık başlık sütunu yerine normal link olarak basılır
+  - Boş görünümlü tek satırlı sütunlar önlenerek terminal kategorilerin menüde daha doğru görünmesi sağlanır
+
+### Degistirildi
+- refactor(categories): kategori ızgarasını API hiyerarşisiyle birleştir (@ahmeetseker)
+  - Kategoriler sayfası ve mega menü aynı grup ızgarasını kullanıyor; görsel tutarlılık ve çift bakım yükünü azaltmak için ortak bileşen eklendi
+  - Statik kategori tipleri kaldırılıp sayfa doğrudan API kategorileriyle beslendi
+  - Mobil çip navigasyonu, aktif bölüm senkronizasyonu ve bölüm giriş animasyonu eklendi
+
+---
 ## [v2.7.0-alpha.4] - 2026-09-25 ALPHA
 
 Bu surum alpha.istoc.com'da gelistirme asamasindadir.
