@@ -1,74 +1,50 @@
 /**
- * CategoryGrid — Amazon-style category section with circular thumbnails.
- * Renders a section title, responsive grid of circular category images,
- * and a "Tümünü gör" (See all) link item.
+ * CategoryGrid — /pages/categories.html sayfasının ana içeriği.
+ * Her ana kategoriyi (1. seviye) ikonlu+kalın başlık + "Tümünü Gör" ile açar,
+ * altında CategoryGroupGrid (2. seviye gruplar ızgarası, 3. seviye yapraklarla)
+ * render eder — mega menü kategori paneliyle birebir aynı görsel dil ve aynı
+ * render fonksiyonu (workflow.md §1 refactor-before-write; bkz. ../shared/CategoryGroupGrid).
+ *
+ * Önceden bu dosya "Amazon tarzı" dairesel ikon ızgarasıydı ve 3. seviyeyi hiç
+ * göstermiyordu (`subcategories: []` her zaman boştu) — kaldırıldı.
+ *
+ * Bölüm girişi staggered "yukarı kayarak belirir" mikro-animasyonu alır
+ * (`.th-cat-rise`, style.css) — yalnız ilk ekrandaki birkaç bölüm için;
+ * gerisi animasyonsuz (fazla animasyon "delight" değil gürültü olur).
+ * `prefers-reduced-motion`: style.css'teki global `*` reset'i devreye girer.
  */
 
-import type { CategorySection as CategorySectionType } from "../../data/categories";
 import { t } from "../../i18n";
-import { escapeHtml, sanitizeUrl } from "../../utils/sanitize";
+import { escapeHtml } from "../../utils/sanitize";
+import { getCategoryIcon, getIconByName } from "../shared/categoryIcons";
+import { renderCategoryGroupsGrid } from "../shared/CategoryGroupGrid";
+import type { ApiCategory } from "../../services/categoryService";
 
-/** Render a single category item as circular thumbnail + label */
-function CategoryItem(cat: { name: string; href: string; image: string }): string {
-  const imageContent = cat.image
-    ? `<img src="${escapeHtml(sanitizeUrl(cat.image))}" alt="${escapeHtml(cat.name)}" width="400" height="400" decoding="async" class="w-full h-full object-cover" loading="lazy" />`
-    : `<span class="text-2xl sm:text-3xl select-none">${escapeHtml(cat.name.charAt(0))}</span>`;
-  return `
-    <a href="${escapeHtml(sanitizeUrl(cat.href))}" class="group flex flex-col items-center gap-2 text-center no-underline">
-      <div class="w-[68px] h-[68px] sm:w-24 sm:h-24 lg:w-28 lg:h-28 xl:w-32 xl:h-32 rounded-full bg-gray-100 overflow-hidden border-2 border-transparent group-hover:border-(--primary) group-hover:shadow-lg transition-[transform,border-color,box-shadow] duration-200 [@media(hover:hover)_and_(pointer:fine)]:group-hover:scale-105 motion-reduce:transform-none motion-reduce:transition-none flex items-center justify-center text-gray-400 font-bold">
-        ${imageContent}
-      </div>
-      <span class="text-xs sm:text-sm lg:text-sm xl:text-base font-medium text-gray-700 group-hover:text-(--primary) transition-colors duration-200 leading-tight max-w-[80px] sm:max-w-[100px] lg:max-w-[120px] xl:max-w-[140px] line-clamp-2">
-        ${escapeHtml(cat.name)}
-      </span>
-    </a>
-  `;
-}
+/** İlk kaç bölüme staggered giriş animasyonu uygulanır (style.css `.th-cat-rise:nth-of-type`). */
+const ANIMATED_SECTION_COUNT = 6;
 
-/** Render a "Tümünü gör" (See all) item with dashed border circle + grid icon */
-function SeeAllItem(sectionTitle: string, slug?: string): string {
-  const href = slug
-    ? `/pages/products.html?cat=${encodeURIComponent(slug)}`
-    : `/pages/products.html?q=${encodeURIComponent(sectionTitle)}`;
-  return `
-    <a href="${href}" class="group flex flex-col items-center gap-2 text-center no-underline">
-      <div class="w-[68px] h-[68px] sm:w-24 sm:h-24 lg:w-28 lg:h-28 xl:w-32 xl:h-32 rounded-full border-2 border-dashed border-gray-300 flex items-center justify-center group-hover:border-(--primary) group-hover:shadow-lg transition-[transform,border-color,box-shadow] duration-200 [@media(hover:hover)_and_(pointer:fine)]:group-hover:scale-105 motion-reduce:transform-none motion-reduce:transition-none bg-white">
-        <svg class="w-8 h-8 lg:w-10 lg:h-10 text-gray-400 group-hover:text-(--primary) transition-colors duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6A2.25 2.25 0 0 1 6 3.75h2.25A2.25 2.25 0 0 1 10.5 6v2.25a2.25 2.25 0 0 1-2.25 2.25H6a2.25 2.25 0 0 1-2.25-2.25V6ZM3.75 15.75A2.25 2.25 0 0 1 6 13.5h2.25a2.25 2.25 0 0 1 2.25 2.25V18a2.25 2.25 0 0 1-2.25 2.25H6A2.25 2.25 0 0 1 3.75 18v-2.25ZM13.5 6a2.25 2.25 0 0 1 2.25-2.25H18A2.25 2.25 0 0 1 20.25 6v2.25A2.25 2.25 0 0 1 18 10.5h-2.25a2.25 2.25 0 0 1-2.25-2.25V6ZM13.5 15.75a2.25 2.25 0 0 1 2.25-2.25H18a2.25 2.25 0 0 1 2.25 2.25V18A2.25 2.25 0 0 1 18 20.25h-2.25A2.25 2.25 0 0 1 13.5 18v-2.25Z" />
-        </svg>
-      </div>
-      <span class="text-sm font-medium text-gray-500 group-hover:text-(--primary) transition-colors duration-200 leading-tight">
-        ${t("categoryPage.seeAll")}
-      </span>
-    </a>
-  `;
-}
-
-/** Render a full category section: title + grid of circular thumbnails */
-export function CategorySection(
-  section: CategorySectionType,
-  isLast: boolean,
-  index: number
-): string {
-  const items = section.categories.map((cat) => CategoryItem(cat)).join("");
-  const seeAll = SeeAllItem(section.title, section.slug);
+function renderCategorySection(cat: ApiCategory, index: number, isLast: boolean): string {
+  const icon = cat.icon_class ? getCategoryIcon(cat.icon_class) : getIconByName(cat.name);
   const borderClass = isLast ? "" : "border-b border-gray-200";
-  const slugAttr = section.slug ? ` data-slug="${escapeHtml(section.slug)}"` : "";
+  const animClass = index < ANIMATED_SECTION_COUNT ? " th-cat-rise" : "";
 
   return `
-    <section id="cat-section-${index}"${slugAttr} class="py-6 lg:py-8 ${borderClass} scroll-mt-28">
-      <h2 class="text-base sm:text-xl lg:text-2xl font-bold text-gray-900 mb-3 sm:mb-5 lg:mb-6">${escapeHtml(section.title)}</h2>
-      <div class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-7 gap-x-2 sm:gap-x-4 lg:gap-x-6 xl:gap-x-8 gap-y-4 sm:gap-y-6 lg:gap-y-8 justify-items-center">
-        ${items}
-        ${seeAll}
+    <section id="cat-section-${index}" data-slug="${escapeHtml(cat.slug)}" class="py-7 lg:py-9 ${borderClass}${animClass} scroll-mt-28">
+      <div class="flex items-center gap-2.5 mb-5 lg:mb-6">
+        <span class="inline-flex shrink-0 items-center justify-center text-gray-400 [&>svg]:w-5 [&>svg]:h-5 lg:[&>svg]:w-6 lg:[&>svg]:h-6">${icon}</span>
+        <h2 class="text-lg sm:text-xl lg:text-2xl font-extrabold tracking-tight text-gray-900">${escapeHtml(cat.name)}</h2>
+        <span class="flex-1"></span>
+        <a href="/pages/products.html?cat=${encodeURIComponent(cat.slug)}" class="group/cat inline-flex shrink-0 items-center gap-1 text-sm font-semibold text-primary-600 transition-colors hover:text-primary-700 whitespace-nowrap">
+          ${t("commonNav.viewAll")}
+          <svg class="w-3.5 h-3.5 shrink-0 transition-transform group-hover/cat:translate-x-0.5 motion-reduce:transition-none motion-reduce:group-hover/cat:translate-x-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m9 5 7 7-7 7"/></svg>
+        </a>
       </div>
+      ${renderCategoryGroupsGrid(cat.children ?? [], "/pages/products.html")}
     </section>
   `;
 }
 
-/** Render the full categories page content (all sections) */
-export function renderCategoryPage(sections: CategorySectionType[]): string {
-  return sections
-    .map((section, i) => CategorySection(section, i === sections.length - 1, i))
-    .join("");
+/** Kategoriler sayfasının tüm bölümlerini render eder. */
+export function renderCategoryPage(cats: ApiCategory[]): string {
+  return cats.map((cat, i) => renderCategorySection(cat, i, i === cats.length - 1)).join("");
 }

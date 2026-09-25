@@ -27,34 +27,17 @@ import { startAlpine } from '../alpine'
 import { Breadcrumb } from '../components/shared/Breadcrumb'
 
 // Categories components
-import { renderCategoryPage, CategoryQuickNav, initCategoryQuickNav } from '../components/categories'
-
-// Category data (type only — no longer used for rendering)
-import type { CategorySection } from '../data/categories'
+import { renderCategoryPage, CategoryQuickNav, CategoryMobileChips, initCategoryQuickNav } from '../components/categories'
 
 // Utilities
 import { initAnimatedPlaceholder } from '../utils/animatedPlaceholder'
 
 // Category service (cached via queryFetch + IndexedDB)
-import { loadCategories, getCategoryPageSeo, type ApiCategory } from '../services/categoryService'
+import { loadCategories, getCategoryPageSeo } from '../services/categoryService'
 
 // SEO: backend'in (panelden yönetilen) seo payload'ını DOM head'ine uygula
 import { applyServerSeo } from '../seo/setPageMeta'
 import { getPublicPageSeo } from '../services/seoService'
-
-function mapApiToSections(cats: ApiCategory[]): CategorySection[] {
-  return cats.map(cat => ({
-    title: cat.name,
-    slug: cat.slug,
-    categories: cat.children.map(ch => ({
-      id: ch.id,
-      name: ch.name,
-      href: `/pages/products.html?cat=${ch.slug}`,
-      image: ch.image || '',
-      subcategories: [],
-    })),
-  }));
-}
 
 const appEl = document.querySelector<HTMLDivElement>('#app')!;
 appEl.innerHTML = `
@@ -73,10 +56,13 @@ appEl.innerHTML = `
         ${Breadcrumb([{ label: t('drawer.categories') }])}
 
         <!-- Page Header -->
-        <div class="mb-4">
-          <h1 class="text-lg sm:text-2xl font-bold text-gray-900" data-i18n="categoryPage.heading">${t('categoryPage.heading')}</h1>
-          <p class="text-xs sm:text-sm text-gray-500 mt-1" data-i18n="drawer.browseCategories">${t('drawer.browseCategories')}</p>
+        <div class="mb-5 lg:mb-6">
+          <h1 class="text-2xl sm:text-[28px] lg:text-[34px] font-extrabold tracking-tight text-gray-900" data-i18n="categoryPage.heading">${t('categoryPage.heading')}</h1>
+          <p class="text-xs sm:text-sm text-gray-500 mt-1.5" data-i18n="drawer.browseCategories">${t('drawer.browseCategories')}</p>
         </div>
+
+        <!-- Mobil/tablet hızlı erişim çip şeridi (lg üstünde sol panel devreye girer) -->
+        <div id="cat-mobile-chips-container"></div>
 
         <!-- Main layout: Filter Sidebar + Category Grid -->
         <div class="flex flex-col lg:flex-row gap-4 lg:gap-6">
@@ -172,16 +158,16 @@ loadCategories()
       return;
     }
 
-    const sections = mapApiToSections(apiCats);
-
     // Panelden girilen SEO meta'ları (BE-LD ile API'ye eklenecek `seo` alanı)
     // varsa uygula — canonical/OG/robots dahil (product-detail.ts:221 deseni).
     applyServerSeo(getCategoryPageSeo() ?? undefined);
 
     const sidebarEl = document.getElementById('cat-sidebar-container');
+    const mobileChipsEl = document.getElementById('cat-mobile-chips-container');
     const gridEl = document.getElementById('cat-grid-container');
-    if (sidebarEl) sidebarEl.innerHTML = CategoryQuickNav(sections);
-    if (gridEl) gridEl.innerHTML = renderCategoryPage(sections);
+    if (sidebarEl) sidebarEl.innerHTML = CategoryQuickNav(apiCats);
+    if (mobileChipsEl) mobileChipsEl.innerHTML = CategoryMobileChips(apiCats);
+    if (gridEl) gridEl.innerHTML = renderCategoryPage(apiCats);
 
     initCategoryQuickNav();
 
