@@ -12,9 +12,10 @@
 import { t } from "../../i18n";
 import { sayiBicimle } from "../../utils/numberLocale";
 import { loadCategories } from "../../services/categoryService";
-import type { ApiCategory, ApiCategoryChild } from "../../services/categoryService";
+import type { ApiCategory } from "../../services/categoryService";
 import { searchListings } from "../../services/listingService";
-import { getLucideIcon, getLucideIconByCategoryName } from "../icons/lucideIcons";
+import { getCategoryIcon, getIconByName } from "../shared/categoryIcons";
+import { renderCategoryGroupsGrid, GROUP_LEAF_ROWS } from "../shared/CategoryGroupGrid";
 import { escapeHtml } from "../../utils/sanitize";
 
 /* ════════════════════════════════════════════════════
@@ -23,8 +24,8 @@ import { escapeHtml } from "../../utils/sanitize";
 
 /** Kenar çubuğunda gösterilecek en fazla ana kategori; gerisi "Tüm Ürünler" ile. Masaüstü + mobil ortak. */
 export const SIDEBAR_LIMIT = 12;
-/** Her grupta gösterilen en fazla yaprak satırı; fazlası "Tümünü Gör" ile. Masaüstü + mobil ortak. */
-export const COLUMN_ROWS = 4;
+/** @deprecated Kullanmayın — ../shared/CategoryGroupGrid'ten GROUP_LEAF_ROWS kullanın. Geriye dönük uyumluluk için re-export. */
+export const COLUMN_ROWS = GROUP_LEAF_ROWS;
 
 /**
  * @deprecated Kullanmayın — categoryService.ts kullanın.
@@ -109,51 +110,10 @@ const protectionCards = [
    ICON MAP
    ════════════════════════════════════════════════════ */
 
-/**
- * Eski API koruma haritası: Bu projede başka yerlerden çağrılan
- * getCategoryIcon("textile"), getCategoryIcon("chip") gibi anahtarları
- * Lucide karşılıklarına bağlar. Yeni kategori için lucideIcons.ts'i kullan.
- */
-const LEGACY_TO_LUCIDE: Record<string, string> = {
-  star: "star",
-  shirt: "shirt",
-  chip: "cpu",
-  trophy: "trophy",
-  running: "footprints",
-  shoe: "footprints",
-  home: "home",
-  sparkles: "sparkles",
-  diamond: "gem",
-  bag: "backpack",
-  box: "boxes",
-  baby: "baby",
-  food: "utensils-crossed",
-  textile: "scissors",
-  chemistry: "flask-conical",
-  agriculture: "sprout",
-  health: "heart-pulse",
-  building: "building",
-  machinery: "cog",
-  tools: "wrench",
-  car: "car",
-  paper: "briefcase",
-  electrical: "cpu",
-  furniture: "sofa",
-  shopping: "shopping-bag",
-};
-
-export function getCategoryIcon(iconName: string): string {
-  const lucideName = LEGACY_TO_LUCIDE[iconName] ?? iconName;
-  return getLucideIcon(lucideName);
-}
-
-/**
- * Kategori adındaki anahtar kelimelere göre otomatik Lucide icon seçer.
- * Backend `icon_class` boş bırakıldığında devreye girer.
- */
-export function getIconByName(name: string): string {
-  return getLucideIconByCategoryName(name);
-}
+// getCategoryIcon/getIconByName artık ../shared/categoryIcons'ta (kategoriler
+// sayfasıyla paylaşılıyor) — burada re-export edilerek mevcut import yolları
+// ("../components/header", "../components/header/MegaMenu") bozulmadan kalır.
+export { getCategoryIcon, getIconByName };
 
 /* ════════════════════════════════════════════════════
    VIEW: Categories (sidebar + panels)
@@ -925,74 +885,6 @@ export function initMegaMenu(): Promise<void> {
 
     const cats = allCats.slice(0, SIDEBAR_LIMIT);
 
-    const grpArrowSvg = `<svg class="w-3.5 h-3.5 shrink-0 transition-transform group-hover/grp:translate-x-0.5 motion-reduce:transition-none motion-reduce:group-hover/grp:translate-x-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m9 5 7 7-7 7"/></svg>`;
-    const leafCls =
-      "block truncate text-sm leading-5 text-gray-700 transition-colors hover:text-primary-600 dark:text-gray-300 dark:hover:text-primary-400";
-
-    /**
-     * Bir grubu (2. seviye) tek sütun olarak render eder:
-     * ikonlu kalın başlık + en fazla COLUMN_ROWS yaprak satırı + gerekirse "Tümünü Gör".
-     * Sütun kendi içeriği kadar yüksek kalır (bkz. renderSectorBody'deki `items-start`) —
-     * az yapraklı bir grup, komşu sütundaki 4 yapraklı grubun boyuna zorlanıp altında
-     * boşluk bırakmasın diye eskiden burada sabit min-height ayrılıyordu; kaldırıldı.
-     */
-    function renderGroupColumn(group: ApiCategoryChild): string {
-      const leaves = group.children ?? [];
-      const groupHref = `/pages/products.html?cat=${encodeURIComponent(group.slug)}`;
-      const icon = getIconByName(group.name);
-      const rows = leaves
-        .slice(0, COLUMN_ROWS)
-        .map(
-          (leaf) =>
-            `<a href="/pages/products.html?cat=${encodeURIComponent(leaf.slug)}" class="${leafCls}">${escapeHtml(leaf.name)}</a>`
-        )
-        .join("");
-      const rowsBlock = rows ? `<div class="flex flex-col gap-3.5">${rows}</div>` : "";
-      const moreSlot =
-        leaves.length > COLUMN_ROWS
-          ? `<a href="${groupHref}" class="group/grp mt-0.5 inline-flex items-center gap-1 self-start whitespace-nowrap text-sm leading-5 font-medium text-primary-600 transition-colors hover:text-primary-700">${t("commonNav.viewAll")}${grpArrowSvg}</a>`
-          : "";
-      return `
-        <div class="flex min-w-0 flex-col gap-3.5">
-          <a href="${groupHref}" class="group/grp mb-0.5 flex items-center gap-2.5 text-base leading-6 font-bold text-gray-900 transition-colors hover:text-primary-600 dark:text-white">
-            <span class="inline-flex shrink-0 items-center justify-center text-gray-500 [&>svg]:w-5 [&>svg]:h-5 dark:text-gray-400">${icon}</span>
-            <span class="min-w-0 line-clamp-2">${escapeHtml(group.name)}</span>
-          </a>
-          ${rowsBlock}
-          ${moreSlot}
-        </div>`;
-    }
-
-    /** Sektör gövdesi: her sütun en az 190px, genişliğe sığdığı kadar sütun; fazlası alt satıra sarar
-     *  (1024: 3, 1280-1440: 4, 1600+: 5). Sabit sütun sayısı dar ekranda başlıkları kırıyordu; başlık
-     *  yalnızca gerçekten sığmazsa ikinci satıra iner (line-clamp-2). `items-start`: grid'in varsayılan
-     *  `stretch` davranışı az yapraklı sütunları komşu sütunun boyuna uzatıp altlarında boşluk
-     *  bırakıyordu — her sütun artık kendi içeriği kadar yüksek, üstten hizalı kalıyor.
-     *
-     *  Yaprağı (3. seviye) olmayan grup bu kategoride son seviyedir — "Parti Malzemeleri ve Süsleri"
-     *  gibi kategorilerde TÜMÜ bu durumda olabilir. Böyle bir grubu yine de ikonlu+kalın "başlık" sütunu
-     *  olarak basmak hem yanlış (aslında alt kategori) hem çirkin (her sütunda tek satır boş başlık) —
-     *  bu yüzden yaprağı olan gruplar ızgarada, yaprağı olmayanlar ise normal (bold olmayan) yaprak
-     *  linki gibi ayrı bir sarılan satırda gösterilir. */
-    function renderSectorBody(cat: ApiCategory): string {
-      const groups = cat.children ?? [];
-      if (groups.length === 0) return "";
-      const withLeaves = groups.filter((g) => (g.children?.length ?? 0) > 0);
-      const terminal = groups.filter((g) => (g.children?.length ?? 0) === 0);
-      const gridPart = withLeaves.length
-        ? `<div class="grid grid-cols-[repeat(auto-fill,minmax(190px,1fr))] items-start gap-x-6 gap-y-6">${withLeaves.map(renderGroupColumn).join("")}</div>`
-        : "";
-      const terminalPart = terminal.length
-        ? `<div class="flex flex-wrap gap-x-6 gap-y-3${withLeaves.length ? " mt-5" : ""}">${terminal
-            .map(
-              (g) =>
-                `<a href="/pages/products.html?cat=${encodeURIComponent(g.slug)}" class="${leafCls}">${escapeHtml(g.name)}</a>`
-            )
-            .join("")}</div>`
-        : "";
-      return gridPart + terminalPart;
-    }
-
     sidebarUl.innerHTML = cats
       .map(
         (cat, index) => `
@@ -1019,7 +911,7 @@ export function initMegaMenu(): Promise<void> {
             <h3 class="text-base font-bold text-gray-900 lg:text-lg dark:text-white">${escapeHtml(cat.name)}</h3>
             <a href="/pages/categories.html?cat=${encodeURIComponent(cat.slug)}" class="text-sm font-medium text-primary-600 transition-colors hover:text-primary-700">${t("commonNav.viewAll")}</a>
           </div>
-          ${renderSectorBody(cat)}
+          ${renderCategoryGroupsGrid(cat.children ?? [], "/pages/products.html")}
         </div>
       `
       )
