@@ -1,3 +1,21 @@
+## [v2.7.0-alpha.4] - 2026-09-25 ALPHA
+
+Bu surum alpha.istoc.com'da gelistirme asamasindadir.
+
+### Eklendi
+- feat(categories): kategori sayfasını API hiyerarşisiyle yenile (@ahmeetseker)
+  - Statik kategori tiplerini kaldırıp sayfayı doğrudan API verisiyle render et
+  - Mega menüyle aynı grup ızgarasını kullanarak 2. ve 3. seviye kategorileri göster
+  - Masaüstü sticky quick-nav ve mobil çip şeridini aktif bölümle senkron tut
+  - İlk kategori bölümlerine hafif giriş animasyonu ekleyerek sayfa geçişini iyileştir
+
+### Degistirildi
+- refactor(categories): kategori ızgarasını API hiyerarşisiyle birleştir (@ahmeetseker)
+  - Kategoriler sayfası ve mega menü aynı grup ızgarasını kullanıyor; görsel tutarlılık ve çift bakım yükünü azaltmak için ortak bileşen eklendi
+  - Statik kategori tipleri kaldırılıp sayfa doğrudan API kategorileriyle beslendi
+  - Mobil çip navigasyonu, aktif bölüm senkronizasyonu ve bölüm giriş animasyonu eklendi
+
+---
 ## [v2.7.0-alpha.3] - 2026-09-22 ALPHA
 
 Bu surum alpha.istoc.com'da gelistirme asamasindadir.
