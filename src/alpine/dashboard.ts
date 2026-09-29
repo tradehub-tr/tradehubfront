@@ -44,16 +44,16 @@ Alpine.data("buyerUserInfo", () => ({
         callMethod<{ success: boolean; counts: Record<string, number> }>(
           "tradehub_core.api.order.get_order_counts"
         ),
-        callMethod<{ coupons: { status: string }[] }>("tradehub_core.api.cart.get_buyer_coupons"),
+        // Uç yalnız bu alıcının kullanabileceği kupon SAYISINI döner — kod listesi
+        // herkese açıktı (MOGEM-685 Adım 4).
+        callMethod<{ available: number }>("tradehub_core.api.cart.get_buyer_coupons"),
       ]);
 
       if (orderResult.status === "fulfilled" && orderResult.value?.success) {
         this.statsMessages = orderResult.value.counts.all || 0;
       }
-      if (couponResult.status === "fulfilled" && couponResult.value?.coupons) {
-        this.statsCoupons = couponResult.value.coupons.filter(
-          (c) => c.status === "available"
-        ).length;
+      if (couponResult.status === "fulfilled") {
+        this.statsCoupons = couponResult.value?.available ?? 0;
       }
     } catch {
       /* ignore */
