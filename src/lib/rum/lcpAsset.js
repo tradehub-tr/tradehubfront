@@ -50,8 +50,16 @@ const WIDTH_IN_PATH = /[-_/]w(\d{2,4})(?=[-_./]|$)/i;
  * etiketlenmez; onların kökenini URL'den kanıtlamak mümkün değildir.
  */
 const ORIGINAL_FILE = /(?:^|\/)files\/(?!media\/)[^/?#]+\.(?:avif|webp|jpe?g|png|gif)$/i;
-const LEGACY_SHARD_RENDITION =
-  /(?:^|\/)files\/[0-9a-f]{2}\/[0-9a-f]{32}\.(?:avif|webp|jpe?g|png)$/i;
+/**
+ * T-5 (2026-09-28, seo-gorsel-adresi) — eski shard türevine EK olarak, okunur
+ * SEO adresini (`/files/<slug>-<8..32 hex>[__<türev>].<uzantı>`) da tanır.
+ * İkisi de "kökeni URL'den kanıtlanamaz" kümesine girer: `__<türev>` ekiyse
+ * zaten türev, ekli değilse de hash'li adın kendisi width bilgisi taşımıyor
+ * — `original` etiketini hak eden tek biçim, hiç hash/şard izi taşımayan
+ * düz dosya adıdır (bkz. üstteki `ORIGINAL_FILE` yorumundaki örnek).
+ */
+export const NON_ORIGINAL_RENDITION =
+  /(?:^|\/)files\/(?:[0-9a-f]{2}\/[0-9a-f]{32}|[a-z0-9-]+-[0-9a-f]{8,32})(?:__[a-z0-9]+)?\.(?:avif|webp|jpe?g|png)$/i;
 
 /** Uzantı — sorgu ve fragment atıldıktan sonraki son nokta. */
 const EXTENSION = /\.([a-z0-9]{2,8})$/i;
@@ -70,7 +78,7 @@ export function parseProfile(url) {
   const yol = ham.split("?")[0].split("#")[0];
   const p = yol.match(WIDTH_IN_PATH);
   if (p) return clampProfile(`w${p[1]}`);
-  if (ORIGINAL_FILE.test(yol) && !LEGACY_SHARD_RENDITION.test(yol)) return "original";
+  if (ORIGINAL_FILE.test(yol) && !NON_ORIGINAL_RENDITION.test(yol)) return "original";
   // Kanonik kaynak ya da türev izi yok; yanlış kohorta sokmaktansa bilinmiyor.
   return PROFILE_UNKNOWN;
 }
