@@ -1,3 +1,16 @@
+## [v2.8.0-alpha.3] - 2026-09-29 ALPHA
+
+Bu surum alpha.istoc.com'da gelistirme asamasindadir.
+
+### Duzeltildi
+- fix(guvenlik): ülke başlığı denetimine sunucu kaynaklı değer eklendi (@aliiball)
+  - 21 Eylül K4 ten beri api bloğu X-Country yi nginx in IP tablosundan gelen ulke_yayin ile eziyor; denetim yalnız boş değeri tanıdığı için birim testi o günden beri kırmızıydı.
+  - Denetim iki biçimi kabul ediyor: boş değer ya da ulke_yayin. İstemci başlığını geçiren her değer yine ihlal; bunu kanıtlayan test eklendi.
+- fix(ci): lojistik monkey turu backendsiz E2E koşusundan çıkarıldı (@aliiball)
+  - Monkey her 5xx yanıtı kusur sayıyor; CI runner da backend olmadığı için sayfanın açılış çağrıları 500 dönüyor ve 22 Eylül den beri 14 kırmızı üretiyordu. Backend le yeşil, backend siz kırmızı ölçüldü.
+  - Yerel e2e.sh onu zaten normal paketten ayırıyordu; test.yml ayırmıyordu. Tur yerelde e2e.sh --monkey ile koşmaya devam ediyor.
+
+---
 ## [v2.8.0-alpha.2] - 2026-09-29 ALPHA
 
 Bu surum alpha.istoc.com'da gelistirme asamasindadir.
