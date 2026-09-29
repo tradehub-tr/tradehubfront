@@ -1,0 +1,64 @@
+# Bağımlılık açıkları — UYARI kapısı (MOGEM-685 F-01, 28 Eyl 2026).
+#
+# NEDEN VAR: 11 Eyl güvenlik taramasında npm açıkları (kritik + yüksek) bulundu;
+# hiçbir iş akışında `npm audit` koşmuyordu, yeni açık girdiğinde kimse görmüyordu.
+#
+# NEDEN KIRMIZIYA DÜŞMEZ (kullanıcı kararı): kalan açıkların bir kısmı düzeltmesi
+# olmayan ya da gerekçeyle kabul edilmiş kalemler; bloklayıcı kapı her PR'ı
+# kırmızıya boyar ve yok sayılır. Bulgular PR'da uyarı + iş özeti olarak görünür.
+#
+# NE ZAMAN KOŞAR: yalnız bağımlılık dosyaları değişince + haftada bir (yeni
+# yayımlanan açıklar kod değişmeden de ortaya çıkar). `node_modules` GEREKMEZ —
+# npm audit kilit dosyasını okur (yerelde ölçüldü).
+name: Bagimlilik denetimi
+
+on:
+  pull_request:
+    paths:
+      - "package.json"
+      - "package-lock.json"
+      - ".github/workflows/audit.yml"
+  push:
+    branches: [main]
+    paths:
+      - "package.json"
+      - "package-lock.json"
+  schedule:
+    - cron: "0 6 * * 1"  # Pazartesi 09:00 (TR)
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  npm-audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: npm audit (uyarı — job kırmızıya düşmez)
+        shell: bash
+        run: |
+          set -u
+          npm audit --json > audit.json 2>/dev/null || true
+          python3 - <<'PY'
+          import json, os
+          j = json.load(open("audit.json"))
+          m = j.get("metadata", {}).get("vulnerabilities", {})
+          agir = sorted((n, v["severity"]) for n, v in j.get("vulnerabilities", {}).items() if v["severity"] in ("critical", "high"))
+          ozet = f"npm audit — kritik {m.get('critical', 0)} · yüksek {m.get('high', 0)} · orta {m.get('moderate', 0)} · düşük {m.get('low', 0)}"
+          print(ozet)
+          for n, s in agir:
+              print(f"::warning title=npm audit ({s})::{n}")
+          with open(os.environ.get("GITHUB_STEP_SUMMARY", "/dev/null"), "a") as f:
+              f.write(f"### {ozet}\n\n" + "".join(f"- `{n}` — {s}\n" for n, s in agir) + "\n_Uyarı kapısıdır; job kırmızıya düşmez (MOGEM-685 kararı)._\n")
+          PY

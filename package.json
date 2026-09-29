@@ -29,14 +29,13 @@
     "cap:open:android": "cap open android",
     "cap:run:ios": "npm run build && cap sync ios && cap run ios",
     "cap:run:android": "npm run build && cap sync android && cap run android",
-    "assets:generate": "capacitor-assets generate --iconBackgroundColor '#ffffff' --splashBackgroundColor '#ffffff'",
+    "assets:generate": "npx --yes @capacitor/assets@3.0.5 generate --iconBackgroundColor '#ffffff' --splashBackgroundColor '#ffffff'",
     "test:unit": "vitest run",
     "test:unit:watch": "vitest",
     "storybook": "storybook dev -p 6007 --no-open",
     "build-storybook": "storybook build"
   },
   "devDependencies": {
-    "@capacitor/assets": "^3.0.5",
     "@eslint/js": "^9.15.0",
     "@playwright/test": "^1.60.0",
     "@storybook/addon-docs": "^10.5.7",
