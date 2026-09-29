@@ -27,7 +27,7 @@ import { KUYRUK_SATIRI } from "./helpers/panelListe";
 import { lojistikMenuYollari } from "./helpers/panelMenu";
 
 const BASE = process.env.PANEL_BASE ?? "http://tradehub.localhost";
-const USER = process.env.SELLER_USER ?? "ali.bal@turksab.com";
+const USER = process.env.SELLER_USER ?? "e2e-satici@istoc.local";
 const PASS = process.env.SELLER_PASS ?? "";
 
 const QUEUE = "/panel/lojistik/paketleme";

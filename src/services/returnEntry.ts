@@ -20,7 +20,7 @@
  * edilmiş her sevkiyatta çiziliyor; pencere kapalıysa form kapalı kutuyu
  * gösteriyor — ölü düğme değil, doğru sebebi söyleyen bir yol.
  */
-import { isMockMode, mockShipmentList } from "./logisticsMock";
+import { isMockMode } from "./logisticsMock";
 import { listShipments } from "./shipmentService";
 
 /**
@@ -69,7 +69,14 @@ export function esle(sevkiyatlar: IadeSevkiyati[]): ReturnEntryMap {
  */
 export async function loadReturnEntries(): Promise<ReturnEntryMap> {
   try {
-    if (isMockMode()) return esle(mockShipmentList() as IadeSevkiyati[]);
+    if (__LOJISTIK_MOCK__ && isMockMode()) {
+      // Dinamik içe aktarma BİLEREK (F-03): bu servis sipariş/pano sayfalarına da giriyor.
+      // Statik içe aktarma `verbatimModuleSyntax` yüzünden dal silinse de kalıyor ve
+      // `shipment.json` PROD derlemesine sızıyordu (ölçüldü 29 Eyl). Dal ve içe aktarma
+      // birlikte derlemeden atılır.
+      const { mockShipmentList } = await import("./logisticsMock");
+      return esle(mockShipmentList() as IadeSevkiyati[]);
+    }
     const { items } = await listShipments();
     return esle(items as IadeSevkiyati[]);
   } catch {

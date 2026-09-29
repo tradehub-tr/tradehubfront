@@ -7,9 +7,17 @@ COPY . .
 ARG VITE_FRAPPE_BACKEND=https://rcistoc.cronbi.com
 ARG VITE_SELLER_PANEL_URL=/panel/
 ARG VITE_API_URL=/api
+# Lojistik örnek verisi (MOGEM-685 F-03) — VARSAYILAN AÇIK. Ürün kararı (29 Eyl 2026):
+# Alpha, Beta ve RC'de örnek veri olabilir, PROD'da HİÇ olmamalı. Bu Dockerfile yalnız
+# Alpha/Beta/RC'de kullanılıyor; PROD sunucudaki AYRI, birleşik Dockerfile ile ve bu
+# anahtar verilmeden derleniyor (Jenkins rc-to-prod #47 koşum çıktısında ölçüldü, 29 Eyl).
+# PROD bir gün bu Dockerfile'a geçirilirse satır `ARG VITE_LOGISTICS_MOCK=` yapılmalı —
+# yoksa örnek veri PROD'un JS dosyalarına girer (sunucu adı kilidi yine çalıştırmaz).
+ARG VITE_LOGISTICS_MOCK=1
 ENV VITE_FRAPPE_BACKEND=$VITE_FRAPPE_BACKEND
 ENV VITE_SELLER_PANEL_URL=$VITE_SELLER_PANEL_URL
 ENV VITE_API_URL=$VITE_API_URL
+ENV VITE_LOGISTICS_MOCK=$VITE_LOGISTICS_MOCK
 RUN npx vite build
 
 # ---- Serve Stage ----

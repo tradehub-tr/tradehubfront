@@ -27,13 +27,8 @@ import { statusBadge } from "../components/logistics/presentation";
 import { ReturnRequest } from "../components/logistics/ReturnRequest";
 import { t } from "../i18n";
 import { isMockMode, mockBannerHtml } from "../services/logisticsMock";
-import {
-  getReturnEligibility,
-  installReturnMock,
-  returnMockBarHtml,
-  type UygunlukYaniti,
-} from "../services/logisticsReturnMock";
-import { getShipment } from "../services/shipmentService";
+import type { UygunlukYaniti } from "../services/logisticsReturnMock";
+import { getReturnEligibility as gercekIadeUygunlugu, getShipment } from "../services/shipmentService";
 import { requireAuth } from "../utils/auth-guard";
 import { escapeHtml } from "../utils/sanitize";
 
@@ -41,12 +36,19 @@ import { mountDashboardShell, shellCard } from "./dashboardShell";
 
 await requireAuth();
 
-const mock = isMockMode();
+// Derleme anahtarı önce: PROD'da sabit false → mock dalları ve verisi derlenmez (F-03).
+const mock = __LOJISTIK_MOCK__ && isMockMode();
+// F-03: modül YALNIZ örnek veri modunda yüklenir. PROD'da `mock` derleme anında
+// false → satır `null`a iner, içe aktarma derlemeye hiç girmez (statik içe aktarma
+// `verbatimModuleSyntax` yüzünden kalıp mock parçasını PROD'a taşıyordu — ölçüldü 29 Eyl).
+const iadeMock = mock ? await import("../services/logisticsReturnMock") : null;
 const shipmentName = new URLSearchParams(window.location.search).get("shipment") ?? "";
 
 // Köprü sayfa çizilmeden ÖNCE kuruluyor: form `window.__thCreateReturn`
 // arıyor ve o bulunamazsa gönder düğmesi sessizce hiçbir şey yapmıyordu.
-installReturnMock();
+// Yalnız örnek veri modunda (F-03): gerçek modda köprü yok → form "henüz kullanıma
+// açılmadı" der (`logisticsBuyer.ts` `!fn` dalı); uç yazılmadığı için sonuç aynı.
+iadeMock?.installReturnMock();
 
 const root = mountDashboardShell({
   breadcrumb: [
@@ -100,7 +102,7 @@ function render(
 
   root.innerHTML = [
     mock ? mockBannerHtml() : "",
-    mock ? returnMockBarHtml() : "",
+    iadeMock ? iadeMock.returnMockBarHtml() : "",
     shellCard(`${header(name, status, carrier)}<div class="mt-4">${body}</div>`),
   ].join("");
   startAlpine();
@@ -119,7 +121,8 @@ if (!shipmentName) {
     // İki istek PARALEL: sevkiyat başlığı ile uygunluk birbirini beklemiyor.
     const [sevkiyat, uygunluk] = await Promise.all([
       getShipment(shipmentName).catch(() => null),
-      getReturnEligibility(shipmentName),
+      // Gerçek modda doğrudan gerçek servis (F-03 — mock modülü PROD'a girmesin).
+      iadeMock ? iadeMock.getReturnEligibility(shipmentName) : gercekIadeUygunlugu(shipmentName),
     ]);
     render(
       sevkiyat?.name ?? shipmentName,

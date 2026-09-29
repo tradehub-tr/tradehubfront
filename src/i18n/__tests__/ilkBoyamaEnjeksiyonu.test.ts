@@ -26,7 +26,11 @@ const ORNEK_HTML = `<!doctype html>
 </html>`;
 
 async function eklentiyiBul() {
-  const config = (await import("../../../vite.config")).default as { plugins?: unknown };
+  const ham: unknown = (await import("../../../vite.config")).default;
+  // vite.config fonksiyon biçiminde (MOGEM-685 F-03: moda göre `define`) — üretim derlemesi gibi çöz.
+  const config = (
+    typeof ham === "function" ? await ham({ mode: "production", command: "build" }) : ham
+  ) as { plugins?: unknown };
   const duz = (config.plugins as unknown[]).flat(3) as Plugin[];
   return duz.find((p) => p && p.name === "ilk-boyama-dili-inject");
 }

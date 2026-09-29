@@ -67,7 +67,12 @@ function extractFrappeError(raw: string): string {
       const first = typeof msgs[0] === "string" ? JSON.parse(msgs[0]) : msgs[0];
       if (first.message) return first.message;
     }
-    if (body.message) return body.message;
+    if (typeof body.message === "string") return body.message;
+    // v1 zarfı `{"message": {"ok": false, "error": {"message": "..."}}}` — lojistik/sevkiyat uçları.
+    // Nesne olduğu gibi döndürülüyordu; `new Error(nesne)` ekrana "[object Object]" basıyordu
+    // (MOGEM-685 bulgu 15, sevkiyat takibi — olmayan sevkiyat HTTP 404 ile bu zarfı döner).
+    const zarf = body.message?.error?.message;
+    if (typeof zarf === "string") return zarf;
   } catch {
     /* not JSON or unexpected structure */
   }

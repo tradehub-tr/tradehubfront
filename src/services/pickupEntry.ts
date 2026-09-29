@@ -13,7 +13,7 @@
  * Ekran ulaşılamaz kalırsa teslim edilmiş sayılmıyor
  * (`GOREV-TAMAMLAMA-SOZLESMESI` §2 · K-B).
  */
-import { mockShipmentList, isMockMode } from "./logisticsMock";
+import { isMockMode } from "./logisticsMock";
 import { listShipments } from "./shipmentService";
 
 /**
@@ -67,7 +67,14 @@ export function esle(sevkiyatlar: KanalliSevkiyat[]): PickupEntryMap {
  */
 export async function loadPickupEntries(): Promise<PickupEntryMap> {
   try {
-    if (isMockMode()) return esle(mockShipmentList() as KanalliSevkiyat[]);
+    if (__LOJISTIK_MOCK__ && isMockMode()) {
+      // Dinamik içe aktarma BİLEREK (F-03): bu servis sipariş/pano sayfalarına da giriyor.
+      // Statik içe aktarma `verbatimModuleSyntax` yüzünden dal silinse de kalıyor ve
+      // `shipment.json` PROD derlemesine sızıyordu (ölçüldü 29 Eyl). Dal ve içe aktarma
+      // birlikte derlemeden atılır.
+      const { mockShipmentList } = await import("./logisticsMock");
+      return esle(mockShipmentList() as KanalliSevkiyat[]);
+    }
     const { items } = await listShipments();
     return esle(items as KanalliSevkiyat[]);
   } catch {

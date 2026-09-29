@@ -16,6 +16,9 @@ import { test, expect, request, type Page, type TestInfo } from "@playwright/tes
 const BASE = process.env.PANEL_BASE ?? "http://tradehub.localhost";
 const USER = process.env.PANEL_USER ?? "Administrator";
 const PASS = process.env.PANEL_PASS ?? "";
+// Sentetik mağaza — kökteki `./seed-e2e-hesaplari.sh` kurar; beklenen değerler o
+// betiğin MAGAZA_ALANLARI'ndan. (Eski SEL-00001 16 Eyl 2026'da silindi.)
+const MAGAZA = "E2E-SATICI";
 
 test.use({ baseURL: BASE });
 
@@ -104,24 +107,24 @@ async function formSekmesi(page: Page, testInfo: TestInfo, ad: RegExp): Promise<
     .click();
 }
 
-test("Faz 1 — adres/vergi verisi dinamik dolu (SEL-00001)", async ({ page }, testInfo) => {
-  await page.goto("/panel/app/Admin%20Seller%20Profile/SEL-00001");
+test("Faz 1 — adres/vergi verisi dinamik dolu (E2E-SATICI)", async ({ page }, testInfo) => {
+  await page.goto(`/panel/app/Admin%20Seller%20Profile/${MAGAZA}`);
   // Masaüstü şeridinde sekmeler `role="tab"` taşıyor. ESKİDEN düz <button>'du
   // ve bu test onu `getByRole("button")` ile arıyordu; erişilebilirlik için rol
   // eklenince arama boş dönmeye başladı ve tıklama zaman aşımına uğradı.
   // İletişim: şehir + adres dinamik dolu (city idx 34, address_line1 idx 32).
   await formSekmesi(page, testInfo, /İletişim/i);
-  await expect(fieldControl(page, "şehir")).toHaveValue("Adana"); // city
-  await expect(fieldControl(page, "Adres")).toHaveValue(/Bursa/); // address_line1
+  await expect(fieldControl(page, "şehir")).toHaveValue("İstanbul"); // city
+  await expect(fieldControl(page, "Adres")).toHaveValue(/E2E Test Sokak/); // address_line1
   // NOT: Vergi Dairesi (tax_office) "Şirket Profili" tab'ında (idx 18), İletişim'de değil.
 });
 
 test("Faz 5 — Performans: total_orders/score_grade var, health_score yok", async ({
   page,
 }, testInfo) => {
-  await page.goto("/panel/app/Admin%20Seller%20Profile/SEL-00001");
+  await page.goto(`/panel/app/Admin%20Seller%20Profile/${MAGAZA}`);
   await formSekmesi(page, testInfo, /Performans/i);
-  // total_orders gerçek değer (SEL-00001 = 5), read-only alan
+  // total_orders gerçek değer (E2E-SATICI = 5), read-only alan
   await expect(fieldControl(page, "Toplam Sipariş")).toHaveValue("5");
   // Gizlenen alanların (Property Setter hidden=1) etiketleri DOM'da olmamalı:
   await expect(page.getByText(/Sağlık Skoru|Health Score/i)).toHaveCount(0);

@@ -29,7 +29,7 @@ const svg = (icerik: string): string =>
  * Beyaz zemin BİLEREK: gerçek imza taramaları da beyaz gelir ve ekranın
  * görsele zemin verip vermediği ancak böyle görülür.
  */
-export const SIGNATURE_URL = svg(`
+export const SIGNATURE_URL = /* @__PURE__ */ svg(`
 <svg xmlns="http://www.w3.org/2000/svg" width="420" height="200" viewBox="0 0 420 200">
   <rect width="420" height="200" fill="#ffffff"/>
   <path d="M40 140 C70 60, 95 60, 105 120 S135 175, 150 105 S175 55, 195 120
@@ -40,7 +40,7 @@ export const SIGNATURE_URL = svg(`
 </svg>`);
 
 /** Teslim fotoğrafı — kapı önüne bırakılmış koliler. */
-export const PHOTO_URL = svg(`
+export const PHOTO_URL = /* @__PURE__ */ svg(`
 <svg xmlns="http://www.w3.org/2000/svg" width="480" height="360" viewBox="0 0 480 360">
   <rect width="480" height="360" fill="#e5e7eb"/>
   <rect y="250" width="480" height="110" fill="#d1d5db"/>
@@ -58,7 +58,7 @@ export const PHOTO_URL = svg(`
  * Gerçekte PDF; mock'ta SVG çünkü tarayıcı ikisini de yeni sekmede açıyor ve
  * `data:` URI ile PDF üretmek base64 yükünü gereksiz büyütürdü.
  */
-export const DOCUMENT_URL = svg(`
+export const DOCUMENT_URL = /* @__PURE__ */ svg(`
 <svg xmlns="http://www.w3.org/2000/svg" width="400" height="520" viewBox="0 0 400 520">
   <rect width="400" height="520" fill="#ffffff" stroke="#d1d5db" stroke-width="2"/>
   <rect x="0" y="0" width="400" height="64" fill="#f3f4f6"/>

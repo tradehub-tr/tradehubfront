@@ -1,19 +1,16 @@
 /**
- * Mock Checkout Data
- * Static data for the checkout page — iSTOC B2B style.
+ * Ödeme sayfasının GERÇEK referans verisi ve sabit arayüz içeriği: ülkeler, iller,
+ * ilçeler, ödeme penceresi bölümleri, bilgi maddeleri, ödeme ikonları, sayfa metinleri.
+ *
+ * MOGEM-685 F-03 (29 Eyl 2026): eski adı `mockCheckout.ts`. İçindeki sahte kayıtlar
+ * (sahte ev adresi, "konumum" adresi, sipariş özeti, koruma metinleri) SİLİNDİ — hiçbir
+ * sayfa kullanmıyordu (ölçüldü). Dosya artık sahte veri taşımadığı için adı içeriğine
+ * uygun hâle getirildi; `check-no-mock-in-build.mjs` "mock" adlı parçaları PROD
+ * derlemesinde reddediyor. Buraya SAHTE KAYIT EKLENMEZ — örnek veri gerekiyorsa
+ * `__LOJISTIK_MOCK__` arkasına alınır.
  */
 
-import type {
-  Country,
-  Province,
-  OrderSummary,
-  ModalSection,
-  PaymentIcon,
-  SavedAddress,
-  PageContent,
-} from "../types/checkout";
-
-const PLACEHOLDER_IMG = "https://placehold.co/80x80/f5f5f5/999?text=SKU";
+import type { Country, Province, ModalSection, PaymentIcon, PageContent } from "../types/checkout";
 
 // 1. Countries (30 with flag, name, code, phone prefix)
 export const countries: Country[] = [
@@ -1079,23 +1076,6 @@ export const districtsByProvince: Record<string, string[]> = {
   ],
 };
 
-// 4. Order Summary
-export const orderSummary: OrderSummary = {
-  itemCount: 200,
-  thumbnails: [
-    { image: PLACEHOLDER_IMG, quantity: 100 },
-    { image: PLACEHOLDER_IMG, quantity: 50 },
-    { image: PLACEHOLDER_IMG, quantity: 30 },
-    { image: PLACEHOLDER_IMG, quantity: 20 },
-  ],
-  itemSubtotal: 60.0,
-  shipping: 402.0,
-  subtotal: 462.0,
-  processingFee: 13.82,
-  total: 475.82,
-  currency: "USD",
-};
-
 // 5. Modal Sections (6 sections)
 export const modalSections: ModalSection[] = [
   {
@@ -1184,56 +1164,6 @@ export const paymentIcons: PaymentIcon[] = [
   { name: "T/T", altText: "T/T (Wire Transfer)", bgColor: "#6b7280", textColor: "#ffffff" },
 ];
 
-// 7. Saved Address (1 entry for autocomplete popup)
-export const savedAddress: SavedAddress = {
-  label: "Home Address",
-  fullAddress: "Gulbahar Mah. Cemal Sururi Sk. No:12, Sisli, İstanbul 34394, Türkiye",
-  country: "TR",
-  countryName: "Türkiye",
-  firstName: "Ali",
-  lastName: "BAL",
-  phone: "5551234567",
-  phonePrefix: "+90",
-  street: "Gulbahar Mah. Cemal Sururi Sk. No:12",
-  apartment: "Kat: 3, Daire: 7",
-  state: "İstanbul",
-  city: "Sisli",
-  postalCode: "34394",
-};
-
-// 8. Geolocation mock address
-export const geolocationMockAddress = {
-  street: "Gulbahar Mah. Cemal Sururi Sk. No:12",
-  state: "İstanbul",
-  city: "Sisli",
-  postalCode: "34394",
-  country: "TR",
-};
-
-// 9. Protection summary items (sidebar)
-export const protectionSummaryItems = [
-  {
-    icon: "✅",
-    key: "secure" as const,
-    title: "Secure payments",
-    description:
-      "Every payment you make on iSTOC.com is secured with strict SSL encryption and PCI DSS data protection protocols.",
-  },
-  {
-    icon: "🚚",
-    key: "dispatch" as const,
-    title: "On-time Dispatch Guarantee",
-    description: "Dispatched within 7 days of payment or receive a 10% delay compensation.",
-  },
-  {
-    icon: "💰",
-    key: "refund" as const,
-    title: "Money-back protection",
-    description:
-      "Claim a refund if your order doesn't ship, is missing, or arrives with product issues.",
-  },
-];
-
 // 10. Page text content
 export const pageContent: PageContent = {
   pageTitle: "Checkout",
@@ -1259,10 +1189,6 @@ export const pageContent: PageContent = {
   orderProtectionLinkText: "iSTOC.com order protection",
   trustIconsLabel: "Trade Assurance",
 };
-
-// 11. Trade Assurance footer text
-export const tradeAssuranceText =
-  "Only orders placed and paid through iSTOC.com can enjoy free protection by 🛡 Trade Assurance";
 
 // 12. Coupon & Credit type definitions (mock data kaldırıldı — veriler backend'den gelir)
 export interface CouponData {

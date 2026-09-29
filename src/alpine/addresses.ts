@@ -8,7 +8,7 @@
 import Alpine from "alpinejs";
 import { t } from "../i18n";
 import { getUser, isLoggedIn } from "../utils/auth";
-import { turkishProvinces, districtsByProvince } from "../data/mockCheckout";
+import { turkishProvinces, districtsByProvince } from "../data/checkoutReferenceData";
 import { showToast } from "../utils/toast";
 import { validatePhone, normalizePhone } from "../utils/tr-validation";
 import {
