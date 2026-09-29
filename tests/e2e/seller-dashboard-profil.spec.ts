@@ -6,6 +6,8 @@
  *
  * Gerekli: docker stack ayakta (tradehub.localhost), storefront dist güncel.
  * Kimlik: Frappe cookie-login (/api/method/login) — SELLER_USER satıcı hesabı.
+ * Hesap + mağaza kökteki `./seed-e2e-hesaplari.sh` ile kurulur (sentetik,
+ * yalnız lokal); beklenen değerler o betiğin MAGAZA_ALANLARI'ndan.
  *
  * Kapsam (bu oturumun "Tedarikçi Profili" görevi):
  *  - Vergi No / Vergi Dairesi (Şirket Profili) + IBAN (İletişim) READ-ONLY.
@@ -15,7 +17,7 @@
 import { test, expect, request } from "@playwright/test";
 
 const BASE = process.env.PANEL_BASE ?? "http://tradehub.localhost";
-const USER = process.env.SELLER_USER ?? "ali.bal@turksab.com";
+const USER = process.env.SELLER_USER ?? "e2e-satici@istoc.local";
 const PASS = process.env.SELLER_PASS ?? "";
 
 test.use({ baseURL: BASE });
@@ -57,12 +59,13 @@ async function openTab(page: import("@playwright/test").Page, label: string): Pr
   await page.getByRole("button", { name: label }).first().click();
 }
 
-test("get_my_profile yükleniyor — Vergi No dolu (SEL-00001)", async ({ page }) => {
+test("get_my_profile yükleniyor — Vergi No dolu (E2E-SATICI)", async ({ page }) => {
   await gotoDashboard(page);
   await openTab(page, "Şirket Profili");
-  // Vergi No / TC No alanı get_my_profile'dan dolu gelmeli (SEL-00001 tax_id).
+  // Vergi No / TC No alanı get_my_profile'dan dolu gelmeli (E2E-SATICI tax_id;
+  // değer kökteki seed-e2e-hesaplari.py MAGAZA_ALANLARI'ndan).
   const taxId = page.locator('input[x-model="form.company.tax_id"]');
-  await expect(taxId).toHaveValue("10843944508");
+  await expect(taxId).toHaveValue("9990000001");
 });
 
 test("Vergi No + Vergi Dairesi READ-ONLY (satıcı düzenleyemez)", async ({ page }) => {
@@ -106,7 +109,7 @@ test("Hesabım performans kartları gerçek değer gösterir, health_score kart�
   await openTab(page, "Hesabım");
   // Kaldırılan kart: "Sağlık Skoru" satırı DOM'da olmamalı.
   await expect(page.getByText("Sağlık Skoru")).toHaveCount(0);
-  // Kalan kartlar gerçek değerle dolu (SEL-00001: score_grade=A, total_orders=5).
+  // Kalan kartlar gerçek değerle dolu (E2E-SATICI: score_grade=A, total_orders=5).
   const gradeRow = page.locator('div.flex:has(> span:text-is("Not")) span').last();
   await expect(gradeRow).toHaveText("A");
   const ordersRow = page.locator('div.flex:has(> span:text-is("Toplam Sipariş")) span').last();
