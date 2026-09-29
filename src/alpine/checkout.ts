@@ -1,7 +1,7 @@
 import { hydrateProductImages } from "../components/media/ProductImage";
 import { getCountryDisplayName } from "../utils/country";
 import Alpine from "alpinejs";
-import { countries as checkoutCountries, districtsByProvince } from "../data/mockCheckout";
+import { countries as checkoutCountries, districtsByProvince } from "../data/checkoutReferenceData";
 import type { SavedAddress } from "../types/checkout";
 import { getUser, isLoggedIn } from "../utils/auth";
 import { formatCurrency } from "../services/currencyService";

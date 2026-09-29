@@ -58,9 +58,16 @@ jobs:
   # görülüyordu, yani `main`e girdikten SONRA. Vite'ın girdi listesi, statik
   # sayfa eşlemeleri ve PWA precache üretimi yalnız build sırasında koşuyor;
   # birim testleri ve lint bunların hiçbirine bakmıyor.
+  #
+  # SAHTE VERİ KAPISI (MOGEM-685 F-03, 29 Eyl 2026 — kullanıcı kararı: KIRMIZIYA DÜŞER).
+  # Ürün kararı: Alpha/Beta/RC'de sahte veri olabilir, PROD'da HİÇ olmamalı. PROD
+  # repo kodundan `VITE_LOGISTICS_MOCK` verilmeden derleniyor — aynı varsayılan derleme
+  # burada taranıyor. Ölçüldü: kapıdan önce PROD'un kendi dosyalarında `dedupe_key` ve
+  # sahte `YK-…` takip numaraları vardı. Kırmızı iş merge/deploy'u ENGELLEMEZ (dalda
+  # koruma kuralı yok, Jenkins bu işe bakmıyor) — görünür uyarıdır.
   derleme:
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -70,6 +77,21 @@ jobs:
       - run: npm ci
       - name: Üretim derlemesi (npm run build)
         run: npm run build
+
+      - name: Varsayılan derlemede sahte veri izi yok
+        run: npm run check:no-mock
+
+      # Tarayıcının kör olmadığının kanıtı: mock AÇIK derlemede aynı betik iz BULMALI.
+      # Bulamazsa işaretler bayatlamış demektir (mock verisi değişmiş) ve yukarıdaki
+      # yeşil anlamsızdır.
+      - name: Tarayıcı öz-denetimi (önizleme derlemesinde iz bulunmalı)
+        run: |
+          VITE_LOGISTICS_MOCK=1 npx vite build --outDir "$RUNNER_TEMP/dist-onizleme" --emptyOutDir > /dev/null
+          if node scripts/check-no-mock-in-build.mjs "$RUNNER_TEMP/dist-onizleme" > /dev/null 2>&1; then
+            echo "::error title=Sahte veri tarayıcısı kör::Önizleme derlemesinde hiç iz bulunamadı — scripts/check-no-mock-in-build.mjs işaretlerini güncelleyin."
+            exit 1
+          fi
+          echo "✓ Tarayıcı önizleme derlemesinde izleri buluyor."
 
   e2e:
     runs-on: ubuntu-latest

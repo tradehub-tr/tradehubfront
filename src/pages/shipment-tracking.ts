@@ -49,10 +49,6 @@ import {
   mockTrackingEvents,
 } from "../services/logisticsMock";
 import {
-  getProofOfDelivery,
-  installNotificationMock,
-} from "../services/logisticsNotificationMock";
-import {
   MOCK as PICKUP_MOCK,
   installPickupMock,
   listAppointmentSlots,
@@ -63,7 +59,12 @@ import {
 // Kanal koşulunun tek tanımı orada — sipariş listesindeki giriş düğmesi de
 // aynı kuralı kullanıyor, iki yerde ayrı liste tutmak ikisini sürüklerdi.
 import { TESLIM_ALMA_TIPLERI } from "../services/pickupEntry";
-import { getShipment, listShipments, type ShipmentDetail } from "../services/shipmentService";
+import {
+  getProofOfDelivery as gercekTeslimKaniti,
+  getShipment,
+  listShipments,
+  type ShipmentDetail,
+} from "../services/shipmentService";
 import type { ShipmentDetail as SozlesmeShipmentDetail } from "../types/logistics";
 import { requireAuth } from "../utils/auth-guard";
 import { escapeHtml } from "../utils/sanitize";
@@ -72,7 +73,12 @@ import { mountDashboardShell, shellCard } from "./dashboardShell";
 
 await requireAuth();
 
-const mock = isMockMode();
+// Derleme anahtarı önce: PROD'da sabit false → mock dalları ve verisi derlenmez (F-03).
+const mock = __LOJISTIK_MOCK__ && isMockMode();
+// F-03: modül YALNIZ örnek veri modunda yüklenir. PROD'da `mock` derleme anında
+// false → satır `null`a iner, içe aktarma derlemeye hiç girmez (statik içe aktarma
+// `verbatimModuleSyntax` yüzünden kalıp mock parçasını PROD'a taşıyordu — ölçüldü 29 Eyl).
+const bildirimMock = mock ? await import("../services/logisticsNotificationMock") : null;
 
 /**
  * Randevu ve teslim onayı düğmeleri `window.__thRequestAppointment` /
@@ -83,7 +89,7 @@ const mock = isMockMode();
 if (mock) {
   installPickupMock();
   // POD kartı da köprü üzerinden besleniyor (12-FE).
-  installNotificationMock();
+  bildirimMock?.installNotificationMock();
 }
 const shipmentName = new URLSearchParams(window.location.search).get("name") ?? "";
 
@@ -335,7 +341,10 @@ async function ekVeriTopla(shipment: ShipmentDetail): Promise<EkVeri> {
   // Teslim kanıtı yalnız teslim edilmiş sevkiyatta sorulur.
   if (shipment.status === DELIVERED) {
     try {
-      ek.pod = await getProofOfDelivery(shipment.name);
+      // Gerçek modda doğrudan gerçek servis: mock modülü PROD derlemesine hiç girmesin (F-03).
+      ek.pod = await (bildirimMock
+        ? bildirimMock.getProofOfDelivery(shipment.name)
+        : gercekTeslimKaniti(shipment.name));
     } catch {
       // Uç bağlı değil → `undefined` kalır → ekran "bağlı değil" çizer.
       // `null` ile karıştırılmamalı: `null` "kanıt yok" demek.

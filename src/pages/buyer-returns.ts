@@ -26,11 +26,9 @@ import { NotWiredNotice } from "../components/logistics/NotWiredNotice";
 import { t } from "../i18n";
 import { isMockMode, mockBannerHtml } from "../services/logisticsMock";
 import {
-  getReturnRequest,
-  installReturnMock,
-  listReturnRequests,
-  returnMockBarHtml,
-} from "../services/logisticsReturnMock";
+  getReturnRequest as gercekIadeKaydi,
+  listReturnRequests as gercekIadeListesi,
+} from "../services/shipmentService";
 import { requireAuth } from "../utils/auth-guard";
 import { escapeHtml } from "../utils/sanitize";
 
@@ -38,10 +36,15 @@ import { mountDashboardShell, shellCard } from "./dashboardShell";
 
 await requireAuth();
 
-const mock = isMockMode();
+// Derleme anahtarı önce: PROD'da sabit false → mock dalları ve verisi derlenmez (F-03).
+const mock = __LOJISTIK_MOCK__ && isMockMode();
+// F-03: modül YALNIZ örnek veri modunda yüklenir. PROD'da `mock` derleme anında
+// false → satır `null`a iner, içe aktarma derlemeye hiç girmez (statik içe aktarma
+// `verbatimModuleSyntax` yüzünden kalıp mock parçasını PROD'a taşıyordu — ölçüldü 29 Eyl).
+const iadeMock = mock ? await import("../services/logisticsReturnMock") : null;
 const istenen = new URLSearchParams(window.location.search).get("name") ?? "";
 
-installReturnMock();
+iadeMock?.installReturnMock();
 
 const root = mountDashboardShell({
   breadcrumb: [
@@ -62,7 +65,7 @@ const root = mountDashboardShell({
 function ciz(baslik: string, govde: string): void {
   root.innerHTML = [
     mock ? mockBannerHtml() : "",
-    mock ? returnMockBarHtml() : "",
+    iadeMock ? iadeMock.returnMockBarHtml() : "",
     shellCard(`
       <h1 class="mb-3 text-base font-semibold text-gray-900">${escapeHtml(baslik)}</h1>
       ${govde}
@@ -74,10 +77,10 @@ function ciz(baslik: string, govde: string): void {
 try {
   if (istenen) {
     // Tek talep — zaman çizgisi, etiket, kalem kırılımı ve tutar.
-    const kayit = (await getReturnRequest(istenen)) as unknown as BuyerReturnTrackingProps;
+    const kayit = (await (iadeMock ? iadeMock.getReturnRequest(istenen) : gercekIadeKaydi(istenen))) as unknown as BuyerReturnTrackingProps;
     ciz(t("shipment.returnTrack.title"), BuyerReturnTracking(kayit));
   } else {
-    const liste = (await listReturnRequests()) as unknown as BuyerReturnTrackingProps[];
+    const liste = (await (iadeMock ? iadeMock.listReturnRequests() : gercekIadeListesi())) as unknown as BuyerReturnTrackingProps[];
     ciz(t("shipment.page.returns"), BuyerReturnList(liste));
   }
 } catch (e) {

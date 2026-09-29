@@ -7,6 +7,12 @@
 import type Alpine from "alpinejs";
 
 declare global {
+  /**
+   * MOGEM-685 F-03 — lojistik mock derleme anahtarı (vite.config `define`).
+   * PROD derlemesinde `false` → mock dalları ve verileri derlenmez.
+   */
+  const __LOJISTIK_MOCK__: boolean;
+
   interface Window {
     /** API base URL — `src/utils/api.ts` set ediyor, Alpine modülleri okur */
     API_BASE: string;

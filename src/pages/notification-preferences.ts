@@ -33,12 +33,10 @@ import { NotWiredNotice } from "../components/logistics/NotWiredNotice";
 import { t } from "../i18n";
 import { isMockMode, mockBannerHtml } from "../services/logisticsMock";
 import {
-  installNotificationMock,
-  listNotificationPreferences,
-  listNotifications,
-  notificationMockBarHtml,
-} from "../services/logisticsNotificationMock";
-import { NotWiredError } from "../services/shipmentService";
+  NotWiredError,
+  listNotificationPreferences as gercekTercihler,
+  listNotifications as gercekBildirimler,
+} from "../services/shipmentService";
 import { requireAuth } from "../utils/auth-guard";
 import { escapeHtml } from "../utils/sanitize";
 
@@ -46,13 +44,18 @@ import { mountDashboardShell, shellCard } from "./dashboardShell";
 
 await requireAuth();
 
-const mock = isMockMode();
+// Derleme anahtarı önce: PROD'da sabit false → mock dalları ve verisi derlenmez (F-03).
+const mock = __LOJISTIK_MOCK__ && isMockMode();
+// F-03: modül YALNIZ örnek veri modunda yüklenir. PROD'da `mock` derleme anında
+// false → satır `null`a iner, içe aktarma derlemeye hiç girmez (statik içe aktarma
+// `verbatimModuleSyntax` yüzünden kalıp mock parçasını PROD'a taşıyordu — ölçüldü 29 Eyl).
+const bildirimMock = mock ? await import("../services/logisticsNotificationMock") : null;
 
 /**
  * Köprü kurulmazsa ekran açılır ama anahtar iş yapmaz — 28 Ağustos'a kadar
  * tam olarak bu oluyordu.
  */
-if (mock) installNotificationMock();
+bildirimMock?.installNotificationMock();
 
 const root = mountDashboardShell({
   breadcrumb: [
@@ -79,11 +82,12 @@ function blokHatasi(e: unknown, baslik: string): string {
 
 async function render(): Promise<void> {
   const bloklar: string[] = [];
-  if (mock) bloklar.push(mockBannerHtml(), shellCard(notificationMockBarHtml()));
+  if (bildirimMock)
+    bloklar.push(mockBannerHtml(), shellCard(bildirimMock.notificationMockBarHtml()));
 
   // ── S6 · Bildirim akışı ──
   try {
-    const feed = await listNotifications();
+    const feed = await (bildirimMock ? bildirimMock.listNotifications() : gercekBildirimler());
     bloklar.push(shellCard(NotificationCenter({ rows: feed })));
   } catch (e) {
     bloklar.push(
@@ -98,7 +102,7 @@ async function render(): Promise<void> {
   // Ayrı `try`: akış düşse bile tercihler çizilmeli. Tek blokta toplamak,
   // bir ucun hatasında ekranın yarısını sebepsiz karartırdı.
   try {
-    const prefs = await listNotificationPreferences();
+    const prefs = await (bildirimMock ? bildirimMock.listNotificationPreferences() : gercekTercihler());
     bloklar.push(shellCard(NotificationPreferences({ rows: prefs })));
   } catch (e) {
     bloklar.push(

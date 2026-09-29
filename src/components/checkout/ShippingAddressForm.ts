@@ -5,7 +5,7 @@
  */
 
 import type { Country, Province } from "../../types/checkout";
-import { countries, turkishProvinces, pageContent } from "../../data/mockCheckout";
+import { countries, turkishProvinces, pageContent } from "../../data/checkoutReferenceData";
 import { t } from "../../i18n";
 
 export interface ShippingAddressFormProps {

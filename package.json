@@ -6,6 +6,8 @@
   "scripts": {
     "dev": "vite",
     "build": "npm run icons:generate && tsc && vite build",
+    "build:onizleme": "VITE_LOGISTICS_MOCK=1 npm run build",
+    "check:no-mock": "node scripts/check-no-mock-in-build.mjs dist",
     "icons:generate": "node scripts/generate-lucide-sprite.mjs",
     "icons:check": "node scripts/generate-lucide-sprite.mjs --check",
     "perf:home": "node scripts/measure-home-perf.mjs",

@@ -39,7 +39,7 @@ import '../alpine/orderProtectionModal'
 
 // Checkout components
 import { CheckoutHeader, CheckoutLayout, CheckoutMinimalHeader, initCheckoutMinimalHeader, ShippingAddressForm, OrderSummary, PaymentMethodSection, ItemsDeliverySection, BillingInfoSection, OrderProtectionModal, OrderReviewModal } from '../components/checkout'
-import { modalSections, paymentIcons, infoBoxBullets } from '../data/mockCheckout'
+import { modalSections, paymentIcons, infoBoxBullets } from '../data/checkoutReferenceData'
 import { cartStore } from '../components/cart/state/CartStore'
 import { initCurrency, getSelectedCurrencyInfo, convertPrice } from '../services/currencyService'
 import type { OrderSummary as OrderSummaryData } from '../types/checkout'

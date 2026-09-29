@@ -1,4 +1,4 @@
-import { defineConfig } from "vite";
+import { defineConfig, loadEnv } from "vite";
 import type { Plugin } from "vite";
 import tailwindcss from "@tailwindcss/vite";
 import { VitePWA } from "vite-plugin-pwa";
@@ -476,7 +476,7 @@ const backendProxy = {
   },
 };
 
-export default defineConfig({
+export default defineConfig(({ mode }) => ({
   preview: {
     host: "0.0.0.0",
     proxy: backendProxy,
@@ -484,6 +484,15 @@ export default defineConfig({
   base: process.env.GITHUB_PAGES === "true" ? "/tradehubfront/" : "/",
   define: {
     "import.meta.env.VITE_APP_VERSION": JSON.stringify(pkg.version),
+    // MOGEM-685 F-03 — lojistik mock derleme anahtarı. `import.meta.env` DEĞİL, düz sabit:
+    // ölçüldü (29 Eyl), `import.meta.env.VITE_…` ağaç budamadan SONRA yerine konuyor ve
+    // mock verisi parçalar arası bağla (`orders` → `pickupEntry`) derlemede kalıyordu.
+    // `define` sabiti Rollup'tan önce yazılır → dallar ve verileri gerçekten atılır.
+    // Kaynak: `.env.*` (development=1, production=0) ya da ortam değişkeni (Docker ARG,
+    // `npm run build:onizleme`); loadEnv ikisini birlikte okur, ortam değişkeni önceliklidir.
+    __LOJISTIK_MOCK__: JSON.stringify(
+      loadEnv(mode, process.cwd(), "VITE_").VITE_LOGISTICS_MOCK === "1"
+    ),
   },
   server: {
     host: "0.0.0.0",
@@ -780,4 +789,4 @@ export default defineConfig({
       },
     },
   },
-});
+}));

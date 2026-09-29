@@ -48,7 +48,8 @@ import { mountDashboardShell, shellCard } from "./dashboardShell";
 
 await requireAuth();
 
-const mock = isMockMode();
+// Derleme anahtarı önce: PROD'da sabit false → mock dalları ve verisi derlenmez (F-03).
+const mock = __LOJISTIK_MOCK__ && isMockMode();
 
 /**
  * `SellerShipmentForm` ve `SellerPacking` davranışlarını `window.__th*`

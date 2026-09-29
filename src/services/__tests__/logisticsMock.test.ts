@@ -20,16 +20,22 @@ const PREVIEW = [
   "::1",
   "ali-pc.local",
   "alpha.istoc.com",
+  "beta.istoc.com", // 29 Eyl 2026 ürün kararı: Alpha/Beta/RC'de örnek veri olabilir (MOGEM-685 F-03)
+  "rc.istoc.com", // aynı karar — RC, Alpha/Beta ile aynı yapıda (UAT örnek veriyle)
 ];
 
-/** Örnek verinin ASLA görünmemesi gereken ortamlar. */
+/**
+ * Örnek verinin ASLA görünmemesi gereken ortam — PROD (ve backend adresleri).
+ * (`*.cronbi.com` BACKEND adresleri; ön yüz orada servis edilmiyor.)
+ * İkinci kilit: PROD derlemesinde mock kodu hiç yok (`__LOJISTIK_MOCK__` =
+ * false) — onu `scripts/check-no-mock-in-build.mjs` derleme çıktısında sınıyor.
+ */
 const LIVE = [
   "betaistoc.cronbi.com",
   "rcistoc.cronbi.com",
   "istoc.cronbi.com",
   "istoc.com",
   "www.istoc.com",
-  "rc.istoc.com",
   "admin-preview.istoc.com",
   "192.168.1.100", // yerel ağ IP'si — makine yerel ama adres beyaz listede değil
 ];
@@ -41,6 +47,13 @@ describe("örnek veri modu — ortam sınırı", () => {
 
   it.each(LIVE)("canlı/kapalı ortam: %s", (host) => {
     expect(isPreviewHostname(host)).toBe(false);
+  });
+
+  it("beta'nın önüne/arkasına eklemek kapıyı açmıyor", () => {
+    expect(isPreviewHostname("beta.istoc.com.saldirgan.net")).toBe(false);
+    expect(isPreviewHostname("rc-beta.istoc.com")).toBe(false);
+    expect(isPreviewHostname("rc.istoc.com.saldirgan.net")).toBe(false);
+    expect(isPreviewHostname("xrc.istoc.com")).toBe(false);
   });
 
   it("canlı alan adının önüne alt alan eklemek kapıyı açmıyor", () => {

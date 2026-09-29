@@ -364,7 +364,7 @@ export function installPickupMock(): void {
    * tam bu oldu ve mock veri canlıya sızacaktı (2026-08-28 denetimi). Köprü
    * artık örnek veri ortamı dışında hiç kurulmuyor.
    */
-  if (!isMockMode()) return;
+  if (!__LOJISTIK_MOCK__ || !isMockMode()) return;
   const w = window as unknown as Record<string, unknown>;
   if (MOCK.appointment) w.__thRequestAppointment = requestAppointment;
   if (MOCK.confirm) w.__thConfirmDelivery = confirmDelivery;

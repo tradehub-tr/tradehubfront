@@ -11,12 +11,33 @@
  *   dosyaları sözleşmeden ÜRETİLİYOR (`gen_logistics_types.py`), yani alan
  *   adları backend yazıldığında da aynı kalacak.
  *
- * TEK KAPI: **sunucu adı.** Önizleme ortamlarında varsayılan AÇIK.
+ * İKİ KAPI (MOGEM-685 F-03, 29 Eyl 2026 — ürün kararı: Alpha, Beta ve RC'de sahte
+ * veri OLABİLİR, PROD'da HİÇ olmamalı):
+ *
+ *   1. DERLEME ANAHTARI `VITE_LOGISTICS_MOCK`. Kapalıyken
+ *      (`.env.production` = "0", PROD derlemesi) çağıranlar `mock` dalını
+ *      derleme anında sabit `false` görür ve bu modülün verisi dahil tüm mock kodu
+ *      DERLEME ÇIKTISINA GİRMEZ. Ölçüldü: anahtardan önce PROD'un kendi dosyalarında
+ *      `dedupe_key` ve sahte `YK-…` takip numaraları vardı. Açanlar: `.env.development`
+ *      (geliştirme sunucusu + mock E2E), `npm run build:onizleme`, repo `Dockerfile`'ı
+ *      (varsayılan AÇIK — Alpha/Beta/RC onunla derleniyor; PROD sunucudaki ayrı
+ *      Dockerfile ile anahtarsız derleniyor, Jenkins rc-to-prod #47'de ölçüldü).
+ *      Kapıyı CI koruyor: `scripts/check-no-mock-in-build.mjs`.
+ *   2. SUNUCU ADI (ikinci kilit). Anahtar yanlışlıkla PROD derlemesine
+ *      verilse bile mod yalnız önizleme sunucularında açılır.
  *
  *   NEREDE ÇALIŞIR : yerel geliştirme (`localhost`, `*.localhost`,
- *                    `127.0.0.1`, `*.local`) ve ALPHA
- *   NEREDE ÇALIŞMAZ: BETA · RC · PROD — beyaz liste eşleşmiyor, hiçbir
- *                    parametre bunu değiştiremez
+ *                    `127.0.0.1`, `*.local`), ALPHA, BETA ve RC
+ *   NEREDE ÇALIŞMAZ: PROD — ne derlenir ne de beyaz liste eşleşir
+ *
+ * ÇAĞIRANLAR için kural: `mock` bayrağını HER DOSYADA `__LOJISTIK_MOCK__ && isMockMode()`
+ * olarak kurun (`__LOJISTIK_MOCK__`: vite.config `define`, `src/types/global.d.ts`).
+ *   - Yalnız `isMockMode()` yazmak kodu ÇALIŞTIRMAZ ama derleyici mock dallarını
+ *     atamaz — veri yine dosyaya girer.
+ *   - Başka dosyadan içe aktarılan bir sabit ya da `import.meta.env.VITE_…` de
+ *     YETMİYOR: ikisi de ölçüldü (29 Eyl) — derleyici ağaç budama anında değeri
+ *     bilmedi ve `shipment.json` parçalar arası bağla derlemede kaldı. `define`
+ *     sabiti Rollup'tan önce yazılır; dal ancak böyle gerçekten atılır.
  *
  * NEDEN VARSAYILAN AÇIK: önce `?mock=1` şartı koymuştum. İşe yaramadı —
  * menü bağlantıları parametre taşımıyor, ekip de her adrese elle eklemeyi
@@ -37,15 +58,21 @@ const STORAGE_KEY = "istoc_logistics_mock";
 /**
  * Örnek veri modunun açılabileceği sunucular — TAM eşleşme.
  *
- * BETA, RC ve PROD BİLİNÇLİ OLARAK YOK: `betaistoc.cronbi.com`,
- * `rcistoc.cronbi.com`, `istoc.cronbi.com`, `istoc.com`, `rc.istoc.com`
- * hiçbiri ne bu listede ne de aşağıdaki son eklerle eşleşiyor.
+ * PROD BİLİNÇLİ OLARAK YOK: `istoc.com`, `www.istoc.com` ve backend adresleri
+ * (`*.cronbi.com`) ne bu listede ne de aşağıdaki son eklerle eşleşiyor.
  *
- * ALPHA açık: tasarım onayı orada alınıyor ve onaya sunulan ekranların
- * çoğunun backend ucu henüz yazılmadı. Kapalı olsaydı paydaş boş kutulardan
- * başka bir şey görmezdi.
+ * ALPHA, BETA ve RC açık: test, tasarım/iş onayı ve UAT orada yapılıyor ve onaya
+ * sunulan ekranların çoğunun backend ucu henüz yazılmadı (BETA ve RC 29 Eyl 2026
+ * ürün kararıyla eklendi — MOGEM-685 F-03).
  */
-const PREVIEW_HOSTS: readonly string[] = ["localhost", "127.0.0.1", "::1", "alpha.istoc.com"];
+const PREVIEW_HOSTS: readonly string[] = [
+  "localhost",
+  "127.0.0.1",
+  "::1",
+  "alpha.istoc.com",
+  "beta.istoc.com",
+  "rc.istoc.com",
+];
 
 /**
  * Önizleme sayılan alan adı SON EKLERİ.
@@ -85,7 +112,7 @@ function isPreviewHost(): boolean {
  * eşleşmiyorsa fonksiyon daha ilk satırda `false` dönüyor.
  */
 export function isMockMode(): boolean {
-  if (!isPreviewHost()) return false;
+  if (!__LOJISTIK_MOCK__ || !isPreviewHost()) return false;
 
   const param = new URLSearchParams(window.location.search).get("mock");
   if (param === "1") {
@@ -106,7 +133,8 @@ export function mockBannerHtml(): string {
     <div class="rounded-md border border-amber-300 bg-amber-50 px-4 py-3 text-sm text-amber-900" role="status">
       <strong class="font-semibold">Örnek veri modu.</strong>
       Bu sayfadaki lojistik verileri sözleşmeden üretilmiş <em>örnek</em> kayıtlardır,
-      gerçek sipariş bilgisi değildir. Yalnız yerel incelemede çalışır.
+      gerçek sipariş bilgisi değildir. Yalnız önizleme ortamlarında (yerel, Alpha, Beta,
+      RC) çalışır; canlı ortamda yoktur.
       <a href="?mock=0" class="ms-1 underline underline-offset-2">Kapat</a>
     </div>`;
 }

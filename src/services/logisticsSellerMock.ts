@@ -242,7 +242,7 @@ export function installSellerMock(): void {
    * tam bu oldu ve mock veri canlıya sızacaktı (2026-08-28 denetimi). Köprü
    * artık örnek veri ortamı dışında hiç kurulmuyor.
    */
-  if (!isMockMode()) return;
+  if (!__LOJISTIK_MOCK__ || !isMockMode()) return;
   const w = window as unknown as Record<string, unknown>;
   if (MOCK.create) w.__thCreateShipment = createShipment;
   if (MOCK.packages) w.__thSavePackage = savePackage;

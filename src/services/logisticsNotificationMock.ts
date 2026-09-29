@@ -73,7 +73,8 @@ export const MOCK = {
  * "henüz bağlı değil" çiziyor — doğru davranış bu.
  */
 function mockAcik(bayrak: boolean): boolean {
-  return bayrak && isMockMode();
+  // Derleme anahtarı önce: PROD'da sabit false → aşağıdaki mock dalları derlenmez (F-03).
+  return __LOJISTIK_MOCK__ && bayrak && isMockMode();
 }
 
 const STORAGE_KEY = "istoc_notification_mock";

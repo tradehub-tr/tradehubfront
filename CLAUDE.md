@@ -18,6 +18,8 @@ Bu dosya kısa orkestrasyon kurallarını içerir. Detaylı kurallar `tradehubfr
 > ```bash
 > cd tradehubfront && npm run build
 > ```
+> ⚠ **`npm run build` PROD eşdeğeridir — lojistik mock'u yok** (MOGEM-685 F-03): lojistik sayfaları "henüz bağlı değil" der. Mock'lu ekranlar için **`npm run build:onizleme`**. Mock dalı kuralı: `src/services/logisticsMock.ts` başlığı; denetim: `npm run check:no-mock` (CI `test.yml` › `derleme`).
+>
 > Sonra tarayıcıda **Ctrl+Shift+R** ile hard refresh. Bağımsız `npm run dev` Vite dev server'ı ayrı portta açar ama gateway proxy ile uyumlu değil.
 
 ## 2. Stack
