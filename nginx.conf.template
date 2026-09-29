@@ -254,6 +254,20 @@ map $uri $t131_files_dispo {
     ~*\.(html?|xhtml|shtml|xml|xsl|xslt|js|mjs|cjs)$  "attachment";
 }
 
+# ── SEO okunur görsel adresi · noindex istisnası (2026-09-28) ───────────────
+# /files/ altındaki yanıtlar bugüne kadar HEP noindex idi (enumeration
+# yavaşlatma — içerik-hash'li olsa da URL indexlenmesin). Okunur adres
+# biçimi (/files/<slug>-<8..32 hex>[__<türev>].<uzantı>) artık ürün SEO'su
+# için bilerek İNDEXLENMEK istiyor; bu map YALNIZ o biçimi noindex'ten
+# muaf tutar, başka her şey (eski hash-only adlar, /private/ dışındaki
+# diğer /files/ yanıtları) default ile noindex kalır.
+# Boş değerli add_header nginx'te HİÇ basılmaz — bu yüzden default "noindex"
+# ve eşleşen için boş dize (aşağıdaki $robots_tag map'iyle aynı desen).
+map $uri $files_robots {
+    "~^/files/[a-z0-9-]+-[0-9a-f]{8,32}(__[a-z0-9]+)?\.[a-z0-9]+$"  "";
+    default                                                          "noindex";
+}
+
 # === ÜLKE TABLOSU · ÜRETİLMİŞTİR, ELLE DÜZENLEME ===
 # Üreteç : scripts/ulke-tablosu-uret.mjs
 # Kaynak : DB-IP Country Lite (https://db-ip.com) — CC BY 4.0
@@ -42775,7 +42789,10 @@ server {
         # noindex + limit_req (2026-08-20: yerel kopyadan kalıcı eve taşındı):
         # içerik-hash'li olsa da URL indexlenmesin; enumeration yavaşlasın.
         # burst=20 nodelay sayfadaki paralel görsel isteklerini engellemez.
-        add_header X-Robots-Tag "noindex" always;
+        # 2026-09-28: sabit "noindex" → $files_robots (map yukarıda). Okunur
+        # SEO adresi (<slug>-<hash>[__türev].<uzantı>) İSTİSNA — o biçim için
+        # map boş dize üretir ve nginx boş add_header'ı hiç basmaz.
+        add_header X-Robots-Tag $files_robots always;
         limit_req zone=files_zone burst=120 nodelay;
 
         # ── T-131 · Medya servis sertleştirmesi (tek blok — geri almak için sil)
