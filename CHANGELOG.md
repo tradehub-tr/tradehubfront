@@ -1,3 +1,15 @@
+## [v2.8.0-alpha.1] - 2026-09-29 ALPHA
+
+Bu surum alpha.istoc.com'da gelistirme asamasindadir.
+
+### Duzeltildi
+- fix(storefront): SEO görselleri ve liste cache davranışını düzelt (@ahmeetseker)
+  - Okunur /files görsel adreslerini X-Robots-Tag noindex dışında bırakarak ürün görsellerinin indexlenmesini sağla
+  - listings sorgularını IndexedDB persister dışında tutarak 7 güne kadar bayat ürün listesinin ekrana basılmasını engelle
+  - LCP profil ayrıştırmada hash'li SEO görsel adreslerini original saymayarak RUM ölçüm kohortlarını doğru tut
+  - Yeni davranışları queryClient ve LCP regex testleriyle sabitle
+
+---
 ## [v2.8.0] - 2026-09-25 PROD
 
 Bu surum istoc.com'da yayindadir.
