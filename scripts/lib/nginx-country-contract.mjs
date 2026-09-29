@@ -15,9 +15,12 @@
  * zorunda. Tek bir bloğun unutulması açığın tamamını geri getirir — yeni
  * `location` eklendiğinde bu denetim kırmızıya döner.
  *
- * NOT: Bu denetim yalnız TEMİZLİĞİ kilitler. Ülke kodunun nereden geleceği
- * (Cloudflare / nginx geo / başka) henüz kararlaştırılmadı; başlığı dolduran
- * kaynak eklendiğinde bu sözleşme de o kaynağa göre genişletilecek.
+ * KAYNAK (21 Eyl 2026, K4): ülke kodu artık nginx'in kendi IP tablosundan
+ * geliyor (`geo $ulke_kodu` → bot muafiyetli `$ulke_yayin`). `/api/` bloğu
+ * `X-Country`'yi bu değerle EZER — istemcinin gönderdiği değer yine geçmez.
+ * Bu yüzden `X-Country` için iki biçim kabul edilir: boş değer ya da
+ * `$ulke_yayin`. Başka her değer (özellikle istemci başlığını geçiren
+ * `$http_x_country`) ihlaldir. `CF-IPCountry` her blokta boş kalır.
  */
 
 /** Backend'e proxy geçen blokların imzası: Host başlığı backend domain'ine ayarlanır. */
@@ -25,6 +28,8 @@ const BACKEND_PROXY_IMZASI = "proxy_set_header Host ${BACKEND_DOMAIN};";
 
 /** Her backend bloğunda bulunması gereken iki satır. */
 const X_COUNTRY_SATIRI = 'proxy_set_header X-Country "";';
+/** `X-Country`'nin kabul edilen ikinci biçimi: sunucunun IP'den bulduğu ülke. */
+const X_COUNTRY_SUNUCU_SATIRI = "proxy_set_header X-Country $ulke_yayin;";
 const CF_IPCOUNTRY_SATIRI = 'proxy_set_header CF-IPCountry "";';
 
 /**
@@ -78,7 +83,7 @@ export function validateNginxCountryTemplate(template) {
   }
 
   for (const blok of bloklar) {
-    if (!blok.govde.includes(X_COUNTRY_SATIRI)) {
+    if (!blok.govde.includes(X_COUNTRY_SATIRI) && !blok.govde.includes(X_COUNTRY_SUNUCU_SATIRI)) {
       ihlaller.push(`${blok.ad} (satır ${blok.satir}): ${X_COUNTRY_SATIRI} eksik`);
     }
     if (!blok.govde.includes(CF_IPCOUNTRY_SATIRI)) {
