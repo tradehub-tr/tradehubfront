@@ -30,6 +30,19 @@ describe("validateNginxCountryTemplate", () => {
     expect(ihlaller.join("\n")).toContain("X-Country");
   });
 
+  it("X-Country istemci değerini geçirirse kırmızıya döner", () => {
+    // `/api/` bloğu başlığı sunucunun bulduğu ülkeyle (`$ulke_yayin`) ezer; bu kabul.
+    // Aynı satır istemcinin başlığını aynen geçirirse ziyaretçi ülkesini yine uydurur.
+    const bozuk = template.replace(
+      "proxy_set_header X-Country $ulke_yayin;",
+      "proxy_set_header X-Country $http_x_country;"
+    );
+    expect(bozuk).not.toBe(template);
+
+    const ihlaller = validateNginxCountryTemplate(bozuk);
+    expect(ihlaller.join("\n")).toContain("/api/");
+  });
+
   it("tek bir blokta CF-IPCountry unutulursa kırmızıya döner", () => {
     // CF-IPCountry ayrıca gerekli: backend onu X-Country'den ÖNCE okuyor,
     // yani yalnız X-Country'yi yeniden yazmak açığı kapatmaz.

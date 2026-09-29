@@ -127,10 +127,14 @@ jobs:
       # Mock-tabanlı spec'ler — backend gerekmiyor, Vite dev server
       # `playwright.config.ts`'teki `webServer` ile kendiliğinden kalkıyor.
       # Panel/satıcı spec'leri hariç (docker + PANEL_PASS ister).
+      # `lojistik-monkey` da hariç: her 5xx yanıtı kusur sayıyor, runner'da backend
+      # olmadığı için sayfanın açılış çağrıları 500 dönüyor ve 22 Eyl'den beri
+      # 14 kırmızı üretiyordu (30 Eyl ölçüldü: backend'le yeşil, backend'siz kırmızı).
+      # Yerelde `./e2e.sh --monkey` ile ayrıca koşuyor — e2e.sh de onu ayırıyor.
       - name: E2E (mock suite, masaüstü + mobil)
         run: |
           npx playwright test $(ls tests/e2e/*.spec.ts \
-            | grep -vE "^tests/e2e/panel-|seller-dashboard-profil|_smoke")
+            | grep -vE "^tests/e2e/panel-|seller-dashboard-profil|_smoke|lojistik-monkey")
 
       - name: Başarısızlıkta iz kaydını yükle
         if: failure()
