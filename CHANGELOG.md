@@ -1,3 +1,16 @@
+## [v2.8.0-alpha.4] - 2026-09-30 ALPHA
+
+Bu surum alpha.istoc.com'da gelistirme asamasindadir.
+
+### Duzeltildi
+- fix(buyer-dashboard): pano sayaçları ve KPI başlıkları düzeltildi (@aliiball)
+  - Teklifler sayacı hiç dolmuyordu ve kimliksiz rfq-quotes sayfasına gidiyordu; artık karar bekleyen teklif sayısını gösteriyor ve talepler listesine (inquiries) gidiyor
+  - Kuponlar hücresi kuponla ilgisi olmayan siparişler sayfasına gidiyordu; kupon listesi sayfası olmadığı için bağlantısız sayı yapıldı
+  - get_buyer_analytics isteği kart ve analitik bölümü arasında paylaşılıyor: sayfa başına tek istek, hata olursa sonraki çağrı yeniden dener
+  - KPI kartı başlıkları sabit Türkçeydi ve İngilizce arayüzde Türkçe çiziliyordu; buyerUi.kpi* anahtarlarıyla dört dile taşındı
+  - Testler: dashboardStats ve buyerAnalyticsService birim testleri, alici-pano-sayaclar E2E (mock, masaüstü ve mobil); her düzeltme geri alınınca kırmızıya düşüyor
+
+---
 ## [v2.8.0-alpha.3] - 2026-09-29 ALPHA
 
 Bu surum alpha.istoc.com'da gelistirme asamasindadir.
