@@ -534,6 +534,10 @@ const ar = {
     },
     buyerUi: {
       kpiVsLastMonth: "مقارنة بالشهر الماضي",
+      kpiTotalSpend: "إجمالي الإنفاق",
+      kpiActiveOrders: "الطلبات النشطة",
+      kpiPendingQuotes: "عروض الأسعار المعلّقة",
+      kpiNegotiationSavings: "وفورات التفاوض",
       kpiActiveOrdersHint: "{{shipping}} قيد الشحن، {{preparing}} قيد التجهيز",
       kpiPendingQuotesHint: "{{rfqCount}} طلب عرض سعر · {{quoteCount}} ردود الموردين",
       kpiNegotiationSavingsHint: "خصم متوسط {{pct}}٪ عبر طلب عرض السعر",

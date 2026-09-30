@@ -280,6 +280,11 @@ export async function listConversations(): Promise<Conversation[]> {
   return threads.map(threadToConversation).filter((c) => c.id);
 }
 
+/** Tüm konuşmalardaki okunmamış mesaj toplamı (alıcı panosundaki "Mesajlar" sayacı). */
+export function countUnreadMessages(conversations: Conversation[]): number {
+  return conversations.reduce((toplam, c) => toplam + (c.unread || 0), 0);
+}
+
 /**
  * Eski signature — yeni akışta önerilmiyor. `startOrGetThread` her zaman doğru
  * conversation'ı (varsa bul, yoksa yarat) döndürür. Burada şimdiki listeden

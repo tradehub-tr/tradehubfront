@@ -535,6 +535,10 @@ const tr = {
     },
     buyerUi: {
       kpiVsLastMonth: "geçen aya göre",
+      kpiTotalSpend: "Toplam Harcama",
+      kpiActiveOrders: "Aktif Sipariş",
+      kpiPendingQuotes: "Bekleyen Teklif",
+      kpiNegotiationSavings: "Pazarlık Tasarrufu",
       kpiActiveOrdersHint: "yolda {{shipping}}, hazırlanıyor {{preparing}}",
       kpiPendingQuotesHint: "{{rfqCount}} RFQ · {{quoteCount}} satıcı yanıtı",
       kpiNegotiationSavingsHint: "RFQ ile %{{pct}} ortalama indirim",

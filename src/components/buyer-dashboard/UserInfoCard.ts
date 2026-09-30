@@ -49,15 +49,16 @@ export function UserInfoCard(props: UserInfoCardProps): string {
           <span class="text-[clamp(0.625rem,0.6rem+0.1vw,0.75rem)] text-center leading-[1.3] line-clamp-2" style="color:var(--color-text-secondary)">${t("dashboard.statsMessages")}</span>
         </a>
         <div class="w-px bg-gray-200 self-stretch"></div>
-        <a href="/pages/dashboard/rfq-quotes.html" class="flex-1 min-w-0 flex flex-col items-center gap-1 no-underline transition-opacity hover:opacity-80">
+        <a href="/pages/dashboard/inquiries.html" class="flex-1 min-w-0 flex flex-col items-center gap-1 no-underline transition-opacity hover:opacity-80">
           <span class="text-[clamp(1rem,0.9rem+0.4vw,1.25rem)] font-bold leading-none" style="color:var(--color-text-primary)" x-text="statsQuotations">0</span>
           <span class="text-[clamp(0.625rem,0.6rem+0.1vw,0.75rem)] text-center leading-[1.3] line-clamp-2" style="color:var(--color-text-secondary)">${t("dashboard.statsQuotations")}</span>
         </a>
         <div class="w-px bg-gray-200 self-stretch"></div>
-        <a href="/pages/dashboard/orders.html" class="flex-1 min-w-0 flex flex-col items-center gap-1 no-underline transition-opacity hover:opacity-80">
+        <!-- Kupon listesi sayfası yok (kod sepette girilir); sayı bilgi amaçlı, tıklanamaz. -->
+        <div class="flex-1 min-w-0 flex flex-col items-center gap-1">
           <span class="text-[clamp(1rem,0.9rem+0.4vw,1.25rem)] font-bold leading-none" style="color:var(--color-text-primary)" x-text="statsCoupons">0</span>
           <span class="text-[clamp(0.625rem,0.6rem+0.1vw,0.75rem)] text-center leading-[1.3] line-clamp-2" style="color:var(--color-text-secondary)">${t("dashboard.statsCoupons")}</span>
-        </a>
+        </div>
       </div>
     </div>
   `;
