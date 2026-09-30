@@ -7,6 +7,8 @@ import { callMethod } from "../utils/api";
 import { t } from "../i18n";
 import { applySwiperDir } from "../utils/direction";
 import { sanitizeUrl } from "../utils/sanitize";
+import { countUnreadMessages, listConversations } from "../services/chatService";
+import { fetchPendingQuoteCount } from "../services/buyerAnalyticsService";
 
 Alpine.data("buyerUserInfo", () => ({
   userName: "",
@@ -40,17 +42,21 @@ Alpine.data("buyerUserInfo", () => ({
 
   async loadStats() {
     try {
-      const [orderResult, couponResult] = await Promise.allSettled([
-        callMethod<{ success: boolean; counts: Record<string, number> }>(
-          "tradehub_core.api.order.get_order_counts"
-        ),
+      // Mesajlar eskiden sipariş sayısını (get_order_counts) gösteriyordu, Teklifler hiç
+      // dolmuyordu. Üç kaynak ayrı; biri düşerse diğer sayaçlar etkilenmez.
+      const [chatResult, quoteResult, couponResult] = await Promise.allSettled([
+        listConversations(),
+        fetchPendingQuoteCount(),
         // Uç yalnız bu alıcının kullanabileceği kupon SAYISINI döner — kod listesi
         // herkese açıktı (MOGEM-685 Adım 4).
         callMethod<{ available: number }>("tradehub_core.api.cart.get_buyer_coupons"),
       ]);
 
-      if (orderResult.status === "fulfilled" && orderResult.value?.success) {
-        this.statsMessages = orderResult.value.counts.all || 0;
+      if (chatResult.status === "fulfilled") {
+        this.statsMessages = countUnreadMessages(chatResult.value);
+      }
+      if (quoteResult.status === "fulfilled") {
+        this.statsQuotations = quoteResult.value;
       }
       if (couponResult.status === "fulfilled") {
         this.statsCoupons = couponResult.value?.available ?? 0;

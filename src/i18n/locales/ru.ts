@@ -536,6 +536,10 @@ const ru = {
     },
     buyerUi: {
       kpiVsLastMonth: "по сравнению с прошлым месяцем",
+      kpiTotalSpend: "Общие расходы",
+      kpiActiveOrders: "Активные заказы",
+      kpiPendingQuotes: "Ожидающие предложения",
+      kpiNegotiationSavings: "Экономия на переговорах",
       kpiActiveOrdersHint: "{{shipping}} в пути, {{preparing}} в подготовке",
       kpiPendingQuotesHint: "{{rfqCount}} RFQ · {{quoteCount}} ответов поставщиков",
       kpiNegotiationSavingsHint: "средняя скидка {{pct}}% через RFQ",

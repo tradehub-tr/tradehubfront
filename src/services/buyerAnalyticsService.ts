@@ -2,6 +2,7 @@ import { callMethod } from "../utils/api";
 import { t } from "../i18n";
 import {
   type KpiCard,
+  type KpiKey,
   type SpendingTrend,
   type CategorySlice,
   KPI_META,
@@ -32,13 +33,19 @@ export interface BuyerAnalytics {
   categoryBreakdown: CategorySlice[];
 }
 
+/** KPI tasarım bilgisini çevrilmiş etiketle kart alanlarına dönüştürür. */
+function kpiMeta(anahtar: KpiKey): Pick<KpiCard, "label" | "icon" | "tone"> {
+  const { labelKey, icon, tone } = KPI_META[anahtar];
+  return { label: t(labelKey), icon, tone };
+}
+
 const fmtTRY = (n: number): string => "₺" + sayiBicimle(Math.round(n));
 const fmtNum = (n: number): string => sayiBicimle(n);
 
 function mapKpis(k: RawAnalytics["kpis"]): KpiCard[] {
   return [
     {
-      ...KPI_META.totalSpend,
+      ...kpiMeta("totalSpend"),
       value: fmtTRY(k.total_spend.amount),
       hint: t("buyerUi.kpiVsLastMonth"),
       // Nötr (geçen ay verisi yok / değişim 0): yanıltıcı ok+yüzde gösterme, sadece hint.
@@ -50,7 +57,7 @@ function mapKpis(k: RawAnalytics["kpis"]): KpiCard[] {
           }),
     },
     {
-      ...KPI_META.activeOrders,
+      ...kpiMeta("activeOrders"),
       value: String(k.active_orders.count),
       hint: t("buyerUi.kpiActiveOrdersHint", {
         shipping: k.active_orders.shipping,
@@ -58,7 +65,7 @@ function mapKpis(k: RawAnalytics["kpis"]): KpiCard[] {
       }),
     },
     {
-      ...KPI_META.pendingQuotes,
+      ...kpiMeta("pendingQuotes"),
       value: String(k.pending_quotes.quote_count),
       hint: t("buyerUi.kpiPendingQuotesHint", {
         rfqCount: k.pending_quotes.rfq_count,
@@ -66,7 +73,7 @@ function mapKpis(k: RawAnalytics["kpis"]): KpiCard[] {
       }),
     },
     {
-      ...KPI_META.negotiationSavings,
+      ...kpiMeta("negotiationSavings"),
       value: fmtTRY(k.negotiation_savings.amount),
       hint: t("buyerUi.kpiNegotiationSavingsHint", {
         pct: fmtNum(k.negotiation_savings.avg_discount_pct),
@@ -83,8 +90,28 @@ function mapCategories(raw: { name: string; value: number }[]): CategorySlice[] 
   }));
 }
 
+let hamIstek: Promise<RawAnalytics> | null = null;
+
+/** Panoda analitik bölümü ve kullanıcı kartı aynı ucu ister; istek sayfa başına bir kez gider.
+ * Hata olursa önbellek bırakılır ki sonraki çağrı yeniden denesin. */
+function fetchRawAnalytics(): Promise<RawAnalytics> {
+  hamIstek ??= callMethod<RawAnalytics>("tradehub_core.api.v1.dashboard.get_buyer_analytics").catch(
+    (hata: unknown) => {
+      hamIstek = null;
+      throw hata;
+    }
+  );
+  return hamIstek;
+}
+
+/** Açık taleplere gelmiş, alıcının kararını bekleyen teklif sayısı. */
+export async function fetchPendingQuoteCount(): Promise<number> {
+  const raw = await fetchRawAnalytics();
+  return raw.kpis?.pending_quotes?.quote_count ?? 0;
+}
+
 export async function fetchBuyerAnalytics(): Promise<BuyerAnalytics> {
-  const raw = await callMethod<RawAnalytics>("tradehub_core.api.v1.dashboard.get_buyer_analytics");
+  const raw = await fetchRawAnalytics();
   return {
     kpis: mapKpis(raw.kpis),
     spendingTrend: raw.spending_trend,
@@ -97,24 +124,24 @@ export function getZeroAnalytics(): BuyerAnalytics {
   return {
     kpis: [
       {
-        ...KPI_META.totalSpend,
+        ...kpiMeta("totalSpend"),
         value: "₺0",
         hint: t("buyerUi.kpiVsLastMonth"),
         trend: "up",
         trendText: "%0",
       },
       {
-        ...KPI_META.activeOrders,
+        ...kpiMeta("activeOrders"),
         value: "0",
         hint: t("buyerUi.kpiActiveOrdersHint", { shipping: 0, preparing: 0 }),
       },
       {
-        ...KPI_META.pendingQuotes,
+        ...kpiMeta("pendingQuotes"),
         value: "0",
         hint: t("buyerUi.kpiPendingQuotesHint", { rfqCount: 0, quoteCount: 0 }),
       },
       {
-        ...KPI_META.negotiationSavings,
+        ...kpiMeta("negotiationSavings"),
         value: "₺0",
         hint: t("buyerUi.kpiNegotiationSavingsHint", { pct: 0 }),
       },

@@ -534,6 +534,10 @@ const en = {
     },
     buyerUi: {
       kpiVsLastMonth: "vs. last month",
+      kpiTotalSpend: "Total Spend",
+      kpiActiveOrders: "Active Orders",
+      kpiPendingQuotes: "Pending Quotes",
+      kpiNegotiationSavings: "Negotiation Savings",
       kpiActiveOrdersHint: "{{shipping}} in transit, {{preparing}} being prepared",
       kpiPendingQuotesHint: "{{rfqCount}} RFQ · {{quoteCount}} supplier responses",
       kpiNegotiationSavingsHint: "{{pct}}% average discount via RFQ",

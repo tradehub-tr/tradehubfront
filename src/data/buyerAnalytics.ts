@@ -37,21 +37,25 @@ export interface CategorySlice {
   color: string;
 }
 
-/** KPI kartlarının statik tasarım bilgisi (etiket/ikon/tema). */
+/** KPI kartlarının statik tasarım bilgisi (etiket anahtarı/ikon/tema).
+ * Etiket render anında `t(labelKey)` ile çevrilir — sabit metin arayüz dilini izlemiyordu. */
 export interface KpiMeta {
-  label: string;
+  labelKey: string;
   icon: string;
   tone: KpiCard["tone"];
 }
 
-export const KPI_META: Record<
-  "totalSpend" | "activeOrders" | "pendingQuotes" | "negotiationSavings",
-  KpiMeta
-> = {
-  totalSpend: { label: "Toplam Harcama", icon: "wallet", tone: "primary" },
-  activeOrders: { label: "Aktif Sipariş", icon: "package", tone: "info" },
-  pendingQuotes: { label: "Bekleyen Teklif", icon: "file-text", tone: "accent" },
-  negotiationSavings: { label: "Pazarlık Tasarrufu", icon: "tag", tone: "success" },
+export type KpiKey = "totalSpend" | "activeOrders" | "pendingQuotes" | "negotiationSavings";
+
+export const KPI_META: Record<KpiKey, KpiMeta> = {
+  totalSpend: { labelKey: "buyerUi.kpiTotalSpend", icon: "wallet", tone: "primary" },
+  activeOrders: { labelKey: "buyerUi.kpiActiveOrders", icon: "package", tone: "info" },
+  pendingQuotes: { labelKey: "buyerUi.kpiPendingQuotes", icon: "file-text", tone: "accent" },
+  negotiationSavings: {
+    labelKey: "buyerUi.kpiNegotiationSavings",
+    icon: "tag",
+    tone: "success",
+  },
 };
 
 /** Kategori donut dilim renkleri — index ile atanır, taşarsa döner. */
