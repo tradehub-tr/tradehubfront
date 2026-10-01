@@ -1,3 +1,48 @@
+## [v2.8.0-rc.1] - 2026-10-01 RC
+
+Bu surum rc.istoc.com'da onay asamasindadir.
+
+### Duzeltildi
+- fix(storefront): SEO görselleri ve liste cache davranışını düzelt (@ahmeetseker)
+  - Okunur /files görsel adreslerini X-Robots-Tag noindex dışında bırakarak ürün görsellerinin indexlenmesini sağla
+  - listings sorgularını IndexedDB persister dışında tutarak 7 güne kadar bayat ürün listesinin ekrana basılmasını engelle
+  - LCP profil ayrıştırmada hash'li SEO görsel adreslerini original saymayarak RUM ölçüm kohortlarını doğru tut
+  - Yeni davranışları queryClient ve LCP regex testleriyle sabitle
+- fix(lojistik): lojistik mock verisi PROD derlemesinden çıkarıldı (@aliiball)
+  - MOGEM-685 F-03: PROD storefront JS inde 7 mock izi vardı. Derleme anahtarı VITE_LOGISTICS_MOCK ve sunucu adı kapısı; PROD da lojistik sayfaları henüz bağlı değil der.
+  - mockCheckout un gerçek referans verisi checkoutReferenceData ya taşındı, sahte kayıtlar ve hiçbir kodun kullanmadığı 7 mock dosyası silindi.
+  - CI test.yml derleme işi varsayılan derlemede sahte veri izi arar (check:no-mock).
+- fix(kupon): alıcı paneli kupon sayısına geçirildi (@aliiball)
+  - MOGEM-685 F-02: get_buyer_coupons artık kod listesi değil sayı döndürüyor; alıcı paneli buna göre güncellendi.
+  - Ödeme ve kupon akışı gerçek backend ile E2E testine bağlandı (alici-odeme-kupon).
+- fix(test): E2E testleri sentetik hesaplara taşındı (@aliiball)
+  - Panel ve satıcı E2E leri silinmiş SEL-00001 ve gerçek bir kişinin hesabını kullanıyordu; kökteki seed in kurduğu E2E-SATICI ve e2e-satici hesabına geçti.
+- fix(guvenlik): misafir medya ve temizleyici tarayıcı testleri eklendi (@aliiball)
+  - misafir-medya-erisim: MOGEM-685 bulgu 1 medya düzeltmesinin gerçek tarayıcı testi.
+  - sanitize-tarayici: vitest ortamı happy-dom da DOMPurify temizlemiyor (script kalıyor, ölçüldü); temizleme gerçek tarayıcıda sınanıyor.
+  - domPurifyBirimTestiYok: DOMPurify lı fonksiyonu birim testinde sınayan dosya olursa kapı kırmızı verir (A-3 bulgu 3).
+- fix(sevkiyat): backend hata zarfının nesne olarak görünmesi düzeltildi (@aliiball)
+  - MOGEM-685 bulgu 15: v1 uçları hatayı message.error.message zarfında döndürüyor; extractFrappeError nesneyi metin sanıyordu ve müşteri sevkiyat takibinde [object Object] görüyordu.
+  - Zarftaki mesaj okunuyor (Sevkiyat bulunamadı: X). Kusur ortak yardımcıdaydı, tüm v1 uçlarını düzeltir.
+- fix(guvenlik): ülke başlığı denetimine sunucu kaynaklı değer eklendi (@aliiball)
+  - 21 Eylül K4 ten beri api bloğu X-Country yi nginx in IP tablosundan gelen ulke_yayin ile eziyor; denetim yalnız boş değeri tanıdığı için birim testi o günden beri kırmızıydı.
+  - Denetim iki biçimi kabul ediyor: boş değer ya da ulke_yayin. İstemci başlığını geçiren her değer yine ihlal; bunu kanıtlayan test eklendi.
+- fix(ci): lojistik monkey turu backendsiz E2E koşusundan çıkarıldı (@aliiball)
+  - Monkey her 5xx yanıtı kusur sayıyor; CI runner da backend olmadığı için sayfanın açılış çağrıları 500 dönüyor ve 22 Eylül den beri 14 kırmızı üretiyordu. Backend le yeşil, backend siz kırmızı ölçüldü.
+  - Yerel e2e.sh onu zaten normal paketten ayırıyordu; test.yml ayırmıyordu. Tur yerelde e2e.sh --monkey ile koşmaya devam ediyor.
+- fix(buyer-dashboard): pano sayaçları ve KPI başlıkları düzeltildi (@aliiball)
+  - Teklifler sayacı hiç dolmuyordu ve kimliksiz rfq-quotes sayfasına gidiyordu; artık karar bekleyen teklif sayısını gösteriyor ve talepler listesine (inquiries) gidiyor
+  - Kuponlar hücresi kuponla ilgisi olmayan siparişler sayfasına gidiyordu; kupon listesi sayfası olmadığı için bağlantısız sayı yapıldı
+  - get_buyer_analytics isteği kart ve analitik bölümü arasında paylaşılıyor: sayfa başına tek istek, hata olursa sonraki çağrı yeniden dener
+  - KPI kartı başlıkları sabit Türkçeydi ve İngilizce arayüzde Türkçe çiziliyordu; buyerUi.kpi* anahtarlarıyla dört dile taşındı
+  - Testler: dashboardStats ve buyerAnalyticsService birim testleri, alici-pano-sayaclar E2E (mock, masaüstü ve mobil); her düzeltme geri alınınca kırmızıya düşüyor
+
+### Degistirildi
+- refactor(deps): capacitor assets bağımlılıktan çıkarıldı, audit eklendi (@aliiball)
+  - MOGEM-685 F-01: @capacitor/assets yalnız ikon üretiminde kullanılıyordu ve açıkların çoğunu taşıyordu; npx ile sabit sürümle çalışıyor. npm audit fix uygulandı.
+  - CI a uyarı veren npm audit işi eklendi (derlemeyi kırmaz). Kilit npm 10 ile üretildi (npm 11 kilidi Docker da npm ci yi kırıyordu).
+
+---
 ## [v2.8.0-alpha.4] - 2026-09-30 ALPHA
 
 Bu surum alpha.istoc.com'da gelistirme asamasindadir.
