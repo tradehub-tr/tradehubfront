@@ -1,5 +1,5 @@
 import { t } from "../../i18n";
-import { renderListingCard, upgradeListingCardMedia } from "../shared/ListingCard";
+import { renderListingCard, upgradeListingCardMedia, LISTING_EAGER_CARDS } from "../shared/ListingCard";
 import { getMediaManifest, primeMediaManifests } from "../../lib/media/manifest";
 /**
  * ProductListingGrid Component
@@ -240,7 +240,10 @@ function renderGridItems(products: ProductListingCard[], fillFrom?: number | nul
     // preload bağlantısının kapatacağı bir keşif boşluğu yok). TEK kart:
     // hepsine `high` vermek önceliği anlamsızlaştırır.
     parts.push(
-      `<div role="listitem" class="flex">${renderListingCard(card, i === 0 ? { priorityImage: true } : {})}</div>`
+      `<div role="listitem" class="flex">${renderListingCard(
+        card,
+        i === 0 ? { priorityImage: true } : { lazy: i >= LISTING_EAGER_CARDS }
+      )}</div>`
     );
   });
   return parts.join("");

@@ -28,6 +28,8 @@ import { escapeHtml, sanitizeUrl, sanitizeRichHtml } from "../../utils/sanitize"
 import { OptionsSheet, initOptionsSheet } from "./OptionsSheet";
 import { MediaViewer, initMediaViewer, openMediaViewer, collectVideoUrls } from "./MediaViewer";
 import { preloadLcpImageFromHtml } from "../media/LcpPreload";
+import { ResponsiveImage } from "../media/ResponsiveImage";
+import { getMediaImageManifest } from "../../lib/media/manifest";
 
 // Product loaded lazily — getCurrentProduct() called inside functions
 
@@ -116,6 +118,57 @@ export function bottomSheet(id: string, title: string, bodyHtml: string): string
    Main Layout HTML
    ══════════════════════════════════════════════════════ */
 
+/**
+ * Mobil galeri görsellerini manifestle yükselt (2026-09-30).
+ *
+ * Mobil düzen bugüne kadar manifesti HİÇ kullanmıyordu: 390px'lik slayt da
+ * 49px'lik karo da ham master'ı (1000–2000 px) indiriyordu. Masaüstü
+ * galerisinin `upgradeGalleryMedia` deseniyle aynı: düğüm yerinde yeniden
+ * üretilir, manifest yoksa dokunulmaz, tekrar çağrılmaya dayanıklıdır.
+ *
+ * `sizes`: slayt tam viewport genişliğinde (`basis-full`, mobil düzen yalnız
+ * <1024px'te basılır); karo sabit 49px (`w-[49px]`).
+ *
+ * @returns Yükseltilen düğüm sayısı.
+ */
+export const MOBILE_SLIDE_SIZES = "100vw";
+export const MOBILE_THUMB_SIZES = "49px";
+
+export function upgradeMobileGalleryMedia(root: ParentNode = document): number {
+  const listing = getCurrentProduct().id || "";
+  if (!listing) return 0;
+  let sayac = 0;
+  const hedefler: Array<[string, string]> = [
+    ["#pdm-gallery-track img", MOBILE_SLIDE_SIZES],
+    ["#pdm-thumb-strip img", MOBILE_THUMB_SIZES],
+  ];
+  for (const [secici, sizes] of hedefler) {
+    for (const img of Array.from(root.querySelectorAll<HTMLImageElement>(secici))) {
+      if (img.hasAttribute("srcset") || img.parentElement?.tagName === "PICTURE") continue;
+      const src = img.getAttribute("src") || "";
+      const manifest = src ? getMediaImageManifest(listing, src) : null;
+      if (!manifest) continue;
+      const eski = img.outerHTML;
+      const yeni = ResponsiveImage({
+        manifest,
+        fallback: () => eski,
+        sizes,
+        eager: img.getAttribute("loading") !== "lazy",
+        priority: img.getAttribute("fetchpriority") === "high",
+        alt: img.getAttribute("alt") ?? "",
+        imgClass: img.getAttribute("class") ?? "",
+        width: Number(img.getAttribute("width")) || 800,
+        height: Number(img.getAttribute("height")) || 800,
+        extraAttrs: img.hasAttribute("draggable") ? { draggable: "false" } : {},
+      });
+      if (yeni === eski) continue;
+      img.outerHTML = yeni;
+      sayac += 1;
+    }
+  }
+  return sayac;
+}
+
 export function MobileProductLayout(): string {
   const p = getCurrentProduct();
 
@@ -143,11 +196,46 @@ export function MobileProductLayout(): string {
    */
   // `ProductImage` — künye alanları (ölçü, yükleme ipuçları) opsiyonel, eski
   // çağıranlar etkilenmiyor.
-  const slaytGorseli = (img: ProductImage, i: number): string =>
+  const hamSlayt = (img: ProductImage, i: number): string =>
     // Gerçek ölçüler API'den (`imageMeta`) geliyorsa onlar basılır; yoksa
     // eski sabit. Sabit ölçü sayfayı zıplatıyordu (CLS) — ölçülen bir üründe
     // gerçek dosya 497×645 iken 800×800 yazılıyordu.
     `<img class="w-full h-full object-contain select-none" src="${escapeHtml(sanitizeUrl(img.src))}" alt="${escapeHtml(img.alt)}" width="${img.width || 800}" height="${img.height || 800}" decoding="${img.decoding || "async"}" draggable="false" loading="${img.loading || (i === 0 ? "eager" : "lazy")}"${i === 0 && img.fetchpriority === "high" ? ' fetchpriority="high"' : ""}>`;
+  // Manifest önbellekteyse (sayfa ilk boyamadan önce kısa süre bekler) slayt
+  // doğrudan `srcset` ile basılır; LCP preload'u da bu işaretlemeden türer ve
+  // `imagesrcset` taşır — ham master önceden indirilmez.
+  const slaytGorseli = (img: ProductImage, i: number): string => {
+    const eski = hamSlayt(img, i);
+    const manifest = img.src ? getMediaImageManifest(p.id || "", img.src) : null;
+    if (!manifest) return eski;
+    return ResponsiveImage({
+      manifest,
+      fallback: () => eski,
+      sizes: MOBILE_SLIDE_SIZES,
+      eager: i === 0,
+      priority: i === 0 && img.fetchpriority === "high",
+      alt: img.alt,
+      imgClass: "w-full h-full object-contain select-none",
+      width: img.width || 800,
+      height: img.height || 800,
+      extraAttrs: { draggable: "false" },
+    });
+  };
+  const karoGorseli = (img: ProductImage): string => {
+    const eski = `<img class="w-full h-full object-cover" src="${escapeHtml(sanitizeUrl(img.src))}" alt="${escapeHtml(img.alt)}" width="80" height="80" decoding="async" loading="lazy">`;
+    const manifest = img.src ? getMediaImageManifest(p.id || "", img.src) : null;
+    if (!manifest) return eski;
+    return ResponsiveImage({
+      manifest,
+      fallback: () => eski,
+      sizes: MOBILE_THUMB_SIZES,
+      eager: false,
+      alt: img.alt,
+      imgClass: "w-full h-full object-cover",
+      width: 80,
+      height: 80,
+    });
+  };
 
   // T-122 — mobilde LCP adayı İLK slayttır (tek `loading="eager"` olan o).
   // Preload düz `href`tir çünkü bu işaretlemede `srcset` YOK; adres `<img
@@ -219,7 +307,7 @@ export function MobileProductLayout(): string {
         .map(
           (img, i) => `
         <button type="button" data-thumb-index="${i}" class="${i === 0 ? "pdm-thumb-active " : ""}th-no-press appearance-none focus:outline-none shrink-0 w-[49px] h-[49px] rounded-md overflow-hidden border-2 border-transparent p-0 bg-none [&.pdm-thumb-active]:border-[var(--color-text-heading,#111827)]" aria-label="${escapeHtml(t("product.imageNumberLabel", { count: String(i + 1) }))}">
-          ${img.src ? `<img class="w-full h-full object-cover" src="${escapeHtml(sanitizeUrl(img.src))}" alt="${escapeHtml(img.alt)}" width="80" height="80" decoding="async" loading="lazy">` : ""}
+          ${img.src ? karoGorseli(img) : ""}
         </button>
       `
         )

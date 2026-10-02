@@ -1030,7 +1030,7 @@ function ContactSidebar(): string {
         <!-- Seller Logo & Name -->
         <div class="flex items-center gap-3 mb-5">
           <div class="w-12 h-12 flex items-center justify-center rounded-md overflow-hidden border border-gray-100 p-1 bg-gray-50 shrink-0">
-            <img x-show="seller?.logo" :src="seller?.logo" :alt="seller?.seller_name || ''" width="120" height="120" decoding="async" class="w-full h-full object-contain" />
+            <img x-show="seller?.logo" :srcset="seller?.logo_media?.srcset || null" sizes="38px" :src="seller?.logo_media?.src || seller?.logo" :alt="seller?.seller_name || ''" width="120" height="120" loading="lazy" decoding="async" class="w-full h-full object-contain" />
             <svg x-show="!seller?.logo" class="w-6 h-6 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/></svg>
           </div>
           <div class="min-w-0">

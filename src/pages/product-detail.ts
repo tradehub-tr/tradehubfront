@@ -56,6 +56,7 @@ import {
   initShippingModal,
   MobileProductLayout,
   initMobileLayout,
+  upgradeMobileGalleryMedia,
   CartDrawer,
   initCartDrawer,
   WriteReviewModal,
@@ -67,6 +68,8 @@ import {
 import { getCurrentProduct, loadProduct } from '../alpine/product'
 // Medya teslim manifesti — galerinin <picture>/srcset üretebilmesi için.
 import { primeMediaManifests } from '../lib/media/manifest'
+import { hydrateProductImages } from '../components/media/ProductImage'
+import { MANIFEST_FIRST_PAINT_WAIT_MS } from '../components/products/ProductListingGrid'
 // B-2: loginModal ayrı modül (product.ts'ten bölündü) — product-detail'de de kullanılıyor.
 import '../alpine/loginModal'
 import { initCurrency, getSelectedCurrency, formatPriceRange } from '../services/currencyService'
@@ -347,6 +350,8 @@ async function renderProductPage() {
       initProductVideoSection({ signal: lifecycle.signal });
     } else {
       initMobileLayout({ signal: lifecycle.signal });
+      // Manifest önbellekteyse (viewport değişimiyle sonradan mount) hemen uygula.
+      upgradeMobileGalleryMedia();
     }
 
     // Reviews and related products belong to the currently mounted layout only.
@@ -406,6 +411,15 @@ async function renderProductPage() {
   initVerificationHelpers(); // window.__verifiedByText / __downloadReportText (before startAlpine)
   initCartDrawer();
   initShippingModal();
+  // 2026-09-30 (ölçüldü): manifest hiç beklenmeden basılan ilk galeri ham
+  // master'ı (≤2000 px) indiriyor ve preload ediyordu; manifest gelince
+  // tarayıcı `srcset`ten önbellekteki en büyük adayı (master) seçtiği için
+  // 390px telefonda da 2000 px iniyordu. Izgara ile aynı kısa tavan: manifest
+  // en çok `MANIFEST_FIRST_PAINT_WAIT_MS` beklenir, gelmezse eski yol sürer.
+  await Promise.race([
+    manifestHazir,
+    new Promise((resolve) => setTimeout(resolve, MANIFEST_FIRST_PAINT_WAIT_MS)),
+  ]);
   mountDetailLayout();
   detailMediaQuery.addEventListener('change', mountDetailLayout);
 
@@ -415,6 +429,11 @@ async function renderProductPage() {
   // slayt değişimi) manifesti zaten senkron önbellekten okur.
   void manifestHazir.then(() => {
     upgradeGalleryMedia();
+    upgradeMobileGalleryMedia();
+    // Varyant karoları / seçenek satırları (`ProductImage` işaretli ham
+    // `<img>`ler) tavanı aşan manifestle yerinde yükseltilir; önbellek sıcak,
+    // ek istek atılmaz.
+    void hydrateProductImages();
   });
 
   // ── Original images (for "back to default" gallery fallback) ──

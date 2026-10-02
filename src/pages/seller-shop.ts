@@ -62,7 +62,11 @@ async function getInitialLayout(): Promise<LayoutConfig> {
     // Alpine `sellerShop` init'i aynı ucu tekrar çekiyordu; memoize servis tek istek atar.
     const data = await fetchStorefrontLayout<SectionConfig>(sellerCode);
     if (data?.message?.sections) {
-      return { sections: data.message.sections, theme: data.message.theme };
+      return {
+        sections: data.message.sections,
+        theme: data.message.theme,
+        image_media: data.message.image_media,
+      };
     }
   } catch {
     // Fall back to default layout
@@ -125,9 +129,10 @@ async function renderPage() {
               <!-- Logo (arka plan yok, radius dinamik) -->
               <div class="w-[140px] h-[140px] overflow-hidden shrink-0"
                    :style="'border-radius:' + (seller?.logo_radius || '8') + 'px'">
-                <img x-show="seller?.logo" :src="seller?.logo" :alt="seller?.seller_name" width="140" height="140"
-                     class="w-full h-full object-cover"
-                     :style="'border-radius:' + (seller?.logo_radius || '8') + 'px'" />
+                <img x-show="seller?.logo" :srcset="seller?.logo_media?.srcset || null" sizes="140px"
+                     :src="seller?.logo_media?.src || seller?.logo" :alt="seller?.seller_name" width="140" height="140"
+                     loading="lazy" decoding="async" class="w-full h-full object-cover"
+                     :style="'border-radius:' + (seller?.logo_radius || '8') + 'px;' + ($focalPos(seller?.logo_media) ? 'object-position:' + $focalPos(seller?.logo_media) : '')" />
                 <div x-show="!seller?.logo" class="w-full h-full bg-gray-100 flex items-center justify-center"
                      :style="'border-radius:' + (seller?.logo_radius || '8') + 'px'">
                   <svg class="w-12 h-12 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M2 7l10-5 10 5v10l-10 5-10-5V7z"/></svg>
@@ -204,8 +209,9 @@ async function renderPage() {
               <div class="flex items-center gap-3">
                 <div class="w-[50px] h-[50px] shrink-0 overflow-hidden border border-gray-200 bg-white"
                      :style="'border-radius:' + (seller?.logo_radius || '8') + 'px'">
-                  <img x-show="seller?.logo" :src="seller?.logo" :alt="seller?.seller_name" width="140" height="140"
-                       class="w-full h-full object-contain" />
+                  <img x-show="seller?.logo" :srcset="seller?.logo_media?.srcset || null" sizes="48px"
+                       :src="seller?.logo_media?.src || seller?.logo" :alt="seller?.seller_name" width="140" height="140"
+                       loading="lazy" decoding="async" class="w-full h-full object-contain" />
                   <div x-show="!seller?.logo" class="w-full h-full bg-gray-100 flex items-center justify-center">
                     <svg class="w-6 h-6 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M2 7l10-5 10 5v10l-10 5-10-5V7z"/></svg>
                   </div>

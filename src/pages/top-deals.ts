@@ -46,7 +46,7 @@ import {
   TopDealsGrid,
   initCategoryTabs,
 } from '../components/top-deals'
-import { renderListingCard, initProductSliders } from '../components/shared/ListingCard'
+import { renderListingCard, initProductSliders, primeCardManifestsBeforePaint } from '../components/shared/ListingCard'
 import { renderPagination } from '../components/shared/Pagination'
 // Sepet çekmecesi statik import edilmez: `ListingCartDrawer → SharedCartDrawer`
 // zinciri sayfanın modulepreload grafiğine giriyordu (MOGEM-638 §2.4).
@@ -211,7 +211,9 @@ Alpine.data('topDealsPage', () => ({
     if (q) params.query = q
 
     searchListings(params)
-      .then(result => {
+      .then(async result => {
+        // Kartlar basılmadan manifest (en çok 500 ms) — ham master indirilmesin.
+        await primeCardManifestsBeforePaint(result.products.map((c) => c.id))
         if (myReq !== this.reqId) return
         this.products = result.products // REPLACE — append yasak (scale-resilience)
         this.totalPages = result.searchHeader.totalPages

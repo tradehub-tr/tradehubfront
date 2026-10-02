@@ -4,6 +4,11 @@ export interface TailoredCategory {
   title: string;
   description: string;
   imageSrc: string;
+  /**
+   * `imageSrc`in ait olduğu ilan — teslim manifesti bu adla anahtarlanır.
+   * Yoksa görsel ham `<img>` ile basılır (türev seçilemez).
+   */
+  listingId?: string;
   badge?: "personal" | "trend" | "quality" | null;
   /** Kategori görüntülenme sayısı — kanal şeridi meta satırı. */
   viewsCount?: number;

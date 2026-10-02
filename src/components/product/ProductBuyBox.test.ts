@@ -264,3 +264,92 @@ describe("Renk kutucukları — varyant görseli yoksa ana görsel, hiç görsel
     expect(btn!.textContent?.trim()).toBe("Füme");
   });
 });
+
+describe("Renk kutucuğu görseli — manifestten küçük türev (2026-09-30 görsel denetimi)", () => {
+  beforeEach(async () => {
+    const { clearMediaManifestCache } = await import("../../lib/media/manifest");
+    clearMediaManifestCache();
+  });
+
+  it("manifest varsa 58px sizes ile srcset basar ve tembel kalır; ham master src olmaz", async () => {
+    const { seedMediaManifest } = await import("../../lib/media/manifest");
+    seedMediaManifest("LST-1", {
+      listing: "LST-1",
+      slot: "product.image",
+      enabled: true,
+      fallback: "/files/media/a/v/w768-768.webp",
+      suppressed: 0,
+      images: [
+        {
+          file_url: "/files/siyah.webp",
+          alt_text: "",
+          primary: false,
+          asset: "MA-1",
+          manifest: {
+            slot_key: "product.image",
+            src: "/files/media/a/v/w768-768.webp",
+            sizes: "",
+            alt: "",
+            loading: "lazy",
+            decoding: "async",
+            fetchpriority: "",
+            width: 1800,
+            height: 1800,
+            aspect_ratio: 1,
+            sources: [
+              {
+                type: "image/webp",
+                srcset:
+                  "/files/media/a/v/w192-192.webp 192w, /files/media/a/v/w1280-1280.webp 1280w, /files/siyah.webp 1800w",
+                sizes: "",
+              },
+            ],
+          },
+        },
+      ],
+    });
+    getCurrentProduct.mockReturnValue(
+      makeProduct({
+        variants: [
+          {
+            type: "color",
+            label: "Renk",
+            options: [
+              { id: "c1", label: "Siyah", value: "#000", available: true, thumbnail: "/files/siyah.webp" },
+            ],
+          },
+        ],
+      })
+    );
+    const img = parse(ProductBuyBox()).querySelector<HTMLImageElement>(
+      '.variant-option[data-variant-id="c1"] img'
+    )!;
+    expect(img.getAttribute("srcset")).toContain("w192-192.webp 192w");
+    expect(img.getAttribute("sizes")).toBe("58px");
+    expect(img.getAttribute("loading")).toBe("lazy");
+    expect(img.getAttribute("src")).not.toBe("/files/siyah.webp");
+  });
+
+  it("manifest yoksa ham görsel tembel ve yükseltme işaretleriyle basılır", () => {
+    getCurrentProduct.mockReturnValue(
+      makeProduct({
+        variants: [
+          {
+            type: "color",
+            label: "Renk",
+            options: [
+              { id: "c1", label: "Siyah", value: "#000", available: true, thumbnail: "/files/siyah.webp" },
+            ],
+          },
+        ],
+      })
+    );
+    const img = parse(ProductBuyBox()).querySelector<HTMLImageElement>(
+      '.variant-option[data-variant-id="c1"] img'
+    )!;
+    expect(img.getAttribute("src")).toBe("/files/siyah.webp");
+    expect(img.getAttribute("loading")).toBe("lazy");
+    expect(img.getAttribute("data-product-image-listing")).toBe("LST-1");
+    expect(img.getAttribute("data-product-image-sizes")).toBe("58px");
+  });
+});

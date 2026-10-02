@@ -77,6 +77,8 @@ declare global {
     city?: string;
     country?: string;
     logo?: string;
+    /** Logonun WebP türevleri (backend `logo_media`, `lib/media/storeImage.ts`). */
+    logo_media?: unknown;
     cover?: string;
     cover_image?: string;
     banner_image?: string;

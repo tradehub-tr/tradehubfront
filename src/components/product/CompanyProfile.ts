@@ -11,6 +11,7 @@ import { getCountryDisplayName } from "../../utils/country";
 import { getCurrentProduct } from "../../alpine/product";
 import { t } from "../../i18n";
 import { escapeHtml, sanitizeUrl } from "../../utils/sanitize";
+import { storeImgAttrs } from "../../lib/media/storeImage";
 import { getSellerUrl } from "../../utils/sellerUrl";
 import { SellerActionButtons } from "./ProductSellerPanel";
 
@@ -106,7 +107,7 @@ export function CompanyProfile(): string {
   ].filter((st) => st.value);
 
   const logoHtml = s.logo
-    ? `<img src="${escapeHtml(s.logo)}" alt="${escapeHtml(s.name)}" width="64" height="64" class="h-[64px] w-[64px] shrink-0 rounded-[4px] border border-[#ddd] bg-white object-contain" loading="lazy" decoding="async" />`
+    ? `<img${storeImgAttrs(s.logoMedia, s.logo, "productSupplierLogo")} alt="${escapeHtml(s.name)}" width="64" height="64" class="h-[64px] w-[64px] shrink-0 rounded-[4px] border border-[#ddd] bg-white object-contain" loading="lazy" decoding="async" />`
     : `<div class="flex h-[64px] w-[64px] shrink-0 items-center justify-center rounded-[4px] border border-[#ddd] bg-white text-[24px] font-bold text-[#999]">${escapeHtml((s.name || "?").charAt(0))}</div>`;
 
   const supplierCard = `

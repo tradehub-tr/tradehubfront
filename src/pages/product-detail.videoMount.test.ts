@@ -93,6 +93,7 @@ vi.mock("../components/product", async () => {
     initProductBuyBox: () => {},
     ProductImageGallery: () => '<div id="pd-gallery-stub"></div>',
     upgradeGalleryMedia: casus.upgrade,
+    upgradeMobileGalleryMedia: () => 0,
     ProductVideoSection: video.ProductVideoSection,
     initProductVideoSection: video.initProductVideoSection,
     ProductOrderPanel: () => "",

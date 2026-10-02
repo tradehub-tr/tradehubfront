@@ -5,6 +5,7 @@
 import { btn } from "../ui/button";
 import { t } from "../../i18n";
 import { escapeHtml, sanitizeUrl, safeHexColor } from "../sanitize";
+import { coverBandSizes, storeImgAttrs } from "../../lib/media/storeImage";
 
 /** Storefront section ayarları — bölüm tipine göre farklı subset'ler kullanılır */
 export interface SectionSettings {
@@ -39,7 +40,12 @@ export interface SectionConfig {
 export interface LayoutConfig {
   sections: SectionConfig[];
   theme?: Record<string, unknown>;
+  /** Vitrin görsellerinin WebP türevleri, adrese göre (`get_storefront_layout.image_media`). */
+  image_media?: Record<string, unknown>;
 }
+
+/** O an basılan düzenin türev haritası — `renderDynamicSections` kurar. */
+let _layoutImageMedia: Record<string, unknown> = {};
 
 type SectionRenderer = (settings: SectionSettings) => string;
 
@@ -97,7 +103,7 @@ function resolveImageUrl(url: string | undefined): string {
   return url;
 }
 
-function renderSlideImage(slide: HeroSlide, isStatic: boolean): string {
+function renderSlideImage(slide: HeroSlide, isStatic: boolean, index = 0): string {
   // Slider modunda yukseklik container'dan gelir (h-full) — pagination/ok hizasi gorselle esit kalir
   const heightCls = isStatic
     ? "w-full h-[180px] sm:h-[220px] md:h-[320px] lg:h-[400px] object-cover"
@@ -108,7 +114,11 @@ function renderSlideImage(slide: HeroSlide, isStatic: boolean): string {
   const hasOverlay = !!(slide.title || slide.subtitle || slide.ctaText);
   const link = !hasOverlay && slide.ctaLink ? slide.ctaLink : "";
   const resolvedSrc = resolveImageUrl(slide.image);
-  const innerImg = `<img src="${escapeHtml(sanitizeUrl(resolvedSrc))}" alt="${escapeAttr(slide.title || t("sellerApp.bannerAlt"))}" class="${heightCls}" onerror="${fallback}" />${renderSlideOverlay(slide)}`;
+  // WebP türevi varsa srcset (bant genişliği × yükseklik oranı); ilk slayttan
+  // sonrakiler ekran dışında (Swiper) — lazy, görününce iner.
+  const media = slide.image ? _layoutImageMedia[slide.image] : null;
+  const lazy = index > 0 ? ` loading="lazy"` : "";
+  const innerImg = `<img${storeImgAttrs(media, resolvedSrc, { sizes: coverBandSizes(media) })}${lazy} decoding="async" alt="${escapeAttr(slide.title || t("sellerApp.bannerAlt"))}" class="${heightCls}" onerror="${fallback}" />${renderSlideOverlay(slide)}`;
   return link
     ? `<a href="${escapeHtml(sanitizeUrl(link))}" class="${wrapper}">${innerImg}</a>`
     : `<div class="${wrapper}">${innerImg}</div>`;
@@ -170,9 +180,9 @@ function renderHeroBanner(settings: SectionSettings): string {
   const slidesToRender = validSlides.length > 0 ? validSlides : rawSlides;
   const slidesHtml = slidesToRender
     .map(
-      (slide) => `
+      (slide, i) => `
     <div class="swiper-slide relative">
-      ${renderSlideImage(slide, false)}
+      ${renderSlideImage(slide, false, i)}
     </div>
   `
     )
@@ -618,7 +628,7 @@ const SECTION_RENDERERS: Record<string, SectionRenderer> = {
               <!-- Kisi Bilgisi -->
               <div class="flex items-center gap-4 mb-6 pb-6 border-b border-gray-100">
                 <div class="w-[56px] h-[56px] rounded-full bg-gray-100 border border-gray-200 flex items-center justify-center overflow-hidden shrink-0">
-                  <img x-show="seller?.logo" :src="seller?.logo" alt="" class="w-full h-full object-contain p-1" />
+                  <img x-show="seller?.logo" :srcset="seller?.logo_media?.srcset || null" sizes="46px" :src="seller?.logo_media?.src || seller?.logo" alt="" loading="lazy" decoding="async" class="w-full h-full object-contain p-1" />
                   <svg x-show="!seller?.logo" class="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0"/></svg>
                 </div>
                 <div>
@@ -747,7 +757,7 @@ const SECTION_RENDERERS: Record<string, SectionRenderer> = {
                 <!-- Sirket Mini Karti -->
                 <div class="flex items-center gap-3 mb-5 pb-4 border-b border-gray-100">
                   <div class="w-10 h-10 rounded-md border border-gray-200 bg-gray-50 flex items-center justify-center overflow-hidden shrink-0">
-                    <img x-show="seller?.logo" :src="seller?.logo" alt="" class="w-full h-full object-contain p-0.5" />
+                    <img x-show="seller?.logo" :srcset="seller?.logo_media?.srcset || null" sizes="36px" :src="seller?.logo_media?.src || seller?.logo" alt="" loading="lazy" decoding="async" class="w-full h-full object-contain p-0.5" />
                   </div>
                   <p class="text-[13px] font-medium text-gray-800 line-clamp-2" x-text="seller?.seller_name || ''"></p>
                 </div>
@@ -780,6 +790,7 @@ const SECTION_RENDERERS: Record<string, SectionRenderer> = {
  */
 export function renderDynamicSections(layout: LayoutConfig): string {
   if (!layout?.sections?.length) return "";
+  _layoutImageMedia = layout.image_media || {};
 
   return layout.sections
     .filter((s) => s.enabled)

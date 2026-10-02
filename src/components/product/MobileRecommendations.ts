@@ -15,6 +15,15 @@ import { escapeHtml, sanitizeUrl } from "../../utils/sanitize";
 import { getCurrentProduct } from "../../alpine/product";
 import { searchListings, getFeaturedListings } from "../../services/listingService";
 import type { ProductListingCard } from "../../types/productListing";
+import { ProductImage, hydrateProductImages } from "../media/ProductImage";
+import { primeCardManifestsBeforePaint } from "../shared/ListingCard";
+
+/**
+ * Kart kutusu: `basis-[42%]` (≤374px'te `46%`) — yüzde, izin taşıyıcının
+ * iç genişliğine (`px-4` = 32px, dar ekranda `px-3` = 24px) göre hesaplanır.
+ */
+export const MOBILE_REC_CARD_SIZES =
+  "(max-width: 374px) calc((100vw - 24px) * 0.46), calc((100vw - 32px) * 0.42)";
 
 interface RecRow {
   key: string;
@@ -55,7 +64,15 @@ function recCard(card: ProductListingCard): string {
       <div class="aspect-square w-full overflow-hidden rounded-lg bg-surface-raised">
         ${
           card.imageSrc
-            ? `<img src="${escapeHtml(sanitizeUrl(card.imageSrc))}" alt="${safeName}" width="400" height="400" decoding="async" class="w-full h-full object-cover" loading="lazy" />`
+            ? ProductImage({
+                listing: card.id,
+                src: card.imageSrc,
+                alt: card.name,
+                className: "w-full h-full object-cover",
+                sizes: MOBILE_REC_CARD_SIZES,
+                width: 400,
+                height: 400,
+              })
             : `<div class="w-full h-full flex items-center justify-center text-text-placeholder">
                 <svg width="40" height="40" fill="none" stroke="currentColor" stroke-width="1.4" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
               </div>`
@@ -110,8 +127,13 @@ export function initMobileRecommendations(): void {
           rowEl.remove();
           return;
         }
-        track.innerHTML = filtered.map(recCard).join("");
-        rowEl.classList.remove("hidden");
+        // Kartlar basılmadan manifest (en çok `CARD_MANIFEST_WAIT_MS`); geç
+        // gelirse basılı tembel `<img>` yerinde yükseltilir.
+        return primeCardManifestsBeforePaint(filtered.map((c) => c.id)).then(() => {
+          track.innerHTML = filtered.map(recCard).join("");
+          rowEl.classList.remove("hidden");
+          void hydrateProductImages(track);
+        });
       })
       .catch(() => rowEl.remove());
   });

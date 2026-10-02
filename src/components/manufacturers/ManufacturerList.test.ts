@@ -31,7 +31,10 @@ describe("ManufacturerList", () => {
   it("defers non-critical seller media and reserves image dimensions", () => {
     const html = ManufacturerList();
 
-    expect(html).toContain(':src="seller.logo"');
+    // Mağaza logosu: WebP türevi (logo_media) varsa srcset, yoksa ham adres.
+    expect(html).toContain(':src="(seller.logo_media && seller.logo_media.src) || seller.logo"');
+    expect(html).toContain('sizes="50px"');
+    expect(html).toContain("seller.gallery_images_media[activeIdx].srcset");
     expect(html).toContain(':src="p.image"');
     expect(html).toContain('loading="lazy"');
     expect(html).toContain('decoding="async"');

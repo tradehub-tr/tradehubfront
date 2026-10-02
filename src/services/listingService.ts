@@ -3,6 +3,7 @@
  * Maps Frappe API responses to frontend TypeScript interfaces.
  */
 
+import { toStoreImageMedia } from "../lib/media/storeImage";
 import type { CategoryFacetItem } from "../components/products/buildCategoryFacetTree";
 import { api } from "../utils/api";
 import { t } from "../i18n";
@@ -1511,6 +1512,7 @@ export function mapListingDetail(raw: any): ProductDetail {
         kybVerified: supplierVerified,
         country: raw.supplier.country || "",
         logo: raw.supplier.logo || "",
+        logoMedia: toStoreImageMedia(raw.supplier.logo_media),
         yearsInBusiness: raw.supplier.yearsInBusiness || 0,
         responseTime: raw.supplier.responseTime || "",
         responseRate: raw.supplier.responseRate ? `${raw.supplier.responseRate}%` : "",

@@ -20,6 +20,8 @@ export interface FavoriteSellerItem {
   city?: string;
   country?: string;
   logo?: string;
+  /** Logonun WebP türevleri (backend `logo_media`); eski kayıtlarda yok → ham `logo`. */
+  logoMedia?: unknown;
   cover?: string;
   rating?: number;
   reviewCount?: number;

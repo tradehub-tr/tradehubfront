@@ -12,6 +12,7 @@
 import { getCurrentProduct } from "../../alpine/product";
 import { t } from "../../i18n";
 import { escapeHtml, sanitizeUrl } from "../../utils/sanitize";
+import { storeImgAttrs } from "../../lib/media/storeImage";
 import { getSellerUrl, getSellerStoreUrl } from "../../utils/sellerUrl";
 import { getCountryCode } from "../../utils/country";
 import { getFlagSvg } from "../../utils/flags";
@@ -71,7 +72,7 @@ export function ProductSellerPanel(): string {
   const sellerLogoUrl = s.logo ? sanitizeUrl(s.logo) : "";
   const sellerAvatar = sellerLogoUrl
     ? `<span data-seller-logo class="shrink-0 w-10 h-10 rounded-md bg-white border border-[var(--color-border-default,#e5e5e5)] p-1 inline-flex items-center justify-center overflow-hidden">
-         <img src="${escapeHtml(sellerLogoUrl)}" alt="${escapeHtml(s.name || "")}" width="40" height="40" decoding="async" class="w-full h-full object-contain" />
+         <img${storeImgAttrs(s.logoMedia, sellerLogoUrl, "productSellerPanelLogo")} alt="${escapeHtml(s.name || "")}" width="40" height="40" decoding="async" class="w-full h-full object-contain" />
        </span>`
     : `<span data-seller-initial class="shrink-0 w-10 h-10 rounded-md bg-gradient-to-br from-[#3b3b3b] to-[#111111] text-white text-base font-extrabold inline-flex items-center justify-center" aria-hidden="true">${sellerInitial}</span>`;
 

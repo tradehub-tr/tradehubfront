@@ -10,7 +10,12 @@ import "../utils/api"; // window.API_BASE'i kurar (Alpine bileşenleriyle aynı 
 const API_BASE = (window as Window & { API_BASE?: string }).API_BASE || "/api";
 
 export interface StorefrontLayoutResponse<TSection = unknown> {
-  message?: { sections?: TSection[]; theme?: Record<string, string | undefined> } | null;
+  message?: {
+    sections?: TSection[];
+    theme?: Record<string, string | undefined>;
+    /** Vitrin görsellerinin WebP türevleri, adrese göre (backend `_vitrin_gorsel_medyasi`). */
+    image_media?: Record<string, unknown>;
+  } | null;
 }
 
 const _inflight = new Map<string, Promise<unknown>>();

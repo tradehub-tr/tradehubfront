@@ -40,7 +40,7 @@ export {
   openCartDrawer,
   setCartDrawerContext,
 } from "./CartDrawer";
-export { MobileProductLayout, initMobileLayout } from "./MobileLayout";
+export { MobileProductLayout, initMobileLayout, upgradeMobileGalleryMedia } from "./MobileLayout";
 export { MobileRecommendations, initMobileRecommendations } from "./MobileRecommendations";
 export { SocialProofBadge } from "./SocialProofBadge";
 export { ProductSalesRank } from "./ProductSalesRank";

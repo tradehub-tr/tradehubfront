@@ -63,6 +63,24 @@ describe("cart and checkout AVIF delivery", () => {
     expect(document.querySelector("picture")).toBeNull();
   });
 
+  it("uses the WebP ladder when the manifest has no AVIF (2026-09-30 product ladder)", () => {
+    const webp = {
+      type: "image/webp",
+      srcset:
+        "/files/media/a/v/w192-192.webp 192w, /files/media/a/v/w384-384.webp 384w, /files/media/a/v/w768-768.webp 768w, /files/media/a/v/w1280-1280.webp 1280w",
+      sizes: "",
+    };
+    seedMediaManifest("LST-1", {
+      ...body,
+      images: [{ ...body.images[0], manifest: { ...image, sources: [webp] } }],
+    });
+    document.body.innerHTML = ProductImage(options);
+    const img = document.querySelector("img")!;
+    expect(img.getAttribute("src")).toBe("/files/media/a/v/w1280-1280.webp");
+    expect(img.srcset).toBe(webp.srcset);
+    expect(img.srcset).not.toContain(".avif");
+  });
+
   it("upgrades a cold cart without replacing its image node or losing events", async () => {
     document.body.innerHTML = ProductImage(options);
     const img = document.querySelector("img")!;
@@ -88,6 +106,46 @@ describe("cart and checkout AVIF delivery", () => {
     document.body.innerHTML = ProductImage(options);
     await hydrateProductImages();
     expect(document.querySelector("img")!.getAttribute("src")).toBe(options.src);
+    expect(document.querySelector("img")!.srcset).toBe("");
+  });
+});
+
+describe("loading semantiği (2026-09-30 görsel denetimi)", () => {
+  it("varsayılan tembel: manifestli ve manifestsiz yolda loading=lazy, fetchpriority yok", () => {
+    document.body.innerHTML = ProductImage(options);
+    expect(document.querySelector("img")!.getAttribute("loading")).toBe("lazy");
+    seedMediaManifest("LST-1", {
+      ...body,
+      images: [{ ...body.images[0], manifest: { ...image, loading: "eager", fetchpriority: "high" } }],
+    });
+    document.body.innerHTML = ProductImage(options);
+    const img = document.querySelector("img")!;
+    expect(img.srcset).not.toBe("");
+    // Manifest "eager/high" dese bile küçük kutu bileşeni öncelik vermez.
+    expect(img.getAttribute("loading")).toBe("lazy");
+    expect(img.hasAttribute("fetchpriority")).toBe(false);
+  });
+
+  it("eager: true → loading yazılmaz (iki yolda da), yine de srcset/sizes basılır", () => {
+    document.body.innerHTML = ProductImage({ ...options, eager: true });
+    expect(document.querySelector("img")!.hasAttribute("loading")).toBe(false);
+    seedMediaManifest("LST-1", body);
+    document.body.innerHTML = ProductImage({ ...options, eager: true });
+    const img = document.querySelector("img")!;
+    expect(img.hasAttribute("loading")).toBe(false);
+    expect(img.hasAttribute("fetchpriority")).toBe(false);
+    expect(img.sizes).toBe("60px");
+  });
+
+  it("hydrateProductImages, manifest isteği patlasa da reddetmez", async () => {
+    document.body.innerHTML = ProductImage(options);
+    vi.stubGlobal(
+      "fetch",
+      vi.fn(async () => {
+        throw new Error("ağ yok");
+      })
+    );
+    await expect(hydrateProductImages()).resolves.toBeUndefined();
     expect(document.querySelector("img")!.srcset).toBe("");
   });
 });

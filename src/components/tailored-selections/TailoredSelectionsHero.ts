@@ -11,6 +11,40 @@ import { t } from "../../i18n";
 import type { TailoredCategory } from "../../types/tailoredSelections";
 import { formatViews } from "../../utils/formatCount";
 import { escapeHtml, sanitizeUrl } from "../../utils/sanitize";
+import { ProductImage } from "../media/ProductImage";
+
+/**
+ * Sahne görseli kutusu: mobilde `max-w-[250px]` − `p-4` = 218px; `lg`de
+ * `clamp(190px,24vw,280px)` − `p-6` → en çok 232px.
+ */
+export const TS_STAGE_IMG_SIZES = "(min-width: 1024px) 232px, 218px";
+/** Kanal şeridi karosu: `w-9` (36px) − `p-1` = 28px. */
+export const TS_CHANNEL_IMG_SIZES = "28px";
+
+/**
+ * Kategori görseli: ilan kimliği biliniyorsa `ProductImage` (manifest varsa
+ * `srcset`, yoksa `hydrateProductImages`in yükselteceği işaretli `<img>`).
+ * 2026-09-30 (ölçüldü): sahne 232px, şerit 28px kutuya ham master (≤2000 px,
+ * görsel başına 5–257 KB) indiriyordu.
+ */
+function categoryImage(
+  category: TailoredCategory,
+  opts: { alt: string; className: string; sizes: string; size: number; eager: boolean }
+): string {
+  if (category.listingId) {
+    return ProductImage({
+      listing: category.listingId,
+      src: category.imageSrc,
+      alt: opts.alt,
+      className: opts.className,
+      sizes: opts.sizes,
+      width: opts.size,
+      height: opts.size,
+      eager: opts.eager,
+    });
+  }
+  return `<img src="${escapeHtml(sanitizeUrl(category.imageSrc))}" alt="${escapeHtml(opts.alt)}" width="${opts.size}" height="${opts.size}" ${opts.eager ? 'loading="eager"' : 'loading="lazy"'} decoding="async" class="${opts.className}"/>`;
+}
 
 const BADGE_ICONS: Record<string, string> = {
   personal:
@@ -102,14 +136,13 @@ function renderStage(category: TailoredCategory): string {
       </div>
       <div class="relative order-first lg:order-none mx-auto w-full max-w-[250px] lg:max-w-none aspect-square rounded-md bg-[#f5f5f3] grid place-items-center p-4 lg:p-6 overflow-hidden">
         ${renderBadge(category.badge)}
-        <img
-          src="${escapeHtml(sanitizeUrl(category.imageSrc))}"
-          alt="${escapeHtml(category.title)}"
-          width="400" height="400"
-          loading="eager"
-          decoding="async"
-          class="w-full h-full object-contain mix-blend-multiply"
-        />
+        ${categoryImage(category, {
+          alt: category.title,
+          className: "w-full h-full object-contain mix-blend-multiply",
+          sizes: TS_STAGE_IMG_SIZES,
+          size: 400,
+          eager: true,
+        })}
       </div>
     </div>
   `;
@@ -135,7 +168,13 @@ function renderChannel(category: TailoredCategory, isActive: boolean): string {
     <button type="button" role="tab" aria-selected="${isActive}" data-slug="${escapeHtml(slug)}"
             class="th-no-press flex-none w-[190px] lg:w-auto min-w-0 flex items-center gap-2.5 rounded-md border ${stateCls} px-3 py-2 text-start cursor-pointer transition-colors duration-150 motion-reduce:transition-none">
       <span class="flex-none w-9 h-9 rounded-md bg-[#f5f5f3] grid place-items-center p-1 overflow-hidden">
-        <img src="${escapeHtml(sanitizeUrl(category.imageSrc))}" alt="" width="200" height="200" loading="lazy" decoding="async" class="w-full h-full object-contain mix-blend-multiply"/>
+        ${categoryImage(category, {
+          alt: "",
+          className: "w-full h-full object-contain mix-blend-multiply",
+          sizes: TS_CHANNEL_IMG_SIZES,
+          size: 200,
+          eager: false,
+        })}
       </span>
       <span class="min-w-0 flex-1">
         <b class="block text-white text-[12.5px] font-semibold leading-tight truncate">${escapeHtml(category.title)}</b>

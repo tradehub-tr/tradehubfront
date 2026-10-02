@@ -6,6 +6,7 @@ import { initMediaRewriter } from "../utils/mediaUrl";
 import { initTracking } from "../utils/trackingManager";
 import { sanitizeHtml } from "../utils/sanitize";
 import { initSelectMenus } from "../components/shared/SelectMenu";
+import { storeImgPosition } from "../lib/media/storeImage";
 
 // Alpine magic: $safeHtml(value) → DOMPurify-sanitized output. Use this in
 // `x-html` bindings whenever the source is user-controlled (review body,
@@ -16,6 +17,9 @@ Alpine.magic(
   "countryName",
   () => (value: unknown) => getCountryDisplayName(value ? String(value) : "")
 );
+// Odak noktası: `*_media.focal` → CSS object-position ("78% 45%"); kayıt yoksa ""
+// (Alpine boş değeri yazmaz → vitrin ortadan kırpar, bugünkü davranış).
+Alpine.magic("focalPos", () => (media: unknown) => storeImgPosition(media) ?? "");
 
 // x-video-src — HLS-farkındalıklı :src (StoreHeader, CompanyProfile video
 // modalı). Direktifin kendisi birkaç satır; hls.js YALNIZ .m3u8 kaynak

@@ -21,3 +21,5 @@ src/types/logistics.d.ts
 # `prettier --write` koşusu 8 anahtarı tek satıra indirdi, `check:dup:update`
 # ilk çalıştığında hepsini geri açardı.
 scripts/duplicate-exports-allowlist.json
+# ÜRETİLMİŞ — tradehub_core sizes.py --emit-placements storefront
+src/lib/media/placements.gen.ts
