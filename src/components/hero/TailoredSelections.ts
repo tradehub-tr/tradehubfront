@@ -14,8 +14,12 @@ import { initCurrency } from "../../services/currencyService";
 import { applySwiperDir } from "../../utils/direction";
 import { formatViews } from "../../utils/formatCount";
 import { escapeHtml, sanitizeUrl } from "../../utils/sanitize";
+import { ProductImage, hydrateProductImages } from "../media/ProductImage";
+import { primeCardManifestsBeforePaint } from "../shared/ListingCard";
 
 interface CollectionProduct {
+  /** İlan adı — manifest anahtarı (2026-09-30). */
+  id?: string;
   name: string;
   price: string;
   imageSrc: string;
@@ -65,17 +69,29 @@ function showTailoredEmptyState(): void {
   if (emptyState) emptyState.style.display = "";
 }
 
+/** Koleksiyon karosu: yan yana iki ürün, slayt genişliğinin yarısı (ölçülen 158–240px). */
+export const TAILORED_TILE_SIZES = "(min-width: 1280px) 240px, (min-width: 768px) 180px, 45vw";
+
 function renderProductImage(product: CollectionProduct): string {
+  const sinif =
+    "w-full h-full object-contain transition-transform duration-300 ease-out group-hover/col:scale-[1.04]";
+  // 2026-09-30: manifest varsa `srcset` (sepetle aynı `ProductImage` yolu);
+  // yoksa `data-product-image-*` işaretli ham `<img>` basılır ve
+  // `hydrateProductImages` manifest gelince yerinde yükseltir.
+  const gorsel = product.id
+    ? ProductImage({
+        listing: product.id,
+        src: product.imageSrc,
+        alt: product.name,
+        className: sinif,
+        sizes: TAILORED_TILE_SIZES,
+        width: 400,
+        height: 400,
+      })
+    : `<img src="${escapeHtml(sanitizeUrl(product.imageSrc))}" alt="${escapeHtml(product.name)}" width="400" height="400" loading="lazy" decoding="async" class="${sinif}" />`;
   return `
     <div class="relative h-full w-full overflow-hidden rounded-md bg-white" aria-hidden="true">
-      <img
-        src="${escapeHtml(sanitizeUrl(product.imageSrc))}"
-        alt="${escapeHtml(product.name)}"
-        width="400" height="400"
-        loading="lazy"
-        decoding="async"
-        class="w-full h-full object-contain transition-transform duration-300 ease-out group-hover/col:scale-[1.04]"
-      />
+      ${gorsel}
     </div>
   `;
 }
@@ -198,8 +214,8 @@ export function initTailoredSelections(): Promise<void> {
             viewsCount: g.viewsCount || 0,
             href: `/pages/tailored-selections.html?category=${encodeURIComponent(g.slug)}`,
             products: [
-              { name: p1.name, price: p1.price, imageSrc: p1.imageSrc || "" },
-              { name: p2.name, price: p2.price, imageSrc: p2.imageSrc || "" },
+              { id: p1.id, name: p1.name, price: p1.price, imageSrc: p1.imageSrc || "" },
+              { id: p2.id, name: p2.name, price: p2.price, imageSrc: p2.imageSrc || "" },
             ] as [CollectionProduct, CollectionProduct],
           };
         });
@@ -208,26 +224,32 @@ export function initTailoredSelections(): Promise<void> {
         showTailoredEmptyState();
         return;
       }
+      // Karolar basılmadan manifest (en çok 500 ms): ham master önbelleğe girip
+      // `srcset` seçimini ezmesin (2026-09-30 ölçümü).
+      return primeCardManifestsBeforePaint(
+        collections.flatMap((c) => c.products.map((p) => p.id || ""))
+      ).then(() => {
+        // Hide empty state
+        document
+          .querySelector("[data-home-section='tailored-selections'] [data-home-section-skeleton]")
+          ?.remove();
+        const emptyState = document.getElementById("tailored-empty");
+        if (emptyState) emptyState.style.display = "none";
 
-      // Hide empty state
-      document
-        .querySelector("[data-home-section='tailored-selections'] [data-home-section-skeleton]")
-        ?.remove();
-      const emptyState = document.getElementById("tailored-empty");
-      if (emptyState) emptyState.style.display = "none";
-
-      const wrapper = document.querySelector("#tailored-swiper .swiper-wrapper");
-      if (wrapper) {
-        wrapper.innerHTML = collections.map((c) => renderCollectionSlide(c)).join("");
-        // Swiper element-bound instance — `swiper-element`/init script tarafından
-        // DOM element üzerine `.swiper` property'si olarak eklenir. Resmi tip yok.
-        const swiperEl = document.querySelector("#tailored-swiper") as
-          | (HTMLElement & { swiper?: { update: () => void } })
-          | null;
-        if (swiperEl?.swiper) {
-          swiperEl.swiper.update();
+        const wrapper = document.querySelector("#tailored-swiper .swiper-wrapper");
+        if (wrapper) {
+          wrapper.innerHTML = collections.map((c) => renderCollectionSlide(c)).join("");
+          void hydrateProductImages(wrapper);
+          // Swiper element-bound instance — `swiper-element`/init script tarafından
+          // DOM element üzerine `.swiper` property'si olarak eklenir. Resmi tip yok.
+          const swiperEl = document.querySelector("#tailored-swiper") as
+            | (HTMLElement & { swiper?: { update: () => void } })
+            | null;
+          if (swiperEl?.swiper) {
+            swiperEl.swiper.update();
+          }
         }
-      }
+      });
     })
     .catch((err) => {
       console.warn("[TailoredSelections] API load failed:", err);

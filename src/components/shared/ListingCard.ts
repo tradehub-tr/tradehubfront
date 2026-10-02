@@ -12,7 +12,7 @@ import { escapeHtml, sanitizeUrl } from "../../utils/sanitize";
 import verifiedTickUrl from "../../assets/images/verfied.png";
 import type { ProductListingCard } from "../../types/productListing";
 import { ResponsiveImage } from "../media/ResponsiveImage";
-import { getMediaImageManifest } from "../../lib/media/manifest";
+import { getMediaImageManifest, primeMediaManifests } from "../../lib/media/manifest";
 import { mediaSizesFor } from "../../lib/media/sizes";
 import { sayiBicimle } from "../../utils/numberLocale";
 
@@ -668,9 +668,10 @@ export function renderListingCard(card: ProductListingCard, opts: ListingCardOpt
  */
 export function upgradeListingCardMedia(
   root: ParentNode = document,
-  sizesRegion = "listing/card_grid"
+  sizesRegion = "listing/card_grid",
+  sizesOverride = ""
 ): number {
-  const sizes = mediaSizesFor(sizesRegion);
+  const sizes = sizesOverride || mediaSizesFor(sizesRegion);
   let sayac = 0;
   for (const slider of Array.from(
     root.querySelectorAll<HTMLElement>(".product-slider[data-slider-id]")
@@ -839,4 +840,76 @@ export function initProductSliders(): void {
   // Her grid render'ında yalnız yeni slider'lar observer'a eklenir. Ana dinleyiciler
   // idempotent kalır, 40 kartlık pagination tekrarında handler çoğalmaz.
   observeDeferredSliderMedia();
+  hydrateListingCardMedia();
+}
+
+/**
+ * Izgarada `loading` özniteliği YAZILMADAN (eager) basılan kart sayısı.
+ *
+ * 2026-09-30 (ölçüldü): liste/arama ve Size Özel ızgaraları her kartın ilk
+ * görselini eager basıyordu; 375px telefonda 36 kartın hepsi (sayfanın
+ * 6.000 px altındakiler dahil) ilk yüklemede iniyordu. İlk 6 kart (telefonda
+ * 3 satır, masaüstünde ilk satır + 1) eager kalır, kalanı `loading="lazy"`.
+ */
+export const LISTING_EAGER_CARDS = 6;
+
+/** Kartların ilk boyamadan önce manifesti bekleme tavanı (ızgara ile aynı değer). */
+export const CARD_MANIFEST_WAIT_MS = 500;
+
+/**
+ * Kartları basmadan ÖNCE manifesti iste — en çok `CARD_MANIFEST_WAIT_MS` bekle.
+ *
+ * 2026-09-30 (ölçüldü): ham master ile basılıp sonradan terfi eden kartta
+ * tarayıcı `srcset`ten önbellekteki en büyük adayı (indirilmiş master) seçiyor;
+ * 169px'lik kartta da 2000 px kalıyordu. Manifest zaten sıcaksa bekleme sıfırdır.
+ * Hiçbir koşulda reddetmez.
+ */
+export function primeCardManifestsBeforePaint(ilanlar: readonly string[]): Promise<void> {
+  const adlar = ilanlar.filter(Boolean);
+  if (!adlar.length) return Promise.resolve();
+  return Promise.race([
+    primeMediaManifests(adlar).catch(() => undefined),
+    new Promise<void>((resolve) => setTimeout(resolve, CARD_MANIFEST_WAIT_MS)),
+  ]).then(() => undefined);
+}
+
+/** Kart kapsayıcısının `sizes` bölgesi — `data-media-region`, yoksa ürün ızgarası. */
+export const DEFAULT_CARD_MEDIA_REGION = "listing/card_grid";
+
+/**
+ * Basılmış kartların manifestini iste ve `srcset`e terfi ettir (2026-09-30).
+ *
+ * Ölçüldü: yalnız `ProductListingGrid` (liste/arama) manifest istiyordu; ana
+ * sayfa ızgarası, Size Özel ve Top Deals sayfaları aynı `renderListingCard`
+ * kartlarını basıp `initProductSliders()` çağırıyor ama manifesti HİÇ
+ * istemiyordu — kartlar ham master'ı (1000–2000 px) indiriyordu. Her kart
+ * render'ından sonra çağrılan `initProductSliders` artık bunu da yapar.
+ * `sizes` en yakın `[data-media-sizes]` (ham dizge, ızgaranın kendi sütun
+ * kırılımlarından yazılmış) ya da `[data-media-region]` kapsayıcısından okunur.
+ * Terfi etmiş kartlar tekrar eşleşmez; fonksiyon tekrar çağrılmaya dayanıklı.
+ */
+export function hydrateListingCardMedia(root: ParentNode = document): Promise<void> {
+  const sliderlar = Array.from(
+    root.querySelectorAll<HTMLElement>(".product-slider[data-slider-id]")
+  );
+  const ilanlar = [...new Set(sliderlar.map((s) => s.dataset.sliderId || "").filter(Boolean))];
+  if (!ilanlar.length) return Promise.resolve();
+  return primeMediaManifests(ilanlar).then(() => {
+    const bolgeler = new Set<HTMLElement>();
+    const bolgesiz: HTMLElement[] = [];
+    for (const slider of sliderlar) {
+      if (!slider.isConnected) continue;
+      const kap = slider.closest<HTMLElement>("[data-media-region],[data-media-sizes]");
+      if (kap) bolgeler.add(kap);
+      else if (slider.parentElement) bolgesiz.push(slider.parentElement);
+    }
+    for (const kap of bolgeler) {
+      upgradeListingCardMedia(
+        kap,
+        kap.dataset.mediaRegion || DEFAULT_CARD_MEDIA_REGION,
+        kap.dataset.mediaSizes || ""
+      );
+    }
+    for (const ebeveyn of bolgesiz) upgradeListingCardMedia(ebeveyn, DEFAULT_CARD_MEDIA_REGION);
+  });
 }

@@ -276,7 +276,7 @@ function renderTopRankingColumn(): string {
              class="block w-[calc(50%-5.5px)] h-[156px] mb-4 group">
             <div class="w-full h-[116px] rounded overflow-hidden flex items-center justify-center bg-gray-50">
               <template x-if="seller.logo">
-                <img :src="seller.logo" :alt="seller.seller_name" width="116" height="116" decoding="async" class="max-w-full max-h-full w-[116px] h-[116px] object-contain [@media(hover:hover)_and_(pointer:fine)]:group-hover:scale-105 transition-transform duration-200 motion-reduce:transition-none motion-reduce:transform-none" />
+                <img :srcset="(seller.logo_media && seller.logo_media.srcset) || null" sizes="116px" :src="(seller.logo_media && seller.logo_media.src) || seller.logo" :alt="seller.seller_name" width="116" height="116" decoding="async" class="max-w-full max-h-full w-[116px] h-[116px] object-contain [@media(hover:hover)_and_(pointer:fine)]:group-hover:scale-105 transition-transform duration-200 motion-reduce:transition-none motion-reduce:transform-none" />
               </template>
               <template x-if="!seller.logo && seller.product_images && seller.product_images.length > 0">
                 <img :src="seller.product_images[0]" :alt="seller.seller_name" width="116" height="116" decoding="async" class="max-w-full max-h-full w-[116px] h-[116px] object-cover [@media(hover:hover)_and_(pointer:fine)]:group-hover:scale-105 transition-transform duration-200 motion-reduce:transition-none motion-reduce:transform-none" />

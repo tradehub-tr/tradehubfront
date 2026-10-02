@@ -7,6 +7,11 @@
  */
 import { t } from "../../i18n";
 import { renderListingCardSkeletons } from "../shared/ListingCardSkeleton";
+// `home/tailored_grid` sizes-bölgesi: aynı kutu formülü (grid-cols-2 sm:2
+// md:3 lg:4 xl:5, gap-3 lg:gap-4, container-boxed) TailoredProductGrid.ts'le
+// BİREBİR aynı — `placements.json`'da bu ızgara için ayrı bir bölge yok,
+// geometri özdeş olduğu için aynı anahtar doğru kaynaktır.
+import { mediaSizesFor } from "../../lib/media/sizes";
 
 // İskelet: masaüstünde 2 satır (5 sütun × 2), mobilde 2 satır (2 sütun × 2) görünür.
 // Viewport'u doldurmak yeter; gerçek 24 kart geldiğinde fazlası katlanma
@@ -35,6 +40,7 @@ export function TopDealsGrid(skeletonCount = 10): string {
           <!-- group/grid + data-list-mode: ListingCard'ın grid-mode variant'ları için zorunlu -->
           <div
             class="group/grid grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 lg:gap-4"
+            data-media-sizes="${mediaSizesFor("home/tailored_grid")}"
             data-list-mode="grid"
             role="list"
             aria-label="Deal products"

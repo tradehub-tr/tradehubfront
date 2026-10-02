@@ -33,6 +33,7 @@ import {
 import { getListingUrl } from "../../utils/listingUrl";
 import { getSellerUrl } from "../../utils/sellerUrl";
 import { escapeHtml, sanitizeUrl } from "../../utils/sanitize";
+import { storeImgAttrs } from "../../lib/media/storeImage";
 
 /* Current metadata is supplied in one batch by get_my_favorites. Old cached
    responses may not include it; those safely retain the favorite snapshot. */
@@ -367,7 +368,7 @@ function renderSupplierCards(items: FavoriteSellerItem[]): string {
       <div class="size-10 rounded-md border border-gray-100 overflow-hidden shrink-0 bg-gray-50 flex items-center justify-center text-[#1a66ff] font-bold text-[12px]">
         ${
           s.logo
-            ? `<img src="${escapeHtml(sanitizeUrl(s.logo))}" alt="" width="48" height="48" decoding="async" class="w-full h-full object-contain p-1" onerror="this.nextElementSibling.classList.remove('hidden');this.remove()" /><span class="hidden">${escapeHtml(initials)}</span>`
+            ? `<img${storeImgAttrs(s.logoMedia, s.logo, "favoritesLogo")} alt="" width="48" height="48" loading="lazy" decoding="async" class="w-full h-full object-contain p-1" onerror="this.nextElementSibling.classList.remove('hidden');this.remove()" /><span class="hidden">${escapeHtml(initials)}</span>`
             : `<span>${escapeHtml(initials)}</span>`
         }
       </div>

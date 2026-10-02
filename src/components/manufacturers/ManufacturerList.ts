@@ -239,7 +239,9 @@ export function ManufacturerList(opts: { mobileFilter?: boolean } = {}): string 
                   <div class="w-12 h-12 lg:w-[50px] lg:h-[50px] border border-gray-200 rounded-md overflow-hidden shrink-0 me-3 bg-gray-50 flex items-center justify-center">
                     <img
                       x-show="seller.logo"
-                      :src="seller.logo"
+                      :srcset="(seller.logo_media && seller.logo_media.srcset) || null"
+                      sizes="50px"
+                      :src="(seller.logo_media && seller.logo_media.src) || seller.logo"
                       :alt="seller.seller_name"
                       width="50" height="50" loading="lazy" decoding="async"
                       class="w-full h-full object-contain p-1"
@@ -354,9 +356,12 @@ export function ManufacturerList(opts: { mobileFilter?: boolean } = {}): string 
                     x-data="{ activeIdx: 0 }"
                   >
                     <img
-                      :src="seller.gallery_images[activeIdx]"
+                      :srcset="(seller.gallery_images_media && seller.gallery_images_media[activeIdx] && seller.gallery_images_media[activeIdx].srcset) || null"
+                      sizes="(min-width: 1024px) 220px, 165px"
+                      :src="(seller.gallery_images_media && seller.gallery_images_media[activeIdx] && seller.gallery_images_media[activeIdx].src) || seller.gallery_images[activeIdx]"
                       :alt="seller.seller_name + ' ${t("checkoutMfr.galleryAlt")}'"
                       width="220" height="220" loading="lazy" decoding="async"
+                      :style="{ objectPosition: $focalPos(seller.gallery_images_media && seller.gallery_images_media[activeIdx]) }"
                       class="w-full h-full object-cover transition-opacity duration-300"
                     />
                     <!-- Foto sayacı rozeti -->
@@ -425,6 +430,7 @@ export function initFactorySliders(): void {
       city: seller.city,
       country: seller.country,
       logo: seller.logo,
+      logoMedia: seller.logo_media || null,
       cover: seller.cover_image || seller.banner_image,
       rating: seller.rating,
       reviewCount: seller.review_count,

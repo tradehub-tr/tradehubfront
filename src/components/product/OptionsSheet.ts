@@ -25,6 +25,12 @@ import { bottomSheet, closeSheet, syncPriceTiersPanel } from "./MobileLayout";
 import { openMediaViewer } from "./MediaViewer";
 import { chatTriggerAttrs } from "../chat-popup/chatTriggerAttrs";
 import { escapeHtml, sanitizeUrl, safeHexColor } from "../../utils/sanitize";
+import { ResponsiveImage } from "../media/ResponsiveImage";
+import { ProductImage } from "../media/ProductImage";
+
+/** Seçenek satırı karosu `w-[62px]`. */
+export const OPTION_ROW_THUMB_SIZES = "62px";
+import { getMediaImageManifest } from "../../lib/media/manifest";
 import { isLoggedIn } from "../../utils/auth";
 import { openLoginModal } from "./LoginModal";
 // SharedCartDrawer yalnız tip olarak statik; `submitCartLines` gerçekten
@@ -239,7 +245,19 @@ function renderRowsHtml(model: SheetModel): string {
       // ürünün hiç görseli yoksa renk bloğu.
       const rowImage = opt.thumbnail || model.heroImage;
       const thumb = rowImage
-        ? `<img src="${escapeHtml(sanitizeUrl(rowImage))}" alt="${escapeHtml(label)}" width="80" height="80" decoding="async" class="w-full h-full object-cover" />`
+        ? // 2026-09-30 (ölçüldü): sayfa açılışında KAPALI duran sayfadaki bu
+          // 62px karolar `loading` taşımadığı için ham master'ı hemen
+          // indiriyordu. Tembel + manifestten `srcset`: açılana kadar inmez,
+          // açılınca 62px'e uygun türev seçilir.
+          ProductImage({
+            listing: getCurrentProduct().id || "",
+            src: rowImage,
+            alt: label,
+            className: "w-full h-full object-cover",
+            sizes: OPTION_ROW_THUMB_SIZES,
+            width: 80,
+            height: 80,
+          })
         : `<div class="w-full h-full" style="background:${safeHexColor(opt.value)}"></div>`;
       const expandBtn = isColorRow
         ? `
@@ -563,8 +581,28 @@ export function OptionsSheet(): string {
   const p = getCurrentProduct();
 
   const heroSrc = p.images?.[0]?.src;
+  // Sayfa açılışında kapalı duran sayfadaki 84px'lik karo: `loading="lazy"`
+  // olmadan ham master (1000–2000 px) ilk boyamada iniyor, tarayıcı da onu
+  // önbellekten galeriye veriyordu. Manifest varsa 84px'e uygun türev seçilir.
+  const heroHam = heroSrc
+    ? `<img src="${escapeHtml(sanitizeUrl(heroSrc))}" alt="${escapeHtml(p.title)}" width="80" height="80" decoding="async" loading="lazy" class="w-full h-full object-cover" />`
+    : "";
+  const heroManifest = heroSrc ? getMediaImageManifest(p.id || "", heroSrc) : null;
   const heroHtml = heroSrc
-    ? `<img src="${escapeHtml(sanitizeUrl(heroSrc))}" alt="${escapeHtml(p.title)}" width="80" height="80" decoding="async" class="w-full h-full object-cover" />`
+    ? heroManifest
+      ? ResponsiveImage({
+          manifest: heroManifest,
+          fallback: () => heroHam,
+          sizes: "84px",
+          eager: false,
+          priority: false,
+          alt: p.title,
+          imgClass: "w-full h-full object-cover",
+          width: 80,
+          height: 80,
+          extraAttrs: {},
+        })
+      : heroHam
     : `<div class="w-full h-full flex items-center justify-center text-text-tertiary">
         <svg width="28" height="28" fill="none" stroke="currentColor" stroke-width="1.4" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
       </div>`;

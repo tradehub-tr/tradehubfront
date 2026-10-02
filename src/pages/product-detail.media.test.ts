@@ -72,6 +72,7 @@ vi.mock("../components/product", () => ({
   initProductBuyBox: () => {},
   ProductImageGallery: () => '<div id="pd-gallery-stub"></div>',
   upgradeGalleryMedia: casus.upgrade,
+  upgradeMobileGalleryMedia: () => 0,
   ProductVideoSection: () => "",
   initProductVideoSection: () => {},
   ProductOrderPanel: () => "",
@@ -148,8 +149,15 @@ describe("ürün detay — manifest çizimi BEKLETMEZ", () => {
     await vi.waitFor(() => {
       expect(document.getElementById("pd-detail-layout-host")).not.toBeNull();
     });
-    // Galeri gerçekten basıldı; yükleme dönencesi ekranda kalmadı.
-    expect(document.getElementById("pd-gallery-stub")).not.toBeNull();
+    // Galeri gerçekten basıldı; yükleme dönencesi ekranda kalmadı. 2026-09-30:
+    // ilk boyama manifesti en çok `MANIFEST_FIRST_PAINT_WAIT_MS` (500 ms)
+    // bekler — sınırsız değil; çözülmeyen manifest çizimi durdurmaz.
+    await vi.waitFor(
+      () => {
+        expect(document.getElementById("pd-gallery-stub")).not.toBeNull();
+      },
+      { timeout: 2000 }
+    );
     expect(casus.prime).toHaveBeenCalledWith(["LST-0001"]);
     expect(casus.loadProduct).toHaveBeenCalledWith("LST-0001");
     // Manifest daha gelmediği için yükseltme de çalışmadı.

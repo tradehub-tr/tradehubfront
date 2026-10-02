@@ -5,6 +5,8 @@
  * içindeki loadPage()/renderProducts() ile doldurulur (bkz. top-deals
  * TopDealsGrid deseni). Sayfalama numaralıdır (append yok).
  */
+import { mediaSizesFor } from "../../lib/media/sizes";
+
 export function TailoredProductGrid(): string {
   return `
     <section class="pt-4 pb-8 lg:pb-12">
@@ -19,6 +21,7 @@ export function TailoredProductGrid(): string {
         </div>
         <div
           id="ts-product-grid"
+          data-media-sizes="${mediaSizesFor("home/tailored_grid")}"
           class="group/grid grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 lg:gap-4 hidden"
           data-list-mode="grid"
           role="list"

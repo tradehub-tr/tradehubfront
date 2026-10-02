@@ -60,7 +60,7 @@ export interface MediaImageManifest {
   width: number;
   height: number;
   aspect_ratio: number;
-  /** Biçim sırası AVIF → WebP → JPEG; backend `FORMAT_ORDER` sabitler. */
+  /** Biçim sırası AVIF → WebP → JPEG; backend `FORMAT_ORDER` sabitler. Ürün görseli 2026-09-30'dan beri yalnız WebP. */
   sources: MediaManifestSource[];
   poster?: string;
   captions?: string;
@@ -99,7 +99,9 @@ const CACHE_TTL_MS = 5 * 60_000;
 /** İstek zaman aşımı. Aşılırsa boş sonuç — sayfa beklemede kalmaz. */
 const TIMEOUT_MS = 4_000;
 
-const STORAGE_KEY = "tradehub-media-manifest-avif-v2";
+// v3 (2026-09-30): ürün görseli merdiveni AVIF'ten WebP'ye geçti; eski
+// oturum önbelleğindeki AVIF manifestleri okunmasın diye anahtar değişti.
+const STORAGE_KEY = "tradehub-media-manifest-v3";
 
 /**
  * "Bayrak kapalı" bilgisinin kalıcı anahtarı.
@@ -109,7 +111,7 @@ const STORAGE_KEY = "tradehub-media-manifest-avif-v2";
  * bayrak kapalıyken bile her sayfa geçişinde bir istek atılırdı. Böylece
  * bedel oturum başına TEK isteğe iner.
  */
-const DISABLED_KEY = "tradehub-media-manifest-off-avif-v2";
+const DISABLED_KEY = "tradehub-media-manifest-off-v3";
 
 const BASE_URL = NATIVE_API_BASE || import.meta.env.VITE_API_URL || "/api";
 const BATCH_ENDPOINT = `${BASE_URL}/method/tradehub_core.api.media_manifest.get_manifest_batch`;

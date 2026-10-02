@@ -86,7 +86,7 @@ export function renderGalleryMedia(
   alt: string,
   visual: GalleryVisual,
   size: "large" | "thumb",
-  opts: { lcp?: boolean; width?: number; height?: number } = {}
+  opts: { lcp?: boolean; width?: number; height?: number; lazy?: boolean } = {}
 ): string {
   if (src) {
     const safeAlt = escapeHtmlAttr(alt);
@@ -105,7 +105,7 @@ export function renderGalleryMedia(
         ${intrinsicAttrs(size, opts.width, opts.height)}
         data-gallery-main-media="true"
         class="${kutuSinifi}"
-        loading="${size === "thumb" ? "lazy" : "eager"}"
+        loading="${size === "thumb" || opts.lazy ? "lazy" : "eager"}"
         decoding="${size === "thumb" ? "async" : "sync"}"
         draggable="false"
       />
@@ -125,7 +125,10 @@ export function renderGalleryMedia(
       ),
       // Ana görsel sayfanın LCP adayıdır: `fetchpriority="high"` + `sync`,
       // `loading` yazılmaz. Karolar tembel.
-      priority: size === "large",
+      // `lazy`: kapalı lightbox'ın ilk işaretlemesi — açılışta
+      // `setLightboxSlide` zaten öncelikli yeniden basar.
+      priority: size === "large" && !opts.lazy,
+      eager: false,
       alt,
       imgClass: kutuSinifi,
       // Ölçü yedeği bugünkü değerler; manifest gerçek oranı taşıyorsa o kazanır.
@@ -187,7 +190,12 @@ export function upgradeGalleryMedia(root: ParentNode = document): number {
     if (!src) continue;
     if (!getMediaImageManifest(listing, src)) continue;
     const size = img.classList.contains("gallery-media-asset--thumb") ? "thumb" : "large";
-    img.outerHTML = renderGalleryMedia(src, img.getAttribute("alt") || "", defaultVisual, size);
+    // Tembel basılmış büyük görsel (kapalı lightbox) tembel kalır; yoksa
+    // yükseltme onu öncelikli/eager yapıp gizliyken indirtirdi.
+    const lazy = size === "large" && img.getAttribute("loading") === "lazy";
+    img.outerHTML = renderGalleryMedia(src, img.getAttribute("alt") || "", defaultVisual, size, {
+      lazy,
+    });
     sayac += 1;
   }
   return sayac;
@@ -438,7 +446,7 @@ export function ProductImageGallery(): string {
         <div id="gallery-lightbox-stage" class="relative flex-1 min-h-0 w-full flex items-center justify-center">
           <div class="relative h-full aspect-square max-w-full mx-auto">
             <div id="gallery-lightbox-image" class="w-full h-full bg-white rounded-2xl overflow-hidden shadow-[0_22px_55px_rgba(0,0,0,0.5)] [&>.gallery-media-asset]:object-contain [&>[data-gallery-main-media=true]]:w-full [&>[data-gallery-main-media=true]]:h-full" x-ref="lightboxImage">
-              ${renderGalleryMedia(firstImage?.src, firstImage?.alt ?? t("product.productImage"), defaultVisual, "large", { width: firstImage?.width, height: firstImage?.height })}
+              ${renderGalleryMedia(firstImage?.src, firstImage?.alt ?? t("product.productImage"), defaultVisual, "large", { width: firstImage?.width, height: firstImage?.height, lazy: true })}
             </div>
 
             <!-- Vitrin (Alt Kapsül): resme yakın, kartın sol/sağ kenarında yatay oklar -->

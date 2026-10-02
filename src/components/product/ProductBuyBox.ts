@@ -17,6 +17,14 @@ import { renderStars, formatScore } from "./ProductReviews";
 import { crossDisableVariants, isOptionAvailableForColor } from "./variantMatrix";
 import { applyVariantPrice, tierQtyLabel } from "./variantPrice";
 import { escapeHtml } from "../../utils/sanitize";
+import { ProductImage } from "../media/ProductImage";
+
+/**
+ * Renk varyantı karosu: `w-[64px]` buton, `p-0.5` + 1px kenarlık → 58px
+ * (seçiliyken `p-[3px]` + 2px → 54px). 2026-09-30 (ölçüldü): bu kutuya ham
+ * master (≤2000 px) iniyordu; manifest varsa en küçük uygun türev seçilir.
+ */
+export const VARIANT_THUMB_SIZES = "58px";
 
 /** Bölümler arası ince yatay ayraç — referans düzenin ritmini veren öğe (16px). */
 export const SECTION_DIVIDER = `<hr class="my-4 border-0 border-t border-[var(--color-border-default,#e5e5e5)]" />`;
@@ -215,7 +223,15 @@ function renderVariant(variant: ProductVariant, allVariants: ProductVariant[], i
               class="variant-option pd-color-thumb w-[64px] p-0.5 flex flex-col items-center border border-[var(--color-border-default,#e5e5e5)] rounded-md overflow-hidden cursor-pointer bg-[var(--color-surface,#fff)] transition-[border-color,box-shadow] duration-150 [&_img]:w-full [&_img]:aspect-square [&_img]:object-cover [&_img]:block [&_img]:rounded-[3px] [&.active]:border-2 [&.active]:border-[var(--pd-title-color,#111827)] [&.active]:p-[3px] [&:hover:not(.active):not(.pd-color-thumb-disabled)]:border-[#999] [&.pd-color-thumb-disabled]:opacity-40 [&.pd-color-thumb-disabled]:cursor-not-allowed ${isActive ? "active" : ""} ${opt.available ? "" : "pd-color-thumb-disabled"}"
               ${dataAttrs}
             >
-              <img src="${escapeHtml(image)}" alt="" width="56" height="56" decoding="async" loading="lazy">
+              ${ProductImage({
+                listing: getCurrentProduct().id || "",
+                src: image,
+                alt: "",
+                className: "",
+                sizes: VARIANT_THUMB_SIZES,
+                width: 56,
+                height: 56,
+              })}
               <span data-variant-caption class="block w-full mt-1 text-[11px] leading-[14px] text-center truncate text-[var(--color-text-muted,#666)]">${label}</span>
             </button>
           `;

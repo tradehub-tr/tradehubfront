@@ -17,7 +17,7 @@ import { initLanguageSelector } from '../components/header/TopBar'
 
 // Shared components
 import { Breadcrumb } from '../components/shared/Breadcrumb'
-import { renderListingCard, initProductSliders } from '../components/shared/ListingCard'
+import { renderListingCard, initProductSliders, primeCardManifestsBeforePaint, LISTING_EAGER_CARDS } from '../components/shared/ListingCard'
 import { renderPagination } from '../components/shared/Pagination'
 
 // Footer components
@@ -39,6 +39,7 @@ import { ListingCartDrawer, initListingCartDrawer } from '../components/products
 import { applyListingSocialProof } from '../components/products/initListingSocialProof'
 import { initListingFavoriteTriggers, syncListingFavoriteHearts } from '../components/products/initListingFavorites'
 import { LoginModal } from '../components/product'
+import { hydrateProductImages } from '../components/media/ProductImage'
 
 // Services
 import { searchListings, getTailoredGroupDetail, getTailoredSelections } from '../services/listingService'
@@ -273,7 +274,15 @@ function renderProducts(products: ProductListingCard[]): void {
   grid.classList.toggle('hidden', products.length === 0);
   toggleEmptyState(products.length > 0);
   grid.innerHTML = products
-    .map((card) => `<div role="listitem" class="flex">${renderListingCard(card, { showDiscount: true })}</div>`)
+    .map(
+      (card, i) =>
+        `<div role="listitem" class="flex">${renderListingCard(card, {
+          showDiscount: true,
+          // Izgara geometrisi `TailoredProductGrid` ile aynı bölge (sizes.ts).
+          sizesRegion: 'home/tailored_grid',
+          lazy: i >= LISTING_EAGER_CARDS,
+        })}</div>`
+    )
     .join('');
   initListingCartDrawer(products);
   initProductSliders();
@@ -355,7 +364,7 @@ async function loadPage(page: number): Promise<void> {
       });
       currentPage = page;
       totalPages = result.totalPages;
-      renderProducts(result.products);
+      void primeCardManifestsBeforePaint(result.products.map((c) => c.id)).then(() => renderProducts(result.products));
       renderPaginationBar();
       // Alt-kategori pill'leri yalnız sayfa 1 yüklemesinde yenilenir (mevcut davranış).
       if (page === 1) renderSubCategoryPills(result.subCategories);
@@ -370,7 +379,7 @@ async function loadPage(page: number): Promise<void> {
       });
       currentPage = page;
       totalPages = result.searchHeader.totalPages;
-      renderProducts(result.products);
+      void primeCardManifestsBeforePaint(result.products.map((c) => c.id)).then(() => renderProducts(result.products));
       renderPaginationBar();
     }
     if (page > 1) {
@@ -406,6 +415,9 @@ async function loadHeroAndInit(): Promise<void> {
       title: g.name,
       description: g.editorialText || '',
       imageSrc: g.image || '',
+      // Kategori görseli, gruptaki bir ürünün birincil görseli — manifest o
+      // ilanın adıyla anahtarlanır (sahne/şerit `srcset` alabilsin diye).
+      listingId: g.products.find(p => p.imageSrc === g.image)?.id,
       badge: g.badge,
       viewsCount: g.viewsCount || 0,
       ...(mockTs ? mockSeriesForSlug(g.slug) : {}),
@@ -422,8 +434,13 @@ async function loadHeroAndInit(): Promise<void> {
       activeCategorySlug = cats[0].slug || null;
     }
 
+    // Sahne + kanal şeridi basılmadan manifest (en çok `CARD_MANIFEST_WAIT_MS`):
+    // 2026-09-30 (ölçüldü) 28px şerit karolarına ham master iniyordu.
+    await primeCardManifestsBeforePaint(cats.map(c => c.listingId || ''))
     // Sahne + kanal şeridini doldur; kanal tıklaması → setActiveCategory
     renderTailoredHero(cats, activeCategorySlug || undefined);
+    // Tavanı aşan manifest gelince basılı `<img>`ler yerinde yükseltilir.
+    void hydrateProductImages(document.getElementById('ts-hero-section') ?? document);
     initTailoredSelectionsHero({
       onCategoryChange: (slug) => setActiveCategory(slug, true),
     });

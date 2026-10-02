@@ -302,7 +302,8 @@ export function StoreHeader(): string {
                        .m3u8 kaynaklar yerli destek yoksa hls.js ile bağlanır; mp4 davranışı aynı. -->
                   <video x-ref="headerVideo"
                          x-video-src="current.src"
-                         :poster="current.poster || ''"
+                         :style="{ objectPosition: $focalPos(current.poster_media) }"
+                         :poster="(current.poster_media && current.poster_media.src) || current.poster || ''"
                          class="w-full h-full object-cover"
                          @timeupdate="updateProgress()"
                          @loadedmetadata="duration = formatTime($refs.headerVideo.duration)"
@@ -313,7 +314,9 @@ export function StoreHeader(): string {
 
                 <!-- IMAGE -->
                 <template x-if="current && !isVideo">
-                  <img :src="current.src" :alt="(currentTab && currentTab.label) || ''" width="800" height="600" decoding="async" class="w-full h-full object-cover" />
+                  <img :srcset="(current.src_media && current.src_media.srcset) || null" sizes="(min-width: 768px) 500px, 100vw"
+                       :src="(current.src_media && current.src_media.src) || current.src" :alt="(currentTab && currentTab.label) || ''" width="800" height="600" decoding="async" class="w-full h-full object-cover"
+                       :style="{ objectPosition: $focalPos(current.src_media) }" />
                 </template>
 
                 <!-- Center Play Button (video only, when paused) -->
@@ -386,18 +389,22 @@ export function StoreHeader(): string {
                             : 'border-transparent opacity-80 hover:opacity-100 hover:border-gray-300'">
                     <!-- IMAGE item -->
                     <template x-if="item.media_type !== 'video'">
-                      <img :src="item.src"
+                      <img :srcset="(item.src_media && item.src_media.srcset) || null" sizes="120px"
+                           :src="(item.src_media && item.src_media.src) || item.src"
+                           :style="{ objectPosition: $focalPos(item.src_media) }"
                            :alt="item.caption || ''"
-                           width="400" height="300" decoding="async"
+                           width="400" height="300" loading="lazy" decoding="async"
                            class="w-full h-full object-cover" />
                     </template>
 
                     <!-- VIDEO item: poster varsa <img>, yoksa MP4'ten ilk frame'i
                          <video preload="metadata"> ile cek (browser native) -->
                     <template x-if="item.media_type === 'video' && item.poster">
-                      <img :src="item.poster"
+                      <img :srcset="(item.poster_media && item.poster_media.srcset) || null" sizes="120px"
+                           :src="(item.poster_media && item.poster_media.src) || item.poster"
+                           :style="{ objectPosition: $focalPos(item.poster_media) }"
                            :alt="item.caption || ''"
-                           width="400" height="300" decoding="async"
+                           width="400" height="300" loading="lazy" decoding="async"
                            class="w-full h-full object-cover" />
                     </template>
                     <template x-if="item.media_type === 'video' && !item.poster">

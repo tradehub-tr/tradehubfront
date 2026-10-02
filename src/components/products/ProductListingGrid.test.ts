@@ -208,3 +208,43 @@ describe("rerenderProductGrid — soğuk yükleme manifest sözleşmesi", () => 
     expect(sahte).not.toHaveBeenCalled();
   });
 });
+
+describe("rerenderProductGrid — kaydırma altındaki kartlar tembel (2026-09-30 görsel denetimi)", () => {
+  beforeEach(() => {
+    clearMediaManifestCache();
+    sessionStorage.clear();
+    izgarayiKur();
+  });
+  afterEach(() => {
+    vi.unstubAllGlobals();
+    document.body.innerHTML = "";
+  });
+
+  it("ilk kart öncelikli, 2.–6. eager, 7. ve sonrası loading=lazy", async () => {
+    // Manifest ucu kapalı: ham yedek yol — loading kararları aynı olmalı.
+    vi.stubGlobal(
+      "fetch",
+      vi.fn(
+        async () =>
+          ({
+            ok: true,
+            status: 200,
+            json: async () => ({ message: { enabled: false, manifests: {} } }),
+          }) as unknown as Response
+      )
+    );
+    const kartlar = Array.from({ length: 9 }, (_, i) => ({
+      ...KART,
+      id: `LST-${i}`,
+      imageSrc: `/files/urun-${i}.jpg`,
+    }));
+    await rerenderProductGrid(kartlar);
+    const ilkGorseller = kartlar.map(
+      (k) => document.querySelector<HTMLImageElement>(`[data-slider-id="${k.id}"] img`)!
+    );
+    expect(ilkGorseller[0].getAttribute("fetchpriority")).toBe("high");
+    expect(ilkGorseller[0].hasAttribute("loading")).toBe(false);
+    for (const img of ilkGorseller.slice(1, 6)) expect(img.hasAttribute("loading")).toBe(false);
+    for (const img of ilkGorseller.slice(6)) expect(img.getAttribute("loading")).toBe("lazy");
+  });
+});

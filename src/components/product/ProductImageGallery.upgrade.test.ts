@@ -132,3 +132,47 @@ describe("upgradeGalleryMedia — geç gelen manifest uygulanır", () => {
     expect(document.body.innerHTML).toBe(once);
   });
 });
+
+describe("kapalı lightbox'ın ilk görseli tembel (2026-09-30 görsel denetimi)", () => {
+  beforeEach(() => {
+    clearMediaManifestCache();
+    sessionStorage.clear();
+    document.body.innerHTML = "";
+  });
+  afterEach(() => {
+    vi.unstubAllGlobals();
+    document.body.innerHTML = "";
+  });
+
+  it("lazy: true → yedek <img> loading=lazy, fetchpriority yok", () => {
+    document.body.innerHTML = `<div id="gallery-lightbox-image">${renderGalleryMedia(
+      "/files/urun.jpg",
+      "Ürün",
+      defaultVisual,
+      "large",
+      { lazy: true }
+    )}</div>`;
+    const img = document.querySelector("img")!;
+    expect(img.getAttribute("loading")).toBe("lazy");
+    expect(img.hasAttribute("fetchpriority")).toBe(false);
+  });
+
+  it("geç manifestle yükseltme tembelliği korur; ana görsel öncelikli kalır", async () => {
+    document.body.innerHTML = `
+      <div id="gallery-main-image">${renderGalleryMedia("/files/urun.jpg", "Ürün", defaultVisual, "large")}</div>
+      <div id="gallery-lightbox-image">${renderGalleryMedia("/files/urun.jpg", "Ürün", defaultVisual, "large", { lazy: true })}</div>`;
+    vi.stubGlobal(
+      "fetch",
+      vi.fn(async () => manifestYaniti())
+    );
+    await primeMediaManifests(["LST-0001"]);
+    expect(upgradeGalleryMedia()).toBe(2);
+    const lightboxImg = document.querySelector("#gallery-lightbox-image img")!;
+    expect(lightboxImg.getAttribute("srcset")).toContain("__w768.webp");
+    expect(lightboxImg.getAttribute("loading")).toBe("lazy");
+    expect(lightboxImg.hasAttribute("fetchpriority")).toBe(false);
+    const mainImg = document.querySelector("#gallery-main-image img")!;
+    expect(mainImg.getAttribute("fetchpriority")).toBe("high");
+    expect(mainImg.hasAttribute("loading")).toBe(false);
+  });
+});

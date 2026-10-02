@@ -10,7 +10,12 @@
  */
 import { searchListings } from "../../services/listingService";
 import { initCurrency } from "../../services/currencyService";
-import { renderListingCard, initProductSliders } from "../shared/ListingCard";
+import { mediaSizesFor } from "../../lib/media/sizes";
+import {
+  renderListingCard,
+  initProductSliders,
+  primeCardManifestsBeforePaint,
+} from "../shared/ListingCard";
 import {
   initListingFavoriteTriggers,
   syncListingFavoriteHearts,
@@ -183,6 +188,7 @@ export function initProductGrid(): Promise<void> {
 
         // İlk satırı/viewport bütçesini gerçek kartlarla, kalan sabit alanı hafif
         // placeholder'larla kur. Böylece 14 zengin kartın DOM'u ilk anda oluşmaz.
+        await primeCardManifestsBeforePaint(result.products.map((c) => c.id));
         releaseProductGridSkeletonHeight(grid);
         grid.innerHTML = eagerProducts
           .map((card) => renderHomeCard(card, false))
@@ -225,6 +231,7 @@ export function ProductGrid(): string {
       <div class="container-wide">
         <div
           id="home-product-grid"
+          data-media-sizes="${mediaSizesFor("home/hero_showcase_grid")}"
           class="group/grid grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 2xl:grid-cols-7 product-grid home-product-grid"
           style="gap: var(--product-grid-gap, 16px);"
           data-list-mode="grid"

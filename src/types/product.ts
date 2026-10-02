@@ -1,3 +1,4 @@
+import type { StoreImageMedia } from "../lib/media/storeImage";
 /**
  * Product Detail Page — TypeScript Interfaces
  * Types for product detail, supplier, reviews, and related data.
@@ -170,6 +171,8 @@ export interface SupplierInfo {
   country?: string;
   /** Mağaza logosu (Admin Seller Profile.logo). */
   logo?: string;
+  /** Logonun WebP türevleri (`lib/media/storeImage.ts`); yoksa `logo` ham adresi basılır. */
+  logoMedia?: StoreImageMedia | null;
   yearsInBusiness: number;
   responseTime: string;
   responseRate: string;

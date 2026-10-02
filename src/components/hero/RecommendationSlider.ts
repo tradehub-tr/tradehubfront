@@ -14,14 +14,21 @@ import { applySwiperDir } from "../../utils/direction";
 import { initCurrency } from "../../services/currencyService";
 import { escapeHtml, sanitizeUrl } from "../../utils/sanitize";
 import { formatStartingPrice } from "../../utils/currency";
+import { ProductImage, hydrateProductImages } from "../media/ProductImage";
+import { primeCardManifestsBeforePaint } from "../shared/ListingCard";
 
 interface RecommendationCard {
+  /** İlan adı — manifest anahtarı (2026-09-30). */
+  id?: string;
   title: string;
   subtitle?: string;
   href: string;
   imageSrc: string;
   price?: string;
 }
+
+/** Kartın görsel kutusu: telefonda ~158px, ≥640 ~226px, ≥1280 ~242px (ölçüldü). */
+export const RECOMMENDATION_SIZES = "(min-width: 1280px) 244px, (min-width: 640px) 228px, 160px";
 
 function renderCardImage(card: RecommendationCard): string {
   if (!card.imageSrc) {
@@ -33,16 +40,23 @@ function renderCardImage(card: RecommendationCard): string {
       </div>
     `;
   }
+  const sinif =
+    "w-full h-full object-contain transition-transform duration-200 ease-out motion-reduce:transition-none motion-reduce:transform-none group-hover/card:scale-105 group-focus-visible/card:scale-105";
+  // 2026-09-30: manifest varsa `srcset` (ölçülen kutu 158 / 226 / 242 px).
+  const gorsel = card.id
+    ? ProductImage({
+        listing: card.id,
+        src: card.imageSrc,
+        alt: card.title,
+        className: sinif,
+        sizes: RECOMMENDATION_SIZES,
+        width: 400,
+        height: 400,
+      })
+    : `<img src="${escapeHtml(sanitizeUrl(card.imageSrc))}" alt="${escapeHtml(card.title)}" width="400" height="400" loading="lazy" decoding="async" class="${sinif}" />`;
   return `
     <div class="relative h-full w-full overflow-hidden rounded-md bg-white flex items-center justify-center" aria-hidden="true">
-      <img
-        src="${escapeHtml(sanitizeUrl(card.imageSrc))}"
-        alt="${escapeHtml(card.title)}"
-        width="400" height="400"
-        loading="lazy"
-        decoding="async"
-        class="w-full h-full object-contain transition-transform duration-200 ease-out motion-reduce:transition-none motion-reduce:transform-none group-hover/card:scale-105 group-focus-visible/card:scale-105"
-      />
+      ${gorsel}
     </div>
   `;
 }
@@ -149,13 +163,15 @@ export function initRecommendationSlider(): Promise<void> {
     initCurrency()
       // verified_supplier: anasayfa KYB doğrulanmamış satıcı ürünü göstermez.
       .then(() => searchListings({ page_size: 9, verified_supplier: true }))
-      .then((result) => {
+      .then(async (result) => {
         const container = document.getElementById("recommendation-slides");
         if (!container) return;
 
         if (result.products.length === 0) return;
+        await primeCardManifestsBeforePaint(result.products.map((p) => p.id));
 
         const cards: RecommendationCard[] = result.products.map((p) => ({
+          id: p.id,
           title: p.name,
           href: getListingUrl({ id: p.id, href: p.href }),
           imageSrc: p.imageSrc || "",
@@ -163,6 +179,7 @@ export function initRecommendationSlider(): Promise<void> {
         }));
 
         container.innerHTML = cards.map((card) => renderCard(card)).join("");
+        void hydrateProductImages(container);
         initSwiper();
       })
       .catch((err) => {
