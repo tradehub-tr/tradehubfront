@@ -1,3 +1,15 @@
+## [v2.8.1-alpha.1] - 2026-10-02 ALPHA
+
+Bu surum alpha.istoc.com'da gelistirme asamasindadir.
+
+### Duzeltildi
+- fix(media): görselleri manifest türevleriyle yükle (@ahmeetseker)
+  - Ürün, liste, öneri ve vitrin görsellerinde ham master yerine uygun WebP/srcset türevlerini kullan
+  - Mobil galeri, lightbox, varyant ve ilişkili ürünlerde gereksiz eager indirmeleri azalt
+  - Satıcı logo, galeri ve banner görsellerine media gövdesi, sizes ve odak noktası desteği ekle
+  - sizes tablosunu yeniden üretilen kaynakla eşitleyip ilgili test kapsamını genişlet
+
+---
 ## [v2.8.1] - 2026-10-01 PROD
 
 Bu surum istoc.com'da yayindadir.
