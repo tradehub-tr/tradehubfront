@@ -772,6 +772,7 @@ export default defineConfig(({ mode }) => ({
             !id.includes("src/alpine/addresses.ts") &&
             !id.includes("src/alpine/payment.ts") &&
             !id.includes("src/alpine/settings.ts") &&
+            !id.includes("src/alpine/settingsNotifications.ts") &&
             !id.includes("src/alpine/orders.ts") &&
             !id.includes("src/alpine/seller.ts") &&
             !id.includes("src/alpine/dashboard.ts") &&

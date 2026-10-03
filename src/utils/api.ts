@@ -200,6 +200,40 @@ export class ForbiddenError extends Error {
   }
 }
 
+/**
+ * `callMethod`'un 2xx dışı yanıtı: HTTP durum kodu + çözülmüş gövde (`message` alanı).
+ *
+ * Frappe v1 uçları beklenen hataları durum kodlu `{"message": {error_code, ...}}`
+ * zarfıyla döner (409 REVISION_CONFLICT, 422 VALIDATION_FAILED, 503 PROVIDER_UNAVAILABLE).
+ * Çağıran, mesaj metnini regex'le aramak yerine `status` ve `errorCode`'a bakar.
+ * `Error` alt sınıfı olduğu için `e.message` okuyan eski çağıranlar etkilenmez.
+ */
+export class ApiHttpError extends Error {
+  readonly status: number;
+  /** Gövdedeki `message` (nesne ise); yoksa `null`. */
+  readonly body: Record<string, unknown> | null;
+  readonly errorCode: string | null;
+
+  constructor(message: string, status: number, body: Record<string, unknown> | null) {
+    super(message);
+    this.name = "ApiHttpError";
+    this.status = status;
+    this.body = body;
+    this.errorCode = typeof body?.error_code === "string" ? body.error_code : null;
+  }
+}
+
+/** Ham hata gövdesinden `message` nesnesini çıkarır (Frappe zarfı). */
+function extractMessageObject(raw: string): Record<string, unknown> | null {
+  try {
+    const body = JSON.parse(raw) as { message?: unknown };
+    const m = body?.message;
+    return m && typeof m === "object" && !Array.isArray(m) ? (m as Record<string, unknown>) : null;
+  } catch {
+    return null;
+  }
+}
+
 /** Helper — bir error yetki (403) hatası mı? */
 export function isForbiddenError(err: unknown): boolean {
   return err instanceof ForbiddenError;
@@ -470,8 +504,9 @@ export async function callMethod<T = unknown>(
 
   if (!res.ok) {
     const raw = await res.text();
-    const msg = extractFrappeError(raw);
-    throw new Error(msg || `HTTP ${res.status}`);
+    const body = extractMessageObject(raw);
+    const msg = extractFrappeError(raw) || (typeof body?.message === "string" ? body.message : "");
+    throw new ApiHttpError(msg || `HTTP ${res.status}`, res.status, body);
   }
 
   const data = (await res.json()) as { message: T };

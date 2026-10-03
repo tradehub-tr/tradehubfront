@@ -1450,9 +1450,6 @@ const en = {
     settingsUi: {
       businessHint: "Complete this section to receive better offers from suppliers.",
       sourcingHint: "Complete this section to see product recommendations tailored to your needs.",
-      emailPrefsEmpty: "No email preferences have been configured yet.",
-      emailPrefsLoadError: "An error occurred while loading your preferences.",
-      retry: "Try again",
     },
     tradeAssurance: {
       heroTitle: "Enjoy protection from payment to delivery on iStoc",
@@ -5851,13 +5848,7 @@ const en = {
       deptManagement: "Management",
       deptOther: "Other",
 
-      // ── SettingsEmailPreferences ─────────────────────────────────
-      emailServices: "Email Services",
-      emailPreferences: "Email preferences",
-      emailPreferencesDesc: "Select the types of emails you want to receive.",
-      emailPreferencesFor: "Email preferences for",
-      unsubscribeAll: "Unsubscribe from all",
-      resubscribeAll: "Resubscribe to all",
+      // ── E-posta bildirim metinleri ───────────────────────────────
       allNotificationEmails: "All notification emails",
       notificationEmailsDesc:
         "Emails that inform you about important account updates and events on iStoc.com",
@@ -5901,9 +5892,257 @@ const en = {
       deleteAccountNav: "Delete account",
       preferencesCardTitle: "Preferences",
       privacySettingsNav: "Privacy settings",
-      emailPreferencesNav: "Email preferences",
       adPreferencesNav: "Ad preferences",
       backToAccountSettings: "Back to account settings",
+    },
+
+    // NOTIFICATION PREFERENCES (Ayarlar > Bildirimler)
+    notifPrefs: {
+      nav: "Notifications",
+      title: "Notifications",
+      lead: "In-app notifications are always on. You choose email, push and SMS for each event.",
+      loading: "Loading notification preferences",
+      loaded: "Notification preferences loaded",
+      loadError:
+        "Notification preferences could not be loaded. Check your connection and try again.",
+      retryLoad: "Try again",
+      channel: {
+        inapp: "In-app",
+        email: "Email",
+        push: "Push",
+        sms: "SMS",
+      },
+      category: {
+        account: "Account and security",
+        orders: "Orders",
+        rfq: "Quotes and RFQ",
+        store: "Store and application",
+        reviews: "Reviews",
+        logistics: "Logistics",
+        billing: "Subscription and payments",
+      },
+      catCount: "{{parts}} on",
+      bulk: {
+        groupLabel: "{{category}}: bulk selection",
+        on: {
+          email: "Turn on all emails",
+          push: "Turn on all push",
+          sms: "Turn on all SMS",
+        },
+        off: {
+          email: "Turn off all emails",
+          push: "Turn off all push",
+          sms: "Turn off all SMS",
+        },
+      },
+      delivery: {
+        aninda: "Always instant",
+        ozetlenebilir: "Can go into digest",
+        srPrefix: "Email: ",
+      },
+      value: {
+        on: "On",
+        off: "Off",
+        pending: "Pending",
+        locked: "Required",
+        none: "Not sent",
+        noProvider: "On · not delivered",
+      },
+      switchLabel: "{{event}}: {{channel}}",
+      summary: {
+        emailLabel: "Email on",
+        pushLabel: "Push on",
+        digestLabel: "Next digest",
+        count: "{{count}} event(s)",
+        pushBlocked: "Not delivered to device",
+        digestOff: "Digest off",
+        digestNone: "Nothing to digest",
+        digestAfterSave: "Set after saving",
+      },
+      jump: {
+        label: "Sections",
+        events: "Events",
+        timing: "Delivery time",
+        quiet: "Quiet hours",
+        consent: "Commercial consent",
+      },
+      events: {
+        heading: "Event notifications",
+        desc: "Turn each channel on or off per event. A “Required” channel cannot be turned off; an event is never sent through a channel marked “Not sent”.",
+        colEvent: "Event",
+      },
+      push: {
+        title: "Push: {{state}}",
+        grant: "Allow",
+        grantHere: "Allow in this browser",
+        state: {
+          hazir: "On for this device",
+          "izin-yok": "Device permission off",
+          engelli: "Blocked in browser",
+          "cihaz-yok": "No connected device",
+          "saglayici-yok": "Not available right now",
+        },
+        text: {
+          hazir: "Push notifications are being sent to this device.",
+          "izin-yok":
+            "Notification permission has not been given on this device. Your push choices are kept but nothing is sent until you allow it; rows show “Pending”.",
+          engelli:
+            "Notifications for this site are blocked in your browser settings; iStoc cannot turn this permission on itself. You can remove the block in your browser's site settings. Your push choices are kept.",
+          "cihaz-yok":
+            "No device that can receive notifications is connected to your account. Your push choices are kept and apply once a device is connected.",
+          "saglayici-yok":
+            "The push delivery service is not available right now, so no push notifications are sent to any device. Your push choices are saved but not applied for now.",
+        },
+        issue: {
+          denied: "Notification permission was not granted; push cannot be sent to this device.",
+          unsupported: "This browser or device does not support push notifications.",
+          "provider-unavailable":
+            "Push could not be turned on: the delivery service is not available right now. Browser permission was not requested.",
+          failed: "Push could not be turned on for this device. Try again later.",
+        },
+      },
+      mandatory: {
+        count: "{{count}} required notification(s)",
+        suffix: "cannot be turned off",
+        why: "They concern your account, payments and legal documents; frequency and quiet hours do not affect them.",
+      },
+      timing: {
+        heading: "Delivery time",
+        desc: "Email and push are scheduled by separate rules. In-app notifications are not affected.",
+      },
+      frequency: {
+        heading: "Email frequency",
+        legend: "Email delivery frequency",
+        recommended: "Recommended",
+        instant: "Instant",
+        instantDesc: "Each event arrives as a separate email.",
+        daily: "Daily digest",
+        dailyDesc: "Events that can go into a digest are combined into one email once a day.",
+        weekly: "Weekly digest",
+        weeklyDesc: "Events that can go into a digest arrive in one email once a week.",
+        effectNone:
+          "You have no event emails turned on; the frequency choice does not affect any email right now. Your choice is kept.",
+        effectNoneUrgent: "Events with a required email ({{count}}) still arrive instantly.",
+        effectInstant:
+          "Events with email on ({{on}}) arrive separately and instantly. If you choose a digest, {{digestible}} go into the digest and urgent ones ({{urgent}}) still arrive instantly.",
+        effectNoDigestible:
+          "None of your active emails go into a digest; urgent events ({{urgent}}) always arrive instantly.",
+        effectDigest:
+          "Events going into the digest: {{digestible}}. Urgent events ({{urgent}}) always arrive instantly.",
+        effectNext: "Next digest: {{at}}.",
+      },
+      quiet: {
+        heading: "Push quiet hours",
+        switchLabel: "Hold push notifications during these hours",
+        start: "Start",
+        end: "End",
+        summaryOff: "Quiet hours are off: push notifications arrive at any time of day.",
+        hours: "{{count}} h",
+        minutes: "{{count}} min",
+        overnight: "runs into the next day",
+        sameDay: "within the same day",
+        errorStartEmpty: "Enter a start time.",
+        errorEndEmpty: "Enter an end time.",
+        errorEqual:
+          "Start and end cannot be the same. Instead of holding push all day, turn off push for the event.",
+        help: "Push is not sent during these hours. Email, SMS and in-app notifications are not affected. Time zone: {{timezone}}.",
+        assumptionTag: "Assumption",
+        assumption:
+          "Held push notifications are delivered as one summary notification at the end time. Awaiting a product decision; not final behaviour.",
+      },
+      consent: {
+        legalTag: "Legal",
+        heading: "Commercial message consent (IYS)",
+        desc: "This section is a consent, not a preference. Campaign and announcement messages are sent only if you have given consent. Changes apply immediately; they do not wait for Save.",
+        emailTitle: "Campaigns and announcements by email",
+        smsTitle: "Campaigns by SMS",
+        targetKind: {
+          email: "email address",
+          sms: "phone number",
+        },
+        targetMissing: "No {{kind}} on file",
+        verified: "Verified",
+        state: {
+          onayli: "Consent given",
+          bekliyor: "Sending to IYS",
+          basarisiz: "Could not be sent to IYS",
+          "geri-cekildi": "Consent withdrawn",
+          yok: "No consent",
+          "hedef-eksik": "Contact detail missing",
+          "hedef-dogrulanmadi": "Not verified",
+        },
+        rest: {
+          bekliyor: "This consent cannot be changed until the result arrives.",
+          basarisiz: "Your choice is saved but was not recorded in IYS.",
+          yok: "There is no recorded consent or refusal for this channel.",
+          "hedef-eksik": "Add your {{kind}} first to give consent.",
+          "hedef-dogrulanmadi": "Your {{kind}} must be verified first to give consent.",
+          unsynced: "Not transferred to IYS: transfer is unavailable right now",
+          basarisizUnavailable:
+            "Your choice is recorded and in effect, but transfer to IYS is unavailable right now.",
+          "hedef-dogrulanmadiGranted":
+            "Your consent is recorded, but no marketing messages are sent until your {{kind}} is verified. You can withdraw it at any time.",
+        },
+        retry: "Try again",
+        update: "Update",
+        verify: "Verify",
+        errorSet: "The consent change could not be processed. Try again.",
+        legal:
+          "Commercial electronic messages are sent only with your consent. Your consent and refusal are recorded in the Message Management System (IYS). Required transactional notifications are not affected by this consent.",
+        related: "Your cookie, KVKK and agreement consents are on a separate page:",
+        relatedLink: "Consent management",
+        errorTarget: "Consent could not be given: add and verify your {{kind}} first.",
+        errorUnavailable:
+          "Transfer to IYS is unavailable right now; retrying will not change the result.",
+        source: {
+          registration: "Sign-up",
+          settings: "Settings",
+          banner: "Banner",
+          modal: "Pop-up",
+          admin_override: "Admin correction",
+        },
+      },
+      history: {
+        toggle: "Consent history",
+        caption: "Commercial message consent change history, newest first",
+        colDate: "Date",
+        colChannel: "Channel",
+        colAction: "Action",
+        colSource: "Source",
+        colSync: "IYS record",
+        grant: "Consent",
+        revoke: "Refusal",
+        empty: "No recorded consent or refusal.",
+        sync: {
+          islendi: "Recorded",
+          bekliyor: "Sending to IYS",
+          basarisiz: "Could not be sent to IYS",
+        },
+      },
+      save: {
+        regionLabel: "Save status",
+        dirtyCount: "Unsaved changes: {{count}}",
+        savingCount: "Saving changes: {{count}}",
+        saving: "Saving",
+        save: "Save",
+        retry: "Try again",
+        reload: "Load latest version",
+        discard: "Discard",
+        errorTitle: "Could not save.",
+        errorGeneric: "Check your connection and try again. Your changes are still on this page.",
+        errorConflict:
+          "Your preferences were changed in another session. Load the latest version and make your changes again.",
+        saved: "Saved",
+        discarded: "Changes discarded",
+        errorValidation: "Some fields are invalid. Fix the highlighted fields and save again.",
+        theirsLoaded: "Latest preferences loaded",
+      },
+      leave: {
+        title: "You have unsaved changes",
+        text: "Unsaved changes: {{count}}. They will be lost if you leave now.",
+        stay: "Stay on page",
+        go: "Leave without saving",
+      },
     },
 
     // PROFILE

@@ -3,14 +3,15 @@
  * Account settings page with profile header and settings cards.
  * Uses Alpine.js x-data="settingsLayout" for hash-based section routing.
  * Supports hash routing for sub-sections:
- *   #profilim, #vergi, #bagli-hesaplar, #eposta, #sifre, #eposta-degistir, #telefon
+ *   #profilim, #vergi, #bagli-hesaplar, #bildirimler, #sifre, #eposta-degistir, #telefon
+ * `#eposta` (eski "E-posta tercihleri") `#bildirimler`e yönlenir.
  */
 
 import { t } from "../../i18n";
 import { SettingsAccountEdit, initSettingsAccountEdit } from "./SettingsAccountEdit";
 // Sprint 2.6'da gizlendi (S3=C kararı, 2026-05-15) — ileride backend entegrasyonu ile yeniden açılacak. Açmak için: bu satırları yorum dışına al ve SettingsTaxInfo'nun backend entegrasyonunu tamamla.
 // import { SettingsTaxInfo, initSettingsTaxInfo } from "./SettingsTaxInfo";
-import { SettingsEmailPreferences, initSettingsEmailPreferences } from "./SettingsEmailPreferences";
+import { SettingsNotifications } from "./SettingsNotifications";
 import { SettingsChangePassword, initSettingsChangePassword } from "./SettingsChangePassword";
 import { SettingsChangeEmail, initSettingsChangeEmail } from "./SettingsChangeEmail";
 import { SettingsChangePhone, initSettingsChangePhone } from "./SettingsChangePhone";
@@ -176,7 +177,7 @@ function getPreferencesCard(): SettingsCard {
     icon: ICONS.preferences,
     title: t("settings.preferencesCardTitle"),
     items: [
-      { label: t("settings.emailPreferencesNav"), href: "#eposta" },
+      { label: t("notifPrefs.nav"), href: "#bildirimler" },
       { label: t("settings.consentManagementNav"), href: "#onay-yonetimi" },
     ],
   };
@@ -221,9 +222,9 @@ function getSectionMap(): Record<string, { title: string; render: () => string }
     },
     // Sprint 2.6'da gizlendi (S3=C kararı, 2026-05-15) — ileride backend entegrasyonu ile yeniden açılacak. Açmak için: bu satırı yorum dışına al ve SettingsTaxInfo'nun backend entegrasyonunu tamamla.
     // "#vergi": { title: t("settings.taxInfoNav"), render: () => SettingsTaxInfo() },
-    "#eposta": {
-      title: t("settings.emailPreferencesNav"),
-      render: () => SettingsEmailPreferences(),
+    "#bildirimler": {
+      title: t("notifPrefs.nav"),
+      render: () => SettingsNotifications(),
     },
     "#sifre": { title: t("settings.changePasswordNav"), render: () => SettingsChangePassword() },
     "#eposta-degistir": {
@@ -248,7 +249,6 @@ const INIT_MAP: Record<string, () => void> = {
   "#hesabim": initSettingsMyAccount,
   // Sprint 2.6'da gizlendi (S3=C kararı, 2026-05-15) — ileride backend entegrasyonu ile yeniden açılacak. Açmak için: bu satırı yorum dışına al ve SettingsTaxInfo'nun backend entegrasyonunu tamamla.
   // "#vergi": initSettingsTaxInfo,
-  "#eposta": initSettingsEmailPreferences,
   "#sifre": initSettingsChangePassword,
   "#eposta-degistir": initSettingsChangeEmail,
   "#telefon": initSettingsChangePhone,
@@ -298,10 +298,23 @@ export function SettingsLayout(): string {
  * These init functions will become no-ops as their components are migrated to Alpine.
  * Copy button is now handled by Alpine @click="copyMemberId()" in the template.
  */
+/**
+ * Taşınan bölümler: eski adres yer imlerinde ve gönderilmiş e-postalarda duruyor olabilir.
+ * `replace` ile yönlenir ki geri tuşu eski adrese takılmasın.
+ */
+const HASH_ALIASES: Record<string, string> = {
+  "#eposta": "#bildirimler",
+};
+
 export function initSettingsLayout(): void {
   const initialized = new Set<string>();
 
   const initCurrent = () => {
+    const alias = HASH_ALIASES[window.location.hash];
+    if (alias) {
+      window.location.replace(alias);
+      return;
+    }
     const hash = window.location.hash;
     if (hash && INIT_MAP[hash] && !initialized.has(hash)) {
       INIT_MAP[hash]();
