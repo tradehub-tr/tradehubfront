@@ -13,6 +13,8 @@ import { startAlpine } from '../alpine'
 import '../alpine/sidebar'
 // B-2: settings Alpine modülü page-specific (alpine/index.ts core'undan çıkarıldı).
 import '../alpine/settings'
+// Ayarlar > Bildirimler (#bildirimler) — sayfa-özel Alpine modülü.
+import '../alpine/settingsNotifications'
 import { requireAuth } from '../utils/auth-guard'
 
 import { TopBar, initHeaderCart } from '../components/header'

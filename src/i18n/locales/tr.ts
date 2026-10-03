@@ -1446,9 +1446,6 @@ const tr = {
     settingsUi: {
       businessHint: "Bu bölümü doldurun, tedarikçilerden daha iyi teklifler alın.",
       sourcingHint: "Bu bölümü doldurun, ihtiyaçlarınıza uygun ürün önerileri görün.",
-      emailPrefsEmpty: "Henüz e-posta tercihi yapılandırılmamış.",
-      emailPrefsLoadError: "Tercihler yüklenirken bir hata oluştu.",
-      retry: "Tekrar dene",
     },
     tradeAssurance: {
       heroTitle: "iStoc'da ödemeden teslimata korumadan faydalanın",
@@ -5823,13 +5820,7 @@ const tr = {
       deptManagement: "Yönetim",
       deptOther: "Diğer",
 
-      // ── SettingsEmailPreferences ─────────────────────────────────
-      emailServices: "E-posta Hizmetleri",
-      emailPreferences: "E-posta tercihleri",
-      emailPreferencesDesc: "Almak istediğiniz e-posta türlerini seçin.",
-      emailPreferencesFor: "E-posta tercihleri için",
-      unsubscribeAll: "Tüm abonelikten çıkın",
-      resubscribeAll: "Tekrar abone ol",
+      // ── E-posta bildirim metinleri ───────────────────────────────
       allNotificationEmails: "Tüm bildirim e-postaları",
       notificationEmailsDesc:
         "iStoc.com'da önemli hesap güncellemeleri ve etkinlikleri hakkında sizi bilgilendiren e-postalar",
@@ -5901,9 +5892,256 @@ const tr = {
       consentDataProcessing: "Veri İşleme",
       preferencesCardTitle: "Tercihler",
       privacySettingsNav: "Gizlilik ayarları",
-      emailPreferencesNav: "E-posta tercihleri",
       adPreferencesNav: "Reklam tercihleri",
       backToAccountSettings: "Hesap ayarlarına dön",
+    },
+
+    // NOTIFICATION PREFERENCES (Ayarlar > Bildirimler)
+    notifPrefs: {
+      nav: "Bildirimler",
+      title: "Bildirimler",
+      lead: "Uygulama içi bildirimler her zaman açıktır. E-posta, push ve SMS'i olay bazında siz seçersiniz.",
+      loading: "Bildirim tercihleri yükleniyor",
+      loaded: "Bildirim tercihleri yüklendi",
+      loadError: "Bildirim tercihleri yüklenemedi. Bağlantınızı kontrol edip yeniden deneyin.",
+      retryLoad: "Yeniden dene",
+      channel: {
+        inapp: "Uygulama içi",
+        email: "E-posta",
+        push: "Push",
+        sms: "SMS",
+      },
+      category: {
+        account: "Hesap ve güvenlik",
+        orders: "Siparişler",
+        rfq: "Teklif ve RFQ",
+        store: "Mağaza ve başvuru",
+        reviews: "Değerlendirmeler",
+        logistics: "Lojistik",
+        billing: "Abonelik ve ödemeler",
+      },
+      catCount: "{{parts}} açık",
+      bulk: {
+        groupLabel: "{{category}}: toplu seçim",
+        on: {
+          email: "Tüm e-postaları aç",
+          push: "Tüm push'ları aç",
+          sms: "Tüm SMS'leri aç",
+        },
+        off: {
+          email: "Tüm e-postaları kapat",
+          push: "Tüm push'ları kapat",
+          sms: "Tüm SMS'leri kapat",
+        },
+      },
+      delivery: {
+        aninda: "Her zaman anında",
+        ozetlenebilir: "Özete girebilir",
+        srPrefix: "E-posta: ",
+      },
+      value: {
+        on: "Açık",
+        off: "Kapalı",
+        pending: "Beklemede",
+        locked: "Zorunlu",
+        none: "Gönderilmiyor",
+        noProvider: "Açık · gönderilemiyor",
+      },
+      switchLabel: "{{event}}: {{channel}}",
+      summary: {
+        emailLabel: "E-posta açık",
+        pushLabel: "Push açık",
+        digestLabel: "Sıradaki özet",
+        count: "{{count}} olay",
+        pushBlocked: "Cihaza gönderilmiyor",
+        digestOff: "Özet kapalı",
+        digestNone: "Özetlenecek olay yok",
+        digestAfterSave: "Kaydedince belirlenir",
+      },
+      jump: {
+        label: "Bölümler",
+        events: "Olaylar",
+        timing: "Gönderim zamanı",
+        quiet: "Sessiz saatler",
+        consent: "Ticari izin",
+      },
+      events: {
+        heading: "Olay bildirimleri",
+        desc: "Her olay için kanalı açın ya da kapatın. “Zorunlu” kanal kapatılamaz; “Gönderilmiyor” yazan kanaldan o olay hiç gitmez.",
+        colEvent: "Olay",
+      },
+      push: {
+        title: "Push: {{state}}",
+        grant: "İzin ver",
+        grantHere: "Bu tarayıcıda izin ver",
+        state: {
+          hazir: "Bu cihazda açık",
+          "izin-yok": "Cihaz izni kapalı",
+          engelli: "Tarayıcıda engellendi",
+          "cihaz-yok": "Bağlı cihaz yok",
+          "saglayici-yok": "Şu an gönderilemiyor",
+        },
+        text: {
+          hazir: "Push bildirimleri bu cihaza gönderiliyor.",
+          "izin-yok":
+            "Bu cihazda bildirim izni verilmedi. Açık push tercihleriniz saklanır, ama izin verene kadar gönderilmez; satırlarda “Beklemede” görünür.",
+          engelli:
+            "Bildirimler bu site için tarayıcı ayarlarından engellenmiş; iStoc bu izni kendisi açamaz. Engeli tarayıcınızın site ayarlarından kaldırabilirsiniz. Açık push tercihleriniz saklanır.",
+          "cihaz-yok":
+            "Hesabınıza bağlı, bildirim alabilen bir cihaz yok. Açık push tercihleriniz saklanır; bir cihaz bağlandığında uygulanır.",
+          "saglayici-yok":
+            "Anlık bildirim gönderim altyapısı şu an kullanılamıyor; hiçbir cihaza push gitmiyor. Push seçimleriniz kaydedilir ama şimdilik uygulanmaz.",
+        },
+        issue: {
+          denied: "Bildirim izni verilmedi; bu cihaza push gönderilemez.",
+          unsupported: "Bu tarayıcı ya da cihaz push bildirimlerini desteklemiyor.",
+          "provider-unavailable":
+            "Push açılamadı: gönderim altyapısı şu an kullanılamıyor. Tarayıcı izni istenmedi.",
+          failed: "Push bu cihazda açılamadı. Daha sonra yeniden deneyin.",
+        },
+      },
+      mandatory: {
+        count: "{{count}} zorunlu bildirim",
+        suffix: "kapatılamaz",
+        why: "Hesabınızı, ödemelerinizi ve yasal belgeleri ilgilendirir; sıklık ve sessiz saat seçimlerinden etkilenmez.",
+      },
+      timing: {
+        heading: "Gönderim zamanı",
+        desc: "E-posta ve push ayrı kurallarla zamanlanır. Uygulama içi bildirimler etkilenmez.",
+      },
+      frequency: {
+        heading: "E-posta sıklığı",
+        legend: "E-posta gönderim sıklığı",
+        recommended: "Önerilen",
+        instant: "Anında",
+        instantDesc: "Her olay ayrı bir e-posta olarak gelir.",
+        daily: "Günlük özet",
+        dailyDesc: "Özete girebilen olaylar günde bir kez tek e-postada birleşir.",
+        weekly: "Haftalık özet",
+        weeklyDesc: "Özete girebilen olaylar haftada bir kez tek e-postada gelir.",
+        effectNone:
+          "Açık olay e-postanız yok; sıklık seçimi şu an hiçbir e-postayı etkilemiyor. Seçiminiz saklanır.",
+        effectNoneUrgent: "Zorunlu e-postası olan {{count}} olay yine anında gelir.",
+        effectInstant:
+          "E-postası açık {{on}} olay ayrı ayrı ve anında gelir. Özet seçerseniz {{digestible}} olay özete girer, acil {{urgent}} olay yine anında gelir.",
+        effectNoDigestible:
+          "Açık e-postalarınızın hiçbiri özete girmiyor; acil {{urgent}} olay her zaman anında gelir.",
+        effectDigest:
+          "{{digestible}} olay özete girer, acil {{urgent}} olay her zaman anında gelir.",
+        effectNext: "Sıradaki özet: {{at}}.",
+      },
+      quiet: {
+        heading: "Push sessiz saatleri",
+        switchLabel: "Push bildirimlerini bu saatlerde beklet",
+        start: "Başlangıç",
+        end: "Bitiş",
+        summaryOff: "Sessiz saatler kapalı: push bildirimleri günün her saatinde gelir.",
+        hours: "{{count}} saat",
+        minutes: "{{count}} dakika",
+        overnight: "ertesi güne geçer",
+        sameDay: "aynı gün içinde",
+        errorStartEmpty: "Başlangıç saatini girin.",
+        errorEndEmpty: "Bitiş saatini girin.",
+        errorEqual:
+          "Başlangıç ve bitiş aynı olamaz. Push'u tüm gün bekletmek yerine ilgili olayın push'unu kapatın.",
+        help: "Bu saatlerde push gönderilmez. E-posta, SMS ve uygulama içi bildirimler etkilenmez. Saat dilimi: {{timezone}}.",
+        assumptionTag: "Varsayım",
+        assumption:
+          "Bekleyen push'lar bitiş saatinde tek özet bildirim olarak iletilir. Ürün kararı bekliyor; kesin davranış değildir.",
+      },
+      consent: {
+        legalTag: "Yasal",
+        heading: "Ticari ileti izni (İYS)",
+        desc: "Bu bölüm bir tercih değil, bir rızadır. Kampanya ve duyuru iletileri yalnız izniniz varsa gönderilir. Değişiklik hemen işlenir; Kaydet beklemez.",
+        emailTitle: "E-posta ile kampanya ve duyuru",
+        smsTitle: "SMS ile kampanya",
+        targetKind: {
+          email: "e-posta adresi",
+          sms: "telefon numarası",
+        },
+        targetMissing: "Kayıtlı {{kind}} yok",
+        verified: "Doğrulandı",
+        state: {
+          onayli: "İzin verildi",
+          bekliyor: "İYS'ye aktarılıyor",
+          basarisiz: "İYS'ye aktarılamadı",
+          "geri-cekildi": "İzin geri çekildi",
+          yok: "İzin yok",
+          "hedef-eksik": "İletişim bilgisi eksik",
+          "hedef-dogrulanmadi": "Doğrulanmadı",
+        },
+        rest: {
+          bekliyor: "Sonuç gelene kadar bu izin değiştirilemiyor.",
+          basarisiz: "Seçiminiz kayıtlı, ama İYS'ye işlenmedi.",
+          yok: "Bu kanal için kayıtlı bir izin ya da ret bulunmuyor.",
+          "hedef-eksik": "İzin verebilmek için önce {{kind}} ekleyin.",
+          "hedef-dogrulanmadi": "İzin verebilmek için önce kayıtlı {{kind}} doğrulanmalı.",
+          unsynced: "İYS'ye aktarılamadı: aktarım şu an kullanılamıyor",
+          basarisizUnavailable:
+            "Seçiminiz kayıtlı ve geçerli, ancak İYS'ye aktarım şu an kullanılamıyor.",
+          "hedef-dogrulanmadiGranted":
+            "İzniniz kayıtlı, ancak {{kind}} doğrulanmadığı için kampanya iletisi gönderilmez. İzni dilediğiniz an geri çekebilirsiniz.",
+        },
+        retry: "Yeniden dene",
+        update: "Güncelle",
+        verify: "Doğrula",
+        errorSet: "İzin değişikliği işlenemedi. Yeniden deneyin.",
+        legal:
+          "Ticari elektronik iletiler yalnız onayınızla gönderilir. Onayınız ve ret bildiriminiz İleti Yönetim Sistemi'ne (İYS) kaydedilir. Zorunlu işlem bildirimleri bu izinden etkilenmez.",
+        related: "Çerez, KVKK ve sözleşme onaylarınız ayrı bir sayfadadır:",
+        relatedLink: "Onay yönetimi",
+        errorTarget: "İzin verilemedi: önce kayıtlı {{kind}} eklenip doğrulanmalı.",
+        errorUnavailable: "İYS aktarımı şu an kullanılamıyor; yeniden denemek sonucu değiştirmez.",
+        source: {
+          registration: "Kayıt",
+          settings: "Ayarlar",
+          banner: "Duyuru bandı",
+          modal: "Açılır pencere",
+          admin_override: "Yönetici düzeltmesi",
+        },
+      },
+      history: {
+        toggle: "İzin geçmişi",
+        caption: "Ticari ileti izni değişiklik geçmişi, en yeni üstte",
+        colDate: "Tarih",
+        colChannel: "Kanal",
+        colAction: "İşlem",
+        colSource: "Kaynak",
+        colSync: "İYS kaydı",
+        grant: "İzin",
+        revoke: "Ret",
+        empty: "Kayıtlı izin ya da ret yok.",
+        sync: {
+          islendi: "İşlendi",
+          bekliyor: "İYS'ye aktarılıyor",
+          basarisiz: "İYS'ye aktarılamadı",
+        },
+      },
+      save: {
+        regionLabel: "Kayıt durumu",
+        dirtyCount: "{{count}} kaydedilmemiş değişiklik",
+        savingCount: "Kaydediliyor: {{count}} değişiklik",
+        saving: "Kaydediliyor",
+        save: "Kaydet",
+        retry: "Yeniden dene",
+        reload: "Güncel hâlini yükle",
+        discard: "Vazgeç",
+        errorTitle: "Kaydedilemedi.",
+        errorGeneric:
+          "Bağlantınızı kontrol edip yeniden deneyin. Değişiklikleriniz bu sayfada duruyor.",
+        errorConflict:
+          "Tercihleriniz başka bir oturumda değiştirilmiş. Güncel hâlini yükleyip değişikliklerinizi yeniden yapın.",
+        saved: "Kaydedildi",
+        discarded: "Değişiklikler geri alındı",
+        errorValidation: "Bazı alanlar geçersiz; işaretli alanları düzeltip yeniden kaydedin.",
+        theirsLoaded: "Güncel tercihler yüklendi",
+      },
+      leave: {
+        title: "Kaydedilmemiş değişiklik var",
+        text: "{{count}} değişiklik kaydedilmedi. Şimdi çıkarsanız kaybolur.",
+        stay: "Sayfada kal",
+        go: "Kaydetmeden çık",
+      },
     },
 
     // PROFILE

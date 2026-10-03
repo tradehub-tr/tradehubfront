@@ -3,7 +3,7 @@ export { SettingsAccountEdit, initSettingsAccountEdit } from "./SettingsAccountE
 export { SettingsTaxInfo, initSettingsTaxInfo } from "./SettingsTaxInfo";
 export { SettingsPrivacy, initSettingsPrivacy } from "./SettingsPrivacy";
 export { SettingsAdPreferences, initSettingsAdPreferences } from "./SettingsAdPreferences";
-export { SettingsEmailPreferences, initSettingsEmailPreferences } from "./SettingsEmailPreferences";
+export { SettingsNotifications } from "./SettingsNotifications";
 export { SettingsChangePassword, initSettingsChangePassword } from "./SettingsChangePassword";
 export { SettingsChangeEmail, initSettingsChangeEmail } from "./SettingsChangeEmail";
 export { SettingsChangePhone, initSettingsChangePhone } from "./SettingsChangePhone";
