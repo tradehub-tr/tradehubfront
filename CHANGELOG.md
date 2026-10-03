@@ -1,3 +1,15 @@
+## [v2.8.5-alpha.1] - 2026-10-03 ALPHA
+
+Bu surum alpha.istoc.com'da gelistirme asamasindadir.
+
+### Eklendi
+- feat(settings): bildirim tercihleri ekranını ekle (@ahmeetseker)
+  - Eski e-posta tercihleri yerine olay bazlı e-posta, push, SMS ve ticari izin yönetimini tek Ayarlar > Bildirimler ekranında toplar
+  - Tercihleri gerçek notification_preferences uçlarına bağlar; 409, 422 ve 503 hatalarını durum kodu ve error_code ile ayırır
+  - Push cihaz durumu, sessiz saatler, özet sıklığı, kaydedilmemiş değişiklik uyarısı ve eski #eposta yönlendirmesini ekler
+  - Bildirim tercih mantığı ve servis sözleşmesi için test kapsamı ekler
+
+---
 ## [v2.8.2] - 2026-10-02 PROD
 
 Bu surum istoc.com'da yayindadir.
